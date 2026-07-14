@@ -22,7 +22,7 @@ import {
   viewSelectCompany
 } from '../controllers/billing-accounts-setup.controller.js'
 
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/billing-accounts/setup/{billingAccountId}',
@@ -276,5 +276,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

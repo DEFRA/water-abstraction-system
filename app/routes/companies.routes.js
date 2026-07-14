@@ -7,7 +7,7 @@ import {
   viewLicences
 } from '../controllers/companies.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/companies/{id}/{role}',
@@ -56,5 +56,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

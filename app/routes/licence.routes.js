@@ -17,7 +17,7 @@ import {
   viewSummary
 } from '../controllers/licences.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/licences/{id}/bills',
@@ -165,5 +165,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

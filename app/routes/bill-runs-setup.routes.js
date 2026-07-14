@@ -13,7 +13,7 @@ import {
   year
 } from '../controllers/bill-runs-setup.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/bill-runs/setup/{sessionId}/check',
@@ -159,5 +159,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

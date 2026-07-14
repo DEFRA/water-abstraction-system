@@ -1,6 +1,6 @@
 import { placeholder } from '../controllers/check.controller.js'
 
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/check/placeholder',
@@ -17,5 +17,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

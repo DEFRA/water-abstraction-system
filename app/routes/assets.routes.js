@@ -1,4 +1,4 @@
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/assets/all.js',
@@ -33,5 +33,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

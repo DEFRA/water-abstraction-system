@@ -1,6 +1,6 @@
 import { check, process } from '../controllers/licences-end-dates.controller.js'
 
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/licences/end-dates/check',
@@ -30,5 +30,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

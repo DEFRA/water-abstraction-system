@@ -1,6 +1,6 @@
 import { changeAddress, view } from '../controllers/billing-accounts.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/billing-accounts/{id}',
@@ -32,5 +32,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

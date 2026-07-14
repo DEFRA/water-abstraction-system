@@ -36,7 +36,7 @@ import {
   volumes
 } from '../controllers/return-logs-setup.controller.js'
 
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/return-logs/setup',
@@ -458,5 +458,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

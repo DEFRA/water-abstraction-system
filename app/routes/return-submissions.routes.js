@@ -1,6 +1,6 @@
 import { view } from '../controllers/return-submissions.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/return-submissions/{returnSubmissionId}/{yearMonth}',
@@ -9,5 +9,3 @@ const routes = [
     }
   }
 ]
-
-export default routes
