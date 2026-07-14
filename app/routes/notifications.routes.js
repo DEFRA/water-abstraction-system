@@ -1,6 +1,6 @@
 import { download, returnedLetter, view } from '../controllers/notifications.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/notifications/{id}/download',
@@ -30,5 +30,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

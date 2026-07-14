@@ -1,6 +1,6 @@
 import { remove, submitRemove } from '../controllers/licence-monitoring-station.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/licence-monitoring-station/{licenceMonitoringStationId}/remove',
@@ -26,5 +26,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

@@ -42,7 +42,7 @@ import {
   viewSelectRecipients
 } from '../controllers/notices-setup.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/notices/setup/{journey}',
@@ -548,5 +548,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

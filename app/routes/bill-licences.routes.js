@@ -1,6 +1,6 @@
 import { remove, submitRemove, view } from '../controllers/bill-licences.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/bill-licences/{id}',
@@ -38,5 +38,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

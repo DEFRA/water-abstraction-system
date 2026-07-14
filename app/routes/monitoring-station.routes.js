@@ -1,6 +1,6 @@
 import { licence, view } from '../controllers/monitoring-stations.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/monitoring-stations/{monitoringStationId}',
@@ -16,5 +16,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

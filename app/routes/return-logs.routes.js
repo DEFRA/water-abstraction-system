@@ -1,6 +1,6 @@
 import { download, submitDetails, viewCommunications, viewDetails } from '../controllers/return-logs.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/return-logs/{id}/communications',
@@ -30,5 +30,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

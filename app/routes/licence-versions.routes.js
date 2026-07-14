@@ -1,6 +1,6 @@
 import { view } from '../controllers/licence-versions.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/licence-versions/{id}',
@@ -9,5 +9,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

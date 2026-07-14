@@ -9,7 +9,7 @@ import {
   timeLimited
 } from '../controllers/jobs.controller.js'
 
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/jobs/clean',
@@ -137,5 +137,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

@@ -1,6 +1,6 @@
 import { view } from '../controllers/manage.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/manage',
@@ -24,5 +24,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

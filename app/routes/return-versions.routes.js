@@ -1,6 +1,6 @@
 import { view } from '../controllers/return-versions.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/return-versions/{id}',
@@ -14,5 +14,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

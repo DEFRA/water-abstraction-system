@@ -20,7 +20,7 @@ import {
   viewInternalPermissions
 } from '../controllers/users-setup.controller.js'
 
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/users/external/{id}/setup',
@@ -250,5 +250,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

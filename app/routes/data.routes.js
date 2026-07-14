@@ -1,6 +1,6 @@
 import { dates, load, seed, tearDown } from '../controllers/data.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/data/dates',
@@ -59,5 +59,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

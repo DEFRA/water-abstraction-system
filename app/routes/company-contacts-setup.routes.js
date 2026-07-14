@@ -17,7 +17,7 @@ import {
   viewRestore
 } from '../controllers/company-contacts-setup.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/company-contacts/setup/{companyId}',
@@ -211,5 +211,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

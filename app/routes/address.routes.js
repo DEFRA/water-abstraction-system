@@ -9,7 +9,7 @@ import {
   viewSelect
 } from '../controllers/address.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/address/{sessionId}/postcode',
@@ -67,5 +67,3 @@ const routes = [
     }
   }
 ]
-
-export default routes
