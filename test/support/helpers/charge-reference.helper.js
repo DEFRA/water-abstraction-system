@@ -2,9 +2,9 @@
  * @module ChargeReferenceHelper
  */
 
+import * as ChargeCategoryHelper from './charge-category.helper.js'
 import ChargeReferenceModel from '../../../app/models/charge-reference.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import * as ChargeCategoryHelper from './charge-category.helper.js'
 
 /**
  * Add a new charge reference

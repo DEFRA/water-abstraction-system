@@ -4,10 +4,10 @@
  * @module ManualAddressValidator
  */
 
-import { postcodeValidator } from 'postcode-validator'
-import { addressLineValidator } from './addressLine.validator.js'
-
 import Joi from 'joi'
+import { postcodeValidator } from 'postcode-validator'
+
+import { addressLineValidator } from './addressLine.validator.js'
 
 /**
  * Validates data submitted for the `address/{sessionId}/manual` page

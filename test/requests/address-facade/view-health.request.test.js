@@ -1,8 +1,8 @@
 import http2 from 'node:http2'
 
 // Things we need to stub
-import addressFacadeConfig from '../../../config/address-facade.config.js'
 import * as BaseRequest from '../../../app/requests/base.request.js'
+import addressFacadeConfig from '../../../config/address-facade.config.js'
 
 // Thing under test
 import * as ViewHealthRequest from '../../../app/requests/address-facade/view-health.request.js'

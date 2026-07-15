@@ -1,7 +1,7 @@
 // Helpers
 import LicenceModel from '../../../../../app/models/licence.model.js'
-import { generateUUID } from '../../../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
 import * as FetchRenewalLicenceDal from '../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js'

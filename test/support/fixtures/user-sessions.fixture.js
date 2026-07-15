@@ -1,6 +1,6 @@
 import * as UsersFixture from './users.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Creates an external user unregistration session fixture for testing purposes

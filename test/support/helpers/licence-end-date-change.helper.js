@@ -2,9 +2,9 @@
  * @module LicenceEndDateChangeHelper
  */
 
+import LicenceEndDateChangeModel from '../../../app/models/licence-end-date-change.model.js'
 import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import LicenceEndDateChangeModel from '../../../app/models/licence-end-date-change.model.js'
 
 /**
  * Add a new licence end date change

@@ -3,14 +3,13 @@
  * @module ChargingModuleRequest
  */
 
+import chargingModuleConfig from '../../config/charging-module.config.js'
 import {
   deleteRequest as baseDeleteRequest,
   getRequest as baseGetRequest,
   patchRequest as basePatchRequest,
   postRequest as basePostRequest
 } from './base.request.js'
-
-import chargingModuleConfig from '../../config/charging-module.config.js'
 
 /**
  * Sends a DELETE request to the Charging Module for the provided path

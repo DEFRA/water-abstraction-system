@@ -1,9 +1,9 @@
 // Test helpers
 import * as CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
-import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import * as ContactHelper from '../../../support/helpers/contact.helper.js'
 import * as LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'
 import * as UserHelper from '../../../support/helpers/user.helper.js'
+import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 
 // Thing under test
 import UpdateCompanyContactDal from '../../../../app/dal/company-contacts/setup/update-company-contact.dal.js'

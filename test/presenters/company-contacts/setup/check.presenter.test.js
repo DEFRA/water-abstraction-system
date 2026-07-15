@@ -1,8 +1,8 @@
 // Test helpers
 import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import { yesterday } from '../../../support/general.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 import { licence } from '../../../support/fixtures/licence.fixture.js'
+import { yesterday } from '../../../support/general.js'
 
 // Thing under test
 import CheckPresenter from '../../../../app/presenters/company-contacts/setup/check.presenter.js'

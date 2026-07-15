@@ -3,8 +3,8 @@
  * @module CancelPresenter
  */
 
-import { formatLongDate, sentenceCase } from '../../base.presenter.js'
 import { NoticeJourney } from '../../../lib/static-lookups.lib.js'
+import { formatLongDate, sentenceCase } from '../../base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/cancel` page

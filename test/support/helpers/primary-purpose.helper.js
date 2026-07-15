@@ -3,8 +3,8 @@
  */
 
 import PrimaryPurposeModel from '../../../app/models/primary-purpose.model.js'
-import { selectRandomEntry } from '../general.js'
 import { data as primaryPurposes } from '../../../db/seeds/data/primary-purposes.js'
+import { selectRandomEntry } from '../general.js'
 
 export const data = primaryPurposes
 

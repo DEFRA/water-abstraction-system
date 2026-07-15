@@ -3,10 +3,9 @@
  * @module FetchUsersDal
  */
 
+import DatabaseConfig from '../../../config/database.config.js'
 import UserModel from '../../models/user.model.js'
 import { userPermissions } from '../../lib/static-lookups.lib.js'
-
-import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches the selected page of users for /users

@@ -4,8 +4,8 @@
  * @module __MODULE_NAME__
  */
 
-import __PRESENTER_NAME__ from '__PRESENTER_PATH__'
 import FetchSessionDal from '__FETCH_SESSION_DAL_PATH__'
+import __PRESENTER_NAME__ from '__PRESENTER_PATH__'
 
 /**
  * Orchestrates fetching and presenting the data for the '' page

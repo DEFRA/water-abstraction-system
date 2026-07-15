@@ -2,10 +2,10 @@
 import * as CheckNotificationStatusService from '../../../../../app/services/notifications/check-notification-status.service.js'
 import * as CreateEmailRequest from '../../../../../app/requests/notify/create-email.request.js'
 import * as GeneralLib from '../../../../../app/lib/general.lib.js'
-import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
-import NotifyConfig from '../../../../../config/notify.config.js'
 import * as NotifyUpdatePresenter from '../../../../../app/presenters/notifications/notify-update.presenter.js'
 import * as UpdateNotificationDal from '../../../../../app/dal/users/internal/update-notification.dal.js'
+import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
+import NotifyConfig from '../../../../../config/notify.config.js'
 
 // Thing under test
 import SendVerificationEmailService from '../../../../../app/services/users/internal/setup/send-verification-email.service.js'

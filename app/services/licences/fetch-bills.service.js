@@ -4,7 +4,6 @@
  */
 
 import BillModel from '../../models/bill.model.js'
-
 import DatabaseConfig from '../../../config/database.config.js'
 
 /**

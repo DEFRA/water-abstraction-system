@@ -1,8 +1,8 @@
 // Test helpers
 import * as GroupHelper from '../../support/helpers/group.helper.js'
 import * as RoleHelper from '../../support/helpers/role.helper.js'
-import * as UserHelper from '../../support/helpers/user.helper.js'
 import * as UserGroupHelper from '../../support/helpers/user-group.helper.js'
+import * as UserHelper from '../../support/helpers/user.helper.js'
 import * as UserRoleHelper from '../../support/helpers/user-role.helper.js'
 
 // Thing under test

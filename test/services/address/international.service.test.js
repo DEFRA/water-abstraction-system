@@ -1,6 +1,6 @@
 // Test helpers
-import { countryLookup } from '../../../app/presenters/address/base-address.presenter.js'
 import SessionModelStub from '../../support/stubs/session.stub.js'
+import { countryLookup } from '../../../app/presenters/address/base-address.presenter.js'
 
 // Things we need to stub
 import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'

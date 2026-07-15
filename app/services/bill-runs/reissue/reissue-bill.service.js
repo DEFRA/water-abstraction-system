@@ -3,10 +3,10 @@
  * @module ReissueBillService
  */
 
+import ExpandedError from '../../../errors/expanded.error.js'
 import { send as reissueBillRequest } from '../../../requests/charging-module/reissue-bill.request.js'
 import { send as viewBillRequest } from '../../../requests/charging-module/view-bill.request.js'
 import { send as viewBillRunStatus } from '../../../requests/charging-module/view-bill-run-status.request.js'
-import ExpandedError from '../../../errors/expanded.error.js'
 import { generateUUID, pause } from '../../../lib/general.lib.js'
 
 /**

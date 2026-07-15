@@ -1,7 +1,7 @@
 // Test helpers
 import fs from 'fs'
-import path from 'path'
 import mockFs from 'mock-fs'
+import path from 'path'
 
 // Things we need to stub
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'

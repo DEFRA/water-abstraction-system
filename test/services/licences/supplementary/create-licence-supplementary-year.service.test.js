@@ -1,7 +1,7 @@
 // Test helpers
-import { generateUUID } from '../../../../app/lib/general.lib.js'
 import * as LicenceSupplementaryYearHelper from '../../../support/helpers/licence-supplementary-year.helper.js'
 import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
 import CreateLicenceSupplementaryYearService from '../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js'

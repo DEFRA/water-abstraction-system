@@ -3,13 +3,12 @@
  * @module SubmitPointsService
  */
 
-import { formatValidationResult } from '../../../presenters/base.presenter.js'
-
 import FetchPointsService from './fetch-points.service.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import { flashNotification } from '../../../lib/general.lib.js'
 import PointsPresenter from '../../../presenters/return-versions/setup/points.presenter.js'
 import PointsValidator from '../../../validators/return-versions/setup/points.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**

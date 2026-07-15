@@ -3,10 +3,10 @@
  * @module CompanyContactsController
  */
 
+import SubmitRemoveCompanyContactService from '../services/company-contacts/submit-remove-company-contact.service.js'
 import ViewCommunicationsService from '../services/company-contacts/view-communications.service.js'
 import ViewContactDetailsService from '../services/company-contacts/view-contact-details.service.js'
 import ViewRemoveCompanyContactService from '../services/company-contacts/view-remove-company-contact.service.js'
-import SubmitRemoveCompanyContactService from '../services/company-contacts/submit-remove-company-contact.service.js'
 
 export async function viewCommunications(request, h) {
   const {

@@ -2,8 +2,8 @@
  * @module LicenceEntityRoleHelper
  */
 
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceEntityRoleModel from '../../../app/models/licence-entity-role.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence entity role

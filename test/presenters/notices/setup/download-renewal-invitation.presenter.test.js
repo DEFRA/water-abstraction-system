@@ -1,8 +1,8 @@
 // Test helpers
 import * as NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
 
 // Thing under test

@@ -3,11 +3,10 @@
  * @module FetchNotificationsDal
  */
 
-import NotificationModel from '../../../models/notification.model.js'
-import { userNotificationTypes } from '../../../lib/static-lookups.lib.js'
-
 import DatabaseConfig from '../../../../config/database.config.js'
+import NotificationModel from '../../../models/notification.model.js'
 import ServerConfig from '../../../../config/server.config.js'
+import { userNotificationTypes } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Fetches data needed for the view '/system/users/external/{id}/communications' page

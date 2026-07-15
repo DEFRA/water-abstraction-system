@@ -2,12 +2,12 @@
 import ViewReturnSubmissionPresenter from '../../../app/presenters/return-submissions/view-return-submission.presenter.js'
 
 // Test helpers
-import ReturnLogModel from '../../../app/models/return-log.model.js'
 import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 import * as ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
-import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
 import * as ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
+import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 
 import { unitNames } from '../../../app/lib/static-lookups.lib.js'
 

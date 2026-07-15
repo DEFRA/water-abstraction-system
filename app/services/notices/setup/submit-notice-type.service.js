@@ -7,9 +7,9 @@
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 import NoticeTypePresenter from '../../../presenters/notices/setup/notice-type.presenter.js'
 import NoticeTypeValidator from '../../../validators/notices/setup/notice-type.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 import { NoticeJourney, NoticeTypes } from '../../../lib/static-lookups.lib.js'
 import { flashNotification, generateNoticeReferenceCode } from '../../../lib/general.lib.js'
-import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/notice-type` page

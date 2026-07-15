@@ -3,8 +3,8 @@
  * @module PrepareChargeVersionService
  */
 
-import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
 import DetermineChargePeriodService from '../determine-charge-period.service.js'
+import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
 
 /**
  * Prepares the charge version for matching with its returns

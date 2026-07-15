@@ -3,11 +3,10 @@
  * @module CheckAllLicenceEndDatesService
  */
 
-import FetchLicences from './fetch-licences.service.js'
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 import CheckLicenceEndDatesService from './check-licence-end-dates.service.js'
-
+import FetchLicences from './fetch-licences.service.js'
 import LicencesConfig from '../../../../config/licences.config.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Checks all licences in the NALD extract against those in WRLS and records any with changed end dates

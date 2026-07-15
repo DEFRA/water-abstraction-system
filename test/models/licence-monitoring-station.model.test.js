@@ -1,14 +1,14 @@
 // Test helpers
-import * as LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
 import * as LicenceHelper from '../support/helpers/licence.helper.js'
-import LicenceModel from '../../app/models/licence.model.js'
+import * as LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
 import * as LicenceVersionPurposeConditionHelper from '../support/helpers/licence-version-purpose-condition.helper.js'
-import LicenceVersionPurposeConditionModel from '../../app/models/licence-version-purpose-condition.model.js'
 import * as MonitoringStationHelper from '../support/helpers/monitoring-station.helper.js'
-import MonitoringStationModel from '../../app/models/monitoring-station.model.js'
 import * as NotificationHelper from '../support/helpers/notification.helper.js'
-import NotificationModel from '../../app/models/notification.model.js'
 import * as UserHelper from '../support/helpers/user.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import LicenceVersionPurposeConditionModel from '../../app/models/licence-version-purpose-condition.model.js'
+import MonitoringStationModel from '../../app/models/monitoring-station.model.js'
+import NotificationModel from '../../app/models/notification.model.js'
 import UserModel from '../../app/models/user.model.js'
 
 // Thing under test

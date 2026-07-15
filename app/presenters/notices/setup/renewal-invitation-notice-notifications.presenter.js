@@ -3,8 +3,8 @@
  * @module RenewalInvitationNotificationsPresenter
  */
 
-import NotifyAddressPresenter from './notify-address.presenter.js'
 import { NOTIFY_TEMPLATES } from '../../../lib/notify-templates.lib.js'
+import NotifyAddressPresenter from './notify-address.presenter.js'
 import { formatLongDate } from '../../base.presenter.js'
 
 const MESSAGE_REFS = {

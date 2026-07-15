@@ -4,9 +4,9 @@
  * @module __MODULE_NAME__
  */
 
+import FetchSessionDal from '__FETCH_SESSION_DAL_PATH__'
 import __PRESENTER_NAME__ from '__PRESENTER_PATH__'
 import __VALIDATOR_NAME__ from '__VALIDATOR_PATH__'
-import FetchSessionDal from '__FETCH_SESSION_DAL_PATH__'
 import { formatValidationResult } from '__BASE_PRESENTER_PATH__'
 
 /**

@@ -5,9 +5,9 @@
 
 import EmptyBillRunPresenter from '../../presenters/bill-runs/empty-bill-run.presenter.js'
 import ErroredBillRunPresenter from '../../presenters/bill-runs/errored-bill-run.presenter.js'
+import FetchBillRunService from './fetch-bill-run.service.js'
 import ViewBillRunPresenter from '../../presenters/bill-runs/view-bill-run.presenter.js'
 import ViewBillSummariesPresenter from '../../presenters/bill-runs/view-bill-summaries.presenter.js'
-import FetchBillRunService from './fetch-bill-run.service.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the bill run page

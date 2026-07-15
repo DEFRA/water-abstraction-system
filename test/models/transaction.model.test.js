@@ -1,9 +1,9 @@
 // Test helpers
-import BillLicenceModel from '../../app/models/bill-licence.model.js'
 import * as BillLicenceHelper from '../support/helpers/bill-licence.helper.js'
 import * as ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
-import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
 import * as TransactionHelper from '../support/helpers/transaction.helper.js'
+import BillLicenceModel from '../../app/models/bill-licence.model.js'
+import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
 
 // Thing under test
 import TransactionModel from '../../app/models/transaction.model.js'

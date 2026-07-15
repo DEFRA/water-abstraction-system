@@ -7,7 +7,6 @@
 import AccountPresenter from '../../../presenters/billing-accounts/setup/account.presenter.js'
 import AccountValidator from '../../../validators/billing-accounts/setup/account.validator.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**

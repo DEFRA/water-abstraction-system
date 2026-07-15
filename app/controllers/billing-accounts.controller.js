@@ -3,8 +3,9 @@
  * @module BillingAccountsController
  */
 
-import http2 from 'node:http2'
 import Boom from '@hapi/boom'
+import http2 from 'node:http2'
+
 import ChangeAddressService from '../services/billing-accounts/change-address.service.js'
 import ChangeAddressValidator from '../validators/change-address.validator.js'
 import ViewBillingAccountService from '../services/billing-accounts/view-billing-account.service.js'

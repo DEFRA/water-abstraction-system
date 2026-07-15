@@ -3,8 +3,8 @@
  * @module NotificationsTablePresenter
  */
 
-import { formatLongDate, sentenceCase } from '../base.presenter.js'
 import { userNotificationTypes } from '../../lib/static-lookups.lib.js'
+import { formatLongDate, sentenceCase } from '../base.presenter.js'
 
 /**
  * Formats data for display in communications tables on view external and internal user pages

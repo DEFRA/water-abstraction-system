@@ -4,8 +4,8 @@
  */
 
 import Big from 'big.js'
-import { randomInt, randomUUID } from 'node:crypto'
 import { setTimeout } from 'node:timers/promises'
+import { randomInt, randomUUID } from 'node:crypto'
 
 import { returnUnits } from './static-lookups.lib.js'
 

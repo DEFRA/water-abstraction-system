@@ -3,8 +3,8 @@
  * @module ViewVerificationsService
  */
 
-import FetchVerificationsDal from '../../../dal/users/external/fetch-verifications.dal.js'
 import FetchUserDal from '../../../dal/users/fetch-user.dal.js'
+import FetchVerificationsDal from '../../../dal/users/external/fetch-verifications.dal.js'
 import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
 import VerificationsPresenter from '../../../presenters/users/external/verifications.presenter.js'
 

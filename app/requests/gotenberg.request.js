@@ -4,10 +4,10 @@
  */
 
 import http2 from 'node:http2'
-import { postRequest as basePostRequest } from './base.request.js'
-import { pause } from '../lib/general.lib.js'
 
+import { postRequest as basePostRequest } from './base.request.js'
 import gotenbergConfig from '../../config/gotenberg.config.js'
+import { pause } from '../lib/general.lib.js'
 
 const { HTTP_STATUS_OK } = http2.constants
 

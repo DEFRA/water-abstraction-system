@@ -3,7 +3,6 @@ import http2 from 'node:http2'
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import Boom from '@hapi/boom'
 import * as GenerateTwoPartTariffBillRunService from '../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
 import * as IndexBillRunsService from '../../app/services/bill-runs/index-bill-runs.service.js'
 import * as SubmitCancelBillRunService from '../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js'
@@ -12,6 +11,7 @@ import * as SubmitSendBillRunService from '../../app/services/bill-runs/send/sub
 import * as ViewBillRunService from '../../app/services/bill-runs/view-bill-run.service.js'
 import * as ViewCancelBillRunService from '../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js'
 import * as ViewSendBillRunService from '../../app/services/bill-runs/send/view-send-bill-run.service.js'
+import Boom from '@hapi/boom'
 
 // For running our service
 import { init } from '../../app/server.js'

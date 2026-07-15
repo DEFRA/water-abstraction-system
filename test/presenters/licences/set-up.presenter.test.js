@@ -1,6 +1,6 @@
 // Test helpers
-import ReturnVersionModel from '../../../app/models/return-version.model.js'
 import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
+import ReturnVersionModel from '../../../app/models/return-version.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test

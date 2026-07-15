@@ -2,9 +2,9 @@
 import http2 from 'node:http2'
 
 // Things we need to stub
-import Boom from '@hapi/boom'
 import * as ChangeAddressService from '../../app/services/billing-accounts/change-address.service.js'
 import * as ViewBillingAccountService from '../../app/services/billing-accounts/view-billing-account.service.js'
+import Boom from '@hapi/boom'
 
 // For running our service
 import { init } from '../../app/server.js'

@@ -3,8 +3,8 @@
  * @module ViewPointsService
  */
 
-import FetchPointsService from '../licences/fetch-points.service.js'
 import FetchLicenceService from './fetch-licence.service.js'
+import FetchPointsService from '../licences/fetch-points.service.js'
 import PointsPresenter from '../../presenters/licences/points.presenter.js'
 import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 

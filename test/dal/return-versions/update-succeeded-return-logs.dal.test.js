@@ -1,8 +1,8 @@
 // Test helpers
 import * as LicenceHelper from '../../support/helpers/licence.helper.js'
 import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import ReturnLogModel from '../../../app/models/return-log.model.js'
 import * as ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
 import { yesterday } from '../../support/general.js'
 
 // Thing under test

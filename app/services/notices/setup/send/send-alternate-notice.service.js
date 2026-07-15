@@ -7,7 +7,6 @@ import NotificationModel from '../../../../models/notification.model.js'
 import RenewalInvitationAlternateNoticeService from './renewal-invitation-alternate-notice.service.js'
 import ReturnsInvitationAlternateNoticeService from './returns-invitation-alternate-notice.service.js'
 import SendLetterNotificationService from './send-letter-notification.service.js'
-
 import { timestampForPostgres } from '../../../../lib/general.lib.js'
 import { NoticeType, NoticeTypes } from '../../../../lib/static-lookups.lib.js'
 

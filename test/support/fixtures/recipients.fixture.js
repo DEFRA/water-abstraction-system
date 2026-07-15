@@ -1,9 +1,9 @@
 import crypto from 'node:crypto'
 
 import { futureDueDate } from '../../../app/presenters/notices/base.presenter.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../helpers/licence.helper.js'
 import { generateReference } from '../helpers/return-requirement.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Creates a fixture for an ad-hoc additional email recipient

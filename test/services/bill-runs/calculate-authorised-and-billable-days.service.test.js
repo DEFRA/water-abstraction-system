@@ -1,6 +1,6 @@
 // Test helpers
-import * as ChargeReferenceHelper from '../../support/helpers/charge-reference.helper.js'
 import * as ChargeElementHelper from '../../support/helpers/charge-element.helper.js'
+import * as ChargeReferenceHelper from '../../support/helpers/charge-reference.helper.js'
 
 // Thing under test
 import CalculateAuthorisedAndBillableDaysService from '../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js'

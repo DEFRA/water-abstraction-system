@@ -3,8 +3,8 @@
  * @module ViewSendBillRunPresenter
  */
 
-import { formatFinancialYear, formatLongDate, titleCase } from '../base.presenter.js'
 import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
+import { formatFinancialYear, formatLongDate, titleCase } from '../base.presenter.js'
 
 /**
  * Prepares and processes bill run data for presentation

@@ -3,9 +3,9 @@ import * as PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
 import * as PurposeHelper from '../helpers/purpose.helper.js'
 import * as RegionHelper from '../helpers/region.helper.js'
 import * as SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
+import { generateLicenceRef } from '../helpers/licence.helper.js'
 import { generateReference } from '../helpers/return-requirement.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef } from '../helpers/licence.helper.js'
 
 /**
  * Generates the return log prefix in the format v1:regionCode:licenceRef:reference from a return requirement

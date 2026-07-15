@@ -8,8 +8,8 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 import FetchUserDetailsDal from '../../../../dal/users/internal/fetch-user-details.dal.js'
 import PermissionsPresenter from '../../../../presenters/users/internal/setup/permissions.presenter.js'
 import PermissionsValidator from '../../../../validators/users/internal/setup/permissions.validator.js'
-import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 import { flashNotification } from '../../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/permissions' page

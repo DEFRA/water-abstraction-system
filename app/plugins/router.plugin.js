@@ -10,11 +10,12 @@
  */
 
 import AddressRoutes from '../routes/address.routes.js'
+import AirbrakeConfig from '../../config/airbrake.config.js'
 import AssetRoutes from '../routes/assets.routes.js'
 import BillLicences from '../routes/bill-licences.routes.js'
 import BillRoutes from '../routes/bills.routes.js'
-import BillRunRoutes from '../routes/bill-runs.routes.js'
 import BillRunReviewRoutes from '../routes/bill-runs-review.routes.js'
+import BillRunRoutes from '../routes/bill-runs.routes.js'
 import BillRunSetupRoutes from '../routes/bill-runs-setup.routes.js'
 import BillingAccountRoutes from '../routes/billing-accounts.routes.js'
 import BillingAccountSetupRoutes from '../routes/billing-accounts-setup.routes.js'
@@ -25,9 +26,6 @@ import CompanyContactsSetupRoutes from '../routes/company-contacts-setup.routes.
 import DataRoutes from '../routes/data.routes.js'
 import FilterRoutesService from '../services/plugins/filter-routes.service.js'
 import HealthRoutes from '../routes/health.routes.js'
-import NoticesRoutes from '../routes/notices.routes.js'
-import NoticesSetupRoutes from '../routes/notices-setup.routes.js'
-import NotificationRoutes from '../routes/notifications.routes.js'
 import JobRoutes from '../routes/jobs.routes.js'
 import LicenceEndDatesRoutes from '../routes/licences-end-dates.routes.js'
 import LicenceMonitoringStationRoutes from '../routes/licence-monitoring-station.routes.js'
@@ -36,6 +34,9 @@ import LicenceRoutes from '../routes/licence.routes.js'
 import LicenceVersionsRoutes from '../routes/licence-versions.routes.js'
 import ManageRoutes from '../routes/manage.routes.js'
 import MonitoringStationRoutes from '../routes/monitoring-station.routes.js'
+import NoticesRoutes from '../routes/notices.routes.js'
+import NoticesSetupRoutes from '../routes/notices-setup.routes.js'
+import NotificationRoutes from '../routes/notifications.routes.js'
 import ReportRoutes from '../routes/reports.routes.js'
 import ReturnLogRoutes from '../routes/return-logs.routes.js'
 import ReturnLogSetupRoutes from '../routes/return-logs-setup.routes.js'
@@ -46,8 +47,6 @@ import RootRoutes from '../routes/root.routes.js'
 import SearchRoutes from '../routes/search.routes.js'
 import UsersRoutes from '../routes/users.routes.js'
 import UsersSetupRoutes from '../routes/users-setup.routes.js'
-
-import AirbrakeConfig from '../../config/airbrake.config.js'
 
 const routes = [
   ...RootRoutes,

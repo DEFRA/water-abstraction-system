@@ -6,10 +6,10 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
-import { formatDateObjectToISO } from '../lib/dates.lib.js'
-import { unitNames } from '../lib/static-lookups.lib.js'
 import ReturnLogModel from './return-log.model.js'
 import ReturnSubmissionLineModel from './return-submission-line.model.js'
+import { formatDateObjectToISO } from '../lib/dates.lib.js'
+import { unitNames } from '../lib/static-lookups.lib.js'
 
 export default class ReturnSubmissionModel extends BaseModel {
   static get tableName() {

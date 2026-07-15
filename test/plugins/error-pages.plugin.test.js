@@ -1,7 +1,7 @@
 // Test helpers
-import http2 from 'node:http2'
 import Boom from '@hapi/boom'
 import SessionNotFoundError from '../../app/errors/session-not-found.error.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'

@@ -4,9 +4,9 @@
  */
 
 import BillLicenceModel from '../../models/bill-licence.model.js'
-import { send } from '../../requests/legacy/delete-bill-licence.request.js'
 import ProcessBillingFlagService from '../licences/supplementary/process-billing-flag.service.js'
 import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-bill-run.service.js'
+import { send } from '../../requests/legacy/delete-bill-licence.request.js'
 
 /**
  * Orchestrates the removing of a bill licence from a bill run

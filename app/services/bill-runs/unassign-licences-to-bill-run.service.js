@@ -3,8 +3,8 @@
  * @module UnassignLicencesToBillRunService
  */
 
-import { timestampForPostgres } from '../../lib/general.lib.js'
 import LicenceSupplementaryYearModel from '../../models/licence-supplementary-year.model.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Unassigns licences from a supplementary bill run

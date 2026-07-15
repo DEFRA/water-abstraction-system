@@ -2,8 +2,8 @@
 import * as LicenceHelper from '../../support/helpers/licence.helper.js'
 import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 import * as ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
-import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 import * as ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
+import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 
 // Thing under test
 import FetchReturnLogDetailsService from '../../../app/services/return-logs/fetch-return-log-details.service.js'

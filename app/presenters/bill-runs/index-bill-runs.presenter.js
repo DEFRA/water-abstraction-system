@@ -3,9 +3,9 @@
  * @module IndexBillRunsPresenter
  */
 
-import { formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
 import { formatBillRunType } from '../billing.presenter.js'
 import { billRunStatuses, billRunTypes } from '../../lib/static-lookups.lib.js'
+import { formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
 
 /**
  * Formats the summary data for each bill run for use in the /bill-runs page

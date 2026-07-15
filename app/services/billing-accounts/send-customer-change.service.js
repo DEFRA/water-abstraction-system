@@ -3,9 +3,9 @@
  * @module SendCustomerChangeService
  */
 
-import { send } from '../../requests/charging-module/create-customer-change.request.js'
 import CreateCustomerChangePresenter from '../../presenters/charging-module/create-customer-change.presenter.js'
 import ExpandedError from '../../errors/expanded.error.js'
+import { send } from '../../requests/charging-module/create-customer-change.request.js'
 
 /**
  * Generates the customer change request data from the model instances provided and sends it to the Charging Module

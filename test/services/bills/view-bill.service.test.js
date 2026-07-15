@@ -1,9 +1,9 @@
 // Things we need to stub
-import BillingAccountModel from '../../../app/models/billing-account.model.js'
-import FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
+import * as ViewBillLicencePresenter from '../../../app/presenters/bill-licences/view-bill-licence.presenter.js'
 import * as ViewBillPresenter from '../../../app/presenters/bills/view-bill.presenter.js'
 import * as ViewLicenceSummariesPresenter from '../../../app/presenters/bills/view-licence-summaries.presenter.js'
-import * as ViewBillLicencePresenter from '../../../app/presenters/bill-licences/view-bill-licence.presenter.js'
+import BillingAccountModel from '../../../app/models/billing-account.model.js'
+import FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
 
 // Thing under test
 import ViewBillService from '../../../app/services/bills/view-bill.service.js'

@@ -3,7 +3,7 @@
  * @module NoticeTypePresenter
  */
 
-import { NoticeType, NoticeJourney, NoticeTypes } from '../../../lib/static-lookups.lib.js'
+import { NoticeJourney, NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/notice-type` page

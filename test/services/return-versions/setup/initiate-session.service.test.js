@@ -1,6 +1,6 @@
 // Test helpers
-import http2 from 'node:http2'
 import LicenceModel from '../../../../app/models/licence.model.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as FetchLicenceService from '../../../../app/services/return-versions/setup/fetch-licence.service.js'

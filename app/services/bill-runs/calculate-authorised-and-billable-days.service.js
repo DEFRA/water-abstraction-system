@@ -3,8 +3,8 @@
  * @module CalculateAuthorisedAndBillableDaysService
  */
 
-import { determineAbstractionPeriods } from '../../lib/abstraction-period.lib.js'
 import ConsolidateDateRangesService from './consolidate-date-ranges.service.js'
+import { determineAbstractionPeriods } from '../../lib/abstraction-period.lib.js'
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 

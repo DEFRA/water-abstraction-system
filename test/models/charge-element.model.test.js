@@ -1,10 +1,10 @@
 // Test helpers
 import * as ChargeElementHelper from '../support/helpers/charge-element.helper.js'
 import * as ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
-import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
 import * as PurposeHelper from '../support/helpers/purpose.helper.js'
-import PurposeModel from '../../app/models/purpose.model.js'
 import * as ReviewChargeElementHelper from '../support/helpers/review-charge-element.helper.js'
+import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
+import PurposeModel from '../../app/models/purpose.model.js'
 import ReviewChargeElementModel from '../../app/models/review-charge-element.model.js'
 
 // Thing under test

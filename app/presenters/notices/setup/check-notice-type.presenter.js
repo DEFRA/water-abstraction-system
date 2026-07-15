@@ -3,9 +3,9 @@
  * @module CheckNoticeTypePresenter
  */
 
-import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
 import { formatLongDate } from '../../base.presenter.js'
 import { returnsPeriodText } from '../base.presenter.js'
+import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
 
 const NOTICE_TYPE_TEXT = {
   [NoticeType.INVITATIONS]: NoticeTypes[NoticeType.INVITATIONS].notificationType,

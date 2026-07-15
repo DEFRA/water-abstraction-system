@@ -4,10 +4,10 @@ import * as NotificationsFixture from '../../../../support/fixtures/notification
 import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import NotificationModel from '../../../../../app/models/notification.model.js'
 import * as RenewalInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/renewal-invitation-alternate-notice.service.js'
 import * as ReturnsInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js'
 import * as SendLetterNotificationService from '../../../../../app/services/notices/setup/send/send-letter-notification.service.js'
+import NotificationModel from '../../../../../app/models/notification.model.js'
 
 // Thing under test
 import SendAlternateNoticeService from '../../../../../app/services/notices/setup/send/send-alternate-notice.service.js'

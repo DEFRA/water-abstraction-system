@@ -1,8 +1,8 @@
 // Things we need to stub
-import BillModel from '../../../app/models/bill.model.js'
 import * as LegacyDeleteBillRequest from '../../../app/requests/legacy/delete-bill.request.js'
 import * as ProcessBillingFlagService from '../../../app/services/licences/supplementary/process-billing-flag.service.js'
 import * as UnassignLicencesToBillRunService from '../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js'
+import BillModel from '../../../app/models/bill.model.js'
 
 // Thing under test
 import SubmitRemoveBillService from '../../../app/services/bills/submit-remove-bill.service.js'

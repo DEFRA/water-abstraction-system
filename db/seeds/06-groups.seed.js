@@ -1,6 +1,6 @@
-import { timestampForPostgres } from '../../app/lib/general.lib.js'
 import { db } from '../db.js'
 import { data as groups } from './data/groups.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
 export default async function seed() {
   for (const group of groups) {

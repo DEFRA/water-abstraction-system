@@ -4,9 +4,8 @@
  * @module PostcodeValidator
  */
 
-import { postcodeValidator } from 'postcode-validator'
-
 import Joi from 'joi'
+import { postcodeValidator } from 'postcode-validator'
 
 /**
  * Validates data submitted for the `address/{sessionId}/postcode` page

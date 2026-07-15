@@ -1,6 +1,6 @@
 // Test helpers
-import * as FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
 import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import * as FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub

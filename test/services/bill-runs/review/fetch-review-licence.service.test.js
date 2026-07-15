@@ -1,8 +1,8 @@
 // Test helpers
 import * as AddressHelper from '../../../support/helpers/address.helper.js'
-import * as BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
-import * as BillingAccountAddressHelper from '../../../support/helpers/billing-account-address.helper.js'
 import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import * as BillingAccountAddressHelper from '../../../support/helpers/billing-account-address.helper.js'
+import * as BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
 import * as ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
 import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
 import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'

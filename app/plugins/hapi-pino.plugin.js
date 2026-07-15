@@ -13,7 +13,6 @@ import HapiPino from 'hapi-pino'
 import HapiPinoIgnoreRequestService from '../services/plugins/hapi-pino-ignore-request.service.js'
 import HapiPinoLogInTestService from '../services/plugins/hapi-pino-log-in-test.service.js'
 import HapiPinoSerializersService from '../services/plugins/hapi-pino-serializers.service.js'
-
 import LogConfig from '../../config/log.config.js'
 
 export default {

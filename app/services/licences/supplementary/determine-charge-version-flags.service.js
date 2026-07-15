@@ -3,9 +3,8 @@
  * @module DetermineChargeVersionFlagsService
  */
 
-import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
-
 import FetchChargeVersionBillingDataService from './fetch-charge-version-billing-data.service.js'
+import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
 
 /**
  * Determines if a licence should be flagged for supplementary billing based on a change in charge version

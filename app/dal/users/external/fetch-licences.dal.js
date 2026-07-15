@@ -3,9 +3,8 @@
  * @module FetchLicencesDal
  */
 
-import LicenceModel from '../../../models/licence.model.js'
-
 import DatabaseConfig from '../../../../config/database.config.js'
+import LicenceModel from '../../../models/licence.model.js'
 
 /**
  * Fetches licences linked to a user for display on the `/users/external/{id}/licences` page

@@ -7,9 +7,9 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 import MultipleEntriesPresenter from '../../../presenters/return-logs/setup/multiple-entries.presenter.js'
 import MultipleEntriesValidator from '../../../validators/return-logs/setup/multiple-entries.validator.js'
 import SplitMultipleEntriesService from '../../../services/return-logs/setup/split-multiple-entries.service.js'
-import { convertFromCubicMetres, convertToCubicMetres } from '../../../lib/general.lib.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
 import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
+import { convertFromCubicMetres, convertToCubicMetres } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/multiple-entries` page

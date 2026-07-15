@@ -5,10 +5,9 @@
 
 import { ref } from 'objection'
 
+import DatabaseConfig from '../../../config/database.config.js'
 import NotificationModel from '../../models/notification.model.js'
 import { ignoreMessageRef } from '../../lib/static-lookups.lib.js'
-
-import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches data needed for the view '/system/company-contacts/{id}/communications' page
