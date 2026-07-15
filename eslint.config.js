@@ -3,6 +3,8 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import globals from 'globals'
 import neostandard from 'neostandard'
 
+import noMixedExports from './eslint-rules/no-mixed-exports.js'
+
 export default [
   // Ignore the folder created when JSDocs are generated
   // NOTE: In an ESLint Flat Config, an object is only treated as a Global Ignore if it contains the ignores key and
@@ -39,12 +41,15 @@ export default [
     plugins: {
       // https://github.com/gajus/eslint-plugin-jsdoc
       jsdoc: jsdocPlugin,
-      import: neostandard.plugins['import-x']
+      import: neostandard.plugins['import-x'],
+      local: { rules: { 'no-mixed-exports': noMixedExports } }
     },
     // NOTE: Special case for arrow-body-style below
     rules: {
       // Enforce .js extension when importing local files; ignore bare package specifiers (e.g. 'dotenv/config')
       'import/extensions': ['error', 'always', { ignorePackages: true }],
+      // A file must use one export style only: either a single default export, or one or more named exports, never both
+      'local/no-mixed-exports': 'error',
       'jsdoc/check-alignment': 'error',
       'jsdoc/check-indentation': 'error',
       'jsdoc/check-types': 'error',

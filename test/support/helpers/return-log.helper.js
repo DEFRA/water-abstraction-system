@@ -4,9 +4,9 @@
 
 import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef } from './licence.helper.js'
+import LicenceHelper from './licence.helper.js'
 import ReturnLogModel from '../../../app/models/return-log.model.js'
-import { generateReference } from './return-requirement.helper.js'
+import ReturnRequirementHelper from './return-requirement.helper.js'
 
 /**
  * Add a new return log
@@ -30,7 +30,7 @@ import { generateReference } from './return-requirement.helper.js'
  *
  * @returns {Promise<module:ReturnLogModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnLogModel.query()
@@ -48,9 +48,9 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
-  const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
-  const returnReference = data.returnReference ? data.returnReference : generateReference()
+function defaults(data = {}) {
+  const licenceRef = data.licenceRef ? data.licenceRef : LicenceHelper.generateLicenceRef()
+  const returnReference = data.returnReference ? data.returnReference : ReturnRequirementHelper.generateReference()
   const timestamp = timestampForPostgres()
   const receivedDate = data.receivedDate ? data.receivedDate : null
   const startDate = data.startDate ? new Date(data.startDate) : new Date('2022-04-01')
@@ -118,7 +118,7 @@ export function defaults(data = {}) {
  *
  * @returns {string} the generated return log ID
  */
-export function generateReturnId(
+function generateReturnId(
   startDate = new Date('2022-04-01'),
   endDate = new Date('2023-03-31'),
   version = 1,
@@ -126,11 +126,11 @@ export function generateReturnId(
   returnReference = null
 ) {
   if (!licenceRef) {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
   }
 
   if (!returnReference) {
-    returnReference = generateReference()
+    returnReference = ReturnRequirementHelper.generateReference()
   }
 
   return `v${version}:1:${licenceRef}:${returnReference}:${formatDateObjectToISO(startDate)}:${formatDateObjectToISO(endDate)}`
@@ -147,7 +147,7 @@ export function generateReturnId(
  * @returns {Promise<boolean>} - A promise that resolves to true if the return logs are continuous,
  * or false otherwise.
  */
-export async function hasContinuousReturnLogs(licenceReference) {
+async function hasContinuousReturnLogs(licenceReference) {
   const returnLogs = await ReturnLogModel.query()
     .select(['endDate', 'startDate'])
     .where('licenceRef', licenceReference)
@@ -175,4 +175,11 @@ function _areDatesSequential(endDate, startDate) {
   const differenceInDays = differenceInMs / (24 * 60 * 60 * 1000)
 
   return differenceInDays <= 1
+}
+
+export default {
+  add,
+  defaults,
+  generateReturnId,
+  hasContinuousReturnLogs
 }

@@ -3,7 +3,7 @@ import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture
 import * as ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import PaperReturnNotificationsPresenter from '../../../../app/presenters/notices/setup/paper-return-notifications.presenter.js'
@@ -20,7 +20,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
   beforeEach(async () => {
     dynamicLetterDueDate = futureDueDate('letter')
 
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
 
     dueReturns = [
       {

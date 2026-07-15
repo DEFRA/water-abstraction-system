@@ -1,6 +1,6 @@
 // Test helpers
 import { generateUUID } from '../../../../app/lib/general.lib.js'
-import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
 
 // Thing under test
 import FetchRelevantLicenceVersionService from '../../../../app/services/return-versions/setup/fetch-relevant-licence-version.service.js'

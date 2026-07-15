@@ -1,5 +1,5 @@
 // Test helpers
-import * as BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
+import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
 
 // Thing under test
 import FetchBillingAccountsService from '../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js'

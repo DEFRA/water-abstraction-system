@@ -6,7 +6,7 @@ import LicenceVersionConditionTypeModel from '../../../app/models/licence-versio
 import { selectRandomEntry } from '../general.js'
 import { data as licenceVersionPurposeConditionTypes } from '../../../db/seeds/data/licence-version-purpose-condition-types.js'
 
-export const data = licenceVersionPurposeConditionTypes
+const data = licenceVersionPurposeConditionTypes
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -22,10 +22,15 @@ export const data = licenceVersionPurposeConditionTypes
  *
  * @returns {module:LicenceVersionConditionTypeModel} The selected reference entry or one picked at random
  */
-export function select(index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return LicenceVersionConditionTypeModel.fromJson(licenceVersionPurposeConditionTypes[index])
   }
 
   return LicenceVersionConditionTypeModel.fromJson(selectRandomEntry(licenceVersionPurposeConditionTypes))
+}
+
+export default {
+  data,
+  select
 }

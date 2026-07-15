@@ -1,7 +1,7 @@
 // Test helpers
-import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import * as ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
-import * as ReturnSubmissionLineHelper from '../../../support/helpers/return-submission-line.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from '../../../support/helpers/return-submission-line.helper.js'
 
 // Things we need to stub
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'

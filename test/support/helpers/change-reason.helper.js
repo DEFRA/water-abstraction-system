@@ -6,7 +6,7 @@ import ChargeReasonModel from '../../../app/models/change-reason.model.js'
 import { data as changeReasons } from '../../../db/seeds/data/change-reasons.js'
 import { selectRandomEntry } from '../general.js'
 
-export const data = changeReasons
+const data = changeReasons
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -22,10 +22,15 @@ export const data = changeReasons
  *
  * @returns {module:ChargeReasonModel} The selected reference entry or one picked at random
  */
-export function select(index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return ChargeReasonModel.fromJson(changeReasons[index])
   }
 
   return ChargeReasonModel.fromJson(selectRandomEntry(changeReasons))
+}
+
+export default {
+  data,
+  select
 }

@@ -1,6 +1,6 @@
 // Test helpers
 import { generateUUID } from '../../../../app/lib/general.lib.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import MarkForSupplementaryBillingPresenter from '../../../../app/presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js'
@@ -16,7 +16,7 @@ describe('Mark For Supplementary Billing presenter', () => {
     let licence
 
     beforeEach(() => {
-      licence = { id: generateUUID(), licenceRef: generateLicenceRef() }
+      licence = { id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }
     })
 
     describe('and the current date is before April', () => {

@@ -19,7 +19,7 @@ import WorkflowModel from '../../../app/models/workflow.model.js'
  *
  * @returns {Promise<module:WorkflowModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return WorkflowModel.query()
@@ -37,7 +37,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     licenceId: generateUUID(),
     status: 'to_setup',
@@ -54,4 +54,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

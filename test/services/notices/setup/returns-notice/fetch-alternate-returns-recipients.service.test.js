@@ -1,6 +1,6 @@
 // Test helpers
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
-import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 
 // Thing under test
 import FetchAlternateReturnsRecipients from '../../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js'

@@ -1,9 +1,9 @@
 // Test helpers
-import * as BillHelper from '../../support/helpers/bill.helper.js'
-import * as BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
-import * as LicenceSupplementaryYearHelper from '../../support/helpers/licence-supplementary-year.helper.js'
-import * as WorkflowHelper from '../../support/helpers/workflow.helper.js'
+import BillHelper from '../../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceSupplementaryYearHelper from '../../support/helpers/licence-supplementary-year.helper.js'
+import WorkflowHelper from '../../support/helpers/workflow.helper.js'
 
 // Thing under test
 import UnflagUnbilledSupplementaryLicencesService from '../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js'

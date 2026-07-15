@@ -6,7 +6,7 @@ import PurposeModel from '../../../app/models/purpose.model.js'
 import { selectRandomEntry } from '../general.js'
 import { data as purposes } from '../../../db/seeds/data/purposes.js'
 
-export const data = purposes
+const data = purposes
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -22,10 +22,15 @@ export const data = purposes
  *
  * @returns {module:PurposeModel} The selected reference entry or one picked at random
  */
-export function select(index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return PurposeModel.fromJson(purposes[index])
   }
 
   return PurposeModel.fromJson(selectRandomEntry(purposes))
+}
+
+export default {
+  data,
+  select
 }

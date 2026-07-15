@@ -2,15 +2,15 @@
  * @module LicenceAbstractionDataSeeder
  */
 
-import * as LicenceHelper from '../helpers/licence.helper.js'
-import * as LicenceVersionHelper from '../helpers/licence-version.helper.js'
-import * as LicenceVersionPurposeHelper from '../helpers/licence-version-purpose.helper.js'
-import * as LicenceVersionPurposePointHelper from '../helpers/licence-version-purpose-point.helper.js'
-import * as PointHelper from '../helpers/point.helper.js'
-import * as PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
-import * as PurposeHelper from '../helpers/purpose.helper.js'
-import * as RegionHelper from '../helpers/region.helper.js'
-import * as SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import LicenceVersionHelper from '../helpers/licence-version.helper.js'
+import LicenceVersionPurposeHelper from '../helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposePointHelper from '../helpers/licence-version-purpose-point.helper.js'
+import PointHelper from '../helpers/point.helper.js'
+import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
+import PurposeHelper from '../helpers/purpose.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
+import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
 
 const { generateLicenceRef } = LicenceHelper
 const { generateLicenceVersionExternalId } = LicenceVersionHelper

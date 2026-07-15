@@ -6,7 +6,7 @@ import SecondaryPurposeModel from '../../../app/models/secondary-purpose.model.j
 import { selectRandomEntry } from '../general.js'
 import { data as secondaryPurposes } from '../../../db/seeds/data/secondary-purposes.js'
 
-export const data = secondaryPurposes
+const data = secondaryPurposes
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -22,10 +22,15 @@ export const data = secondaryPurposes
  *
  * @returns {module:SecondaryPurposeModel} The selected reference entry or one picked at random
  */
-export function select(index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return SecondaryPurposeModel.fromJson(secondaryPurposes[index])
   }
 
   return SecondaryPurposeModel.fromJson(selectRandomEntry(secondaryPurposes))
+}
+
+export default {
+  data,
+  select
 }

@@ -1,7 +1,7 @@
 // Test helpers
 import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -37,7 +37,7 @@ describe('Notifications - View Notification service', () => {
       beforeEach(() => {
         licence = {
           id: generateUUID(),
-          licenceRef: generateLicenceRef()
+          licenceRef: LicenceHelper.generateLicenceRef()
         }
 
         vi.spyOn(FetchNotificationService, 'default').mockResolvedValue({ licence, notification })

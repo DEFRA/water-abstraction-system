@@ -1,7 +1,7 @@
 // Test helpers
-import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Test helpers
 import YarStub from '../../../support/stubs/yar.stub.js'
@@ -41,7 +41,7 @@ describe('Bill Runs - Review - View Review Service', () => {
               issues: 'Aggregate',
               licenceId: generateUUID(),
               licenceHolder: 'ACME Water PLC',
-              licenceRef: generateLicenceRef(),
+              licenceRef: LicenceHelper.generateLicenceRef(),
               progress: true,
               status: 'review'
             },
@@ -50,7 +50,7 @@ describe('Bill Runs - Review - View Review Service', () => {
               issues: '',
               licenceId: generateUUID(),
               licenceHolder: 'SCEP Holdings Ltd',
-              licenceRef: generateLicenceRef(),
+              licenceRef: LicenceHelper.generateLicenceRef(),
               progress: false,
               status: 'ready'
             }

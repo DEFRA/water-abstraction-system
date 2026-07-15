@@ -1,7 +1,7 @@
 // Test helpers
 import { generateUUID } from '../../../app/lib/general.lib.js'
 import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
-import { generateUserId } from '../../support/helpers/user.helper.js'
+import UserHelper from '../../support/helpers/user.helper.js'
 
 // Things we need to stub
 import * as FetchLicenceMonitoringStationsDal from '../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
@@ -41,7 +41,7 @@ describe('Monitoring Stations - View Licence service', () => {
         },
         licenceVersionPurposeCondition: null,
         user: {
-          id: generateUserId(),
+          id: UserHelper.generateUserId(),
           username: 'environment.officer@wrls.gov.uk'
         }
       },
@@ -69,7 +69,7 @@ describe('Monitoring Stations - View Licence service', () => {
           }
         },
         user: {
-          id: generateUserId(),
+          id: UserHelper.generateUserId(),
           username: 'environment.officer@wrls.gov.uk'
         }
       }

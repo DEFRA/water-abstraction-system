@@ -1,6 +1,6 @@
 // Test helpers
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -36,7 +36,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
 
     vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    licenceRefWithDueReturns = generateLicenceRef()
+    licenceRefWithDueReturns = LicenceHelper.generateLicenceRef()
   })
 
   afterEach(() => {

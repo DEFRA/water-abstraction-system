@@ -1,5 +1,5 @@
 // Test helpers
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import ViewMarkedForSupplementaryBillingService from '../../../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js'

@@ -2,7 +2,7 @@
  * @module ChargeVersionNoteHelper
  */
 
-import { generateUserId } from './user.helper.js'
+import UserHelper from './user.helper.js'
 import ChargeVersionNoteModel from '../../../app/models/charge-version-note.model.js'
 
 /**
@@ -17,7 +17,7 @@ import ChargeVersionNoteModel from '../../../app/models/charge-version-note.mode
  *
  * @returns {Promise<module:NoteModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ChargeVersionNoteModel.query()
@@ -35,14 +35,19 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     note: 'This is a test note',
-    userId: generateUserId()
+    userId: UserHelper.generateUserId()
   }
 
   return {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

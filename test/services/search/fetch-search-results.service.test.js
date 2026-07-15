@@ -1,12 +1,12 @@
 // Test helpers
-import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
 import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
-import * as CompanyHelper from '../../support/helpers/company.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
 import * as EmptyLicenceSeeder from '../../support/seeders/empty-licence.seeder.js'
-import * as MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
-import * as RegionHelper from '../../support/helpers/region.helper.js'
-import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import * as UserHelper from '../../support/helpers/user.helper.js'
+import MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import UserHelper from '../../support/helpers/user.helper.js'
 
 // Things we need to stub
 import DatabaseConfig from '../../../config/database.config.js'

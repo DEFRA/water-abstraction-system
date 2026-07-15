@@ -1,5 +1,5 @@
 // Test helpers
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -29,7 +29,7 @@ describe('Notices - Setup - Licence presenter', () => {
     let licenceRef
 
     beforeEach(() => {
-      licenceRef = generateLicenceRef()
+      licenceRef = LicenceHelper.generateLicenceRef()
 
       session.licenceRef = licenceRef
     })

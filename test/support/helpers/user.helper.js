@@ -7,14 +7,14 @@ import { generateRandomInteger, generateUUID } from '../../../app/lib/general.li
 import UserModel from '../../../app/models/user.model.js'
 import { data as users } from '../../../db/seeds/data/users.js'
 
-export const data = users
+const data = users
 
 /**
  * List of attributes to skip when comparing user records in tests
  */
-export const SKIP_COMPARE_LIST = Object.freeze(['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData'])
+const SKIP_COMPARE_LIST = Object.freeze(['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData'])
 
-export const DEFAULT_INDEX = 4
+const DEFAULT_INDEX = 4
 
 /**
  * Add a new user
@@ -32,7 +32,7 @@ export const DEFAULT_INDEX = 4
  *
  * @returns {Promise<module:UserModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   // Overwrite the current password with the hashed version we want to persist unless it's set to 'VOID'
@@ -55,7 +55,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     username: generateUserName(),
     password: 'P@55word',
@@ -75,7 +75,7 @@ export function defaults(data = {}) {
  *
  * @returns {number} a random integer between 100011 and 199999
  */
-export function generateUserId() {
+function generateUserId() {
   // The last ID in the pre-seeded users is 100010
   return generateRandomInteger(100011, 199999)
 }
@@ -85,7 +85,7 @@ export function generateUserId() {
  *
  * @returns {string} a random user name in the format [random UUID]@wrls.gov.uk
  */
-export function generateUserName() {
+function generateUserName() {
   return `${generateUUID()}@wrls.gov.uk`
 }
 
@@ -103,10 +103,21 @@ export function generateUserName() {
  *
  * @returns {module:UserModel} The selected reference entry or one picked at random
  */
-export function select(index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return UserModel.fromJson(users[index])
   }
 
   return UserModel.fromJson(selectRandomEntry(users))
+}
+
+export default {
+  data,
+  SKIP_COMPARE_LIST,
+  DEFAULT_INDEX,
+  add,
+  defaults,
+  generateUserId,
+  generateUserName,
+  select
 }

@@ -1,11 +1,11 @@
 // Test helpers
-import * as BillRunHelper from '../support/helpers/bill-run.helper.js'
+import BillRunHelper from '../support/helpers/bill-run.helper.js'
 import BillRunModel from '../../app/models/bill-run.model.js'
-import * as CompanyHelper from '../support/helpers/company.helper.js'
+import CompanyHelper from '../support/helpers/company.helper.js'
 import CompanyModel from '../../app/models/company.model.js'
-import * as LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
-import * as RegionHelper from '../support/helpers/region.helper.js'
+import RegionHelper from '../support/helpers/region.helper.js'
 
 // Thing under test
 import RegionModel from '../../app/models/region.model.js'

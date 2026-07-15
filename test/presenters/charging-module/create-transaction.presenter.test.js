@@ -1,9 +1,9 @@
 // Test helpers
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import { ref } from 'objection'
-import * as RegionHelper from '../../support/helpers/region.helper.js'
-import * as TransactionHelper from '../../support/helpers/transaction.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
+import TransactionHelper from '../../support/helpers/transaction.helper.js'
 
 // Thing under test
 import CreateTransactionPresenter from '../../../app/presenters/charging-module/create-transaction.presenter.js'

@@ -3,7 +3,7 @@ import CompanyContactModel from '../../../../app/models/company-contact.model.js
 import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
 import SessionModel from '../../../../app/models/session.model.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
 import * as FetchCompanyContactDal from '../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js'
@@ -21,7 +21,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
     company = CustomersFixtures.company()
     contact = CustomersFixtures.contact()
 
-    licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
+    licences = [{ id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }]
 
     companyContact = CompanyContactModel.fromJson({
       id: generateUUID(),
@@ -74,7 +74,9 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
         describe('and there are abstraction alert licences', () => {
           beforeEach(() => {
-            companyContact.abstractionAlertLicences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
+            companyContact.abstractionAlertLicences = [
+              { id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }
+            ]
           })
 
           it('returns "some"', async () => {
@@ -118,7 +120,9 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
         describe('and there are abstraction alert licences', () => {
           beforeEach(() => {
-            companyContact.abstractionAlertLicences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
+            companyContact.abstractionAlertLicences = [
+              { id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }
+            ]
           })
 
           it('returns "no"', async () => {

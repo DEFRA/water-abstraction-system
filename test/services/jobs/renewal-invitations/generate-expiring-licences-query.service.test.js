@@ -1,5 +1,5 @@
 // Test helpers
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { db } from '../../../../db/db.js'
 import { tomorrow, yesterday } from '../../../support/general.js'
 

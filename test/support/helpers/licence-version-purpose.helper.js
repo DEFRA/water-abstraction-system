@@ -4,9 +4,9 @@
 
 import { generateRandomInteger, generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 import LicenceVersionPurposeModel from '../../../app/models/licence-version-purpose.model.js'
-import * as PrimaryPurposeHelper from './primary-purpose.helper.js'
-import * as PurposeHelper from './purpose.helper.js'
-import * as SecondaryPurposeHelper from './secondary-purpose.helper.js'
+import PrimaryPurposeHelper from './primary-purpose.helper.js'
+import PurposeHelper from './purpose.helper.js'
+import SecondaryPurposeHelper from './secondary-purpose.helper.js'
 
 /**
  * Add a new licence version purpose
@@ -29,7 +29,7 @@ import * as SecondaryPurposeHelper from './secondary-purpose.helper.js'
  *
  * @returns {Promise<module:LicenceVersionPurposeModel>} The instance of the newly created record
  */
-export async function add(data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceVersionPurposeModel.query()
@@ -47,7 +47,7 @@ export async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const { id: primaryPurposeId } = PrimaryPurposeHelper.select()
   const { id: purposeId } = PurposeHelper.select()
   const { id: secondaryPurposeId } = SecondaryPurposeHelper.select()
@@ -79,6 +79,12 @@ export function defaults(data = {}) {
  *
  * @returns {string} - A randomly generated external id
  */
-export function generateLicenceVersionPurposeExternalId() {
+function generateLicenceVersionPurposeExternalId() {
   return `${generateRandomInteger(0, 9)}:${generateRandomInteger(10000, 99999)}`
+}
+
+export default {
+  add,
+  defaults,
+  generateLicenceVersionPurposeExternalId
 }

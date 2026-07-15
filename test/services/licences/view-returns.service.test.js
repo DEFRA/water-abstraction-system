@@ -1,5 +1,5 @@
 // Test helpers
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 
 // Things we need to stub
 import * as DetermineLicenceHasReturnVersionsService from '../../../app/services/licences/determine-licence-has-return-versions.service.js'
@@ -32,7 +32,7 @@ describe('Licences - View Returns service', () => {
     }
 
     licence = {
-      licenceRef: generateLicenceRef()
+      licenceRef: LicenceHelper.generateLicenceRef()
     }
 
     vi.spyOn(DetermineLicenceHasReturnVersionsService, 'default').mockReturnValue(true)

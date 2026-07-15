@@ -6,7 +6,7 @@ import FinancialAgreementModel from '../../../app/models/financial-agreement.mod
 import { data as financialAgreements } from '../../../db/seeds/data/financial-agreements.js'
 import { selectRandomEntry } from '../general.js'
 
-export const data = financialAgreements
+const data = financialAgreements
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -22,10 +22,15 @@ export const data = financialAgreements
  *
  * @returns {module:FinancialAgreementModel} The selected reference entry or one picked at random
  */
-export function select(index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return FinancialAgreementModel.fromJson(financialAgreements[index])
   }
 
   return FinancialAgreementModel.fromJson(selectRandomEntry(financialAgreements))
+}
+
+export default {
+  data,
+  select
 }

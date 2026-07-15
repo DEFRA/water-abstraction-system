@@ -4,9 +4,9 @@
 
 import ChargeElementModel from '../../../app/models/charge-element.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import * as PrimaryPurposeHelper from './primary-purpose.helper.js'
-import * as PurposeHelper from './purpose.helper.js'
-import * as SecondaryPurposeHelper from './secondary-purpose.helper.js'
+import PrimaryPurposeHelper from './primary-purpose.helper.js'
+import PurposeHelper from './purpose.helper.js'
+import SecondaryPurposeHelper from './secondary-purpose.helper.js'
 
 /**
  * Add a new charge element
@@ -34,7 +34,7 @@ import * as SecondaryPurposeHelper from './secondary-purpose.helper.js'
  *
  * @returns {Promise<module:ChargeElementModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ChargeElementModel.query()
@@ -52,7 +52,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const { id: purposeId } = PurposeHelper.select()
   const { id: purposePrimaryId } = PrimaryPurposeHelper.select()
   const { id: purposeSecondaryId } = SecondaryPurposeHelper.select()
@@ -80,4 +80,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

@@ -1,7 +1,7 @@
 // Test Helpers
 import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -14,7 +14,7 @@ describe('Licences - Communications presenter', () => {
   beforeEach(() => {
     licence = {
       id: generateUUID(),
-      licenceRef: generateLicenceRef()
+      licenceRef: LicenceHelper.generateLicenceRef()
     }
 
     const notice = NoticesFixture.alertStop()

@@ -1,6 +1,6 @@
 import LicenceModel from '../../../app/models/licence.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef } from '../helpers/licence.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
 
 /**
  * Generates an instance of `LicenceModel` with an ID and a licence reference
@@ -14,7 +14,7 @@ import { generateLicenceRef } from '../helpers/licence.helper.js'
 export function licence(data = {}) {
   return LicenceModel.fromJson({
     id: generateUUID(),
-    licenceRef: generateLicenceRef(),
+    licenceRef: LicenceHelper.generateLicenceRef(),
     ...data
   })
 }

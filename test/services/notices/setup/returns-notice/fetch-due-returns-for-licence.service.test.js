@@ -1,7 +1,7 @@
 // Test helpers
-import * as RegionHelper from '../../../../support/helpers/region.helper.js'
-import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
-import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
+import RegionHelper from '../../../../support/helpers/region.helper.js'
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import FetchDueReturnsForLicence from '../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'
@@ -12,7 +12,7 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
   let region
 
   beforeAll(async () => {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
 
     region = RegionHelper.select()
 

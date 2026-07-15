@@ -17,7 +17,7 @@ import ReviewChargeReferenceModel from '../../../app/models/review-charge-refere
  *
  * @returns {Promise<module:ReviewChargeReferenceModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReviewChargeReferenceModel.query()
@@ -35,7 +35,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns data from the query
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     reviewChargeVersionId: generateUUID(),
     chargeReferenceId: generateUUID()
@@ -45,4 +45,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

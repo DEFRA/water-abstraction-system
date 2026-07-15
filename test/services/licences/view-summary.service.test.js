@@ -1,6 +1,6 @@
 // Test helpers
 import LicenceModel from '../../../app/models/licence.model.js'
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -21,7 +21,7 @@ describe('Licences - View Summary service', () => {
       lapsedDate: null,
       includeInPresrocBilling: 'no',
       includeInSrocBilling: false,
-      licenceRef: generateLicenceRef(),
+      licenceRef: LicenceHelper.generateLicenceRef(),
       revokedDate: null,
       licenceSupplementaryYears: [],
       startDate: new Date('2019-04-01')

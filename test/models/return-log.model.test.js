@@ -1,14 +1,14 @@
 // Test helpers
-import * as LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
-import * as ReturnCycleHelper from '../support/helpers/return-cycle.helper.js'
+import ReturnCycleHelper from '../support/helpers/return-cycle.helper.js'
 import ReturnCycleModel from '../../app/models/return-cycle.model.js'
-import * as ReturnLogHelper from '../support/helpers/return-log.helper.js'
-import * as ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
+import ReturnLogHelper from '../support/helpers/return-log.helper.js'
+import ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
 import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
-import * as ReturnSubmissionHelper from '../support/helpers/return-submission.helper.js'
+import ReturnSubmissionHelper from '../support/helpers/return-submission.helper.js'
 import ReturnSubmissionModel from '../../app/models/return-submission.model.js'
-import * as ReviewReturnHelper from '../support/helpers/review-return.helper.js'
+import ReviewReturnHelper from '../support/helpers/review-return.helper.js'
 import ReviewReturnModel from '../../app/models/review-return.model.js'
 
 // Thing under test

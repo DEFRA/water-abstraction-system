@@ -1,5 +1,5 @@
 // Test helpers
-import * as SessionHelper from '../support/helpers/session.helper.js'
+import SessionHelper from '../support/helpers/session.helper.js'
 import SessionNotFoundError from '../../app/errors/session-not-found.error.js'
 import { generateUUID } from '../../app/lib/general.lib.js'
 

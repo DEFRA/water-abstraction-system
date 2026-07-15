@@ -6,7 +6,7 @@ import LicenceModel from '../../../app/models/licence.model.js'
 import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
 import * as FetchLicencesService from '../../../app/dal/companies/fetch-licences.dal.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 
 // Thing under test
 import ViewLicencesService from '../../../app/services/companies/view-licences.service.js'
@@ -29,7 +29,7 @@ describe('Companies - View Licences service', () => {
         expiredDate: null,
         id: generateUUID(),
         lapsedDate: null,
-        licenceRef: generateLicenceRef(),
+        licenceRef: LicenceHelper.generateLicenceRef(),
         revokedDate: null,
         startDate: new Date('2022-01-01'),
         currentLicenceHolderId: company.id,

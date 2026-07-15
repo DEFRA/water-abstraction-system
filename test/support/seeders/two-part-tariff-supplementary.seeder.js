@@ -2,20 +2,20 @@
  * @module TwoPartTariffSupplementarySeeder
  */
 
-import * as BillRunHelper from '../helpers/bill-run.helper.js'
-import * as BillingAccountHelper from '../helpers/billing-account.helper.js'
-import * as ChangeReasonHelper from '../helpers/change-reason.helper.js'
-import * as ChargeCategoryHelper from '../helpers/charge-category.helper.js'
-import * as ChargeElementHelper from '../helpers/charge-element.helper.js'
-import * as ChargeReferenceHelper from '../helpers/charge-reference.helper.js'
-import * as ChargeVersionHelper from '../helpers/charge-version.helper.js'
-import * as LicenceHelper from '../helpers/licence.helper.js'
-import * as LicenceSupplementaryYearHelper from '../helpers/licence-supplementary-year.helper.js'
-import * as RegionHelper from '../helpers/region.helper.js'
-import * as ReviewChargeElementHelper from '../helpers/review-charge-element.helper.js'
-import * as ReviewChargeReferenceHelper from '../helpers/review-charge-reference.helper.js'
-import * as ReviewChargeVersionHelper from '../helpers/review-charge-version.helper.js'
-import * as ReviewLicenceHelper from '../helpers/review-licence.helper.js'
+import BillRunHelper from '../helpers/bill-run.helper.js'
+import BillingAccountHelper from '../helpers/billing-account.helper.js'
+import ChangeReasonHelper from '../helpers/change-reason.helper.js'
+import ChargeCategoryHelper from '../helpers/charge-category.helper.js'
+import ChargeElementHelper from '../helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../helpers/charge-reference.helper.js'
+import ChargeVersionHelper from '../helpers/charge-version.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import LicenceSupplementaryYearHelper from '../helpers/licence-supplementary-year.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
+import ReviewChargeElementHelper from '../helpers/review-charge-element.helper.js'
+import ReviewChargeReferenceHelper from '../helpers/review-charge-reference.helper.js'
+import ReviewChargeVersionHelper from '../helpers/review-charge-version.helper.js'
+import ReviewLicenceHelper from '../helpers/review-licence.helper.js'
 
 const ABATEMENT_S126 = 16
 const MAJOR_CHANGE = 0

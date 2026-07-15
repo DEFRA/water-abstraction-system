@@ -1,8 +1,8 @@
 // Test helpers
-import * as ReviewChargeElementHelper from '../support/helpers/review-charge-element.helper.js'
+import ReviewChargeElementHelper from '../support/helpers/review-charge-element.helper.js'
 import ReviewChargeElementModel from '../../app/models/review-charge-element.model.js'
-import * as ReviewChargeElementReturnHelper from '../support/helpers/review-charge-element-return.helper.js'
-import * as ReviewReturnHelper from '../support/helpers/review-return.helper.js'
+import ReviewChargeElementReturnHelper from '../support/helpers/review-charge-element-return.helper.js'
+import ReviewReturnHelper from '../support/helpers/review-return.helper.js'
 import ReviewReturnModel from '../../app/models/review-return.model.js'
 
 // Thing under test

@@ -1,8 +1,8 @@
 // Test helpers
-import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
 import BillRunModel from '../../../app/models/bill-run.model.js'
 import EventModel from '../../../app/models/event.model.js'
-import * as RegionHelper from '../../support/helpers/region.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
 
 // Thing under test
 import CreateBillRunEventService from '../../../app/services/bill-runs/create-bill-run-event.service.js'

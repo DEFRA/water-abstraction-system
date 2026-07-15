@@ -1,11 +1,11 @@
 // Test helpers
-import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
-import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
-import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
-import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
-import * as RegionHelper from '../../../support/helpers/region.helper.js'
-import * as WorkflowHelper from '../../../support/helpers/workflow.helper.js'
+import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
 
 // Thing under test
 import FetchTimeLimitedLicencesService from '../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js'

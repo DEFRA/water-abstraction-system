@@ -1,9 +1,9 @@
 // Test helpers
-import * as PointHelper from '../support/helpers/point.helper.js'
+import PointHelper from '../support/helpers/point.helper.js'
 import PointModel from '../../app/models/point.model.js'
-import * as ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
+import ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
 import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
-import * as ReturnRequirementPointHelper from '../support/helpers/return-requirement-point.helper.js'
+import ReturnRequirementPointHelper from '../support/helpers/return-requirement-point.helper.js'
 
 // Thing under test
 import ReturnRequirementPointModel from '../../app/models/return-requirement-point.model.js'

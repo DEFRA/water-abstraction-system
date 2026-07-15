@@ -18,7 +18,7 @@ import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
  *
  * @returns {Promise<module:LicenceEntityModel>} The instance of the newly created record
  */
-export async function add(data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceEntityModel.query()
@@ -36,7 +36,7 @@ export async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     id: generateUUID(),
     name: generateName(),
@@ -54,6 +54,12 @@ export function defaults(data = {}) {
  *
  * @returns {string} a random name in the format [random UUID]@example.co.uk
  */
-export function generateName() {
+function generateName() {
   return `${generateUUID()}@example.co.uk`
+}
+
+export default {
+  add,
+  defaults,
+  generateName
 }

@@ -4,7 +4,7 @@
 
 import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceVersionPurposePointModel from '../../../app/models/licence-version-purpose-point.model.js'
-import * as PointHelper from './point.helper.js'
+import PointHelper from './point.helper.js'
 
 /**
  * Add a new licence version purpose point
@@ -19,7 +19,7 @@ import * as PointHelper from './point.helper.js'
  *
  * @returns {Promise<module:LicenceVersionPurposePointModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceVersionPurposePointModel.query()
@@ -37,7 +37,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     externalId: generateLicenceVersionPurposePointExternalId(),
     licenceVersionPurposeId: generateUUID(),
@@ -59,8 +59,14 @@ export function defaults(data = {}) {
  *
  * @returns {string} - A randomly generated licence version purpose point external ID
  */
-export function generateLicenceVersionPurposePointExternalId() {
+function generateLicenceVersionPurposePointExternalId() {
   const naldPointId = PointHelper.generateNaldPointId()
 
   return `9:${generateRandomInteger(100, 99999)}:${naldPointId}`
+}
+
+export default {
+  add,
+  defaults,
+  generateLicenceVersionPurposePointExternalId
 }

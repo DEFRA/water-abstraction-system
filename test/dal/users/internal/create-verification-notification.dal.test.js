@@ -1,7 +1,7 @@
 // Test helpers
 import NotificationModel from '../../../../app/models/notification.model.js'
 import ServerConfig from '../../../../config/server.config.js'
-import { generateUserName } from '../../../support/helpers/user.helper.js'
+import UserHelper from '../../../support/helpers/user.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -15,7 +15,7 @@ describe('Users - Internal - Create Verification Notification DAL', () => {
 
   describe('when called', () => {
     beforeEach(() => {
-      email = generateUserName()
+      email = UserHelper.generateUserName()
       resetGuid = generateUUID()
     })
 

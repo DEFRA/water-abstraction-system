@@ -1,5 +1,5 @@
 import { generateNoticeReferenceCode, generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef } from '../helpers/licence.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
 
 /**
  * Represents a notice of type 'alert reduce'
@@ -284,7 +284,7 @@ function _defaults() {
     id: generateUUID(),
     createdAt: new Date('2025-03-25'),
     issuer: 'admin-internal@wrls.gov.uk',
-    licences: [generateLicenceRef()],
+    licences: [LicenceHelper.generateLicenceRef()],
     overallStatus: 'pending',
     status: 'completed',
     statusCounts: { cancelled: 0, error: 0, pending: 1, returned: 0, sent: 0 },

@@ -1,7 +1,7 @@
 // Test helpers
-import * as EventHelper from '../../support/helpers/event.helper.js'
+import EventHelper from '../../support/helpers/event.helper.js'
 import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
-import * as NotificationHelper from '../../support/helpers/notification.helper.js'
+import NotificationHelper from '../../support/helpers/notification.helper.js'
 import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 

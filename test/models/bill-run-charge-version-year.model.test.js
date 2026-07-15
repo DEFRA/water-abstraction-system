@@ -1,8 +1,8 @@
 // Test helpers
-import * as BillRunHelper from '../support/helpers/bill-run.helper.js'
+import BillRunHelper from '../support/helpers/bill-run.helper.js'
 import BillRunModel from '../../app/models/bill-run.model.js'
-import * as BillRunChargeVersionYearHelper from '../support/helpers/bill-run-charge-version-year.helper.js'
-import * as ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
+import BillRunChargeVersionYearHelper from '../support/helpers/bill-run-charge-version-year.helper.js'
+import ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
 import ChargeVersionModel from '../../app/models/charge-version.model.js'
 
 // Thing under test

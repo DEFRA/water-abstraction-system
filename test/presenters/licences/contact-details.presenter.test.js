@@ -1,6 +1,6 @@
 // Test Helpers
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 
 // Thing under test
 import ContactDetailsPresenter from '../../../app/presenters/licences/contact-details.presenter.js'
@@ -13,7 +13,7 @@ describe('Licences - Contact Details presenter', () => {
   beforeEach(() => {
     licence = {
       id: generateUUID(),
-      licenceRef: generateLicenceRef()
+      licenceRef: LicenceHelper.generateLicenceRef()
     }
 
     companyId = generateUUID()

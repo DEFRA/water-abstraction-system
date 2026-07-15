@@ -1,5 +1,5 @@
 // Test helpers
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import CheckLicenceExistsDal from '../../../../app/dal/notices/setup/check-licence-exists.dal.js'

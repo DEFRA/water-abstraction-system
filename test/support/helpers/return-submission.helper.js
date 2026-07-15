@@ -3,7 +3,7 @@
  */
 
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateReturnId } from './return-log.helper.js'
+import ReturnLogHelper from './return-log.helper.js'
 import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 
 /**
@@ -26,7 +26,7 @@ import ReturnSubmissionModel from '../../../app/models/return-submission.model.j
  *
  * @returns {Promise<module:ReturnSubmissionModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnSubmissionModel.query()
@@ -44,11 +44,11 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     id: generateUUID(),
     returnLogId: generateUUID(),
-    returnId: generateReturnId(),
+    returnId: ReturnLogHelper.generateReturnId(),
     userId: 'admin-internal@wrls.gov.uk',
     userType: 'internal',
     version: 1,
@@ -69,4 +69,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

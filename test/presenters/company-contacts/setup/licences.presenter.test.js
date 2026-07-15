@@ -1,6 +1,6 @@
 // Test helpers
 import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -16,7 +16,7 @@ describe('Company Contacts - Setup - Licences Presenter', () => {
 
     licence = {
       id: generateUUID(),
-      licenceRef: generateLicenceRef()
+      licenceRef: LicenceHelper.generateLicenceRef()
     }
 
     session = { id: generateUUID(), company, licences: [licence] }

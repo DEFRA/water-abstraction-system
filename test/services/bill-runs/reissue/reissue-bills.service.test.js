@@ -1,10 +1,10 @@
 // Test helpers
-import * as BillHelper from '../../../support/helpers/bill.helper.js'
+import BillHelper from '../../../support/helpers/bill.helper.js'
 import BillModel from '../../../../app/models/bill.model.js'
-import * as BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
+import BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
 import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
-import * as TransactionHelper from '../../../support/helpers/transaction.helper.js'
+import TransactionHelper from '../../../support/helpers/transaction.helper.js'
 import TransactionModel from '../../../../app/models/transaction.model.js'
 
 // Things we need to stub

@@ -1,5 +1,5 @@
 // Test helpers
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import CancelPresenter from '../../../../app/presenters/notices/setup/cancel.presenter.js'
@@ -11,7 +11,7 @@ describe('Notices - Setup - Cancel presenter', () => {
   let session
 
   beforeEach(() => {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
 
     session = {
       licenceRef,

@@ -1,6 +1,6 @@
 // Test helpers
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Test helpers
@@ -21,7 +21,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
   let yarStub
 
   beforeEach(() => {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
 
     dueReturn = {
       siteDescription: 'Potable Water Supply - Direct',

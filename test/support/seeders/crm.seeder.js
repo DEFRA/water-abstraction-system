@@ -2,21 +2,21 @@
  * @module CRMSeeder
  */
 
-import * as BillingAccountHelper from '../helpers/billing-account.helper.js'
-import * as ChangeReasonHelper from '../helpers/change-reason.helper.js'
-import * as ChargeVersionHelper from '../helpers/charge-version.helper.js'
-import * as CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
-import * as CompanyHelper from '../helpers/company.helper.js'
-import * as ContactHelper from '../../support/helpers/contact.helper.js'
-import * as LicenceDocumentHeaderHelper from '../helpers/licence-document-header.helper.js'
-import * as LicenceDocumentHelper from '../../support/helpers/licence-document.helper.js'
-import * as LicenceDocumentRoleHelper from '../helpers/licence-document-role.helper.js'
-import * as LicenceEntityHelper from '../helpers/licence-entity.helper.js'
-import * as LicenceEntityRoleHelper from '../helpers/licence-entity-role.helper.js'
-import * as LicenceHelper from '../helpers/licence.helper.js'
-import * as LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
-import * as LicenceVersionHelper from '../helpers/licence-version.helper.js'
-import * as UserModel from '../helpers/user.helper.js'
+import BillingAccountHelper from '../helpers/billing-account.helper.js'
+import ChangeReasonHelper from '../helpers/change-reason.helper.js'
+import ChargeVersionHelper from '../helpers/charge-version.helper.js'
+import CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
+import CompanyHelper from '../helpers/company.helper.js'
+import ContactHelper from '../../support/helpers/contact.helper.js'
+import LicenceDocumentHeaderHelper from '../helpers/licence-document-header.helper.js'
+import LicenceDocumentHelper from '../../support/helpers/licence-document.helper.js'
+import LicenceDocumentRoleHelper from '../helpers/licence-document-role.helper.js'
+import LicenceEntityHelper from '../helpers/licence-entity.helper.js'
+import LicenceEntityRoleHelper from '../helpers/licence-entity-role.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
+import LicenceVersionHelper from '../helpers/licence-version.helper.js'
+import UserModel from '../helpers/user.helper.js'
 
 const { generateLicenceRef } = LicenceHelper
 

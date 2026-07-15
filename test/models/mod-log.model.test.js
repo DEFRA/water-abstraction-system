@@ -1,13 +1,13 @@
 // Test helpers
-import * as ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
+import ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
 import ChargeVersionModel from '../../app/models/charge-version.model.js'
-import * as LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
-import * as LicenceVersionHelper from '../support/helpers/licence-version.helper.js'
+import LicenceVersionHelper from '../support/helpers/licence-version.helper.js'
 import LicenceVersionModel from '../../app/models/licence-version.model.js'
-import * as ReturnVersionHelper from '../support/helpers/return-version.helper.js'
+import ReturnVersionHelper from '../support/helpers/return-version.helper.js'
 import ReturnVersionModel from '../../app/models/return-version.model.js'
-import * as ModLogHelper from '../support/helpers/mod-log.helper.js'
+import ModLogHelper from '../support/helpers/mod-log.helper.js'
 
 // Thing under test
 import ModLogModel from '../../app/models/mod-log.model.js'

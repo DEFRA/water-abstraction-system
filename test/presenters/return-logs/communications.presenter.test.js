@@ -2,7 +2,7 @@
 import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 
 // Thing under test
 import CommunicationsPresenter from '../../../app/presenters/return-logs/communications.presenter.js'
@@ -17,7 +17,7 @@ describe('Return Logs - Communications presenter', () => {
       id: generateUUID(),
       licence: {
         id: generateUUID(),
-        licenceRef: generateLicenceRef()
+        licenceRef: LicenceHelper.generateLicenceRef()
       }
     }
 

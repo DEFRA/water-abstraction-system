@@ -1,6 +1,6 @@
 // Test helpers
-import * as CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
-import * as ContactHelper from '../../../support/helpers/contact.helper.js'
+import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
+import ContactHelper from '../../../support/helpers/contact.helper.js'
 
 // Thing under test
 import FetchCompanyContactsDal from '../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js'

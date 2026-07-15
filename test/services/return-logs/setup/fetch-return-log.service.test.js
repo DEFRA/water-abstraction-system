@@ -1,8 +1,8 @@
 // Test helpers
 import { generateUUID } from '../../../../app/lib/general.lib.js'
-import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import * as ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import FetchReturnLogService from '../../../../app/services/return-logs/setup/fetch-return-log.service.js'

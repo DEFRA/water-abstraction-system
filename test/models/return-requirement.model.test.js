@@ -1,13 +1,13 @@
 // Test helpers
-import * as PointHelper from '../support/helpers/point.helper.js'
+import PointHelper from '../support/helpers/point.helper.js'
 import PointModel from '../../app/models/point.model.js'
-import * as ReturnLogHelper from '../support/helpers/return-log.helper.js'
+import ReturnLogHelper from '../support/helpers/return-log.helper.js'
 import ReturnLogModel from '../../app/models/return-log.model.js'
-import * as ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
-import * as ReturnRequirementPointHelper from '../support/helpers/return-requirement-point.helper.js'
-import * as ReturnRequirementPurposeHelper from '../support/helpers/return-requirement-purpose.helper.js'
+import ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
+import ReturnRequirementPointHelper from '../support/helpers/return-requirement-point.helper.js'
+import ReturnRequirementPurposeHelper from '../support/helpers/return-requirement-purpose.helper.js'
 import ReturnRequirementPurposeModel from '../../app/models/return-requirement-purpose.model.js'
-import * as ReturnVersionHelper from '../support/helpers/return-version.helper.js'
+import ReturnVersionHelper from '../support/helpers/return-version.helper.js'
 import ReturnVersionModel from '../../app/models/return-version.model.js'
 
 // Thing under test

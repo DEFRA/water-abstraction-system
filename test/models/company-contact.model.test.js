@@ -1,12 +1,12 @@
 // Test helpers
-import * as CompanyContactHelper from '../support/helpers/company-contact.helper.js'
-import * as CompanyHelper from '../support/helpers/company.helper.js'
+import CompanyContactHelper from '../support/helpers/company-contact.helper.js'
+import CompanyHelper from '../support/helpers/company.helper.js'
 import CompanyModel from '../../app/models/company.model.js'
-import * as ContactHelper from '../support/helpers/contact.helper.js'
+import ContactHelper from '../support/helpers/contact.helper.js'
 import ContactModel from '../../app/models/contact.model.js'
-import * as LicenceRoleHelper from '../support/helpers/licence-role.helper.js'
+import LicenceRoleHelper from '../support/helpers/licence-role.helper.js'
 import LicenceRoleModel from '../../app/models/licence-role.model.js'
-import * as UserHelper from '../support/helpers/user.helper.js'
+import UserHelper from '../support/helpers/user.helper.js'
 import UserModel from '../../app/models/user.model.js'
 import { generateUUID } from '../../app/lib/general.lib.js'
 

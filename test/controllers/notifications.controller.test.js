@@ -3,7 +3,7 @@ import http2 from 'node:http2'
 import * as NoticesFixture from '../support/fixtures/notices.fixture.js'
 import * as NotificationsFixture from '../support/fixtures/notifications.fixture.js'
 import { generateUUID } from '../../app/lib/general.lib.js'
-import { generateLicenceRef } from '../support/helpers/licence.helper.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
 
 // Things we need to stub
 import * as DownloadNotificationService from '../../app/services/notifications/download-notification.service.js'
@@ -60,7 +60,7 @@ describe('Notifications controller', () => {
           beforeEach(async () => {
             licence = {
               id: generateUUID(),
-              licenceRef: generateLicenceRef()
+              licenceRef: LicenceHelper.generateLicenceRef()
             }
 
             const notice = NoticesFixture.returnsInvitation()
@@ -114,7 +114,7 @@ describe('Notifications controller', () => {
           beforeEach(async () => {
             licence = {
               id: generateUUID(),
-              licenceRef: generateLicenceRef()
+              licenceRef: LicenceHelper.generateLicenceRef()
             }
 
             const notice = NoticesFixture.returnsInvitation()
@@ -168,7 +168,7 @@ describe('Notifications controller', () => {
           beforeEach(async () => {
             licence = {
               id: generateUUID(),
-              licenceRef: generateLicenceRef()
+              licenceRef: LicenceHelper.generateLicenceRef()
             }
 
             const returnLogId = generateUUID()

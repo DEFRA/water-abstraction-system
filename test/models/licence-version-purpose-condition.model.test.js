@@ -1,10 +1,10 @@
 // Test helpers
-import * as LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
+import LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
 import LicenceMonitoringStationModel from '../../app/models/licence-monitoring-station.model.js'
-import * as LicenceVersionPurposeConditionHelper from '../support/helpers/licence-version-purpose-condition.helper.js'
-import * as LicenceVersionPurposeConditionTypeHelper from '../support/helpers/licence-version-purpose-condition-type.helper.js'
+import LicenceVersionPurposeConditionHelper from '../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionTypeHelper from '../support/helpers/licence-version-purpose-condition-type.helper.js'
 import LicenceVersionPurposeConditionTypeModel from '../../app/models/licence-version-purpose-condition-type.model.js'
-import * as LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
 import LicenceVersionPurposeModel from '../../app/models/licence-version-purpose.model.js'
 
 // Thing under test

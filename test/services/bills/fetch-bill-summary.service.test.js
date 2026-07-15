@@ -1,12 +1,12 @@
 // Test helpers
-import * as BillHelper from '../../support/helpers/bill.helper.js'
-import * as BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
-import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import * as BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
-import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
-import * as CompanyHelper from '../../support/helpers/company.helper.js'
-import * as ContactHelper from '../../support/helpers/contact.helper.js'
-import * as RegionHelper from '../../support/helpers/region.helper.js'
+import BillHelper from '../../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
+import ContactHelper from '../../support/helpers/contact.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
 
 // Thing under test
 import FetchBillSummaryService from '../../../app/services/bills/fetch-bill-summary.service.js'

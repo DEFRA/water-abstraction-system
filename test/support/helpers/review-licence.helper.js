@@ -3,7 +3,7 @@
  */
 
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef } from './licence.helper.js'
+import LicenceHelper from './licence.helper.js'
 import ReviewLicenceModel from '../../../app/models/review-licence.model.js'
 
 /**
@@ -21,7 +21,7 @@ import ReviewLicenceModel from '../../../app/models/review-licence.model.js'
  *
  * @returns {Promise<module:ReviewLicenceModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReviewLicenceModel.query()
@@ -39,11 +39,11 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns data from the query
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     billRunId: generateUUID(),
     licenceId: generateUUID(),
-    licenceRef: generateLicenceRef(),
+    licenceRef: LicenceHelper.generateLicenceRef(),
     licenceHolder: 'Licence Holder Ltd',
     issues: ''
   }
@@ -52,4 +52,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

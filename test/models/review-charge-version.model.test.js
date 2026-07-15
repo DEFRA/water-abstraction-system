@@ -1,10 +1,10 @@
 // Test helpers
-import * as ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
+import ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
 import ChargeVersionModel from '../../app/models/charge-version.model.js'
-import * as ReviewChargeReferenceHelper from '../support/helpers/review-charge-reference.helper.js'
+import ReviewChargeReferenceHelper from '../support/helpers/review-charge-reference.helper.js'
 import ReviewChargeReferenceModel from '../../app/models/review-charge-reference.model.js'
-import * as ReviewChargeVersionHelper from '../support/helpers/review-charge-version.helper.js'
-import * as ReviewLicenceHelper from '../support/helpers/review-licence.helper.js'
+import ReviewChargeVersionHelper from '../support/helpers/review-charge-version.helper.js'
+import ReviewLicenceHelper from '../support/helpers/review-licence.helper.js'
 import ReviewLicenceModel from '../../app/models/review-licence.model.js'
 
 // Thing under test

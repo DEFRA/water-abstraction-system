@@ -1,6 +1,6 @@
 // Test helpers
 import CompanyModel from '../../../../app/models/company.model.js'
-import * as CompanyHelper from '../../../support/helpers/company.helper.js'
+import CompanyHelper from '../../../support/helpers/company.helper.js'
 
 // Thing under test
 import FetchExistingCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js'

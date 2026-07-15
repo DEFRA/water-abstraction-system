@@ -1,9 +1,9 @@
 // Test helpers
-import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
-import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
-import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
-import * as WorkflowHelper from '../../../support/helpers/workflow.helper.js'
+import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
 
 // Thing under test
 import FetchLicenceService from '../../../../app/services/licences/supplementary/fetch-licence.service.js'

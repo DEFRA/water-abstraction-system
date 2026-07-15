@@ -1,5 +1,5 @@
 // Test helpers
-import * as WorkflowHelper from '../../support/helpers/workflow.helper.js'
+import WorkflowHelper from '../../support/helpers/workflow.helper.js'
 
 // Thing under test
 import FetchWorkflowsService from '../../../app/services/licences/fetch-workflows.service.js'

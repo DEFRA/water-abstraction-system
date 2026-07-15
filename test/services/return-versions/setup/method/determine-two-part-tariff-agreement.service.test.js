@@ -1,14 +1,14 @@
 // Test helpers
-import * as FinancialAgreementHelper from '../../../../support/helpers/financial-agreement.helper.js'
-import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
-import * as LicenceAgreementHelper from '../../../../support/helpers/licence-agreement.helper.js'
+import FinancialAgreementHelper from '../../../../support/helpers/financial-agreement.helper.js'
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
+import LicenceAgreementHelper from '../../../../support/helpers/licence-agreement.helper.js'
 
 // Thing under test
 import DetermineTwoPartTariffAgreementService from '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
 
 describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service', () => {
   const licenceAgreements = {}
-  const licenceRef = generateLicenceRef()
+  const licenceRef = LicenceHelper.generateLicenceRef()
 
   let startDate
 
@@ -78,7 +78,7 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
     })
 
     it('returns false', async () => {
-      const result = await DetermineTwoPartTariffAgreementService(generateLicenceRef(), startDate)
+      const result = await DetermineTwoPartTariffAgreementService(LicenceHelper.generateLicenceRef(), startDate)
 
       expect(result).toBe(false)
     })

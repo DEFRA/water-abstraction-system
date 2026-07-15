@@ -4,7 +4,7 @@
 
 import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 import PointModel from '../../../app/models/point.model.js'
-import * as SourceHelper from './source.helper.js'
+import SourceHelper from './source.helper.js'
 
 /**
  * Add a new licence version purpose point
@@ -20,7 +20,7 @@ import * as SourceHelper from './source.helper.js'
  *
  * @returns {Promise<module:PointModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return PointModel.query()
@@ -38,7 +38,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const { id: sourceId } = SourceHelper.select()
   const naldPointId = data.naldPointId ? data.naldPointId : generateNaldPointId()
   const ngr1 = data.ngr1 ? data.ngr1 : generateNationalGridReference()
@@ -61,7 +61,7 @@ export function defaults(data = {}) {
  *
  * @returns {string} - A randomly National Grid Reference NGR
  */
-export function generateNationalGridReference() {
+function generateNationalGridReference() {
   // NOTE: These are taken from https://en.wikipedia.org/wiki/Ordnance_Survey_National_Grid and are the 100KM
   // square references that cover the majority of the UK (sorry far North!)
   const codes = ['SD', 'SE', 'SJ', 'SK', 'SO', 'SP', 'ST', 'SU', 'SY', 'SZ', 'TA', 'TF', 'TL', 'TQ', 'TV', 'TG', 'TM']
@@ -74,6 +74,13 @@ export function generateNationalGridReference() {
  *
  * @returns {string} - A randomly generated point ID
  */
-export function generateNaldPointId() {
+function generateNaldPointId() {
   return generateRandomInteger(1, 99999)
+}
+
+export default {
+  add,
+  defaults,
+  generateNationalGridReference,
+  generateNaldPointId
 }

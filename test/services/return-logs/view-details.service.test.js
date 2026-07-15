@@ -1,6 +1,6 @@
 // Test helpers
 import * as ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
-import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 
 // Things we need to stub
 import * as FetchReturnLogDetailsService from '../../../app/services/return-logs/fetch-return-log-details.service.js'

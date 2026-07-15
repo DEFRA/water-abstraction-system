@@ -4,7 +4,7 @@
 
 import ChargeVersionModel from '../../../app/models/charge-version.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef } from './licence.helper.js'
+import LicenceHelper from './licence.helper.js'
 
 /**
  * Add a new charge version
@@ -25,7 +25,7 @@ import { generateLicenceRef } from './licence.helper.js'
  *
  * @returns {Promise<module:ChargeVersionModel>} The instance of the newly created record
  */
-export async function add(data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return ChargeVersionModel.query()
@@ -43,9 +43,9 @@ export async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
-    licenceRef: generateLicenceRef(),
+    licenceRef: LicenceHelper.generateLicenceRef(),
     scheme: 'sroc',
     versionNumber: 1,
     startDate: new Date('2022-04-01'),
@@ -60,4 +60,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

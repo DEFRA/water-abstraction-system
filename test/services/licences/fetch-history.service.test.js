@@ -1,7 +1,7 @@
 // Test helpers
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
-import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import * as ModLogHelper from '../../support/helpers/mod-log.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import ModLogHelper from '../../support/helpers/mod-log.helper.js'
 
 // Thing under test
 import FetchHistoryService from '../../../app/services/licences/fetch-history.service.js'

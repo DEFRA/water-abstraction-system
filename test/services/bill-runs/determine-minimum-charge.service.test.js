@@ -1,6 +1,6 @@
 // Test helpers
-import * as ChangeReasonHelper from '../../support/helpers/change-reason.helper.js'
-import * as ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
+import ChangeReasonHelper from '../../support/helpers/change-reason.helper.js'
+import ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
 
 // Thing under test
 import DetermineMinimumChargeService from '../../../app/services/bill-runs/determine-minimum-charge.service.js'

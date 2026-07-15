@@ -1,11 +1,11 @@
 // Test helpers
-import * as EventHelper from '../../../../support/helpers/event.helper.js'
+import EventHelper from '../../../../support/helpers/event.helper.js'
 import * as NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import * as NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
-import * as NotificationHelper from '../../../../support/helpers/notification.helper.js'
+import NotificationHelper from '../../../../support/helpers/notification.helper.js'
 import { futureDueDate } from '../../../../../app/presenters/notices/base.presenter.js'
 import { compareStrings, generateUUID } from '../../../../../app/lib/general.lib.js'
-import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import FetchFailedReturnsInvitationsService from '../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js'
@@ -54,11 +54,13 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
           beforeEach(async () => {
             // The notifications will share some of the same licence references and return log IDs. We can then test
             // what the service returns doesn't contain duplicates
-            licenceRefs = [generateLicenceRef(), generateLicenceRef(), generateLicenceRef()].sort(
-              (referenceString, compareString) => {
-                return compareStrings(referenceString, compareString)
-              }
-            )
+            licenceRefs = [
+              LicenceHelper.generateLicenceRef(),
+              LicenceHelper.generateLicenceRef(),
+              LicenceHelper.generateLicenceRef()
+            ].sort((referenceString, compareString) => {
+              return compareStrings(referenceString, compareString)
+            })
             returnLogIds = [generateUUID(), generateUUID(), generateUUID()].sort((referenceString, compareString) => {
               return compareStrings(referenceString, compareString)
             })

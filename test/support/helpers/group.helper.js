@@ -6,7 +6,7 @@ import GroupModel from '../../../app/models/group.model.js'
 import { selectRandomEntry } from '../general.js'
 import { data as groups } from '../../../db/seeds/data/groups.js'
 
-export const data = groups
+const data = groups
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -22,10 +22,15 @@ export const data = groups
  *
  * @returns {module:GroupModel} The selected reference entry or one picked at random
  */
-export function select(index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return GroupModel.fromJson(groups[index])
   }
 
   return GroupModel.fromJson(selectRandomEntry(groups))
+}
+
+export default {
+  data,
+  select
 }

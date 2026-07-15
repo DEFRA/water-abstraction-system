@@ -1,8 +1,8 @@
 // Test helpers
-import * as ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
+import ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
 import ChargeVersionModel from '../../app/models/charge-version.model.js'
-import * as ChargeVersionNoteHelper from '../support/helpers/charge-version-note.helper.js'
-import * as UserHelper from '../support/helpers/user.helper.js'
+import ChargeVersionNoteHelper from '../support/helpers/charge-version-note.helper.js'
+import UserHelper from '../support/helpers/user.helper.js'
 import UserModel from '../../app/models/user.model.js'
 
 // Thing under test

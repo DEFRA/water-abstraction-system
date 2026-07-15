@@ -3,7 +3,7 @@ import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 import { yesterday } from '../../support/general.js'
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 
 // Thing under test
 import LicencesPresenter from '../../../app/presenters/companies/licences.presenter.js'
@@ -19,7 +19,7 @@ describe('Companies - Licences presenter', () => {
         expiredDate: null,
         id: generateUUID(),
         lapsedDate: null,
-        licenceRef: generateLicenceRef(),
+        licenceRef: LicenceHelper.generateLicenceRef(),
         revokedDate: null,
         startDate: new Date('2022-01-01'),
         currentLicenceHolderId: company.id,

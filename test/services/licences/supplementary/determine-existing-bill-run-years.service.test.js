@@ -1,6 +1,6 @@
 // Test helpers
-import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Thing under test
 import DetermineExistingBillRunYearsService from '../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js'

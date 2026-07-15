@@ -1,6 +1,6 @@
 // Test helpers
 import http2 from 'node:http2'
-import * as RegionHelper from '../../support/helpers/region.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
 
 // Things we need to stub
 import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'

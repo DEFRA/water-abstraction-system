@@ -13,7 +13,7 @@ import NotificationModel from '../../../app/models/notification.model.js'
  *
  * @returns {Promise<module:NotificationModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return NotificationModel.query()
@@ -31,11 +31,16 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {}
 
   return {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

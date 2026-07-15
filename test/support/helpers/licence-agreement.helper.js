@@ -2,9 +2,9 @@
  * @module LicenceAgreementHelper
  */
 
-import * as FinancialAgreementHelper from './financial-agreement.helper.js'
+import FinancialAgreementHelper from './financial-agreement.helper.js'
 import LicenceAgreementModel from '../../../app/models/licence-agreement.model.js'
-import * as LicenceHelper from './licence.helper.js'
+import LicenceHelper from './licence.helper.js'
 
 /**
  * Add a new licence agreement
@@ -19,7 +19,7 @@ import * as LicenceHelper from './licence.helper.js'
  *
  * @returns {Promise<module:LicenceAgreementModel>} The instance of the newly created record
  */
-export async function add(data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceAgreementModel.query()
@@ -37,7 +37,7 @@ export async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const { id: financialAgreementId } = FinancialAgreementHelper.select()
 
   const defaults = {
@@ -50,4 +50,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

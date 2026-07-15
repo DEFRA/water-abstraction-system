@@ -2,11 +2,11 @@
 import DatabaseConfig from '../../../config/database.config.js'
 
 // Test helpers
-import * as LicenceDocumentHeaderHelper from '../../support/helpers/licence-document-header.helper.js'
-import * as LicenceEntityHelper from '../../support/helpers/licence-entity.helper.js'
-import * as LicenceEntityRoleHelper from '../../support/helpers/licence-entity-role.helper.js'
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
-import * as UserHelper from '../../support/helpers/user.helper.js'
+import LicenceDocumentHeaderHelper from '../../support/helpers/licence-document-header.helper.js'
+import LicenceEntityHelper from '../../support/helpers/licence-entity.helper.js'
+import LicenceEntityRoleHelper from '../../support/helpers/licence-entity-role.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import UserHelper from '../../support/helpers/user.helper.js'
 import * as UsersFixture from '../../support/fixtures/users.fixture.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 

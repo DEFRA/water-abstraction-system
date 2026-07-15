@@ -1,12 +1,12 @@
 // Test helpers
-import * as ChargeElementHelper from '../support/helpers/charge-element.helper.js'
+import ChargeElementHelper from '../support/helpers/charge-element.helper.js'
 import ChargeElementModel from '../../app/models/charge-element.model.js'
-import * as ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
+import ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
 import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
-import * as LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
 import LicenceVersionPurposeModel from '../../app/models/licence-version-purpose.model.js'
-import * as PurposeHelper from '../support/helpers/purpose.helper.js'
-import * as ReturnRequirementPurposeHelper from '../support/helpers/return-requirement-purpose.helper.js'
+import PurposeHelper from '../support/helpers/purpose.helper.js'
+import ReturnRequirementPurposeHelper from '../support/helpers/return-requirement-purpose.helper.js'
 import ReturnRequirementPurposeModel from '../../app/models/return-requirement-purpose.model.js'
 
 // Thing under test

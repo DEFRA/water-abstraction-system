@@ -1,5 +1,5 @@
 // Test helpers
-import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
 import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub

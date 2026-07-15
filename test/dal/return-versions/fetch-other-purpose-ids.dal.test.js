@@ -1,9 +1,9 @@
 // Test helpers
-import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import * as LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
-import * as PrimaryPurposeHelper from '../../support/helpers/primary-purpose.helper.js'
-import * as PurposeHelper from '../../support/helpers/purpose.helper.js'
-import * as SecondaryPurposeHelper from '../../support/helpers/secondary-purpose.helper.js'
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import PrimaryPurposeHelper from '../../support/helpers/primary-purpose.helper.js'
+import PurposeHelper from '../../support/helpers/purpose.helper.js'
+import SecondaryPurposeHelper from '../../support/helpers/secondary-purpose.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
