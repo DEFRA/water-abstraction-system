@@ -1,9 +1,9 @@
+import BillingAccountHelper from '../helpers/billing-account.helper.js'
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
 import CompanyContactModel from '../../../app/models/company-contact.model.js'
 import ContactModel from '../../../app/models/contact.model.js'
-import LicenceModel from '../../../app/models/licence.model.js'
-import BillingAccountHelper from '../helpers/billing-account.helper.js'
 import LicenceHelper from '../helpers/licence.helper.js'
+import LicenceModel from '../../../app/models/licence.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**

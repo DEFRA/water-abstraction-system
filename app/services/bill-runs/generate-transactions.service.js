@@ -3,9 +3,8 @@
  * @module GenerateTransactionsService
  */
 
-import { generateUUID } from '../../lib/general.lib.js'
-
 import CalculateAuthorisedAndBillableDaysServiceService from './calculate-authorised-and-billable-days.service.js'
+import { generateUUID } from '../../lib/general.lib.js'
 
 /**
  * Generates an array of transactions ready to be persisted as `billing_transactions`

@@ -2,8 +2,8 @@
  * @module ChargeVersionNoteHelper
  */
 
-import UserHelper from './user.helper.js'
 import ChargeVersionNoteModel from '../../../app/models/charge-version-note.model.js'
+import UserHelper from './user.helper.js'
 
 /**
  * Add a new charge version note

@@ -1,6 +1,6 @@
 // Things we need to stub
-import BillRunModel from '../../../../app/models/bill-run.model.js'
 import * as GenerateTwoPartTariffBillRunService from '../../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
 
 // Thing under test
 import ProcessBillRunPostRemoveService from '../../../../app/services/bill-runs/review/process-bill-run-post-remove.service.js'

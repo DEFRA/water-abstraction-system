@@ -3,11 +3,10 @@
  * @module FetchPaperReturnsRecipientsService
  */
 
-import GenerateReturnLogsByIdQueryService from './generate-return-logs-by-id-query.service.js'
 import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
-import { futureDueDate } from '../../../../presenters/notices/base.presenter.js'
-
+import GenerateReturnLogsByIdQueryService from './generate-return-logs-by-id-query.service.js'
 import { db } from '../../../../../db/db.js'
+import { futureDueDate } from '../../../../presenters/notices/base.presenter.js'
 
 /**
  * Fetches recipient data for a paper returns notice

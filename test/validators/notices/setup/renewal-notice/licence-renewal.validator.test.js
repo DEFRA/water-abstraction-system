@@ -1,7 +1,7 @@
 // Helpers
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 import LicenceModel from '../../../../../app/models/licence.model.js'
 import { generateUUID } from '../../../../../app/lib/general.lib.js'
-import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import LicenceRenewalValidator from '../../../../../app/validators/notices/setup/renewal-notice/licence-renewal.validator.js'

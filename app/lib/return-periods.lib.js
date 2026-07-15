@@ -3,8 +3,8 @@
  * @module ReturnPeriodLib
  */
 
-import { compareDates, sameDate } from './dates.lib.js'
 import { returnPeriodDates } from './static-lookups.lib.js'
+import { compareDates, sameDate } from './dates.lib.js'
 
 /**
  * Determine return periods for a given return cycle.

@@ -5,6 +5,7 @@ import * as GotenbergRequest from '../../../app/requests/gotenberg.request.js'
 
 // Thing under test
 import * as GeneratePaperReturnRequest from '../../../app/requests/gotenberg/generate-paper-return.request.js'
+
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 describe('Gotenberg - Generate Paper Return Request', () => {

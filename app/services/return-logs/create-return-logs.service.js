@@ -5,8 +5,8 @@
 
 import GenerateReturnLogService from './generate-return-log.service.js'
 import { db } from '../../../db/db.js'
-import { timestampForPostgres } from '../../lib/general.lib.js'
 import { determineReturnsPeriods } from '../../lib/return-periods.lib.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Generates and persists return logs for the given return requirement and cycle

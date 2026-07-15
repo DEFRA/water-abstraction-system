@@ -3,11 +3,10 @@
  * @module SubmitNoteService
  */
 
-import { formatValidationResult } from '../../../presenters/base.presenter.js'
-
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 import NotePresenter from '../../../presenters/return-versions/setup/note.presenter.js'
 import NoteValidator from '../../../validators/return-versions/setup/note.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/note` page

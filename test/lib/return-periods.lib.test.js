@@ -1,6 +1,6 @@
 // Test framework dependencies
-import { returnPeriodDates } from '../../app/lib/static-lookups.lib.js'
 import ReturnCycleHelper from '../support/helpers/return-cycle.helper.js'
+import { returnPeriodDates } from '../../app/lib/static-lookups.lib.js'
 
 // Thing under test
 import * as ReturnPeriodLib from '../../app/lib/return-periods.lib.js'

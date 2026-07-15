@@ -8,7 +8,6 @@ import ExistingAddressPresenter from '../../../presenters/billing-accounts/setup
 import ExistingAddressValidator from '../../../validators/billing-accounts/setup/existing-address.validator.js'
 import FetchCompanyAddressesService from './fetch-company-addresses.service.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**

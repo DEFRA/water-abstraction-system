@@ -4,10 +4,10 @@
  */
 
 import http2 from 'node:http2'
-import { getRequest as baseGetRequest, postRequest as basePostRequest } from './base.request.js'
-import { pause } from '../lib/general.lib.js'
 
 import notifyConfig from '../../config/notify.config.js'
+import { pause } from '../lib/general.lib.js'
+import { getRequest as baseGetRequest, postRequest as basePostRequest } from './base.request.js'
 
 const { HTTP_STATUS_TOO_MANY_REQUESTS } = http2.constants
 

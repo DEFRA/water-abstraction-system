@@ -1,8 +1,8 @@
 // Test helpers
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
 import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 import ReturnRequirementHelper from '../../support/helpers/return-requirement.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
 import VoidLicenceReturnLogsService from '../../../app/services/return-logs/void-licence-return-logs.service.js'

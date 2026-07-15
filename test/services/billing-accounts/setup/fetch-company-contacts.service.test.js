@@ -1,6 +1,6 @@
 // Test helpers
-import CompanyHelper from '../../../support/helpers/company.helper.js'
 import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
+import CompanyHelper from '../../../support/helpers/company.helper.js'
 import ContactHelper from '../../../support/helpers/contact.helper.js'
 
 // Thing under test

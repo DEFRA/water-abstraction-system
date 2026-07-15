@@ -8,7 +8,6 @@ import { ref } from 'objection'
 import ProfileDetailsPresenter from '../../presenters/users/profile-details.presenter.js'
 import ProfileDetailsValidator from '../../validators/users/profile-details.validator.js'
 import UserModel from '../../models/user.model.js'
-
 import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**

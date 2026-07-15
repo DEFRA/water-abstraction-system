@@ -1,5 +1,5 @@
 import SendRenewalInvitations from './send-renewal-invitations.service.js'
-import { currentTimeInNanoseconds, calculateAndLogTimeTaken } from '../../../lib/general.lib.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates the process of fetching, sending, and updating renewal invitations notifications

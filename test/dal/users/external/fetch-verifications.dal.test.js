@@ -5,8 +5,8 @@ import LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
 import UserHelper from '../../../support/helpers/user.helper.js'
-import UserVerificationHelper from '../../../support/helpers/user-verification.helper.js'
 import UserVerificationDocumentHelper from '../../../support/helpers/user-verification-document.helper.js'
+import UserVerificationHelper from '../../../support/helpers/user-verification.helper.js'
 import { today } from '../../../../app/lib/general.lib.js'
 import { yesterday } from '../../../support/general.js'
 

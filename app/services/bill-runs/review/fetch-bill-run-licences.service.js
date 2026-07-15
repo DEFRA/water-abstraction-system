@@ -4,10 +4,9 @@
  */
 
 import BillRunModel from '../../../models/bill-run.model.js'
+import DatabaseConfig from '../../../../config/database.config.js'
 import ReviewLicenceModel from '../../../models/review-licence.model.js'
 import { twoPartTariffReviewIssues } from '../../../lib/static-lookups.lib.js'
-
-import DatabaseConfig from '../../../../config/database.config.js'
 
 /**
  * Fetches bill run and licences data for two-part-tariff billing review

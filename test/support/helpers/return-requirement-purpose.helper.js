@@ -2,11 +2,11 @@
  * @module ReturnRequirementPurposeHelper
  */
 
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 import PrimaryPurposeHelper from './primary-purpose.helper.js'
 import PurposeHelper from './purpose.helper.js'
 import ReturnRequirementPurposeModel from '../../../app/models/return-requirement-purpose.model.js'
 import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new return requirement purpose

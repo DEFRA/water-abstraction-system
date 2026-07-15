@@ -2,8 +2,8 @@
 import * as UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Things to stub
-import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
 import * as FetchUsersDal from '../../../app/dal/users/fetch-users.dal.js'
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
 import YarStub from '../../support/stubs/yar.stub.js'
 
 // Thing under test

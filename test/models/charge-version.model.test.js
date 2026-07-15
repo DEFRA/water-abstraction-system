@@ -1,8 +1,8 @@
 // Test helpers
-import BillingAccountHelper from '../support/helpers/billing-account.helper.js'
-import BillingAccountModel from '../../app/models/billing-account.model.js'
 import BillRunChargeVersionYearHelper from '../support/helpers/bill-run-charge-version-year.helper.js'
 import BillRunChargeVersionYearModel from '../../app/models/bill-run-charge-version-year.model.js'
+import BillingAccountHelper from '../support/helpers/billing-account.helper.js'
+import BillingAccountModel from '../../app/models/billing-account.model.js'
 import ChangeReasonHelper from '../support/helpers/change-reason.helper.js'
 import ChangeReasonModel from '../../app/models/change-reason.model.js'
 import ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'

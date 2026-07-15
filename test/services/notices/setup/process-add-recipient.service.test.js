@@ -1,7 +1,7 @@
 // Test helpers
 import AddressHelper from '../../../support/helpers/address.helper.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Test helpers

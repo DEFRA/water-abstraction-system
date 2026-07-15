@@ -5,8 +5,9 @@
  */
 
 import Joi from 'joi'
-import { countries } from '../../lib/static-lookups.lib.js'
+
 import { addressLineValidator } from './addressLine.validator.js'
+import { countries } from '../../lib/static-lookups.lib.js'
 
 /**
  * Validates data submitted for the `address/{sessionId}/international` page

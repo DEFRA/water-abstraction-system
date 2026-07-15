@@ -1,6 +1,6 @@
 // Test Helpers
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
 import ContactDetailsPresenter from '../../../app/presenters/licences/contact-details.presenter.js'

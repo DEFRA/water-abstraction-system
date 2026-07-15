@@ -4,11 +4,12 @@
  */
 
 import fs from 'node:fs'
-import { pipeline, Transform } from 'node:stream'
 import path from 'node:path'
 import util from 'node:util'
+import { Transform, pipeline } from 'node:stream'
 
 import { transformArrayToCSVRow } from '../../../lib/transform-to-csv.lib.js'
+
 const fsPromises = fs.promises
 
 /**

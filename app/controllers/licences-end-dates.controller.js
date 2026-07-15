@@ -4,6 +4,7 @@
  */
 
 import http2 from 'node:http2'
+
 import CheckAllLicenceEndDatesService from '../services/licences/end-dates/check-all-licence-end-dates.service.js'
 import ProcessLicenceEndDateChangesService from '../services/licences/end-dates/process-licence-end-date-changes.service.js'
 

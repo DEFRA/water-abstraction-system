@@ -7,10 +7,10 @@ import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.j
 // Things we need to stub
 import * as ChargingModuleGenerateRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
 import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
 import * as LegacyRefreshBillRunRequest from '../../../../app/requests/legacy/refresh-bill-run.request.js'
 import * as ProcessBillingPeriodService from '../../../../app/services/bill-runs/annual/process-billing-period.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ProcessBillRunService from '../../../../app/services/bill-runs/annual/process-bill-run.service.js'

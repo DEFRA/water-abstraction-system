@@ -3,11 +3,11 @@
  * @module ViewBillLicencePresenter
  */
 
-import { formatMoney } from '../base.presenter.js'
-import { displayCreditDebitTotals } from '../billing.presenter.js'
 import ViewCompensationChargeTransactionPresenter from './view-compensation-charge-transaction.presenter.js'
 import ViewMinimumChargeTransactionPresenter from './view-minimum-charge-transaction.presenter.js'
 import ViewStandardChargeTransactionPresenter from './view-standard-charge-transaction.presenter.js'
+import { displayCreditDebitTotals } from '../billing.presenter.js'
+import { formatMoney } from '../base.presenter.js'
 
 /**
  * Formats data for a bill licence including its transactions into what is needed for the bill-licence page

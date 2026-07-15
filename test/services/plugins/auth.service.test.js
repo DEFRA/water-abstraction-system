@@ -1,6 +1,6 @@
 // Things to stub
-import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
 import * as FetchUserRolesAndGroupsService from '../../../app/services/idm/fetch-user-roles-and-groups.service.js'
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
 
 // Thing under test
 import AuthService from '../../../app/services/plugins/auth.service.js'

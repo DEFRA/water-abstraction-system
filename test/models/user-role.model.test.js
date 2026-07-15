@@ -1,9 +1,9 @@
 // Test helpers
-import RoleModel from '../../app/models/role.model.js'
 import RoleHelper from '../support/helpers/role.helper.js'
-import UserRoleHelper from '../support/helpers/user-role.helper.js'
-import UserModel from '../../app/models/user.model.js'
+import RoleModel from '../../app/models/role.model.js'
 import UserHelper from '../support/helpers/user.helper.js'
+import UserModel from '../../app/models/user.model.js'
+import UserRoleHelper from '../support/helpers/user-role.helper.js'
 
 // Thing under test
 import UserRoleModel from '../../app/models/user-role.model.js'

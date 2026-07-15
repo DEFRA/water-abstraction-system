@@ -3,8 +3,8 @@ import LicenceHelper from '../../support/helpers/licence.helper.js'
 
 // Things we need to stub
 import * as DetermineLicenceHasReturnVersionsService from '../../../app/services/licences/determine-licence-has-return-versions.service.js'
-import * as FetchReturnsService from '../../../app/services/licences/fetch-returns.service.js'
 import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchReturnsService from '../../../app/services/licences/fetch-returns.service.js'
 
 // Thing under test
 import ViewReturnsService from '../../../app/services/licences/view-returns.service.js'

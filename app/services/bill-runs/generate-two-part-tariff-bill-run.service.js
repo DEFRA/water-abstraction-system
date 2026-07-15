@@ -5,9 +5,9 @@
 
 import BillRunModel from '../../models/bill-run.model.js'
 import ExpandedError from '../../errors/expanded.error.js'
-import { timestampForPostgres } from '../../lib/general.lib.js'
 import GenerateAnnualBillRun from './two-part-tariff/generate-bill-run.service.js'
 import GenerateSupplementaryBillRun from './tpt-supplementary/generate-bill-run.service.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Checks a two-part tariff bill run can be generated, then determines which generate engine to use

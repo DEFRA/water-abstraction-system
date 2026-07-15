@@ -4,9 +4,9 @@ import ChargeCategoryHelper from '../../../support/helpers/charge-category.helpe
 import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
 import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
 import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import RegionHelper from '../../../support/helpers/region.helper.js'
+import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
 
 // Thing under test
 import FetchChargeVersionsService from '../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js'

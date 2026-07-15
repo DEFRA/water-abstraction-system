@@ -1,6 +1,6 @@
 // Test helpers
-import { generateUUID } from '../../../../app/lib/general.lib.js'
 import WorkflowModel from '../../../../app/models/workflow.model.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
 import * as FetchLicenceUpdatesService from '../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js'

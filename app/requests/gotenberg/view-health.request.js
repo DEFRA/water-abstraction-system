@@ -4,7 +4,6 @@
  */
 
 import { getRequest } from '../base.request.js'
-
 import gotenbergConfig from '../../../config/gotenberg.config.js'
 
 /**

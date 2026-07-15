@@ -3,9 +3,8 @@
  * @module FetchRelevantLicenceVersionService
  */
 
-import { sameDate } from '../../../lib/dates.lib.js'
-
 import LicenceVersionModel from '../../../models/licence-version.model.js'
+import { sameDate } from '../../../lib/dates.lib.js'
 
 /**
  * Fetches the relevant licence version to extract data from for the start date selected by the user

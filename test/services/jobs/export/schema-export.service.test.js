@@ -3,8 +3,8 @@ import * as CompressSchemaFolderService from '../../../../app/services/jobs/expo
 import * as DeleteFilesService from '../../../../app/services/jobs/export/delete-files.service.js'
 import * as ExportTableService from '../../../../app/services/jobs/export/export-table.service.js'
 import * as FetchTableNamesService from '../../../../app/services/jobs/export/fetch-table-names.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as SendToS3BucketService from '../../../../app/services/jobs/export/send-to-s3-bucket.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import SchemaExportService from '../../../../app/services/jobs/export/schema-export.service.js'

@@ -1,7 +1,7 @@
 // Test helpers
-import http2 from 'node:http2'
 import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
 import BillingAccountModel from '../../../../app/models/billing-account.model.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as ChargingModuleViewCustomerFilesRequest from '../../../../app/requests/charging-module/view-customer-files.request.js'
@@ -9,6 +9,7 @@ import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ProcessCustomerFilesService from '../../../../app/services/jobs/customer-files/process-customer-files.service.js'
+
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Jobs - Customer Files - Process Customer Files service', () => {

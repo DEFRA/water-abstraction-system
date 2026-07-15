@@ -2,9 +2,9 @@
 import ExpandedErrorError from '../../../app/errors/expanded.error.js'
 
 // Things we need to stub
-import BillRunModel from '../../../app/models/bill-run.model.js'
 import * as GenerateAnnualBillRunService from '../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js'
 import * as GenerateSupplementaryBillRunService from '../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
 
 // Thing under test
 import GenerateTwoPartTariffBillRunService from '../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'

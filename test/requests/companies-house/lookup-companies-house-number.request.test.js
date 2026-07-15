@@ -5,6 +5,7 @@ import * as CompaniesHouseRequest from '../../../app/requests/companies-house.re
 
 // Thing under test
 import * as LookupCompaniesHouseNumberRequest from '../../../app/requests/companies-house/lookup-companies-house-number.request.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Companies House - Lookup Companies House Number request', () => {

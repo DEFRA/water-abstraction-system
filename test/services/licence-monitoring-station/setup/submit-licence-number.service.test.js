@@ -1,8 +1,8 @@
 // Test helpers
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import LicenceModel from '../../../../app/models/licence.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
 import * as FetchLicenceDal from '../../../../app/dal/licence-monitoring-station/fetch-licence.dal.js'

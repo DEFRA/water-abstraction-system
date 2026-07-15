@@ -1,7 +1,7 @@
 // Test helpers
 import NotificationHelper from '../../../support/helpers/notification.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
 import UserHelper from '../../../support/helpers/user.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
 import UpdateNotificationDal from '../../../../app/dal/users/internal/update-notification.dal.js'

@@ -2,8 +2,8 @@
 import http2 from 'node:http2'
 
 import * as RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import LicenceHelper from '../../../../support/helpers/licence.helper.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import { generateNoticeReferenceCode, generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -13,6 +13,7 @@ import * as GeneratePreviewRequest from '../../../../../app/requests/notify/gene
 
 // Thing under test
 import ViewPreviewService from '../../../../../app/services/notices/setup/preview/view-preview.service.js'
+
 const { HTTP_STATUS_OK } = http2.constants
 
 describe('Notices - Setup - Preview - View Preview service', () => {

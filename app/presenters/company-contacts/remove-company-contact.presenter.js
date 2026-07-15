@@ -3,8 +3,8 @@
  * @module RemoveCompanyContactPresenter
  */
 
-import { formatEmail } from '../base.presenter.js'
 import { abstractionAlertsLabel } from '../crm.presenter.js'
+import { formatEmail } from '../base.presenter.js'
 
 /**
  * Formats data for the '/company-contacts/{id}/remove' page

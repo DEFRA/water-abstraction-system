@@ -1,6 +1,6 @@
 // Test helpers
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import * as UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub

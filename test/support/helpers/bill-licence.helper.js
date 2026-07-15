@@ -3,8 +3,8 @@
  */
 
 import BillLicenceModel from '../../../app/models/bill-licence.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceHelper from './licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new bill licence

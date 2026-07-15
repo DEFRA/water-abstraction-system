@@ -2,9 +2,9 @@
  * @module LicenceDocumentHeaderHelper
  */
 
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
-import LicenceHelper from './licence.helper.js'
 import LicenceDocumentHeaderModel from '../../../app/models/licence-document-header.model.js'
+import LicenceHelper from './licence.helper.js'
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence document header

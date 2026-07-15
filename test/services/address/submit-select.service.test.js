@@ -1,7 +1,7 @@
 // Test helpers
 import SessionModelStub from '../../support/stubs/session.stub.js'
-import http2 from 'node:http2'
 import { generateUUID } from '../../../app/lib/general.lib.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
@@ -10,6 +10,7 @@ import * as LookupUPRNRequest from '../../../app/requests/address-facade/lookup-
 
 // Thing under test
 import SubmitSelectService from '../../../app/services/address/submit-select.service.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address - Submit Select Service', () => {

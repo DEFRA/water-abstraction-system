@@ -10,6 +10,7 @@ import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import * as BaseRequest from '../../app/requests/base.request.js'
+
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Base Request', () => {

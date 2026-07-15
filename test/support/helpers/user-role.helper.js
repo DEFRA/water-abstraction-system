@@ -2,11 +2,11 @@
  * @module UserRoleHelper
  */
 
+import RoleHelper from './role.helper.js'
+import UserHelper from './user.helper.js'
+import UserRoleModel from '../../../app/models/user-role.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 import { selectRandomEntry } from '../general.js'
-import UserHelper from './user.helper.js'
-import RoleHelper from './role.helper.js'
-import UserRoleModel from '../../../app/models/user-role.model.js'
 import { data as userRoles } from '../../../db/seeds/data/user-roles.js'
 
 const data = userRoles

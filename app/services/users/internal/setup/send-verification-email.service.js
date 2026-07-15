@@ -4,13 +4,12 @@
  */
 
 import CheckNotificationStatusService from '../../../notifications/check-notification-status.service.js'
-import { send } from '../../../../requests/notify/create-email.request.js'
+import { NOTIFY_TEMPLATES } from '../../../../lib/notify-templates.lib.js'
 import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
 import UpdateNotificationDal from '../../../../dal/users/internal/update-notification.dal.js'
-import { pause } from '../../../../lib/general.lib.js'
-import { NOTIFY_TEMPLATES } from '../../../../lib/notify-templates.lib.js'
-
 import notifyConfig from '../../../../../config/notify.config.js'
+import { pause } from '../../../../lib/general.lib.js'
+import { send } from '../../../../requests/notify/create-email.request.js'
 
 /**
  * Orchestrates sending the verification email to the new user, recording the results, and checking the status

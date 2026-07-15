@@ -3,8 +3,8 @@ import * as ReturnCyclesFixture from '../../../support/fixtures/return-cycles.fi
 import * as ReturnRequirementsFixture from '../../../support/fixtures/return-requirements.fixture.js'
 
 // Things we need to stub
-import * as CreateReturnLogsService from '../../../../app/services/return-logs/create-return-logs.service.js'
 import * as CheckReturnCycleService from '../../../../app/services/jobs/return-logs/check-return-cycle.service.js'
+import * as CreateReturnLogsService from '../../../../app/services/return-logs/create-return-logs.service.js'
 import * as FetchReturnRequirementsService from '../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 

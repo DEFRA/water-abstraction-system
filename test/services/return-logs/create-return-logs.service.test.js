@@ -1,8 +1,8 @@
 // Test helpers
 import * as ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
+import * as ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
 import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 import ReturnLogModel from '../../../app/models/return-log.model.js'
-import * as ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
 import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 
 // Thing under test

@@ -1,6 +1,6 @@
 // Test helpers
-import ReturnSubmissionLineHelper from '../support/helpers/return-submission-line.helper.js'
 import ReturnSubmissionHelper from '../support/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from '../support/helpers/return-submission-line.helper.js'
 import ReturnSubmissionModel from '../../app/models/return-submission.model.js'
 
 // Thing under test

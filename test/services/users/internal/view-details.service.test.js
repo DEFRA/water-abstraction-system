@@ -2,8 +2,8 @@
 import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Things we want to stub
-import FeatureFlagsConfig from '../../../../config/feature-flags.config.js'
 import * as FetchUserDetailsDal from '../../../../app/dal/users/internal/fetch-user-details.dal.js'
+import FeatureFlagsConfig from '../../../../config/feature-flags.config.js'
 
 // Thing under test
 import ViewDetailsService from '../../../../app/services/users/internal/view-details.service.js'

@@ -1,6 +1,6 @@
 // Test helpers
-import AddressModel from '../../app/models/address.model.js'
 import AddressHelper from '../support/helpers/address.helper.js'
+import AddressModel from '../../app/models/address.model.js'
 import CompanyHelper from '../support/helpers/company.helper.js'
 import CompanyModel from '../../app/models/company.model.js'
 import LicenceHelper from '../support/helpers/licence.helper.js'

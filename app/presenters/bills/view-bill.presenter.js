@@ -3,8 +3,8 @@
  * @module ViewBillPresenter
  */
 
+import { displayCreditDebitTotals, formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
 import { formatFinancialYear, formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
-import { formatBillRunType, formatChargeScheme, displayCreditDebitTotals } from '../billing.presenter.js'
 
 /**
  * Formats bill and billing account data ready for presenting in the single licence bill and multi licence bill pages

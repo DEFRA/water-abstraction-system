@@ -1,8 +1,8 @@
 // Test helpers
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
 import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 import { db } from '../../../../../db/db.js'
-import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
 
 // Thing under test
 import GenerateRecipientsQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-recipients-query.service.js'

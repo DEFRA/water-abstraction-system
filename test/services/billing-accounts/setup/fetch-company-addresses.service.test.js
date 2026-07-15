@@ -1,7 +1,7 @@
 // Test helpers
 import AddressHelper from '../../../support/helpers/address.helper.js'
-import CompanyHelper from '../../../support/helpers/company.helper.js'
 import CompanyAddressHelper from '../../../support/helpers/company-address.helper.js'
+import CompanyHelper from '../../../support/helpers/company.helper.js'
 
 // Thing under test
 import FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'

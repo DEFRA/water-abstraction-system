@@ -1,9 +1,9 @@
 // Test helpers
-import http2 from 'node:http2'
 import * as NoticesFixture from '../support/fixtures/notices.fixture.js'
 import * as NotificationsFixture from '../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../app/lib/general.lib.js'
 import LicenceHelper from '../support/helpers/licence.helper.js'
+import { generateUUID } from '../../app/lib/general.lib.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as DownloadNotificationService from '../../app/services/notifications/download-notification.service.js'
@@ -13,6 +13,7 @@ import notifyConfig from '../../config/notify.config.js'
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 describe('Notifications controller', () => {

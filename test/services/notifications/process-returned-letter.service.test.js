@@ -1,12 +1,12 @@
 // Test framework dependencies
-import { generateUUID, today, generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode, generateUUID, today } from '../../../app/lib/general.lib.js'
 
 // Test helpers
 import NotificationHelper from '../../support/helpers/notification.helper.js'
 
 // Things we need to stub
-import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
 import * as UpdateNoticeService from '../../../app/services/notices/update-notice.service.js'
+import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ProcessReturnedLetterService from '../../../app/services/notifications/process-returned-letter.service.js'

@@ -1,6 +1,6 @@
-import { timestampForPostgres } from '../../app/lib/general.lib.js'
-import { data as secondaryPurposes } from './data/secondary-purposes.js'
 import SecondaryPurposeModel from '../../app/models/secondary-purpose.model.js'
+import { data as secondaryPurposes } from './data/secondary-purposes.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
 /**
  * Seeds the secondary purpose reference data using an upsert

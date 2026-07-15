@@ -2,8 +2,8 @@
 import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
-import BillRunModel from '../../../../app/models/bill-run.model.js'
 import * as FetchLiveBillRunService from '../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
 
 // Thing under test
 import DetermineBlockingTwoPartAnnualService from '../../../../app/services/bill-runs/setup/determine-blocking-two-part-annual.service.js'

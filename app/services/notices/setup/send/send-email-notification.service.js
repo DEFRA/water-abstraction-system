@@ -3,8 +3,8 @@
  * @module SendEmailNotificationService
  */
 
-import { send } from '../../../../requests/notify/create-email.request.js'
 import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
+import { send } from '../../../../requests/notify/create-email.request.js'
 
 /**
  * Orchestrates sending an email notification to Notify

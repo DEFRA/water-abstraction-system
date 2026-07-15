@@ -1,7 +1,7 @@
 // Test helpers
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 import RegionHelper from '../../../../support/helpers/region.helper.js'
 import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
-import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import FetchDueReturnsForLicence from '../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'

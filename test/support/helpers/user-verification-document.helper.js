@@ -2,8 +2,8 @@
  * @module UserVerificationDocumentHelper
  */
 
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import UserVerificationDocumentModel from '../../../app/models/user-verification-document.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new user verification document

@@ -5,6 +5,7 @@ import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
 import * as ViewMessageDataRequest from '../../../app/requests/notify/view-message-data.request.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Notify - View Message Data request', () => {

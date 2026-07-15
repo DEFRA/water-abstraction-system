@@ -6,11 +6,11 @@ import * as CreateReturnVersionService from '../../../../../app/services/return-
 import * as DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
 import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 import * as GenerateReturnVersionService from '../../../../../app/services/return-versions/setup/check/generate-return-version.service.js'
-import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
 import * as ProcessExistingReturnVersionsService from '../../../../../app/services/return-versions/setup/check/process-existing-return-versions.service.js'
 import * as ProcessLicenceReturnLogsService from '../../../../../app/services/return-logs/process-licence-return-logs.service.js'
 import * as UpdateSucceededReturnLogsDal from '../../../../../app/dal/return-versions/update-succeeded-return-logs.dal.js'
 import * as VoidReturnLogsService from '../../../../../app/services/return-logs/void-return-logs.service.js'
+import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import SubmitCheckService from '../../../../../app/services/return-versions/setup/check/submit-check.service.js'

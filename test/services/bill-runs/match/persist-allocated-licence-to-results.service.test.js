@@ -1,7 +1,7 @@
 // Test helpers
-import { generateUUID } from '../../../../app/lib/general.lib.js'
 import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
 import PersistAllocatedLicenceToResultsService from '../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js'

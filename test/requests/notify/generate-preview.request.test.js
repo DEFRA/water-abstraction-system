@@ -1,12 +1,13 @@
 // Test helpers
-import http2 from 'node:http2'
 import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
 import * as GeneratePreviewRequest from '../../../app/requests/notify/generate-preview.request.js'
+
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 
 describe('Notify - Generate Preview request', () => {

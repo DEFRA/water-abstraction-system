@@ -1,9 +1,9 @@
 // Test helpers
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
+import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
 import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 import { db } from '../../../../../db/db.js'
-import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 import { tomorrow } from '../../../../support/general.js'
-import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
 
 // Thing under test
 import GenerateReturnLogsByLicenceQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-licence-query.service.js'

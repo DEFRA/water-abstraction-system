@@ -2,8 +2,8 @@
  * @module LicenceSupplementaryYearHelper
  */
 
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceSupplementaryYearModel from '../../../app/models/licence-supplementary-year.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence supplementary year record

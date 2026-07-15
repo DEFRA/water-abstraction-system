@@ -1,13 +1,14 @@
 // Test helpers
-import http2 from 'node:http2'
-import billingConfig from '../../../config/billing.config.js'
 import ExpandedError from '../../../app/errors/expanded.error.js'
+import billingConfig from '../../../config/billing.config.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as ChargingModuleViewBillRunStatusRequest from '../../../app/requests/charging-module/view-bill-run-status.request.js'
 
 // Thing under test
 import * as ChargingModuleWaitForStatusRequest from '../../../app/requests/charging-module/wait-for-status.request.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Charging Module Wait For Status request', () => {

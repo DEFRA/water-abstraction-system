@@ -1,9 +1,9 @@
 // Test helpers
-import GroupModel from '../../app/models/group.model.js'
 import GroupHelper from '../support/helpers/group.helper.js'
+import GroupModel from '../../app/models/group.model.js'
 import UserGroupHelper from '../support/helpers/user-group.helper.js'
-import UserModel from '../../app/models/user.model.js'
 import UserHelper from '../support/helpers/user.helper.js'
+import UserModel from '../../app/models/user.model.js'
 
 // Thing under test
 import UserGroupModel from '../../app/models/user-group.model.js'

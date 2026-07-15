@@ -2,11 +2,11 @@
 import BillRunModel from '../../../../app/models/bill-run.model.js'
 import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
 import ChargeReferenceModel from '../../../../app/models/charge-reference.model.js'
-import { db } from '../../../../db/db.js'
 import ExpandedError from '../../../../app/errors/expanded.error.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import LicenceModel from '../../../../app/models/licence.model.js'
 import RegionHelper from '../../../support/helpers/region.helper.js'
+import { db } from '../../../../db/db.js'
 
 // Thing under test
 import LoadService from '../../../../app/services/data/load/load.service.js'

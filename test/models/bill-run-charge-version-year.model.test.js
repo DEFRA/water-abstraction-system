@@ -1,7 +1,7 @@
 // Test helpers
+import BillRunChargeVersionYearHelper from '../support/helpers/bill-run-charge-version-year.helper.js'
 import BillRunHelper from '../support/helpers/bill-run.helper.js'
 import BillRunModel from '../../app/models/bill-run.model.js'
-import BillRunChargeVersionYearHelper from '../support/helpers/bill-run-charge-version-year.helper.js'
 import ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
 import ChargeVersionModel from '../../app/models/charge-version.model.js'
 

@@ -7,6 +7,7 @@ import serverConfig from '../../config/server.config.js'
 
 // Thing under test
 import * as CompaniesHouseRequest from '../../app/requests/companies-house.request.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Companies House Request', () => {

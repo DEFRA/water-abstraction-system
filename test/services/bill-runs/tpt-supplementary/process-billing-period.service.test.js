@@ -1,16 +1,16 @@
 // Test helpers
-import RegionHelper from '../../../support/helpers/region.helper.js'
 import * as TwoPartTariffFixture from '../../../support/fixtures/two-part-tariff.fixture.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Things we need to stub
-import BillModel from '../../../../app/models/bill.model.js'
-import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
-import BillRunError from '../../../../app/errors/bill-run.error.js'
-import BillRunModel from '../../../../app/models/bill-run.model.js'
 import * as FetchPreviousTransactionsService from '../../../../app/services/bill-runs/fetch-previous-transactions.service.js'
 import * as GenerateTwoPartTariffTransactionService from '../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js'
 import * as ProcessSupplementaryTransactionsService from '../../../../app/services/bill-runs/process-supplementary-transactions.service.js'
 import * as SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
+import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
+import BillModel from '../../../../app/models/bill.model.js'
+import BillRunError from '../../../../app/errors/bill-run.error.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
 import TransactionModel from '../../../../app/models/transaction.model.js'
 
 // Thing under test

@@ -3,8 +3,8 @@
  * @module BillsPresenter
  */
 
-import { formatLongDate, formatMoney } from '../base.presenter.js'
 import { formatBillRunType } from '../billing.presenter.js'
+import { formatLongDate, formatMoney } from '../base.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/bills` view licence bill page

@@ -1,9 +1,9 @@
 // Test helpers
+import LicenceDocumentHeaderHelper from '../support/helpers/licence-document-header.helper.js'
 import LicenceEntityRoleHelper from '../support/helpers/licence-entity-role.helper.js'
 import LicenceEntityRoleModel from '../../app/models/licence-entity-role.model.js'
 import LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
-import LicenceDocumentHeaderHelper from '../support/helpers/licence-document-header.helper.js'
 
 // Thing under test
 import LicenceDocumentHeaderModel from '../../app/models/licence-document-header.model.js'

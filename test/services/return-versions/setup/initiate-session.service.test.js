@@ -1,12 +1,13 @@
 // Test helpers
-import http2 from 'node:http2'
 import LicenceModel from '../../../../app/models/licence.model.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as FetchLicenceService from '../../../../app/services/return-versions/setup/fetch-licence.service.js'
 
 // Thing under test
 import InitiateSessionService from '../../../../app/services/return-versions/setup/initiate-session.service.js'
+
 const { HTTP_STATUS_NOT_FOUND } = http2.constants
 
 describe('Return Versions - Setup - Initiate Session service', () => {

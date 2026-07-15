@@ -1,12 +1,13 @@
 // Test helpers
-import http2 from 'node:http2'
 import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
 import * as CreateEmailRequest from '../../../app/requests/notify/create-email.request.js'
+
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 
 describe('Notify - Create Email request', () => {

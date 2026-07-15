@@ -3,12 +3,11 @@
  * @module SubmitSetupService
  */
 
-import { formatValidationResult } from '../../../../presenters/base.presenter.js'
-
 import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 import GenerateFromAbstractionDataService from './generate-from-abstraction-data.service.js'
 import MethodPresenter from '../../../../presenters/return-versions/setup/method.presenter.js'
 import MethodValidator from '../../../../validators/return-versions/setup/method.validator.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/method` page

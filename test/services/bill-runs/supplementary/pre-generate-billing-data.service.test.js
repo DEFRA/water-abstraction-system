@@ -1,7 +1,7 @@
 // Test helpers
-import { generateUUID } from '../../../../app/lib/general.lib.js'
 import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
 import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js'

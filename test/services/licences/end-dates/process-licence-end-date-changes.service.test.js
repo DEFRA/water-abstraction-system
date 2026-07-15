@@ -2,10 +2,10 @@
 import LicenceEndDateChangeHelper from '../../../support/helpers/licence-end-date-change.helper.js'
 
 // Things we need to stub
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import LicenceEndDateChangeModel from '../../../../app/models/licence-end-date-change.model.js'
 import * as ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
 import * as ProcessLicenceReturnLogsService from '../../../../app/services/return-logs/process-licence-return-logs.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import LicenceEndDateChangeModel from '../../../../app/models/licence-end-date-change.model.js'
 
 // Thing under test
 import ProcessLicenceEndDateChangesService from '../../../../app/services/licences/end-dates/process-licence-end-date-changes.service.js'

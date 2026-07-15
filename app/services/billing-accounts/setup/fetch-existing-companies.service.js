@@ -5,6 +5,7 @@
 
 import CompanyModel from '../../../models/company.model.js'
 import { db } from '../../../../db/db.js'
+
 const NUMBER_OF_RESULTS = 15
 
 /**

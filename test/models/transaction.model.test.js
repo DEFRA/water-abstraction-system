@@ -1,6 +1,6 @@
 // Test helpers
-import BillLicenceModel from '../../app/models/bill-licence.model.js'
 import BillLicenceHelper from '../support/helpers/bill-licence.helper.js'
+import BillLicenceModel from '../../app/models/bill-licence.model.js'
 import ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
 import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
 import TransactionHelper from '../support/helpers/transaction.helper.js'

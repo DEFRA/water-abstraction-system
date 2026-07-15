@@ -1,7 +1,7 @@
 // Test helpers
 import FinancialAgreementHelper from '../../../../support/helpers/financial-agreement.helper.js'
-import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 import LicenceAgreementHelper from '../../../../support/helpers/licence-agreement.helper.js'
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import DetermineTwoPartTariffAgreementService from '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'

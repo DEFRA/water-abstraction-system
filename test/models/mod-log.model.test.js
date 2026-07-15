@@ -5,9 +5,9 @@ import LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
 import LicenceVersionHelper from '../support/helpers/licence-version.helper.js'
 import LicenceVersionModel from '../../app/models/licence-version.model.js'
+import ModLogHelper from '../support/helpers/mod-log.helper.js'
 import ReturnVersionHelper from '../support/helpers/return-version.helper.js'
 import ReturnVersionModel from '../../app/models/return-version.model.js'
-import ModLogHelper from '../support/helpers/mod-log.helper.js'
 
 // Thing under test
 import ModLogModel from '../../app/models/mod-log.model.js'

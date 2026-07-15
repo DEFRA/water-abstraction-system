@@ -1,6 +1,6 @@
 // Test helpers
-import SessionModelStub from '../../../support/stubs/session.stub.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
 import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'

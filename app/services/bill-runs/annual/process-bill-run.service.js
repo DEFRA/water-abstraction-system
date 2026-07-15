@@ -3,14 +3,14 @@
  * @module ProcessBillRunService
  */
 
-import BillRunModel from '../../../models/bill-run.model.js'
 import BillRunError from '../../../errors/bill-run.error.js'
-import { send as generateBillRun } from '../../../requests/charging-module/generate-bill-run.request.js'
+import BillRunModel from '../../../models/bill-run.model.js'
 import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
-import { send as refreshBillRun } from '../../../requests/legacy/refresh-bill-run.request.js'
-import ProcessBillingPeriodService from './process-billing-period.service.js'
 import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
+import ProcessBillingPeriodService from './process-billing-period.service.js'
+import { send as generateBillRun } from '../../../requests/charging-module/generate-bill-run.request.js'
+import { send as refreshBillRun } from '../../../requests/legacy/refresh-bill-run.request.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Process a given bill run for the given billing periods

@@ -1,7 +1,7 @@
 // Test helpers
 import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub

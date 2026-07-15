@@ -4,10 +4,9 @@
  */
 
 import ExpandedError from '../../errors/expanded.error.js'
-import { send as viewBillRunStatus } from './view-bill-run-status.request.js'
-import { pause } from '../../lib/general.lib.js'
-
 import billingConfig from '../../../config/billing.config.js'
+import { pause } from '../../lib/general.lib.js'
+import { send as viewBillRunStatus } from './view-bill-run-status.request.js'
 
 /**
  * Wait for a Charging Module bill run to have a specified state

@@ -5,6 +5,7 @@ import * as ChargingModuleRequest from '../../../app/requests/charging-module.re
 
 // Thing under test
 import * as ViewHealthRequest from '../../../app/requests/charging-module/view-health.request.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Charging Module - View Health request', () => {

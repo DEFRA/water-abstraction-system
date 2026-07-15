@@ -5,8 +5,8 @@
 
 import Joi from 'joi'
 
-import { renewalNoticeDate } from '../../../../lib/dates.lib.js'
 import { licenceRefSchema } from '../../../schemas/licence-ref.schema.js'
+import { renewalNoticeDate } from '../../../../lib/dates.lib.js'
 import { today } from '../../../../lib/general.lib.js'
 
 /**

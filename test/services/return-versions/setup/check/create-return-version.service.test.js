@@ -1,9 +1,9 @@
 // Test helpers
-import { generateUUID } from '../../../../../app/lib/general.lib.js'
-import ReturnVersionModel from '../../../../../app/models/return-version.model.js'
 import ReturnRequirementModel from '../../../../../app/models/return-requirement.model.js'
 import ReturnRequirementPointModel from '../../../../../app/models/return-requirement-point.model.js'
 import ReturnRequirementPurposeModel from '../../../../../app/models/return-requirement-purpose.model.js'
+import ReturnVersionModel from '../../../../../app/models/return-version.model.js'
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Thing under test
 import CreateReturnVersionService from '../../../../../app/services/return-versions/setup/check/create-return-version.service.js'

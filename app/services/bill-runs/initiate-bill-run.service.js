@@ -4,9 +4,9 @@
  */
 
 import BillRunModel from '../../models/bill-run.model.js'
-import { send } from '../../requests/charging-module/create-bill-run.request.js'
-import CreateBillRunService from './create-bill-run.service.js'
 import CreateBillRunEventService from './create-bill-run-event.service.js'
+import CreateBillRunService from './create-bill-run.service.js'
+import { send } from '../../requests/charging-module/create-bill-run.request.js'
 
 /**
  * Initiate a new bill run

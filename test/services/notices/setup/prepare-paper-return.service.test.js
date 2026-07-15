@@ -1,7 +1,7 @@
 // Test helpers
 import * as ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
-import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 
 // Things we need to stub
 import * as GeneratePaperReturnRequest from '../../../../app/requests/gotenberg/generate-paper-return.request.js'

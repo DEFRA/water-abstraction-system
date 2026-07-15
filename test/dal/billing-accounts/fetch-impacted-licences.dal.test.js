@@ -1,7 +1,7 @@
 // Test helpers
 import ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
-import { compareStrings, generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
+import { compareStrings, generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
 import FetchImpactedLicencesDal from '../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js'

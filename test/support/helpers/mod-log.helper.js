@@ -2,10 +2,10 @@
  * @module ModLogHelper
  */
 
-import { randomRegionCode } from '../general.js'
-import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 import LicenceHelper from './licence.helper.js'
 import ModLogModel from '../../../app/models/mod-log.model.js'
+import { generateRandomInteger } from '../../../app/lib/general.lib.js'
+import { randomRegionCode } from '../general.js'
 
 /**
  * Add a new mod log

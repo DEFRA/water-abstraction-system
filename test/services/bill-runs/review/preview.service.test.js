@@ -1,6 +1,6 @@
 // Test helpers
-import http2 from 'node:http2'
 import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import http2 from 'node:http2'
 
 // Test helpers
 import YarStub from '../../../support/stubs/yar.stub.js'
@@ -11,6 +11,7 @@ import * as FetchReviewChargeReferenceService from '../../../../app/services/bil
 
 // Thing under test
 import PreviewService from '../../../../app/services/bill-runs/review/preview.service.js'
+
 const { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } = http2.constants
 
 describe('Bill Runs Review - Preview service', () => {

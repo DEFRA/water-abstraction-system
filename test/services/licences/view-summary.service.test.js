@@ -1,6 +1,6 @@
 // Test helpers
-import LicenceModel from '../../../app/models/licence.model.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceModel from '../../../app/models/licence.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub

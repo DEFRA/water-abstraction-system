@@ -4,8 +4,8 @@
  */
 
 import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js'
-import { formatValueUnit, titleCase } from '../../../base.presenter.js'
 import { unitConversion } from '../../../../lib/static-lookups.lib.js'
+import { formatValueUnit, titleCase } from '../../../base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page

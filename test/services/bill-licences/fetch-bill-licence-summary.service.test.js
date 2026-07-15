@@ -1,9 +1,9 @@
 // Test helpers
-import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
-import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
 import BillHelper from '../../support/helpers/bill.helper.js'
 import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
 import BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
 import CompanyHelper from '../../support/helpers/company.helper.js'
 import ContactHelper from '../../support/helpers/contact.helper.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'

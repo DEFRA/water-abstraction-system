@@ -2,8 +2,8 @@
  * @module PermitLicenceHelper
  */
 
-import PermitLicenceModel from '../../../app/models/permit-licence.model.js'
 import LicenceHelper from './licence.helper.js'
+import PermitLicenceModel from '../../../app/models/permit-licence.model.js'
 
 /**
  * Add a new licence into the licence table in the permit schema

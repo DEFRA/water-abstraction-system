@@ -6,8 +6,8 @@
 
 import AddressModel from '../../../models/address.model.js'
 import ChangeAddressService from '../change-address.service.js'
-import FetchCompanyService from './fetch-company.service.js'
 import FetchCompanyContactsService from './fetch-company-contacts.service.js'
+import FetchCompanyService from './fetch-company.service.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**

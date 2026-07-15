@@ -1,9 +1,9 @@
 // Test helpers
-import http2 from 'node:http2'
 import BillHelper from '../../../support/helpers/bill.helper.js'
 import BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
 import TransactionHelper from '../../../support/helpers/transaction.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as ChargingModuleReissueBillRequest from '../../../../app/requests/charging-module/reissue-bill.request.js'
@@ -12,6 +12,7 @@ import * as ChargingModuleViewBillRunStatusRequest from '../../../../app/request
 
 // Thing under test
 import ReissueBillService from '../../../../app/services/bill-runs/reissue/reissue-bill.service.js'
+
 const { HTTP_STATUS_CONFLICT } = http2.constants
 
 const ORIGINAL_BILLING_BATCH_EXTERNAL_ID = generateUUID()

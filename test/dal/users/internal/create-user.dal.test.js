@@ -1,9 +1,9 @@
 // Test helpers
 import EventModel from '../../../../app/models/event.model.js'
 import UserGroupModel from '../../../../app/models/user-group.model.js'
+import UserHelper from '../../../support/helpers/user.helper.js'
 import UserModel from '../../../../app/models/user.model.js'
 import UserRoleModel from '../../../../app/models/user-role.model.js'
-import UserHelper from '../../../support/helpers/user.helper.js'
 
 // Things we need to stub
 import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'

@@ -2,11 +2,11 @@
  * @module ReturnLogHelper
  */
 
-import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
-import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 import LicenceHelper from './licence.helper.js'
 import ReturnLogModel from '../../../app/models/return-log.model.js'
 import ReturnRequirementHelper from './return-requirement.helper.js'
+import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
+import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new return log

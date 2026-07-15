@@ -3,8 +3,8 @@
  * @module FetchLicenceRefsWithDueReturnsService
  */
 
-import ReturnLogModel from '../../../models/return-log.model.js'
 import { NoticeType } from '../../../lib/static-lookups.lib.js'
+import ReturnLogModel from '../../../models/return-log.model.js'
 
 /**
  * Fetches the licence refs with due returns for the return period selected to validate those licences to be removed

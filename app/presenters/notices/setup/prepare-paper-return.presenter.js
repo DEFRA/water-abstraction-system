@@ -3,10 +3,10 @@
  * @module PreparePaperReturnPresenter
  */
 
-import { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } from '../../../lib/dates.lib.js'
 import { formatLongDate } from '../../base.presenter.js'
-import { naldAreaCodes, returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
 import { splitArrayIntoGroups } from '../../../lib/general.lib.js'
+import { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } from '../../../lib/dates.lib.js'
+import { naldAreaCodes, returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
 
 const RETURN_TYPE = {
   week: {

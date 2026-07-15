@@ -1,6 +1,6 @@
 // Test helpers
-import LicenceVersionModel from '../../../app/models/licence-version.model.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceVersionModel from '../../../app/models/licence-version.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test

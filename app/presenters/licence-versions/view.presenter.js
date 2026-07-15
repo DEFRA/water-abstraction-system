@@ -6,9 +6,9 @@
 import NotifyAddressPresenter from '../notices/setup/notify-address.presenter.js'
 import NotifyConfig from '../../../config/notify.config.js'
 import PreviousAndNextPresenter from '../previous-and-next.presenter.js'
-import { formatLongDate, formatVersionReason } from '../base.presenter.js'
 import { compareStrings } from '../../lib/general.lib.js'
-import { formatLicencePoints, formatLicencePurposes, formatConditionTypes } from '../licence.presenter.js'
+import { formatConditionTypes, formatLicencePoints, formatLicencePurposes } from '../licence.presenter.js'
+import { formatLongDate, formatVersionReason } from '../base.presenter.js'
 
 /**
  * Formats data for the `/licence-versions/{id}` page

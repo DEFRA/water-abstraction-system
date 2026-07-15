@@ -3,8 +3,8 @@
  */
 
 import BillModel from '../../../app/models/bill.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import BillingAccountHelper from './billing-account.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new bill

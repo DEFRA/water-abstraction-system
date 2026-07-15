@@ -1,9 +1,9 @@
 // Test helpers
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import * as ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import PaperReturnNotificationsPresenter from '../../../../app/presenters/notices/setup/paper-return-notifications.presenter.js'

@@ -1,11 +1,11 @@
 import LicenceModel from '../../../app/models/licence.model.js'
 import ReturnLogHelper from '../helpers/return-log.helper.js'
 import ReturnLogModel from '../../../app/models/return-log.model.js'
-import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
-import { formatDateObjectToISO, daysFromPeriod, weeksFromPeriod, monthsFromPeriod } from '../../../app/lib/dates.lib.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 import { relativeToToday } from '../general.js'
+import { daysFromPeriod, formatDateObjectToISO, monthsFromPeriod, weeksFromPeriod } from '../../../app/lib/dates.lib.js'
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Applies the fields that are returned by the FetchReturnLogService to a return log instance

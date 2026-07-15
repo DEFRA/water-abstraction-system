@@ -1,6 +1,6 @@
 // Test helpers
-import http2 from 'node:http2'
 import { generateUUID } from '../../app/lib/general.lib.js'
+import http2 from 'node:http2'
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
@@ -26,6 +26,7 @@ import * as ViewInternalPermissionsService from '../../app/services/users/intern
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Users Setup controller', () => {

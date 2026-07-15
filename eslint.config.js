@@ -1,6 +1,6 @@
-import jsdocPlugin from 'eslint-plugin-jsdoc'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import globals from 'globals'
+import jsdocPlugin from 'eslint-plugin-jsdoc'
 import neostandard from 'neostandard'
 
 import noMixedExports from './eslint-rules/no-mixed-exports.js'
@@ -60,7 +60,27 @@ export default [
       'jsdoc/require-hyphen-before-param-description': 'error',
       'jsdoc/require-jsdoc': ['error', { publicOnly: true }],
       'jsdoc/require-param': ['error', { exemptedBy: ['private'] }],
-      'jsdoc/require-returns': ['error', { publicOnly: true }]
+      'jsdoc/require-returns': ['error', { publicOnly: true }],
+      // Enforce `import * as X` before `import X` before `import { x }`, alphabetically sorted within each group.
+      // allowSeparatedGroups lets us keep the "Test helpers" / "Thing under test" blocks independently sorted
+      'sort-imports': [
+        'error',
+        { memberSyntaxSortOrder: ['all', 'single', 'multiple', 'none'], allowSeparatedGroups: true }
+      ],
+      // Group external imports (Node builtins and node_modules packages) before internal (relative path) imports,
+      // with a blank line between the two groups
+      'import/order': [
+        'error',
+        {
+          groups: [
+            ['builtin', 'external'],
+            ['internal', 'parent', 'sibling', 'index']
+          ],
+          'newlines-between': 'always'
+        }
+      ],
+      // Require a blank line after the last import statement, separating imports from the rest of the file
+      'import/newline-after-import': 'error'
     },
     settings: {
       jsdoc: {
@@ -102,6 +122,22 @@ export default [
     files: ['eslint.config.js'],
     rules: {
       'import/extensions': 'off'
+    }
+  },
+  // Test files use blank lines to separate "Test helpers" / "Things we need to stub" / "Thing under test" blocks,
+  // a different convention to external-vs-internal grouping, so exempt them from import/order
+  {
+    files: ['templates/*.test.js', 'test/**/*'],
+    rules: {
+      'import/order': 'off'
+    }
+  },
+  // This file deliberately separates its two imports with a large explanatory comment, which import/order treats as
+  // a disallowed blank line within the group
+  {
+    files: ['knexfile.application.js'],
+    rules: {
+      'import/order': 'off'
     }
   },
   // Adds prettier ESLint rules. It automatically sets up eslint-config-prettier, which turns off any rules declared

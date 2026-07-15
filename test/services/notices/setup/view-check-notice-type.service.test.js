@@ -1,6 +1,6 @@
 // Test helpers
-import SessionModelStub from '../../../support/stubs/session.stub.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Test helpers
 import YarStub from '../../../support/stubs/yar.stub.js'

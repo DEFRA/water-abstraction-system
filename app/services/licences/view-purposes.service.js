@@ -3,8 +3,8 @@
  * @module ViewPurposesService
  */
 
-import FetchPurposesService from '../licences/fetch-purposes.service.js'
 import FetchLicenceService from './fetch-licence.service.js'
+import FetchPurposesService from '../licences/fetch-purposes.service.js'
 import PurposesPresenter from '../../presenters/licences/purposes.presenter.js'
 import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 

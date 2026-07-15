@@ -5,9 +5,8 @@
 
 import querystring from 'node:querystring'
 
-import { postRequest } from '../base.request.js'
-
 import config from '../../../config/resp.config.js'
+import { postRequest } from '../base.request.js'
 
 /**
  * Connects with the ReSP API's Azure AD authentication service to getRequest a JWT for authentication

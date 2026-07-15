@@ -7,6 +7,7 @@ import * as ViewService from '../../app/services/monitoring-stations/view.servic
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_OK } = http2.constants
 
 describe('Monitoring stations controller', () => {

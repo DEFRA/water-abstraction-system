@@ -4,13 +4,13 @@
  */
 
 import DetermineBillingPeriodsService from '../../bill-runs/determine-billing-periods.service.js'
+import { determineUpcomingReturnPeriods } from '../../../lib/return-periods.lib.js'
 import { determineCurrentFinancialYear, today } from '../../../lib/general.lib.js'
 import {
   determineCycleDueDate,
   determineCycleEndDate,
   determineCycleStartDate
 } from '../../../lib/return-cycle-dates.lib.js'
-import { determineUpcomingReturnPeriods } from '../../../lib/return-periods.lib.js'
 
 /**
  * Returns dynamic dates used by the service, for example, current financial year and returns periods

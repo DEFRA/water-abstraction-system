@@ -1,6 +1,6 @@
 // Test helpers
-import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 
 // Thing under test
 import FetchLicenceRefsWithDueReturnsService from '../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js'

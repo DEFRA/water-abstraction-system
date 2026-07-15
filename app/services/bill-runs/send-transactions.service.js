@@ -5,8 +5,8 @@
 
 import BillRunError from '../../errors/bill-run.error.js'
 import BillRunModel from '../../models/bill-run.model.js'
-import { send } from '../../requests/charging-module/create-transaction.request.js'
 import ChargingModuleCreateTransactionPresenter from '../../presenters/charging-module/create-transaction.presenter.js'
+import { send } from '../../requests/charging-module/create-transaction.request.js'
 
 /**
  * Sends the provided transactions to the Charging Module and returns an array of the sent transactions

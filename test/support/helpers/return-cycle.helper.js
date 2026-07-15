@@ -2,9 +2,9 @@
  * @module ReturnCycleHelper
  */
 
+import ReturnCycleModel from '../../../app/models/return-cycle.model.js'
 import { selectRandomEntry } from '../general.js'
 import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
-import ReturnCycleModel from '../../../app/models/return-cycle.model.js'
 
 /**
  * Add a new return cycle

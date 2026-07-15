@@ -5,8 +5,8 @@ import LicenceModel from '../../../app/models/licence.model.js'
 // Things we need to stub
 import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
 import * as FetchLicencesService from '../../../app/dal/companies/fetch-licences.dal.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
 import ViewLicencesService from '../../../app/services/companies/view-licences.service.js'

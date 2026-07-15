@@ -3,10 +3,10 @@
  * @module ProcessLicenceEndDateChangesService
  */
 
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 import LicenceEndDateChangeModel from '../../../models/licence-end-date-change.model.js'
 import ProcessBillingFlagService from '../../licences/supplementary/process-billing-flag.service.js'
 import ProcessLicenceReturnLogsService from '../../return-logs/process-licence-return-logs.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Process all licence end date changes previously recorded

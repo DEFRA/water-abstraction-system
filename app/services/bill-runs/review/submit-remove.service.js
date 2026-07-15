@@ -5,9 +5,9 @@
 
 import CreateLicenceSupplementaryYearService from '../../licences/supplementary/create-licence-supplementary-year.service.js'
 import FetchRemoveReviewLicenceModel from './fetch-remove-review-licence.service.js'
-import UnassignLicencesToBillRunService from '../unassign-licences-to-bill-run.service.js'
 import ProcessBillRunPostRemove from './process-bill-run-post-remove.service.js'
 import RemoveReviewLicenceService from './remove-review-licence.service.js'
+import UnassignLicencesToBillRunService from '../unassign-licences-to-bill-run.service.js'
 import { flashNotification } from '../../../lib/general.lib.js'
 
 /**

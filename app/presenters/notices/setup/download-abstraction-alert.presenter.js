@@ -4,8 +4,8 @@
  */
 
 import { addressToCSV } from '../base.presenter.js'
-import { formatAbstractionPeriod, formatValueUnit } from '../../base.presenter.js'
 import { transformArrayToCSVRow } from '../../../lib/transform-to-csv.lib.js'
+import { formatAbstractionPeriod, formatValueUnit } from '../../base.presenter.js'
 
 const HEADERS = [
   'Licence',

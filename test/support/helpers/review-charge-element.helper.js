@@ -2,8 +2,8 @@
  * @module ReviewChargeElementHelper
  */
 
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import ReviewChargeElementModel from '../../../app/models/review-charge-element.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new review charge element for 2pt matching

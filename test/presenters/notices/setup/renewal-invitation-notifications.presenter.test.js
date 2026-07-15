@@ -1,7 +1,7 @@
 // Test helpers
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
 
 // Thing under test
 import RenewalInvitationNotificationsPresenter from '../../../../app/presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'

@@ -1,6 +1,6 @@
 // Test helpers
-import http2 from 'node:http2'
 import { generateUUID } from '../../app/lib/general.lib.js'
+import http2 from 'node:http2'
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
@@ -9,8 +9,8 @@ import * as SubmitAccountService from '../../app/services/billing-accounts/setup
 import * as SubmitAccountTypeService from '../../app/services/billing-accounts/setup/submit-account-type.service.js'
 import * as SubmitCheckService from '../../app/services/billing-accounts/setup/submit-check.service.js'
 import * as SubmitCompanySearchService from '../../app/services/billing-accounts/setup/submit-company-search.service.js'
-import * as SubmitContactService from '../../app/services/billing-accounts/setup/submit-contact.service.js'
 import * as SubmitContactNameService from '../../app/services/billing-accounts/setup/submit-contact-name.service.js'
+import * as SubmitContactService from '../../app/services/billing-accounts/setup/submit-contact.service.js'
 import * as SubmitExistingAccountService from '../../app/services/billing-accounts/setup/submit-existing-account.service.js'
 import * as SubmitExistingAddressService from '../../app/services/billing-accounts/setup/submit-existing-address.service.js'
 import * as SubmitFaoService from '../../app/services/billing-accounts/setup/submit-fao.service.js'
@@ -19,8 +19,8 @@ import * as ViewAccountService from '../../app/services/billing-accounts/setup/v
 import * as ViewAccountTypeService from '../../app/services/billing-accounts/setup/view-account-type.service.js'
 import * as ViewCheckService from '../../app/services/billing-accounts/setup/view-check.service.js'
 import * as ViewCompanySearchService from '../../app/services/billing-accounts/setup/view-company-search.service.js'
-import * as ViewContactService from '../../app/services/billing-accounts/setup/view-contact.service.js'
 import * as ViewContactNameService from '../../app/services/billing-accounts/setup/view-contact-name.service.js'
+import * as ViewContactService from '../../app/services/billing-accounts/setup/view-contact.service.js'
 import * as ViewExistingAccountService from '../../app/services/billing-accounts/setup/view-existing-account.service.js'
 import * as ViewExistingAddressService from '../../app/services/billing-accounts/setup/view-existing-address.service.js'
 import * as ViewFaoService from '../../app/services/billing-accounts/setup/view-fao.service.js'
@@ -28,6 +28,7 @@ import * as ViewSelectCompanyService from '../../app/services/billing-accounts/s
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Billing Accounts Setup controller', () => {

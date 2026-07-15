@@ -3,10 +3,10 @@
  * @module ViewPresenter
  */
 
-import { formatAbstractionPeriod, formatLongDate, formatVersionReason } from '../base.presenter.js'
-import { isQuarterlyReturnSubmissions } from '../../lib/dates.lib.js'
 import PreviousAndNextPresenter from '../previous-and-next.presenter.js'
+import { isQuarterlyReturnSubmissions } from '../../lib/dates.lib.js'
 import { returnRequirementFrequencies } from '../../lib/static-lookups.lib.js'
+import { formatAbstractionPeriod, formatLongDate, formatVersionReason } from '../base.presenter.js'
 
 /**
  * Formats return version data ready for presenting in the view return version page

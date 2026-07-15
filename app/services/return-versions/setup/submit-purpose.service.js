@@ -5,9 +5,9 @@
 
 import FetchPurposesService from './fetch-purposes.service.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import { flashNotification } from '../../../lib/general.lib.js'
 import PurposePresenter from '../../../presenters/return-versions/setup/purpose.presenter.js'
 import PurposeValidation from '../../../validators/return-versions/setup/purpose.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
 import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 

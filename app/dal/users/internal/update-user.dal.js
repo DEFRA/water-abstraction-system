@@ -10,8 +10,8 @@ import RoleModel from '../../../models/role.model.js'
 import UserGroupModel from '../../../models/user-group.model.js'
 import UserModel from '../../../models/user.model.js'
 import UserRoleModel from '../../../models/user-role.model.js'
-import { generateUUID, timestampForPostgres } from '../../../lib/general.lib.js'
 import { userPermissions } from '../../../lib/static-lookups.lib.js'
+import { generateUUID, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Updates an existing user

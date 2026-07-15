@@ -7,8 +7,8 @@
 import CreateNotificationsService from './create-notifications.service.js'
 import EventModel from '../../../models/event.model.js'
 import FetchAlternateReturnsRecipientsService from './returns-notice/fetch-alternate-returns-recipients.service.js'
-import { generateNoticeReferenceCode, timestampForPostgres } from '../../../lib/general.lib.js'
 import { NoticeJourney, NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
+import { generateNoticeReferenceCode, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates creating a new notice and notifications for returns invitation emails that failed

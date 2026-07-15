@@ -6,8 +6,8 @@ import { generateUUID } from '../../../../app/lib/general.lib.js'
 import * as CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
 import * as CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
 import * as FetchRenewalRecipients from '../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js'
-import NotifyConfig from '../../../../config/notify.config.js'
 import * as SendNoticeService from '../../../../app/services/notices/setup/send/send-notice.service.js'
+import NotifyConfig from '../../../../config/notify.config.js'
 
 // Thing under test
 import SendRenewalInvitations from '../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js'

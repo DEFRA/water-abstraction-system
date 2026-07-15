@@ -3,10 +3,10 @@ import * as NoticesFixture from '../../../../support/fixtures/notices.fixture.js
 import * as NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
-import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
 import * as SendAlternateNoticeService from '../../../../../app/services/notices/setup/send/send-alternate-notice.service.js'
 import * as SendMainNoticeService from '../../../../../app/services/notices/setup/send/send-main-notice.service.js'
 import * as UpdateNoticeService from '../../../../../app/services/notices/update-notice.service.js'
+import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import SendNoticeService from '../../../../../app/services/notices/setup/send/send-notice.service.js'

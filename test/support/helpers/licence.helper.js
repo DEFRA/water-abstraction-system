@@ -3,8 +3,8 @@
  */
 
 import LicenceModel from '../../../app/models/licence.model.js'
-import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 import RegionHelper from './region.helper.js'
+import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence

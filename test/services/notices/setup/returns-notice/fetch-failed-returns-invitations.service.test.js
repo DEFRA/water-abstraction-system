@@ -1,11 +1,11 @@
 // Test helpers
-import EventHelper from '../../../../support/helpers/event.helper.js'
 import * as NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import * as NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
+import EventHelper from '../../../../support/helpers/event.helper.js'
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 import NotificationHelper from '../../../../support/helpers/notification.helper.js'
 import { futureDueDate } from '../../../../../app/presenters/notices/base.presenter.js'
 import { compareStrings, generateUUID } from '../../../../../app/lib/general.lib.js'
-import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import FetchFailedReturnsInvitationsService from '../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js'

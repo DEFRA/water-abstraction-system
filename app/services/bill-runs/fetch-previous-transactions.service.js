@@ -3,9 +3,9 @@
  * @module FetchPreviousTransactionsService
  */
 
+import TransactionModel from '../../models/transaction.model.js'
 import { db } from '../../../db/db.js'
 import { transactionsMatch } from '../../lib/general.lib.js'
-import TransactionModel from '../../models/transaction.model.js'
 
 /**
  * Fetches the previously billed transactions that match, removing any debits which cancelled out by previous credits

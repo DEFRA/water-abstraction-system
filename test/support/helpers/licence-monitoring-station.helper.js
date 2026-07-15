@@ -2,8 +2,8 @@
  * @module LicenceMonitoringStationHelper
  */
 
-import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 import LicenceMonitoringStationModel from '../../../app/models/licence-monitoring-station.model.js'
+import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence monitoring station

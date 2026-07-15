@@ -3,14 +3,14 @@
  * @module ProcessBillingPeriodService
  */
 
+import BillLicenceModel from '../../../models/bill-licence.model.js'
+import BillModel from '../../../models/bill.model.js'
 import BillRunError from '../../../errors/bill-run.error.js'
 import BillRunModel from '../../../models/bill-run.model.js'
-import BillModel from '../../../models/bill.model.js'
-import BillLicenceModel from '../../../models/bill-licence.model.js'
 import DetermineChargePeriodService from '../determine-charge-period.service.js'
 import DetermineMinimumChargeService from '../determine-minimum-charge.service.js'
-import GenerateTransactionsService from '../generate-transactions.service.js'
 import FetchPreviousTransactionsService from '../fetch-previous-transactions.service.js'
+import GenerateTransactionsService from '../generate-transactions.service.js'
 import PreGenerateBillingDataService from './pre-generate-billing-data.service.js'
 import ProcessSupplementaryTransactionsService from '../process-supplementary-transactions.service.js'
 import SendTransactionsService from '../send-transactions.service.js'

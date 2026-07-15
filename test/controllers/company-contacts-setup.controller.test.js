@@ -1,6 +1,6 @@
 // Test helpers
-import http2 from 'node:http2'
 import { generateUUID } from '../../app/lib/general.lib.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as InitiateEditSessionService from '../../app/services/company-contacts/setup/initiate-edit-session.service.js'
@@ -24,6 +24,7 @@ import * as ViewRestoreService from '../../app/services/company-contacts/setup/v
 import { init } from '../../app/server.js'
 
 import { postRequestOptions } from '../support/general.js'
+
 const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 
 describe('Company Contacts Setup controller', () => {

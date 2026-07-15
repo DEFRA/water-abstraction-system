@@ -6,7 +6,6 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
-
 import BillingAccountAddressModel from './billing-account-address.model.js'
 import CompanyAddressModel from './company-address.model.js'
 import LicenceDocumentRoleModel from './licence-document-role.model.js'

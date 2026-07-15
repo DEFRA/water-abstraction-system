@@ -10,8 +10,8 @@ import FetchUserDal from '../fetch-user.dal.js'
 import GroupModel from '../../../models/group.model.js'
 import RoleModel from '../../../models/role.model.js'
 import UserModel from '../../../models/user.model.js'
-import { generateUUID, timestampForPostgres } from '../../../lib/general.lib.js'
 import { userPermissions } from '../../../lib/static-lookups.lib.js'
+import { generateUUID, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Creates a new user

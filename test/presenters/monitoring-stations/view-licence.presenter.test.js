@@ -1,7 +1,7 @@
 // Test helpers
+import UserHelper from '../../support/helpers/user.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
-import UserHelper from '../../support/helpers/user.helper.js'
 
 // Thing under test
 import ViewLicencePresenter from '../../../app/presenters/monitoring-stations/view-licence.presenter.js'

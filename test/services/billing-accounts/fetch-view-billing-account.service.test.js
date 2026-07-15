@@ -1,11 +1,11 @@
 // Test helpers
 import AddressHelper from '../../support/helpers/address.helper.js'
 import BillHelper from '../../support/helpers/bill.helper.js'
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
 import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
 import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
-import BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import ContactHelper from '../../support/helpers/contact.helper.js'
 import CompanyHelper from '../../support/helpers/company.helper.js'
+import ContactHelper from '../../support/helpers/contact.helper.js'
 
 // Thing under test
 import FetchViewBillingAccountService from '../../../app/services/billing-accounts/fetch-view-billing-account.service.js'

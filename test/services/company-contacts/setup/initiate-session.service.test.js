@@ -1,8 +1,8 @@
 // Test helpers
 import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import SessionModel from '../../../../app/models/session.model.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
 import * as FetchCompanyLicencesDal from '../../../../app/dal/company-contacts/fetch-company-licences.dal.js'

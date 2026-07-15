@@ -3,8 +3,8 @@
  * @module DbExportService
  */
 
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 import SchemaExportService from './schema-export.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Calls SchemaExportService giving it a schemaName

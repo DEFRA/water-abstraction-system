@@ -2,8 +2,8 @@
 import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-import * as FetchPurposesService from '../../../app/services/licences/fetch-purposes.service.js'
 import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchPurposesService from '../../../app/services/licences/fetch-purposes.service.js'
 
 // Thing under test
 import ViewPurposesService from '../../../app/services/licences/view-purposes.service.js'

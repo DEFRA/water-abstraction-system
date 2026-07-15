@@ -5,10 +5,9 @@
 
 import { ref } from 'objection'
 
+import DatabaseConfig from '../../../config/database.config.js'
 import EventModel from '../../models/event.model.js'
 import NotificationModel from '../../models/notification.model.js'
-
-import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetch the selected notice and its associated notifications for the 'notices/{id}' page

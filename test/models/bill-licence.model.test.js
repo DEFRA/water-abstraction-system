@@ -1,7 +1,7 @@
 // Test helpers
 import BillHelper from '../support/helpers/bill.helper.js'
-import BillModel from '../../app/models/bill.model.js'
 import BillLicenceHelper from '../support/helpers/bill-licence.helper.js'
+import BillModel from '../../app/models/bill.model.js'
 import LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
 import TransactionHelper from '../support/helpers/transaction.helper.js'

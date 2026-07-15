@@ -1,8 +1,8 @@
-import RegionHelper from '../helpers/region.helper.js'
-import { generateNoticeReferenceCode, generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceHelper from '../helpers/licence.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
 import ReturnRequirementHelper from '../helpers/return-requirement.helper.js'
 import { NoticeJourney, NoticeType, NoticeTypes } from '../../../app/lib/static-lookups.lib.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Creates an abstraction alert stop notice setup session fixture for testing purposes

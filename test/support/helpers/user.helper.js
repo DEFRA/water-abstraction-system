@@ -2,10 +2,10 @@
  * @module UserHelper
  */
 
-import { selectRandomEntry } from '../general.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 import UserModel from '../../../app/models/user.model.js'
+import { selectRandomEntry } from '../general.js'
 import { data as users } from '../../../db/seeds/data/users.js'
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 const data = users
 
