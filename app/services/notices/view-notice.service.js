@@ -6,8 +6,8 @@
 
 import FetchNoticeService from '../../services/notices/fetch-notice.service.js'
 import PaginatorPresenter from '../../presenters/paginator.presenter.js'
-import { processSavedFilters } from '../../lib/submit-page.lib.js'
 import ViewNoticePresenter from '../../presenters/notices/view-notice.presenter.js'
+import { processSavedFilters } from '../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the 'notices/{id}' page

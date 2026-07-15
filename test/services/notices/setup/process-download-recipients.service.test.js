@@ -1,9 +1,9 @@
 // Test helpers
 import * as NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { formatAbstractionPeriod, formatValueUnit } from '../../../../app/presenters/base.presenter.js'
 import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.js'
 import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
+import { formatAbstractionPeriod, formatValueUnit } from '../../../../app/presenters/base.presenter.js'
 
 // Things to stub
 import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'

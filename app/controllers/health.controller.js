@@ -3,9 +3,9 @@
  * @module HealthController
  */
 
-import http2 from 'node:http2'
 import DatabaseHealthCheckService from '../services/health/database-health-check.service.js'
 import InfoService from '../services/health/info.service.js'
+import http2 from 'node:http2'
 
 const { HTTP_STATUS_OK } = http2.constants
 

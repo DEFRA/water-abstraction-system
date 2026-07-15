@@ -3,8 +3,8 @@
  * @module ChargingModuleSendBillRunRequest
  */
 
-import { patchRequest } from '../charging-module.request.js'
 import ExpandedError from '../../errors/expanded.error.js'
+import { patchRequest } from '../charging-module.request.js'
 import { send as waitForStatus } from './wait-for-status.request.js'
 
 /**

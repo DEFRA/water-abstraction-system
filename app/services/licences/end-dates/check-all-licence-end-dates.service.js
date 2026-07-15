@@ -3,9 +3,9 @@
  * @module CheckAllLicenceEndDatesService
  */
 
+import CheckLicenceEndDatesService from './check-licence-end-dates.service.js'
 import FetchLicences from './fetch-licences.service.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
-import CheckLicenceEndDatesService from './check-licence-end-dates.service.js'
 
 import LicencesConfig from '../../../../config/licences.config.js'
 

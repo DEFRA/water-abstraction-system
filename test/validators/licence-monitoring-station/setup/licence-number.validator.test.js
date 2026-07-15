@@ -1,7 +1,7 @@
 // Test helpers
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 import { licenceEnds } from '../../../support/fixtures/licence.fixture.js'
 import { yesterday } from '../../../support/general.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import LicenceNumberValidator from '../../../../app/validators/licence-monitoring-station/setup/licence-number.validator.js'

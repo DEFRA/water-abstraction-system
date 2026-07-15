@@ -6,8 +6,8 @@
 import BillingAccountModel from '../../models/billing-account.model.js'
 import FetchBillLicence from '../bill-licences/fetch-bill-licence.service.js'
 import FetchBillService from './fetch-bill-service.js'
-import ViewBillPresenter from '../../presenters/bills/view-bill.presenter.js'
 import ViewBillLicencePresenter from '../../presenters/bill-licences/view-bill-licence.presenter.js'
+import ViewBillPresenter from '../../presenters/bills/view-bill.presenter.js'
 import ViewLicenceSummariesPresenter from '../../presenters/bills/view-licence-summaries.presenter.js'
 
 /**

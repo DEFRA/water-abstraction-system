@@ -1,6 +1,6 @@
 // Test helpers
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
 import * as FetchNotificationsDal from '../../../app/dal/return-logs/fetch-notifications.dal.js'

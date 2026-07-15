@@ -2,8 +2,8 @@
 import * as EventHelper from '../../support/helpers/event.helper.js'
 import * as LicenceHelper from '../../support/helpers/licence.helper.js'
 import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
-import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 import * as NotificationHelper from '../../support/helpers/notification.helper.js'
+import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 
 // Thing under test
 import FetchNotificationService from '../../../app/services/notifications/fetch-notification.service.js'

@@ -1,9 +1,9 @@
 // Test helpers
-import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import SessionModel from '../../../../app/models/session.model.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
 import * as FetchCompanyContactDal from '../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js'

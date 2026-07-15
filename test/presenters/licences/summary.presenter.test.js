@@ -1,9 +1,9 @@
 // Test helpers
+import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 import CompanyModel from '../../../app/models/company.model.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import PointModel from '../../../app/models/point.model.js'
-import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
-import { today, generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID, today } from '../../../app/lib/general.lib.js'
 
 // Thing under test
 import SummaryPresenter from '../../../app/presenters/licences/summary.presenter.js'

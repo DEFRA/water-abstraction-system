@@ -2,8 +2,8 @@
  * @module ReturnRequirementHelper
  */
 
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 import ReturnRequirementModel from '../../../app/models/return-requirement.model.js'
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new return requirement

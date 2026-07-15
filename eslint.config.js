@@ -1,6 +1,6 @@
-import jsdocPlugin from 'eslint-plugin-jsdoc'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import globals from 'globals'
+import jsdocPlugin from 'eslint-plugin-jsdoc'
 import neostandard from 'neostandard'
 
 export default [
@@ -55,7 +55,13 @@ export default [
       'jsdoc/require-hyphen-before-param-description': 'error',
       'jsdoc/require-jsdoc': ['error', { publicOnly: true }],
       'jsdoc/require-param': ['error', { exemptedBy: ['private'] }],
-      'jsdoc/require-returns': ['error', { publicOnly: true }]
+      'jsdoc/require-returns': ['error', { publicOnly: true }],
+      // Enforce `import * as X` before `import X` before `import { x }`, alphabetically sorted within each group.
+      // allowSeparatedGroups lets us keep the "Test helpers" / "Thing under test" blocks independently sorted
+      'sort-imports': [
+        'error',
+        { memberSyntaxSortOrder: ['all', 'single', 'multiple', 'none'], allowSeparatedGroups: true }
+      ]
     },
     settings: {
       jsdoc: {

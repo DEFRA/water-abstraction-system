@@ -4,9 +4,9 @@
  */
 
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import { flashNotification } from '../../../lib/general.lib.js'
 import MeterProvidedPresenter from '../../../presenters/return-logs/setup/meter-provided.presenter.js'
 import MeterProvidedValidator from '../../../validators/return-logs/setup/meter-provided.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**

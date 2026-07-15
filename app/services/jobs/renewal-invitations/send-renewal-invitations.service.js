@@ -7,9 +7,9 @@ import CreateNoticeService from '../../notices/setup/create-notice.service.js'
 import CreateNotificationsService from '../../notices/setup/create-notifications.service.js'
 import FetchRenewalRecipients from './fetch-renewal-recipients.service.js'
 import SendNoticeService from '../../notices/setup/send/send-notice.service.js'
-import { renewalExpiryDate, renewalNoticeDate } from '../../../lib/dates.lib.js'
 import { generateNoticeReferenceCode } from '../../../lib/general.lib.js'
-import { NoticeTypes, NoticeType } from '../../../lib/static-lookups.lib.js'
+import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
+import { renewalExpiryDate, renewalNoticeDate } from '../../../lib/dates.lib.js'
 
 import NotifyConfig from '../../../../config/notify.config.js'
 

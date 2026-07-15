@@ -1,14 +1,14 @@
 // Test helpers
 import * as RegionHelper from '../../../support/helpers/region.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Test helpers
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import DatabaseConfig from '../../../../config/database.config.js'
 import * as FetchBillRunLicencesService from '../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js'
+import DatabaseConfig from '../../../../config/database.config.js'
 
 // Thing under test
 import ViewReviewService from '../../../../app/services/bill-runs/review/view-review.service.js'

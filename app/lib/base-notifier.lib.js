@@ -7,9 +7,9 @@ import { Notifier } from '@airbrake/node'
 import Pino from 'pino'
 
 import AirbrakeConfig from '../../config/airbrake.config.js'
-import { send } from '../requests/notify/create-email.request.js'
-import NotifyConfig from '../../config/notify.config.js'
 import { NOTIFY_TEMPLATES } from './notify-templates.lib.js'
+import NotifyConfig from '../../config/notify.config.js'
+import { send } from '../requests/notify/create-email.request.js'
 
 /**
  * Based class for combined logging and Airbrake (Errbit) notification managers

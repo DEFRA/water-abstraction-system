@@ -1,13 +1,13 @@
 // Test helpers
-import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 import * as LicenceHelper from '../../support/helpers/licence.helper.js'
 import * as LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
 import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import * as LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
 import * as LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
+import * as LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
 import * as MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
 import * as NotificationHelper from '../../support/helpers/notification.helper.js'
 import * as PointHelper from '../../support/helpers/point.helper.js'
+import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 
 // Thing under test
 import FetchMonitoringStationDetailsDal from '../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'

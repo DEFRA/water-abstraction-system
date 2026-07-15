@@ -1,7 +1,7 @@
 // Test helpers
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
 import { formatDateObjectToISO } from '../../../../app/lib/dates.lib.js'
+import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
 
 // Thing under test
 import CreateNoticePresenter from '../../../../app/presenters/notices/setup/create-notice.presenter.js'

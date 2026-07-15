@@ -3,10 +3,10 @@
  * @module FetchReturnRequirementsService
  */
 
-import { db } from '../../../../db/db.js'
 import ReturnLogModel from '../../../models/return-log.model.js'
 import ReturnRequirementModel from '../../../models/return-requirement.model.js'
 import ReturnVersionModel from '../../../models/return-version.model.js'
+import { db } from '../../../../db/db.js'
 
 /**
  * Fetches the matching return requirements for a given return cycle

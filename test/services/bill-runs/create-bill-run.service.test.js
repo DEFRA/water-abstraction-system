@@ -1,6 +1,6 @@
 // Test helpers
-import BillRunModel from '../../../app/models/bill-run.model.js'
 import * as RegionHelper from '../../support/helpers/region.helper.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
 import RegionModel from '../../../app/models/region.model.js'
 
 // Thing under test

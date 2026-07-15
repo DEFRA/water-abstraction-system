@@ -6,10 +6,10 @@
 import ChildProcess from 'node:child_process'
 import util from 'node:util'
 
-import { send as addressFacadeViewHealth } from '../../requests/address-facade/view-health.request.js'
-import { send as chargingModuleViewHealth } from '../../requests/charging-module/view-health.request.js'
 import CreateRedisClientService from './create-redis-client.service.js'
 import FetchSystemInfoService from './fetch-system-info.service.js'
+import { send as addressFacadeViewHealth } from '../../requests/address-facade/view-health.request.js'
+import { send as chargingModuleViewHealth } from '../../requests/charging-module/view-health.request.js'
 import { send as gotenbergViewHealth } from '../../requests/gotenberg/view-health.request.js'
 import { send as legacyViewHealth } from '../../requests/legacy/view-health.request.js'
 import { send as notifyViewHealth } from '../../requests/notify/view-health.request.js'

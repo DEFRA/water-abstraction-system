@@ -2,8 +2,8 @@
  * @module ReturnSubmissionLineHelper
  */
 
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new return submission line

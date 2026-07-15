@@ -4,8 +4,8 @@
  * @module ManualAddressValidator
  */
 
-import { postcodeValidator } from 'postcode-validator'
 import { addressLineValidator } from './addressLine.validator.js'
+import { postcodeValidator } from 'postcode-validator'
 
 import Joi from 'joi'
 

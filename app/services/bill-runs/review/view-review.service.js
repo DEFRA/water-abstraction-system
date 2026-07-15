@@ -6,8 +6,8 @@
 import FetchBillRunLicencesService from './fetch-bill-run-licences.service.js'
 import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
 import ReviewPresenter from '../../../presenters/bill-runs/review/review.presenter.js'
-import { readFlashNotification } from '../../../lib/general.lib.js'
 import { processSavedFilters } from '../../../lib/submit-page.lib.js'
+import { readFlashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/bill-runs/review/{id}' page

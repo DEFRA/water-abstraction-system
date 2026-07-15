@@ -1,6 +1,6 @@
 // Test helpers
-import http2 from 'node:http2'
 import { generateNoticeReferenceCode } from '../../../../../app/lib/general.lib.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as GeneratePreviewRequest from '../../../../../app/requests/notify/generate-preview.request.js'

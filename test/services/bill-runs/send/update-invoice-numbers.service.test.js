@@ -6,8 +6,8 @@ import ExpandedError from '../../../../app/errors/expanded.error.js'
 // Things we need to stub
 import * as ChargingModuleSendBillRunRequest from '../../../../app/requests/charging-module/send-bill-run.request.js'
 import * as ChargingModuleViewBillRunRequest from '../../../../app/requests/charging-module/view-bill-run.request.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as UnflagBilledSupplementaryLicencesService from '../../../../app/services/bill-runs/unflag-billed-supplementary-licences.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import UpdateInvoiceNumbersService from '../../../../app/services/bill-runs/send/update-invoice-numbers.service.js'

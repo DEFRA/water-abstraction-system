@@ -3,8 +3,8 @@
  */
 
 import GroupRoleModel from '../../../app/models/group-role.model.js'
-import { selectRandomEntry } from '../general.js'
 import { data as groupRoles } from '../../../db/seeds/data/group-roles.js'
+import { selectRandomEntry } from '../general.js'
 
 export const data = groupRoles
 

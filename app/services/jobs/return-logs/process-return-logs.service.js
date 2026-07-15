@@ -3,11 +3,11 @@
  * @module ProcessReturnLogsService
  */
 
+import CheckReturnCycleService from './check-return-cycle.service.js'
+import CreateReturnLogsService from '../../return-logs/create-return-logs.service.js'
+import FetchReturnRequirementsService from './fetch-return-requirements.service.js'
 import { determineEarliestDate } from '../../../lib/dates.lib.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
-import CreateReturnLogsService from '../../return-logs/create-return-logs.service.js'
-import CheckReturnCycleService from './check-return-cycle.service.js'
-import FetchReturnRequirementsService from './fetch-return-requirements.service.js'
 
 /**
  * Determines what return logs need to be generated for a given cycle and creates them

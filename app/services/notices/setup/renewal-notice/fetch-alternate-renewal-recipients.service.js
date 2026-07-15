@@ -3,8 +3,8 @@
  * @module FetchAlternateRenewalRecipientsService
  */
 
-import { licenceHolderRecipientQuery } from '../../../../dal/notices/recipient-queries.dal.js'
 import { db } from '../../../../../db/db.js'
+import { licenceHolderRecipientQuery } from '../../../../dal/notices/recipient-queries.dal.js'
 
 /**
  * Fetches recipient data for an alternate renewal notice

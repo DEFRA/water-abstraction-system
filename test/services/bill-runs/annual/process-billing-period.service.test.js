@@ -2,11 +2,11 @@
 import { determineCurrentFinancialYear, generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
+import * as ChargingModuleCreateTransactionRequest from '../../../../app/requests/charging-module/create-transaction.request.js'
+import * as GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
 import BillModel from '../../../../app/models/bill.model.js'
 import BillRunError from '../../../../app/errors/bill-run.error.js'
 import BillRunModel from '../../../../app/models/bill-run.model.js'
-import * as ChargingModuleCreateTransactionRequest from '../../../../app/requests/charging-module/create-transaction.request.js'
-import * as GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
 
 // Thing under test
 import ProcessBillingPeriodService from '../../../../app/services/bill-runs/annual/process-billing-period.service.js'

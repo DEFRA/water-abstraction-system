@@ -6,9 +6,9 @@
 
 import FetchRecipientsService from './fetch-recipients.service.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import { flashNotification } from '../../../lib/general.lib.js'
 import SelectRecipientsPresenter from '../../../presenters/notices/setup/select-recipients.presenter.js'
 import SelectRecipientsValidator from '../../../validators/notices/setup/select-recipients.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
 import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 

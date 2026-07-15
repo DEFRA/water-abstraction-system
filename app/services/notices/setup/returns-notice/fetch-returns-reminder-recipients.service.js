@@ -3,12 +3,12 @@
  * @module FetchReturnsReminderRecipientsService
  */
 
+import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
 import GenerateReturnLogsByLicenceQueryService from './generate-return-logs-by-licence-query.service.js'
 import GenerateReturnLogsByPeriodQueryService from './generate-return-logs-by-period-query.service.js'
-import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
+import { NoticeJourney } from '../../../../lib/static-lookups.lib.js'
 import { db } from '../../../../../db/db.js'
 import { transformStringOfLicencesToArray } from '../../../../lib/general.lib.js'
-import { NoticeJourney } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Fetches recipient data for a returns reminder notice

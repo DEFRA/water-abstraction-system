@@ -1,7 +1,7 @@
 // Test helpers
+import * as LicenceEndDateChangeHelper from '../support/helpers/licence-end-date-change.helper.js'
 import * as LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
-import * as LicenceEndDateChangeHelper from '../support/helpers/licence-end-date-change.helper.js'
 
 // Thing under test
 import LicenceEndDateChangeModel from '../../app/models/licence-end-date-change.model.js'

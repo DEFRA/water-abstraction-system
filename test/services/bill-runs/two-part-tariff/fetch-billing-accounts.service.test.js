@@ -1,7 +1,6 @@
 // Test helpers
 import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
 import * as BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
-import BillingAccountModel from '../../../../app/models/billing-account.model.js'
 import * as ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
 import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
 import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
@@ -12,6 +11,7 @@ import * as ReviewChargeElementHelper from '../../../support/helpers/review-char
 import * as ReviewChargeReferenceHelper from '../../../support/helpers/review-charge-reference.helper.js'
 import * as ReviewChargeVersionHelper from '../../../support/helpers/review-charge-version.helper.js'
 import * as ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
+import BillingAccountModel from '../../../../app/models/billing-account.model.js'
 
 // Thing under test
 import FetchBillingAccountsService from '../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js'

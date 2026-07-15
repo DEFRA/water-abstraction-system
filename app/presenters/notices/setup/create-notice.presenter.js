@@ -3,9 +3,9 @@
  * @module CreateNoticePresenter
  */
 
-import { NoticeJourney, NoticeType } from '../../../lib/static-lookups.lib.js'
 import { formatDateObjectToISO } from '../../../lib/dates.lib.js'
 import { futureDueDate } from '../base.presenter.js'
+import { NoticeJourney, NoticeType } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats a notice `SessionModel` instance into the data needed for a 'notice' record

@@ -3,8 +3,8 @@ import LicenceModel from '../../../../../app/models/licence.model.js'
 import LicenceVersionPurposeModel from '../../../../../app/models/licence-version-purpose.model.js'
 
 // Things we need to stub
-import DetermineTwoPartTariffAgreementService from '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
 import * as FetchAbstractionDataService from '../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js'
+import DetermineTwoPartTariffAgreementService from '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
 
 // Thing under test
 import GenerateFromAbstractionDataService from '../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js'

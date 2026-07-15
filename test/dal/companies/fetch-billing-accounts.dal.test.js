@@ -1,8 +1,8 @@
 // Test helpers
 import * as AddressHelper from '../../support/helpers/address.helper.js'
-import * as CompanyHelper from '../../support/helpers/company.helper.js'
-import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
 import * as BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import * as CompanyHelper from '../../support/helpers/company.helper.js'
 
 // Thing under test
 import FetchCompanyDal from '../../../app/dal/companies/fetch-billing-accounts.dal.js'

@@ -1,7 +1,7 @@
 // Test helpers
-import { tomorrow, yesterday } from '../../support/general.js'
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
 import * as LicenceDocumentHeaderHelper from '../../support/helpers/licence-document-header.helper.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import { tomorrow, yesterday } from '../../support/general.js'
 
 // Thing under test
 import FetchInvalidAddressesService from '../../../app/services/reports/fetch-invalid-addresses.service.js'

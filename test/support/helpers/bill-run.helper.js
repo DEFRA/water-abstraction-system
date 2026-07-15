@@ -2,8 +2,8 @@
  * @module BillRunHelper
  */
 
-import BillRunModel from '../../../app/models/bill-run.model.js'
 import * as RegionHelper from './region.helper.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
 
 /**
  * Add a new bill run

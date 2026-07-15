@@ -5,8 +5,8 @@
 
 import Big from 'big.js'
 
-import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
 import FetchReturnLogsForLicenceService from './fetch-return-logs-for-licence.service.js'
+import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
 import { periodsOverlap } from '../../../lib/general.lib.js'
 
 /**

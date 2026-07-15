@@ -6,8 +6,8 @@
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 import ReceivedDateValidator from '../../../validators/return-logs/setup/received-date.validator.js'
 import ReceivedPresenter from '../../../presenters/return-logs/setup/received.presenter.js'
-import { flashNotification, today } from '../../../lib/general.lib.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { flashNotification, today } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/received` page

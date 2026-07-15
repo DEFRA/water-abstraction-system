@@ -1,8 +1,8 @@
 // Test helpers
 import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
 import ViewNotificationPresenter from '../../../app/presenters/notifications/view-notification.presenter.js'

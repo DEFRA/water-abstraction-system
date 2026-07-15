@@ -4,7 +4,7 @@
  */
 
 import { formatFinancialYear } from '../../base.presenter.js'
-import { formatAdditionalCharges, formatChargePeriod, formatAdjustments } from './base-review.presenter.js'
+import { formatAdditionalCharges, formatAdjustments, formatChargePeriod } from './base-review.presenter.js'
 
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference factors page

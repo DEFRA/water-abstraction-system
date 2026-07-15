@@ -7,8 +7,8 @@
 import AccessPresenter from '../../../../presenters/users/internal/setup/access.presenter.js'
 import AccessValidator from '../../../../validators/users/internal/setup/access.validator.js'
 import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
-import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 import { flashNotification } from '../../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/access' page

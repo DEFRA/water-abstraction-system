@@ -3,8 +3,8 @@
  * @module ViewLicencePresenter
  */
 
-import { formatLongDate, formatRestrictionType, formatValueUnit, sentenceCase } from '../base.presenter.js'
 import { licenceEndsWarning } from '../licence.presenter.js'
+import { formatLongDate, formatRestrictionType, formatValueUnit, sentenceCase } from '../base.presenter.js'
 
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page

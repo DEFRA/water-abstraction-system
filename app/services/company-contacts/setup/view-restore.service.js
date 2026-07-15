@@ -4,8 +4,8 @@
  * @module ViewRestoreService
  */
 
-import RestorePresenter from '../../../presenters/company-contacts/setup/restore.presenter.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RestorePresenter from '../../../presenters/company-contacts/setup/restore.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/restore' page

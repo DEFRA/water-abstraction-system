@@ -2,8 +2,8 @@
  * @module ReviewChargeVersionHelper
  */
 
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import ReviewChargeVersionModel from '../../../app/models/review-charge-version.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new review charge version record for 2pt matching

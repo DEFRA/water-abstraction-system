@@ -1,8 +1,8 @@
 // Things we need to stub
-import BillRunModel from '../../../../app/models/bill-run.model.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
 import * as MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ProcessBillRunService from '../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js'

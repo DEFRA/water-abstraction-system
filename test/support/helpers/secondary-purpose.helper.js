@@ -3,8 +3,8 @@
  */
 
 import SecondaryPurposeModel from '../../../app/models/secondary-purpose.model.js'
-import { selectRandomEntry } from '../general.js'
 import { data as secondaryPurposes } from '../../../db/seeds/data/secondary-purposes.js'
+import { selectRandomEntry } from '../general.js'
 
 export const data = secondaryPurposes
 

@@ -3,10 +3,10 @@
  * @module NotificationsController
  */
 
-import http2 from 'node:http2'
 import DownloadNotificationService from '../services/notifications/download-notification.service.js'
 import ProcessReturnedLetterService from '../services/notifications/process-returned-letter.service.js'
 import ViewNotificationService from '../services/notifications/view-notification.service.js'
+import http2 from 'node:http2'
 
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 

@@ -1,6 +1,6 @@
 // Test helpers
-import { today } from '../../app/lib/general.lib.js'
 import { returnCycleDates } from '../../app/lib/static-lookups.lib.js'
+import { today } from '../../app/lib/general.lib.js'
 
 // Thing under test
 import * as ReturnCycleDatesLib from '../../app/lib/return-cycle-dates.lib.js'

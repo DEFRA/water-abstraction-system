@@ -2,9 +2,9 @@
  * @module PointHelper
  */
 
-import { generateRandomInteger } from '../../../app/lib/general.lib.js'
-import PointModel from '../../../app/models/point.model.js'
 import * as SourceHelper from './source.helper.js'
+import PointModel from '../../../app/models/point.model.js'
+import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence version purpose point

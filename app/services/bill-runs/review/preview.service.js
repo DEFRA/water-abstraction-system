@@ -3,9 +3,9 @@
  * @module PreviewService
  */
 
-import { formatChargingModuleDate, formatMoney } from '../../../presenters/base.presenter.js'
-import { send } from '../../../requests/charging-module/calculate-charge.request.js'
 import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
+import { send } from '../../../requests/charging-module/calculate-charge.request.js'
+import { formatChargingModuleDate, formatMoney } from '../../../presenters/base.presenter.js'
 
 /**
  * Calculates the charge for a charge reference for preview by a user on the review charge reference page

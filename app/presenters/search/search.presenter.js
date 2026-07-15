@@ -4,8 +4,8 @@
  */
 
 import ContactModel from '../../models/contact.model.js'
-import { formatLongDate, formatReturnLogStatus } from '../base.presenter.js'
 import { today } from '../../lib/general.lib.js'
+import { formatLongDate, formatReturnLogStatus } from '../base.presenter.js'
 
 /**
  * Formats data for the `/search` page

@@ -3,8 +3,8 @@
  * @module MarkForSupplementaryBillingPresenter
  */
 
-import { formatFinancialYear } from '../../base.presenter.js'
 import { determineFinancialYearEnd } from '../../../lib/dates.lib.js'
+import { formatFinancialYear } from '../../base.presenter.js'
 
 const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
 const PREVIOUS_SIX_YEARS = 6

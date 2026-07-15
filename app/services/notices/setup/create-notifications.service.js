@@ -9,8 +9,8 @@ import PaperReturnNotificationsPresenter from '../../../presenters/notices/setup
 import ReturnsInvitationNotificationsPresenter from '../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
 import ReturnsNoticeNotificationsPresenter from '../../../presenters/notices/setup/returns-notice-notifications.presenter.js'
 
-import { timestampForPostgres } from '../../../lib/general.lib.js'
 import { NoticeType } from '../../../lib/static-lookups.lib.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Create notifications

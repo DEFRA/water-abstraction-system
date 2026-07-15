@@ -4,9 +4,9 @@
  */
 
 import BillRunModel from '../../../models/bill-run.model.js'
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
 import MatchAndAllocateService from '../match/match-and-allocate.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Matches and allocates licences to returns for a two-part tariff bill run

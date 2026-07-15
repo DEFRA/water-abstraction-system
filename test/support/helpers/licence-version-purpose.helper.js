@@ -2,11 +2,11 @@
  * @module LicenceVersionPurposesHelper
  */
 
-import { generateRandomInteger, generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
-import LicenceVersionPurposeModel from '../../../app/models/licence-version-purpose.model.js'
 import * as PrimaryPurposeHelper from './primary-purpose.helper.js'
 import * as PurposeHelper from './purpose.helper.js'
 import * as SecondaryPurposeHelper from './secondary-purpose.helper.js'
+import LicenceVersionPurposeModel from '../../../app/models/licence-version-purpose.model.js'
+import { generateRandomInteger, generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence version purpose

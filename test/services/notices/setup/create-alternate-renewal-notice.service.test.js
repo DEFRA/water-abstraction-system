@@ -1,9 +1,9 @@
 // Test helpers
-import EventModel from '../../../../app/models/event.model.js'
 import * as NoticesFixture from '../../../support/fixtures/notices.fixture.js'
-import NotificationModel from '../../../../app/models/notification.model.js'
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import EventModel from '../../../../app/models/event.model.js'
 import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
+import NotificationModel from '../../../../app/models/notification.model.js'
 
 // Things we need to stub
 import * as FetchAlternateRenewalRecipientsService from '../../../../app/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js'

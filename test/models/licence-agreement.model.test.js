@@ -1,8 +1,8 @@
 // Test helpers
 import * as FinancialAgreementHelper from '../support/helpers/financial-agreement.helper.js'
-import FinancialAgreementModel from '../../app/models/financial-agreement.model.js'
 import * as LicenceAgreementHelper from '../support/helpers/licence-agreement.helper.js'
 import * as LicenceHelper from '../support/helpers/licence.helper.js'
+import FinancialAgreementModel from '../../app/models/financial-agreement.model.js'
 import LicenceModel from '../../app/models/licence.model.js'
 
 // Thing under test

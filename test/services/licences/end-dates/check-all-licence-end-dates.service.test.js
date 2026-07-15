@@ -1,8 +1,8 @@
 // Things we need to stub
+import * as CheckLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-licence-end-dates.service.js'
 import * as FetchLicencesService from '../../../../app/services/licences/end-dates/fetch-licences.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import LicencesConfig from '../../../../config/licences.config.js'
-import * as CheckLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-licence-end-dates.service.js'
 import { generateUUID, pause } from '../../../../app/lib/general.lib.js'
 
 // Thing under test

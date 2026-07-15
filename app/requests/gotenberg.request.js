@@ -3,8 +3,8 @@
  * @module GotenbergRequest
  */
 
-import http2 from 'node:http2'
 import { postRequest as basePostRequest } from './base.request.js'
+import http2 from 'node:http2'
 import { pause } from '../lib/general.lib.js'
 
 import gotenbergConfig from '../../config/gotenberg.config.js'

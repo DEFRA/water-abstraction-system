@@ -4,8 +4,8 @@
  */
 
 import BillRunModel from '../../../models/bill-run.model.js'
-import { timestampForPostgres } from '../../../lib/general.lib.js'
 import GenerateTwoPartTariffBillRunService from '../generate-two-part-tariff-bill-run.service.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Determines if a two-part tariff bill run is now empty (all licences removed) and if so what to do next

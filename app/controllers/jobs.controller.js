@@ -3,7 +3,6 @@
  * @module JobsController
  */
 
-import http2 from 'node:http2'
 import ExportService from '../services/jobs/export/export.service.js'
 import ProcessCleanService from '../services/jobs/clean/process-clean.service.js'
 import ProcessCustomerFilesService from '../services/jobs/customer-files/process-customer-files.service.js'
@@ -12,6 +11,7 @@ import ProcessNotificationStatusService from '../services/jobs/notification-stat
 import ProcessRenewalInvitationsService from '../services/jobs/renewal-invitations/process-renewal-invitations.service.js'
 import ProcessReturnLogsService from '../services/jobs/return-logs/process-return-logs.service.js'
 import ProcessTimeLimitedLicencesService from '../services/jobs/time-limited/process-time-limited-licences.service.js'
+import http2 from 'node:http2'
 
 const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_NOT_FOUND } = http2.constants
 

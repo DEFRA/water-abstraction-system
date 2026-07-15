@@ -4,8 +4,8 @@
  */
 
 import DetermineEarliestLicenceChangedDateService from './determine-earliest-licence-changed-date.service.js'
-import { timestampForPostgres } from '../../../lib/general.lib.js'
 import LicenceEndDateChangeModel from '../../../models/licence-end-date-change.model.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Check the end dates of the licence between NALD and WRLS and if changed, records the details for future processing

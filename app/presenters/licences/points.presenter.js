@@ -3,8 +3,8 @@
  * @module PointsPresenter
  */
 
-import { pluralise } from './base-licences.presenter.js'
 import { formatLicencePoints } from '../licence.presenter.js'
+import { pluralise } from './base-licences.presenter.js'
 
 /**
  * Formats the licence and related points data for the view licence points page

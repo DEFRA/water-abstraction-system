@@ -2,11 +2,11 @@
  * @module ChargeElementHelper
  */
 
-import ChargeElementModel from '../../../app/models/charge-element.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import * as PrimaryPurposeHelper from './primary-purpose.helper.js'
 import * as PurposeHelper from './purpose.helper.js'
 import * as SecondaryPurposeHelper from './secondary-purpose.helper.js'
+import ChargeElementModel from '../../../app/models/charge-element.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new charge element

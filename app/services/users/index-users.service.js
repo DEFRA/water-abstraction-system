@@ -6,8 +6,8 @@
 import FetchUsersDal from '../../dal/users/fetch-users.dal.js'
 import IndexUsersPresenter from '../../presenters/users/index-users.presenter.js'
 import PaginatorPresenter from '../../presenters/paginator.presenter.js'
-import { readFlashNotification } from '../../lib/general.lib.js'
 import { processSavedFilters } from '../../lib/submit-page.lib.js'
+import { readFlashNotification } from '../../lib/general.lib.js'
 
 import featureFlagsConfig from '../../../config/feature-flags.config.js'
 

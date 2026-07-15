@@ -1,12 +1,12 @@
 // Test helpers
 import * as BillRunHelper from '../support/helpers/bill-run.helper.js'
-import BillRunModel from '../../app/models/bill-run.model.js'
 import * as LicenceHelper from '../support/helpers/licence.helper.js'
-import LicenceModel from '../../app/models/licence.model.js'
 import * as ReviewChargeVersionHelper from '../support/helpers/review-charge-version.helper.js'
-import ReviewChargeVersionModel from '../../app/models/review-charge-version.model.js'
 import * as ReviewLicenceHelper from '../support/helpers/review-licence.helper.js'
 import * as ReviewReturnHelper from '../support/helpers/review-return.helper.js'
+import BillRunModel from '../../app/models/bill-run.model.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import ReviewChargeVersionModel from '../../app/models/review-charge-version.model.js'
 import ReviewReturnModel from '../../app/models/review-return.model.js'
 
 // Thing under test

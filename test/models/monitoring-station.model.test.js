@@ -1,7 +1,7 @@
 // Test helpers
 import * as LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
-import LicenceMonitoringStationModel from '../../app/models/licence-monitoring-station.model.js'
 import * as MonitoringStationHelper from '../support/helpers/monitoring-station.helper.js'
+import LicenceMonitoringStationModel from '../../app/models/licence-monitoring-station.model.js'
 
 // Thing under test
 import MonitoringStationModel from '../../app/models/monitoring-station.model.js'

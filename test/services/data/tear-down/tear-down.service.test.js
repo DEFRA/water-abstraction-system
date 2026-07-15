@@ -1,10 +1,10 @@
 // Things we need to stub
 import * as CrmSchemaService from '../../../../app/services/data/tear-down/crm-schema.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as IdmSchemaService from '../../../../app/services/data/tear-down/idm-schema.service.js'
 import * as PermitSchemaService from '../../../../app/services/data/tear-down/permit-schema.service.js'
 import * as ReturnsSchemaService from '../../../../app/services/data/tear-down/returns-schema.service.js'
 import * as WaterSchemaService from '../../../../app/services/data/tear-down/water-schema.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import TearDownService from '../../../../app/services/data/tear-down/tear-down.service.js'

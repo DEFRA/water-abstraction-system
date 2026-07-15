@@ -6,7 +6,7 @@
 import ContactPresenter from './contact.presenter.js'
 import DatabaseConfig from '../../../../config/database.config.js'
 import { compareStrings } from '../../../lib/general.lib.js'
-import { NoticeType, NoticeJourney } from '../../../lib/static-lookups.lib.js'
+import { NoticeJourney, NoticeType } from '../../../lib/static-lookups.lib.js'
 
 const NOTIFICATION_TYPES = {
   [NoticeType.ABSTRACTION_ALERTS]: 'Abstraction alerts',

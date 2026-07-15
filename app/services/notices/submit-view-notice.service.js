@@ -3,12 +3,12 @@
  * @module SubmitViewNoticeService
  */
 
-import { formatValidationResult } from '../../presenters/base.presenter.js'
 import FetchNoticeService from '../../services/notices/fetch-notice.service.js'
 import PaginatorPresenter from '../../presenters/paginator.presenter.js'
 import ViewNoticePresenter from '../../presenters/notices/view-notice.presenter.js'
 import ViewValidator from '../../validators/notices/view.validator.js'
 import { clearFilters } from '../../lib/submit-page.lib.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid

@@ -4,8 +4,8 @@
  * @module AlertTypeValidator
  */
 
-import Joi from 'joi'
 import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from '../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js'
+import Joi from 'joi'
 
 const errorMessage = 'Select the type of alert you need to send'
 

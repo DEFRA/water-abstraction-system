@@ -5,9 +5,9 @@ import * as NotificationsFixture from '../../../support/fixtures/notifications.f
 // Things we need to stub
 import * as CheckNotificationStatusService from '../../../../app/services/notifications/check-notification-status.service.js'
 import * as FetchNotificationsService from '../../../../app/services/jobs/notification-status/fetch-notifications.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as SendAlternateNoticesService from '../../../../app/services/jobs/notification-status/send-alternate-notices.service.js'
 import * as UpdateNoticeService from '../../../../app/services/notices/update-notice.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ProcessNotificationStatusService from '../../../../app/services/jobs/notification-status/process-notification-status.service.js'

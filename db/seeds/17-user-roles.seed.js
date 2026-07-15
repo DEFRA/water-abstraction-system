@@ -1,6 +1,6 @@
+import UserRoleModel from '../../app/models/user-role.model.js'
 import { db } from '../db.js'
 import { data as roles } from './data/roles.js'
-import UserRoleModel from '../../app/models/user-role.model.js'
 import { data as userRoles } from './data/user-roles.js'
 import { data as users } from './data/users.js'
 

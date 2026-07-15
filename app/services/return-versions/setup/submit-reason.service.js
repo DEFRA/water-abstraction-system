@@ -6,9 +6,9 @@
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import { flashNotification } from '../../../lib/general.lib.js'
 import ReasonPresenter from '../../../presenters/return-versions/setup/reason.presenter.js'
 import ReasonValidator from '../../../validators/return-versions/setup/reason.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/reason` page

@@ -3,13 +3,13 @@
  * @module SubmitIndexBillRunsService
  */
 
-import { formatValidationResult } from '../../presenters/base.presenter.js'
 import CheckBusyBillRunsService from './check-busy-bill-runs.service.js'
 import FetchBillRunsService from './fetch-bill-runs.service.js'
 import FetchRegionsService from './setup/fetch-regions.service.js'
 import IndexBillRunsPresenter from '../../presenters/bill-runs/index-bill-runs.presenter.js'
 import IndexValidator from '../../validators/bill-runs/index.validator.js'
 import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 import { clearFilters, handleOneOptionSelected } from '../../lib/submit-page.lib.js'
 
 /**

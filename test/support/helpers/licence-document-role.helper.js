@@ -2,8 +2,8 @@
  * @module LicenceDocumentRoleHelper
  */
 
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceDocumentRoleModel from '../../../app/models/licence-document-role.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence document role

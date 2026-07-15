@@ -6,11 +6,11 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
-import { returnRequirementReasons } from '../lib/static-lookups.lib.js'
 import LicenceModel from './licence.model.js'
 import ModLogModel from './mod-log.model.js'
 import ReturnRequirementModel from './return-requirement.model.js'
 import UserModel from './user.model.js'
+import { returnRequirementReasons } from '../lib/static-lookups.lib.js'
 
 export default class ReturnVersionModel extends BaseModel {
   static get tableName() {

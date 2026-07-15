@@ -1,8 +1,8 @@
 import EventModel from '../../../app/models/event.model.js'
 import LicenceModel from '../../../app/models/licence.model.js'
+import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 import NotificationModel from '../../../app/models/notification.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 
 import ServerConfig from '../../../config/server.config.js'
 

@@ -1,6 +1,6 @@
 // Test helpers
-import ReturnLogModel from '../../../app/models/return-log.model.js'
 import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
 
 // Thing under test
 import VoidReturnLogsService from '../../../app/services/return-logs/void-return-logs.service.js'

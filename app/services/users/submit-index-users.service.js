@@ -3,12 +3,12 @@
  * @module SubmitIndexUsersService
  */
 
-import { formatValidationResult } from '../../presenters/base.presenter.js'
 import FetchUsersDal from '../../dal/users/fetch-users.dal.js'
 import IndexUsersPresenter from '../../presenters/users/index-users.presenter.js'
 import IndexValidator from '../../validators/users/index.validator.js'
 import PaginatorPresenter from '../../presenters/paginator.presenter.js'
 import { clearFilters } from '../../lib/submit-page.lib.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid

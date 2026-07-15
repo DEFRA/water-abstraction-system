@@ -3,8 +3,8 @@
  * @module RequestNotifierPlugin
  */
 
-import http2 from 'node:http2'
 import ErrorPagesService from '../services/plugins/error-pages.service.js'
+import http2 from 'node:http2'
 
 const { HTTP_STATUS_OK } = http2.constants
 

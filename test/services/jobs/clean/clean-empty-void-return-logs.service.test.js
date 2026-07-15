@@ -1,7 +1,7 @@
 // Test helpers
 import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import ReturnLogModel from '../../../../app/models/return-log.model.js'
 import * as ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import ReturnLogModel from '../../../../app/models/return-log.model.js'
 
 // Things we need to stub
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'

@@ -1,6 +1,6 @@
 // Test helpers
-import http2 from 'node:http2'
 import { generateUUID } from '../../app/lib/general.lib.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as InitiateEditSessionService from '../../app/services/company-contacts/setup/initiate-edit-session.service.js'

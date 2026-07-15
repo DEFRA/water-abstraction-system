@@ -3,7 +3,6 @@
  * @module LicencesController
  */
 
-import http2 from 'node:http2'
 import InitiateSessionService from '../services/return-versions/setup/initiate-session.service.js'
 import LicenceSupplementaryProcessBillingFlagService from '../services/licences/supplementary/process-billing-flag.service.js'
 import SubmitMarkForSupplementaryBillingService from '../services/licences/supplementary/submit-mark-for-supplementary-billing.service.js'
@@ -19,6 +18,7 @@ import ViewPurposesService from '../services/licences/view-purposes.service.js'
 import ViewReturnsService from '../services/licences/view-returns.service.js'
 import ViewSetUpService from '../services/licences/view-set-up.service.js'
 import ViewSummaryService from '../services/licences/view-summary.service.js'
+import http2 from 'node:http2'
 
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 

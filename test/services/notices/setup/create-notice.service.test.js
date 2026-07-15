@@ -1,6 +1,6 @@
 // Test helpers
-import EventModel from '../../../../app/models/event.model.js'
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import EventModel from '../../../../app/models/event.model.js'
 import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Thing under test

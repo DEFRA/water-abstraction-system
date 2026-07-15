@@ -2,8 +2,8 @@
 import * as NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
-import { compareStrings, generateUUID } from '../../../../../app/lib/general.lib.js'
 import { futureDueDate } from '../../../../../app/presenters/notices/base.presenter.js'
+import { compareStrings, generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Thing under test
 import FetchReturnsInvitationRecipients from '../../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js'

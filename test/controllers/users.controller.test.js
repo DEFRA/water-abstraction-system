@@ -1,8 +1,8 @@
 // Test helpers
 import FeatureFlagsConfig from '../../config/feature-flags.config.js'
 import http2 from 'node:http2'
-import { generateUUID, today } from '../../app/lib/general.lib.js'
 import { postRequestOptions } from '../support/general.js'
+import { generateUUID, today } from '../../app/lib/general.lib.js'
 
 // Things we need to stub
 import * as FetchLegacyIdDal from '../../app/dal/users/fetch-legacy-id.dal.js'

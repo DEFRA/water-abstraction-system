@@ -1,6 +1,6 @@
 // Things we need to stub
-import * as GeneralLib from '../../../../app/lib/general.lib.js'
 import * as FetchChargeVersionBillingDataService from '../../../../app/services/licences/supplementary/fetch-charge-version-billing-data.service.js'
+import * as GeneralLib from '../../../../app/lib/general.lib.js'
 
 // Thing under test
 import DetermineChargeVersionFlagsService from '../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js'

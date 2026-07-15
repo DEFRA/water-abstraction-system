@@ -3,8 +3,8 @@
  */
 
 import * as FinancialAgreementHelper from './financial-agreement.helper.js'
-import LicenceAgreementModel from '../../../app/models/licence-agreement.model.js'
 import * as LicenceHelper from './licence.helper.js'
+import LicenceAgreementModel from '../../../app/models/licence-agreement.model.js'
 
 /**
  * Add a new licence agreement

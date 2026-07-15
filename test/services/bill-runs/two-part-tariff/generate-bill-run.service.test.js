@@ -2,13 +2,13 @@
 import BillRunError from '../../../../app/errors/bill-run.error.js'
 
 // Things we need to stub
-import BillRunModel from '../../../../app/models/bill-run.model.js'
 import * as ChargingModuleGenerateRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
 import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
 import * as LegacyRefreshBillRunRequest from '../../../../app/requests/legacy/refresh-bill-run.request.js'
 import * as ProcessBillingPeriodService from '../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import GenerateBillRunService from '../../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js'

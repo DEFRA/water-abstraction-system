@@ -2,9 +2,9 @@
 import DatabaseConfig from '../../../config/database.config.js'
 
 // Test helpers
-import EventModel from '../../../app/models/event.model.js'
 import * as EventHelper from '../../support/helpers/event.helper.js'
 import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import EventModel from '../../../app/models/event.model.js'
 
 // Thing under test
 import FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'

@@ -7,8 +7,8 @@
 import CreateNotificationsService from './create-notifications.service.js'
 import EventModel from '../../../models/event.model.js'
 import FetchAlternateRenewalRecipientsService from './renewal-notice/fetch-alternate-renewal-recipients.service.js'
-import { generateNoticeReferenceCode, timestampForPostgres } from '../../../lib/general.lib.js'
 import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
+import { generateNoticeReferenceCode, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates creating a new notice and notifications for renewal invitation emails that failed

@@ -1,6 +1,6 @@
 // Things we need to stub
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as SchemaExportService from '../../../../app/services/jobs/export/schema-export.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ExportService from '../../../../app/services/jobs/export/export.service.js'
