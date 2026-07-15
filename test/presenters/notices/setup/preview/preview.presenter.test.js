@@ -7,6 +7,7 @@ import * as GeneratePreviewRequest from '../../../../../app/requests/notify/gene
 
 // Thing under test
 import PreviewPresenter from '../../../../../app/presenters/notices/setup/preview/preview.presenter.js'
+
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 
 describe('Notices - Setup - Preview - Preview presenter', () => {

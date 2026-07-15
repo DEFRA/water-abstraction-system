@@ -7,6 +7,7 @@ import * as BaseRequest from '../../app/requests/base.request.js'
 
 // Thing under test
 import * as LegacyRequest from '../../app/requests/legacy.request.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 describe('Legacy Request', () => {

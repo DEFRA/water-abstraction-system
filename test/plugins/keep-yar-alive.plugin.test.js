@@ -10,6 +10,7 @@ import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import KeepYarAlivePlugin from '../../app/plugins/keep-yar-alive.plugin.js'
+
 const { HTTP_STATUS_OK } = http2.constants
 
 describe('Keep Yar Alive plugin', () => {

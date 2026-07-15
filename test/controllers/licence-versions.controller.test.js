@@ -6,6 +6,7 @@ import * as ViewService from '../../app/services/licence-versions/view.service.j
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_OK } = http2.constants
 
 describe('Licence Versions controller', () => {

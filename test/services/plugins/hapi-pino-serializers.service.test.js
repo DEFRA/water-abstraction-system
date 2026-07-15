@@ -2,6 +2,7 @@ import http2 from 'node:http2'
 
 // Thing under test
 import HapiPinoSerializersService from '../../../app/services/plugins/hapi-pino-serializers.service.js'
+
 const { HTTP_STATUS_OK } = http2.constants
 
 describe('Hapi Pino Serializers service', () => {

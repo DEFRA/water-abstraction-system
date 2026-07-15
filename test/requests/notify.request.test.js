@@ -7,6 +7,7 @@ import serverConfig from '../../config/server.config.js'
 
 // Thing under test
 import * as NotifyRequest from '../../app/requests/notify.request.js'
+
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_TOO_MANY_REQUESTS } =
   http2.constants
 

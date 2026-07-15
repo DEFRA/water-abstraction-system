@@ -8,6 +8,7 @@ import * as ViewSearchService from '../../app/services/search/view-search.servic
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Search controller', () => {

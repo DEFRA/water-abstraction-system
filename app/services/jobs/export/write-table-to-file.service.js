@@ -9,6 +9,7 @@ import util from 'node:util'
 import { Transform, pipeline } from 'node:stream'
 
 import { transformArrayToCSVRow } from '../../../lib/transform-to-csv.lib.js'
+
 const fsPromises = fs.promises
 
 /**

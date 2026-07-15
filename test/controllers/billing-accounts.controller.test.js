@@ -8,6 +8,7 @@ import Boom from '@hapi/boom'
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } =
   http2.constants
 
