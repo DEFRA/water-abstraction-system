@@ -1,5 +1,5 @@
 // Test helpers
-import * as MonitoringStationHelper from '../../../support/helpers/monitoring-station.helper.js'
+import MonitoringStationHelper from '../../../support/helpers/monitoring-station.helper.js'
 import SessionModel from '../../../../app/models/session.model.js'
 
 // Thing under test

@@ -1,6 +1,6 @@
 // Test helpers
-import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import * as ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 

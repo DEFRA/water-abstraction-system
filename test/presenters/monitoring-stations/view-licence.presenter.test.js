@@ -1,6 +1,6 @@
 // Test helpers
+import UserHelper from '../../support/helpers/user.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateUserId } from '../../support/helpers/user.helper.js'
 import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
 
 // Thing under test
@@ -31,7 +31,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         thresholdValue: 500,
         licenceVersionPurposeCondition: null,
         user: {
-          id: generateUserId(),
+          id: UserHelper.generateUserId(),
           username: 'environment.officer@wrls.gov.uk'
         }
       },
@@ -66,7 +66,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
           }
         },
         user: {
-          id: generateUserId(),
+          id: UserHelper.generateUserId(),
           username: 'environment.officer@wrls.gov.uk'
         }
       }

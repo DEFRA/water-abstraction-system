@@ -1,7 +1,7 @@
 // Test helpers
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
-import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import * as ReturnRequirementHelper from '../../support/helpers/return-requirement.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnRequirementHelper from '../../support/helpers/return-requirement.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test

@@ -1,5 +1,5 @@
 // Test helpers
-import * as AddressHelper from '../../support/helpers/address.helper.js'
+import AddressHelper from '../../support/helpers/address.helper.js'
 
 // Thing under test
 import FetchAddressDal from '../../../app/dal/companies/fetch-address.dal.js'

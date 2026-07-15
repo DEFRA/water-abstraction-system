@@ -1,5 +1,5 @@
 // Test helpers
-import * as CompanyHelper from '../../support/helpers/company.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
 
 // Thing under test
 import FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'

@@ -1,6 +1,6 @@
 // Test helpers
-import * as ModLogHelper from '../../support/helpers/mod-log.helper.js'
 import * as RequirementsForReturnsSeeder from '../../support/seeders/requirements-for-returns.seeder.js'
+import ModLogHelper from '../../support/helpers/mod-log.helper.js'
 
 // Thing under test
 import FetchReturnVersionService from '../../../app/services/return-versions/fetch-return-version.service.js'

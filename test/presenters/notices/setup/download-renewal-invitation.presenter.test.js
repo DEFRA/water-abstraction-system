@@ -1,8 +1,8 @@
 // Test helpers
 import * as NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
 
 // Thing under test
@@ -55,7 +55,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
   describe('when the recipient has multiple licences', () => {
     beforeEach(() => {
       recipient = RecipientsFixture.renewalInvitationPrimaryUser()
-      recipient.licence_refs = [generateLicenceRef(), generateLicenceRef()]
+      recipient.licence_refs = [LicenceHelper.generateLicenceRef(), LicenceHelper.generateLicenceRef()]
     })
 
     it('joins the licence refs with a comma', () => {

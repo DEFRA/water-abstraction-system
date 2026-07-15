@@ -1,10 +1,10 @@
 // Test helpers
-import * as CompanyHelper from '../../../support/helpers/company.helper.js'
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
-import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
-import * as ModLogHelper from '../../../support/helpers/mod-log.helper.js'
-import * as ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
-import * as ReturnVersionHelper from '../../../support/helpers/return-version.helper.js'
+import CompanyHelper from '../../../support/helpers/company.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import ModLogHelper from '../../../support/helpers/mod-log.helper.js'
+import ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
+import ReturnVersionHelper from '../../../support/helpers/return-version.helper.js'
 
 // Thing under test
 import FetchLicenceService from '../../../../app/services/return-versions/setup/fetch-licence.service.js'

@@ -1,6 +1,6 @@
 // Test helpers
-import * as EventHelper from '../../../support/helpers/event.helper.js'
-import * as NotificationHelper from '../../../support/helpers/notification.helper.js'
+import EventHelper from '../../../support/helpers/event.helper.js'
+import NotificationHelper from '../../../support/helpers/notification.helper.js'
 import { timestampForPostgres } from '../../../../app/lib/general.lib.js'
 
 // Thing under test

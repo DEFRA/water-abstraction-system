@@ -1,9 +1,9 @@
 // Test helpers
-import * as LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
-import * as ReturnRequirementPurposeHelper from '../support/helpers/return-requirement-purpose.helper.js'
-import * as SecondaryPurposeHelper from '../support/helpers/secondary-purpose.helper.js'
+import LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
 import LicenceVersionPurposeModel from '../../app/models/licence-version-purpose.model.js'
+import ReturnRequirementPurposeHelper from '../support/helpers/return-requirement-purpose.helper.js'
 import ReturnRequirementPurposeModel from '../../app/models/return-requirement-purpose.model.js'
+import SecondaryPurposeHelper from '../support/helpers/secondary-purpose.helper.js'
 
 // Thing under test
 import SecondaryPurposeModel from '../../app/models/secondary-purpose.model.js'

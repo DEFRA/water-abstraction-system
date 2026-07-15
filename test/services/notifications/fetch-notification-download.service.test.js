@@ -1,5 +1,5 @@
 // Test helpers
-import * as NotificationHelper from '../../support/helpers/notification.helper.js'
+import NotificationHelper from '../../support/helpers/notification.helper.js'
 
 // Thing under test
 import FetchDownloadNotificationService from '../../../app/services/notifications/fetch-notification-download.service.js'

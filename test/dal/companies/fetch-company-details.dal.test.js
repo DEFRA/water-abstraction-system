@@ -1,8 +1,8 @@
 // Test helpers
-import * as AddressHelper from '../../support/helpers/address.helper.js'
-import * as CompanyAddressHelper from '../../support/helpers/company-address.helper.js'
-import * as CompanyHelper from '../../support/helpers/company.helper.js'
-import * as LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
+import AddressHelper from '../../support/helpers/address.helper.js'
+import CompanyAddressHelper from '../../support/helpers/company-address.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
+import LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
 import { tomorrow, yesterday } from '../../support/general.js'
 
 // Thing under test

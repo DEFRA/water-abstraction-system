@@ -1,7 +1,7 @@
 // Test helpers
 import * as ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
 import * as GeneratePaperReturnRequest from '../../../../app/requests/gotenberg/generate-paper-return.request.js'
@@ -21,7 +21,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
   beforeEach(async () => {
     dueReturnLog = ReturnLogFixture.dueReturn()
 
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
 
     notification = {
       eventId: null,

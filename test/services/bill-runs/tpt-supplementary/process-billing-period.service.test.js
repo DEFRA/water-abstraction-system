@@ -1,6 +1,6 @@
 // Test helpers
-import * as RegionHelper from '../../../support/helpers/region.helper.js'
 import * as TwoPartTariffFixture from '../../../support/fixtures/two-part-tariff.fixture.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Things we need to stub
 import * as FetchPreviousTransactionsService from '../../../../app/services/bill-runs/fetch-previous-transactions.service.js'

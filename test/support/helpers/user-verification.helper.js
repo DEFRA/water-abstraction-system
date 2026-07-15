@@ -24,7 +24,7 @@ const VERIFICATION_CODE_LENGTH = 5
  *
  * @returns {Promise<module:UserVerificationModel>} The instance of the newly created record
  */
-export async function add(data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return UserVerificationModel.query()
@@ -42,7 +42,7 @@ export async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     companyEntityId: generateUUID(),
     createdAt: new Date(),
@@ -64,8 +64,14 @@ export function defaults(data = {}) {
  *
  * @returns {string} a random 5-character verification code, using the allowed characters
  */
-export function generateVerificationCode() {
+function generateVerificationCode() {
   return Array.from({ length: VERIFICATION_CODE_LENGTH }, () => {
     return VERIFICATION_CODE_CHARACTERS.charAt(generateRandomInteger(0, VERIFICATION_CODE_CHARACTERS.length - 1))
   }).join('')
+}
+
+export default {
+  add,
+  defaults,
+  generateVerificationCode
 }

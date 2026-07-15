@@ -2,10 +2,10 @@
 import ViewReturnSubmissionPresenter from '../../../app/presenters/return-submissions/view-return-submission.presenter.js'
 
 // Test helpers
-import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import * as ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
-import * as ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 import ReturnLogModel from '../../../app/models/return-log.model.js'
+import ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
 import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
 import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 

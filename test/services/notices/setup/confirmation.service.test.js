@@ -1,5 +1,5 @@
 // Test helpers
-import * as EventHelper from '../../../support/helpers/event.helper.js'
+import EventHelper from '../../../support/helpers/event.helper.js'
 import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Thing under test

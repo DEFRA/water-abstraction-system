@@ -1,5 +1,5 @@
 // Test helpers
-import * as LicenceMonitoringStationHelper from '../../../support/helpers/licence-monitoring-station.helper.js'
+import LicenceMonitoringStationHelper from '../../../support/helpers/licence-monitoring-station.helper.js'
 
 // Thing under test
 import UpdateAbstractionAlertsService from '../../../../app/services/jobs/notification-status/update-abstraction-alerts.service.js'

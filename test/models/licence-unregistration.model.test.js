@@ -1,8 +1,8 @@
 // Test helpers
-import * as LicenceHelper from '../support/helpers/licence.helper.js'
-import * as LicenceUnregistrationHelper from '../support/helpers/licence-unregistration.helper.js'
-import * as UserHelper from '../support/helpers/user.helper.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
+import LicenceUnregistrationHelper from '../support/helpers/licence-unregistration.helper.js'
+import UserHelper from '../support/helpers/user.helper.js'
 import UserModel from '../../app/models/user.model.js'
 
 // Thing under test

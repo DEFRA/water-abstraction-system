@@ -1,9 +1,9 @@
 // Test helpers
-import * as LicenceDocumentHeaderHelper from '../support/helpers/licence-document-header.helper.js'
-import * as LicenceEntityHelper from '../support/helpers/licence-entity.helper.js'
-import * as UserVerificationDocumentHelper from '../support/helpers/user-verification-document.helper.js'
-import * as UserVerificationHelper from '../support/helpers/user-verification.helper.js'
+import LicenceDocumentHeaderHelper from '../support/helpers/licence-document-header.helper.js'
 import LicenceDocumentHeaderModel from '../../app/models/licence-document-header.model.js'
+import LicenceEntityHelper from '../support/helpers/licence-entity.helper.js'
+import UserVerificationDocumentHelper from '../support/helpers/user-verification-document.helper.js'
+import UserVerificationHelper from '../support/helpers/user-verification.helper.js'
 import UserVerificationModel from '../../app/models/user-verification.model.js'
 
 // Thing under test

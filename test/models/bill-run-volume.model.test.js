@@ -1,8 +1,8 @@
 // Test helpers
-import * as BillRunHelper from '../support/helpers/bill-run.helper.js'
-import * as BillRunVolumeHelper from '../support/helpers/bill-run-volume.helper.js'
-import * as ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
+import BillRunHelper from '../support/helpers/bill-run.helper.js'
 import BillRunModel from '../../app/models/bill-run.model.js'
+import BillRunVolumeHelper from '../support/helpers/bill-run-volume.helper.js'
+import ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
 import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
 
 // Thing under test

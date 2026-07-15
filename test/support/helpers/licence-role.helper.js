@@ -5,7 +5,7 @@
 import LicenceRoleModel from '../../../app/models/licence-role.model.js'
 import { data as licenceRoles } from '../../../db/seeds/data/licence-roles.js'
 
-export const data = licenceRoles
+const data = licenceRoles
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -20,10 +20,15 @@ export const data = licenceRoles
  *
  * @returns {module:LicenceRoleModel} The selected reference entry or one picked at random
  */
-export function select(name = 'licenceHolder') {
+function select(name = 'licenceHolder') {
   const licenceRole = licenceRoles.find((licenceRole) => {
     return licenceRole.name === name
   })
 
   return LicenceRoleModel.fromJson(licenceRole)
+}
+
+export default {
+  data,
+  select
 }

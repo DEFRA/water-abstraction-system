@@ -1,5 +1,5 @@
 // Test helpers
-import * as ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
 
 // Thing under test
 import FetchLicenceHasRequirementsService from '../../../app/services/licences/determine-licence-has-return-versions.service.js'

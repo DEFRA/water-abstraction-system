@@ -1,5 +1,5 @@
 // Test helpers
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import LicenceModel from '../../../../app/models/licence.model.js'
 
 // Things we need to stub

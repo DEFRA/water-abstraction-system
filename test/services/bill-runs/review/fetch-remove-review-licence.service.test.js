@@ -1,7 +1,7 @@
 // Test helpers
-import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import * as RegionHelper from '../../../support/helpers/region.helper.js'
-import * as ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
+import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
 
 // Thing under test
 import FetchRemoveReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js'

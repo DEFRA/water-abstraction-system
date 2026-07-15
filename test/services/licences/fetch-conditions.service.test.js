@@ -1,12 +1,12 @@
 // Test helpers
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
-import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import * as LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
-import * as LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
-import * as LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
-import * as LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
-import * as PointHelper from '../../support/helpers/point.helper.js'
-import * as PurposeHelper from '../../support/helpers/purpose.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
+import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
+import PointHelper from '../../support/helpers/point.helper.js'
+import PurposeHelper from '../../support/helpers/purpose.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test

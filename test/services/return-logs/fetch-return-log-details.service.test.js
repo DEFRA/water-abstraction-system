@@ -1,8 +1,8 @@
 // Test helpers
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
-import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import * as ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
-import * as ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
 import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 
 // Thing under test

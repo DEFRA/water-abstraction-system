@@ -1,5 +1,5 @@
 // Test helpers
-import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 import ReturnLogModel from '../../../app/models/return-log.model.js'
 
 // Thing under test

@@ -2,8 +2,8 @@
  * @module LicenceVersionPurposeConditionHelper
  */
 
-import * as LicenceVersionPurposeConditionTypeHelper from './licence-version-purpose-condition-type.helper.js'
 import LicenceVersionPurposeConditionModel from '../../../app/models/licence-version-purpose-condition.model.js'
+import LicenceVersionPurposeConditionTypeHelper from './licence-version-purpose-condition-type.helper.js'
 import { generateRandomInteger, generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
@@ -23,7 +23,7 @@ import { generateRandomInteger, generateUUID, timestampForPostgres } from '../..
  *
  * @returns {Promise<module:LicenceVersionPurposeConditionModel>} The instance of the newly created record
  */
-export async function add(data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceVersionPurposeConditionModel.query()
@@ -41,7 +41,7 @@ export async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const { id: licenceVersionPurposeConditionTypeId } = LicenceVersionPurposeConditionTypeHelper.select()
   const timestamp = timestampForPostgres()
 
@@ -58,4 +58,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

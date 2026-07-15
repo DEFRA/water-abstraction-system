@@ -1,9 +1,9 @@
 // Test helpers
 import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
 import * as EmptyLicence from '../../support/seeders/empty-licence.seeder.js'
-import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
 import * as RecipientScenariosSeeder from '../../support/seeders/recipient-scenarios.seeder.js'
 import * as RecipientsFormatter from '../../support/seeders/recipients.formatter.js'
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
 import { db } from '../../../db/db.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 

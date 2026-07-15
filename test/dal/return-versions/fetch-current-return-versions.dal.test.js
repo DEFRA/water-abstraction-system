@@ -1,5 +1,5 @@
 // Test helpers
-import * as ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
 import ReturnVersionModel from '../../../app/models/return-version.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 

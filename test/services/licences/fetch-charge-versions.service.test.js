@@ -1,6 +1,6 @@
 // Test helpers
-import * as ChangeReasonHelper from '../../support/helpers/change-reason.helper.js'
-import * as ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
+import ChangeReasonHelper from '../../support/helpers/change-reason.helper.js'
+import ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
 import ChargeVersionModel from '../../../app/models/charge-version.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 

@@ -1,6 +1,6 @@
 // Test helpers
-import * as LicenceVersionPurposeConditionHelper from '../../../support/helpers/licence-version-purpose-condition.helper.js'
-import * as LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposeConditionHelper from '../../../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub

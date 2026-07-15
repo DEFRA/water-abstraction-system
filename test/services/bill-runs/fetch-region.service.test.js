@@ -1,5 +1,5 @@
 // Test helpers
-import * as RegionHelper from '../../support/helpers/region.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
 
 // Thing under test
 import FetchRegionService from '../../../app/services/bill-runs/fetch-region.service.js'

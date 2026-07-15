@@ -1,5 +1,5 @@
 // Test helpers
-import * as BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
+import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
 import BillingAccountModel from '../../../../app/models/billing-account.model.js'
 import http2 from 'node:http2'
 

@@ -1,5 +1,5 @@
 // Test helpers
-import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
 import { generateRandomInteger, generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test

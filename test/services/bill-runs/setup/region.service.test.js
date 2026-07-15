@@ -1,5 +1,5 @@
 // Test helpers
-import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub

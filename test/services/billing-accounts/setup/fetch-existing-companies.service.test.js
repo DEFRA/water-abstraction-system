@@ -1,5 +1,5 @@
 // Test helpers
-import * as CompanyHelper from '../../../support/helpers/company.helper.js'
+import CompanyHelper from '../../../support/helpers/company.helper.js'
 import CompanyModel from '../../../../app/models/company.model.js'
 
 // Thing under test

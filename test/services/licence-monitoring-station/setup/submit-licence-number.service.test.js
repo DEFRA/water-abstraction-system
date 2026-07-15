@@ -1,7 +1,7 @@
 // Test helpers
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import LicenceModel from '../../../../app/models/licence.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -24,7 +24,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       expiredDate: null,
       id: generateUUID(),
       lapsedDate: null,
-      licenceRef: generateLicenceRef(),
+      licenceRef: LicenceHelper.generateLicenceRef(),
       revokedDate: null
     })
 

@@ -2,7 +2,7 @@
 import { generateNoticeReferenceCode, generateUUID, today } from '../../../app/lib/general.lib.js'
 
 // Test helpers
-import * as NotificationHelper from '../../support/helpers/notification.helper.js'
+import NotificationHelper from '../../support/helpers/notification.helper.js'
 
 // Things we need to stub
 import * as UpdateNoticeService from '../../../app/services/notices/update-notice.service.js'

@@ -1,9 +1,9 @@
 // Test helpers
-import * as EventHelper from '../../../../support/helpers/event.helper.js'
 import * as NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
-import * as NotificationHelper from '../../../../support/helpers/notification.helper.js'
 import * as NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
-import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
+import EventHelper from '../../../../support/helpers/event.helper.js'
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
+import NotificationHelper from '../../../../support/helpers/notification.helper.js'
 import { compareStrings, generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -50,11 +50,13 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
       describe('that include emails to primary users', () => {
         describe('and that have not been previously processed', () => {
           beforeEach(async () => {
-            licenceRefs = [generateLicenceRef(), generateLicenceRef(), generateLicenceRef()].sort(
-              (referenceString, compareString) => {
-                return compareStrings(referenceString, compareString)
-              }
-            )
+            licenceRefs = [
+              LicenceHelper.generateLicenceRef(),
+              LicenceHelper.generateLicenceRef(),
+              LicenceHelper.generateLicenceRef()
+            ].sort((referenceString, compareString) => {
+              return compareStrings(referenceString, compareString)
+            })
           })
 
           beforeEach(async () => {

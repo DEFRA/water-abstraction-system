@@ -1,5 +1,5 @@
 // Test helpers
-import * as SessionHelper from '../support/helpers/session.helper.js'
+import SessionHelper from '../support/helpers/session.helper.js'
 
 // Thing under test
 import SessionModel from '../../app/models/session.model.js'

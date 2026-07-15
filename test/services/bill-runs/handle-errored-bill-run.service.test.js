@@ -1,5 +1,5 @@
 // Test helpers
-import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
 
 // Things we need to stub
 import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'

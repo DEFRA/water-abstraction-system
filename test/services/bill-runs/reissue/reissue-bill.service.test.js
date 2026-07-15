@@ -1,7 +1,7 @@
 // Test helpers
-import * as BillHelper from '../../../support/helpers/bill.helper.js'
-import * as BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
-import * as TransactionHelper from '../../../support/helpers/transaction.helper.js'
+import BillHelper from '../../../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
+import TransactionHelper from '../../../support/helpers/transaction.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 import http2 from 'node:http2'
 

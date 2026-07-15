@@ -1,10 +1,10 @@
-import * as PointHelper from '../helpers/point.helper.js'
-import * as PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
-import * as PurposeHelper from '../helpers/purpose.helper.js'
-import * as RegionHelper from '../helpers/region.helper.js'
-import * as SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
-import { generateLicenceRef } from '../helpers/licence.helper.js'
-import { generateReference } from '../helpers/return-requirement.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import PointHelper from '../helpers/point.helper.js'
+import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
+import PurposeHelper from '../helpers/purpose.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
+import ReturnRequirementHelper from '../helpers/return-requirement.helper.js'
+import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -36,7 +36,7 @@ export function returnLogPrefix(returnRequirement) {
  */
 export function summerReturnRequirement() {
   const returnVersion = _returnVersion(false)
-  const reference = generateReference()
+  const reference = ReturnRequirementHelper.generateReference()
 
   return {
     abstractionPeriodEndDay: 31,
@@ -74,7 +74,7 @@ export function summerReturnRequirement() {
  */
 export function winterReturnRequirement(quarterlyReturns = false) {
   const returnVersion = _returnVersion(quarterlyReturns)
-  const reference = generateReference()
+  const reference = ReturnRequirementHelper.generateReference()
 
   return {
     abstractionPeriodEndDay: 31,
@@ -129,7 +129,7 @@ function _returnVersion(quarterlyReturns) {
       expiredDate: null,
       id: generateUUID(),
       lapsedDate: null,
-      licenceRef: generateLicenceRef(),
+      licenceRef: LicenceHelper.generateLicenceRef(),
       revokedDate: null,
       region: {
         id: region.id,

@@ -6,7 +6,7 @@ import ChargeCategoryModel from '../../../app/models/charge-category.model.js'
 import { data as chargeCategories } from '../../../db/seeds/data/charge-categories.js'
 import { selectRandomEntry } from '../general.js'
 
-export const data = chargeCategories
+const data = chargeCategories
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -22,10 +22,15 @@ export const data = chargeCategories
  *
  * @returns {module:ChargeCategoryModel} The selected reference entry or one picked at random
  */
-export function select(index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return ChargeCategoryModel.fromJson(chargeCategories[index])
   }
 
   return ChargeCategoryModel.fromJson(selectRandomEntry(chargeCategories))
+}
+
+export default {
+  data,
+  select
 }

@@ -2,14 +2,14 @@
  * @module RequirementsForReturnsSeeder
  */
 
-import * as LicenceHelper from '../helpers/licence.helper.js'
-import * as PointHelper from '../helpers/point.helper.js'
-import * as PurposeHelper from '../helpers/purpose.helper.js'
-import * as ReturnRequirementHelper from '../helpers/return-requirement.helper.js'
-import * as ReturnRequirementPointHelper from '../helpers/return-requirement-point.helper.js'
-import * as ReturnRequirementPurposeHelper from '../helpers/return-requirement-purpose.helper.js'
-import * as ReturnVersionHelper from '../helpers/return-version.helper.js'
-import * as UserHelper from '../helpers/user.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import PointHelper from '../helpers/point.helper.js'
+import PurposeHelper from '../helpers/purpose.helper.js'
+import ReturnRequirementHelper from '../helpers/return-requirement.helper.js'
+import ReturnRequirementPointHelper from '../helpers/return-requirement-point.helper.js'
+import ReturnRequirementPurposeHelper from '../helpers/return-requirement-purpose.helper.js'
+import ReturnVersionHelper from '../helpers/return-version.helper.js'
+import UserHelper from '../helpers/user.helper.js'
 
 /**
  * Add a complete 'requirements for returns' record, including return version, requirements, points and purposes

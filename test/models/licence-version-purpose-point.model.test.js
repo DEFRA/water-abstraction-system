@@ -1,8 +1,8 @@
 // Test helpers
-import * as LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
-import * as LicenceVersionPurposePointHelper from '../support/helpers/licence-version-purpose-point.helper.js'
-import * as PointHelper from '../support/helpers/point.helper.js'
+import LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
 import LicenceVersionPurposeModel from '../../app/models/licence-version-purpose.model.js'
+import LicenceVersionPurposePointHelper from '../support/helpers/licence-version-purpose-point.helper.js'
+import PointHelper from '../support/helpers/point.helper.js'
 import PointModel from '../../app/models/point.model.js'
 
 // Thing under test

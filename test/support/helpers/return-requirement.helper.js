@@ -22,7 +22,7 @@ import { generateRandomInteger, generateUUID } from '../../../app/lib/general.li
  *
  * @returns {Promise<module:ReturnRequirementModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnRequirementModel.query()
@@ -40,7 +40,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     abstractionPeriodStartDay: 1,
     abstractionPeriodStartMonth: 4,
@@ -66,6 +66,12 @@ export function defaults(data = {}) {
  *
  * @returns {number}
  */
-export function generateReference() {
+function generateReference() {
   return generateRandomInteger(10000000, 99999999)
+}
+
+export default {
+  add,
+  defaults,
+  generateReference
 }

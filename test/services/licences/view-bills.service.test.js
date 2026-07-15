@@ -1,5 +1,5 @@
 // Test helpers
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -26,7 +26,7 @@ describe('Licences - View Bills service', () => {
     }
 
     licenceId = generateUUID()
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
 
     vi.spyOn(FetchLicenceService, 'default').mockReturnValue({
       id: licenceId,

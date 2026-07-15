@@ -2,8 +2,8 @@
  * @module ModLogHelper
  */
 
+import LicenceHelper from './licence.helper.js'
 import ModLogModel from '../../../app/models/mod-log.model.js'
-import { generateLicenceRef } from './licence.helper.js'
 import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 import { randomRegionCode } from '../general.js'
 
@@ -24,7 +24,7 @@ import { randomRegionCode } from '../general.js'
  *
  * @returns {Promise<module:ModLogModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ModLogModel.query()
@@ -42,7 +42,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const regionCode = randomRegionCode()
 
   const defaults = {
@@ -51,7 +51,7 @@ export function defaults(data = {}) {
     eventDescription: 'Draft version created',
     naldDate: new Date('2012-06-01'),
     userId: 'TTESTER',
-    licenceRef: generateLicenceRef(),
+    licenceRef: LicenceHelper.generateLicenceRef(),
     // The licence and mod log share the same external ID pattern: [region code:NALD ID]
     licenceExternalId: generateRegionNaldPatternExternalId(regionCode)
   }
@@ -71,8 +71,14 @@ export function defaults(data = {}) {
  *
  * @returns {string} The generated external ID
  */
-export function generateRegionNaldPatternExternalId(regionCode = null) {
+function generateRegionNaldPatternExternalId(regionCode = null) {
   const regionCodeToUse = regionCode ?? generateRandomInteger(1, 9)
 
   return `${regionCodeToUse}:${generateRandomInteger(100, 99999)}`
+}
+
+export default {
+  add,
+  defaults,
+  generateRegionNaldPatternExternalId
 }

@@ -1,7 +1,7 @@
 // Test helpers
-import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
-import * as LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
-import * as PurposeHelper from '../../../support/helpers/purpose.helper.js'
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
+import PurposeHelper from '../../../support/helpers/purpose.helper.js'
 
 // Thing under test
 import FetchPurposesService from '../../../../app/services/return-versions/setup/fetch-purposes.service.js'

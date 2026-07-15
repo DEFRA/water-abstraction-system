@@ -1,7 +1,7 @@
 // Test helpers
-import * as LicenceEntityHelper from '../support/helpers/licence-entity.helper.js'
-import * as LicenceEntityRoleHelper from '../support/helpers/licence-entity-role.helper.js'
+import LicenceEntityHelper from '../support/helpers/licence-entity.helper.js'
 import LicenceEntityModel from '../../app/models/licence-entity.model.js'
+import LicenceEntityRoleHelper from '../support/helpers/licence-entity-role.helper.js'
 
 // Thing under test
 import LicenceEntityRoleModel from '../../app/models/licence-entity-role.model.js'

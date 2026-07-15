@@ -1,7 +1,7 @@
 // Test helpers
-import * as NotificationHelper from '../../../support/helpers/notification.helper.js'
 import * as NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
+import NotificationHelper from '../../../support/helpers/notification.helper.js'
 import { today } from '../../../../app/lib/general.lib.js'
 import { yesterday } from '../../../support/general.js'
 

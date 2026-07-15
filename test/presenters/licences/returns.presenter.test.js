@@ -1,5 +1,5 @@
 // Test helpers
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 
 // Thing under test
 import ReturnsPresenter from '../../../app/presenters/licences/returns.presenter.js'
@@ -14,7 +14,7 @@ describe('Licences - Returns presenter', () => {
     returnLogs = _returnLogs()
 
     licence = {
-      licenceRef: generateLicenceRef()
+      licenceRef: LicenceHelper.generateLicenceRef()
     }
   })
 

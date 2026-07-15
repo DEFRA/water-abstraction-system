@@ -1,5 +1,5 @@
 // Test helpers
-import * as TransactionHelper from '../support/helpers/transaction.helper.js'
+import TransactionHelper from '../support/helpers/transaction.helper.js'
 import YarStub from '../support/stubs/yar.stub.js'
 
 // Things we need to stub

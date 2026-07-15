@@ -1,9 +1,9 @@
 // Test helpers
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
-import * as LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
-import * as LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
-import * as LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
-import * as MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
+import LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
+import MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
 
 // Thing under test
 import FetchLicenceMonitoringStationService from '../../../app/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js'

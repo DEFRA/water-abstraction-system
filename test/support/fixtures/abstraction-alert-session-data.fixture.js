@@ -1,4 +1,4 @@
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -16,7 +16,7 @@ export function licenceMonitoringStations() {
       id: generateUUID(),
       latestNotification: null,
       licence: {
-        licenceRef: generateLicenceRef(),
+        licenceRef: LicenceHelper.generateLicenceRef(),
         id: generateUUID()
       },
       measureType: 'level',
@@ -34,7 +34,7 @@ export function licenceMonitoringStations() {
       id: generateUUID(),
       latestNotification: null,
       licence: {
-        licenceRef: generateLicenceRef(),
+        licenceRef: LicenceHelper.generateLicenceRef(),
         id: generateUUID()
       },
       measureType: 'flow',
@@ -52,7 +52,7 @@ export function licenceMonitoringStations() {
       id: generateUUID(),
       latestNotification: null,
       licence: {
-        licenceRef: generateLicenceRef(),
+        licenceRef: LicenceHelper.generateLicenceRef(),
         id: generateUUID()
       },
       measureType: 'level',
@@ -80,7 +80,7 @@ export function unsortedLicenceMonitoringStations() {
       id: generateUUID(),
       latestNotification: null,
       licence: {
-        licenceRef: generateLicenceRef(),
+        licenceRef: LicenceHelper.generateLicenceRef(),
         id: generateUUID()
       },
       measureType: 'level',
@@ -98,7 +98,7 @@ export function unsortedLicenceMonitoringStations() {
       id: generateUUID(),
       latestNotification: null,
       licence: {
-        licenceRef: generateLicenceRef(),
+        licenceRef: LicenceHelper.generateLicenceRef(),
         id: generateUUID()
       },
       measureType: 'flow',
@@ -116,7 +116,7 @@ export function unsortedLicenceMonitoringStations() {
       id: generateUUID(),
       latestNotification: null,
       licence: {
-        licenceRef: generateLicenceRef(),
+        licenceRef: LicenceHelper.generateLicenceRef(),
         id: generateUUID()
       },
       measureType: 'level',
@@ -135,7 +135,7 @@ export function unsortedLicenceMonitoringStations() {
       latestNotification: null,
       licence: {
         id: generateUUID(),
-        licenceRef: generateLicenceRef()
+        licenceRef: LicenceHelper.generateLicenceRef()
       },
       measureType: 'flow',
       notes: null,
@@ -153,7 +153,7 @@ export function unsortedLicenceMonitoringStations() {
       latestNotification: null,
       licence: {
         id: generateUUID(),
-        licenceRef: generateLicenceRef()
+        licenceRef: LicenceHelper.generateLicenceRef()
       },
       measureType: 'flow',
       notes: 'minor abstraction',
@@ -171,7 +171,7 @@ export function unsortedLicenceMonitoringStations() {
       latestNotification: null,
       licence: {
         id: generateUUID(),
-        licenceRef: generateLicenceRef()
+        licenceRef: LicenceHelper.generateLicenceRef()
       },
       measureType: 'level',
       notes: null,
@@ -189,7 +189,7 @@ export function unsortedLicenceMonitoringStations() {
       latestNotification: null,
       licence: {
         id: generateUUID(),
-        licenceRef: generateLicenceRef()
+        licenceRef: LicenceHelper.generateLicenceRef()
       },
       measureType: 'flow',
       notes: null,
@@ -207,7 +207,7 @@ export function unsortedLicenceMonitoringStations() {
       latestNotification: null,
       licence: {
         id: generateUUID(),
-        licenceRef: generateLicenceRef()
+        licenceRef: LicenceHelper.generateLicenceRef()
       },
       measureType: 'flow',
       notes: 'uses imperial units',
@@ -225,7 +225,7 @@ export function unsortedLicenceMonitoringStations() {
       latestNotification: null,
       licence: {
         id: generateUUID(),
-        licenceRef: generateLicenceRef()
+        licenceRef: LicenceHelper.generateLicenceRef()
       },
       measureType: 'level',
       notes: null,

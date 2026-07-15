@@ -1,10 +1,10 @@
 // Test helpers
-import * as BillHelper from '../support/helpers/bill.helper.js'
-import * as BillLicenceHelper from '../support/helpers/bill-licence.helper.js'
-import * as LicenceHelper from '../support/helpers/licence.helper.js'
-import * as TransactionHelper from '../support/helpers/transaction.helper.js'
+import BillHelper from '../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../support/helpers/bill-licence.helper.js'
 import BillModel from '../../app/models/bill.model.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
+import TransactionHelper from '../support/helpers/transaction.helper.js'
 import TransactionModel from '../../app/models/transaction.model.js'
 
 // Thing under test

@@ -1,11 +1,11 @@
 // Test helpers
-import * as CompanyAddressHelper from '../support/helpers/company-address.helper.js'
-import * as CompanyContactHelper from '../support/helpers/company-contact.helper.js'
-import * as LicenceDocumentRoleHelper from '../support/helpers/licence-document-role.helper.js'
-import * as LicenceRoleHelper from '../support/helpers/licence-role.helper.js'
+import CompanyAddressHelper from '../support/helpers/company-address.helper.js'
 import CompanyAddressModel from '../../app/models/company-address.model.js'
+import CompanyContactHelper from '../support/helpers/company-contact.helper.js'
 import CompanyContactModel from '../../app/models/company-contact.model.js'
+import LicenceDocumentRoleHelper from '../support/helpers/licence-document-role.helper.js'
 import LicenceDocumentRoleModel from '../../app/models/licence-document-role.model.js'
+import LicenceRoleHelper from '../support/helpers/licence-role.helper.js'
 
 // Thing under test
 import LicenceRoleModel from '../../app/models/licence-role.model.js'
