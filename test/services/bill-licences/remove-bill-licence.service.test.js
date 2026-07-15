@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as FetchBillLicenceSummaryService from '../../../app/services/bill-licences/fetch-bill-licence-summary.service.js'
 

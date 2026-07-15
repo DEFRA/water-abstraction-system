@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { NOTIFY_TEMPLATES } from '../../app/lib/notify-templates.lib.js'
 

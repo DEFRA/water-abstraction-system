@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as SessionHelper from '../../../support/helpers/session.helper.js'
 import SessionModel from '../../../../app/models/session.model.js'

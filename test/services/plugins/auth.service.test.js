@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things to stub
 import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
 import * as FetchUserRolesAndGroupsService from '../../../app/services/idm/fetch-user-roles-and-groups.service.js'

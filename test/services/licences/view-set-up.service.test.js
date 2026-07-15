@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import ReturnVersionModel from '../../../app/models/return-version.model.js'
 import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'

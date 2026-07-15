@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
 import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'

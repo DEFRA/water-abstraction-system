@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as AssignBillRunToLicencesService from '../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js'
 import BillRunModel from '../../../../app/models/bill-run.model.js'

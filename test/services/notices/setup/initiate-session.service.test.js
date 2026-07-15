@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as AbstractionAlertSessionData from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 import SessionModel from '../../../../app/models/session.model.js'

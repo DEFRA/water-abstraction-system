@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 import YarStub from '../../../support/stubs/yar.stub.js'

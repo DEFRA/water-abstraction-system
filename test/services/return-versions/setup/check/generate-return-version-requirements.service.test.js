@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as FetchOtherPurposeIdsDal from '../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'
 

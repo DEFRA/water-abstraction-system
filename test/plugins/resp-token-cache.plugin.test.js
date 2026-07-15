@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as RespTokenRequest from '../../app/requests/resp/token.request.js'
 

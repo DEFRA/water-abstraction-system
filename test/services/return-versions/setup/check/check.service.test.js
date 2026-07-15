@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as FetchPointsService from '../../../../../app/services/return-versions/setup/fetch-points.service.js'
 import SessionModelStub from '../../../../support/stubs/session.stub.js'

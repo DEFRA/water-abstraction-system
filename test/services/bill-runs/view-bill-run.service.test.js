@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as FetchBillRunService from '../../../app/services/bill-runs/fetch-bill-run.service.js'
 

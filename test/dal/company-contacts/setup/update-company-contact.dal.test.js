@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
 import CompanyContactModel from '../../../../app/models/company-contact.model.js'

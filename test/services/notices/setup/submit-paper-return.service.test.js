@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'

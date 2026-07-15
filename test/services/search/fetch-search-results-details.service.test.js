@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things to stub
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
 import CompanyModel from '../../../app/models/company.model.js'

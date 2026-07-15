@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import http2 from 'node:http2'
 import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'

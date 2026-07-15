@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
 import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'

@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as FetchChargeVersionsService from '../../../../app/services/bill-runs/match/fetch-charge-versions.service.js'
 

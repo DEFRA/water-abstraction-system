@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import LicenceMonitoringStationModel from '../../../../app/models/licence-monitoring-station.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'

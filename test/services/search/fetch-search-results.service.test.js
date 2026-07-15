@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
 import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'

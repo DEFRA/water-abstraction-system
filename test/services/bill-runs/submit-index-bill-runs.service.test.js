@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things to stub
 import * as CheckBusyBillRunsService from '../../../app/services/bill-runs/check-busy-bill-runs.service.js'
 import * as FetchBillRunsService from '../../../app/services/bill-runs/fetch-bill-runs.service.js'

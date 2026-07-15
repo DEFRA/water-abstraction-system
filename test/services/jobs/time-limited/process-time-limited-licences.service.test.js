@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import WorkflowModel from '../../../../app/models/workflow.model.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'

@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things to stub
 import ReturnCycleModel from '../../../../app/models/return-cycle.model.js'
 

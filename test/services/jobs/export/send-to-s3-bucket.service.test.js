@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 

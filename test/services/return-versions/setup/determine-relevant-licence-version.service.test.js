@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 
 // Things we need to stub

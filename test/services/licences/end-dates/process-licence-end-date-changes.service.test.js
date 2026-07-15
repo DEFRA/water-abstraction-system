@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as LicenceEndDateChangeHelper from '../../../support/helpers/licence-end-date-change.helper.js'
 

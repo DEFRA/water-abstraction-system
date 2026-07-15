@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as FetchReturnLogsForLicenceService from '../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
 

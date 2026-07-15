@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as ChargingModuleTokenRequest from '../../app/requests/charging-module/token.request.js'
 

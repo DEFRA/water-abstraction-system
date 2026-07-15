@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
 import * as LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'

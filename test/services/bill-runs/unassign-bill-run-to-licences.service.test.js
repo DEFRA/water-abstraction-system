@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import LicenceSupplementaryYearModel from '../../../app/models/licence-supplementary-year.model.js'
 

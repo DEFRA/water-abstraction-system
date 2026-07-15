@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import DatabaseConfig from '../../config/database.config.js'
 

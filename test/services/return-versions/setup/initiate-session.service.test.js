@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import http2 from 'node:http2'
 import LicenceModel from '../../../../app/models/licence.model.js'

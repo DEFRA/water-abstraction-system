@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'

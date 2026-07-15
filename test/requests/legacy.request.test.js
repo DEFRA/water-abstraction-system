@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import http2 from 'node:http2'
 import legacyConfig from '../../config/legacy.config.js'

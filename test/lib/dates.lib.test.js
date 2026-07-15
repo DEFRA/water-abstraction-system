@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Thing under test
 import * as DateLib from '../../app/lib/dates.lib.js'
 

@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as FetchReturnSubmissionService from '../../../app/services/return-submissions/fetch-return-submission.service.js'
 

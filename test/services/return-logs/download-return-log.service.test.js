@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 import * as ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'

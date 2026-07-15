@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'

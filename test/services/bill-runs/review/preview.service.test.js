@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import http2 from 'node:http2'
 import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'

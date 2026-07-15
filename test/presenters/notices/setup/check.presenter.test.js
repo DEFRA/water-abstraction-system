@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'

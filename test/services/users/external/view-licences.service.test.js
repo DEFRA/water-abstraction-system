@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
 import YarStub from '../../../support/stubs/yar.stub.js'

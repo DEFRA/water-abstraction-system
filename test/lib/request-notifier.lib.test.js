@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Thing under test
 import RequestNotifierLib from '../../app/lib/request-notifier.lib.js'
 
