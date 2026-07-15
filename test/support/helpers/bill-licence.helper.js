@@ -2,8 +2,8 @@
  * @module BillLicenceHelper
  */
 
-import * as LicenceHelper from './licence.helper.js'
 import BillLicenceModel from '../../../app/models/bill-licence.model.js'
+import LicenceHelper from './licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -19,7 +19,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {Promise<module:BillLicenceModel>} The instance of the newly created record
  */
-export async function add(data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return BillLicenceModel.query()
@@ -37,7 +37,7 @@ export async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     billId: generateUUID(),
     licenceRef: LicenceHelper.generateLicenceRef(),
@@ -48,4 +48,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

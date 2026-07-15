@@ -1,6 +1,6 @@
 // Test helpers
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
-import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 
 // Things we need to stub
 import * as ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'

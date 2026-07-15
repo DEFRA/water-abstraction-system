@@ -1,12 +1,12 @@
 // Test helpers
-import * as ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
-import * as ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
-import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
-import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
-import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
-import * as RegionHelper from '../../../support/helpers/region.helper.js'
-import * as WorkflowHelper from '../../../support/helpers/workflow.helper.js'
+import ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
+import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
+import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
 
 // Thing under test
 import FetchChargeVersionsService from '../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js'

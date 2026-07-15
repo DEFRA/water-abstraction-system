@@ -1,6 +1,6 @@
 // Test helpers
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Test helpers
 import YarStub from '../../../support/stubs/yar.stub.js'
@@ -18,7 +18,7 @@ describe('Notices - Setup - View Check Notice Type service', () => {
   let yarStub
 
   beforeEach(() => {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
     sessionData = { licenceRef, noticeType: 'invitations' }
 
     session = SessionModelStub(sessionData)

@@ -1,6 +1,6 @@
 // Test helpers
-import * as ModLogHelper from '../../support/helpers/mod-log.helper.js'
-import * as ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import ModLogHelper from '../../support/helpers/mod-log.helper.js'
+import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
 
 // Thing under test
 import FetchReturnVersionsService from '../../../app/services/licences/fetch-return-versions.service.js'

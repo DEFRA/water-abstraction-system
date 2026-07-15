@@ -1,6 +1,6 @@
 // Test helpers
-import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
 import BillRunError from '../../../../app/errors/bill-run.error.js'
+import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
 import BillRunModel from '../../../../app/models/bill-run.model.js'
 import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
 

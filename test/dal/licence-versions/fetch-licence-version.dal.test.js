@@ -1,12 +1,12 @@
 // Test helpers
 import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
-import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import * as LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
-import * as LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
-import * as PointHelper from '../../support/helpers/point.helper.js'
-import * as PurposeHelper from '../../support/helpers/purpose.helper.js'
-import * as SourceHelper from '../../support/helpers/source.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
+import PointHelper from '../../support/helpers/point.helper.js'
+import PurposeHelper from '../../support/helpers/purpose.helper.js'
+import SourceHelper from '../../support/helpers/source.helper.js'
 
 // Thing under test
 import FetchLicenceVersionDal from '../../../app/dal/licence-versions/fetch-licence-version.dal.js'

@@ -1,6 +1,6 @@
 // Test helpers
-import { generateAccountNumber } from '../../../support/helpers/billing-account.helper.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -19,17 +19,17 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
   const billingAccounts = [
     {
       id: generateUUID(),
-      accountNumber: generateAccountNumber()
+      accountNumber: BillingAccountHelper.generateAccountNumber()
     },
     {
       id: generateUUID(),
-      accountNumber: generateAccountNumber()
+      accountNumber: BillingAccountHelper.generateAccountNumber()
     }
   ]
 
   const licences = [
-    { id: generateUUID(), licenceRef: generateLicenceRef() },
-    { id: generateUUID(), licenceRef: generateLicenceRef() }
+    { id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() },
+    { id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }
   ]
 
   let chargeVersions

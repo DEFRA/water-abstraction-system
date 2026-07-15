@@ -1,5 +1,5 @@
 // Test helpers
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -19,7 +19,7 @@ describe('Return Logs - View Communications Service', () => {
       id: generateUUID(),
       licence: {
         id: generateUUID(),
-        licenceRef: generateLicenceRef()
+        licenceRef: LicenceHelper.generateLicenceRef()
       }
     }
 

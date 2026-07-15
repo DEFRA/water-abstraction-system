@@ -1,8 +1,8 @@
 // Test helpers
-import * as GroupHelper from '../support/helpers/group.helper.js'
-import * as GroupRoleHelper from '../support/helpers/group-role.helper.js'
-import * as RoleHelper from '../support/helpers/role.helper.js'
+import GroupHelper from '../support/helpers/group.helper.js'
 import GroupModel from '../../app/models/group.model.js'
+import GroupRoleHelper from '../support/helpers/group-role.helper.js'
+import RoleHelper from '../support/helpers/role.helper.js'
 import RoleModel from '../../app/models/role.model.js'
 
 // Thing under test

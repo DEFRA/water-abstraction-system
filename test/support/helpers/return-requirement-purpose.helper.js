@@ -2,10 +2,10 @@
  * @module ReturnRequirementPurposeHelper
  */
 
-import * as PrimaryPurposeHelper from './primary-purpose.helper.js'
-import * as PurposeHelper from './purpose.helper.js'
-import * as SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
+import PrimaryPurposeHelper from './primary-purpose.helper.js'
+import PurposeHelper from './purpose.helper.js'
 import ReturnRequirementPurposeModel from '../../../app/models/return-requirement-purpose.model.js'
+import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
 import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -23,7 +23,7 @@ import { generateRandomInteger, generateUUID } from '../../../app/lib/general.li
  *
  * @returns {Promise<module:ReturnRequirementPurposeModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnRequirementPurposeModel.query()
@@ -41,7 +41,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const purpose = PurposeHelper.select()
   const primaryPurpose = PrimaryPurposeHelper.select()
   const secondaryPurpose = SecondaryPurposeHelper.select()
@@ -61,4 +61,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

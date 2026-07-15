@@ -6,7 +6,7 @@ import GroupRoleModel from '../../../app/models/group-role.model.js'
 import { data as groupRoles } from '../../../db/seeds/data/group-roles.js'
 import { selectRandomEntry } from '../general.js'
 
-export const data = groupRoles
+const data = groupRoles
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -22,10 +22,15 @@ export const data = groupRoles
  *
  * @returns {module:GroupRoleModel} The selected reference entry or one picked at random
  */
-export function select(index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return GroupRoleModel.fromJson(groupRoles[index])
   }
 
   return GroupRoleModel.fromJson(selectRandomEntry(groupRoles))
+}
+
+export default {
+  data,
+  select
 }

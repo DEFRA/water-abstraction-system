@@ -1,6 +1,6 @@
 // Test helpers
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
-import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 
 // Thing under test
 import DetermineReturnLogFlagsService from '../../../../app/services/licences/supplementary/determine-return-log-flags.service.js'

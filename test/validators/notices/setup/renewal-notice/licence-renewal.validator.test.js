@@ -1,6 +1,6 @@
 // Helpers
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 import LicenceModel from '../../../../../app/models/licence.model.js'
-import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -14,7 +14,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   beforeEach(() => {
     vi.useFakeTimers({ now: new Date('2026-05-21') })
 
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
 
     payload = { licenceRef }
 

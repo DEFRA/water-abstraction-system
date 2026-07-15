@@ -1,6 +1,6 @@
 // Test helpers
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
-import { generateReturnId } from '../../../support/helpers/return-log.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -272,7 +272,7 @@ function _generateData(returnMatched = true) {
     returnLogs: [
       {
         id: returnLogId,
-        returnId: generateReturnId(),
+        returnId: ReturnLogHelper.generateReturnId(),
         returnReference: '10021668',
         description: 'DRAINS ETC-DEEPING FEN AND OTHER LINKED SITES',
         startDate: new Date('2022-04-01'),

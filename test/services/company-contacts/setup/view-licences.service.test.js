@@ -1,7 +1,7 @@
 // Test helpers
 import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -19,7 +19,7 @@ describe('Company Contacts - Setup - Licences Service', () => {
   beforeEach(() => {
     licence = {
       id: generateUUID(),
-      licenceRef: generateLicenceRef()
+      licenceRef: LicenceHelper.generateLicenceRef()
     }
 
     company = CustomersFixtures.company()

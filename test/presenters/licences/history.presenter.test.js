@@ -1,6 +1,6 @@
 // Test helpers
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import LicenceVersionModel from '../../../app/models/licence-version.model.js'
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -13,7 +13,7 @@ describe('Licences - History presenter', () => {
   beforeEach(() => {
     licence = {
       id: generateUUID(),
-      licenceRef: generateLicenceRef()
+      licenceRef: LicenceHelper.generateLicenceRef()
     }
 
     licenceHistory = [

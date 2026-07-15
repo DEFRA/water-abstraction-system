@@ -1,7 +1,7 @@
 // Test helpers
 import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
-import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
 import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub

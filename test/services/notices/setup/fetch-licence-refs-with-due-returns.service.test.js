@@ -1,6 +1,6 @@
 // Test helpers
-import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 
 // Thing under test
 import FetchLicenceRefsWithDueReturnsService from '../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js'
@@ -27,7 +27,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
 
     // 0 & 1) Add two 'due' return logs with the same dates and same licence refs. This will confirm licence refs are
     // DISTINCT in the results
-    distinctInvitationLicenceRef = generateLicenceRef()
+    distinctInvitationLicenceRef = LicenceHelper.generateLicenceRef()
     await _addReturnLog(returnLogs, { ...defaultDates, licenceRef: distinctInvitationLicenceRef })
     await _addReturnLog(returnLogs, { ...defaultDates, licenceRef: distinctInvitationLicenceRef })
 
@@ -52,7 +52,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
 
     // 7 & 8) Add two 'due' return logs with the same dates and same licence refs. This will confirm licence refs are
     // DISTINCT in the results
-    distinctReminderLicenceRef = generateLicenceRef()
+    distinctReminderLicenceRef = LicenceHelper.generateLicenceRef()
     const dueDate = new Date('2025-04-28')
     await _addReturnLog(returnLogs, { ...defaultDates, dueDate, licenceRef: distinctReminderLicenceRef })
     await _addReturnLog(returnLogs, { ...defaultDates, dueDate, licenceRef: distinctReminderLicenceRef })

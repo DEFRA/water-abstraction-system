@@ -1,10 +1,10 @@
 // Test helpers
-import * as AddressHelper from '../../support/helpers/address.helper.js'
-import * as BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
-import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
-import * as CompanyHelper from '../../support/helpers/company.helper.js'
+import AddressHelper from '../../support/helpers/address.helper.js'
 import AddressModel from '../../../app/models/address.model.js'
+import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
 import BillingAccountAddressModel from '../../../app/models/billing-account-address.model.js'
+import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
 import CompanyModel from '../../../app/models/company.model.js'
 import ContactModel from '../../../app/models/contact.model.js'
 

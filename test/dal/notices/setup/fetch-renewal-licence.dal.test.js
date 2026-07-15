@@ -1,5 +1,5 @@
 // Test helpers
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import FetchRenewalLicenceDal from '../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js'

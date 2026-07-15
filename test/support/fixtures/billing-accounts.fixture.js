@@ -1,6 +1,6 @@
+import BillingAccountHelper from '../helpers/billing-account.helper.js'
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
 import ContactModel from '../../../app/models/contact.model.js'
-import { generateAccountNumber } from '../helpers/billing-account.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -20,7 +20,7 @@ export function billingAccount() {
   return {
     billingAccount: BillingAccountModel.fromJson({
       id: generateUUID(),
-      accountNumber: generateAccountNumber(),
+      accountNumber: BillingAccountHelper.generateAccountNumber(),
       createdAt: new Date('2023-12-14T18:42:59.659Z'),
       lastTransactionFile: null,
       lastTransactionFileCreatedAt: null,

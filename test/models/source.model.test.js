@@ -1,7 +1,7 @@
 // Test helpers
-import * as PointHelper from '../support/helpers/point.helper.js'
-import * as SourceHelper from '../support/helpers/source.helper.js'
+import PointHelper from '../support/helpers/point.helper.js'
 import PointModel from '../../app/models/point.model.js'
+import SourceHelper from '../support/helpers/source.helper.js'
 
 // Thing under test
 import SourceModel from '../../app/models/source.model.js'

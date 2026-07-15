@@ -1,6 +1,6 @@
-import * as RegionHelper from '../helpers/region.helper.js'
-import { generateLicenceRef } from '../helpers/licence.helper.js'
-import { generateReference } from '../helpers/return-requirement.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
+import ReturnRequirementHelper from '../helpers/return-requirement.helper.js'
 import { NoticeJourney, NoticeType, NoticeTypes } from '../../../app/lib/static-lookups.lib.js'
 import { generateNoticeReferenceCode, generateUUID } from '../../../app/lib/general.lib.js'
 
@@ -16,7 +16,7 @@ import { generateNoticeReferenceCode, generateUUID } from '../../../app/lib/gene
  */
 export function abstractionAlertStop(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -95,7 +95,7 @@ export function abstractionAlertStop(licenceRef = null) {
  */
 export function adHocRenewalInvitation(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -128,7 +128,7 @@ export function adHocRenewalInvitation(licenceRef = null) {
  */
 export function adHocInvitation(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -171,7 +171,7 @@ export function adHocInvitation(licenceRef = null) {
  */
 export function adHocReminder(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -216,7 +216,7 @@ export function adHocReminder(licenceRef = null) {
  */
 export function paperReturn(licenceRef = null, selectedReturnLog = null) {
   if (!licenceRef) {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -261,7 +261,7 @@ export function paperReturn(licenceRef = null, selectedReturnLog = null) {
  */
 export function standardInvitation(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -312,7 +312,7 @@ export function standardInvitation(licenceRef = null) {
  */
 export function standardReminder(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -352,7 +352,7 @@ export function standardReminder(licenceRef = null) {
 }
 
 function _generateReturnLog(licenceRef) {
-  const returnReference = generateReference()
+  const returnReference = ReturnRequirementHelper.generateReference()
   const region = RegionHelper.select()
 
   return {

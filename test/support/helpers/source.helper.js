@@ -6,7 +6,7 @@ import SourceModel from '../../../app/models/source.model.js'
 import { selectRandomEntry } from '../general.js'
 import { data as sources } from '../../../db/seeds/data/sources.js'
 
-export const data = sources
+const data = sources
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -22,10 +22,15 @@ export const data = sources
  *
  * @returns {module:SourceModel} The selected reference entry or one picked at random
  */
-export function select(index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return SourceModel.fromJson(sources[index])
   }
 
   return SourceModel.fromJson(selectRandomEntry(sources))
+}
+
+export default {
+  data,
+  select
 }

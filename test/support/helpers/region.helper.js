@@ -8,10 +8,10 @@ import { data as regions } from '../../../db/seeds/data/regions.js'
 
 // The `BILL_RUN_REGION_INDEX` is only to be used for testing bill run services that need to know details of bill runs
 // per region. This region is not selected randomly to prevent unit tests from using this region unless necessary.
-export const data = regions
+const data = regions
 
-export const BILL_RUN_REGION_INDEX = 9
-export const TEST_REGION_INDEX = 8
+const BILL_RUN_REGION_INDEX = 9
+const TEST_REGION_INDEX = 8
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -27,7 +27,7 @@ export const TEST_REGION_INDEX = 8
  *
  * @returns {module:RegionModel} The selected reference entry or one picked at random
  */
-export function select(index = -1) {
+function select(index = -1) {
   if (index > -1) {
     return RegionModel.fromJson(regions[index])
   }
@@ -36,4 +36,11 @@ export function select(index = -1) {
   const randomIndex = generateRandomInteger(0, regions.length - 2)
 
   return RegionModel.fromJson(regions[randomIndex])
+}
+
+export default {
+  data,
+  BILL_RUN_REGION_INDEX,
+  TEST_REGION_INDEX,
+  select
 }

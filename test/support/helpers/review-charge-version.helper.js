@@ -20,7 +20,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {Promise<module:ReviewChargeVersionModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReviewChargeVersionModel.query()
@@ -38,7 +38,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns data from the query
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     reviewLicenceId: generateUUID(),
     chargeVersionId: generateUUID(),
@@ -51,4 +51,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

@@ -1,7 +1,7 @@
 // Test helpers
 import * as NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
-import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 
 // Thing under test
 import FetchReturnsReminderRecipients from '../../../../../app/services/notices/setup/returns-notice/fetch-returns-reminder-recipients.service.js'

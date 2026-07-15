@@ -2,14 +2,14 @@
  * @module PreviousBillingDataSeeder
  */
 
-import * as BillHelper from '../helpers/bill.helper.js'
-import * as BillLicenceHelper from '../helpers/bill-licence.helper.js'
-import * as BillRunHelper from '../helpers/bill-run.helper.js'
-import * as BillingAccountHelper from '../helpers/billing-account.helper.js'
-import * as ChargeCategoryHelper from '../helpers/charge-category.helper.js'
-import * as LicenceHelper from '../helpers/licence.helper.js'
-import * as RegionHelper from '../helpers/region.helper.js'
-import * as TransactionHelper from '../helpers/transaction.helper.js'
+import BillHelper from '../helpers/bill.helper.js'
+import BillLicenceHelper from '../helpers/bill-licence.helper.js'
+import BillRunHelper from '../helpers/bill-run.helper.js'
+import BillingAccountHelper from '../helpers/billing-account.helper.js'
+import ChargeCategoryHelper from '../helpers/charge-category.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
+import TransactionHelper from '../helpers/transaction.helper.js'
 
 /**
  * Seeds previous billing data need to support testing of supplementary billing

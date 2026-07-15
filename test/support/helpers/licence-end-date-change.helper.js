@@ -19,7 +19,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {Promise<module:BillModel>} The instance of the newly created record
  */
-export async function add(data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceEndDateChangeModel.query()
@@ -37,7 +37,7 @@ export async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const changeDate = formatDateObjectToISO(new Date())
 
   const defaults = {
@@ -50,4 +50,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

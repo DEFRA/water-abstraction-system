@@ -1,5 +1,5 @@
 // Test helpers
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import DetermineLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-licence-flags.service.js'

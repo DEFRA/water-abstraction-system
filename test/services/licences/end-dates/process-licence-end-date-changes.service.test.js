@@ -1,5 +1,5 @@
 // Test helpers
-import * as LicenceEndDateChangeHelper from '../../../support/helpers/licence-end-date-change.helper.js'
+import LicenceEndDateChangeHelper from '../../../support/helpers/licence-end-date-change.helper.js'
 
 // Things we need to stub
 import * as ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'

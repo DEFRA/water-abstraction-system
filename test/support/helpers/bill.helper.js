@@ -3,7 +3,7 @@
  */
 
 import BillModel from '../../../app/models/bill.model.js'
-import { generateAccountNumber } from './billing-account.helper.js'
+import BillingAccountHelper from './billing-account.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -21,7 +21,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {Promise<module:BillModel>} The instance of the newly created record
  */
-export async function add(data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return BillModel.query()
@@ -39,11 +39,11 @@ export async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     billingAccountId: generateUUID(),
     address: {},
-    accountNumber: generateAccountNumber(),
+    accountNumber: BillingAccountHelper.generateAccountNumber(),
     billRunId: generateUUID(),
     financialYearEnding: 2023
   }
@@ -52,4 +52,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

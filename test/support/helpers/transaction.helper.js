@@ -2,7 +2,7 @@
  * @module TransactionHelper
  */
 
-import * as ChargeCategoryHelper from './charge-category.helper.js'
+import ChargeCategoryHelper from './charge-category.helper.js'
 import TransactionModel from '../../../app/models/transaction.model.js'
 import { determineCurrentFinancialYear, generateUUID } from '../../../app/lib/general.lib.js'
 
@@ -38,7 +38,7 @@ import { determineCurrentFinancialYear, generateUUID } from '../../../app/lib/ge
  *
  * @returns {Promise<module:TransactionModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return TransactionModel.query()
@@ -56,7 +56,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const { startDate, endDate } = determineCurrentFinancialYear()
   const { reference, shortDescription } = ChargeCategoryHelper.select()
 
@@ -89,4 +89,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

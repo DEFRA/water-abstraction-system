@@ -1,6 +1,6 @@
 // Helpers
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 import LicenceModel from '../../../../../app/models/licence.model.js'
-import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -18,7 +18,7 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
 
   beforeEach(() => {
     licenceExpiryDate = new Date('2026-09-01')
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
     payload = { licenceRef }
     renewalDate = new Date('2026-06-03')
 

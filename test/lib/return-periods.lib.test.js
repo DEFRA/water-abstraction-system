@@ -1,5 +1,5 @@
 // Test framework dependencies
-import * as ReturnCycleHelper from '../support/helpers/return-cycle.helper.js'
+import ReturnCycleHelper from '../support/helpers/return-cycle.helper.js'
 import { returnPeriodDates } from '../../app/lib/static-lookups.lib.js'
 
 // Thing under test

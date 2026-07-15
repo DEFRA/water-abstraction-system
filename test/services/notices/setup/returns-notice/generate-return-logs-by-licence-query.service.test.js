@@ -1,8 +1,8 @@
 // Test helpers
-import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 import { db } from '../../../../../db/db.js'
-import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
 import { tomorrow } from '../../../../support/general.js'
 
 // Thing under test
@@ -16,7 +16,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
   beforeAll(async () => {
     let returnLog
 
-    licenceRef = generateLicenceRef()
+    licenceRef = LicenceHelper.generateLicenceRef()
     returnLogs = []
 
     // First return log has a status of 'due' - should be included in results when notice type is NOT reminders

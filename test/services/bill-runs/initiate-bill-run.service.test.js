@@ -1,6 +1,6 @@
 // Test helpers
-import * as RegionHelper from '../../support/helpers/region.helper.js'
 import BillRunModel from '../../../app/models/bill-run.model.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
 import http2 from 'node:http2'
 
 // Things we need to stub

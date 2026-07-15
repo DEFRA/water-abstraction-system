@@ -1,7 +1,7 @@
 // Test helpers
-import * as LicenceHelper from '../support/helpers/licence.helper.js'
-import * as WorkflowHelper from '../support/helpers/workflow.helper.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
+import WorkflowHelper from '../support/helpers/workflow.helper.js'
 
 // Thing under test
 import WorkflowModel from '../../app/models/workflow.model.js'

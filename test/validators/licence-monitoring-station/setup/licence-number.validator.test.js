@@ -1,5 +1,5 @@
 // Test helpers
-import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { licenceEnds } from '../../../support/fixtures/licence.fixture.js'
 import { yesterday } from '../../../support/general.js'
 
@@ -65,7 +65,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
         licence = undefined
 
         payload = {
-          licenceRef: generateLicenceRef()
+          licenceRef: LicenceHelper.generateLicenceRef()
         }
       })
 
@@ -83,7 +83,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
         licence = licenceEnds(yesterday())
 
         payload = {
-          licenceRef: generateLicenceRef()
+          licenceRef: LicenceHelper.generateLicenceRef()
         }
       })
 

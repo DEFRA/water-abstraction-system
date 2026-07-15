@@ -1,5 +1,5 @@
 // Test helpers
-import * as RegionHelper from '../../support/helpers/region.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
 import http2 from 'node:http2'
 
 // Things we need to stub

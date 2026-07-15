@@ -1,5 +1,5 @@
 // Test helpers
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -16,11 +16,11 @@ describe('Users - Base Users presenter', () => {
         licences: [
           {
             id: generateUUID(),
-            licenceRef: generateLicenceRef()
+            licenceRef: LicenceHelper.generateLicenceRef()
           },
           {
             id: generateUUID(),
-            licenceRef: generateLicenceRef()
+            licenceRef: LicenceHelper.generateLicenceRef()
           }
         ],
         selectedLicences: []

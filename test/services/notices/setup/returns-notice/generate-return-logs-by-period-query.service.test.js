@@ -1,6 +1,6 @@
 // Test helpers
-import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 import { db } from '../../../../../db/db.js'
 
 // Thing under test

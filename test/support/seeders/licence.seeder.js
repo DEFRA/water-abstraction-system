@@ -2,9 +2,9 @@
  * @module LicenceSeeder
  */
 
-import * as CompanyHelper from '../helpers/company.helper.js'
-import * as LicenceHelper from '../helpers/licence.helper.js'
-import * as LicenceVersionHelper from '../helpers/licence-version.helper.js'
+import CompanyHelper from '../helpers/company.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import LicenceVersionHelper from '../helpers/licence-version.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**

@@ -1,6 +1,6 @@
 // Test helpers
-import * as LicenceDocumentHeaderHelper from '../../support/helpers/licence-document-header.helper.js'
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceDocumentHeaderHelper from '../../support/helpers/licence-document-header.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import { tomorrow, yesterday } from '../../support/general.js'
 
 // Thing under test

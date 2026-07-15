@@ -1,6 +1,6 @@
 // Test helpers
-import { generateAccountNumber } from '../../support/helpers/billing-account.helper.js'
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -15,7 +15,7 @@ describe('Licences - Bills presenter', () => {
 
     licence = {
       id: generateUUID(),
-      licenceRef: generateLicenceRef()
+      licenceRef: LicenceHelper.generateLicenceRef()
     }
   })
 
@@ -114,7 +114,7 @@ describe('Licences - Bills presenter', () => {
 
 function _bill() {
   return {
-    accountNumber: generateAccountNumber(),
+    accountNumber: BillingAccountHelper.generateAccountNumber(),
     billRun: { batchType: 'annual', scheme: 'sroc', summer: false },
     billingAccountId: generateUUID(),
     createdAt: new Date('2020-01-01'),

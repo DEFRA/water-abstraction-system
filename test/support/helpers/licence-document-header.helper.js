@@ -3,7 +3,7 @@
  */
 
 import LicenceDocumentHeaderModel from '../../../app/models/licence-document-header.model.js'
-import { generateLicenceRef } from './licence.helper.js'
+import LicenceHelper from './licence.helper.js'
 import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -20,7 +20,7 @@ import { generateRandomInteger, generateUUID } from '../../../app/lib/general.li
  *
  * @returns {Promise<module:LicenceDocumentHeaderModel>} The instance of the newly created record
  */
-export async function add(data = {}) {
+async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceDocumentHeaderModel.query()
@@ -38,11 +38,11 @@ export async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const defaults = {
     regimeEntityId: generateUUID(),
     naldId: generateRandomInteger(1000, 199999),
-    licenceRef: generateLicenceRef(),
+    licenceRef: LicenceHelper.generateLicenceRef(),
     metadata: _metadata()
   }
 
@@ -89,4 +89,9 @@ function _metadata() {
     AddressLine3: 'DEANERY ROAD',
     AddressLine4: ''
   }
+}
+
+export default {
+  add,
+  defaults
 }

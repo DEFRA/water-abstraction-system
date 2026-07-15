@@ -2,10 +2,10 @@
  * @module ReviewReturnHelper
  */
 
+import LicenceHelper from './licence.helper.js'
+import ReturnLogHelper from './return-log.helper.js'
+import ReturnRequirementHelper from './return-requirement.helper.js'
 import ReviewReturnModel from '../../../app/models/review-return.model.js'
-import { generateLicenceRef } from './licence.helper.js'
-import { generateReference } from './return-requirement.helper.js'
-import { generateReturnId } from './return-log.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -31,7 +31,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {Promise<module:ReviewReturnModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReviewReturnModel.query()
@@ -49,13 +49,19 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns data from the query
  */
-export function defaults(data = {}) {
-  const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
-  const returnReference = data.returnReference ? data.returnReference : generateReference()
+function defaults(data = {}) {
+  const licenceRef = data.licenceRef ? data.licenceRef : LicenceHelper.generateLicenceRef()
+  const returnReference = data.returnReference ? data.returnReference : ReturnRequirementHelper.generateReference()
 
   const defaults = {
     reviewLicenceId: generateUUID(),
-    returnId: generateReturnId(new Date('2022-04-01'), new Date('2023-03-31'), 1, licenceRef, returnReference),
+    returnId: ReturnLogHelper.generateReturnId(
+      new Date('2022-04-01'),
+      new Date('2023-03-31'),
+      1,
+      licenceRef,
+      returnReference
+    ),
     returnLogId: generateUUID(),
     returnReference,
     returnStatus: 'completed',
@@ -73,4 +79,9 @@ export function defaults(data = {}) {
     ...defaults,
     ...data
   }
+}
+
+export default {
+  add,
+  defaults
 }

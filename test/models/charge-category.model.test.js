@@ -1,6 +1,6 @@
 // Test helpers
-import * as ChargeCategoryHelper from '../support/helpers/charge-category.helper.js'
-import * as ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
+import ChargeCategoryHelper from '../support/helpers/charge-category.helper.js'
+import ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
 import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
 
 // Thing under test

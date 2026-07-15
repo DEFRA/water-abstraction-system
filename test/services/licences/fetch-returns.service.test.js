@@ -1,6 +1,6 @@
 // Test helpers
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
-import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 
 // Thing under test
 import FetchReturnsService from '../../../app/services/licences/fetch-returns.service.js'

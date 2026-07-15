@@ -2,8 +2,8 @@
 import http2 from 'node:http2'
 
 import * as RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
+import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
-import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
 import { generateNoticeReferenceCode, generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -125,7 +125,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
 
       recipients = [fixtureData.primaryUser]
 
-      const licenceRef = generateLicenceRef()
+      const licenceRef = LicenceHelper.generateLicenceRef()
       const referenceCode = generateNoticeReferenceCode('RINV-')
       const sessionId = generateUUID()
       const dueReturns = [

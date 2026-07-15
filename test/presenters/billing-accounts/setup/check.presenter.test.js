@@ -1,7 +1,7 @@
 // Test helpers
 import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 import * as CustomersFixture from '../../../support/fixtures/customers.fixture.js'
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test

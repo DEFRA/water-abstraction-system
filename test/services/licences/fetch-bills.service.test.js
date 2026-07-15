@@ -1,8 +1,8 @@
 // Test helpers
-import * as BillHelper from '../../support/helpers/bill.helper.js'
-import * as BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
-import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import BillHelper from '../../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test

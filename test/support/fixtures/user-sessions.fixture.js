@@ -1,5 +1,5 @@
 import * as UsersFixture from './users.fixture.js'
-import { generateLicenceRef } from '../helpers/licence.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -19,7 +19,7 @@ export function unregistrationSession() {
     licences: [
       {
         id: generateUUID(),
-        licenceRef: generateLicenceRef(),
+        licenceRef: LicenceHelper.generateLicenceRef(),
         licenceVersions: [
           {
             id: generateUUID(),
@@ -37,7 +37,7 @@ export function unregistrationSession() {
       },
       {
         id: generateUUID(),
-        licenceRef: generateLicenceRef(),
+        licenceRef: LicenceHelper.generateLicenceRef(),
         licenceVersions: [
           {
             id: generateUUID(),

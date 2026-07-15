@@ -1,7 +1,7 @@
 // Test helpers
-import * as ChargeCategoryHelper from '../../support/helpers/charge-category.helper.js'
-import * as ChargeElementHelper from '../../support/helpers/charge-element.helper.js'
-import * as ChargeReferenceHelper from '../../support/helpers/charge-reference.helper.js'
+import ChargeCategoryHelper from '../../support/helpers/charge-category.helper.js'
+import ChargeElementHelper from '../../support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../../support/helpers/charge-reference.helper.js'
 
 // Things we need to stub
 import * as CalculateAuthorisedAndBillableDaysService from '../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js'

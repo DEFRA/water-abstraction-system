@@ -1,7 +1,7 @@
 // Test helpers
-import * as LicenceVersionPurposeConditionHelper from '../support/helpers/licence-version-purpose-condition.helper.js'
-import * as LicenceVersionPurposeConditionTypeHelper from '../support/helpers/licence-version-purpose-condition-type.helper.js'
+import LicenceVersionPurposeConditionHelper from '../support/helpers/licence-version-purpose-condition.helper.js'
 import LicenceVersionPurposeConditionModel from '../../app/models/licence-version-purpose-condition.model.js'
+import LicenceVersionPurposeConditionTypeHelper from '../support/helpers/licence-version-purpose-condition-type.helper.js'
 
 // Thing under test
 import LicenceVersionPurposeConditionTypeModel from '../../app/models/licence-version-purpose-condition-type.model.js'

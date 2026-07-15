@@ -1,5 +1,5 @@
 // Test helpers
-import * as UserHelper from '../../support/helpers/user.helper.js'
+import UserHelper from '../../support/helpers/user.helper.js'
 
 // Thing under test
 import CheckEmailExistsDal from '../../../app/dal/users/check-email-exists.dal.js'

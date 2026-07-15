@@ -1,12 +1,12 @@
 // Test helpers
-import * as LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
-import * as LicenceVersionPurposePointHelper from '../support/helpers/licence-version-purpose-point.helper.js'
-import * as PointHelper from '../support/helpers/point.helper.js'
-import * as ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
-import * as ReturnRequirementPointHelper from '../support/helpers/return-requirement-point.helper.js'
-import * as SourceHelper from '../support/helpers/source.helper.js'
+import LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
 import LicenceVersionPurposeModel from '../../app/models/licence-version-purpose.model.js'
+import LicenceVersionPurposePointHelper from '../support/helpers/licence-version-purpose-point.helper.js'
+import PointHelper from '../support/helpers/point.helper.js'
+import ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
 import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
+import ReturnRequirementPointHelper from '../support/helpers/return-requirement-point.helper.js'
+import SourceHelper from '../support/helpers/source.helper.js'
 import SourceModel from '../../app/models/source.model.js'
 
 // Thing under test

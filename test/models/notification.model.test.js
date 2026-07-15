@@ -1,9 +1,9 @@
 // Test helpers
-import * as EventHelper from '../support/helpers/event.helper.js'
-import * as LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
-import * as NotificationHelper from '../support/helpers/notification.helper.js'
+import EventHelper from '../support/helpers/event.helper.js'
 import EventModel from '../../app/models/event.model.js'
+import LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
 import LicenceMonitoringStationModel from '../../app/models/licence-monitoring-station.model.js'
+import NotificationHelper from '../support/helpers/notification.helper.js'
 
 // Thing under test
 import NotificationModel from '../../app/models/notification.model.js'

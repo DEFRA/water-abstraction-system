@@ -1,10 +1,10 @@
 // Test helpers
-import * as CompanyHelper from '../../../support/helpers/company.helper.js'
-import * as LicenceDocumentHeaderHelper from '../../../support/helpers/licence-document-header.helper.js'
-import * as LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
-import * as LicenceEntityRoleHelper from '../../../support/helpers/licence-entity-role.helper.js'
-import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
-import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import CompanyHelper from '../../../support/helpers/company.helper.js'
+import LicenceDocumentHeaderHelper from '../../../support/helpers/licence-document-header.helper.js'
+import LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
+import LicenceEntityRoleHelper from '../../../support/helpers/licence-entity-role.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test

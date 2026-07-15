@@ -1,12 +1,12 @@
 // Test helpers
-import * as ChargeElementHelper from '../support/helpers/charge-element.helper.js'
-import * as ReviewChargeElementHelper from '../support/helpers/review-charge-element.helper.js'
-import * as ReviewChargeElementReturnHelper from '../support/helpers/review-charge-element-return.helper.js'
-import * as ReviewChargeReferenceHelper from '../support/helpers/review-charge-reference.helper.js'
-import * as ReviewReturnHelper from '../support/helpers/review-return.helper.js'
+import ChargeElementHelper from '../support/helpers/charge-element.helper.js'
 import ChargeElementModel from '../../app/models/charge-element.model.js'
+import ReviewChargeElementHelper from '../support/helpers/review-charge-element.helper.js'
+import ReviewChargeElementReturnHelper from '../support/helpers/review-charge-element-return.helper.js'
 import ReviewChargeElementReturnModel from '../../app/models/review-charge-element-return.model.js'
+import ReviewChargeReferenceHelper from '../support/helpers/review-charge-reference.helper.js'
 import ReviewChargeReferenceModel from '../../app/models/review-charge-reference.model.js'
+import ReviewReturnHelper from '../support/helpers/review-return.helper.js'
 import ReviewReturnModel from '../../app/models/review-return.model.js'
 
 // Thing under test

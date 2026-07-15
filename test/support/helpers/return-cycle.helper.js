@@ -24,7 +24,7 @@ import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib
  *
  * @returns {Promise<module:ReturnLogModel>} The instance of the newly created record
  */
-export function add(data = {}) {
+function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnCycleModel.query()
@@ -42,7 +42,7 @@ export function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-export function defaults(data = {}) {
+function defaults(data = {}) {
   const timestamp = timestampForPostgres()
 
   const defaults = {
@@ -77,7 +77,7 @@ export function defaults(data = {}) {
  *
  * @returns {module:ReturnCycleModel} The selected reference entry or one picked at random
  */
-export async function select(index = -1, summer = false) {
+async function select(index = -1, summer = false) {
   const returnCycles = await ReturnCycleModel.query().where('summer', summer).orderBy('startDate', 'DESC')
 
   if (index > -1) {
@@ -101,6 +101,13 @@ export async function select(index = -1, summer = false) {
  *
  * @returns {object} The selected reference entry or one picked at random
  */
-export async function selectByDate(date, summer = false) {
+async function selectByDate(date, summer = false) {
   return ReturnCycleModel.query().where('summer', summer).where('startDate', '<=', date).first()
+}
+
+export default {
+  add,
+  defaults,
+  select,
+  selectByDate
 }

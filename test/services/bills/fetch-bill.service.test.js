@@ -1,12 +1,12 @@
 // Test helpers
-import * as BillHelper from '../../support/helpers/bill.helper.js'
-import * as BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
-import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import * as RegionHelper from '../../support/helpers/region.helper.js'
-import * as TransactionHelper from '../../support/helpers/transaction.helper.js'
+import BillHelper from '../../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
 import BillModel from '../../../app/models/bill.model.js'
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
 import BillRunModel from '../../../app/models/bill-run.model.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
 import RegionModel from '../../../app/models/region.model.js'
+import TransactionHelper from '../../support/helpers/transaction.helper.js'
 
 // Thing under test
 import FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
