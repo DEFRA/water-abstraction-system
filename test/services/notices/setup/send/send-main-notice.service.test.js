@@ -4,11 +4,11 @@ import * as NotificationsFixture from '../../../../support/fixtures/notification
 
 // Things we need to stub
 import * as CheckNotificationStatusService from '../../../../../app/services/notifications/check-notification-status.service.js'
-import NotificationModel from '../../../../../app/models/notification.model.js'
-import NotifyConfig from '../../../../../config/notify.config.js'
 import * as SendEmailNotificationService from '../../../../../app/services/notices/setup/send/send-email-notification.service.js'
 import * as SendLetterNotificationService from '../../../../../app/services/notices/setup/send/send-letter-notification.service.js'
 import * as SendPaperReturnNotificationService from '../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js'
+import NotificationModel from '../../../../../app/models/notification.model.js'
+import NotifyConfig from '../../../../../config/notify.config.js'
 
 // Thing under test
 import SendMainNoticeService from '../../../../../app/services/notices/setup/send/send-main-notice.service.js'

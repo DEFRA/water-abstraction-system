@@ -1,6 +1,6 @@
-import { timestampForPostgres } from '../../app/lib/general.lib.js'
 import { db } from '../db.js'
 import { data as roles } from './data/roles.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
 export default async function seed() {
   for (const role of roles) {

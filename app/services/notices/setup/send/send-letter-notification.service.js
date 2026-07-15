@@ -3,8 +3,8 @@
  * @module SendLetterNotificationService
  */
 
-import { send } from '../../../../requests/notify/create-letter.request.js'
 import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
+import { send } from '../../../../requests/notify/create-letter.request.js'
 
 /**
  * Orchestrates sending a letter notification to Notify

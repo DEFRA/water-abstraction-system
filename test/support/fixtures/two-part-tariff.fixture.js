@@ -1,6 +1,6 @@
 import { generateAccountNumber } from '../helpers/billing-account.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Represents a bill run object with generated UUIDs for the ID and external ID

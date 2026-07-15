@@ -4,8 +4,8 @@
  */
 
 import FetchTimeLimitedLicencesService from './fetch-time-limited-licences.service.js'
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 import Workflow from '../../../models/workflow.model.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Puts SROC licences into workflow that have a related `purpose` that is due to expire in less than 50 days

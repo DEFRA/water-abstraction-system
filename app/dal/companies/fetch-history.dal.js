@@ -3,9 +3,8 @@
  * @module FetchHistoryDal
  */
 
-import LicenceModel from '../../models/licence.model.js'
-
 import DatabaseConfig from '../../../config/database.config.js'
+import LicenceModel from '../../models/licence.model.js'
 
 /**
  * Fetches the licences and their versions, related to a company, data needed for the view '/companies/{id}/history'

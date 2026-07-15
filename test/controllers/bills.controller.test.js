@@ -3,10 +3,10 @@ import http2 from 'node:http2'
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import Boom from '@hapi/boom'
 import * as RemoveBillService from '../../app/services/bills/remove-bill.service.js'
 import * as SubmitRemoveBillService from '../../app/services/bills/submit-remove-bill.service.js'
 import * as ViewBillService from '../../app/services/bills/view-bill.service.js'
+import Boom from '@hapi/boom'
 
 // For running our service
 import { init } from '../../app/server.js'

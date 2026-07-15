@@ -2,8 +2,8 @@
  * @module LicenceEntityHelper
  */
 
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence entity

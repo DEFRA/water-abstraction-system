@@ -1,7 +1,7 @@
 // Test helpers
-import http2 from 'node:http2'
-import BillRunModel from '../../../app/models/bill-run.model.js'
 import * as RegionHelper from '../../support/helpers/region.helper.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as ChargingModuleCreateBillRunRequest from '../../../app/requests/charging-module/create-bill-run.request.js'

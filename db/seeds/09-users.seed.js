@@ -1,12 +1,11 @@
 import bcrypt from 'bcryptjs'
 
+import DatabaseConfig from '../../config/database.config.js'
+import ServerConfig from '../../config/server.config.js'
+import UserModel from '../../app/models/user.model.js'
 import { db } from '../db.js'
 import { timestampForPostgres } from '../../app/lib/general.lib.js'
 import { data as users } from './data/users.js'
-import UserModel from '../../app/models/user.model.js'
-
-import DatabaseConfig from '../../config/database.config.js'
-import ServerConfig from '../../config/server.config.js'
 
 export default async function seed() {
   // These users are for use in our non-production environments only

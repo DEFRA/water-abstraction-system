@@ -4,9 +4,9 @@
  */
 
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import { flashNotification } from '../../../lib/general.lib.js'
 import UnitsPresenter from '../../../presenters/return-logs/setup/units.presenter.js'
 import UnitsValidator from '../../../validators/return-logs/setup/units.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
 import { returnUnits } from '../../../lib/static-lookups.lib.js'
 

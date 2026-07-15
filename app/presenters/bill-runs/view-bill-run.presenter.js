@@ -3,13 +3,13 @@
  * @module ViewBillRunPresenter
  */
 
-import { formatFinancialYear, formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
 import {
+  displayCreditDebitTotals,
   formatBillRunType,
   formatChargeScheme,
-  displayCreditDebitTotals,
   generateBillRunTitle
 } from '../billing.presenter.js'
+import { formatFinancialYear, formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
 
 /**
  * Formats bill run data ready for presenting in the view bill run page

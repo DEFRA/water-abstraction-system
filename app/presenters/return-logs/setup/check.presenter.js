@@ -5,9 +5,9 @@
 
 import Big from 'big.js'
 
-import { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } from '../../base.presenter.js'
 import { generateSummaryTableHeaders } from '../base-return-logs.presenter.js'
 import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
+import { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } from '../../base.presenter.js'
 
 const ABSTRACTION_VOLUMES_METHOD = 'abstractionVolumes'
 

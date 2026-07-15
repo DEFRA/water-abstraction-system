@@ -1,12 +1,12 @@
 // Test helpers
-import EventModel from '../../../../app/models/event.model.js'
 import * as GroupHelper from '../../../support/helpers/group.helper.js'
 import * as RoleHelper from '../../../support/helpers/role.helper.js'
 import * as UserGroupHelper from '../../../support/helpers/user-group.helper.js'
-import UserGroupModel from '../../../../app/models/user-group.model.js'
 import * as UserHelper from '../../../support/helpers/user.helper.js'
-import UserModel from '../../../../app/models/user.model.js'
 import * as UserRoleHelper from '../../../support/helpers/user-role.helper.js'
+import EventModel from '../../../../app/models/event.model.js'
+import UserGroupModel from '../../../../app/models/user-group.model.js'
+import UserModel from '../../../../app/models/user.model.js'
 import UserRoleModel from '../../../../app/models/user-role.model.js'
 
 // Things we need to stub

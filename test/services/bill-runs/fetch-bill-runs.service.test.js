@@ -1,7 +1,7 @@
 // Test helpers
 import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import DatabaseConfig from '../../../config/database.config.js'
 import * as RegionHelper from '../../support/helpers/region.helper.js'
+import DatabaseConfig from '../../../config/database.config.js'
 
 // Thing under test
 import FetchBillRunsService from '../../../app/services/bill-runs/fetch-bill-runs.service.js'

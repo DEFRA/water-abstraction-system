@@ -1,10 +1,9 @@
+import ServerConfig from '../../config/server.config.js'
+import UserRoleModel from '../../app/models/user-role.model.js'
 import { db } from '../db.js'
 import { data as roles } from './data/roles.js'
-import UserRoleModel from '../../app/models/user-role.model.js'
 import { data as userRoles } from './data/user-roles.js'
 import { data as users } from './data/users.js'
-
-import ServerConfig from '../../config/server.config.js'
 
 export default async function seed() {
   // These user groups relate to users that are only for use in our non-production environments

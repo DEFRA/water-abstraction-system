@@ -3,7 +3,6 @@
  * @module ReviewLicencePresenter
  */
 
-import { formatAbstractionPeriod, formatFinancialYear, formatLongDate, formatPurposes } from '../../base.presenter.js'
 import { generateBillRunTitle } from '../../billing.presenter.js'
 import {
   calculateTotalBillableReturns,
@@ -13,6 +12,7 @@ import {
   formatReturnStatus,
   formatReturnTotals
 } from './base-review.presenter.js'
+import { formatAbstractionPeriod, formatFinancialYear, formatLongDate, formatPurposes } from '../../base.presenter.js'
 
 /**
  * Formats the review licence data ready for presenting in the review licence page

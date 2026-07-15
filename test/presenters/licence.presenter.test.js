@@ -1,6 +1,6 @@
 // Test helpers
-import PointModel from '../../app/models/point.model.js'
 import * as ViewLicencesFixture from '../support/fixtures/view-licences.fixture.js'
+import PointModel from '../../app/models/point.model.js'
 import { generateUUID } from '../../app/lib/general.lib.js'
 import { licenceEnds } from '../support/fixtures/licence.fixture.js'
 

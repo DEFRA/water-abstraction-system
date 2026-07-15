@@ -4,9 +4,9 @@
  */
 
 import NotificationModel from '../../../../models/notification.model.js'
-import { futureDueDate } from '../../../../presenters/notices/base.presenter.js'
 import { compareDates } from '../../../../lib/dates.lib.js'
 import { compareStrings } from '../../../../lib/general.lib.js'
+import { futureDueDate } from '../../../../presenters/notices/base.presenter.js'
 
 /**
  * Fetches the licence refs and return logs IDs from failed returns invitation notifications to primary users

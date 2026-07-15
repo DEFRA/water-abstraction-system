@@ -4,7 +4,6 @@
  */
 
 import { dbConfig } from './db.js'
-
 import { wipe } from '../test/support/database.js'
 
 /**

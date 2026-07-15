@@ -2,9 +2,9 @@
  * @module PreviousBillingDataSeeder
  */
 
+import * as BillHelper from '../helpers/bill.helper.js'
 import * as BillLicenceHelper from '../helpers/bill-licence.helper.js'
 import * as BillRunHelper from '../helpers/bill-run.helper.js'
-import * as BillHelper from '../helpers/bill.helper.js'
 import * as BillingAccountHelper from '../helpers/billing-account.helper.js'
 import * as ChargeCategoryHelper from '../helpers/charge-category.helper.js'
 import * as LicenceHelper from '../helpers/licence.helper.js'

@@ -1,6 +1,6 @@
 // Test helpers
-import http2 from 'node:http2'
 import Hapi from '@hapi/hapi'
+import http2 from 'node:http2'
 
 // Test helpers
 import YarStub from '../support/stubs/yar.stub.js'

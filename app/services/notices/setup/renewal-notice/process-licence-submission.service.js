@@ -5,8 +5,8 @@
 
 import FetchRenewalLicenceDal from '../../../../dal/notices/setup/fetch-renewal-licence.dal.js'
 import LicenceRenewalValidator from '../../../../validators/notices/setup/renewal-notice/licence-renewal.validator.js'
-import { renewalNoticeDate } from '../../../../lib/dates.lib.js'
 import { formatValidationResult } from '../../../../presenters/base.presenter.js'
+import { renewalNoticeDate } from '../../../../lib/dates.lib.js'
 
 /**
  * Orchestrates validating the renewal notice types for the `/notices/setup/{sessionId}/licence` page

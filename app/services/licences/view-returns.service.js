@@ -4,8 +4,8 @@
  */
 
 import DetermineLicenceHasReturnVersionsService from './determine-licence-has-return-versions.service.js'
-import FetchReturnsService from './fetch-returns.service.js'
 import FetchLicenceService from '../../services/licences/fetch-licence.service.js'
+import FetchReturnsService from './fetch-returns.service.js'
 import PaginatorPresenter from '../../presenters/paginator.presenter.js'
 import ReturnsPresenter from '../../presenters/licences/returns.presenter.js'
 import { userRoles } from '../../presenters/licences/base-licences.presenter.js'

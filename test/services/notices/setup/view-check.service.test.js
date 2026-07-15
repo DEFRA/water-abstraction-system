@@ -1,6 +1,6 @@
 // Test helpers
-import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import * as NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub

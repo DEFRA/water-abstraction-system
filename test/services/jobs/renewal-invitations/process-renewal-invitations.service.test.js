@@ -1,6 +1,6 @@
 // Things we need to stub
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as SendRenewalInvitations from '../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ProcessRenewalInvitationsService from '../../../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js'

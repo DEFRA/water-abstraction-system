@@ -1,9 +1,9 @@
 // Test helpers
 import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 import LicenceModel from '../../../app/models/licence.model.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 import { yesterday } from '../../support/general.js'
-import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Thing under test
 import LicencesPresenter from '../../../app/presenters/companies/licences.presenter.js'

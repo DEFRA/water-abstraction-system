@@ -5,9 +5,9 @@
  */
 
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import { flashNotification } from '../../../lib/general.lib.js'
 import PaperReturnPresenter from '../../../presenters/notices/setup/paper-return.presenter.js'
 import PaperReturnValidator from '../../../validators/notices/setup/paper-return.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
 import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 

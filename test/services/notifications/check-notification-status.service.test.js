@@ -3,11 +3,11 @@ import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
+import * as ViewMessageDataRequest from '../../../app/requests/notify/view-message-data.request.js'
 import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
 import LicenceMonitoringStationModel from '../../../app/models/licence-monitoring-station.model.js'
 import NotificationModel from '../../../app/models/notification.model.js'
 import ReturnLogModel from '../../../app/models/return-log.model.js'
-import * as ViewMessageDataRequest from '../../../app/requests/notify/view-message-data.request.js'
 
 // Thing under test
 import CheckNotificationStatusService from '../../../app/services/notifications/check-notification-status.service.js'

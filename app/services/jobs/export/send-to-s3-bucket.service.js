@@ -3,14 +3,14 @@
  * @module SendToS3BucketService
  */
 
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import { promises as fsPromises } from 'node:fs'
-import { HttpsProxyAgent, HttpProxyAgent } from 'hpagent'
 import { NodeHttpHandler } from '@smithy/node-http-handler'
+import { promises as fsPromises } from 'node:fs'
 import path from 'node:path'
+import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
-import serverConfig from '../../../../config/server.config.js'
 import S3Config from '../../../../config/s3.config.js'
+import serverConfig from '../../../../config/server.config.js'
 
 /**
  * Sends a file to our AWS S3 Bucket using the filePath that it receives

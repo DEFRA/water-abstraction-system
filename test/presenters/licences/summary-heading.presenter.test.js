@@ -1,6 +1,6 @@
 // Test helpers
-import LicenceModel from '../../../app/models/licence.model.js'
 import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
+import LicenceModel from '../../../app/models/licence.model.js'
 import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
 
 // Thing under test

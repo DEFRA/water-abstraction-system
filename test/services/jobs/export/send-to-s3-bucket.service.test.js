@@ -1,5 +1,5 @@
 // Things we need to stub
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
 // Thing under test
 import SendToS3BucketService from '../../../../app/services/jobs/export/send-to-s3-bucket.service.js'

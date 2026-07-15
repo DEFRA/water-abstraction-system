@@ -2,9 +2,9 @@
  * @module ReturnSubmissionHelper
  */
 
-import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateReturnId } from './return-log.helper.js'
 import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
+import { generateReturnId } from './return-log.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new return submission

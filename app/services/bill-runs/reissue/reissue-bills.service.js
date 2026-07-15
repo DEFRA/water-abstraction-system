@@ -3,8 +3,8 @@
  * @module ReissueBillsService
  */
 
-import BillModel from '../../../models/bill.model.js'
 import BillLicenceModel from '../../../models/bill-licence.model.js'
+import BillModel from '../../../models/bill.model.js'
 import FetchBillsToBeReissuedService from './fetch-bills-to-be-reissued.service.js'
 import ReissueBillService from './reissue-bill.service.js'
 import TransactionModel from '../../../models/transaction.model.js'

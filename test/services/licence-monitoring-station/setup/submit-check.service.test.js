@@ -7,8 +7,8 @@ import { generateUUID } from '../../../../app/lib/general.lib.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitCheckService from '../../../../app/services/licence-monitoring-station/setup/submit-check.service.js'

@@ -1,10 +1,10 @@
 // Things we need to stub
 import * as AssignBillRunToLicencesService from '../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js'
-import BillRunModel from '../../../../app/models/bill-run.model.js'
 import * as GenerateBillRunService from '../../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
 import * as MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ProcessBillRunService from '../../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js'

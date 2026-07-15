@@ -1,6 +1,6 @@
 // Test helpers
-import { generateUUID } from '../../../../app/lib/general.lib.js'
 import LicenceEndDateChangeModel from '../../../../app/models/licence-end-date-change.model.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'

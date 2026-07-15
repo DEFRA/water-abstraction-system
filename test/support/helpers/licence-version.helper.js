@@ -2,8 +2,8 @@
  * @module LicenceVersionHelper
  */
 
-import { generateRandomInteger, generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 import LicenceVersionModel from '../../../app/models/licence-version.model.js'
+import { generateRandomInteger, generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence version

@@ -1,7 +1,7 @@
 // Test helpers
-import http2 from 'node:http2'
-import billingConfig from '../../../config/billing.config.js'
 import ExpandedError from '../../../app/errors/expanded.error.js'
+import billingConfig from '../../../config/billing.config.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as ChargingModuleViewBillRunStatusRequest from '../../../app/requests/charging-module/view-bill-run-status.request.js'

@@ -3,9 +3,9 @@
  * @module CheckReturnCycleService
  */
 
+import ReturnCycleModel from '../../../models/return-cycle.model.js'
 import { timestampForPostgres } from '../../../lib/general.lib.js'
 import { determineCycleEndDate, determineCycleStartDate } from '../../../lib/return-cycle-dates.lib.js'
-import ReturnCycleModel from '../../../models/return-cycle.model.js'
 
 /**
  * Check if the current summer or all year return cycle exists, and if not create it, then return the result

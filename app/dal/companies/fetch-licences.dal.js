@@ -3,9 +3,8 @@
  * @module FetchLicencesDal
  */
 
-import LicenceModel from '../../models/licence.model.js'
-
 import DatabaseConfig from '../../../config/database.config.js'
+import LicenceModel from '../../models/licence.model.js'
 
 /**
  * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'

@@ -4,8 +4,8 @@
  */
 
 import FetchLicenceUpdatesService from './fetch-licence-updates.service.js'
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 import Workflow from '../../../models/workflow.model.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Puts licences into workflow that have a licence version created in last 2 months and no existing workflow record

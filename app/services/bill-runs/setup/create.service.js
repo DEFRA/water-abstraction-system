@@ -3,9 +3,9 @@
  * @module CreateService
  */
 
-import { send } from '../../../requests/legacy/create-bill-run.request.js'
 import StartBillRunProcessService from '../start-bill-run-process.service.js'
 import { engineTriggers } from '../../../lib/static-lookups.lib.js'
+import { send } from '../../../requests/legacy/create-bill-run.request.js'
 
 /**
  * Used to create the new bill run at the end of the setup bill run journey

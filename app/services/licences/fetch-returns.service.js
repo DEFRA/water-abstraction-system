@@ -3,9 +3,8 @@
  * @module FetchReturnsService
  */
 
-import ReturnLogModel from '../../models/return-log.model.js'
-
 import DatabaseConfig from '../../../config/database.config.js'
+import ReturnLogModel from '../../models/return-log.model.js'
 
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page

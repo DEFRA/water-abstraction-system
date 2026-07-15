@@ -3,6 +3,7 @@
  * @module UsersController
  */
 
+import FeatureFlagsConfig from '../../config/feature-flags.config.js'
 import FetchLegacyIdDal from '../dal/users/fetch-legacy-id.dal.js'
 import IndexUsersService from '../services/users/index-users.service.js'
 import SubmitIndexUsersService from '../services/users/submit-index-users.service.js'
@@ -15,8 +16,6 @@ import ViewInternalCommunicationsService from '../services/users/internal/view-c
 import ViewInternalDetailsService from '../services/users/internal/view-details.service.js'
 import ViewNotificationService from '../services/users/view-notification.service.js'
 import ViewProfileDetailsService from '../services/users/view-profile-details.service.js'
-
-import FeatureFlagsConfig from '../../config/feature-flags.config.js'
 
 export async function index(request, h) {
   const {

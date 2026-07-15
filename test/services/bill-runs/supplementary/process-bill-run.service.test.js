@@ -2,14 +2,14 @@
 import BillRunError from '../../../../app/errors/bill-run.error.js'
 
 // Things we need to stub
-import BillRunModel from '../../../../app/models/bill-run.model.js'
 import * as ChargingModuleGenerateBillRunRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
 import * as FetchChargeVersionsService from '../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
 import * as LegacyRefreshBillRunRequest from '../../../../app/requests/legacy/refresh-bill-run.request.js'
 import * as ProcessBillingPeriodService from '../../../../app/services/bill-runs/supplementary/process-billing-period.service.js'
 import * as UnflagUnbilledSupplementaryLicencesService from '../../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ProcessBillRunService from '../../../../app/services/bill-runs/supplementary/process-bill-run.service.js'

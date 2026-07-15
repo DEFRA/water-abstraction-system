@@ -3,8 +3,8 @@
  * @module GenerateReturnLogsByLicenceQueryService
  */
 
-import { timestampForPostgres } from '../../../../lib/general.lib.js'
 import { NoticeType } from '../../../../lib/static-lookups.lib.js'
+import { timestampForPostgres } from '../../../../lib/general.lib.js'
 
 /**
  * Generates the query and bindings for selecting the return logs by licence that determine which recipients to fetch

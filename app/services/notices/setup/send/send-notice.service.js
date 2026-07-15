@@ -6,9 +6,8 @@
 import SendAlternateNoticeService from './send-alternate-notice.service.js'
 import SendMainNoticeService from './send-main-notice.service.js'
 import UpdateNoticeService from '../../update-notice.service.js'
-
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../../lib/general.lib.js'
 import { NoticeType, NoticeTypes } from '../../../../lib/static-lookups.lib.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates sending the first main notice to Notify, then checking if an alternate needs creating and sending

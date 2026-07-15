@@ -1,12 +1,12 @@
 // Test helpers
 import * as PrimaryPurposeHelper from '../support/helpers/primary-purpose.helper.js'
-import PrimaryPurposeModel from '../../app/models/primary-purpose.model.js'
 import * as PurposeHelper from '../support/helpers/purpose.helper.js'
-import PurposeModel from '../../app/models/purpose.model.js'
 import * as ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
-import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
 import * as ReturnRequirementPurposeHelper from '../support/helpers/return-requirement-purpose.helper.js'
 import * as SecondaryPurposeHelper from '../support/helpers/secondary-purpose.helper.js'
+import PrimaryPurposeModel from '../../app/models/primary-purpose.model.js'
+import PurposeModel from '../../app/models/purpose.model.js'
+import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
 import SecondaryPurposeModel from '../../app/models/secondary-purpose.model.js'
 
 // Thing under test

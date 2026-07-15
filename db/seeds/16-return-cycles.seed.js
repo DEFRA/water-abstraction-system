@@ -1,10 +1,10 @@
-import { generateUUID, timestampForPostgres } from '../../app/lib/general.lib.js'
+import ReturnCycleModel from '../../app/models/return-cycle.model.js'
 import {
   determineCycleDueDate,
   determineCycleEndDate,
   determineCycleStartDate
 } from '../../app/lib/return-cycle-dates.lib.js'
-import ReturnCycleModel from '../../app/models/return-cycle.model.js'
+import { generateUUID, timestampForPostgres } from '../../app/lib/general.lib.js'
 
 export default async function seed() {
   const currentYear = new Date().getFullYear()

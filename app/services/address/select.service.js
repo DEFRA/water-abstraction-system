@@ -5,8 +5,8 @@
  */
 
 import FetchSessionDal from '../../dal/fetch-session.dal.js'
-import { send } from '../../requests/address-facade/lookup-postcode.request.js'
 import SelectPresenter from '../../presenters/address/select.presenter.js'
+import { send } from '../../requests/address-facade/lookup-postcode.request.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/select` page

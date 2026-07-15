@@ -4,8 +4,8 @@
  */
 
 import { compareStrings } from '../../lib/general.lib.js'
-import { formatLongDate, formatAbstractionDate } from '../base.presenter.js'
 import { formatAbstractionAmounts } from './base-licences.presenter.js'
+import { formatAbstractionDate, formatLongDate } from '../base.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/summary` page

@@ -5,13 +5,13 @@
 
 import BillRunError from '../../../errors/bill-run.error.js'
 import BillRunModel from '../../../models/bill-run.model.js'
-import { send as generateBillRun } from '../../../requests/charging-module/generate-bill-run.request.js'
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
 import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
-import { send as refreshBillRun } from '../../../requests/legacy/refresh-bill-run.request.js'
 import ProcessBillingPeriodService from './process-billing-period.service.js'
 import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-supplementary-licences.service.js'
+import { send as generateBillRun } from '../../../requests/charging-module/generate-bill-run.request.js'
+import { send as refreshBillRun } from '../../../requests/legacy/refresh-bill-run.request.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Generates a supplementary two-part tariff bill run

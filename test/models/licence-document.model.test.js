@@ -1,9 +1,9 @@
 // Test helpers
-import * as LicenceHelper from '../support/helpers/licence.helper.js'
-import LicenceModel from '../../app/models/licence.model.js'
 import * as LicenceDocumentHelper from '../support/helpers/licence-document.helper.js'
 import * as LicenceDocumentRoleHelper from '../support/helpers/licence-document-role.helper.js'
+import * as LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceDocumentRoleModel from '../../app/models/licence-document-role.model.js'
+import LicenceModel from '../../app/models/licence.model.js'
 
 // Thing under test
 import LicenceDocumentModel from '../../app/models/licence-document.model.js'

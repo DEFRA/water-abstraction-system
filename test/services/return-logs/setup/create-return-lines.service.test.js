@@ -1,6 +1,6 @@
 // Test helpers
-import { generateUUID, timestampForPostgres } from '../../../../app/lib/general.lib.js'
 import ReturnSubmissionLineModel from '../../../../app/models/return-submission-line.model.js'
+import { generateUUID, timestampForPostgres } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
 import CreateReturnLinesService from '../../../../app/services/return-logs/setup/create-return-lines.service.js'

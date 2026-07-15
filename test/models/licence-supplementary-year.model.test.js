@@ -1,9 +1,9 @@
 // Test helpers
 import * as BillRunHelper from '../support/helpers/bill-run.helper.js'
-import BillRunModel from '../../app/models/bill-run.model.js'
 import * as LicenceHelper from '../support/helpers/licence.helper.js'
-import LicenceModel from '../../app/models/licence.model.js'
 import * as LicenceSupplementaryYearHelper from '../support/helpers/licence-supplementary-year.helper.js'
+import BillRunModel from '../../app/models/bill-run.model.js'
+import LicenceModel from '../../app/models/licence.model.js'
 
 // Thing under test
 import LicenceSupplementaryYearModel from '../../app/models/licence-supplementary-year.model.js'

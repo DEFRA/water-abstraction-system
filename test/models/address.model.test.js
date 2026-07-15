@@ -1,12 +1,12 @@
 // Test helpers
 import * as AddressHelper from '../support/helpers/address.helper.js'
 import * as BillingAccountAddressHelper from '../support/helpers/billing-account-address.helper.js'
-import BillingAccountAddressModel from '../../app/models/billing-account-address.model.js'
 import * as CompanyAddressHelper from '../support/helpers/company-address.helper.js'
-import CompanyAddressModel from '../../app/models/company-address.model.js'
 import * as LicenceDocumentRoleHelper from '../support/helpers/licence-document-role.helper.js'
-import LicenceDocumentRoleModel from '../../app/models/licence-document-role.model.js'
 import * as LicenceVersionHelper from '../support/helpers/licence-version.helper.js'
+import BillingAccountAddressModel from '../../app/models/billing-account-address.model.js'
+import CompanyAddressModel from '../../app/models/company-address.model.js'
+import LicenceDocumentRoleModel from '../../app/models/licence-document-role.model.js'
 import LicenceVersionModel from '../../app/models/licence-version.model.js'
 
 // Thing under test

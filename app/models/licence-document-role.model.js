@@ -5,8 +5,8 @@
 
 import { Model } from 'objection'
 
-import BaseModel from './base.model.js'
 import AddressModel from './address.model.js'
+import BaseModel from './base.model.js'
 import CompanyModel from './company.model.js'
 import ContactModel from './contact.model.js'
 import LicenceDocumentModel from './licence-document.model.js'

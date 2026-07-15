@@ -3,9 +3,8 @@
  * @module TokenRequest
  */
 
-import { postRequest } from '../base.request.js'
-
 import config from '../../../config/charging-module.config.js'
+import { postRequest } from '../base.request.js'
 
 /**
  * Connects with the Charging Module API's Cognito service to getRequest a JWT for authentication

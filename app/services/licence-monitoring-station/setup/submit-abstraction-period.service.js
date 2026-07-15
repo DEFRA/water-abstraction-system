@@ -4,11 +4,10 @@
  * @module SubmitAbstractionPeriodService
  */
 
-import { formatValidationResult } from '../../../presenters/base.presenter.js'
-
 import AbstractionPeriodPresenter from '../../../presenters/licence-monitoring-station/setup/abstraction-period.presenter.js'
 import AbstractionPeriodValidator from '../../../validators/abstraction-period.validator.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/abstraction-period`

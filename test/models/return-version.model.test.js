@@ -1,13 +1,13 @@
 // Test helpers
 import * as LicenceHelper from '../support/helpers/licence.helper.js'
-import LicenceModel from '../../app/models/licence.model.js'
 import * as ModLogHelper from '../support/helpers/mod-log.helper.js'
-import ModLogModel from '../../app/models/mod-log.model.js'
 import * as ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
-import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
 import * as ReturnVersionHelper from '../support/helpers/return-version.helper.js'
-import UserModel from '../../app/models/user.model.js'
 import * as UserHelper from '../support/helpers/user.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import ModLogModel from '../../app/models/mod-log.model.js'
+import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
+import UserModel from '../../app/models/user.model.js'
 import { generateRandomInteger } from '../../app/lib/general.lib.js'
 import { randomRegionCode } from '../support/general.js'
 

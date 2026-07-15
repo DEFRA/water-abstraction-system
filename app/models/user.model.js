@@ -3,12 +3,10 @@
  * @module UserModel
  */
 
-import { hashSync } from 'bcryptjs'
 import { Model } from 'objection'
+import { hashSync } from 'bcryptjs'
 
 import BaseModel from './base.model.js'
-import { db } from '../../db/db.js'
-import { userPermissions } from '../lib/static-lookups.lib.js'
 import ChargeVersionNoteModel from './charge-version-note.model.js'
 import CompanyContactModel from './company-contact.model.js'
 import GroupModel from './group.model.js'
@@ -19,6 +17,8 @@ import ReturnVersionModel from './return-version.model.js'
 import RoleModel from './role.model.js'
 import UserGroupModel from './user-group.model.js'
 import UserRoleModel from './user-role.model.js'
+import { db } from '../../db/db.js'
+import { userPermissions } from '../lib/static-lookups.lib.js'
 
 export default class UserModel extends BaseModel {
   static get tableName() {

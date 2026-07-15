@@ -3,12 +3,11 @@
  * @module SubmitReturnsCycleService
  */
 
-import { formatValidationResult } from '../../../presenters/base.presenter.js'
-
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import { flashNotification } from '../../../lib/general.lib.js'
 import ReturnsCyclePresenter from '../../../presenters/return-versions/setup/returns-cycle.presenter.js'
 import ReturnsCycleValidator from '../../../validators/return-versions/setup/returns-cycle.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/returns-cycle` page

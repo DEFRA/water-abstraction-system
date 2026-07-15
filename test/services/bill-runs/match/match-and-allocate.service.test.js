@@ -2,11 +2,11 @@
 import * as AllocateReturnsToChargeElementService from '../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js'
 import * as DetermineLicenceIssuesService from '../../../../app/services/bill-runs/match/determine-licence-issues.service.js'
 import * as FetchLicencesService from '../../../../app/services/bill-runs/match/fetch-licences.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as MatchReturnsToChargeElementService from '../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js'
+import * as PersistAllocatedLicenceToResultsService from '../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
 import * as PrepareChargeVersionService from '../../../../app/services/bill-runs/match/prepare-charge-version.service.js'
 import * as PrepareReturnLogsService from '../../../../app/services/bill-runs/match/prepare-return-logs.service.js'
-import * as PersistAllocatedLicenceToResultsService from '../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'

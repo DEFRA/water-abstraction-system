@@ -2,9 +2,9 @@
  * @module ReturnRequirementPointHelper
  */
 
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 import * as PointHelper from './point.helper.js'
 import ReturnRequirementPointModel from '../../../app/models/return-requirement-point.model.js'
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new return requirement point

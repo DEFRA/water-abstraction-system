@@ -3,8 +3,8 @@
  * @module NoAnnualBillRunPresenter
  */
 
-import { formatBillRunType, formatChargeScheme } from '../../../billing.presenter.js'
 import { checkPageBackLink } from './base-check.presenter.js'
+import { formatBillRunType, formatChargeScheme } from '../../../billing.presenter.js'
 
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page when the financial year could not be determined

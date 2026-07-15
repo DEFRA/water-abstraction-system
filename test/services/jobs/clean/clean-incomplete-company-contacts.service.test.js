@@ -1,9 +1,9 @@
 // Test helpers
+import * as CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
+import * as ContactHelper from '../../../support/helpers/contact.helper.js'
 import * as LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
 import * as LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'
-import * as CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
 import CompanyContactModel from '../../../../app/models/company-contact.model.js'
-import * as ContactHelper from '../../../support/helpers/contact.helper.js'
 
 // Things we need to stub
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'

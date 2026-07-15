@@ -2,11 +2,11 @@
  * @module ReviewReturnHelper
  */
 
-import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef } from './licence.helper.js'
-import { generateReturnId } from './return-log.helper.js'
-import { generateReference } from './return-requirement.helper.js'
 import ReviewReturnModel from '../../../app/models/review-return.model.js'
+import { generateLicenceRef } from './licence.helper.js'
+import { generateReference } from './return-requirement.helper.js'
+import { generateReturnId } from './return-log.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new review return for 2pt matching

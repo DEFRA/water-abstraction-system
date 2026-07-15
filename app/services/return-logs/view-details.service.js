@@ -4,8 +4,8 @@
  * @module ViewDetailsService
  */
 
-import FetchReturnLogDetailsService from './fetch-return-log-details.service.js'
 import DetailsPresenter from '../../presenters/return-logs/details.presenter.js'
+import FetchReturnLogDetailsService from './fetch-return-log-details.service.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/return-logs/{id}/details' page

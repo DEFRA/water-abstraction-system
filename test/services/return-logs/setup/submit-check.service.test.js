@@ -1,11 +1,11 @@
 // Test helpers
 import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
 import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import ReturnLogModel from '../../../../app/models/return-log.model.js'
 import * as ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import * as UserHelper from '../../../support/helpers/user.helper.js'
+import ReturnLogModel from '../../../../app/models/return-log.model.js'
 import SessionModel from '../../../../app/models/session.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import * as UserHelper from '../../../support/helpers/user.helper.js'
 
 // Things we need to stub
 import * as CreateReturnLinesService from '../../../../app/services/return-logs/setup/create-return-lines.service.js'

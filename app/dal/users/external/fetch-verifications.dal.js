@@ -3,9 +3,8 @@
  * @module FetchVerificationsDal
  */
 
-import UserVerificationModel from '../../../models/user-verification.model.js'
-
 import DatabaseConfig from '../../../../config/database.config.js'
+import UserVerificationModel from '../../../models/user-verification.model.js'
 
 /**
  * Fetches verifications for an external user on the `/users/external/{id}/verifications` page

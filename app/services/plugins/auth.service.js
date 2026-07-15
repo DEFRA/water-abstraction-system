@@ -4,7 +4,6 @@
  */
 
 import FetchUserRolesAndGroupsService from '../idm/fetch-user-roles-and-groups.service.js'
-
 import featureFlagsConfig from '../../../config/feature-flags.config.js'
 
 /**

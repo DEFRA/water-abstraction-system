@@ -2,8 +2,8 @@
  * @module LicenceDocumentHelper
  */
 
-import { generateLicenceRef } from './licence.helper.js'
 import LicenceDocumentModel from '../../../app/models/licence-document.model.js'
+import { generateLicenceRef } from './licence.helper.js'
 
 /**
  * Add a new licence document

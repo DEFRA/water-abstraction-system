@@ -4,8 +4,8 @@
  */
 
 import { checkPageBackLink } from './base-check.presenter.js'
-import { formatBillRunType, formatChargeScheme } from '../../../billing.presenter.js'
 import { engineTriggers } from '../../../../lib/static-lookups.lib.js'
+import { formatBillRunType, formatChargeScheme } from '../../../billing.presenter.js'
 
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page when the bill run is allowed to be created

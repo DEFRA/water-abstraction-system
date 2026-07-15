@@ -2,11 +2,11 @@
  * @module UserGroupHelper
  */
 
-import { generateUUID } from '../../../app/lib/general.lib.js'
-import { selectRandomEntry } from '../general.js'
-import { generateUserId } from './user.helper.js'
 import * as GroupHelper from './group.helper.js'
 import UserGroupModel from '../../../app/models/user-group.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUserId } from './user.helper.js'
+import { selectRandomEntry } from '../general.js'
 import { data as userGroups } from '../../../db/seeds/data/user-groups.js'
 
 export const data = userGroups

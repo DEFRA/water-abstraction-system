@@ -3,16 +3,16 @@
  * @module ProcessBillingFlagService
  */
 
-import DetermineBillingYearsService from './determine-billing-years.service.js'
 import DetermineBillLicenceFlagsService from './determine-bill-licence-flags.service.js'
+import DetermineBillingYearsService from './determine-billing-years.service.js'
 import DetermineChargeVersionFlagsService from './determine-charge-version-flags.service.js'
 import DetermineExistingBillRunYearsService from './determine-existing-bill-run-years.service.js'
 import DetermineImportedLicenceFlagsService from './determine-imported-licence-flags.service.js'
 import DetermineLicenceFlagsService from './determine-licence-flags.service.js'
 import DetermineReturnLogFlagsService from './determine-return-log-flags.service.js'
 import DetermineWorkflowFlagsService from './determine-workflow-flags.service.js'
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 import PersistSupplementaryBillingFlagsService from './persist-supplementary-billing-flags.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates flagging a licence for supplementary billing

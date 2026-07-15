@@ -6,8 +6,6 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
-import { compareDates } from '../lib/dates.lib.js'
-import { timestampForPostgres, today } from '../lib/general.lib.js'
 import BillLicenceModel from './bill-licence.model.js'
 import ChargeVersionModel from './charge-version.model.js'
 import LicenceAgreementModel from './licence-agreement.model.js'
@@ -25,6 +23,8 @@ import ReturnLogModel from './return-log.model.js'
 import ReturnVersionModel from './return-version.model.js'
 import ReviewLicenceModel from './review-licence.model.js'
 import WorkflowModel from './workflow.model.js'
+import { compareDates } from '../lib/dates.lib.js'
+import { timestampForPostgres, today } from '../lib/general.lib.js'
 
 export default class LicenceModel extends BaseModel {
   static get tableName() {

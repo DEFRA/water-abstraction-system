@@ -4,8 +4,8 @@
  * @module PreparePaperReturnService
  */
 
-import { send } from '../../../requests/gotenberg/generate-paper-return.request.js'
 import PreparePaperReturnPresenter from '../../../presenters/notices/setup/prepare-paper-return.presenter.js'
+import { send } from '../../../requests/gotenberg/generate-paper-return.request.js'
 
 /**
  * Orchestrates fetching and presenting the data for the paper return

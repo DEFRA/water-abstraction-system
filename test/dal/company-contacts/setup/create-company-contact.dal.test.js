@@ -1,7 +1,7 @@
 // Test helpers
-import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import * as CompanyHelper from '../../../support/helpers/company.helper.js'
 import * as LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'
+import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test

@@ -5,11 +5,11 @@
  */
 
 import FetchSessionDal from '../../dal/fetch-session.dal.js'
-import { send as lookupPostcode } from '../../requests/address-facade/lookup-postcode.request.js'
-import { send as lookupUprn } from '../../requests/address-facade/lookup-uprn.request.js'
 import SelectPresenter from '../../presenters/address/select.presenter.js'
 import SelectValidator from '../../validators/address/select.validator.js'
 import { formatValidationResult } from '../../presenters/base.presenter.js'
+import { send as lookupPostcode } from '../../requests/address-facade/lookup-postcode.request.js'
+import { send as lookupUprn } from '../../requests/address-facade/lookup-uprn.request.js'
 
 /**
  * Orchestrates validating the data for `address/{sessionId}/select` page

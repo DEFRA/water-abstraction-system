@@ -3,10 +3,9 @@
  * @module FetchViewBillingAccountService
  */
 
-import BillingAccountModel from '../../models/billing-account.model.js'
 import BillModel from '../../models/bill.model.js'
 import BillRunModel from '../../models/bill-run.model.js'
-
+import BillingAccountModel from '../../models/billing-account.model.js'
 import DatabaseConfig from '../../../config/database.config.js'
 
 /**

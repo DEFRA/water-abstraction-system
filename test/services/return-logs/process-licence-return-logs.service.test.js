@@ -5,8 +5,8 @@ import * as ReturnRequirementsFixture from '../../support/fixtures/return-requir
 // Things we need to stub
 import * as CreateReturnLogsService from '../../../app/services/return-logs/create-return-logs.service.js'
 import * as FetchLicenceReturnRequirementsService from '../../../app/services/return-logs/fetch-licence-return-requirements.service.js'
-import ReturnCycleModel from '../../../app/models/return-cycle.model.js'
 import * as VoidLicenceReturnLogsService from '../../../app/services/return-logs/void-licence-return-logs.service.js'
+import ReturnCycleModel from '../../../app/models/return-cycle.model.js'
 
 // Thing under test
 import ProcessLicenceReturnLogsService from '../../../app/services/return-logs/process-licence-return-logs.service.js'

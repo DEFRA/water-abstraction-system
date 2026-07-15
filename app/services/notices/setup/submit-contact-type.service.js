@@ -9,8 +9,8 @@ import crypto from 'node:crypto'
 import ContactTypePresenter from '../../../presenters/notices/setup/contact-type.presenter.js'
 import ContactTypeValidator from '../../../validators/notices/setup/contact-type.validator.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import { formatValidationResult } from '../../../presenters/base.presenter.js'
 import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/contact-type` page

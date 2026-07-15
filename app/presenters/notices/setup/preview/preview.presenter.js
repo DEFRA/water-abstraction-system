@@ -3,9 +3,8 @@
  * @module PreviewPresenter
  */
 
-import { send } from '../../../../requests/notify/generate-preview.request.js'
-
 import { NoticeType } from '../../../../lib/static-lookups.lib.js'
+import { send } from '../../../../requests/notify/generate-preview.request.js'
 import { sentenceCase } from '../../../base.presenter.js'
 
 /**

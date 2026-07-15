@@ -3,8 +3,8 @@
  */
 
 import ChargeVersionModel from '../../../app/models/charge-version.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from './licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new charge version

@@ -2,8 +2,8 @@
 import * as BillingAccountAddressHelper from '../../../support/helpers/billing-account-address.helper.js'
 import * as CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
 import * as ContactHelper from '../../../support/helpers/contact.helper.js'
-import ContactModel from '../../../../app/models/contact.model.js'
 import * as LicenceDocumentRoleHelper from '../../../support/helpers/licence-document-role.helper.js'
+import ContactModel from '../../../../app/models/contact.model.js'
 
 // Things we need to stub
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'

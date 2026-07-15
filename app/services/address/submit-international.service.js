@@ -4,9 +4,9 @@
  * @module SubmitInternationalService
  */
 
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
 import InternationalPresenter from '../../presenters/address/international.presenter.js'
 import InternationalValidator from '../../validators/address/international.validator.js'
-import FetchSessionDal from '../../dal/fetch-session.dal.js'
 import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**

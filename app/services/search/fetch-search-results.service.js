@@ -4,7 +4,6 @@
  */
 
 import DatabaseConfig from '../../../config/database.config.js'
-
 import { db } from '../../../db/db.js'
 
 const BILLING_ACCOUNT_SQL = `

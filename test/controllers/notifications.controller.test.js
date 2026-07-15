@@ -1,9 +1,9 @@
 // Test helpers
-import http2 from 'node:http2'
 import * as NoticesFixture from '../support/fixtures/notices.fixture.js'
 import * as NotificationsFixture from '../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../support/helpers/licence.helper.js'
+import { generateUUID } from '../../app/lib/general.lib.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as DownloadNotificationService from '../../app/services/notifications/download-notification.service.js'

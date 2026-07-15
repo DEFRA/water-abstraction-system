@@ -1,6 +1,6 @@
 import LicenceModel from '../../../app/models/licence.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Generates an instance of `LicenceModel` with an ID and a licence reference

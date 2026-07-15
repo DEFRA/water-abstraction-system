@@ -3,8 +3,8 @@
  * @module ViewDetailsService
  */
 
-import FetchUserDetailsDal from '../../../dal/users/external/fetch-user-details.dal.js'
 import DetailsPresenter from '../../../presenters/users/external/details.presenter.js'
+import FetchUserDetailsDal from '../../../dal/users/external/fetch-user-details.dal.js'
 
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/details` page

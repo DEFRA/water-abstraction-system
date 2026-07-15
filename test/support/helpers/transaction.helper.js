@@ -3,8 +3,8 @@
  */
 
 import * as ChargeCategoryHelper from './charge-category.helper.js'
-import { determineCurrentFinancialYear, generateUUID } from '../../../app/lib/general.lib.js'
 import TransactionModel from '../../../app/models/transaction.model.js'
+import { determineCurrentFinancialYear, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new transaction

@@ -3,8 +3,8 @@
  */
 
 import LicenceVersionConditionTypeModel from '../../../app/models/licence-version-purpose-condition-type.model.js'
-import { selectRandomEntry } from '../general.js'
 import { data as licenceVersionPurposeConditionTypes } from '../../../db/seeds/data/licence-version-purpose-condition-types.js'
+import { selectRandomEntry } from '../general.js'
 
 export const data = licenceVersionPurposeConditionTypes
 

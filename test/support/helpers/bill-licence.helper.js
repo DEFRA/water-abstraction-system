@@ -2,9 +2,9 @@
  * @module BillLicenceHelper
  */
 
+import * as LicenceHelper from './licence.helper.js'
 import BillLicenceModel from '../../../app/models/bill-licence.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
-import * as LicenceHelper from './licence.helper.js'
 
 /**
  * Add a new bill licence

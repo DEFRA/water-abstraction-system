@@ -1,6 +1,6 @@
 // Test helpers
-import http2 from 'node:http2'
 import ExpandedError from '../../../app/errors/expanded.error.js'
+import http2 from 'node:http2'
 
 // Things we need to stub
 import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'

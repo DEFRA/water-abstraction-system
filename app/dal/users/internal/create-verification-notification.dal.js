@@ -4,7 +4,6 @@
  */
 
 import NotificationModel from '../../../models/notification.model.js'
-
 import ServerConfig from '../../../../config/server.config.js'
 
 /**

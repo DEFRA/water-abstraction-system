@@ -3,8 +3,8 @@
  * @module RemoveBillPresenter
  */
 
-import { formatFinancialYear, formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
 import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
+import { formatFinancialYear, formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
 
 /**
  * Formats data for the confirm remove a bill page
