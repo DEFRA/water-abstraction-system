@@ -3,9 +3,8 @@
  * @module ViewHealthRequest
  */
 
-import { getRequest } from '../base.request.js'
-
 import addressFacadeConfig from '../../../config/address-facade.config.js'
+import { getRequest } from '../base.request.js'
 
 /**
  * View the health of the Address Facade

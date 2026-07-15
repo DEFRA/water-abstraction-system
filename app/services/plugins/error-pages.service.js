@@ -1,5 +1,6 @@
-import SessionNotFoundError from '../../errors/session-not-found.error.js'
 import http2 from 'node:http2'
+
+import SessionNotFoundError from '../../errors/session-not-found.error.js'
 
 /**
  * Used by the `ErrorPagesPlugin` to process unhandled exceptions in the service

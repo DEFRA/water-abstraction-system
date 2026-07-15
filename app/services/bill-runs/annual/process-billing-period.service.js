@@ -7,14 +7,13 @@ import BillLicenceModel from '../../../models/bill-licence.model.js'
 import BillModel from '../../../models/bill.model.js'
 import BillRunError from '../../../errors/bill-run.error.js'
 import BillRunModel from '../../../models/bill-run.model.js'
+import BillingConfig from '../../../../config/billing.config.js'
 import DetermineChargePeriodService from '../determine-charge-period.service.js'
 import DetermineMinimumChargeService from '../determine-minimum-charge.service.js'
 import GenerateTransactionsService from '../generate-transactions.service.js'
 import SendTransactionsService from '../send-transactions.service.js'
 import TransactionModel from '../../../models/transaction.model.js'
 import { generateUUID } from '../../../lib/general.lib.js'
-
-import BillingConfig from '../../../../config/billing.config.js'
 
 /**
  * Process the billing accounts for a given billing period and creates their annual bills

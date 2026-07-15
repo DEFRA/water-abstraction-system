@@ -3,13 +3,12 @@
  * @module LegacyRequest
  */
 
+import legacyConfig from '../../config/legacy.config.js'
 import {
   deleteRequest as baseDeleteRequest,
   getRequest as baseGetRequest,
   postRequest as basePostRequest
 } from './base.request.js'
-
-import legacyConfig from '../../config/legacy.config.js'
 
 const services = {
   // REPO-NAME - PM2 NAME

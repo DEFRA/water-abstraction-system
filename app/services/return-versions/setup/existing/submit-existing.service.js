@@ -3,12 +3,11 @@
  * @module SubmitExistingService
  */
 
-import { formatValidationResult } from '../../../../presenters/base.presenter.js'
-
 import ExistingPresenter from '../../../../presenters/return-versions/setup/existing.presenter.js'
 import ExistingValidator from '../../../../validators/return-versions/setup/existing.validator.js'
 import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 import GenerateFromExistingRequirementsService from './generate-from-existing-requirements.service.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/existing` page

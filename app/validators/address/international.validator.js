@@ -5,6 +5,7 @@
  */
 
 import Joi from 'joi'
+
 import { addressLineValidator } from './addressLine.validator.js'
 import { countries } from '../../lib/static-lookups.lib.js'
 

@@ -6,7 +6,6 @@
 import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
 import GenerateReturnLogsByIdQueryService from './generate-return-logs-by-id-query.service.js'
 import { NoticeType } from '../../../../lib/static-lookups.lib.js'
-
 import { db } from '../../../../../db/db.js'
 
 /**

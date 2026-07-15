@@ -5,9 +5,8 @@
 
 import { ref } from 'objection'
 
-import EventModel from '../../models/event.model.js'
-
 import DatabaseConfig from '../../../config/database.config.js'
+import EventModel from '../../models/event.model.js'
 
 /**
  * Fetches the notices for the `/notices` page

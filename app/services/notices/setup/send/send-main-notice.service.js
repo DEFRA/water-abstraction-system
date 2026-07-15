@@ -8,10 +8,8 @@ import NotificationModel from '../../../../../app/models/notification.model.js'
 import SendEmailNotificationService from './send-email-notification.service.js'
 import SendLetterNotificationService from './send-letter-notification.service.js'
 import SendPaperReturnNotificationService from './send-paper-return-notification.service.js'
-
-import { pause } from '../../../../lib/general.lib.js'
-
 import notifyConfig from '../../../../../config/notify.config.js'
+import { pause } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates sending the first main notice to Notify, recording the results, and checking the status when finished

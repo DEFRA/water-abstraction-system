@@ -61,6 +61,18 @@ export default [
       'sort-imports': [
         'error',
         { memberSyntaxSortOrder: ['all', 'single', 'multiple', 'none'], allowSeparatedGroups: true }
+      ],
+      // Group external imports (Node builtins and node_modules packages) before internal (relative path) imports,
+      // with a blank line between the two groups
+      'import/order': [
+        'error',
+        {
+          groups: [
+            ['builtin', 'external'],
+            ['internal', 'parent', 'sibling', 'index']
+          ],
+          'newlines-between': 'always'
+        }
       ]
     },
     settings: {
@@ -103,6 +115,22 @@ export default [
     files: ['eslint.config.js'],
     rules: {
       'import/extensions': 'off'
+    }
+  },
+  // Test files use blank lines to separate "Test helpers" / "Things we need to stub" / "Thing under test" blocks,
+  // a different convention to external-vs-internal grouping, so exempt them from import/order
+  {
+    files: ['templates/*.test.js', 'test/**/*'],
+    rules: {
+      'import/order': 'off'
+    }
+  },
+  // This file deliberately separates its two imports with a large explanatory comment, which import/order treats as
+  // a disallowed blank line within the group
+  {
+    files: ['knexfile.application.js'],
+    rules: {
+      'import/order': 'off'
     }
   },
   // Adds prettier ESLint rules. It automatically sets up eslint-config-prettier, which turns off any rules declared

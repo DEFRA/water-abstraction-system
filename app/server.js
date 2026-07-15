@@ -1,4 +1,7 @@
+import Cookie from '@hapi/cookie'
 import Hapi from '@hapi/hapi'
+import Inert from '@hapi/inert'
+import Scooter from '@hapi/scooter'
 
 import AirbrakePlugin from './plugins/airbrake.plugin.js'
 import AuthPlugin from './plugins/auth.plugin.js'
@@ -16,15 +19,10 @@ import PayloadCleanerPlugin from './plugins/payload-cleaner.plugin.js'
 import RequestNotifierPlugin from './plugins/request-notifier.plugin.js'
 import RespTokenCachePlugin from './plugins/resp-token-cache.plugin.js'
 import RouterPlugin from './plugins/router.plugin.js'
+import ServerConfig from '../config/server.config.js'
 import StopPlugin from './plugins/stop.plugin.js'
 import ViewsPlugin from './plugins/views.plugin.js'
 import YarPlugin from './plugins/yar.plugin.js'
-
-import Cookie from '@hapi/cookie'
-import Inert from '@hapi/inert'
-import Scooter from '@hapi/scooter'
-
-import ServerConfig from '../config/server.config.js'
 
 /**
  * Initialises the Hapi server without starting it

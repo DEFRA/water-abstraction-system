@@ -7,7 +7,6 @@ import Big from 'big.js'
 
 import { convertFromCubicMetres } from '../../lib/general.lib.js'
 import { formatLongDate, formatNumber, formatQuantityToUnit, sentenceCase } from '../base.presenter.js'
-
 import { returnUnits, unitNames } from '../../lib/static-lookups.lib.js'
 
 /**

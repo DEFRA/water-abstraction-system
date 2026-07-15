@@ -4,7 +4,6 @@
  */
 
 import { getRequest as baseGetRequest } from './base.request.js'
-
 import companiesHouseConfig from '../../config/companies-house.config.js'
 
 /**

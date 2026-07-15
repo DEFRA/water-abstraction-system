@@ -6,7 +6,6 @@
 import Boom from '@hapi/boom'
 
 import AuthService from '../services/plugins/auth.service.js'
-
 import AuthenticationConfig from '../../config/authentication.config.js'
 import NotifyConfig from '../../config/notify.config.js'
 

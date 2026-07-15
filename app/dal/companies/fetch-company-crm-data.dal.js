@@ -3,9 +3,8 @@
  * @module FetchCompanyCRMDataDal
  */
 
-import { db } from '../../../db/db.js'
-
 import DatabaseConfig from '../../../config/database.config.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetches the contacts data needed for the view '/companies/{id}/contacts'

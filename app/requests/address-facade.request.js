@@ -3,9 +3,8 @@
  * @module AddressFacadeRequest
  */
 
-import { getRequest as baseGetRequest } from './base.request.js'
-
 import addressFacadeConfig from '../../config/address-facade.config.js'
+import { getRequest as baseGetRequest } from './base.request.js'
 
 /**
  * Sends a GET request to the Address Facade

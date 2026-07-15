@@ -5,9 +5,8 @@
 
 import { ref } from 'objection'
 
-import NotificationModel from '../../models/notification.model.js'
-
 import DatabaseConfig from '../../../config/database.config.js'
+import NotificationModel from '../../models/notification.model.js'
 
 /**
  * Fetches data needed for the view '/system/return-logs/{id}/communications' page

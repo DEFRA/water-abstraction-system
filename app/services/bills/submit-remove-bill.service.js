@@ -4,7 +4,6 @@
  */
 
 import BillModel from '../../models/bill.model.js'
-
 import ProcessBillingFlagService from '../licences/supplementary/process-billing-flag.service.js'
 import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-bill-run.service.js'
 import { send } from '../../requests/legacy/delete-bill.request.js'

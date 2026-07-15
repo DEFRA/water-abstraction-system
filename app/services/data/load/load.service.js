@@ -3,10 +3,6 @@
  * @module LoadService
  */
 
-import { db } from '../../../../db/db.js'
-
-import ExpandedError from '../../../errors/expanded.error.js'
-
 import * as AddressHelper from '../../../../test/support/helpers/address.helper.js'
 import * as BillHelper from '../../../../test/support/helpers/bill.helper.js'
 import * as BillLicenceHelper from '../../../../test/support/helpers/bill-licence.helper.js'
@@ -64,6 +60,8 @@ import * as UserGroupHelper from '../../../../test/support/helpers/user-group.he
 import * as UserHelper from '../../../../test/support/helpers/user.helper.js'
 import * as UserRoleHelper from '../../../../test/support/helpers/user-role.helper.js'
 import * as WorkflowHelper from '../../../../test/support/helpers/workflow.helper.js'
+import ExpandedError from '../../../errors/expanded.error.js'
+import { db } from '../../../../db/db.js'
 
 // The entities defined in the payload need to match the properties of this object else you'll get an error. The loader
 // uses the matched value to determine which helper to use to 'load' the entity instance, and whether we can flag it

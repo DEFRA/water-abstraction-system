@@ -3,11 +3,12 @@
  * @module DataController
  */
 
+import http2 from 'node:http2'
+
 import DatesService from '../services/data/dates/dates.service.js'
 import LoadService from '../services/data/load/load.service.js'
 import SeedService from '../services/data/seed/seed.service.js'
 import TearDownService from '../services/data/tear-down/tear-down.service.js'
-import http2 from 'node:http2'
 
 const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 

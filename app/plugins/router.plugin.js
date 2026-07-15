@@ -10,6 +10,7 @@
  */
 
 import AddressRoutes from '../routes/address.routes.js'
+import AirbrakeConfig from '../../config/airbrake.config.js'
 import AssetRoutes from '../routes/assets.routes.js'
 import BillLicences from '../routes/bill-licences.routes.js'
 import BillRoutes from '../routes/bills.routes.js'
@@ -46,8 +47,6 @@ import RootRoutes from '../routes/root.routes.js'
 import SearchRoutes from '../routes/search.routes.js'
 import UsersRoutes from '../routes/users.routes.js'
 import UsersSetupRoutes from '../routes/users-setup.routes.js'
-
-import AirbrakeConfig from '../../config/airbrake.config.js'
 
 const routes = [
   ...RootRoutes,

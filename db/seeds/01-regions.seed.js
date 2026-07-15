@@ -1,10 +1,8 @@
-import { db } from '../db.js'
-
 import RegionModel from '../../app/models/region.model.js'
+import ServerConfig from '../../config/server.config.js'
+import { db } from '../db.js'
 import { data as regions } from './data/regions.js'
 import { timestampForPostgres } from '../../app/lib/general.lib.js'
-
-import ServerConfig from '../../config/server.config.js'
 
 /**
  * Seed the regions reference data

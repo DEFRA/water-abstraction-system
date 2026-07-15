@@ -14,7 +14,6 @@ import path from 'node:path'
 
 import FeatureFlagsConfig from '../../config/feature-flags.config.js'
 import MarkdownFilter from '../views/filters/markdown.filter.js'
-
 import ServerConfig from '../../config/server.config.js'
 
 /**

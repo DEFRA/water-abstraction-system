@@ -4,9 +4,8 @@
  */
 
 import NotificationModel from '../../../models/notification.model.js'
-import { today } from '../../../lib/general.lib.js'
-
 import notifyConfig from '../../../../config/notify.config.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Fetches pending notifications awaiting a status update from Notify

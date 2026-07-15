@@ -4,10 +4,11 @@
  */
 
 import Boom from '@hapi/boom'
+import http2 from 'node:http2'
+
 import ChangeAddressService from '../services/billing-accounts/change-address.service.js'
 import ChangeAddressValidator from '../validators/change-address.validator.js'
 import ViewBillingAccountService from '../services/billing-accounts/view-billing-account.service.js'
-import http2 from 'node:http2'
 
 const { HTTP_STATUS_CREATED } = http2.constants
 
