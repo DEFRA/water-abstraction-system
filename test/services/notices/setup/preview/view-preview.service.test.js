@@ -13,6 +13,7 @@ import * as GeneratePreviewRequest from '../../../../../app/requests/notify/gene
 
 // Thing under test
 import ViewPreviewService from '../../../../../app/services/notices/setup/preview/view-preview.service.js'
+
 const { HTTP_STATUS_OK } = http2.constants
 
 describe('Notices - Setup - Preview - View Preview service', () => {

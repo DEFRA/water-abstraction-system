@@ -5,6 +5,7 @@ import * as BaseRequest from '../../../app/requests/base.request.js'
 
 // Thing under test
 import * as TokenRequest from '../../../app/requests/resp/token.request.js'
+
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('ReSP API Token request', () => {

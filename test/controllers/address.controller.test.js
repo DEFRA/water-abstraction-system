@@ -14,6 +14,7 @@ import * as SubmitSelectAddressService from '../../app/services/address/submit-s
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address controller', () => {

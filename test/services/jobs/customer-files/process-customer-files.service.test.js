@@ -9,6 +9,7 @@ import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ProcessCustomerFilesService from '../../../../app/services/jobs/customer-files/process-customer-files.service.js'
+
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Jobs - Customer Files - Process Customer Files service', () => {

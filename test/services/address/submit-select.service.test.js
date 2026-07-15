@@ -10,6 +10,7 @@ import * as LookupUPRNRequest from '../../../app/requests/address-facade/lookup-
 
 // Thing under test
 import SubmitSelectService from '../../../app/services/address/submit-select.service.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address - Submit Select Service', () => {

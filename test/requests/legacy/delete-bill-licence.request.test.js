@@ -5,6 +5,7 @@ import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
 import * as DeleteBillLicenceRequest from '../../../app/requests/legacy/delete-bill-licence.request.js'
+
 const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Legacy Delete Bill Licence request', () => {

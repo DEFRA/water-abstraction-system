@@ -10,6 +10,7 @@ import * as ViewDetailsService from '../../app/services/return-logs/view-details
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Return Logs controller', () => {

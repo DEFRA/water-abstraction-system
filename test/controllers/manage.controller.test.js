@@ -6,6 +6,7 @@ import * as ViewManageService from '../../app/services/manage/view-manage.servic
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_OK } = http2.constants
 
 describe('Manage controller', () => {

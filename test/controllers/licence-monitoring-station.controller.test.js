@@ -8,6 +8,7 @@ import * as SubmitRemoveService from '../../app/services/licence-monitoring-stat
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 const licenceMonitoringStationId = 'ab4aff2b-cb01-4070-b896-948d80d61f96'

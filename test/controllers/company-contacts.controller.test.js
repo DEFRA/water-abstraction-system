@@ -11,6 +11,7 @@ import * as ViewRemoveCompanyContactService from '../../app/services/company-con
 // For running our service
 import { init } from '../../app/server.js'
 import { postRequestOptions } from '../support/general.js'
+
 const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 
 describe('Company Contacts controller', () => {

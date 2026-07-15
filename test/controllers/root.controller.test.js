@@ -3,6 +3,7 @@ import http2 from 'node:http2'
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_OK } = http2.constants
 
 describe('Root controller: GET /', () => {

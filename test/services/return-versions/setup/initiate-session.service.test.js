@@ -7,6 +7,7 @@ import * as FetchLicenceService from '../../../../app/services/return-versions/s
 
 // Thing under test
 import InitiateSessionService from '../../../../app/services/return-versions/setup/initiate-session.service.js'
+
 const { HTTP_STATUS_NOT_FOUND } = http2.constants
 
 describe('Return Versions - Setup - Initiate Session service', () => {

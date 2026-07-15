@@ -12,6 +12,7 @@ import util from 'node:util'
 
 // Thing under test
 import InfoService from '../../../app/services/health/info.service.js'
+
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Health - Info service', () => {
