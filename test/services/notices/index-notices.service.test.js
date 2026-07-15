@@ -3,10 +3,12 @@ import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things to stub
-import * as FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'
+import FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'
 
 // Thing under test
 import IndexNoticesService from '../../../app/services/notices/index-notices.service.js'
+
+vi.mock('../../../app/services/notices/fetch-notices.service.js')
 
 describe('Notices - Index Notices service', () => {
   let auth
@@ -33,7 +35,7 @@ describe('Notices - Index Notices service', () => {
       const results = NoticesFixture.mapToFetchNoticesResult([NoticesFixture.alertReduce()])
 
       fetchResults = { results, total: 1 }
-      vi.spyOn(FetchNoticesService, 'default').mockResolvedValue(fetchResults)
+      FetchNoticesService.mockResolvedValue(fetchResults)
     })
 
     it('returns page data for the view', async () => {
@@ -83,7 +85,7 @@ describe('Notices - Index Notices service', () => {
     beforeEach(() => {
       // For the purposes of these tests the results don't matter
       fetchResults = { results: [], total: 0 }
-      vi.spyOn(FetchNoticesService, 'default').mockResolvedValue(fetchResults)
+      FetchNoticesService.mockResolvedValue(fetchResults)
     })
 
     describe('and none were ever set or they were cleared', () => {
