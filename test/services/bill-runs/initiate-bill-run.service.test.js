@@ -9,6 +9,7 @@ import * as CreateBillRunEventService from '../../../app/services/bill-runs/crea
 
 // Thing under test
 import InitiateBillRunService from '../../../app/services/bill-runs/initiate-bill-run.service.js'
+
 const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } = http2.constants
 
 describe('Initiate Bill Run service', () => {

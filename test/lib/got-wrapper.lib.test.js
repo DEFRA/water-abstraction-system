@@ -5,6 +5,7 @@ import Nock from 'nock'
 
 // Thing under test
 import { gotWrapper } from '../../app/lib/got-wrapper.lib.js'
+
 const { HTTP_STATUS_CREATED, HTTP_STATUS_OK } = http2.constants
 
 describe('GotWrapperLib', () => {

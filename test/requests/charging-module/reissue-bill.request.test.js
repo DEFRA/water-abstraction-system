@@ -5,6 +5,7 @@ import * as ChargingModuleRequest from '../../../app/requests/charging-module.re
 
 // Thing under test
 import * as ReissueBillRequest from '../../../app/requests/charging-module/reissue-bill.request.js'
+
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Charging Module Reissue Bill request', () => {

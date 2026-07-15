@@ -5,6 +5,7 @@ import * as SearchCompaniesRequest from '../../../../app/requests/companies-hous
 
 // Thing under test
 import FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Billing Accounts - Setup - Fetch Companies service', () => {

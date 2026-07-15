@@ -8,6 +8,7 @@ import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ErrorPagesService from '../../../app/services/plugins/error-pages.service.js'
+
 const {
   HTTP_STATUS_FORBIDDEN,
   HTTP_STATUS_INTERNAL_SERVER_ERROR,

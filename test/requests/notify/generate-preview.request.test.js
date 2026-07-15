@@ -7,6 +7,7 @@ import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
 import * as GeneratePreviewRequest from '../../../app/requests/notify/generate-preview.request.js'
+
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 
 describe('Notify - Generate Preview request', () => {

@@ -11,6 +11,7 @@ import * as FetchReviewChargeReferenceService from '../../../../app/services/bil
 
 // Thing under test
 import PreviewService from '../../../../app/services/bill-runs/review/preview.service.js'
+
 const { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } = http2.constants
 
 describe('Bill Runs Review - Preview service', () => {

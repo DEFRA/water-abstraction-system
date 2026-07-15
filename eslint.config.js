@@ -73,7 +73,9 @@ export default [
           ],
           'newlines-between': 'always'
         }
-      ]
+      ],
+      // Require a blank line after the last import statement, separating imports from the rest of the file
+      'import/newline-after-import': 'error'
     },
     settings: {
       jsdoc: {

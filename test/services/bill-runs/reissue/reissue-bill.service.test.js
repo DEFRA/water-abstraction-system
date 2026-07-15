@@ -12,6 +12,7 @@ import * as ChargingModuleViewBillRunStatusRequest from '../../../../app/request
 
 // Thing under test
 import ReissueBillService from '../../../../app/services/bill-runs/reissue/reissue-bill.service.js'
+
 const { HTTP_STATUS_CONFLICT } = http2.constants
 
 const ORIGINAL_BILLING_BATCH_EXTERNAL_ID = generateUUID()

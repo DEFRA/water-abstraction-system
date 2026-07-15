@@ -5,6 +5,7 @@ import * as ChargingModuleRequest from '../../../app/requests/charging-module.re
 
 // Thing under test
 import * as DeleteBillRunRequest from '../../../app/requests/charging-module/delete-bill-run.request.js'
+
 const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Charging Module Delete Bill Run request', () => {

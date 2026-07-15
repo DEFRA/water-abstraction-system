@@ -47,6 +47,7 @@ import * as ViewSelectRecipientsService from '../../app/services/notices/setup/v
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Notices Setup controller', () => {

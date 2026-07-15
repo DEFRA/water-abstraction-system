@@ -8,6 +8,7 @@ import * as ChargingModuleViewBillRunStatusRequest from '../../../app/requests/c
 
 // Thing under test
 import * as ChargingModuleWaitForStatusRequest from '../../../app/requests/charging-module/wait-for-status.request.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Charging Module Wait For Status request', () => {

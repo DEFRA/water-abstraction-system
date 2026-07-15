@@ -8,6 +8,7 @@ import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const {
   HTTP_STATUS_BAD_REQUEST,
   HTTP_STATUS_FORBIDDEN,

@@ -24,6 +24,7 @@ import * as ViewRestoreService from '../../app/services/company-contacts/setup/v
 import { init } from '../../app/server.js'
 
 import { postRequestOptions } from '../support/general.js'
+
 const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 
 describe('Company Contacts Setup controller', () => {

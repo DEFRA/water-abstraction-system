@@ -13,6 +13,7 @@ import * as ProcessTimeLimitedLicencesService from '../../app/services/jobs/time
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT } = http2.constants
 
 describe('Jobs controller', () => {

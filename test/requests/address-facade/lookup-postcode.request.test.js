@@ -5,6 +5,7 @@ import * as AddressFacadeRequest from '../../../app/requests/address-facade.requ
 
 // Thing under test
 import * as LookupPostcodeRequest from '../../../app/requests/address-facade/lookup-postcode.request.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address Facade - Lookup Postcode request', () => {

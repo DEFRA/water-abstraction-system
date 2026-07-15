@@ -6,6 +6,7 @@ import addressFacadeConfig from '../../../config/address-facade.config.js'
 
 // Thing under test
 import * as ViewHealthRequest from '../../../app/requests/address-facade/view-health.request.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address Facade - View Health request', () => {

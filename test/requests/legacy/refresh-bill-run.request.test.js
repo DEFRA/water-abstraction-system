@@ -5,6 +5,7 @@ import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
 import * as RefreshBillRunRequest from '../../../app/requests/legacy/refresh-bill-run.request.js'
+
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Legacy Refresh Bill Run request', () => {

@@ -5,6 +5,7 @@ import * as AddressFacadeRequest from '../../../app/requests/address-facade.requ
 
 // Thing under test
 import * as LookupUPRNRequest from '../../../app/requests/address-facade/lookup-uprn.request.js'
+
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address Facade - Lookup UPRN request', () => {

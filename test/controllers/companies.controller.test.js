@@ -12,6 +12,7 @@ import * as ViewLicencesService from '../../app/services/companies/view-licences
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_OK, HTTP_STATUS_NOT_FOUND } = http2.constants
 
 describe('Companies controller', () => {

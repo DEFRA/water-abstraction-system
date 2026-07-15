@@ -8,6 +8,7 @@ import * as WaitForStatusRequest from '../../../app/requests/charging-module/wai
 
 // Thing under test
 import * as SendBillRunRequest from '../../../app/requests/charging-module/send-bill-run.request.js'
+
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 describe('Charging Module Send Bill Run request', () => {

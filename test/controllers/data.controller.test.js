@@ -8,6 +8,7 @@ import * as TearDownService from '../../app/services/data/tear-down/tear-down.se
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 describe('Data controller', () => {

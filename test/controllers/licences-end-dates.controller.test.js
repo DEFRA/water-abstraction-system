@@ -7,6 +7,7 @@ import * as ProcessLicenceEndDateChangesService from '../../app/services/licence
 
 // For running our service
 import { init } from '../../app/server.js'
+
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 describe('Licences End Dates controller', () => {
