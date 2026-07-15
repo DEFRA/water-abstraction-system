@@ -1,5 +1,4 @@
 // Test framework dependencies
-
 import BillModel from '../../../../app/models/bill.model.js'
 import BillRunModel from '../../../../app/models/bill-run.model.js'
 import ExpandedError from '../../../../app/errors/expanded.error.js'

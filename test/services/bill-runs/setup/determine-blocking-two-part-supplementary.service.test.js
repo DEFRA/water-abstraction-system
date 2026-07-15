@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 

@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as CompressSchemaFolderService from '../../../../app/services/jobs/export/compress-schema-folder.service.js'
 import * as DeleteFilesService from '../../../../app/services/jobs/export/delete-files.service.js'

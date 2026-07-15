@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
 

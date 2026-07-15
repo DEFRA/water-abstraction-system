@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import { db } from '../../../../db/db.js'
 

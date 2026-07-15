@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { data as chargeCategories } from '../../../../db/seeds/data/charge-categories.js'
 import { db } from '../../../../db/db.js'

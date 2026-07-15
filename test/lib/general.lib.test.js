@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as TransactionHelper from '../support/helpers/transaction.helper.js'
 import YarStub from '../support/stubs/yar.stub.js'

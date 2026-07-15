@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
 import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'

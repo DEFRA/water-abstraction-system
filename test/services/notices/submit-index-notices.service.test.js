@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
 

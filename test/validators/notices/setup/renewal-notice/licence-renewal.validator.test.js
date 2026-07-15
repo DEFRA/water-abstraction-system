@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Helpers
 import LicenceModel from '../../../../../app/models/licence.model.js'
 import { generateUUID } from '../../../../../app/lib/general.lib.js'

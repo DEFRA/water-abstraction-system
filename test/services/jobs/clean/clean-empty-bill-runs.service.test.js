@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import BillRunModel from '../../../../app/models/bill-run.model.js'
 

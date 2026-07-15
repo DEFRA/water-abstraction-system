@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { determineCurrentFinancialYear, generateUUID } from '../../../../app/lib/general.lib.js'
 

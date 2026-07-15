@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../support/helpers/licence.helper.js'

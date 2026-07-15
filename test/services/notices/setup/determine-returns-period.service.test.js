@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Thing under test
 import DetermineReturnsPeriodService from '../../../../app/services/notices/setup/determine-returns-period.service.js'
 

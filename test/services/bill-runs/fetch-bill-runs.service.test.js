@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
 import DatabaseConfig from '../../../config/database.config.js'

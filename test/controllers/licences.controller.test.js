@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import Boom from '@hapi/boom'
 import http2 from 'node:http2'

@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 import LicenceEndDateChangeModel from '../../../../app/models/licence-end-date-change.model.js'

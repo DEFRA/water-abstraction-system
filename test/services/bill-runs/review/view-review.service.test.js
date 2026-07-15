@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as RegionHelper from '../../../support/helpers/region.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'

@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import PointModel from '../../../../app/models/point.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'

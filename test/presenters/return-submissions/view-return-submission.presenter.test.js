@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Thing under test
 import ViewReturnSubmissionPresenter from '../../../app/presenters/return-submissions/view-return-submission.presenter.js'
 

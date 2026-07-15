@@ -1,5 +1,4 @@
 // Test framework dependencies
-
 import Nock from 'nock'
 
 // Test helpers

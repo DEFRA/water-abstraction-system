@@ -1,5 +1,4 @@
 // Test framework dependencies
-
 import * as Hoek from '@hapi/hoek'
 
 // Thing under test

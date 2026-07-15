@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
 import YarStub from '../../support/stubs/yar.stub.js'

@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import BillRunModel from '../../../../app/models/bill-run.model.js'
 

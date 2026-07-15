@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as AddressHelper from '../../../support/helpers/address.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'

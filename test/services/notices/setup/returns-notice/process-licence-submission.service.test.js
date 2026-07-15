@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as CheckLicenceExistsDal from '../../../../../app/dal/notices/setup/check-licence-exists.dal.js'
 import * as FetchDueReturnsForLicenceService from '../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'

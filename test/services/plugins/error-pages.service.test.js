@@ -1,7 +1,5 @@
 import http2 from 'node:http2'
 
-// Test framework dependencies
-
 // Test helpers
 import SessionNotFoundError from '../../../app/errors/session-not-found.error.js'
 

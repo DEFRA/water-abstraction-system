@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as CleanEmptyBillRunsService from '../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js'
 import * as CleanEmptyVoidReturnLogsService from '../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js'

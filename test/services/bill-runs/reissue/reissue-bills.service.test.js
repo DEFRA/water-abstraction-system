@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as BillHelper from '../../../support/helpers/bill.helper.js'
 import BillModel from '../../../../app/models/bill.model.js'

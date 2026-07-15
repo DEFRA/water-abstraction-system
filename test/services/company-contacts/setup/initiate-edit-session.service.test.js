@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'

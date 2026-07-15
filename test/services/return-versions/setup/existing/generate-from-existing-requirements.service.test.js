@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as FetchExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js'
 

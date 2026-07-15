@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as FetchBillLicenceService from '../../../app/services/bill-licences/fetch-bill-licence.service.js'
 import * as ViewBillLicencePresenter from '../../../app/presenters/bill-licences/view-bill-licence.presenter.js'

@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import EventModel from '../../../../app/models/event.model.js'
 import UserGroupModel from '../../../../app/models/user-group.model.js'

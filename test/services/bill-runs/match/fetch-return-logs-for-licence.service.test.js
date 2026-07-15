@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 import * as ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'

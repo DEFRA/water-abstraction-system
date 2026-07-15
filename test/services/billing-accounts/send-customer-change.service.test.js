@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import ExpandedError from '../../../app/errors/expanded.error.js'
 

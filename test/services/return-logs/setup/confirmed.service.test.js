@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as FetchReturnLogService from '../../../../app/services/return-logs/setup/fetch-return-log.service.js'
 

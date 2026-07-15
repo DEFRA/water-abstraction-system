@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Thing under test
 import DetermineBillingYearsService from '../../../../app/services/licences/supplementary/determine-billing-years.service.js'
 

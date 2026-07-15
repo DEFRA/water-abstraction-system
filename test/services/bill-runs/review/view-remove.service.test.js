@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 

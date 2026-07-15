@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import YarStub from '../support/stubs/yar.stub.js'
 

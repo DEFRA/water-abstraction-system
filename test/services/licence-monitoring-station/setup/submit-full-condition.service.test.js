@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as LicenceVersionPurposeConditionHelper from '../../../support/helpers/licence-version-purpose-condition.helper.js'
 import * as LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'

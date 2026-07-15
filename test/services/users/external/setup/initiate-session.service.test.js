@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import SessionModel from '../../../../../app/models/session.model.js'
 import * as UsersFixture from '../../../../support/fixtures/users.fixture.js'

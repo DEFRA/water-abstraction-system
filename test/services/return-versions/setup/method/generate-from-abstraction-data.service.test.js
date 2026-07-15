@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import LicenceModel from '../../../../../app/models/licence.model.js'
 import LicenceVersionPurposeModel from '../../../../../app/models/licence-version-purpose.model.js'

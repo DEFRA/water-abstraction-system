@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as FetchLicencesService from '../../../../app/services/licences/end-dates/fetch-licences.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'

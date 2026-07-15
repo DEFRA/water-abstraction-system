@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as AddressHelper from '../../../support/helpers/address.helper.js'
 import * as BillingAccountAddressHelper from '../../../support/helpers/billing-account-address.helper.js'
