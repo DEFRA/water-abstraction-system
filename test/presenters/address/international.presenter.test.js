@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import { countryLookup } from '../../../app/presenters/address/base-address.presenter.js'
 

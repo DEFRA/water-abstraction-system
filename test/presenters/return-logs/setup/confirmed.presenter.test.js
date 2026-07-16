@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import ConfirmedPresenter from '../../../../app/presenters/return-logs/setup/confirmed.presenter.js'
 

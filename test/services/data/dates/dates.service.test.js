@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import DatesService from '../../../../app/services/data/dates/dates.service.js'
 

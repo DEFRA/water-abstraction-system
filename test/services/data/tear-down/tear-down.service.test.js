@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import * as CrmSchemaService from '../../../../app/services/data/tear-down/crm-schema.service.js'
 import * as IdmSchemaService from '../../../../app/services/data/tear-down/idm-schema.service.js'

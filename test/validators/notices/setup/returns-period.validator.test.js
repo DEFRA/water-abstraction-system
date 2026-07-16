@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import ReturnsPeriodValidator from '../../../../app/validators/notices/setup/returns-periods.validator.js'
 

@@ -1,3 +1,6 @@
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import NoticeTypeValidator from '../../../../app/validators/notices/setup/notice-type.validator.js'
 

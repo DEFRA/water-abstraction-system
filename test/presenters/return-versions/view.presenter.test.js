@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import ContactModel from '../../../app/models/contact.model.js'
 import LicenceModel from '../../../app/models/licence.model.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import AddressHelper from '../../support/helpers/address.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'

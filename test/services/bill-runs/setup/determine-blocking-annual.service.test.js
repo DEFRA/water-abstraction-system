@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
 import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'

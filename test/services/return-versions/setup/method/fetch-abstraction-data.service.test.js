@@ -1,3 +1,6 @@
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as LicenceAbstractionDataSeeder from '../../../../support/seeders/licence-abstraction-data.seeder.js'
 

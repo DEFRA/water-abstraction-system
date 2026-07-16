@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import * as UsersFixture from '../../../../support/fixtures/users.fixture.js'
 import SessionModel from '../../../../../app/models/session.model.js'

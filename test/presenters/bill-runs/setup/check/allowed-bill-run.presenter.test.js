@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import { engineTriggers } from '../../../../../app/lib/static-lookups.lib.js'
 

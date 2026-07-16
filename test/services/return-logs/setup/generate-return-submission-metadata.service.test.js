@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import GenerateReturnSubmissionMetadataService from '../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js'
 

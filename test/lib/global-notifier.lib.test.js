@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import BaseNotifierLib from '../../app/lib/base-notifier.lib.js'
 

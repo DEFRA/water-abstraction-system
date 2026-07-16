@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
 import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'

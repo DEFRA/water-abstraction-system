@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import AlertThresholdsValidator from '../../../../app/validators/notices/setup/alert-thresholds.validator.js'
 

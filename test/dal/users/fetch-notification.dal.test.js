@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 import * as UsersFixture from '../../support/fixtures/users.fixture.js'

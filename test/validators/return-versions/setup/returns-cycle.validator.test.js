@@ -1,3 +1,6 @@
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
+
 // Thing under test
 import ReturnsCycleValidator from '../../../../app/validators/return-versions/setup/returns-cycle.validator.js'
 

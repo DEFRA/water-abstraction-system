@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import AbstractionPeriodValidator from '../../app/validators/abstraction-period.validator.js'
 

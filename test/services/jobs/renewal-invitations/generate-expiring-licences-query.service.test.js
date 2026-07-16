@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { db } from '../../../../db/db.js'

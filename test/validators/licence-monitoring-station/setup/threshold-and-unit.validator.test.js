@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import ThresholdAndUnitValidator from '../../../../app/validators/licence-monitoring-station/setup/threshold-and-unit.validator.js'
 

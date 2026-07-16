@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import { transformArrayToCSVRow } from '../../app/lib/transform-to-csv.lib.js'
 

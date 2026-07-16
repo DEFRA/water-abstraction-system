@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import ModLogHelper from '../../support/helpers/mod-log.helper.js'
 import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'

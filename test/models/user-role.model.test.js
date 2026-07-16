@@ -1,3 +1,6 @@
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import RoleHelper from '../support/helpers/role.helper.js'
 import RoleModel from '../../app/models/role.model.js'

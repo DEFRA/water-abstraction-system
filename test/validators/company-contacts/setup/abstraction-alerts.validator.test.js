@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import AbstractionAlertsValidator from '../../../../app/validators/company-contacts/setup/abstraction-alerts.validator.js'
 

@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import NotificationModel from '../../../../app/models/notification.model.js'
 import ServerConfig from '../../../../config/server.config.js'

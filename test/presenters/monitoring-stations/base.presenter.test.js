@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import * as BasePresenter from '../../../app/presenters/monitoring-stations/base.presenter.js'
 

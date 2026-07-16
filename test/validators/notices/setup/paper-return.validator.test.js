@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import PaperReturnValidator from '../../../../app/validators/notices/setup/paper-return.validator.js'
 

@@ -1,3 +1,6 @@
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as RequirementsForReturnsSeeder from '../../../../support/seeders/requirements-for-returns.seeder.js'
 

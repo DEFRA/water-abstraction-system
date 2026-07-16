@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import jwt from 'jsonwebtoken'
 import notifyConfig from '../../config/notify.config.js'

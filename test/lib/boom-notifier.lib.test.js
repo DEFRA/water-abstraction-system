@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Thing under test
 import BoomNotifierLib from '../../app/lib/boom-notifier.lib.js'
 

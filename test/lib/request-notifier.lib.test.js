@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Thing under test
 import RequestNotifierLib from '../../app/lib/request-notifier.lib.js'
 

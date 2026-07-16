@@ -98,23 +98,6 @@ export default [
       'jsdoc/require-jsdoc': 'off'
     }
   },
-  // Vitest injects test globals (describe, it, expect, etc.) via globals: true in vitest.config.js. This tells ESLint
-  // about those globals so it does not flag them as undefined in test files.
-  {
-    files: ['templates/*.test.js', 'test/**/*.test.js', 'test/support/stubs/*.js'],
-    languageOptions: {
-      globals: {
-        afterAll: 'readonly',
-        afterEach: 'readonly',
-        beforeAll: 'readonly',
-        beforeEach: 'readonly',
-        describe: 'readonly',
-        expect: 'readonly',
-        it: 'readonly',
-        vi: 'readonly'
-      }
-    }
-  },
   // This section adds another override to the configuration object above. It tells the import/extensions plugin to
   // ignore this file. The plugin flags `eslint-plugin-prettier/recommended` as a violation, even though it is not and
   // adding `.js` causes it to break

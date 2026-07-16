@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import ReviewChargeElementHelper from '../../../support/helpers/review-charge-element.helper.js'
 import ReviewChargeElementModel from '../../../../app/models/review-charge-element.model.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import LicenceEndDateChangeHelper from '../support/helpers/licence-end-date-change.helper.js'
 import LicenceHelper from '../support/helpers/licence.helper.js'

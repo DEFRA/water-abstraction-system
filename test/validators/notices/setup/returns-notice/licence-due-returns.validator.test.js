@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import LicenceDueReturnsValidator from '../../../../../app/validators/notices/setup/returns-notice/licence-due-returns.validator.js'
 

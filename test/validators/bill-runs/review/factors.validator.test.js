@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import FactorsValidator from '../../../../app/validators/bill-runs/review/factors.validator.js'
 

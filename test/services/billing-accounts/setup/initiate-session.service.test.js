@@ -1,3 +1,6 @@
+// Test framework
+import { beforeAll, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 

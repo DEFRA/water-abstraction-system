@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
 import LicenceMonitoringStationModel from '../../app/models/licence-monitoring-station.model.js'

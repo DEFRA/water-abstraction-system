@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import ContactTypePresenter from '../../../../app/presenters/notices/setup/contact-type.presenter.js'
 

@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import * as RespTokenRequest from '../../app/requests/resp/token.request.js'
 

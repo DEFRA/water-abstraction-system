@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
 import YarStub from '../../support/stubs/yar.stub.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import StopOrReduceValidator from '../../../../app/validators/licence-monitoring-station/setup/stop-or-reduce.validator.js'
 

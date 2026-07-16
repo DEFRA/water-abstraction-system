@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import DetermineEarliestLicenceChangedDateService from '../../../../app/services/licences/end-dates/determine-earliest-licence-changed-date.service.js'
 

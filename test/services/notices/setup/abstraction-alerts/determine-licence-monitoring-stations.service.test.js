@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import { generateUUID } from '../../../../../app/lib/general.lib.js'
 import { licenceEnds } from '../../../../support/fixtures/licence.fixture.js'

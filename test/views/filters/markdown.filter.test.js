@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import MarkdownFilter from '../../../app/views/filters/markdown.filter.js'
 

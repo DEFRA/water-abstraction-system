@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'

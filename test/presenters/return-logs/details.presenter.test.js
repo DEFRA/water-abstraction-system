@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
 import { formatNumber } from '../../../app/presenters/base.presenter.js'

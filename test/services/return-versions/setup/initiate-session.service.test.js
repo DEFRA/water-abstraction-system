@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import LicenceModel from '../../../../app/models/licence.model.js'
 import http2 from 'node:http2'

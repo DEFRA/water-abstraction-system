@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import * as CheckLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-licence-end-dates.service.js'
 import * as FetchLicencesService from '../../../../app/services/licences/end-dates/fetch-licences.service.js'

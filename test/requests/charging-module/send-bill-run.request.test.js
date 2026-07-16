@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import ExpandedError from '../../../app/errors/expanded.error.js'
 import http2 from 'node:http2'

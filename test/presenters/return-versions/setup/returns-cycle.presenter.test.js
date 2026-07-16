@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import ReturnsCyclePresenter from '../../../../app/presenters/return-versions/setup/returns-cycle.presenter.js'
 
