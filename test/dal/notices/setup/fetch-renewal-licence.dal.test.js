@@ -36,7 +36,7 @@ describe('Notices - Setup - Fetch Renewal Licence DAL', () => {
     it('returns undefined', async () => {
       const result = await FetchRenewalLicenceDal('does-not-exist')
 
-      expect(result).toEqual(undefined)
+      expect(result).toBeUndefined()
     })
   })
 })

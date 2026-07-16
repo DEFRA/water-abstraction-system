@@ -69,9 +69,9 @@ describe('Fetch Existing Licence Details Service', () => {
 
         expect(result.id).toEqual(licence.id)
         expect(result.region_id).toEqual(licence.regionId)
-        expect(result.revoked_date).toEqual(null)
-        expect(result.lapsed_date).toEqual(null)
-        expect(result.expired_date).toEqual(null)
+        expect(result.revoked_date).toBeNull()
+        expect(result.lapsed_date).toBeNull()
+        expect(result.expired_date).toBeNull()
         expect(result.flagged_for_presroc).toEqual(false)
         expect(result.flagged_for_sroc).toEqual(false)
       })

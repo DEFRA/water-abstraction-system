@@ -64,7 +64,7 @@ describe('Abstraction Period validator', () => {
         expect(result.value.abstractionPeriodStart).toBeDefined()
         expect(result.value.abstractionPeriodEnd).toBeDefined()
         expect(result.error.details[0].message).toEqual('Enter a real start date')
-        expect(result.error.details.length).toEqual(1)
+        expect(result.error.details).toHaveLength(1)
       })
     })
 
@@ -84,7 +84,7 @@ describe('Abstraction Period validator', () => {
         expect(result.value.abstractionPeriodStart).toBeDefined()
         expect(result.value.abstractionPeriodEnd).toBeDefined()
         expect(result.error.details[0].message).toEqual('Enter a real end date')
-        expect(result.error.details.length).toEqual(1)
+        expect(result.error.details).toHaveLength(1)
       })
     })
 
@@ -105,7 +105,7 @@ describe('Abstraction Period validator', () => {
         expect(result.value.abstractionPeriodEnd).toBeNull()
         expect(result.error.details[0].message).toEqual('Enter a real start date')
         expect(result.error.details[1].message).toEqual('Select the end date of the abstraction period')
-        expect(result.error.details.length).toEqual(2)
+        expect(result.error.details).toHaveLength(2)
       })
     })
 
@@ -126,7 +126,7 @@ describe('Abstraction Period validator', () => {
         expect(result.value.abstractionPeriodEnd).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select the start date of the abstraction period')
         expect(result.error.details[1].message).toEqual('Enter a real end date')
-        expect(result.error.details.length).toEqual(2)
+        expect(result.error.details).toHaveLength(2)
       })
     })
 
@@ -147,7 +147,7 @@ describe('Abstraction Period validator', () => {
         expect(result.value.abstractionPeriodEnd).toBeDefined()
         expect(result.error.details[0].message).toEqual('Enter a real start date')
         expect(result.error.details[1].message).toEqual('Enter a real end date')
-        expect(result.error.details.length).toEqual(2)
+        expect(result.error.details).toHaveLength(2)
       })
     })
   })
@@ -168,7 +168,7 @@ describe('Abstraction Period validator', () => {
       expect(result.value.abstractionPeriodStart).toBeDefined()
       expect(result.value.abstractionPeriodEnd).toBeNull()
       expect(result.error.details[0].message).toEqual('Select the end date of the abstraction period')
-      expect(result.error.details.length).toEqual(1)
+      expect(result.error.details).toHaveLength(1)
     })
   })
 
@@ -188,7 +188,7 @@ describe('Abstraction Period validator', () => {
       expect(result.value.abstractionPeriodStart).toBeNull()
       expect(result.value.abstractionPeriodEnd).toBeDefined()
       expect(result.error.details[0].message).toEqual('Select the start date of the abstraction period')
-      expect(result.error.details.length).toEqual(1)
+      expect(result.error.details).toHaveLength(1)
     })
   })
 
@@ -204,7 +204,7 @@ describe('Abstraction Period validator', () => {
       expect(result.value.abstractionPeriodEnd).toBeNull()
       expect(result.error.details[0].message).toEqual('Select the start date of the abstraction period')
       expect(result.error.details[1].message).toEqual('Select the end date of the abstraction period')
-      expect(result.error.details.length).toEqual(2)
+      expect(result.error.details).toHaveLength(2)
     })
   })
 })

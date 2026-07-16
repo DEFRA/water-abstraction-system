@@ -43,7 +43,7 @@ describe('Address - Postcode Presenter', () => {
       it('returns null', () => {
         const result = PostcodePresenter(session)
 
-        expect(result.pageTitleCaption).toEqual(null)
+        expect(result.pageTitleCaption).toBeNull()
       })
     })
 
@@ -77,7 +77,7 @@ describe('Address - Postcode Presenter', () => {
       it('returns null', () => {
         const result = PostcodePresenter(session)
 
-        expect(result.postcode).toEqual(null)
+        expect(result.postcode).toBeNull()
       })
     })
   })
@@ -99,7 +99,7 @@ describe('Address - Postcode Presenter', () => {
       it('returns null', () => {
         const result = PostcodePresenter(session)
 
-        expect(result.activeNavBar).toEqual(null)
+        expect(result.activeNavBar).toBeNull()
       })
     })
   })

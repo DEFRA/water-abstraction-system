@@ -64,7 +64,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       it('returns null', () => {
         const result = ContactPresenter(session, companyContacts)
 
-        expect(result.contactSelected).toEqual(null)
+        expect(result.contactSelected).toBeNull()
       })
     })
 

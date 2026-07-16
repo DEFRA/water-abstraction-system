@@ -39,7 +39,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       it('returns null', () => {
         const result = ContactNamePresenter(session)
 
-        expect(result.contactName).toEqual(null)
+        expect(result.contactName).toBeNull()
       })
     })
 

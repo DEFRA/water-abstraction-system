@@ -62,7 +62,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
         expect(result[0].chargeVersions).toHaveLength(1)
         expect(result[0].chargeVersions[0].id).toEqual('9407b74d-816c-44a2-9926-73a89a9da985')
         expect(result[0].chargeVersions[0].startDate).toEqual('2022-04-01T00:00:00.000Z')
-        expect(result[0].chargeVersions[0].endDate).toEqual(null)
+        expect(result[0].chargeVersions[0].endDate).toBeNull()
         expect(result[0].chargeVersions[0].status).toEqual('current')
         expect(result[0].chargeVersions[0].licence).toEqual(licenceOne)
       })

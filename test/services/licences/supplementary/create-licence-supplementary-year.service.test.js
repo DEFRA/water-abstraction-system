@@ -72,7 +72,7 @@ describe('Create Licence Supplementary Years Service', () => {
 
           expect(result).toHaveLength(2)
           expect(result[0].billRunId).toEqual(billRunId)
-          expect(result[1].billRunId).toEqual(null)
+          expect(result[1].billRunId).toBeNull()
         })
       })
     })

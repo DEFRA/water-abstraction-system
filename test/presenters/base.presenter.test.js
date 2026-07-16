@@ -330,7 +330,7 @@ describe('Base presenter', () => {
       it('returns null', () => {
         const result = BasePresenter.formatNumber(null)
 
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
 
@@ -338,7 +338,7 @@ describe('Base presenter', () => {
       it('returns null', () => {
         const result = BasePresenter.formatNumber(undefined)
 
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
   })
@@ -444,7 +444,7 @@ describe('Base presenter', () => {
       it('returns null', () => {
         const result = BasePresenter.formatQuantityToUnit(null, 'someUnit')
 
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
   })

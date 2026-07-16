@@ -142,7 +142,7 @@ describe('Dates lib', () => {
 
       it('returns null', () => {
         const result = DateLib.determineEarliestDate(dates)
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
 
@@ -153,7 +153,7 @@ describe('Dates lib', () => {
 
       it('returns null', () => {
         const result = DateLib.determineEarliestDate(dates)
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
   })

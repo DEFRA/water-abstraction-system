@@ -224,7 +224,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         it('returns null', async () => {
           const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
-          expect(result.licenceMonitoringStations[0].notes).toEqual(null)
+          expect(result.licenceMonitoringStations[0].notes).toBeNull()
         })
       })
 

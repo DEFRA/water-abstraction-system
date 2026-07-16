@@ -92,7 +92,7 @@ describe('Companies - Licences presenter', () => {
         it('returns null', () => {
           const result = LicencesPresenter(company, licences)
 
-          expect(result.licences[0].status).toEqual(null)
+          expect(result.licences[0].status).toBeNull()
         })
       })
 
@@ -116,7 +116,7 @@ describe('Companies - Licences presenter', () => {
         it('returns null', () => {
           const result = LicencesPresenter(company, licences)
 
-          expect(result.licences[0].status).toEqual(null)
+          expect(result.licences[0].status).toBeNull()
         })
       })
     })
