@@ -54,25 +54,13 @@ describe('Airbrake plugin', () => {
     })
   })
 
-  // TODO: airbrake.plugin.js holds a module-level _notifier singleton. The beforeAll above spins up a real Hapi
-  // server that sets it via the real plugin module, so these tests need a completely fresh module instance (where
-  // _notifier is undefined) with Notifier and gotWrapper stubbed out. Proxyquire provided that isolation in CJS
-  // mode, but it's a CJS-only tool and no longer works now the project is ESM.
-  //
-  // vi.resetModules() + dynamic import() looks like the obvious ESM replacement, and Notifier can be stubbed via a
-  // default import of '@airbrake/node' (see test/lib/base-notifier.lib.test.js) — but don't reach for
-  // vi.resetModules() here. This project's vitest.config.js runs the 'parallel' project with `isolate: false` (a
-  // single shared module registry across test files, for performance). Resetting the registry in one test file
-  // doesn't just create a locally-fresh copy — it invalidates the *shared* cache entry for
-  // 'app/plugins/airbrake.plugin.js', so the next test FILE anywhere in the run that imports this plugin for the
-  // first time gets re-pointed at whatever instance this test last created, singleton state and all. This was tried
-  // and confirmed to break unrelated controller tests elsewhere in the suite (their `server.app.airbrake.notify`
-  // came back undefined, because the shared _notifier had been left pointing at this test's stub).
-  //
-  // A safer route if this gets picked up again: export the plugin's private `_notifierArgs()` helper and test it
-  // directly — it contains all the gotWrapper/proxy logic these tests care about, without needing to go through
-  // register() or touch the _notifier singleton at all. We do not use vi.mock()/vi.doMock() here — see the testing
-  // skill's Mocking section for why.
+  // TODO: Remove describe.skip once the project migrates to ESM. In CJS mode, airbrake.plugin.js holds a module-level
+  // _notifier singleton. The beforeAll above spins up a real Hapi server that sets it via the real plugin module.
+  // These tests need a completely fresh module instance (where _notifier is undefined) with Notifier and gotWrapper
+  // stubbed out. Proxyquire provides that isolation today. We do not use vi.mock() here or once the project is ESM
+  // — see the testing skill's Mocking section for why. Instead, once ESM, use vi.resetModules() + dynamic import()
+  // to load a fresh plugin instance per test, then vi.spyOn() the namespace imports of '@airbrake/node' and
+  // '../lib/got-wrapper.lib.js' to stub their exports.
   describe.skip('when registering the plugin', () => {
     let AirbrakePluginWithStubs
     let fakeServer
