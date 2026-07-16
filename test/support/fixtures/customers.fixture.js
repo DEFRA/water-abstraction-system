@@ -11,7 +11,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {object[]} A array of billing accounts
  */
-export function billingAccounts() {
+function billingAccounts() {
   return [
     BillingAccountModel.fromJson({
       accountNumber: BillingAccountHelper.generateAccountNumber(),
@@ -48,7 +48,7 @@ export function billingAccounts() {
  *
  * @returns {object} A company object
  */
-export function company() {
+function company() {
   return {
     id: generateUUID(),
     name: 'Tyrell Corporation'
@@ -60,7 +60,7 @@ export function company() {
  *
  * @returns {object[]} A array of company objects
  */
-export function companies() {
+function companies() {
   return [
     {
       id: generateUUID(),
@@ -74,7 +74,7 @@ export function companies() {
  *
  * @returns {module:CompanyAddressModel} A company address
  */
-export function companyAddress() {
+function companyAddress() {
   return {
     id: generateUUID(),
     address: {
@@ -96,7 +96,7 @@ export function companyAddress() {
  *
  * @returns {module:CompanyContactModel} A company contact
  */
-export function companyContact() {
+function companyContact() {
   return CompanyContactModel.fromJson({
     id: generateUUID(),
     abstractionAlertLicences: null,
@@ -126,7 +126,7 @@ export function companyContact() {
  *
  * @returns {object[]} An array of company contact
  */
-export function companyContacts() {
+function companyContacts() {
   return [
     {
       ...companyContact(),
@@ -142,7 +142,7 @@ export function companyContacts() {
  *
  * @returns {object[]} A contact
  */
-export function contact() {
+function contact() {
   return ContactModel.fromJson({
     id: generateUUID(),
     salutation: null,
@@ -163,7 +163,7 @@ export function contact() {
  *
  * @returns {object[]} A array of licences
  */
-export function licences() {
+function licences() {
   return [
     LicenceModel.fromJson({
       expiredDate: null,
@@ -181,4 +181,15 @@ export function licences() {
       startDate: new Date('2022-01-01')
     })
   ]
+}
+
+export default {
+  billingAccounts,
+  company,
+  companies,
+  companyAddress,
+  companyContact,
+  companyContacts,
+  contact,
+  licences
 }

@@ -2,9 +2,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import * as ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
 

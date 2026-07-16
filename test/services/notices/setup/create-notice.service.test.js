@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import EventModel from '../../../../app/models/event.model.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Thing under test

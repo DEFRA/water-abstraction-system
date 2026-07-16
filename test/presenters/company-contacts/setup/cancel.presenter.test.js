@@ -2,9 +2,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
-import { licence } from '../../../support/fixtures/licence.fixture.js'
 
 // Thing under test
 import CancelPresenter from '../../../../app/presenters/company-contacts/setup/cancel.presenter.js'
@@ -17,7 +17,7 @@ describe('Company Contacts - Setup - Cancel Presenter', () => {
   beforeEach(() => {
     company = CustomersFixtures.company()
 
-    licences = [licence()]
+    licences = [LicenceFixture.licence()]
 
     session = {
       abstractionAlertLicences: null,

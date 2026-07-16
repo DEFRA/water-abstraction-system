@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as AbstractionAlertSessionData from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import AbstractionAlertSessionData from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
 import AlertTypeValidator from '../../../../app/validators/notices/setup/alert-type.validator.js'

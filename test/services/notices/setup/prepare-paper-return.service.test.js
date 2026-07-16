@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 
 // Things we need to stub

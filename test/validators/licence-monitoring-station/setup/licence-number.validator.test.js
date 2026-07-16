@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import { licenceEnds } from '../../../support/fixtures/licence.fixture.js'
 import { yesterday } from '../../../support/general.js'
 
 // Thing under test
@@ -14,7 +14,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
   let payload = {}
 
   beforeEach(() => {
-    licence = licenceEnds()
+    licence = LicenceFixture.licenceEnds()
   })
 
   describe('when called with valid data', () => {
@@ -83,7 +83,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
 
     describe('because the licence has ended', () => {
       beforeEach(() => {
-        licence = licenceEnds(yesterday())
+        licence = LicenceFixture.licenceEnds(yesterday())
 
         payload = {
           licenceRef: LicenceHelper.generateLicenceRef()

@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
-import * as CustomersFixture from '../../../support/fixtures/customers.fixture.js'
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import CustomersFixture from '../../../support/fixtures/customers.fixture.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 

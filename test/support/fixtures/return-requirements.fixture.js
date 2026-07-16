@@ -14,7 +14,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {string} The formatted return log prefix string
  */
-export function returnLogPrefix(returnRequirement) {
+function returnLogPrefix(returnRequirement) {
   const { reference, returnVersion } = returnRequirement
 
   const licenceRef = returnVersion.licence.licenceRef
@@ -34,7 +34,7 @@ export function returnLogPrefix(returnRequirement) {
  *
  * @returns {object} A summer return requirement fixture object
  */
-export function summerReturnRequirement() {
+function summerReturnRequirement() {
   const returnVersion = _returnVersion(false)
   const reference = ReturnRequirementHelper.generateReference()
 
@@ -72,7 +72,7 @@ export function summerReturnRequirement() {
  *
  * @returns {object} A winter all-year return requirement fixture object
  */
-export function winterReturnRequirement(quarterlyReturns = false) {
+function winterReturnRequirement(quarterlyReturns = false) {
   const returnVersion = _returnVersion(quarterlyReturns)
   const reference = ReturnRequirementHelper.generateReference()
 
@@ -140,4 +140,10 @@ function _returnVersion(quarterlyReturns) {
     quarterlyReturns,
     multipleUpload: false
   }
+}
+
+export default {
+  returnLogPrefix,
+  summerReturnRequirement,
+  winterReturnRequirement
 }

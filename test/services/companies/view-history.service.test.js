@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
 import * as FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'

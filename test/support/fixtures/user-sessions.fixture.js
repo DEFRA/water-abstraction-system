@@ -1,5 +1,5 @@
-import * as UsersFixture from './users.fixture.js'
 import LicenceHelper from '../helpers/licence.helper.js'
+import UsersFixture from './users.fixture.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -9,7 +9,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {object} The external user unregistration setup session fixture
  */
-export function unregistrationSession() {
+function unregistrationSession() {
   const user = UsersFixture.jonLee()
 
   return {
@@ -61,4 +61,8 @@ export function unregistrationSession() {
       username: user.username
     }
   }
+}
+
+export default {
+  unregistrationSession
 }

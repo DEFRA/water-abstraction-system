@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import * as UsersFixture from '../../support/fixtures/users.fixture.js'
+import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Things we need to stub
 import * as FetchNotificationDal from '../../../app/dal/users/fetch-notification.dal.js'

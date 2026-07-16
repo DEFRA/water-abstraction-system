@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import LicenceFixture from '../support/fixtures/licence.fixture.js'
 import { generateUUID } from '../../app/lib/general.lib.js'
-import { licence } from '../support/fixtures/licence.fixture.js'
 
 // Thing under test
 import * as CRMPresenter from '../../app/presenters/crm.presenter.js'
@@ -264,7 +264,7 @@ describe('CRM presenter', () => {
 
     describe('when there are "liveLicences"', () => {
       beforeEach(() => {
-        liveLicences = [licence()]
+        liveLicences = [LicenceFixture.licence()]
       })
 
       describe('and the user is set to receive "some" notices', () => {

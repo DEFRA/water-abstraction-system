@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
+import UsersFixture from '../../../support/fixtures/users.fixture.js'
 import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 import { yesterday } from '../../../support/general.js'
 import { generateUUID, today } from '../../../../app/lib/general.lib.js'

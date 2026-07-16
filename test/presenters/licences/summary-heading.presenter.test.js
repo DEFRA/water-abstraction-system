@@ -2,9 +2,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
+import LicenceFixture from '../../support/fixtures/licence.fixture.js'
 import LicenceModel from '../../../app/models/licence.model.js'
-import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
+import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Thing under test
 import SummaryHeadingPresenter from '../../../app/presenters/licences/summary-heading.presenter.js'
@@ -110,7 +110,7 @@ describe('Licences - Summary Heading presenter', () => {
   describe('the "warning" property', () => {
     describe('when the licence has ended', () => {
       beforeEach(() => {
-        licence = licenceEnds(new Date('2019-04-01'))
+        licence = LicenceFixture.licenceEnds(new Date('2019-04-01'))
       })
 
       it('returns the warning', () => {
