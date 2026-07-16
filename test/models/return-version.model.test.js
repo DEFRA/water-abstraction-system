@@ -11,7 +11,7 @@ import ReturnRequirementModel from '../../app/models/return-requirement.model.js
 import ReturnVersionHelper from '../support/helpers/return-version.helper.js'
 import UserHelper from '../support/helpers/user.helper.js'
 import UserModel from '../../app/models/user.model.js'
-import { generateRandomInteger } from '../../app/lib/general.lib.js'
+import { generateRandomInteger } from '../support/generators.js'
 import { randomRegionCode } from '../support/general.js'
 
 // Thing under test

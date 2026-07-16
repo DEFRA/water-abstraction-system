@@ -2,7 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test framework dependencies
-import { generateNoticeReferenceCode, generateUUID, today } from '../../../app/lib/general.lib.js'
+import { today } from '../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../support/generators.js'
 
 // Test helpers
 import NotificationHelper from '../../support/helpers/notification.helper.js'

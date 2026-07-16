@@ -3,7 +3,7 @@
  */
 
 import ReturnRequirementModel from '../../../app/models/return-requirement.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new return requirement

@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import ContactValidator from '../../../../app/validators/billing-accounts/setup/contact.validator.js'

@@ -4,7 +4,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import { generateUUID } from '../../app/lib/general.lib.js'
+import { generateUUID } from '../support/generators.js'
 
 // Things we need to stub
 import * as ViewBillingAccountsService from '../../app/services/companies/view-billing-accounts.service.js'

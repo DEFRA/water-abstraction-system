@@ -3,7 +3,8 @@
  */
 
 import MonitoringStationModel from '../../../app/models/monitoring-station.model.js'
-import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
+import { timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new monitoring station

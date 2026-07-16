@@ -4,7 +4,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import { generateUUID } from '../../app/lib/general.lib.js'
+import { generateUUID } from '../support/generators.js'
 
 // Things we need to stub
 import * as InitiateEditSessionService from '../../app/services/company-contacts/setup/initiate-edit-session.service.js'

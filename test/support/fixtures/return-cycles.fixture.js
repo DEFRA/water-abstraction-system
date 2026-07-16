@@ -1,4 +1,4 @@
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Returns a summer return cycle fixture with predefined dates and properties

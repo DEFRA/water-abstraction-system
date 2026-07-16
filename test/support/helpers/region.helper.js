@@ -3,7 +3,7 @@
  */
 
 import RegionModel from '../../../app/models/region.model.js'
-import { generateRandomInteger } from '../../../app/lib/general.lib.js'
+import { generateRandomInteger } from '../generators.js'
 import { data as regions } from '../../../db/seeds/data/regions.js'
 
 // The `BILL_RUN_REGION_INDEX` is only to be used for testing bill run services that need to know details of bill runs

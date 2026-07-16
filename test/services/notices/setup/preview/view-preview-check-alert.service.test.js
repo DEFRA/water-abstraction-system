@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import AbstractionAlertSessionDataFixture from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 import RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
-import { generateNoticeReferenceCode } from '../../../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode } from '../../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchAbstractionAlertRecipientsDal from '../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'

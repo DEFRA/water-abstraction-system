@@ -4,8 +4,9 @@ import { beforeEach, describe, expect, it } from 'vitest'
 // Test helpers
 import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
 import UsersFixture from '../../../support/fixtures/users.fixture.js'
+import { generateUUID } from '../../../support/generators.js'
+import { today } from '../../../../app/lib/general.lib.js'
 import { tomorrow } from '../../../support/general.js'
-import { generateUUID, today } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
 import LicencesPresenter from '../../../../app/presenters/users/external/licences.presenter.js'

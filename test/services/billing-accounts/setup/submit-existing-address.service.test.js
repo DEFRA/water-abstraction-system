@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Things to stub
 import * as FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'

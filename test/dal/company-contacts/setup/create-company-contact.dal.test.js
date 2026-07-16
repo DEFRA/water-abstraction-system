@@ -5,7 +5,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import CompanyHelper from '../../../support/helpers/company.helper.js'
 import LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import CreateCompanyContactDal from '../../../../app/dal/company-contacts/setup/create-company-contact.dal.js'

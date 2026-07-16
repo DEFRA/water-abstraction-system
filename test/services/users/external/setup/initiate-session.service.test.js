@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import SessionModel from '../../../../../app/models/session.model.js'
 import UsersFixture from '../../../../support/fixtures/users.fixture.js'
-import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Things to stub
 import * as FetchLicencesDal from '../../../../../app/dal/users/external/setup/fetch-licences.dal.js'

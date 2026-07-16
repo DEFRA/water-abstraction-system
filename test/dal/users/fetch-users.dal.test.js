@@ -11,7 +11,7 @@ import LicenceEntityRoleHelper from '../../support/helpers/licence-entity-role.h
 import LicenceHelper from '../../support/helpers/licence.helper.js'
 import UserHelper from '../../support/helpers/user.helper.js'
 import UsersFixture from '../../support/fixtures/users.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import FetchUsersDal from '../../../app/dal/users/fetch-users.dal.js'

@@ -6,7 +6,7 @@ import * as FetchDownloadNotificationService from '../../../app/services/notific
 
 // Thing under test
 import DownloadNotificationService from '../../../app/services/notifications/download-notification.service.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 describe('Notifications - Download Notification service', () => {
   let notificationId

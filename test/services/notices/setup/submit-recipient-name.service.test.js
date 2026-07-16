@@ -6,7 +6,7 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
 import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Thing under test
 import SubmitRecipientNameService from '../../../../app/services/notices/setup/submit-recipient-name.service.js'

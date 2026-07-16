@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 // Test helpers
 import EventModel from '../../../../app/models/event.model.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Thing under test
 import CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'

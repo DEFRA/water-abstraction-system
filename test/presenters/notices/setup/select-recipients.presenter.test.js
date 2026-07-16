@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Thing under test
 import SelectRecipientsPresenter from '../../../../app/presenters/notices/setup/select-recipients.presenter.js'

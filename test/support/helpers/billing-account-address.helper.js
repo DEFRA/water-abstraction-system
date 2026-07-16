@@ -3,7 +3,7 @@
  */
 
 import BillingAccountAddressModel from '../../../app/models/billing-account-address.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new billing account address

@@ -2,12 +2,13 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { generateUUID } from '../../support/generators.js'
+import { today } from '../../../app/lib/general.lib.js'
 import {
   exLicenceHolderWithSingleLicences,
   licenceHolderWithMultipleLicences,
   licenceHolderWithSingleLicence
 } from '../../support/seeders/licence.seeder.js'
-import { generateUUID, today } from '../../../app/lib/general.lib.js'
 import { tomorrow, yesterday } from '../../support/general.js'
 
 // Thing under test

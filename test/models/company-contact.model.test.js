@@ -11,7 +11,7 @@ import LicenceRoleHelper from '../support/helpers/licence-role.helper.js'
 import LicenceRoleModel from '../../app/models/licence-role.model.js'
 import UserHelper from '../support/helpers/user.helper.js'
 import UserModel from '../../app/models/user.model.js'
-import { generateUUID } from '../../app/lib/general.lib.js'
+import { generateUUID } from '../support/generators.js'
 
 // Thing under test
 import CompanyContactModel from '../../app/models/company-contact.model.js'

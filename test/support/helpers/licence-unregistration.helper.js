@@ -3,7 +3,7 @@
  */
 
 import LicenceUnregistrationModel from '../../../app/models/licence-unregistration.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new licence unregistration

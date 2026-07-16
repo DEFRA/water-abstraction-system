@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Things we need to stub
 import * as RenewalInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/renewal-invitation-alternate-notice.service.js'

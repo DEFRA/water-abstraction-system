@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
 import YarStub from '../../../../support/stubs/yar.stub.js'
-import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Things we need to stub
 import * as DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'

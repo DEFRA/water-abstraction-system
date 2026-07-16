@@ -5,8 +5,9 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 import NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
 import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import { compareStrings } from '../../../../../app/lib/general.lib.js'
 import { futureDueDate } from '../../../../../app/presenters/notices/base.presenter.js'
-import { compareStrings, generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
 import FetchReturnsInvitationRecipients from '../../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js'

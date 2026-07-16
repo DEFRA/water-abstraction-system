@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 // Test helpers
 import LicenceSupplementaryYearHelper from '../../../support/helpers/licence-supplementary-year.helper.js'
 import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import CreateLicenceSupplementaryYearService from '../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js'
