@@ -4,6 +4,7 @@ import jsdocPlugin from 'eslint-plugin-jsdoc'
 import neostandard from 'neostandard'
 
 import noMixedExports from './eslint-rules/no-mixed-exports.js'
+import orderWithinImportGroups from './eslint-rules/order-within-import-groups.js'
 
 export default [
   // Ignore the folder created when JSDocs are generated
@@ -42,7 +43,12 @@ export default [
       // https://github.com/gajus/eslint-plugin-jsdoc
       jsdoc: jsdocPlugin,
       import: neostandard.plugins['import-x'],
-      local: { rules: { 'no-mixed-exports': noMixedExports } }
+      local: {
+        rules: {
+          'no-mixed-exports': noMixedExports,
+          'order-within-import-groups': orderWithinImportGroups
+        }
+      }
     },
     // NOTE: Special case for arrow-body-style below
     rules: {
@@ -108,11 +114,15 @@ export default [
     }
   },
   // Test files use blank lines to separate "Test helpers" / "Things we need to stub" / "Thing under test" blocks,
-  // a different convention to external-vs-internal grouping, so exempt them from import/order
+  // a different convention to external-vs-internal grouping, so exempt them from import/order. Instead,
+  // 'local/order-within-import-groups' enforces external-before-internal ordering *within* each of those
+  // blank-line-separated blocks, replacing sort-imports (which has no concept of external vs internal) for these files
   {
     files: ['templates/*.test.js', 'test/**/*'],
     rules: {
-      'import/order': 'off'
+      'import/order': 'off',
+      'sort-imports': 'off',
+      'local/order-within-import-groups': 'error'
     }
   },
   // This file deliberately separates its two imports with a large explanatory comment, which import/order treats as

@@ -2,9 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import http2 from 'node:http2'
 import SessionModelStub from '../../support/stubs/session.stub.js'
 import { generateUUID } from '../../support/generators.js'
-import http2 from 'node:http2'
 
 // Things we need to stub
 import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'

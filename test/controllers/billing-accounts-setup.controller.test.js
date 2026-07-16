@@ -2,8 +2,8 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../support/generators.js'
 import http2 from 'node:http2'
+import { generateUUID } from '../support/generators.js'
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub

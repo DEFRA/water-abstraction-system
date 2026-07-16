@@ -5,9 +5,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { NOTIFY_TEMPLATES } from '../../app/lib/notify-templates.lib.js'
 
 // Things we need to stub
+import AirbrakeModule from '@airbrake/node'
 import * as CreateEmailRequest from '../../app/requests/notify/create-email.request.js'
 import AirbrakeConfig from '../../config/airbrake.config.js'
-import AirbrakeModule from '@airbrake/node'
 import NotifyConfig from '../../config/notify.config.js'
 
 // Thing under test

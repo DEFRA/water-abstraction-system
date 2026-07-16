@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { ref } from 'objection'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import RegionHelper from '../../support/helpers/region.helper.js'
 import TransactionHelper from '../../support/helpers/transaction.helper.js'
-import { ref } from 'objection'
 
 // Thing under test
 import CreateTransactionPresenter from '../../../app/presenters/charging-module/create-transaction.presenter.js'

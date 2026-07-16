@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceModel from '../../../../app/models/licence.model.js'
 import http2 from 'node:http2'
+import LicenceModel from '../../../../app/models/licence.model.js'
 
 // Things we need to stub
 import * as FetchLicenceService from '../../../../app/services/return-versions/setup/fetch-licence.service.js'
