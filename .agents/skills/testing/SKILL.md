@@ -64,7 +64,7 @@ vi.spyOn(ReturnLogModel, 'query').mockReturnValue({
 })
 ```
 
-- To stub a module's default-exported function (e.g. a service or DAL), you can't spy on the default import binding directly — import it as a namespace instead and spy on the `'default'` property. This works for our own project source files, and for third-party packages that are shipped as CJS:
+- To stub a module's default-exported function (e.g. a service or DAL), you can't spy on the default import binding directly — import it as a namespace instead and spy on the `'default'` property:
 
 ```js
 import * as FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
@@ -77,11 +77,10 @@ vi.spyOn(FetchBillService, 'default').mockResolvedValue(billData)
 
 ## Mocking
 
-- Never use `vi.mock()` or `vi.doMock()`. They hoist to the top of the file, auto-mock every export, and behave inconsistently between CJS and ESM — they've caused real problems in this codebase and are banned. Use the `vi.spyOn()` patterns above instead
-- A third-party package that ships as native ESM has a frozen module namespace — `vi.spyOn(SomePackage, 'someExport')` throws `Cannot redefine property`. There's no `vi.mock()`-shaped escape hatch for this; pick one of:
-  - **Prefer exercising the real thing** where the dependency is cheap and side-effect-free (e.g. a filesystem operation) — see `test/services/jobs/export/compress-schema-folder.service.test.js`, which really compresses a real temp folder with `tar` rather than stubbing it
-  - **Stub a project-owned wrapper** if the code already goes through one (e.g. `app/lib/got-wrapper.lib.js` wraps `got` — stub `gotWrapper`, not `got` itself)
-  - **`vi.resetModules()` + dynamic `import()`** when a module-level singleton in the thing under test needs a genuinely fresh instance per test — reset the registry, dynamically re-import every project-owned dependency the module reads at import time and spy on those fresh instances, then dynamically import the module under test so it picks them up. See `test/plugins/airbrake.plugin.test.js`'s `'when registering the plugin'` block. Note this also invalidates any other project-owned module (e.g. shared config) imported statically elsewhere in the file — reload and use a fresh reference to those too, rather than mutating the stale top-of-file import
+- Never use `vi.mock()` or `vi.doMock()`. They hoist to the top of the file, auto-mock every export, and behave inconsistently between CJS and ESM — they've caused real problems in this codebase and are banned
+- Use the `vi.spyOn()` patterns above instead
+- This also works for named exports of third-party packages, e.g. `vi.spyOn(Tar, 'create')` against `import * as Tar from 'tar'`
+- If a module genuinely cannot be stubbed this way (e.g. a CJS module with a module-level singleton, or a package whose live bindings can't be intercepted), use `Proxyquire` instead — see `test/plugins/airbrake.plugin.test.js` for an example. Don't reach for `vi.mock()`/`vi.doMock()` as a workaround
 
 ## Assertions
 
