@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
+import * as FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
 import * as ViewBillLicencePresenter from '../../../app/presenters/bill-licences/view-bill-licence.presenter.js'
 import * as ViewBillPresenter from '../../../app/presenters/bills/view-bill.presenter.js'
 import * as ViewLicenceSummariesPresenter from '../../../app/presenters/bills/view-licence-summaries.presenter.js'
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
-import FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
 
 // Thing under test
 import ViewBillService from '../../../app/services/bills/view-bill.service.js'
@@ -21,8 +21,7 @@ describe('View Bill service', () => {
   describe('when a bill with a matching ID exists', () => {
     describe('and it is linked to multiple licences', () => {
       beforeEach(() => {
-        vi.mock('../../../app/services/bills/fetch-bill-service.js')
-        FetchBillService.mockResolvedValue({
+        vi.spyOn(FetchBillService, 'default').mockResolvedValue({
           bill: {
             id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
             billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
@@ -84,8 +83,7 @@ describe('View Bill service', () => {
 
     describe('and it is linked to a single licence', () => {
       beforeEach(() => {
-        vi.mock('../../../app/services/bills/fetch-bill-service.js')
-        FetchBillService.mockResolvedValue({
+        vi.spyOn(FetchBillService, 'default').mockResolvedValue({
           bill: {
             id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
             billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
@@ -118,8 +116,7 @@ describe('View Bill service', () => {
 
   describe('when a bill with a matching ID does not exist', () => {
     beforeEach(() => {
-      vi.mock('../../../app/services/bills/fetch-bill-service.js')
-      FetchBillService.mockResolvedValue({
+      vi.spyOn(FetchBillService, 'default').mockResolvedValue({
         bill: undefined,
         licenceSummaries: []
       })

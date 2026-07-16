@@ -6,7 +6,7 @@ import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
 import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
-import GenerateFromExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js'
+import * as GenerateFromExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js'
 
 // Thing under test
 import SubmitExistingService from '../../../../../app/services/return-versions/setup/existing/submit-existing.service.js'
@@ -73,10 +73,7 @@ describe('Return Versions - Setup - Submit Existing service', () => {
           existing: '60b5d10d-1372-4fb2-b222-bfac81da69ab'
         }
 
-        vi.mock(
-          '../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js'
-        )
-        GenerateFromExistingRequirementsService.mockResolvedValue({
+        vi.spyOn(GenerateFromExistingRequirementsService, 'default').mockResolvedValue({
           multipleUpload: false,
           quarterlyReturns: false,
           requirements: [_transformedReturnRequirement()]

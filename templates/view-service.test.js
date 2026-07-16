@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import SessionModelStub from '__STUBS_SESSION_PATH__'
 
 // Things we need to stub
-import FetchSessionDal from '__FETCH_SESSION_DAL_TEST_PATH__'
+import * as FetchSessionDal from '__FETCH_SESSION_DAL_TEST_PATH__'
 
 // Thing under test
 import __MODULE_NAME__ from '__REQUIRE_PATH__'
@@ -19,8 +19,7 @@ describe('__DESCRIBE_LABEL__', () => {
 
     session = SessionModelStub.build(sessionData)
 
-    vi.mock('__FETCH_SESSION_DAL_TEST_PATH__')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
