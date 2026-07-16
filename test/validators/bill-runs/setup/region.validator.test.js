@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import RegionValidator from '../../../../app/validators/bill-runs/setup/region.validator.js'
 

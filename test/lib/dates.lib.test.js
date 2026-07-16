@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+
 // Thing under test
 import * as DateLib from '../../app/lib/dates.lib.js'
 

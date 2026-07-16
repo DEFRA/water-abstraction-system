@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test framework dependencies
 import { generateNoticeReferenceCode, generateUUID, today } from '../../../app/lib/general.lib.js'
 

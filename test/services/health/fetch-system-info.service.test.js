@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import FetchSystemInfoService from '../../../app/services/health/fetch-system-info.service.js'
 

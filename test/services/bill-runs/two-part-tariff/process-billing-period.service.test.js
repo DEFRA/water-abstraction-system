@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import * as TwoPartTariffFixture from '../../../support/fixtures/two-part-tariff.fixture.js'
 import RegionHelper from '../../../support/helpers/region.helper.js'

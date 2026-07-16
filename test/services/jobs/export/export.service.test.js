@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import * as SchemaExportService from '../../../../app/services/jobs/export/schema-export.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import ReasonValidator from '../../../../app/validators/return-versions/setup/reason.validator.js'
 

@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import ReverseSupplementaryTransactionsService from '../../../app/services/bill-runs/reverse-supplementary-transactions.service.js'
 

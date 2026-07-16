@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Test helpers
 import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 import { tomorrow } from '../../support/general.js'

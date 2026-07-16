@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test framework dependencies
 import ReturnCycleHelper from '../support/helpers/return-cycle.helper.js'
 import { returnPeriodDates } from '../../app/lib/static-lookups.lib.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import RegionHelper from '../../../support/helpers/region.helper.js'
 import { generateRandomInteger, generateUUID } from '../../../../app/lib/general.lib.js'

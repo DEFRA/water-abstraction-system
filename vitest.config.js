@@ -40,8 +40,8 @@ export default {
         test: {
           // Run tests in a plain Node.js environment with no browser globals
           environment: 'node',
-          // Inject Vitest globals (describe, it, expect, etc.) without requiring explicit imports in test files
-          globals: true,
+          // Vitest globals (describe, it, expect, etc.) must be imported explicitly in each test file
+          globals: false,
           // Maximum time in milliseconds allowed for a before/after hook to complete
           hookTimeout: 10000,
           // Glob patterns that select which test files belong to this project
@@ -97,8 +97,8 @@ export default {
         test: {
           // Run tests in a plain Node.js environment with no browser globals
           environment: 'node',
-          // Inject Vitest globals (describe, it, expect, etc.) without requiring explicit imports in test files
-          globals: true,
+          // Vitest globals (describe, it, expect, etc.) must be imported explicitly in each test file
+          globals: false,
           // Maximum time in milliseconds allowed for a before/after hook to complete
           hookTimeout: 10000,
           // Glob patterns that select which test files belong to this project

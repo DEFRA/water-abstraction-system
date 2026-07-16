@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import * as AssignBillRunToLicencesService from '../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js'
 import * as GenerateBillRunService from '../../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'

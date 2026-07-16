@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Test helper
 import RegionHelper from '../../../support/helpers/region.helper.js'
 

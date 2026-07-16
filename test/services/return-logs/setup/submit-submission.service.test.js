@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 import ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'

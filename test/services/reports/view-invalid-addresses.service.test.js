@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we want to stub
 import * as FetchInvalidAddressesService from '../../../app/services/reports/fetch-invalid-addresses.service.js'
 

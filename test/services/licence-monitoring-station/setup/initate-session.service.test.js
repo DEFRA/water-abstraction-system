@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import MonitoringStationHelper from '../../../support/helpers/monitoring-station.helper.js'
 import SessionModel from '../../../../app/models/session.model.js'

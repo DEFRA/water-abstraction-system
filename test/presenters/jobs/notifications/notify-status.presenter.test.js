@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import NotifyStatusPresenter from '../../../../app/presenters/jobs/notifications/notify-status.presenter.js'
 

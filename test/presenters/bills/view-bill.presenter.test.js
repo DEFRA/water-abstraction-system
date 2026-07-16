@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
 

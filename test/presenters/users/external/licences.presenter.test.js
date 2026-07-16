@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
 import { licenceEnds } from '../../../support/fixtures/licence.fixture.js'

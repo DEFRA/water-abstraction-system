@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import UnitsValidator from '../../../../app/validators/return-logs/setup/units.validator.js'
 

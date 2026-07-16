@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import NoReturnsRequiredValidator from '../../../../app/validators/return-versions/setup/no-returns-required.validator.js'
 

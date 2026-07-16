@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import FeatureFlagsConfig from '../../config/feature-flags.config.js'
 import http2 from 'node:http2'

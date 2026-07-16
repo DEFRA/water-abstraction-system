@@ -1,3 +1,6 @@
+// Test framework
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
 import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'

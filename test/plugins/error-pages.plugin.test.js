@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import Boom from '@hapi/boom'
 import SessionNotFoundError from '../../app/errors/session-not-found.error.js'

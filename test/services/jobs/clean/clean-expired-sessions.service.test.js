@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import SessionHelper from '../../../support/helpers/session.helper.js'
 import SessionModel from '../../../../app/models/session.model.js'

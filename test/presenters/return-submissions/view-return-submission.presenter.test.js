@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Thing under test
 import ViewReturnSubmissionPresenter from '../../../app/presenters/return-submissions/view-return-submission.presenter.js'
 

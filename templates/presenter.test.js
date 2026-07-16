@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import __MODULE_NAME__ from '__REQUIRE_PATH__'
 

@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
 import ReturnVersionModel from '../../../app/models/return-version.model.js'

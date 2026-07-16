@@ -1,3 +1,6 @@
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
 import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'

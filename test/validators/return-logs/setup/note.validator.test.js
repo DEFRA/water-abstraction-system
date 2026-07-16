@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import NoteValidator from '../../../../app/validators/return-logs/setup/note.validator.js'
 

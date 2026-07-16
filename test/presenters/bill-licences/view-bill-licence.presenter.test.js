@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import * as ViewCompensationChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js'
 import * as ViewMinimumChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js'

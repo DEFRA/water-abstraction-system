@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import ReturnRequirementModel from '../../../../../app/models/return-requirement.model.js'
 import ReturnRequirementPointModel from '../../../../../app/models/return-requirement-point.model.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import CompanySearchValidator from '../../../../app/validators/billing-accounts/setup/company-search.validator.js'
 

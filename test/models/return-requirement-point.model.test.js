@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import PointHelper from '../support/helpers/point.helper.js'
 import PointModel from '../../app/models/point.model.js'

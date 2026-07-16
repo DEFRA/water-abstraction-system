@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import PointModel from '../../../../app/models/point.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import LicenceMonitoringStationModel from '../../../../app/models/licence-monitoring-station.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'

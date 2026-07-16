@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import SingleVolumeValidator from '../../../../app/validators/return-logs/setup/single-volume.validator.js'
 

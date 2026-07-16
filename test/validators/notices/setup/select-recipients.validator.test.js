@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import SelectRecipientsValidator from '../../../../app/validators/notices/setup/select-recipients.validator.js'
 

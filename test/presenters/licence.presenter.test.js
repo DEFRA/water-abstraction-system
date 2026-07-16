@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as ViewLicencesFixture from '../support/fixtures/view-licences.fixture.js'
 import PointModel from '../../app/models/point.model.js'

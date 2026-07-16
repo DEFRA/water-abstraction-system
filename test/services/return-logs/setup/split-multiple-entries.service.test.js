@@ -1,3 +1,6 @@
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
+
 // Thing under test
 import SplitMultipleEntriesService from '../../../../app/services/return-logs/setup/split-multiple-entries.service.js'
 

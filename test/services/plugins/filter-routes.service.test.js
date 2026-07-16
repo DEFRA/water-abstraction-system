@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Test framework dependencies
 import * as Hoek from '@hapi/hoek'
 

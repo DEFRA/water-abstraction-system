@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import WorkflowHelper from '../../support/helpers/workflow.helper.js'
 

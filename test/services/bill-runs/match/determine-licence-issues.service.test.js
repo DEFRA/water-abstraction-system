@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import DetermineLicenceIssuesService from '../../../../app/services/bill-runs/match/determine-licence-issues.service.js'
 

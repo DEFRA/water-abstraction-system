@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import FAOValidator from '../../../../app/validators/billing-accounts/setup/fao.validator.js'
 

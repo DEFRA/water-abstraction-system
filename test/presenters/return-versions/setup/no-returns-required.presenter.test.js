@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import NoReturnsRequiredPresenter from '../../../../app/presenters/return-versions/setup/no-returns-required.presenter.js'
 

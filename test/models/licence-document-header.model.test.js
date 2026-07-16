@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import LicenceDocumentHeaderHelper from '../support/helpers/licence-document-header.helper.js'
 import LicenceEntityRoleHelper from '../support/helpers/licence-entity-role.helper.js'

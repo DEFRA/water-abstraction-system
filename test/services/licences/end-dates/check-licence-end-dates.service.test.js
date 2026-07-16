@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import LicenceEndDateChangeModel from '../../../../app/models/licence-end-date-change.model.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'

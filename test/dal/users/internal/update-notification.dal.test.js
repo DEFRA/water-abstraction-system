@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import NotificationHelper from '../../../support/helpers/notification.helper.js'
 import UserHelper from '../../../support/helpers/user.helper.js'

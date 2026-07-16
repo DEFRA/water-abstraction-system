@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import GenerateTwoPartTariffTransactionService from '../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js'
 

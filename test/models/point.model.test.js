@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
 import LicenceVersionPurposeModel from '../../app/models/licence-version-purpose.model.js'

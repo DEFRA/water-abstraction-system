@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 import http2 from 'node:http2'
 
 // Thing under test

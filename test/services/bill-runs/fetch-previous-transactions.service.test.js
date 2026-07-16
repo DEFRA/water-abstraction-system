@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as PreviousBillingDataSeeder from '../../support/seeders/previous-billing-data.seeder.js'
 

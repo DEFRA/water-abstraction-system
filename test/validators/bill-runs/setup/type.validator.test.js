@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import TypeValidator from '../../../../app/validators/bill-runs/setup/type.validator.js'
 

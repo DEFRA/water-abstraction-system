@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import ConsolidateDateRangesService from '../../../app/services/bill-runs/consolidate-date-ranges.service.js'
 

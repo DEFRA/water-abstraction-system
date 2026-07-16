@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'

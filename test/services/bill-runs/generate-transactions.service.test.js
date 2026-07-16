@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import ChargeCategoryHelper from '../../support/helpers/charge-category.helper.js'
 import ChargeElementHelper from '../../support/helpers/charge-element.helper.js'

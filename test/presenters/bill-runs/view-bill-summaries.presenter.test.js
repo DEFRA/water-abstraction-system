@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import ViewBillSummariesPresenter from '../../../app/presenters/bill-runs/view-bill-summaries.presenter.js'
 
