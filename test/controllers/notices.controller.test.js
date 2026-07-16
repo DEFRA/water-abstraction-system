@@ -3,7 +3,6 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 
 // Test helpers
 import http2 from 'node:http2'
-
 import { generateNoticeReferenceCode } from '../support/generators.js'
 import { postRequestOptions } from '../support/general.js'
 

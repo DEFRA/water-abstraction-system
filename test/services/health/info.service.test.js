@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import http2 from 'node:http2'
 
 // Things we need to stub
+import util from 'node:util'
 import * as AddressFacadeViewHealthRequest from '../../../app/requests/address-facade/view-health.request.js'
 import * as ChargingModuleViewHealthRequest from '../../../app/requests/charging-module/view-health.request.js'
 import * as CreateRedisClientService from '../../../app/services/health/create-redis-client.service.js'
@@ -11,7 +12,6 @@ import * as GotenbergViewHealthRequest from '../../../app/requests/gotenberg/vie
 import * as LegacyViewHealthRequest from '../../../app/requests/legacy/view-health.request.js'
 import * as NotifyViewHealthRequest from '../../../app/requests/notify/view-health.request.js'
 import * as RespViewHealthRequest from '../../../app/requests/resp/view-health.request.js'
-import util from 'node:util'
 
 // Thing under test
 import InfoService from '../../../app/services/health/info.service.js'
