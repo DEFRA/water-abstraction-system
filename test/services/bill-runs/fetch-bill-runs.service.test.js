@@ -62,7 +62,7 @@ describe('Fetch Bill Runs service', () => {
         const { results, total } = await FetchBillRunsService(filters, page)
 
         expect(results).toHaveLength(3)
-        expect(total >= 5).toBe(true)
+        expect(total).toBeGreaterThanOrEqual(5)
       })
     })
 
@@ -74,8 +74,8 @@ describe('Fetch Bill Runs service', () => {
       it('returns a result with the matching "results" and the correct "total"', async () => {
         const { results, total } = await FetchBillRunsService(filters, page)
 
-        expect(results.length >= 2).toBe(true)
-        expect(total >= 5).toBe(true)
+        expect(results.length).toBeGreaterThanOrEqual(2)
+        expect(total).toBeGreaterThanOrEqual(5)
       })
     })
 
@@ -88,7 +88,7 @@ describe('Fetch Bill Runs service', () => {
         const { results, total } = await FetchBillRunsService(filters, page)
 
         expect(results).toHaveLength(0)
-        expect(total >= 5).toBe(true)
+        expect(total).toBeGreaterThanOrEqual(5)
       })
     })
 
@@ -133,7 +133,7 @@ describe('Fetch Bill Runs service', () => {
 
             // All returned results should match the filter
             expect(results[0].batchType).toEqual('supplementary')
-            expect(total >= 5).toBe(true)
+            expect(total).toBeGreaterThanOrEqual(5)
           })
         })
 
@@ -162,7 +162,7 @@ describe('Fetch Bill Runs service', () => {
 
             // All returned results should match the filter
             expect(results[0].region).toEqual(region.displayName)
-            expect(total >= 5).toBe(true)
+            expect(total).toBeGreaterThanOrEqual(5)
           })
         })
 
@@ -191,7 +191,7 @@ describe('Fetch Bill Runs service', () => {
 
             // All returned results should match the filter
             expect(results[0].status).toEqual('sent')
-            expect(total >= 5).toBe(true)
+            expect(total).toBeGreaterThanOrEqual(5)
           })
         })
 
@@ -220,7 +220,7 @@ describe('Fetch Bill Runs service', () => {
 
             // All returned results should match the filter
             expect(new Date(results[0].createdAt).getFullYear()).toEqual(filters.yearCreated)
-            expect(total >= 3).toBe(true)
+            expect(total).toBeGreaterThanOrEqual(3)
           })
         })
 

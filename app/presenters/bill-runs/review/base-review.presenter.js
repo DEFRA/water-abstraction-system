@@ -8,7 +8,7 @@ import { formatLongDate } from '../../base.presenter.js'
  *
  * @param {module:ReviewChargeElementModel[]} reviewChargeElements - array of `ReviewChargeElementModel` instances
  *
- * @returns {string} the sum of allocated volume against all review charge elements without loss of precision
+ * @returns {number} the sum of allocated volume against all review charge elements without loss of precision
  */
 export function calculateTotalBillableReturns(reviewChargeElements) {
   return reviewChargeElements.reduce((total, reviewChargeElement) => {
