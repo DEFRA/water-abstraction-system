@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as NoticesFixture from '../../../support/fixtures/notices.fixture.js'
-import * as NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
-import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
+import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
 

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
+import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Thing under test
 import FetchUserDetailsDal from '../../../../app/dal/users/internal/fetch-user-details.dal.js'

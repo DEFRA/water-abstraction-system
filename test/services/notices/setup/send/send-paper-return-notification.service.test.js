@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
-import * as NotifyResponseFixture from '../../../../support/fixtures/notify-response.fixture.js'
+import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
+import NotifyResponseFixture from '../../../../support/fixtures/notify-response.fixture.js'
 import { generateNoticeReferenceCode } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub

@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as AbstractionAlertSessionDataFixture from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
-import * as RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
+import AbstractionAlertSessionDataFixture from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import { generateNoticeReferenceCode } from '../../../../../app/lib/general.lib.js'
 

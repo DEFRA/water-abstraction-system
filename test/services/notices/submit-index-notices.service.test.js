@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Things to stub
 import * as FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'

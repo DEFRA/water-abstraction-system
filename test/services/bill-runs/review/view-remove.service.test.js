@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Things we need to stub
 import * as FetchRemoveReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js'

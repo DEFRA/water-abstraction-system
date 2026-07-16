@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
-import { licenceEnds } from '../../../support/fixtures/licence.fixture.js'
+import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
+import UsersFixture from '../../../support/fixtures/users.fixture.js'
 import { tomorrow } from '../../../support/general.js'
 import { generateUUID, today } from '../../../../app/lib/general.lib.js'
 
@@ -147,7 +147,7 @@ function _licence(licenceRef, expiredDate, role) {
   const licenceVersionId = generateUUID()
   const licenceDocumentHeaderId = generateUUID()
 
-  const licence = licenceEnds(expiredDate)
+  const licence = LicenceFixture.licenceEnds(expiredDate)
 
   licence.licenceVersions = [
     {

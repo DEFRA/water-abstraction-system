@@ -2,12 +2,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as CustomersFixture from '../../../support/fixtures/customers.fixture.js'
 import AddressHelper from '../../../support/helpers/address.helper.js'
 import BillingAccountAddressHelper from '../../../support/helpers/billing-account-address.helper.js'
 import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
 import CompanyHelper from '../../../support/helpers/company.helper.js'
 import ContactHelper from '../../../support/helpers/contact.helper.js'
+import CustomersFixture from '../../../support/fixtures/customers.fixture.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub

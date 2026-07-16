@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
-import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import LicenceFixture from '../../support/fixtures/licence.fixture.js'
 import { yesterday } from '../../support/general.js'
 
 // Thing under test
@@ -126,7 +126,7 @@ describe('Company Contacts - Contact Details presenter', () => {
 
         describe('when the abstractionAlertType is "some"', () => {
           beforeEach(() => {
-            licences = [licenceEnds()]
+            licences = [LicenceFixture.licenceEnds()]
 
             companyContact.abstractionAlerts = true
             companyContact.abstractionAlertLicences = [licences[0].id]
@@ -152,7 +152,7 @@ describe('Company Contacts - Contact Details presenter', () => {
 
       describe('when one or more licences have ended', () => {
         beforeEach(() => {
-          licences = [licenceEnds(yesterday())]
+          licences = [LicenceFixture.licenceEnds(yesterday())]
         })
 
         it('returns a warning object', () => {

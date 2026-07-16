@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
-import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.js'
 import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
 

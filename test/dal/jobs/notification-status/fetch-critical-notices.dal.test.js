@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as NoticesFixture from '../../../support/fixtures/notices.fixture.js'
-import * as NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 import EventHelper from '../../../support/helpers/event.helper.js'
 import EventModel from '../../../../app/models/event.model.js'
+import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 import NotificationHelper from '../../../support/helpers/notification.helper.js'
+import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 
 // Thing under test
 import FetchCriticalNoticesDal from '../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js'

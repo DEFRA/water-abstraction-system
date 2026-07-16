@@ -2,10 +2,10 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as UsersFixture from '../../../../support/fixtures/users.fixture.js'
 import LicenceDocumentHeaderHelper from '../../../../support/helpers/licence-document-header.helper.js'
 import LicenceDocumentHeaderModel from '../../../../../app/models/licence-document-header.model.js'
 import LicenceUnregistrationModel from '../../../../../app/models/licence-unregistration.model.js'
+import UsersFixture from '../../../../support/fixtures/users.fixture.js'
 import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Thing under test

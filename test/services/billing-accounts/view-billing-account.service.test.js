@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as BillingAccountsFixture from '../../support/fixtures/billing-accounts.fixture.js'
+import BillingAccountsFixture from '../../support/fixtures/billing-accounts.fixture.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub

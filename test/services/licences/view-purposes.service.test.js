@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
+import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
 import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'

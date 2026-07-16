@@ -5,7 +5,7 @@ import BillingAccountModel from '../../../app/models/billing-account.model.js'
  *
  * @returns {object}
  */
-export function removeReviewLicence() {
+function removeReviewLicence() {
   return {
     id: 'bb779166-0576-4581-b504-edbc0227d763',
     licenceId: '32416c67-f755-4c3f-8816-ecde0ee596bd',
@@ -30,7 +30,7 @@ export function removeReviewLicence() {
  *
  * @returns {object}
  */
-export function reviewChargeElement() {
+function reviewChargeElement() {
   return {
     id: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1',
     amendedAllocated: 0,
@@ -102,7 +102,7 @@ export function reviewChargeElement() {
  *
  * @returns {object}
  */
-export function reviewChargeReference() {
+function reviewChargeReference() {
   return {
     id: '6b3d11f2-d361-4eaa-bce2-5561283bd023',
     abatementAgreement: 1,
@@ -157,7 +157,7 @@ export function reviewChargeReference() {
  *
  * @returns {object}
  */
-export function reviewLicence() {
+function reviewLicence() {
   return {
     id: 'bb779166-0576-4581-b504-edbc0227d763',
     billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
@@ -335,4 +335,11 @@ export function reviewLicence() {
       }
     ]
   }
+}
+
+export default {
+  removeReviewLicence,
+  reviewChargeElement,
+  reviewChargeReference,
+  reviewLicence
 }

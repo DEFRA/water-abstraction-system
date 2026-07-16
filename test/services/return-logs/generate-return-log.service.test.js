@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
-import * as ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
+import ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
+import ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
 
 // Thing under test
 import GenerateReturnLogService from '../../../app/services/return-logs/generate-return-log.service.js'

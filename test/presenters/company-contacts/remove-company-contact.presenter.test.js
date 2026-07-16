@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
-import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import LicenceFixture from '../../support/fixtures/licence.fixture.js'
 
 // Thing under test
 import RemoveCompanyContactPresenter from '../../../app/presenters/company-contacts/remove-company-contact.presenter.js'
@@ -52,7 +52,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
 
       describe('when the abstractionAlertType is "some"', () => {
         beforeEach(() => {
-          licences = [licenceEnds()]
+          licences = [LicenceFixture.licenceEnds()]
 
           companyContact.abstractionAlerts = true
           companyContact.abstractionAlertLicences = [licences[0].id]

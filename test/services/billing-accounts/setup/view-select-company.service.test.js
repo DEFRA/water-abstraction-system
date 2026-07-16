@@ -9,7 +9,7 @@ import * as FetchCompaniesService from '../../../../app/services/billing-account
 import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Test helpers
-import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Thing under test
 import ViewSelectCompanyService from '../../../../app/services/billing-accounts/setup/view-select-company.service.js'

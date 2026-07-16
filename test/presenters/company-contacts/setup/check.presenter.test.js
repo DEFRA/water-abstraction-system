@@ -2,9 +2,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
-import { licence } from '../../../support/fixtures/licence.fixture.js'
 import { yesterday } from '../../../support/general.js'
 
 // Thing under test
@@ -31,7 +31,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     name = companyContact.contact.department
     email = companyContact.contact.email
 
-    licences = [licence()]
+    licences = [LicenceFixture.licence()]
 
     sentNotification = undefined
 

@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
-import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub

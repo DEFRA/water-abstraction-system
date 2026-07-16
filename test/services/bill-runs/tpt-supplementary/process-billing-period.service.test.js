@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as TwoPartTariffFixture from '../../../support/fixtures/two-part-tariff.fixture.js'
 import RegionHelper from '../../../support/helpers/region.helper.js'
+import TwoPartTariffFixture from '../../../support/fixtures/two-part-tariff.fixture.js'
 
 // Things we need to stub
 import * as FetchPreviousTransactionsService from '../../../../app/services/bill-runs/fetch-previous-transactions.service.js'

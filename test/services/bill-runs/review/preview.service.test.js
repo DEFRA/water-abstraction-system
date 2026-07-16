@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 import http2 from 'node:http2'
 
 // Test helpers

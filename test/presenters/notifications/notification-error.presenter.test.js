@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
-import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 
 // Thing under test
 import NotificationErrorPresenter from '../../../app/presenters/notifications/notification-error.presenter.js'
