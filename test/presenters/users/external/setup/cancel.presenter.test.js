@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
+import UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
 
 // Thing under test
 import CancelPresenter from '../../../../../app/presenters/users/external/setup/cancel.presenter.js'

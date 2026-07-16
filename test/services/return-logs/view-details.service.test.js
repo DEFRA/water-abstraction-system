@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
 import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
 
 // Things we need to stub
 import * as FetchReturnLogDetailsService from '../../../app/services/return-logs/fetch-return-log-details.service.js'

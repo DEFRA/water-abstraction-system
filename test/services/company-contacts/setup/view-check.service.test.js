@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 

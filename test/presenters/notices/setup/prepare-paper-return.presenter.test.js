@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
+import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 
 // Thing under test
 import PreparePaperReturnPresenter from '../../../../app/presenters/notices/setup/prepare-paper-return.presenter.js'

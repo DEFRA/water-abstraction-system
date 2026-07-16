@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
 import ContactPresenter from '../../../../app/presenters/notices/setup/contact.presenter.js'

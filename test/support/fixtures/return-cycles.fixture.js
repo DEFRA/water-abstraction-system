@@ -5,7 +5,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {object} A summer return cycle object with id, dates, and flags
  */
-export function summerCycle() {
+function summerCycle() {
   return {
     id: generateUUID(),
     startDate: new Date('2025-11-01'),
@@ -21,7 +21,7 @@ export function summerCycle() {
  *
  * @returns {object} A winter return cycle object with id, dates, and flags
  */
-export function winterCycle() {
+function winterCycle() {
   return {
     id: generateUUID(),
     startDate: new Date('2025-04-01'),
@@ -38,7 +38,7 @@ export function winterCycle() {
  * @param {number} [numberOfCycles=2] - the number of return cycles to return - defaults to the first two
  * @returns {object[]} an array of objects, each representing a return cycle
  */
-export function returnCycles(numberOfCycles = 2) {
+function returnCycles(numberOfCycles = 2) {
   const cycles = [
     summerCycle(),
     winterCycle(),
@@ -77,4 +77,10 @@ export function returnCycles(numberOfCycles = 2) {
   ]
 
   return cycles.slice(0, numberOfCycles)
+}
+
+export default {
+  summerCycle,
+  winterCycle,
+  returnCycles
 }

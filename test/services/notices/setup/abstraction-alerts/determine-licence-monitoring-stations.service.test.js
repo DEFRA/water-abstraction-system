@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import LicenceFixture from '../../../../support/fixtures/licence.fixture.js'
 import { generateUUID } from '../../../../../app/lib/general.lib.js'
-import { licenceEnds } from '../../../../support/fixtures/licence.fixture.js'
 import { yesterday } from '../../../../support/general.js'
 
 // Things we need to stub
@@ -41,7 +41,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         thresholdUnit: 'm3/s',
         thresholdValue: 100,
         latestNotification: null,
-        licence: licenceEnds(),
+        licence: LicenceFixture.licenceEnds(),
         licenceVersionPurposeCondition: null
       },
       {
@@ -55,7 +55,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         thresholdUnit: 'm3/s',
         thresholdValue: 100,
         latestNotification: null,
-        licence: licenceEnds(),
+        licence: LicenceFixture.licenceEnds(),
         licenceVersionPurposeCondition: {
           id: generateUUID(),
           notes: 'I have a bad feeling about this'
@@ -68,7 +68,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         abstractionPeriodStartMonth: 1,
         id: generateUUID(),
         latestNotification: null,
-        licence: licenceEnds(),
+        licence: LicenceFixture.licenceEnds(),
         licenceVersionPurposeCondition: {
           id: generateUUID(),
           notes: '"                   "             "                    "'

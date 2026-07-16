@@ -5,12 +5,12 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import DatabaseConfig from '../../../config/database.config.js'
 
 // Test helpers
-import * as UsersFixture from '../../support/fixtures/users.fixture.js'
 import LicenceDocumentHeaderHelper from '../../support/helpers/licence-document-header.helper.js'
 import LicenceEntityHelper from '../../support/helpers/licence-entity.helper.js'
 import LicenceEntityRoleHelper from '../../support/helpers/licence-entity-role.helper.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
 import UserHelper from '../../support/helpers/user.helper.js'
+import UsersFixture from '../../support/fixtures/users.fixture.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test

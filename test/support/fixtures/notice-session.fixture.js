@@ -14,7 +14,7 @@ import { generateNoticeReferenceCode, generateUUID } from '../../../app/lib/gene
  *
  * @returns {object} The notice setup session fixture
  */
-export function abstractionAlertStop(licenceRef = null) {
+function abstractionAlertStop(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = LicenceHelper.generateLicenceRef()
   }
@@ -93,7 +93,7 @@ export function abstractionAlertStop(licenceRef = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-export function adHocRenewalInvitation(licenceRef = null) {
+function adHocRenewalInvitation(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = LicenceHelper.generateLicenceRef()
   }
@@ -126,7 +126,7 @@ export function adHocRenewalInvitation(licenceRef = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-export function adHocInvitation(licenceRef = null) {
+function adHocInvitation(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = LicenceHelper.generateLicenceRef()
   }
@@ -169,7 +169,7 @@ export function adHocInvitation(licenceRef = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-export function adHocReminder(licenceRef = null) {
+function adHocReminder(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = LicenceHelper.generateLicenceRef()
   }
@@ -214,7 +214,7 @@ export function adHocReminder(licenceRef = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-export function paperReturn(licenceRef = null, selectedReturnLog = null) {
+function paperReturn(licenceRef = null, selectedReturnLog = null) {
   if (!licenceRef) {
     licenceRef = LicenceHelper.generateLicenceRef()
   }
@@ -259,7 +259,7 @@ export function paperReturn(licenceRef = null, selectedReturnLog = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-export function standardInvitation(licenceRef = null) {
+function standardInvitation(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = LicenceHelper.generateLicenceRef()
   }
@@ -310,7 +310,7 @@ export function standardInvitation(licenceRef = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-export function standardReminder(licenceRef = null) {
+function standardReminder(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = LicenceHelper.generateLicenceRef()
   }
@@ -391,4 +391,14 @@ function _transformReturnLog(returnLog) {
     startDate: returnLog.startDate.toISOString(),
     twoPartTariff: isTwoPartTariff
   }
+}
+
+export default {
+  abstractionAlertStop,
+  adHocRenewalInvitation,
+  adHocInvitation,
+  adHocReminder,
+  paperReturn,
+  standardInvitation,
+  standardReminder
 }

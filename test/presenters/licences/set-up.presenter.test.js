@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 import ReturnVersionModel from '../../../app/models/return-version.model.js'
+import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test

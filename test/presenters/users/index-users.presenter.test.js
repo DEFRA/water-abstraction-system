@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as UsersFixture from '../../support/fixtures/users.fixture.js'
+import UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Things we need to stub
 import FeatureFlagsConfig from '../../../config/feature-flags.config.js'

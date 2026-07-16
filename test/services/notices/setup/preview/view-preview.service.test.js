@@ -4,8 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import http2 from 'node:http2'
 
-import * as RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
 import LicenceHelper from '../../../../support/helpers/licence.helper.js'
+import RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import { generateNoticeReferenceCode, generateUUID } from '../../../../../app/lib/general.lib.js'
 

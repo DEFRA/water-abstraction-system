@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as AbstractionAlertSessionData from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import AbstractionAlertSessionData from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 import SessionModel from '../../../../app/models/session.model.js'
 
 // Things we need to stub

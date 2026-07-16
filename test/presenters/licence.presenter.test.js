@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as ViewLicencesFixture from '../support/fixtures/view-licences.fixture.js'
+import LicenceFixture from '../support/fixtures/licence.fixture.js'
 import PointModel from '../../app/models/point.model.js'
+import ViewLicencesFixture from '../support/fixtures/view-licences.fixture.js'
 import { generateUUID } from '../../app/lib/general.lib.js'
-import { licenceEnds } from '../support/fixtures/licence.fixture.js'
 
 // Thing under test
 import * as LicencePresenter from '../../app/presenters/licence.presenter.js'
@@ -731,7 +731,7 @@ describe('Licences presenter', () => {
 
     describe('when the licence does not have an "end" date', () => {
       beforeEach(() => {
-        licence = licenceEnds()
+        licence = LicenceFixture.licenceEnds()
       })
 
       it('returns null', () => {
@@ -744,7 +744,7 @@ describe('Licences presenter', () => {
     describe('when the licence does have an "end" date', () => {
       describe('but it is in the future', () => {
         beforeEach(() => {
-          licence = licenceEnds(new Date('2099-04-01'))
+          licence = LicenceFixture.licenceEnds(new Date('2099-04-01'))
         })
 
         it('returns null', () => {
@@ -756,7 +756,7 @@ describe('Licences presenter', () => {
 
       describe('because it expired in the past', () => {
         beforeEach(() => {
-          licence = licenceEnds(new Date('2019-04-01'))
+          licence = LicenceFixture.licenceEnds(new Date('2019-04-01'))
         })
 
         it('returns "This licence expired on 1 April 2019"', () => {
@@ -771,7 +771,7 @@ describe('Licences presenter', () => {
 
       describe('because it lapsed in the past', () => {
         beforeEach(() => {
-          licence = licenceEnds()
+          licence = LicenceFixture.licenceEnds()
           licence.lapsedDate = new Date('2019-04-01')
         })
 
@@ -787,7 +787,7 @@ describe('Licences presenter', () => {
 
       describe('because it was revoked in the past', () => {
         beforeEach(() => {
-          licence = licenceEnds()
+          licence = LicenceFixture.licenceEnds()
           licence.revokedDate = new Date('2019-04-01')
         })
 

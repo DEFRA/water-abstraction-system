@@ -25,7 +25,7 @@ const ADDRESS = {
  *
  * @returns {object} The generated abstraction alert email object
  */
-export function abstractionAlertEmail(notice) {
+function abstractionAlertEmail(notice) {
   const licenceMonitoringStationId = generateUUID()
 
   const notification = {
@@ -79,7 +79,7 @@ export function abstractionAlertEmail(notice) {
  *
  * @returns {object} The generated abstraction alert letter object
  */
-export function abstractionAlertLetter(notice) {
+function abstractionAlertLetter(notice) {
   const licenceMonitoringStationId = generateUUID()
 
   const notification = {
@@ -134,7 +134,7 @@ export function abstractionAlertLetter(notice) {
  *
  * @returns {object} The generated legacy hands off flow letter object
  */
-export function legacyHandsOfFlow(notice) {
+function legacyHandsOfFlow(notice) {
   const notification = {
     contactType: null,
     createdAt: new Date('2022-10-09'),
@@ -184,7 +184,7 @@ export function legacyHandsOfFlow(notice) {
  *
  * @returns {object} The generated legacy renewal letter object
  */
-export function legacyRenewal(notice) {
+function legacyRenewal(notice) {
   const notification = {
     contactType: null,
     createdAt: new Date('2022-10-09'),
@@ -232,7 +232,7 @@ export function legacyRenewal(notice) {
  *
  * @returns {object} an object representing the notification and its related licence
  */
-export function notification() {
+function notification() {
   const licence = LicenceModel.fromJson({
     id: '136bfed6-7e14-4144-a06f-35a21ceb4aa2',
     licenceRef: '01/117'
@@ -290,7 +290,7 @@ export function notification() {
  *
  * @returns {object} The generated paper return notification object
  */
-export function paperReturn(notice) {
+function paperReturn(notice) {
   const returnLogId = generateUUID()
 
   const notification = {
@@ -339,7 +339,7 @@ export function paperReturn(notice) {
  *
  * @returns {object} The generated renewal invitation email object
  */
-export function renewalInvitationEmail(notice) {
+function renewalInvitationEmail(notice) {
   const notification = {
     contactType: 'primary user',
     createdAt: new Date('2025-04-02'),
@@ -381,7 +381,7 @@ export function renewalInvitationEmail(notice) {
  *
  * @returns {object} The generated renewal invitation letter object
  */
-export function renewalInvitationLetter(notice) {
+function renewalInvitationLetter(notice) {
   const notification = {
     contactType: 'licence holder',
     createdAt: new Date('2025-04-02'),
@@ -425,7 +425,7 @@ export function renewalInvitationLetter(notice) {
  *
  * @returns {object} The generated returns invitation email object
  */
-export function returnsInvitationAdHocEmail(notice) {
+function returnsInvitationAdHocEmail(notice) {
   const notification = _returnsInvitationDefaults(notice)
 
   return {
@@ -457,7 +457,7 @@ export function returnsInvitationAdHocEmail(notice) {
  *
  * @returns {object} The generated returns invitation letter object
  */
-export function returnsInvitationAdHocLetter(notice) {
+function returnsInvitationAdHocLetter(notice) {
   const notification = _returnsInvitationDefaults(notice)
 
   return {
@@ -493,7 +493,7 @@ export function returnsInvitationAdHocLetter(notice) {
  *
  * @returns {object} The generated returns invitation letter object
  */
-export function returnsInvitationAlternateLetter(notice) {
+function returnsInvitationAlternateLetter(notice) {
   const notification = _returnsInvitationDefaults(notice)
 
   return {
@@ -527,7 +527,7 @@ export function returnsInvitationAlternateLetter(notice) {
  *
  * @returns {object} The generated returns invitation email object
  */
-export function returnsInvitationEmail(notice) {
+function returnsInvitationEmail(notice) {
   const notification = _returnsInvitationDefaults(notice)
 
   return {
@@ -559,7 +559,7 @@ export function returnsInvitationEmail(notice) {
  *
  * @returns {object} The generated returns invitation letter object
  */
-export function returnsInvitationLetter(notice) {
+function returnsInvitationLetter(notice) {
   const notification = _returnsInvitationDefaults(notice)
 
   return {
@@ -593,7 +593,7 @@ export function returnsInvitationLetter(notice) {
  *
  * @returns {object} The generated returns reminder email object
  */
-export function returnsReminderEmail(notice) {
+function returnsReminderEmail(notice) {
   const notification = {
     contactType: 'primary user',
     createdAt: new Date('2025-04-18'),
@@ -635,7 +635,7 @@ export function returnsReminderEmail(notice) {
  *
  * @returns {object} The generated returns reminder letter object
  */
-export function returnsReminderLetter(notice) {
+function returnsReminderLetter(notice) {
   const notification = {
     contactType: 'licence holder',
     createdAt: new Date('2025-04-18'),
@@ -682,7 +682,7 @@ export function returnsReminderLetter(notice) {
  *
  * @returns {object} The generated user external email object
  */
-export function userExternalPasswordResetEmail(recipient, overrides = {}) {
+function userExternalPasswordResetEmail(recipient, overrides = {}) {
   return _userPasswordResetEmail(recipient, false, overrides)
 }
 
@@ -695,7 +695,7 @@ export function userExternalPasswordResetEmail(recipient, overrides = {}) {
  *
  * @returns {object} The generated user external email object
  */
-export function userExternalShareExistingEmail(recipient, sender, overrides = {}) {
+function userExternalShareExistingEmail(recipient, sender, overrides = {}) {
   const notification = {
     contactType: null,
     createdAt: new Date('2025-04-18'),
@@ -738,7 +738,7 @@ export function userExternalShareExistingEmail(recipient, sender, overrides = {}
  *
  * @returns {object} The generated user internal email object
  */
-export function userInternalPasswordResetEmail(recipient, overrides = {}) {
+function userInternalPasswordResetEmail(recipient, overrides = {}) {
   return _userPasswordResetEmail(recipient, true, overrides)
 }
 
@@ -750,7 +750,7 @@ export function userInternalPasswordResetEmail(recipient, overrides = {}) {
  *
  * @returns {object} The generated user new internal email object
  */
-export function userNewInternalEmail(recipient, overrides = {}) {
+function userNewInternalEmail(recipient, overrides = {}) {
   const notification = {
     contactType: null,
     createdAt: new Date('2025-04-18'),
@@ -833,4 +833,26 @@ function _userPasswordResetEmail(recipient, internal, overrides) {
   }
 
   return { ...notification, ...overrides }
+}
+
+export default {
+  abstractionAlertEmail,
+  abstractionAlertLetter,
+  legacyHandsOfFlow,
+  legacyRenewal,
+  notification,
+  paperReturn,
+  renewalInvitationEmail,
+  renewalInvitationLetter,
+  returnsInvitationAdHocEmail,
+  returnsInvitationAdHocLetter,
+  returnsInvitationAlternateLetter,
+  returnsInvitationEmail,
+  returnsInvitationLetter,
+  returnsReminderEmail,
+  returnsReminderLetter,
+  userExternalPasswordResetEmail,
+  userExternalShareExistingEmail,
+  userInternalPasswordResetEmail,
+  userNewInternalEmail
 }

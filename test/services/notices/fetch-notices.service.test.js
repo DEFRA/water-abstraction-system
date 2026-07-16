@@ -5,9 +5,9 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import DatabaseConfig from '../../../config/database.config.js'
 
 // Test helpers
-import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import EventHelper from '../../support/helpers/event.helper.js'
 import EventModel from '../../../app/models/event.model.js'
+import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Thing under test
 import FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'

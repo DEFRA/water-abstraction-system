@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import * as ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
+import ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
 import { formatNumber } from '../../../app/presenters/base.presenter.js'
 import { today } from '../../../app/lib/general.lib.js'
 import { unitNames } from '../../../app/lib/static-lookups.lib.js'

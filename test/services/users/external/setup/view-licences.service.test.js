@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
 
 // Things we need to stub
 import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
