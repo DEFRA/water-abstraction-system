@@ -16,7 +16,7 @@ import ModLogModel from '../../app/models/mod-log.model.js'
 import PurposeHelper from '../support/helpers/purpose.helper.js'
 import PurposeModel from '../../app/models/purpose.model.js'
 import RegionHelper from '../support/helpers/region.helper.js'
-import { generateRandomInteger } from '../../app/lib/general.lib.js'
+import { generateRandomInteger } from '../support/generators.js'
 
 // Thing under test
 import LicenceVersionModel from '../../app/models/licence-version.model.js'

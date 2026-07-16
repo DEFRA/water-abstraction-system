@@ -26,7 +26,7 @@ import UserGroupModel from '../../app/models/user-group.model.js'
 import UserHelper from '../support/helpers/user.helper.js'
 import UserRoleHelper from '../support/helpers/user-role.helper.js'
 import UserRoleModel from '../../app/models/user-role.model.js'
-import { generateUUID } from '../../app/lib/general.lib.js'
+import { generateUUID } from '../support/generators.js'
 import { userPermissions } from '../../app/lib/static-lookups.lib.js'
 
 // Thing under test

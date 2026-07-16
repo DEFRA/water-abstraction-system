@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
 import LicenceHelper from '../../support/helpers/licence.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import FetchAbstractionAlertLicencesDal from '../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'

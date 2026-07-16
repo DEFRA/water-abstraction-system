@@ -7,7 +7,7 @@ import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-p
 import PrimaryPurposeHelper from '../../support/helpers/primary-purpose.helper.js'
 import PurposeHelper from '../../support/helpers/purpose.helper.js'
 import SecondaryPurposeHelper from '../../support/helpers/secondary-purpose.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import FetchOtherPurposeIdsDal from '../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'

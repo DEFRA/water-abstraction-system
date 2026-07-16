@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import ReturnVersionModel from '../../../app/models/return-version.model.js'
 import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import * as FetchAgreementsService from '../../../app/services/licences/fetch-agreements.service.js'

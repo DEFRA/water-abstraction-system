@@ -5,7 +5,7 @@ import ReturnSubmissionLineModel from '../../../app/models/return-submission-lin
 import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 import { relativeToToday } from '../general.js'
 import { daysFromPeriod, formatDateObjectToISO, monthsFromPeriod, weeksFromPeriod } from '../../../app/lib/dates.lib.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import { generateRandomInteger, generateUUID } from '../generators.js'
 
 /**
  * Applies the fields that are returned by the FetchReturnLogService to a return log instance

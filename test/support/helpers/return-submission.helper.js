@@ -2,9 +2,8 @@
  * @module ReturnSubmissionHelper
  */
 
-import ReturnLogHelper from './return-log.helper.js'
 import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateReturnId, generateUUID } from '../generators.js'
 
 /**
  * Add a new return submission
@@ -48,7 +47,7 @@ function defaults(data = {}) {
   const defaults = {
     id: generateUUID(),
     returnLogId: generateUUID(),
-    returnId: ReturnLogHelper.generateReturnId(),
+    returnId: generateReturnId(),
     userId: 'admin-internal@wrls.gov.uk',
     userType: 'internal',
     version: 1,

@@ -2,9 +2,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 
 // Thing under test
 import RenewalInvitationNotificationsPresenter from '../../../../app/presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
@@ -115,7 +115,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
     describe('when the notification is an email', () => {
       describe('and there are multiple licence refs', () => {
         beforeEach(() => {
-          recipients[0].licence_refs.push(LicenceHelper.generateLicenceRef())
+          recipients[0].licence_refs.push(generateLicenceRef())
         })
 
         it('returns the expected "personalisation"', () => {
@@ -145,7 +145,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
     describe('when the notification is a letter', () => {
       describe('and there are multiple licence refs', () => {
         beforeEach(() => {
-          recipients[1].licence_refs.push(LicenceHelper.generateLicenceRef())
+          recipients[1].licence_refs.push(generateLicenceRef())
         })
 
         it('returns the expected "personalisation"', () => {
@@ -191,7 +191,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
     describe('when the notification is an email', () => {
       describe('and there are multiple licence refs', () => {
         beforeEach(() => {
-          recipients[0].licence_refs.push(LicenceHelper.generateLicenceRef())
+          recipients[0].licence_refs.push(generateLicenceRef())
         })
 
         it('returns the expected "templateId"', () => {
@@ -213,7 +213,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
     describe('when the notification is a letter', () => {
       describe('and there are multiple licence refs', () => {
         beforeEach(() => {
-          recipients[1].licence_refs.push(LicenceHelper.generateLicenceRef())
+          recipients[1].licence_refs.push(generateLicenceRef())
         })
 
         it('returns the expected "templateId"', () => {

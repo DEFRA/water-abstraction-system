@@ -8,7 +8,7 @@ import LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.
 import LicenceEntityRoleHelper from '../../../support/helpers/licence-entity-role.helper.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import FetchLicencesDal from '../../../../app/dal/users/external/fetch-licences.dal.js'

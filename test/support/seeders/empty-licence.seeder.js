@@ -6,8 +6,7 @@ import LicenceDocumentHeaderHelper from '../helpers/licence-document-header.help
 import LicenceDocumentHelper from '../helpers/licence-document.helper.js'
 import LicenceHelper from '../helpers/licence.helper.js'
 import RegionHelper from '../helpers/region.helper.js'
-
-const { generateLicenceRef } = LicenceHelper
+import { generateLicenceRef } from '../generators.js'
 
 /**
  * Adds a licence

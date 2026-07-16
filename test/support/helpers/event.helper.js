@@ -3,7 +3,7 @@
  */
 
 import EventModel from '../../../app/models/event.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new event

@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Test helpers
 import YarStub from '../../support/stubs/yar.stub.js'

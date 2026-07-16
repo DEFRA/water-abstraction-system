@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode } from '../../support/generators.js'
 import http2 from 'node:http2'
 
 // Things we need to stub

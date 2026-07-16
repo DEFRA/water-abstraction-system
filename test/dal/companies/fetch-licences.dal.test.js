@@ -5,7 +5,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
 import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import { generateRandomInteger, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import databaseConfig from '../../../config/database.config.js'

@@ -11,10 +11,11 @@ import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
 import PurposeHelper from '../helpers/purpose.helper.js'
 import RegionHelper from '../helpers/region.helper.js'
 import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
-
-const { generateLicenceRef } = LicenceHelper
-const { generateLicenceVersionExternalId } = LicenceVersionHelper
-const { generateLicenceVersionPurposeExternalId } = LicenceVersionPurposeHelper
+import {
+  generateLicenceRef,
+  generateLicenceVersionExternalId,
+  generateLicenceVersionPurposeExternalId
+} from '../generators.js'
 
 /**
  * Seeds a licence with all the related records to get a 'real' set of abstraction data

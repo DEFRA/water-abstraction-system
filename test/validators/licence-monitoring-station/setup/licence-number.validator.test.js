@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 import { yesterday } from '../../../support/general.js'
 
 // Thing under test
@@ -68,7 +68,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
         licence = undefined
 
         payload = {
-          licenceRef: LicenceHelper.generateLicenceRef()
+          licenceRef: generateLicenceRef()
         }
       })
 
@@ -86,7 +86,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
         licence = LicenceFixture.licenceEnds(yesterday())
 
         payload = {
-          licenceRef: LicenceHelper.generateLicenceRef()
+          licenceRef: generateLicenceRef()
         }
       })
 

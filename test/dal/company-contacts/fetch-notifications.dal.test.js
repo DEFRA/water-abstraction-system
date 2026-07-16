@@ -6,7 +6,7 @@ import EventHelper from '../../support/helpers/event.helper.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationHelper from '../../support/helpers/notification.helper.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import FetchNotificationsDal from '../../../app/dal/company-contacts/fetch-notifications.dal.js'

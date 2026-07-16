@@ -16,6 +16,7 @@ import ReviewChargeElementHelper from '../helpers/review-charge-element.helper.j
 import ReviewChargeReferenceHelper from '../helpers/review-charge-reference.helper.js'
 import ReviewChargeVersionHelper from '../helpers/review-charge-version.helper.js'
 import ReviewLicenceHelper from '../helpers/review-licence.helper.js'
+import { generateAccountNumber } from '../generators.js'
 
 const ABATEMENT_S126 = 16
 const MAJOR_CHANGE = 0
@@ -173,7 +174,7 @@ async function _changeBillingAccount(billRun, chargeCategory) {
 
   // NOTE: We control the account numbers so we can both test the ordering FetchBillingAccountsService applies and
   // predict the result to more easily assert against
-  let billingAccountNumber = BillingAccountHelper.generateAccountNumber()
+  let billingAccountNumber = generateAccountNumber()
   billingAccountNumber = billingAccountNumber.replace('T', 'W')
   const billingAccountA = await BillingAccountHelper.add({ accountNumber: billingAccountNumber })
 

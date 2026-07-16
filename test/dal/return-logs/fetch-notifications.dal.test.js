@@ -6,8 +6,7 @@ import EventHelper from '../../support/helpers/event.helper.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationHelper from '../../support/helpers/notification.helper.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-
-import LicenceHelper from '../../support/helpers/licence.helper.js'
+import { generateLicenceRef } from '../../support/generators.js'
 
 // Thing under test
 import FetchNotificationsDal from '../../../app/dal/return-logs/fetch-notifications.dal.js'
@@ -19,7 +18,7 @@ describe('Return Logs - Fetch Notifications DAL', () => {
   beforeEach(async () => {
     notice = await EventHelper.add({
       ...NoticesFixture.returnsInvitation(),
-      licences: [LicenceHelper.generateLicenceRef()]
+      licences: [generateLicenceRef()]
     })
 
     notification = await NotificationHelper.add(NotificationsFixture.returnsInvitationEmail(notice))

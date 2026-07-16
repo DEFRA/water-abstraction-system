@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Thing under test
 import RecipientNamePresenter from '../../../../app/presenters/notices/setup/recipient-name.presenter.js'

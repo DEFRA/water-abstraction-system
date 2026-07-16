@@ -7,7 +7,7 @@ import BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
 import BillModel from '../../../../app/models/bill.model.js'
 import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
 import TransactionHelper from '../../../support/helpers/transaction.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'

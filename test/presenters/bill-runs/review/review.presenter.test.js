@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import RegionHelper from '../../../support/helpers/region.helper.js'
-import { generateRandomInteger, generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateRandomInteger, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import ReviewPresenter from '../../../../app/presenters/bill-runs/review/review.presenter.js'

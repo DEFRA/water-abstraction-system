@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import ReturnsPeriodPresenter from '../../../../app/presenters/notices/setup/returns-period.presenter.js'

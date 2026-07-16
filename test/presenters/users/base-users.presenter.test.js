@@ -2,8 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import * as BaseUsersPresenter from '../../../app/presenters/users/base-users.presenter.js'
@@ -19,11 +18,11 @@ describe('Users - Base Users presenter', () => {
         licences: [
           {
             id: generateUUID(),
-            licenceRef: LicenceHelper.generateLicenceRef()
+            licenceRef: generateLicenceRef()
           },
           {
             id: generateUUID(),
-            licenceRef: LicenceHelper.generateLicenceRef()
+            licenceRef: generateLicenceRef()
           }
         ],
         selectedLicences: []

@@ -2,9 +2,8 @@
  * @module ReturnRequirementPointHelper
  */
 
-import PointHelper from './point.helper.js'
 import ReturnRequirementPointModel from '../../../app/models/return-requirement-point.model.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import { generateReturnRequirementPointExternalId, generateUUID } from '../generators.js'
 
 /**
  * Add a new return requirement point
@@ -50,23 +49,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Returns a randomly generated return requirement point external ID (9:100:1)
- *
- * Combines IDs found in `NALD_RET_FMT_POINTS` which is the basis for return requirements points.
- *
- * - `[region code]:[return requirement ID]:[point ID]` - all values are NALD IDs
- *
- * @returns {string} - A randomly generated return requirement point external ID
- */
-function generateReturnRequirementPointExternalId() {
-  const naldPointId = PointHelper.generateNaldPointId()
-
-  return `9:${generateRandomInteger(100, 99999)}:${naldPointId}`
-}
-
 export default {
   add,
-  defaults,
-  generateReturnRequirementPointExternalId
+  defaults
 }

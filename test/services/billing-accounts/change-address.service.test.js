@@ -10,6 +10,7 @@ import BillingAccountHelper from '../../support/helpers/billing-account.helper.j
 import CompanyHelper from '../../support/helpers/company.helper.js'
 import CompanyModel from '../../../app/models/company.model.js'
 import ContactModel from '../../../app/models/contact.model.js'
+import { generateCompanyNumber, generateUprn } from '../../support/generators.js'
 
 // Things we need to stub
 import * as SendCustomerChangeService from '../../../app/services/billing-accounts/send-customer-change.service.js'
@@ -62,7 +63,7 @@ describe('Change address service', () => {
             addressLine2: 'HORIZON HOUSE',
             town: 'BRISTOL',
             postcode: 'BS1 5AH',
-            uprn: AddressHelper.generateUprn()
+            uprn: generateUprn()
           }
         })
 
@@ -170,7 +171,7 @@ describe('Change address service', () => {
         agentCompany = {
           type: 'organisation',
           name: 'SCP Foundation',
-          companyNumber: CompanyHelper.generateCompanyNumber(),
+          companyNumber: generateCompanyNumber(),
           organisationType: 'limitedCompany'
         }
       })
@@ -414,7 +415,7 @@ describe('Change address service', () => {
       agentCompany = {
         type: 'organisation',
         name: 'WRLS Team',
-        companyNumber: CompanyHelper.generateCompanyNumber(),
+        companyNumber: generateCompanyNumber(),
         organisationType: 'limitedCompany'
       }
       contact = {

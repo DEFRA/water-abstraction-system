@@ -2,11 +2,8 @@
  * @module ReviewReturnHelper
  */
 
-import LicenceHelper from './licence.helper.js'
-import ReturnLogHelper from './return-log.helper.js'
-import ReturnRequirementHelper from './return-requirement.helper.js'
 import ReviewReturnModel from '../../../app/models/review-return.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateReference, generateReturnId, generateUUID } from '../generators.js'
 
 /**
  * Add a new review return for 2pt matching
@@ -50,18 +47,12 @@ function add(data = {}) {
  * @returns {object} - Returns data from the query
  */
 function defaults(data = {}) {
-  const licenceRef = data.licenceRef ? data.licenceRef : LicenceHelper.generateLicenceRef()
-  const returnReference = data.returnReference ? data.returnReference : ReturnRequirementHelper.generateReference()
+  const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
+  const returnReference = data.returnReference ? data.returnReference : generateReference()
 
   const defaults = {
     reviewLicenceId: generateUUID(),
-    returnId: ReturnLogHelper.generateReturnId(
-      new Date('2022-04-01'),
-      new Date('2023-03-31'),
-      1,
-      licenceRef,
-      returnReference
-    ),
+    returnId: generateReturnId(new Date('2022-04-01'), new Date('2023-03-31'), 1, licenceRef, returnReference),
     returnLogId: generateUUID(),
     returnReference,
     returnStatus: 'completed',

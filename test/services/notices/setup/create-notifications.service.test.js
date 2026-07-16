@@ -6,7 +6,7 @@ import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
-import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'

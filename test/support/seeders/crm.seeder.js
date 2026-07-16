@@ -17,8 +17,7 @@ import LicenceHelper from '../helpers/licence.helper.js'
 import LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
 import LicenceVersionHelper from '../helpers/licence-version.helper.js'
 import UserModel from '../helpers/user.helper.js'
-
-const { generateLicenceRef } = LicenceHelper
+import { generateLicenceRef } from '../generators.js'
 
 /**
  * Seed CRM data

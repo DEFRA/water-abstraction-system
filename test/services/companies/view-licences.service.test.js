@@ -4,12 +4,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 import LicenceModel from '../../../app/models/licence.model.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
 import * as FetchLicencesService from '../../../app/dal/companies/fetch-licences.dal.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
 import ViewLicencesService from '../../../app/services/companies/view-licences.service.js'
@@ -32,7 +31,7 @@ describe('Companies - View Licences service', () => {
         expiredDate: null,
         id: generateUUID(),
         lapsedDate: null,
-        licenceRef: LicenceHelper.generateLicenceRef(),
+        licenceRef: generateLicenceRef(),
         revokedDate: null,
         startDate: new Date('2022-01-01'),
         currentLicenceHolderId: company.id,

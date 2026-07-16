@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
 
 //
 import DatabaseConfig from '../../../../config/database.config.js'

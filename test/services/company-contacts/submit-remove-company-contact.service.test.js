@@ -9,7 +9,7 @@ import YarStub from '../../support/stubs/yar.stub.js'
 import * as DeleteCompanyContactService from '../../../app/services/company-contacts/delete-company-contact.service.js'
 import * as FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
 import * as FetchNotificationService from '../../../app/services/company-contacts/fetch-notification.service.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import SubmitRemoveCompanyContactService from '../../../app/services/company-contacts/submit-remove-company-contact.service.js'

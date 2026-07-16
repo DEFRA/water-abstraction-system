@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 // Test helpers
 import EventHelper from '../../support/helpers/event.helper.js'
 import NotificationHelper from '../../support/helpers/notification.helper.js'
-import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode } from '../../support/generators.js'
 
 // Thing under test
 import UpdateEventService from '../../../app/services/notices/update-notice.service.js'

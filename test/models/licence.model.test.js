@@ -40,7 +40,8 @@ import UserHelper from '../support/helpers/user.helper.js'
 import UserModel from '../../app/models/user.model.js'
 import WorkflowHelper from '../support/helpers/workflow.helper.js'
 import WorkflowModel from '../../app/models/workflow.model.js'
-import { generateUUID, today } from '../../app/lib/general.lib.js'
+import { generateUUID } from '../support/generators.js'
+import { today } from '../../app/lib/general.lib.js'
 import { tomorrow, yesterday } from '../support/general.js'
 
 // Thing under test

@@ -6,7 +6,8 @@ import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
 import DatabaseConfig from '../../../../config/database.config.js'
 import RegionHelper from '../../../support/helpers/region.helper.js'
 import ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
-import { generateRandomInteger, today } from '../../../../app/lib/general.lib.js'
+import { generateRandomInteger } from '../../../support/generators.js'
+import { today } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
 import FetchBillRunLicencesService from '../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js'

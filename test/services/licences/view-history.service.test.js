@@ -2,9 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
 import LicenceVersionModel from '../../../app/models/licence-version.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import * as FetchHistoryService from '../../../app/services/licences/fetch-history.service.js'
@@ -31,7 +30,7 @@ describe('Licences - View History service', () => {
 
     licence = {
       id: generateUUID(),
-      licenceRef: LicenceHelper.generateLicenceRef()
+      licenceRef: generateLicenceRef()
     }
 
     licenceHistory = [

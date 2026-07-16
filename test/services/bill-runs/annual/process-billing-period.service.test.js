@@ -2,7 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { determineCurrentFinancialYear, generateUUID } from '../../../../app/lib/general.lib.js'
+import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as ChargingModuleCreateTransactionRequest from '../../../../app/requests/charging-module/create-transaction.request.js'

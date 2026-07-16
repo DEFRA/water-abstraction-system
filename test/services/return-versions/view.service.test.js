@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ContactModel from '../../../app/models/contact.model.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import ReturnVersionModel from '../../../app/models/return-version.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we want to stub
 import * as FetchReturnVersionService from '../../../app/services/return-versions/fetch-return-version.service.js'

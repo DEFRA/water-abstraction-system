@@ -3,9 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateReference, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
@@ -29,7 +28,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       receivedDateOptions: 'today',
       receivedDate: new Date('2025-02-14'),
       returnLogId,
-      returnReference: ReturnRequirementHelper.generateReference()
+      returnReference: generateReference()
     }
 
     session = SessionModelStub(sessionData)

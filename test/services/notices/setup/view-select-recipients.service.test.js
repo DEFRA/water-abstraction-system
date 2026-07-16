@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'

@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchCriticalNoticesDal from '../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js'

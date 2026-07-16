@@ -8,7 +8,7 @@ import * as RecipientScenariosSeeder from '../../support/seeders/recipient-scena
 import * as RecipientsFormatter from '../../support/seeders/recipients.formatter.js'
 import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
 import { db } from '../../../db/db.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import * as RecipientQueriesDal from '../../../app/dal/notices/recipient-queries.dal.js'

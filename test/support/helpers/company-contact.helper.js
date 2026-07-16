@@ -3,7 +3,7 @@
  */
 
 import CompanyContactModel from '../../../app/models/company-contact.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new company contact

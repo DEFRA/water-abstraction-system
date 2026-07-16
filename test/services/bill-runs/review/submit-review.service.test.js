@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Test helpers
 import YarStub from '../../../support/stubs/yar.stub.js'

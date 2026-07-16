@@ -2,8 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import RegionHelper from '../../support/helpers/region.helper.js'
 import http2 from 'node:http2'
+
+import RegionHelper from '../../support/helpers/region.helper.js'
 
 // Things we need to stub
 import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'

@@ -4,7 +4,7 @@
 
 import FinancialAgreementHelper from './financial-agreement.helper.js'
 import LicenceAgreementModel from '../../../app/models/licence-agreement.model.js'
-import LicenceHelper from './licence.helper.js'
+import { generateLicenceRef } from '../generators.js'
 
 /**
  * Add a new licence agreement
@@ -42,7 +42,7 @@ function defaults(data = {}) {
 
   const defaults = {
     financialAgreementId,
-    licenceRef: LicenceHelper.generateLicenceRef(),
+    licenceRef: generateLicenceRef(),
     startDate: new Date('2023-01-01')
   }
 

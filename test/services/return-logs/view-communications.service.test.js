@@ -2,8 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import * as FetchNotificationsDal from '../../../app/dal/return-logs/fetch-notifications.dal.js'
@@ -22,7 +21,7 @@ describe('Return Logs - View Communications Service', () => {
       id: generateUUID(),
       licence: {
         id: generateUUID(),
-        licenceRef: LicenceHelper.generateLicenceRef()
+        licenceRef: generateLicenceRef()
       }
     }
 

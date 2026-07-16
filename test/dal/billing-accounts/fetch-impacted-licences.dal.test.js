@@ -3,8 +3,8 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
 import ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import { compareStrings, generateUUID } from '../../../app/lib/general.lib.js'
+import { compareStrings } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import FetchImpactedLicencesDal from '../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js'
@@ -19,11 +19,9 @@ describe('DAL - Fetch Impacted Licences dal', () => {
   beforeAll(async () => {
     // NOTE: We want to confirm the results are sorted. So, of the two references generated, we'll use the 'higher'
     // one to create our first record, to confirm the order isn't a fluke of the order in which the records were created
-    const licenceRefs = [LicenceHelper.generateLicenceRef(), LicenceHelper.generateLicenceRef()].sort(
-      (referenceString, compareString) => {
-        return compareStrings(referenceString, compareString)
-      }
-    )
+    const licenceRefs = [generateLicenceRef(), generateLicenceRef()].sort((referenceString, compareString) => {
+      return compareStrings(referenceString, compareString)
+    })
 
     multiUseLicenceRef = licenceRefs[0]
     singleUseLicenceRef = licenceRefs[1]
@@ -32,7 +30,7 @@ describe('DAL - Fetch Impacted Licences dal', () => {
       await ChargeVersionHelper.add({ billingAccountId, licenceRef: singleUseLicenceRef }),
       await ChargeVersionHelper.add({ billingAccountId, licenceRef: multiUseLicenceRef }),
       await ChargeVersionHelper.add({ billingAccountId, licenceRef: multiUseLicenceRef }),
-      await ChargeVersionHelper.add({ licenceRef: LicenceHelper.generateLicenceRef() })
+      await ChargeVersionHelper.add({ licenceRef: generateLicenceRef() })
     ]
   })
 

@@ -3,9 +3,9 @@
  */
 
 import UserModel from '../../../app/models/user.model.js'
+import { generateUserName } from '../generators.js'
 import { selectRandomEntry } from '../general.js'
 import { data as users } from '../../../db/seeds/data/users.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 const data = users
 
@@ -71,25 +71,6 @@ function defaults(data = {}) {
 }
 
 /**
- * Generates a random user ID
- *
- * @returns {number} a random integer between 100011 and 199999
- */
-function generateUserId() {
-  // The last ID in the pre-seeded users is 100010
-  return generateRandomInteger(100011, 199999)
-}
-
-/**
- * Generates a random user name
- *
- * @returns {string} a random user name in the format [random UUID]@wrls.gov.uk
- */
-function generateUserName() {
-  return `${generateUUID()}@wrls.gov.uk`
-}
-
-/**
  * Select an entry from the reference data entries seeded at the start of testing
  *
  * Because this helper is linked to a reference record instead of a transaction, we don't expect these to be created
@@ -117,7 +98,5 @@ export default {
   DEFAULT_INDEX,
   add,
   defaults,
-  generateUserId,
-  generateUserName,
   select
 }

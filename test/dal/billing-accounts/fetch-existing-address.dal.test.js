@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
 import AddressHelper from '../../support/helpers/address.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import FetchExistingAddress from '../../../app/dal/billing-accounts/fetch-existing-address.dal.js'

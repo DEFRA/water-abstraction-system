@@ -2,10 +2,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test Helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import CommunicationsPresenter from '../../../app/presenters/licences/communications.presenter.js'
@@ -17,7 +16,7 @@ describe('Licences - Communications presenter', () => {
   beforeEach(() => {
     licence = {
       id: generateUUID(),
-      licenceRef: LicenceHelper.generateLicenceRef()
+      licenceRef: generateLicenceRef()
     }
 
     const notice = NoticesFixture.alertStop()

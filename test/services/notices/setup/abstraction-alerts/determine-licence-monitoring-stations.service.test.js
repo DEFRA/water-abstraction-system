@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import LicenceFixture from '../../../../support/fixtures/licence.fixture.js'
-import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../../support/generators.js'
 import { yesterday } from '../../../../support/general.js'
 
 // Things we need to stub

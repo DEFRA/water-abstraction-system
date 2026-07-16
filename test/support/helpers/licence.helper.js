@@ -4,7 +4,7 @@
 
 import LicenceModel from '../../../app/models/licence.model.js'
 import RegionHelper from './region.helper.js'
-import { generateRandomInteger } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../generators.js'
 
 /**
  * Add a new licence
@@ -56,21 +56,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Returns a randomly generated licence reference
- *
- * @returns {string} - A randomly generated licence reference
- */
-function generateLicenceRef() {
-  const secondPart = generateRandomInteger(10, 99)
-  const thirdPart = generateRandomInteger(10, 99)
-  const fourthPart = generateRandomInteger(1000, 9999)
-
-  return `01/${secondPart}/${thirdPart}/${fourthPart}`
-}
-
 export default {
   add,
-  defaults,
-  generateLicenceRef
+  defaults
 }

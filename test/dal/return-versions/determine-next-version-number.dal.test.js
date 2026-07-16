@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
 import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import DetermineNextVersionNumberDal from '../../../app/dal/return-versions/determine-next-version-number.dal.js'
