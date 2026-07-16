@@ -57,9 +57,10 @@ describe('Airbrake plugin', () => {
   // TODO: Remove describe.skip once the project migrates to ESM. In CJS mode, airbrake.plugin.js holds a module-level
   // _notifier singleton. The beforeAll above spins up a real Hapi server that sets it via the real plugin module.
   // These tests need a completely fresh module instance (where _notifier is undefined) with Notifier and gotWrapper
-  // stubbed out. Proxyquire provides that isolation today but vi.mock() cannot replicate it in CJS. Once the project
-  // is ESM, replace Proxyquire with vi.mock('@airbrake/node', ...) and vi.mock('../lib/got-wrapper.lib.js', ...),
-  // then use vi.resetModules() + dynamic import() to load a fresh plugin instance per test.
+  // stubbed out. Proxyquire provides that isolation today. We do not use vi.mock() here or once the project is ESM
+  // — see the testing skill's Mocking section for why. Instead, once ESM, use vi.resetModules() + dynamic import()
+  // to load a fresh plugin instance per test, then vi.spyOn() the namespace imports of '@airbrake/node' and
+  // '../lib/got-wrapper.lib.js' to stub their exports.
   describe.skip('when registering the plugin', () => {
     let AirbrakePluginWithStubs
     let fakeServer
@@ -70,7 +71,7 @@ describe('Airbrake plugin', () => {
       gotWrapperStub = vi.fn().mockResolvedValue('fake-request-fn')
       NotifierStub = vi.fn()
 
-      // TODO: Replace with vi.mock() + dynamic import() once the project migrates to ESM
+      // TODO: Replace with vi.spyOn() + dynamic import() once the project migrates to ESM
       // AirbrakePluginWithStubs = Proxyquire('../../app/plugins/airbrake.plugin.js', {
       //   '../lib/got-wrapper.lib.js': { gotWrapper: gotWrapperStub },
       //   '@airbrake/node': { Notifier: NotifierStub },

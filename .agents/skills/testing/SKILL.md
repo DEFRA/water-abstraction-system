@@ -7,35 +7,34 @@ description: Testing standards and conventions for this project
 
 ## Framework
 
-- Use `vitest` — not Jest, Mocha, or Chai
-- Use `sinon` for stubs and spies
-- `vitest` runs with `globals: true`, so `describe`, `it`, `expect`, `beforeAll`, `afterAll`, `beforeEach`, `afterEach`, and `vi` are all available without importing
+- Use `vitest` — not Jest, Mocha, Chai, or Sinon
+- `vitest` runs with `globals: false`, so `describe`, `it`, `expect`, `beforeAll`, `afterAll`, `beforeEach`, `afterEach`, and `vi` must always be imported explicitly from `'vitest'`
+- Test files are ESM. No `'use strict'`, no `require()` — use `import`
 
 ## Test file structure
 
-Test files do not use JSDoc or `@module`. The top-of-file order is `'use strict'` followed by imports grouped by section comment:
+Test files do not use JSDoc or `@module`. The top-of-file order is imports grouped by section comment:
 
 ```js
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SomeModelStub = require('../support/stubs/some-model.stub.js')
+import SomeModelHelper from '../support/helpers/some-model.helper.js'
 
 // Things we need to stub
-const SomeDal = require('../../app/dal/some.dal.js')
+import * as SomeDal from '../../app/dal/some.dal.js'
 
 // Thing under test
-const SubjectUnderTest = require('../../app/services/subject-under-test.service.js')
+import SubjectUnderTest from '../../app/services/subject-under-test.service.js'
 ```
 
 - Use these section comments in order, omitting any that are not needed:
-  1. `// Test framework dependencies` (omit entirely when only Vitest globals are needed — i.e. no Sinon or other requires)
+  1. `// Test framework` (omit entirely when only Vitest globals are needed — i.e. no other imports)
   2. `// Test helpers`
   3. `// Things we need to stub`
   4. `// Thing under test`
+  5. `// For running our service` (controller tests only — the `init` import used to start the Hapi server)
 - Alphabetical ordering within each section still applies (alanisms rule 2)
 - The top-level `describe` label must reflect the file's folder path. Each path segment is title-cased and joined with ` - `, followed by the module type:
 
@@ -48,16 +47,44 @@ const SubjectUnderTest = require('../../app/services/subject-under-test.service.
 
 ## Controller tests
 
-- Always call `await server.stop()` in `after`
+- Start the server in `beforeAll` and stop it in `afterAll` with `await server.stop()`
 
-## Sinon
+## Stubbing and spying
 
-- Always call `Sinon.restore()` in `afterEach` whenever stubs are used
+Use `vi.spyOn()` and `vi.fn()` — vitest's built-in mocking, not Sinon.
+
+- To stub a static/class method (e.g. an Objection model), spy directly on the default import — mutating a method on the object works even though the import binding itself is read-only:
+
+```js
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+
+vi.spyOn(ReturnLogModel, 'query').mockReturnValue({
+  patch: vi.fn().mockReturnThis(),
+  findById: vi.fn().mockResolvedValue()
+})
+```
+
+- To stub a module's default-exported function (e.g. a service or DAL), you can't spy on the default import binding directly — import it as a namespace instead and spy on the `'default'` property:
+
+```js
+import * as FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
+
+vi.spyOn(FetchBillService, 'default').mockResolvedValue(billData)
+```
+
+- Always call `vi.restoreAllMocks()` in `afterEach` whenever stubs are used
 - Never leave stubs active across tests
+
+## Mocking
+
+- Never use `vi.mock()` or `vi.doMock()`. They hoist to the top of the file, auto-mock every export, and behave inconsistently between CJS and ESM — they've caused real problems in this codebase and are banned
+- Use the `vi.spyOn()` patterns above instead
+- This also works for named exports of third-party packages, e.g. `vi.spyOn(Tar, 'create')` against `import * as Tar from 'tar'`
+- If a module genuinely cannot be stubbed this way (e.g. a CJS module with a module-level singleton, or a package whose live bindings can't be intercepted), use `Proxyquire` instead — see `test/plugins/airbrake.plugin.test.js` for an example. Don't reach for `vi.mock()`/`vi.doMock()` as a workaround
 
 ## Assertions
 
-- Vitest assertions use `.toEqual()`, `.toBe()`, etc. directly on `expect()`:
+- Vitest assertions use `.toEqual()`, `.toBe()`, etc. directly on `expect()`
 - Never inline computed values directly in `expect()` — assign them to a variable first, then wrap in the array at the assertion. Always leave a blank line between the assignment and the `expect()`:
 
 ```js

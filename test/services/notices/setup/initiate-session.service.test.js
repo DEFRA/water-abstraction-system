@@ -6,7 +6,7 @@ import AbstractionAlertSessionData from '../../../support/fixtures/abstraction-a
 import SessionModel from '../../../../app/models/session.model.js'
 
 // Things we need to stub
-import DetermineLicenceMonitoringStationsService from '../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
+import * as DetermineLicenceMonitoringStationsService from '../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
 
 // Thing under test
 import InitiateSessionService from '../../../../app/services/notices/setup/initiate-session.service.js'
@@ -77,10 +77,7 @@ describe('Notices - Setup - Initiate Session service', () => {
         journey = 'alerts'
         monitoringStationId = monitoringStationData.monitoringStationId
 
-        vi.mock(
-          '../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
-        )
-        DetermineLicenceMonitoringStationsService.mockResolvedValue(monitoringStationData)
+        vi.spyOn(DetermineLicenceMonitoringStationsService, 'default').mockResolvedValue(monitoringStationData)
       })
 
       it('initiates the session for the abstraction alerts setup journey and returns the session ID and redirect path', async () => {
