@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import EventHelper from '../../../../support/helpers/event.helper.js'
-import LicenceHelper from '../../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../../support/helpers/generate.helper.js'
 import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import NotificationHelper from '../../../../support/helpers/notification.helper.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
@@ -58,9 +58,9 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
             // The notifications will share some of the same licence references and return log IDs. We can then test
             // what the service returns doesn't contain duplicates
             licenceRefs = [
-              LicenceHelper.generateLicenceRef(),
-              LicenceHelper.generateLicenceRef(),
-              LicenceHelper.generateLicenceRef()
+              GenerateHelper.generateLicenceRef(),
+              GenerateHelper.generateLicenceRef(),
+              GenerateHelper.generateLicenceRef()
             ].sort((referenceString, compareString) => {
               return compareStrings(referenceString, compareString)
             })

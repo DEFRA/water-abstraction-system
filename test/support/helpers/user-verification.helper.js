@@ -2,11 +2,9 @@
  * @module UserVerificationHelper
  */
 
+import GenerateHelper from './generate.helper.js'
 import UserVerificationModel from '../../../app/models/user-verification.model.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
-
-const VERIFICATION_CODE_CHARACTERS = '23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXY'
-const VERIFICATION_CODE_LENGTH = 5
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new user verification
@@ -48,7 +46,7 @@ function defaults(data = {}) {
     createdAt: new Date(),
     id: generateUUID(),
     licenceEntityId: generateUUID(),
-    verificationCode: generateVerificationCode(),
+    verificationCode: GenerateHelper.generateVerificationCode(),
     verificationMethod: 'post',
     verifiedAt: null
   }
@@ -59,19 +57,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Generates a random verification code
- *
- * @returns {string} a random 5-character verification code, using the allowed characters
- */
-function generateVerificationCode() {
-  return Array.from({ length: VERIFICATION_CODE_LENGTH }, () => {
-    return VERIFICATION_CODE_CHARACTERS.charAt(generateRandomInteger(0, VERIFICATION_CODE_CHARACTERS.length - 1))
-  }).join('')
-}
-
 export default {
   add,
-  defaults,
-  generateVerificationCode
+  defaults
 }

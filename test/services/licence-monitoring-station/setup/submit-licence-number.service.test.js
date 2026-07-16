@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import LicenceModel from '../../../../app/models/licence.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
@@ -27,7 +27,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       expiredDate: null,
       id: generateUUID(),
       lapsedDate: null,
-      licenceRef: LicenceHelper.generateLicenceRef(),
+      licenceRef: GenerateHelper.generateLicenceRef(),
       revokedDate: null
     })
 

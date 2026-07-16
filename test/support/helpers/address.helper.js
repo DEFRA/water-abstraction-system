@@ -2,10 +2,8 @@
  * @module AddressHelper
  */
 
-import crypto from 'crypto'
-
 import AddressModel from '../../../app/models/address.model.js'
-import { generateRandomInteger } from '../../../app/lib/general.lib.js'
+import GenerateHelper from './generate.helper.js'
 
 /**
  * Add a new address
@@ -52,7 +50,7 @@ function defaults(data = {}) {
     postcode: 'BS1 5AH',
     country: 'United Kingdom',
     dataSource: 'wrls',
-    uprn: generateUprn()
+    uprn: GenerateHelper.generateUprn()
   }
 
   return {
@@ -61,54 +59,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Creates an MD5 hash of contact name and address to be used for comparing 'contacts'
- *
- * @param {string} contactName - The contact name to be used with the address
- * @param {object} address - The address (lines 1 to 4 plus postcode and country) to be converted to a hash
- *
- * @returns {string} - The md5 'hash ID' of the contact name and address
- */
-function generateContactHashId(contactName, address) {
-  const addressLine1 = address.addressLine1
-  const addressLine2 = address.addressLine2 ?? ''
-  const addressLine3 = address.addressLine3 ?? ''
-  const addressLine4 = address.addressLine4
-  const postcode = address.postcode ?? ''
-  const country = address.country ?? ''
-
-  const combinedString = `${contactName}${addressLine1}${addressLine2}${addressLine3}${addressLine4}${postcode}${country}`
-
-  return crypto.createHash('md5').update(combinedString).digest('hex')
-}
-
-/**
- * Generate an UPRN for an address
- *
- * @returns {string} - A random UPRN
- */
-function generateUprn() {
-  return generateRandomInteger(100, 999999)
-}
-
-/**
- * Generate an address external id
- *
- * This is built from NALD import data using the region code and address id
- *
- * @returns {string} - A random external id
- */
-function generateExternalId() {
-  const regionCode = generateRandomInteger(1, 9)
-  const addressId = generateRandomInteger(100, 99998)
-
-  return `${regionCode}:${addressId}`
-}
-
 export default {
   add,
-  defaults,
-  generateContactHashId,
-  generateUprn,
-  generateExternalId
+  defaults
 }

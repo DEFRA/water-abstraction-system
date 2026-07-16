@@ -2,10 +2,8 @@
  * @module ReturnLogHelper
  */
 
-import LicenceHelper from './licence.helper.js'
+import GenerateHelper from './generate.helper.js'
 import ReturnLogModel from '../../../app/models/return-log.model.js'
-import ReturnRequirementHelper from './return-requirement.helper.js'
-import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
@@ -49,8 +47,8 @@ function add(data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults(data = {}) {
-  const licenceRef = data.licenceRef ? data.licenceRef : LicenceHelper.generateLicenceRef()
-  const returnReference = data.returnReference ? data.returnReference : ReturnRequirementHelper.generateReference()
+  const licenceRef = data.licenceRef ? data.licenceRef : GenerateHelper.generateLicenceRef()
+  const returnReference = data.returnReference ? data.returnReference : GenerateHelper.generateReference()
   const timestamp = timestampForPostgres()
   const receivedDate = data.receivedDate ? data.receivedDate : null
   const startDate = data.startDate ? new Date(data.startDate) : new Date('2022-04-01')
@@ -84,7 +82,7 @@ function defaults(data = {}) {
       version: 1
     },
     receivedDate,
-    returnId: generateReturnId(startDate, endDate, 1, licenceRef, returnReference),
+    returnId: GenerateHelper.generateReturnId(startDate, endDate, 1, licenceRef, returnReference),
     returnReference,
     returnsFrequency: 'month',
     startDate,
@@ -96,44 +94,6 @@ function defaults(data = {}) {
     ...defaults,
     ...data
   }
-}
-
-/**
- * Returns a randomly generated return log Id
- *
- * Unlike other tables, the previous team opted to generate a unique ID based on properties of the return log including
- * start and end dates, version and references.
- *
- * So, in order to replicate that we have this helper method, that defaults some of those values, and randomises others
- * in order to generate a unique return log ID.
- *
- * If you have known values, for example, the licence reference they can be passed to this helper and it will
- * incorporate them into the ID.
- *
- * @param {string} [startDate] - the start date as a string, for example '2022-04-01'
- * @param {string} [endDate] - the end date as a string, for example '2023-03-31'
- * @param {number} [version] - the version number to use, for example 1
- * @param {string} [licenceRef] - the licence reference to use
- * @param {string} [returnReference] - the return requirement reference to use
- *
- * @returns {string} the generated return log ID
- */
-function generateReturnId(
-  startDate = new Date('2022-04-01'),
-  endDate = new Date('2023-03-31'),
-  version = 1,
-  licenceRef = null,
-  returnReference = null
-) {
-  if (!licenceRef) {
-    licenceRef = LicenceHelper.generateLicenceRef()
-  }
-
-  if (!returnReference) {
-    returnReference = ReturnRequirementHelper.generateReference()
-  }
-
-  return `v${version}:1:${licenceRef}:${returnReference}:${formatDateObjectToISO(startDate)}:${formatDateObjectToISO(endDate)}`
 }
 
 /**
@@ -180,6 +140,5 @@ function _areDatesSequential(endDate, startDate) {
 export default {
   add,
   defaults,
-  generateReturnId,
   hasContinuousReturnLogs
 }

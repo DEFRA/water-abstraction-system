@@ -1,4 +1,4 @@
-import LicenceHelper from '../helpers/licence.helper.js'
+import GenerateHelper from '../helpers/generate.helper.js'
 import { generateNoticeReferenceCode, generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -284,7 +284,7 @@ function _defaults() {
     id: generateUUID(),
     createdAt: new Date('2025-03-25'),
     issuer: 'admin-internal@wrls.gov.uk',
-    licences: [LicenceHelper.generateLicenceRef()],
+    licences: [GenerateHelper.generateLicenceRef()],
     overallStatus: 'pending',
     status: 'completed',
     statusCounts: { cancelled: 0, error: 0, pending: 1, returned: 0, sent: 0 },

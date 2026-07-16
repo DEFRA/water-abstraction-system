@@ -2,11 +2,12 @@
  * @module LicenceVersionPurposesHelper
  */
 
+import GenerateHelper from './generate.helper.js'
 import LicenceVersionPurposeModel from '../../../app/models/licence-version-purpose.model.js'
 import PrimaryPurposeHelper from './primary-purpose.helper.js'
 import PurposeHelper from './purpose.helper.js'
 import SecondaryPurposeHelper from './secondary-purpose.helper.js'
-import { generateRandomInteger, generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence version purpose
@@ -58,7 +59,7 @@ function defaults(data = {}) {
     abstractionPeriodStartMonth: 1,
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,
-    externalId: generateLicenceVersionPurposeExternalId(),
+    externalId: GenerateHelper.generateLicenceVersionPurposeExternalId(),
     licenceVersionId: generateUUID(),
     primaryPurposeId,
     purposeId,
@@ -74,17 +75,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Returns a randomly generated licence version purpose external id
- *
- * @returns {string} - A randomly generated external id
- */
-function generateLicenceVersionPurposeExternalId() {
-  return `${generateRandomInteger(0, 9)}:${generateRandomInteger(10000, 99999)}`
-}
-
 export default {
   add,
-  defaults,
-  generateLicenceVersionPurposeExternalId
+  defaults
 }

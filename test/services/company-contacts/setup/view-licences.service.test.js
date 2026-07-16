@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
@@ -22,7 +22,7 @@ describe('Company Contacts - Setup - Licences Service', () => {
   beforeEach(() => {
     licence = {
       id: generateUUID(),
-      licenceRef: LicenceHelper.generateLicenceRef()
+      licenceRef: GenerateHelper.generateLicenceRef()
     }
 
     company = CustomersFixtures.company()

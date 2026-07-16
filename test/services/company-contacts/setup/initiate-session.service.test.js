@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import SessionModel from '../../../../app/models/session.model.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
@@ -20,7 +20,7 @@ describe('Company Contacts - Setup - Initiate Session service', () => {
 
   beforeEach(() => {
     company = CustomersFixtures.company()
-    licences = [{ id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }]
+    licences = [{ id: generateUUID(), licenceRef: GenerateHelper.generateLicenceRef() }]
 
     vi.spyOn(FetchCompanyService, 'default').mockReturnValue(company)
     vi.spyOn(FetchCompanyLicencesDal, 'default').mockReturnValue(licences)

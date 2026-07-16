@@ -2,7 +2,7 @@
  * @module PermitLicenceHelper
  */
 
-import LicenceHelper from './licence.helper.js'
+import GenerateHelper from './generate.helper.js'
 import PermitLicenceModel from '../../../app/models/permit-licence.model.js'
 
 /**
@@ -39,7 +39,7 @@ async function add(data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults(data = {}) {
-  const licenceRef = data.licenceRef ? data.licenceRef : LicenceHelper.generateLicenceRef()
+  const licenceRef = data.licenceRef ? data.licenceRef : GenerateHelper.generateLicenceRef()
   const defaults = {
     licenceStatusId: 1,
     licenceTypeId: 8,

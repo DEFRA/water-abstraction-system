@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../support/helpers/generate.helper.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
@@ -24,7 +24,7 @@ describe('Licences - View Summary service', () => {
       lapsedDate: null,
       includeInPresrocBilling: 'no',
       includeInSrocBilling: false,
-      licenceRef: LicenceHelper.generateLicenceRef(),
+      licenceRef: GenerateHelper.generateLicenceRef(),
       revokedDate: null,
       licenceSupplementaryYears: [],
       startDate: new Date('2019-04-01')

@@ -2,9 +2,8 @@
  * @module ModLogHelper
  */
 
-import LicenceHelper from './licence.helper.js'
+import GenerateHelper from './generate.helper.js'
 import ModLogModel from '../../../app/models/mod-log.model.js'
-import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 import { randomRegionCode } from '../general.js'
 
 /**
@@ -46,14 +45,14 @@ function defaults(data = {}) {
   const regionCode = randomRegionCode()
 
   const defaults = {
-    externalId: generateRegionNaldPatternExternalId(regionCode),
+    externalId: GenerateHelper.generateRegionNaldPatternExternalId(regionCode),
     eventCode: 'DRFVER',
     eventDescription: 'Draft version created',
     naldDate: new Date('2012-06-01'),
     userId: 'TTESTER',
-    licenceRef: LicenceHelper.generateLicenceRef(),
+    licenceRef: GenerateHelper.generateLicenceRef(),
     // The licence and mod log share the same external ID pattern: [region code:NALD ID]
-    licenceExternalId: generateRegionNaldPatternExternalId(regionCode)
+    licenceExternalId: GenerateHelper.generateRegionNaldPatternExternalId(regionCode)
   }
 
   return {
@@ -62,23 +61,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Generates a NALD pattern external ID (e.g. 9:10001)
- *
- * The pattern is: [region code]:[NALD ID]
- *
- * @param {number} [regionCode] - The region code to use, if not provided a random one is used
- *
- * @returns {string} The generated external ID
- */
-function generateRegionNaldPatternExternalId(regionCode = null) {
-  const regionCodeToUse = regionCode ?? generateRandomInteger(1, 9)
-
-  return `${regionCodeToUse}:${generateRandomInteger(100, 99999)}`
-}
-
 export default {
   add,
-  defaults,
-  generateRegionNaldPatternExternalId
+  defaults
 }

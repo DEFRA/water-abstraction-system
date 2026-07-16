@@ -8,6 +8,7 @@ import ChargeVersionHelper from '../helpers/charge-version.helper.js'
 import CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
 import CompanyHelper from '../helpers/company.helper.js'
 import ContactHelper from '../../support/helpers/contact.helper.js'
+import GenerateHelper from '../helpers/generate.helper.js'
 import LicenceDocumentHeaderHelper from '../helpers/licence-document-header.helper.js'
 import LicenceDocumentHelper from '../../support/helpers/licence-document.helper.js'
 import LicenceDocumentRoleHelper from '../helpers/licence-document-role.helper.js'
@@ -18,7 +19,7 @@ import LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
 import LicenceVersionHelper from '../helpers/licence-version.helper.js'
 import UserModel from '../helpers/user.helper.js'
 
-const { generateLicenceRef } = LicenceHelper
+const { generateLicenceRef } = GenerateHelper
 
 /**
  * Seed CRM data

@@ -2,12 +2,13 @@
  * @module EmptyLicenceSeeder
  */
 
+import GenerateHelper from '../helpers/generate.helper.js'
 import LicenceDocumentHeaderHelper from '../helpers/licence-document-header.helper.js'
 import LicenceDocumentHelper from '../helpers/licence-document.helper.js'
 import LicenceHelper from '../helpers/licence.helper.js'
 import RegionHelper from '../helpers/region.helper.js'
 
-const { generateLicenceRef } = LicenceHelper
+const { generateLicenceRef } = GenerateHelper
 
 /**
  * Adds a licence

@@ -6,6 +6,7 @@ import AddressHelper from '../helpers/address.helper.js'
 import CompanyContactHelper from '../helpers/company-contact.helper.js'
 import CompanyHelper from '../helpers/company.helper.js'
 import ContactHelper from '../helpers/contact.helper.js'
+import GenerateHelper from '../helpers/generate.helper.js'
 import LicenceDocumentRoleHelper from '../helpers/licence-document-role.helper.js'
 import LicenceEntityHelper from '../helpers/licence-entity.helper.js'
 import LicenceEntityRoleHelper from '../helpers/licence-entity-role.helper.js'
@@ -79,7 +80,7 @@ export async function licenceHolder(licenceSeedData, name, existingRegionId = nu
   const company = await CompanyHelper.add({
     name,
     regionId,
-    externalId: CompanyHelper.generateExternalId()
+    externalId: GenerateHelper.generateCompanyExternalId()
   })
 
   const address = await AddressHelper.add({

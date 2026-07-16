@@ -3,7 +3,7 @@
  */
 
 import ReturnRequirementModel from '../../../app/models/return-requirement.model.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new return requirement
@@ -61,17 +61,7 @@ function defaults(data = {}) {
   return returnRequirement
 }
 
-/**
- * Generates a return requirement reference
- *
- * @returns {number}
- */
-function generateReference() {
-  return generateRandomInteger(10000000, 99999999)
-}
-
 export default {
   add,
-  defaults,
-  generateReference
+  defaults
 }

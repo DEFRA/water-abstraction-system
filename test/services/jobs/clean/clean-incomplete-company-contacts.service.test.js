@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
 import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import ContactHelper from '../../../support/helpers/contact.helper.js'
-import LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'
 
 // Things we need to stub
@@ -83,7 +83,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
 
     describe('there is a contact with a populated email address', () => {
       beforeEach(async () => {
-        contact = await ContactHelper.add({ email: LicenceEntityHelper.generateName() })
+        contact = await ContactHelper.add({ email: GenerateHelper.generateName() })
       })
 
       describe('and it is linked to a company contact with the "additionalContact" role', () => {

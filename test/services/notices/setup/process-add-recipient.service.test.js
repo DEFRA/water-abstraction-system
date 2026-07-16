@@ -2,8 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import AddressHelper from '../../../support/helpers/address.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
@@ -27,7 +26,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
   beforeEach(() => {
     sessionId = generateUUID()
 
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = GenerateHelper.generateLicenceRef()
 
     sessionData = {
       contactName: 'Fake Person',
@@ -64,7 +63,10 @@ describe('Notices - Setup - Process Add Recipient service', () => {
           redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
         }
 
-        contactHashId = AddressHelper.generateContactHashId(sessionData.contactName, sessionData.addressJourney.address)
+        contactHashId = GenerateHelper.generateContactHashId(
+          sessionData.contactName,
+          sessionData.addressJourney.address
+        )
       })
 
       describe('and this is the first additional contact to be added', () => {
@@ -206,7 +208,10 @@ describe('Notices - Setup - Process Add Recipient service', () => {
           redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
         }
 
-        contactHashId = AddressHelper.generateContactHashId(sessionData.contactName, sessionData.addressJourney.address)
+        contactHashId = GenerateHelper.generateContactHashId(
+          sessionData.contactName,
+          sessionData.addressJourney.address
+        )
       })
 
       describe('and this is the first additional contact to be added', () => {

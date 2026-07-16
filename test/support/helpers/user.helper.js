@@ -2,10 +2,10 @@
  * @module UserHelper
  */
 
+import GenerateHelper from './generate.helper.js'
 import UserModel from '../../../app/models/user.model.js'
 import { selectRandomEntry } from '../general.js'
 import { data as users } from '../../../db/seeds/data/users.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 const data = users
 
@@ -57,7 +57,7 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const defaults = {
-    username: generateUserName(),
+    username: GenerateHelper.generateUserName(),
     password: 'P@55word',
     resetRequired: 0,
     badLogins: 0,
@@ -68,25 +68,6 @@ function defaults(data = {}) {
     ...defaults,
     ...data
   }
-}
-
-/**
- * Generates a random user ID
- *
- * @returns {number} a random integer between 100011 and 199999
- */
-function generateUserId() {
-  // The last ID in the pre-seeded users is 100010
-  return generateRandomInteger(100011, 199999)
-}
-
-/**
- * Generates a random user name
- *
- * @returns {string} a random user name in the format [random UUID]@wrls.gov.uk
- */
-function generateUserName() {
-  return `${generateUUID()}@wrls.gov.uk`
 }
 
 /**
@@ -117,7 +98,5 @@ export default {
   DEFAULT_INDEX,
   add,
   defaults,
-  generateUserId,
-  generateUserName,
   select
 }

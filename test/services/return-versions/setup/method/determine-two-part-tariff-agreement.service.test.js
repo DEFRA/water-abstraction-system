@@ -3,15 +3,15 @@ import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
 import FinancialAgreementHelper from '../../../../support/helpers/financial-agreement.helper.js'
+import GenerateHelper from '../../../../support/helpers/generate.helper.js'
 import LicenceAgreementHelper from '../../../../support/helpers/licence-agreement.helper.js'
-import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 
 // Thing under test
 import DetermineTwoPartTariffAgreementService from '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
 
 describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service', () => {
   const licenceAgreements = {}
-  const licenceRef = LicenceHelper.generateLicenceRef()
+  const licenceRef = GenerateHelper.generateLicenceRef()
 
   let startDate
 
@@ -81,7 +81,7 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
     })
 
     it('returns false', async () => {
-      const result = await DetermineTwoPartTariffAgreementService(LicenceHelper.generateLicenceRef(), startDate)
+      const result = await DetermineTwoPartTariffAgreementService(GenerateHelper.generateLicenceRef(), startDate)
 
       expect(result).toBe(false)
     })

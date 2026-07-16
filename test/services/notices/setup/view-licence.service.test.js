@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
@@ -17,7 +17,7 @@ describe('Notices - Setup - View Licence service', () => {
   let sessionData
 
   beforeEach(() => {
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = GenerateHelper.generateLicenceRef()
 
     sessionData = { licenceRef }
 

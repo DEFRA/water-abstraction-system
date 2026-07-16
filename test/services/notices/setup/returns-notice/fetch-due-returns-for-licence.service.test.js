@@ -2,7 +2,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../../support/helpers/generate.helper.js'
 import RegionHelper from '../../../../support/helpers/region.helper.js'
 import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 
@@ -15,7 +15,7 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
   let region
 
   beforeAll(async () => {
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = GenerateHelper.generateLicenceRef()
 
     region = RegionHelper.select()
 

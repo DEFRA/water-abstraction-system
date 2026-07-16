@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import EventModel from '../../../../app/models/event.model.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import GroupHelper from '../../../support/helpers/group.helper.js'
 import RoleHelper from '../../../support/helpers/role.helper.js'
 import UserGroupHelper from '../../../support/helpers/user-group.helper.js'
@@ -115,7 +116,7 @@ describe('Users - Internal - Update User DAL', () => {
 
     describe('and the email has changed', () => {
       beforeEach(() => {
-        session.email = UserHelper.generateUserName()
+        session.email = GenerateHelper.generateUserName()
       })
 
       it('updates the username', async () => {

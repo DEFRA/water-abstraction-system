@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 
 // Thing under test
 import CancelPresenter from '../../../../app/presenters/notices/setup/cancel.presenter.js'
@@ -14,7 +14,7 @@ describe('Notices - Setup - Cancel presenter', () => {
   let session
 
   beforeEach(() => {
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = GenerateHelper.generateLicenceRef()
 
     session = {
       licenceRef,

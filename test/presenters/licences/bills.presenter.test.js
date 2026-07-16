@@ -2,8 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../support/helpers/generate.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -18,7 +17,7 @@ describe('Licences - Bills presenter', () => {
 
     licence = {
       id: generateUUID(),
-      licenceRef: LicenceHelper.generateLicenceRef()
+      licenceRef: GenerateHelper.generateLicenceRef()
     }
   })
 
@@ -117,7 +116,7 @@ describe('Licences - Bills presenter', () => {
 
 function _bill() {
   return {
-    accountNumber: BillingAccountHelper.generateAccountNumber(),
+    accountNumber: GenerateHelper.generateAccountNumber(),
     billRun: { batchType: 'annual', scheme: 'sroc', summer: false },
     billingAccountId: generateUUID(),
     createdAt: new Date('2020-01-01'),

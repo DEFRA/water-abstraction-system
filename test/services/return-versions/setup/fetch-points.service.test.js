@@ -2,6 +2,7 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
 import LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
 import LicenceVersionPurposePointHelper from '../../../support/helpers/licence-version-purpose-point.helper.js'
@@ -111,7 +112,7 @@ async function _points() {
   // expect to see it only listed once in the results from the service.
   const sharedPoint = await PointHelper.add({
     description: `I am the shared point`,
-    ngr1: `SU${PointHelper.generateNationalGridReference().slice(2)}`
+    ngr1: `SU${GenerateHelper.generateNationalGridReference().slice(2)}`
   })
 
   points.push(sharedPoint)
@@ -119,7 +120,7 @@ async function _points() {
   // This point will only be assigned to the first of the two purposes we'll add
   const point1 = await PointHelper.add({
     description: 'I am point 1',
-    ngr1: `TQ${PointHelper.generateNationalGridReference().slice(2)}`
+    ngr1: `TQ${GenerateHelper.generateNationalGridReference().slice(2)}`
   })
 
   points.push(point1)
@@ -127,7 +128,7 @@ async function _points() {
   // This point will only be assigned to the second of the two purposes we'll add
   const point2 = await PointHelper.add({
     description: 'I am point 2',
-    ngr1: `SE${PointHelper.generateNationalGridReference().slice(2)}`
+    ngr1: `SE${GenerateHelper.generateNationalGridReference().slice(2)}`
   })
 
   points.push(point2)

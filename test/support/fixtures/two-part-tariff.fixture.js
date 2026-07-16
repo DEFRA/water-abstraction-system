@@ -1,5 +1,4 @@
-import BillingAccountHelper from '../helpers/billing-account.helper.js'
-import LicenceHelper from '../helpers/licence.helper.js'
+import GenerateHelper from '../helpers/generate.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -25,7 +24,7 @@ function billRun(regionId) {
 function billingAccount() {
   return {
     id: generateUUID(),
-    accountNumber: BillingAccountHelper.generateAccountNumber()
+    accountNumber: GenerateHelper.generateAccountNumber()
   }
 }
 
@@ -136,7 +135,7 @@ function chargeVersion(billingAccountId, licence) {
 function licence(region) {
   return {
     id: generateUUID(),
-    licenceRef: LicenceHelper.generateLicenceRef(),
+    licenceRef: GenerateHelper.generateLicenceRef(),
     waterUndertaker: true,
     historicalAreaCode: 'SAAR',
     regionalChargeArea: 'Southern',

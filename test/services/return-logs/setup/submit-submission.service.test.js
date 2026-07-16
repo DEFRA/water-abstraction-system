@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
@@ -29,7 +29,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       receivedDateOptions: 'today',
       receivedDate: new Date('2025-02-14'),
       returnLogId,
-      returnReference: ReturnRequirementHelper.generateReference()
+      returnReference: GenerateHelper.generateReference()
     }
 
     session = SessionModelStub(sessionData)

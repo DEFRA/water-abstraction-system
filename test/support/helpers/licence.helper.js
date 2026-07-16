@@ -2,9 +2,9 @@
  * @module LicenceHelper
  */
 
+import GenerateHelper from './generate.helper.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import RegionHelper from './region.helper.js'
-import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence
@@ -44,7 +44,7 @@ function defaults(data = {}) {
 
   const defaults = {
     waterUndertaker: false,
-    licenceRef: generateLicenceRef(),
+    licenceRef: GenerateHelper.generateLicenceRef(),
     regionId,
     regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' },
     startDate: new Date('2022-01-01')
@@ -56,21 +56,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Returns a randomly generated licence reference
- *
- * @returns {string} - A randomly generated licence reference
- */
-function generateLicenceRef() {
-  const secondPart = generateRandomInteger(10, 99)
-  const thirdPart = generateRandomInteger(10, 99)
-  const fourthPart = generateRandomInteger(1000, 9999)
-
-  return `01/${secondPart}/${thirdPart}/${fourthPart}`
-}
-
 export default {
   add,
-  defaults,
-  generateLicenceRef
+  defaults
 }

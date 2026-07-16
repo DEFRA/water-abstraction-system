@@ -2,9 +2,9 @@
  * @module LicenceVersionPurposePointHelper
  */
 
+import GenerateHelper from './generate.helper.js'
 import LicenceVersionPurposePointModel from '../../../app/models/licence-version-purpose-point.model.js'
-import PointHelper from './point.helper.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence version purpose point
@@ -39,7 +39,7 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const defaults = {
-    externalId: generateLicenceVersionPurposePointExternalId(),
+    externalId: GenerateHelper.generateLicenceVersionPurposePointExternalId(),
     licenceVersionPurposeId: generateUUID(),
     pointId: generateUUID()
   }
@@ -50,23 +50,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Returns a randomly generated licence version purpose point external ID (9:100:1)
- *
- * Combines IDs found in `NALD_ABS_PURP_POINTS` which is the basis for licence version purpose points.
- *
- * - `[region code]:[licence version purpose ID]:[point ID]` - all values are NALD IDs
- *
- * @returns {string} - A randomly generated licence version purpose point external ID
- */
-function generateLicenceVersionPurposePointExternalId() {
-  const naldPointId = PointHelper.generateNaldPointId()
-
-  return `9:${generateRandomInteger(100, 99999)}:${naldPointId}`
-}
-
 export default {
   add,
-  defaults,
-  generateLicenceVersionPurposePointExternalId
+  defaults
 }

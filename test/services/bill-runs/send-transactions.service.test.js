@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import BillRunError from '../../../app/errors/bill-run.error.js'
 import BillRunModel from '../../../app/models/bill-run.model.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../support/helpers/generate.helper.js'
 
 // Things we need to stub
 import * as ChargingModuleCreateTransactionRequest from '../../../app/requests/charging-module/create-transaction.request.js'
@@ -17,7 +17,7 @@ describe('Bill Runs - Send Transactions service', () => {
   const billRunExternalId = '4f3710ca-75b1-4828-8fe9-f7c1edecbbf3'
   const licence = {
     historicalAreaCode: 'DALES',
-    licenceRef: LicenceHelper.generateLicenceRef(),
+    licenceRef: GenerateHelper.generateLicenceRef(),
     regionalChargeArea: 'Yorkshire',
     region: { chargeRegionId: 'N' }
   }

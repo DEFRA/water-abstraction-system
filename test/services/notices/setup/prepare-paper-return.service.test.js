@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 
@@ -24,7 +24,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
   beforeEach(async () => {
     dueReturnLog = ReturnLogFixture.dueReturn()
 
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = GenerateHelper.generateLicenceRef()
 
     notification = {
       eventId: null,

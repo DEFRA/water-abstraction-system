@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 // Test helpers
 import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 import CustomersFixture from '../../../support/fixtures/customers.fixture.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -489,8 +489,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
     describe('when an array is provided', () => {
       it('returns it for display', () => {
         const impactedLicences = [
-          { licenceRef: LicenceHelper.generateLicenceRef() },
-          { licenceRef: LicenceHelper.generateLicenceRef() }
+          { licenceRef: GenerateHelper.generateLicenceRef() },
+          { licenceRef: GenerateHelper.generateLicenceRef() }
         ]
 
         const result = CheckPresenter(

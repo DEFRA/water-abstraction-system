@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../support/helpers/generate.helper.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 import { yesterday } from '../../support/general.js'
@@ -22,7 +22,7 @@ describe('Companies - Licences presenter', () => {
         expiredDate: null,
         id: generateUUID(),
         lapsedDate: null,
-        licenceRef: LicenceHelper.generateLicenceRef(),
+        licenceRef: GenerateHelper.generateLicenceRef(),
         revokedDate: null,
         startDate: new Date('2022-01-01'),
         currentLicenceHolderId: company.id,

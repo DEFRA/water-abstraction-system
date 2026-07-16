@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Helpers
-import LicenceHelper from '../../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../../support/helpers/generate.helper.js'
 import LicenceModel from '../../../../../app/models/licence.model.js'
 import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
@@ -21,7 +21,7 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
 
   beforeEach(() => {
     licenceExpiryDate = new Date('2026-09-01')
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = GenerateHelper.generateLicenceRef()
     payload = { licenceRef }
     renewalDate = new Date('2026-06-03')
 

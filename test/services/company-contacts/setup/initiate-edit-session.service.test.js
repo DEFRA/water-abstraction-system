@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import SessionModel from '../../../../app/models/session.model.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
@@ -24,7 +24,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
     company = CustomersFixtures.company()
     contact = CustomersFixtures.contact()
 
-    licences = [{ id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }]
+    licences = [{ id: generateUUID(), licenceRef: GenerateHelper.generateLicenceRef() }]
 
     companyContact = CompanyContactModel.fromJson({
       id: generateUUID(),
@@ -78,7 +78,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
         describe('and there are abstraction alert licences', () => {
           beforeEach(() => {
             companyContact.abstractionAlertLicences = [
-              { id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }
+              { id: generateUUID(), licenceRef: GenerateHelper.generateLicenceRef() }
             ]
           })
 
@@ -124,7 +124,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
         describe('and there are abstraction alert licences', () => {
           beforeEach(() => {
             companyContact.abstractionAlertLicences = [
-              { id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }
+              { id: generateUUID(), licenceRef: GenerateHelper.generateLicenceRef() }
             ]
           })
 

@@ -1,9 +1,7 @@
-import LicenceHelper from '../helpers/licence.helper.js'
-import PointHelper from '../helpers/point.helper.js'
+import GenerateHelper from '../helpers/generate.helper.js'
 import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
 import PurposeHelper from '../helpers/purpose.helper.js'
 import RegionHelper from '../helpers/region.helper.js'
-import ReturnRequirementHelper from '../helpers/return-requirement.helper.js'
 import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
@@ -36,7 +34,7 @@ function returnLogPrefix(returnRequirement) {
  */
 function summerReturnRequirement() {
   const returnVersion = _returnVersion(false)
-  const reference = ReturnRequirementHelper.generateReference()
+  const reference = GenerateHelper.generateReference()
 
   return {
     abstractionPeriodEndDay: 31,
@@ -74,7 +72,7 @@ function summerReturnRequirement() {
  */
 function winterReturnRequirement(quarterlyReturns = false) {
   const returnVersion = _returnVersion(quarterlyReturns)
-  const reference = ReturnRequirementHelper.generateReference()
+  const reference = GenerateHelper.generateReference()
 
   return {
     abstractionPeriodEndDay: 31,
@@ -99,7 +97,7 @@ function winterReturnRequirement(quarterlyReturns = false) {
 function _point(description) {
   return {
     description,
-    ngr1: PointHelper.generateNationalGridReference(),
+    ngr1: GenerateHelper.generateNationalGridReference(),
     ngr2: null,
     ngr3: null,
     ngr4: null
@@ -129,7 +127,7 @@ function _returnVersion(quarterlyReturns) {
       expiredDate: null,
       id: generateUUID(),
       lapsedDate: null,
-      licenceRef: LicenceHelper.generateLicenceRef(),
+      licenceRef: GenerateHelper.generateLicenceRef(),
       revokedDate: null,
       region: {
         id: region.id,

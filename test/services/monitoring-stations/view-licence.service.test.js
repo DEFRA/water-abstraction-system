@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import GenerateHelper from '../../support/helpers/generate.helper.js'
 import LicenceFixture from '../../support/fixtures/licence.fixture.js'
-import UserHelper from '../../support/helpers/user.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -44,7 +44,7 @@ describe('Monitoring Stations - View Licence service', () => {
         },
         licenceVersionPurposeCondition: null,
         user: {
-          id: UserHelper.generateUserId(),
+          id: GenerateHelper.generateUserId(),
           username: 'environment.officer@wrls.gov.uk'
         }
       },
@@ -72,7 +72,7 @@ describe('Monitoring Stations - View Licence service', () => {
           }
         },
         user: {
-          id: UserHelper.generateUserId(),
+          id: GenerateHelper.generateUserId(),
           username: 'environment.officer@wrls.gov.uk'
         }
       }

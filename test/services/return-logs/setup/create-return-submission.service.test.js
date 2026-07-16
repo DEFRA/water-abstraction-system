@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import ReturnLogModel from '../../../../app/models/return-log.model.js'
 import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
 import ReturnSubmissionModel from '../../../../app/models/return-submission.model.js'
@@ -23,7 +23,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       session = {
         journey: 'enterReturn',
         note: { content: 'TEST_NOTE' },
-        returnId: ReturnLogHelper.generateReturnId(),
+        returnId: GenerateHelper.generateReturnId(),
         returnLogId: generateUUID()
       }
     })

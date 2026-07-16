@@ -9,6 +9,7 @@ import ChargeCategoryHelper from '../helpers/charge-category.helper.js'
 import ChargeElementHelper from '../helpers/charge-element.helper.js'
 import ChargeReferenceHelper from '../helpers/charge-reference.helper.js'
 import ChargeVersionHelper from '../helpers/charge-version.helper.js'
+import GenerateHelper from '../helpers/generate.helper.js'
 import LicenceHelper from '../helpers/licence.helper.js'
 import LicenceSupplementaryYearHelper from '../helpers/licence-supplementary-year.helper.js'
 import RegionHelper from '../helpers/region.helper.js'
@@ -173,7 +174,7 @@ async function _changeBillingAccount(billRun, chargeCategory) {
 
   // NOTE: We control the account numbers so we can both test the ordering FetchBillingAccountsService applies and
   // predict the result to more easily assert against
-  let billingAccountNumber = BillingAccountHelper.generateAccountNumber()
+  let billingAccountNumber = GenerateHelper.generateAccountNumber()
   billingAccountNumber = billingAccountNumber.replace('T', 'W')
   const billingAccountA = await BillingAccountHelper.add({ accountNumber: billingAccountNumber })
 

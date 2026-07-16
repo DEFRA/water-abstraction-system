@@ -2,8 +2,9 @@
  * @module LicenceVersionHelper
  */
 
+import GenerateHelper from './generate.helper.js'
 import LicenceVersionModel from '../../../app/models/licence-version.model.js'
-import { generateRandomInteger, generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence version
@@ -50,7 +51,7 @@ function defaults(data = {}) {
     increment: 0,
     status: 'current',
     startDate: new Date('2022-01-01'),
-    externalId: generateLicenceVersionExternalId(),
+    externalId: GenerateHelper.generateLicenceVersionExternalId(),
     createdAt: timestamp,
     updatedAt: timestamp
   }
@@ -61,17 +62,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Returns a randomly generated externalId for a licence version
- *
- * @returns {string} - A randomly generated externalId
- */
-function generateLicenceVersionExternalId() {
-  return `${generateRandomInteger(0, 9)}:${generateRandomInteger(10000, 99999)}:${generateRandomInteger(1, 100)}:0`
-}
-
 export default {
   add,
-  defaults,
-  generateLicenceVersionExternalId
+  defaults
 }

@@ -2,9 +2,7 @@
  * @module ReviewReturnHelper
  */
 
-import LicenceHelper from './licence.helper.js'
-import ReturnLogHelper from './return-log.helper.js'
-import ReturnRequirementHelper from './return-requirement.helper.js'
+import GenerateHelper from './generate.helper.js'
 import ReviewReturnModel from '../../../app/models/review-return.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
@@ -50,12 +48,12 @@ function add(data = {}) {
  * @returns {object} - Returns data from the query
  */
 function defaults(data = {}) {
-  const licenceRef = data.licenceRef ? data.licenceRef : LicenceHelper.generateLicenceRef()
-  const returnReference = data.returnReference ? data.returnReference : ReturnRequirementHelper.generateReference()
+  const licenceRef = data.licenceRef ? data.licenceRef : GenerateHelper.generateLicenceRef()
+  const returnReference = data.returnReference ? data.returnReference : GenerateHelper.generateReference()
 
   const defaults = {
     reviewLicenceId: generateUUID(),
-    returnId: ReturnLogHelper.generateReturnId(
+    returnId: GenerateHelper.generateReturnId(
       new Date('2022-04-01'),
       new Date('2023-03-31'),
       1,

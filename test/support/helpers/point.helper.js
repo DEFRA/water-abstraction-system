@@ -2,9 +2,9 @@
  * @module PointHelper
  */
 
+import GenerateHelper from './generate.helper.js'
 import PointModel from '../../../app/models/point.model.js'
 import SourceHelper from './source.helper.js'
-import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence version purpose point
@@ -40,8 +40,8 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const { id: sourceId } = SourceHelper.select()
-  const naldPointId = data.naldPointId ? data.naldPointId : generateNaldPointId()
-  const ngr1 = data.ngr1 ? data.ngr1 : generateNationalGridReference()
+  const naldPointId = data.naldPointId ? data.naldPointId : GenerateHelper.generateNaldPointId()
+  const ngr1 = data.ngr1 ? data.ngr1 : GenerateHelper.generateNationalGridReference()
 
   const defaults = {
     description: 'WELL AT WELLINGTON',
@@ -56,31 +56,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Returns a randomly generated National Grid Reference NGR (TL 5143 7153)
- *
- * @returns {string} - A randomly National Grid Reference NGR
- */
-function generateNationalGridReference() {
-  // NOTE: These are taken from https://en.wikipedia.org/wiki/Ordnance_Survey_National_Grid and are the 100KM
-  // square references that cover the majority of the UK (sorry far North!)
-  const codes = ['SD', 'SE', 'SJ', 'SK', 'SO', 'SP', 'ST', 'SU', 'SY', 'SZ', 'TA', 'TF', 'TL', 'TQ', 'TV', 'TG', 'TM']
-
-  return `${codes[generateRandomInteger(0, 16)]} ${generateRandomInteger(100, 999)} ${generateRandomInteger(100, 999)}`
-}
-
-/**
- * Returns a randomly generated NALD point ID (55944)
- *
- * @returns {string} - A randomly generated point ID
- */
-function generateNaldPointId() {
-  return generateRandomInteger(1, 99999)
-}
-
 export default {
   add,
-  defaults,
-  generateNationalGridReference,
-  generateNaldPointId
+  defaults
 }

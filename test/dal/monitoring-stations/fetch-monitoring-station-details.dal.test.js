@@ -2,6 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import GenerateHelper from '../../support/helpers/generate.helper.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
 import LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
 import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
@@ -9,7 +10,6 @@ import LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-
 import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
 import MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
 import NotificationHelper from '../../support/helpers/notification.helper.js'
-import PointHelper from '../../support/helpers/point.helper.js'
 import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -27,7 +27,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
   describe('when a matching monitoring station exists', () => {
     beforeEach(async () => {
       monitoringStation = await MonitoringStationHelper.add({
-        gridReference: PointHelper.generateNationalGridReference(),
+        gridReference: GenerateHelper.generateNationalGridReference(),
         label: 'GROSSE POINT BLANK'
       })
     })

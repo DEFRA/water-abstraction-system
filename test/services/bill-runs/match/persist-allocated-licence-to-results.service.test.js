@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
@@ -275,7 +275,7 @@ function _generateData(returnMatched = true) {
     returnLogs: [
       {
         id: returnLogId,
-        returnId: ReturnLogHelper.generateReturnId(),
+        returnId: GenerateHelper.generateReturnId(),
         returnReference: '10021668',
         description: 'DRAINS ETC-DEEPING FEN AND OTHER LINKED SITES',
         startDate: new Date('2022-04-01'),

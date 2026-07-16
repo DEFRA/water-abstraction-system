@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
@@ -23,7 +23,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
   beforeEach(async () => {
     dynamicLetterDueDate = futureDueDate('letter')
 
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = GenerateHelper.generateLicenceRef()
 
     dueReturns = [
       {

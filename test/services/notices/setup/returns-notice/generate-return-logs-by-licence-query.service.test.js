@@ -2,7 +2,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../../support/helpers/generate.helper.js'
 import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
 import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 import { db } from '../../../../../db/db.js'
@@ -19,7 +19,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
   beforeAll(async () => {
     let returnLog
 
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = GenerateHelper.generateLicenceRef()
     returnLogs = []
 
     // First return log has a status of 'due' - should be included in results when notice type is NOT reminders

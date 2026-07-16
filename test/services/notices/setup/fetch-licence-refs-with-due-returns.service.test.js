@@ -2,7 +2,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 
 // Thing under test
@@ -30,7 +30,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
 
     // 0 & 1) Add two 'due' return logs with the same dates and same licence refs. This will confirm licence refs are
     // DISTINCT in the results
-    distinctInvitationLicenceRef = LicenceHelper.generateLicenceRef()
+    distinctInvitationLicenceRef = GenerateHelper.generateLicenceRef()
     await _addReturnLog(returnLogs, { ...defaultDates, licenceRef: distinctInvitationLicenceRef })
     await _addReturnLog(returnLogs, { ...defaultDates, licenceRef: distinctInvitationLicenceRef })
 
@@ -55,7 +55,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
 
     // 7 & 8) Add two 'due' return logs with the same dates and same licence refs. This will confirm licence refs are
     // DISTINCT in the results
-    distinctReminderLicenceRef = LicenceHelper.generateLicenceRef()
+    distinctReminderLicenceRef = GenerateHelper.generateLicenceRef()
     const dueDate = new Date('2025-04-28')
     await _addReturnLog(returnLogs, { ...defaultDates, dueDate, licenceRef: distinctReminderLicenceRef })
     await _addReturnLog(returnLogs, { ...defaultDates, dueDate, licenceRef: distinctReminderLicenceRef })
