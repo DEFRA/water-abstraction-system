@@ -2,6 +2,7 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
+import AirbrakeModule from '@airbrake/node'
 import serverConfig from '../../config/server.config.js'
 
 // For running our service
@@ -54,47 +55,52 @@ describe('Airbrake plugin', () => {
     })
   })
 
-  // TODO: Remove describe.skip once the project migrates to ESM. In CJS mode, airbrake.plugin.js holds a module-level
-  // _notifier singleton. The beforeAll above spins up a real Hapi server that sets it via the real plugin module.
-  // These tests need a completely fresh module instance (where _notifier is undefined) with Notifier and gotWrapper
-  // stubbed out. Proxyquire provides that isolation today. We do not use vi.mock() here or once the project is ESM
-  // — see the testing skill's Mocking section for why. Instead, once ESM, use vi.resetModules() + dynamic import()
-  // to load a fresh plugin instance per test, then vi.spyOn() the namespace imports of '@airbrake/node' and
-  // '../lib/got-wrapper.lib.js' to stub their exports.
-  describe.skip('when registering the plugin', () => {
+  // airbrake.plugin.js holds a module-level _notifier singleton, and the beforeAll above spins up a real Hapi server
+  // that sets it via the real plugin module. These tests need a completely fresh module instance (where _notifier is
+  // undefined) with Notifier and gotWrapper stubbed out, so we reset the module registry and dynamically re-import
+  // the plugin (plus its first-party dependencies, which resetModules() also disconnects from the copies imported
+  // above) per test. Notifier is stubbed via a default import of '@airbrake/node' (see
+  // test/lib/base-notifier.lib.test.js for the same pattern) rather than a namespace import, because named exports
+  // of a real ES module are non-configurable and can't be redefined by vi.spyOn().
+  describe('when registering the plugin', () => {
     let AirbrakePluginWithStubs
     let fakeServer
-    let gotWrapperStub
-    let NotifierStub
+    let freshServerConfig
+    let freshGotWrapperLib
 
-    beforeEach(() => {
-      gotWrapperStub = vi.fn().mockResolvedValue('fake-request-fn')
-      NotifierStub = vi.fn()
-
-      // TODO: Replace with vi.spyOn() + dynamic import() once the project migrates to ESM
-      // AirbrakePluginWithStubs = Proxyquire('../../app/plugins/airbrake.plugin.js', {
-      //   '../lib/got-wrapper.lib.js': { gotWrapper: gotWrapperStub },
-      //   '@airbrake/node': { Notifier: NotifierStub },
-      //   '../../config/server.config.js': serverConfig
-      // })
+    beforeEach(async () => {
+      vi.spyOn(AirbrakeModule, 'Notifier').mockImplementation(
+        class {
+          constructor(opts) {
+            this.request = opts.request
+          }
+        }
+      )
 
       fakeServer = {
         app: {},
         events: { on: vi.fn() },
         logger: { error: vi.fn() }
       }
+
+      vi.resetModules()
+      ;({ default: AirbrakePluginWithStubs } = await import('../../app/plugins/airbrake.plugin.js'))
+      ;({ default: freshServerConfig } = await import('../../config/server.config.js'))
+      freshGotWrapperLib = await import('../../app/lib/got-wrapper.lib.js')
+
+      vi.spyOn(freshGotWrapperLib, 'gotWrapper').mockResolvedValue('fake-request-fn')
     })
 
     describe('and httpProxy is set', () => {
       beforeEach(() => {
-        serverConfig.httpProxy = 'http://proxy.local:8080'
+        freshServerConfig.httpProxy = 'http://proxy.local:8080'
       })
 
       it('calls gotWrapper to create a Request function', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(gotWrapperStub).toHaveBeenCalledOnce()
-        expect(gotWrapperStub.mock.calls[0][0]).toEqual({
+        expect(freshGotWrapperLib.gotWrapper).toHaveBeenCalledOnce()
+        expect(freshGotWrapperLib.gotWrapper.mock.calls[0][0]).toEqual({
           proxy: 'http://proxy.local:8080'
         })
       })
@@ -102,28 +108,28 @@ describe('Airbrake plugin', () => {
       it('passes the Request function to Notifier', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(NotifierStub).toHaveBeenCalledOnce()
-        const args = NotifierStub.mock.calls[0][0]
+        expect(AirbrakeModule.Notifier).toHaveBeenCalledOnce()
+        const args = AirbrakeModule.Notifier.mock.calls[0][0]
         expect(args.request).toEqual('fake-request-fn')
       })
     })
 
     describe('and httpProxy is not set', () => {
       beforeEach(() => {
-        serverConfig.httpProxy = null
+        freshServerConfig.httpProxy = null
       })
 
       it('does not call gotWrapper', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(gotWrapperStub).not.toHaveBeenCalled()
+        expect(freshGotWrapperLib.gotWrapper).not.toHaveBeenCalled()
       })
 
       it('does not pass a request function to Notifier', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(NotifierStub).toHaveBeenCalledOnce()
-        const args = NotifierStub.mock.calls[0][0]
+        expect(AirbrakeModule.Notifier).toHaveBeenCalledOnce()
+        const args = AirbrakeModule.Notifier.mock.calls[0][0]
         expect(args.request).toBeUndefined()
       })
     })
