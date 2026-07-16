@@ -2,9 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Test helpers
 import YarStub from '../../../support/stubs/yar.stub.js'
@@ -24,7 +23,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
   let yarStub
 
   beforeEach(() => {
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
 
     dueReturn = {
       siteDescription: 'Potable Water Supply - Direct',

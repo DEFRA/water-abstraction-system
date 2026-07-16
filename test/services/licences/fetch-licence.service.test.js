@@ -6,7 +6,7 @@ import LicenceHelper from '../../support/helpers/licence.helper.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import LicenceSupplementaryYearModel from '../../support/helpers/licence-supplementary-year.helper.js'
 import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'

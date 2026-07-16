@@ -2,11 +2,11 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../support/helpers/licence.helper.js'
+import http2 from 'node:http2'
+
 import NoticesFixture from '../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../app/lib/general.lib.js'
-import http2 from 'node:http2'
+import { generateLicenceRef, generateUUID } from '../support/generators.js'
 
 // Things we need to stub
 import * as DownloadNotificationService from '../../app/services/notifications/download-notification.service.js'
@@ -64,7 +64,7 @@ describe('Notifications controller', () => {
           beforeEach(async () => {
             licence = {
               id: generateUUID(),
-              licenceRef: LicenceHelper.generateLicenceRef()
+              licenceRef: generateLicenceRef()
             }
 
             const notice = NoticesFixture.returnsInvitation()
@@ -118,7 +118,7 @@ describe('Notifications controller', () => {
           beforeEach(async () => {
             licence = {
               id: generateUUID(),
-              licenceRef: LicenceHelper.generateLicenceRef()
+              licenceRef: generateLicenceRef()
             }
 
             const notice = NoticesFixture.returnsInvitation()
@@ -172,7 +172,7 @@ describe('Notifications controller', () => {
           beforeEach(async () => {
             licence = {
               id: generateUUID(),
-              licenceRef: LicenceHelper.generateLicenceRef()
+              licenceRef: generateLicenceRef()
             }
 
             const returnLogId = generateUUID()

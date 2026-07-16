@@ -6,7 +6,7 @@ import ReturnRequirementModel from '../../../../../app/models/return-requirement
 import ReturnRequirementPointModel from '../../../../../app/models/return-requirement-point.model.js'
 import ReturnRequirementPurposeModel from '../../../../../app/models/return-requirement-purpose.model.js'
 import ReturnVersionModel from '../../../../../app/models/return-version.model.js'
-import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
 import CreateReturnVersionService from '../../../../../app/services/return-versions/setup/check/create-return-version.service.js'

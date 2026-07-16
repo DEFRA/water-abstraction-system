@@ -6,7 +6,7 @@ import BillRunHelper from '../../support/helpers/bill-run.helper.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
 import LicenceSupplementaryYearHelper from '../../support/helpers/licence-supplementary-year.helper.js'
 import RegionHelper from '../../support/helpers/region.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import AssignBillRunToLicencesService from '../../../app/services/bill-runs/assign-bill-run-to-licences.service.js'

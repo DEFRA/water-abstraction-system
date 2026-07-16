@@ -2,9 +2,8 @@
  * @module ReviewLicenceHelper
  */
 
-import LicenceHelper from './licence.helper.js'
 import ReviewLicenceModel from '../../../app/models/review-licence.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../generators.js'
 
 /**
  * Add a new review licence record for 2pt matching
@@ -43,7 +42,7 @@ function defaults(data = {}) {
   const defaults = {
     billRunId: generateUUID(),
     licenceId: generateUUID(),
-    licenceRef: LicenceHelper.generateLicenceRef(),
+    licenceRef: generateLicenceRef(),
     licenceHolder: 'Licence Holder Ltd',
     issues: ''
   }

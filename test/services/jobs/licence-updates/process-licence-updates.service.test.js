@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import WorkflowModel from '../../../../app/models/workflow.model.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchLicenceUpdatesService from '../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js'

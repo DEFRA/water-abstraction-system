@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 // Test helpers
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import NotificationsTablePresenter from '../../../app/presenters/notifications/notifications-table.presenter.js'

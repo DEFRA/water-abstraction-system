@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import LicenceFixture from '../support/fixtures/licence.fixture.js'
 import PointModel from '../../app/models/point.model.js'
 import ViewLicencesFixture from '../support/fixtures/view-licences.fixture.js'
-import { generateUUID } from '../../app/lib/general.lib.js'
+import { generateUUID } from '../support/generators.js'
 
 // Thing under test
 import * as LicencePresenter from '../../app/presenters/licence.presenter.js'

@@ -3,9 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
@@ -22,7 +21,7 @@ describe('Company Contacts - Setup - Licences Service', () => {
   beforeEach(() => {
     licence = {
       id: generateUUID(),
-      licenceRef: LicenceHelper.generateLicenceRef()
+      licenceRef: generateLicenceRef()
     }
 
     company = CustomersFixtures.company()

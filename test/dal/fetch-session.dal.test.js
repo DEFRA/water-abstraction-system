@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 // Test helpers
 import SessionHelper from '../support/helpers/session.helper.js'
 import SessionNotFoundError from '../../app/errors/session-not-found.error.js'
-import { generateUUID } from '../../app/lib/general.lib.js'
+import { generateUUID } from '../support/generators.js'
 
 // Thing under test
 import FetchSessionDal from '../../app/dal/fetch-session.dal.js'

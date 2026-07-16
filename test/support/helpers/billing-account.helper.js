@@ -3,7 +3,7 @@
  */
 
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import { generateAccountNumber, generateUUID } from '../generators.js'
 
 /**
  * Add a new billing account
@@ -47,21 +47,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Generates a random account number
- *
- * The account number is in the format 'T########A', where '#' is a digit.
- *
- * @returns {string} - The generated account number
- */
-function generateAccountNumber() {
-  const numbering = generateRandomInteger(10000000, 99999999)
-
-  return `T${numbering}A`
-}
-
 export default {
   add,
-  defaults,
-  generateAccountNumber
+  defaults
 }

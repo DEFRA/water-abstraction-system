@@ -3,8 +3,7 @@
  */
 
 import BillModel from '../../../app/models/bill.model.js'
-import BillingAccountHelper from './billing-account.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateAccountNumber, generateUUID } from '../generators.js'
 
 /**
  * Add a new bill
@@ -43,7 +42,7 @@ function defaults(data = {}) {
   const defaults = {
     billingAccountId: generateUUID(),
     address: {},
-    accountNumber: BillingAccountHelper.generateAccountNumber(),
+    accountNumber: generateAccountNumber(),
     billRunId: generateUUID(),
     financialYearEnding: 2023
   }

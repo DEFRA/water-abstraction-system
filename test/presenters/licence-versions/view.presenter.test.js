@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import NotifyConfig from '../../../config/notify.config.js'

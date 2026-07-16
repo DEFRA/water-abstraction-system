@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import LicenceMonitoringStationModel from '../../../../app/models/licence-monitoring-station.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Test helpers
 import YarStub from '../../../support/stubs/yar.stub.js'

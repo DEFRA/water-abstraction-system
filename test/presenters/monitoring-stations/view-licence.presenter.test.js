@@ -3,8 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import LicenceFixture from '../../support/fixtures/licence.fixture.js'
-import UserHelper from '../../support/helpers/user.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID, generateUserId } from '../../support/generators.js'
 
 // Thing under test
 import ViewLicencePresenter from '../../../app/presenters/monitoring-stations/view-licence.presenter.js'
@@ -34,7 +33,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         thresholdValue: 500,
         licenceVersionPurposeCondition: null,
         user: {
-          id: UserHelper.generateUserId(),
+          id: generateUserId(),
           username: 'environment.officer@wrls.gov.uk'
         }
       },
@@ -69,7 +68,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
           }
         },
         user: {
-          id: UserHelper.generateUserId(),
+          id: generateUserId(),
           username: 'environment.officer@wrls.gov.uk'
         }
       }

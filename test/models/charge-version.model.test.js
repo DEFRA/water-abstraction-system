@@ -20,7 +20,7 @@ import ModLogModel from '../../app/models/mod-log.model.js'
 import ReviewChargeVersionHelper from '../support/helpers/review-charge-version.helper.js'
 import ReviewChargeVersionModel from '../../app/models/review-charge-version.model.js'
 import UserHelper from '../support/helpers/user.helper.js'
-import { generateRandomInteger } from '../../app/lib/general.lib.js'
+import { generateRandomInteger } from '../support/generators.js'
 
 // Thing under test
 import ChargeVersionModel from '../../app/models/charge-version.model.js'

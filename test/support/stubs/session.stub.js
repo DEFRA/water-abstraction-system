@@ -2,7 +2,7 @@
 import { vi } from 'vitest'
 
 import SessionModel from '../../../app/models/session.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Creates a stubbed instance of the SessionModel for testing purposes.

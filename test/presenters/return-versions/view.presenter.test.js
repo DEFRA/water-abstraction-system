@@ -6,7 +6,7 @@ import ContactModel from '../../../app/models/contact.model.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import PointModel from '../../../app/models/point.model.js'
 import ReturnVersionModel from '../../../app/models/return-version.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import ViewPresenter from '../../../app/presenters/return-versions/view.presenter.js'

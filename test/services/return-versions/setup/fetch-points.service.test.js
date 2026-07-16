@@ -7,6 +7,7 @@ import LicenceVersionPurposeHelper from '../../../support/helpers/licence-versio
 import LicenceVersionPurposePointHelper from '../../../support/helpers/licence-version-purpose-point.helper.js'
 import PointHelper from '../../../support/helpers/point.helper.js'
 import PointModel from '../../../../app/models/point.model.js'
+import { generateNationalGridReference } from '../../../support/generators.js'
 
 // Thing under test
 import FetchPointsService from '../../../../app/services/return-versions/setup/fetch-points.service.js'
@@ -111,7 +112,7 @@ async function _points() {
   // expect to see it only listed once in the results from the service.
   const sharedPoint = await PointHelper.add({
     description: `I am the shared point`,
-    ngr1: `SU${PointHelper.generateNationalGridReference().slice(2)}`
+    ngr1: `SU${generateNationalGridReference().slice(2)}`
   })
 
   points.push(sharedPoint)
@@ -119,7 +120,7 @@ async function _points() {
   // This point will only be assigned to the first of the two purposes we'll add
   const point1 = await PointHelper.add({
     description: 'I am point 1',
-    ngr1: `TQ${PointHelper.generateNationalGridReference().slice(2)}`
+    ngr1: `TQ${generateNationalGridReference().slice(2)}`
   })
 
   points.push(point1)
@@ -127,7 +128,7 @@ async function _points() {
   // This point will only be assigned to the second of the two purposes we'll add
   const point2 = await PointHelper.add({
     description: 'I am point 2',
-    ngr1: `SE${PointHelper.generateNationalGridReference().slice(2)}`
+    ngr1: `SE${generateNationalGridReference().slice(2)}`
   })
 
   points.push(point2)

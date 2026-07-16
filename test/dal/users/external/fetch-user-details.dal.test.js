@@ -7,7 +7,7 @@ import LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.
 import LicenceEntityRoleHelper from '../../../support/helpers/licence-entity-role.helper.js'
 import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import UserHelper from '../../../support/helpers/user.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import FetchUserDetailsDal from '../../../../app/dal/users/external/fetch-user-details.dal.js'

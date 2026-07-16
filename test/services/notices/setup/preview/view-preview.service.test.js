@@ -4,10 +4,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import http2 from 'node:http2'
 
-import LicenceHelper from '../../../../support/helpers/licence.helper.js'
 import RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
-import { generateNoticeReferenceCode, generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateNoticeReferenceCode, generateUUID } from '../../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchRecipientsService from '../../../../../app/services/notices/setup/fetch-recipients.service.js'
@@ -128,7 +127,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
 
       recipients = [fixtureData.primaryUser]
 
-      const licenceRef = LicenceHelper.generateLicenceRef()
+      const licenceRef = generateLicenceRef()
       const referenceCode = generateNoticeReferenceCode('RINV-')
       const sessionId = generateUUID()
       const dueReturns = [

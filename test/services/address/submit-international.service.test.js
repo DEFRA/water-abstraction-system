@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import SessionModelStub from '../../support/stubs/session.stub.js'
 import { countryLookup } from '../../../app/presenters/address/base-address.presenter.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'

@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
+import { generateLicenceRef } from '../../support/generators.js'
 
 // Things we need to stub
 import * as DetermineLicenceHasReturnVersionsService from '../../../app/services/licences/determine-licence-has-return-versions.service.js'
@@ -35,7 +35,7 @@ describe('Licences - View Returns service', () => {
     }
 
     licence = {
-      licenceRef: LicenceHelper.generateLicenceRef()
+      licenceRef: generateLicenceRef()
     }
 
     vi.spyOn(DetermineLicenceHasReturnVersionsService, 'default').mockReturnValue(true)

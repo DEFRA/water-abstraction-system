@@ -3,8 +3,7 @@
  */
 
 import LicenceDocumentHeaderModel from '../../../app/models/licence-document-header.model.js'
-import LicenceHelper from './licence.helper.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateRandomInteger, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence document header
@@ -42,7 +41,7 @@ function defaults(data = {}) {
   const defaults = {
     regimeEntityId: generateUUID(),
     naldId: generateRandomInteger(1000, 199999),
-    licenceRef: LicenceHelper.generateLicenceRef(),
+    licenceRef: generateLicenceRef(),
     metadata: _metadata()
   }
 

@@ -2,8 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import * as FetchBillsService from '../../../app/services/licences/fetch-bills.service.js'
@@ -29,7 +28,7 @@ describe('Licences - View Bills service', () => {
     }
 
     licenceId = generateUUID()
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
 
     vi.spyOn(FetchLicenceService, 'default').mockReturnValue({
       id: licenceId,

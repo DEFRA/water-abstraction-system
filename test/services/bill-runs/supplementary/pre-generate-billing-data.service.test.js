@@ -2,9 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateAccountNumber, generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js'
@@ -22,17 +20,17 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
   const billingAccounts = [
     {
       id: generateUUID(),
-      accountNumber: BillingAccountHelper.generateAccountNumber()
+      accountNumber: generateAccountNumber()
     },
     {
       id: generateUUID(),
-      accountNumber: BillingAccountHelper.generateAccountNumber()
+      accountNumber: generateAccountNumber()
     }
   ]
 
   const licences = [
-    { id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() },
-    { id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }
+    { id: generateUUID(), licenceRef: generateLicenceRef() },
+    { id: generateUUID(), licenceRef: generateLicenceRef() }
   ]
 
   let chargeVersions

@@ -3,7 +3,8 @@
  */
 
 import LicenceVersionModel from '../../../app/models/licence-version.model.js'
-import { generateRandomInteger, generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { generateLicenceVersionExternalId, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence version
@@ -61,17 +62,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Returns a randomly generated externalId for a licence version
- *
- * @returns {string} - A randomly generated externalId
- */
-function generateLicenceVersionExternalId() {
-  return `${generateRandomInteger(0, 9)}:${generateRandomInteger(10000, 99999)}:${generateRandomInteger(1, 100)}:0`
-}
-
 export default {
   add,
-  defaults,
-  generateLicenceVersionExternalId
+  defaults
 }

@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 // Test helpers
 import CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
 import ContactHelper from '../../support/helpers/contact.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'

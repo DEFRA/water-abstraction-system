@@ -3,7 +3,7 @@
  */
 
 import BillRunVolumeModel from '../../../app/models/bill-run-volume.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new bill run volume

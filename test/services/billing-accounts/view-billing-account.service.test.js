@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import BillingAccountsFixture from '../../support/fixtures/billing-accounts.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import * as FetchViewBillingAccountService from '../../../app/services/billing-accounts/fetch-view-billing-account.service.js'

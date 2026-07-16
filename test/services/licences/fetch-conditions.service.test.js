@@ -10,7 +10,7 @@ import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-p
 import LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
 import PointHelper from '../../support/helpers/point.helper.js'
 import PurposeHelper from '../../support/helpers/purpose.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import FetchConditionsService from '../../../app/services/licences/fetch-conditions.service.js'

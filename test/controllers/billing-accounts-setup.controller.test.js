@@ -2,7 +2,7 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../app/lib/general.lib.js'
+import { generateUUID } from '../support/generators.js'
 import http2 from 'node:http2'
 import { postRequestOptions } from '../support/general.js'
 

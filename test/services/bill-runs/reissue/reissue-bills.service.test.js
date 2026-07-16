@@ -8,7 +8,7 @@ import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
 import BillModel from '../../../../app/models/bill.model.js'
 import TransactionHelper from '../../../support/helpers/transaction.helper.js'
 import TransactionModel from '../../../../app/models/transaction.model.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchBillsToBeReissuedService from '../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js'

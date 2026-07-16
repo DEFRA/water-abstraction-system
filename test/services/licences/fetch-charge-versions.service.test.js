@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import ChangeReasonHelper from '../../support/helpers/change-reason.helper.js'
 import ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
 import ChargeVersionModel from '../../../app/models/charge-version.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import FetchChargeVersionsService from '../../../app/services/licences/fetch-charge-versions.service.js'

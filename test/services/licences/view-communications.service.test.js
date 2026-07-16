@@ -2,10 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test Helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
@@ -34,7 +33,7 @@ describe('Licences - View Communications service', () => {
     }
 
     licenceId = generateUUID()
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
 
     const notice = NoticesFixture.alertStop()
     const { createdAt, id, messageType, status } = NotificationsFixture.abstractionAlertEmail(notice)

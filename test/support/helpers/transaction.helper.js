@@ -4,7 +4,8 @@
 
 import ChargeCategoryHelper from './charge-category.helper.js'
 import TransactionModel from '../../../app/models/transaction.model.js'
-import { determineCurrentFinancialYear, generateUUID } from '../../../app/lib/general.lib.js'
+import { determineCurrentFinancialYear } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new transaction

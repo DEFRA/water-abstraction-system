@@ -6,7 +6,8 @@ import * as CheckLicenceEndDatesService from '../../../../app/services/licences/
 import * as FetchLicencesService from '../../../../app/services/licences/end-dates/fetch-licences.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import LicencesConfig from '../../../../config/licences.config.js'
-import { generateUUID, pause } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
+import { pause } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
 import CheckAllLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-all-licence-end-dates.service.js'

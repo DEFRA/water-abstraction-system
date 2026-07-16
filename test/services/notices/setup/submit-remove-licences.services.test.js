@@ -2,9 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchLicenceRefsWithDueReturnsService from '../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js'
@@ -39,7 +38,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
 
     vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    licenceRefWithDueReturns = LicenceHelper.generateLicenceRef()
+    licenceRefWithDueReturns = generateLicenceRef()
   })
 
   afterEach(() => {

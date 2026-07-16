@@ -3,7 +3,7 @@
  */
 
 import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateName, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence entity
@@ -49,17 +49,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Generates a random name
- *
- * @returns {string} a random name in the format [random UUID]@example.co.uk
- */
-function generateName() {
-  return `${generateUUID()}@example.co.uk`
-}
-
 export default {
   add,
-  defaults,
-  generateName
+  defaults
 }

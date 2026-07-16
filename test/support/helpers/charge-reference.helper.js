@@ -4,7 +4,7 @@
 
 import ChargeCategoryHelper from './charge-category.helper.js'
 import ChargeReferenceModel from '../../../app/models/charge-reference.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new charge reference

@@ -3,7 +3,7 @@
  */
 
 import LicenceSupplementaryYearModel from '../../../app/models/licence-supplementary-year.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new licence supplementary year record

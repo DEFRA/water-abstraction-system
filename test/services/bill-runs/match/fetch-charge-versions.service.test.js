@@ -15,7 +15,7 @@ import LicenceSupplementaryYearHelper from '../../../support/helpers/licence-sup
 import PurposeHelper from '../../../support/helpers/purpose.helper.js'
 import RegionHelper from '../../../support/helpers/region.helper.js'
 import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import FetchChargeVersionsService from '../../../../app/services/bill-runs/match/fetch-charge-versions.service.js'

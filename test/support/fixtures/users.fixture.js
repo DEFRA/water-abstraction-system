@@ -9,7 +9,8 @@ import UserGroupHelper from '../helpers/user-group.helper.js'
 import UserHelper from '../helpers/user.helper.js'
 import UserModel from '../../../app/models/user.model.js'
 import UserRoleHelper from '../helpers/user-role.helper.js'
-import { compareStrings, generateUUID } from '../../../app/lib/general.lib.js'
+import { compareStrings } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Populates a `UserModel` instance as the 'admin-internal@wrls.gov.uk' user for testing purposes

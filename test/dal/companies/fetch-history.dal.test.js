@@ -5,7 +5,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
 import LicenceHelper from '../../support/helpers/licence.helper.js'
 import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import DatabaseConfig from '../../../config/database.config.js'

@@ -3,8 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import NotificationHelper from '../../../support/helpers/notification.helper.js'
-import UserHelper from '../../../support/helpers/user.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID, generateUserName } from '../../../support/generators.js'
 
 // Thing under test
 import UpdateNotificationDal from '../../../../app/dal/users/internal/update-notification.dal.js'
@@ -22,7 +21,7 @@ describe('Users - Internal - Update Notification DAL', () => {
         unique_create_password_link:
           'https://internal.com/reset_password_change_password?resetGuid=2a595ee7-3ece-47b2-95c0-bea84efa7422'
       },
-      recipient: UserHelper.generateUserName()
+      recipient: generateUserName()
     }
 
     notification = await NotificationHelper.add(notificationData)

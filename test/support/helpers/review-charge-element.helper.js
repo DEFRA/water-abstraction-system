@@ -3,7 +3,7 @@
  */
 
 import ReviewChargeElementModel from '../../../app/models/review-charge-element.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new review charge element for 2pt matching

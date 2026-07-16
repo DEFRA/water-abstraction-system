@@ -2,8 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
@@ -17,7 +16,7 @@ import SendRenewalInvitations from '../../../../app/services/jobs/renewal-invita
 
 describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => {
   const days = '300'
-  const recipients = [{ licence_refs: LicenceHelper.generateLicenceRef() }]
+  const recipients = [{ licence_refs: generateLicenceRef() }]
 
   let expectedRenewalDate
   let expiredDate

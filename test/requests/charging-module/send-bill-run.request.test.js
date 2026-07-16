@@ -2,8 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ExpandedError from '../../../app/errors/expanded.error.js'
 import http2 from 'node:http2'
+
+import ExpandedError from '../../../app/errors/expanded.error.js'
 
 // Things we need to stub
 import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'

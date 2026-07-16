@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
 import NotifyResponseFixture from '../../../../support/fixtures/notify-response.fixture.js'
-import { generateNoticeReferenceCode } from '../../../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode } from '../../../../support/generators.js'
 
 // Things we need to stub
 import * as CreatePrecompiledFileRequest from '../../../../../app/requests/notify/create-precompiled-file.request.js'

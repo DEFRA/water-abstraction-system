@@ -6,7 +6,7 @@ import LicenceDocumentHeaderHelper from '../../../../support/helpers/licence-doc
 import LicenceDocumentHeaderModel from '../../../../../app/models/licence-document-header.model.js'
 import LicenceUnregistrationModel from '../../../../../app/models/licence-unregistration.model.js'
 import UsersFixture from '../../../../support/fixtures/users.fixture.js'
-import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
 import UnregisterLicencesDal from '../../../../../app/dal/users/external/setup/unregister-licences.dal.js'

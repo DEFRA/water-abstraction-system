@@ -1,9 +1,7 @@
 import crypto from 'node:crypto'
 
-import LicenceHelper from '../helpers/licence.helper.js'
-import ReturnRequirementHelper from '../helpers/return-requirement.helper.js'
 import { futureDueDate } from '../../../app/presenters/notices/base.presenter.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateReference, generateUUID } from '../generators.js'
 
 /**
  * Creates a fixture for an ad-hoc additional email recipient
@@ -17,7 +15,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  * @returns {object} The ad-hoc returns notice additional email recipient fixture
  */
 function additionalEmailRecipient(licenceRef = null, email = null) {
-  const recipientLicenceRef = licenceRef ?? LicenceHelper.generateLicenceRef()
+  const recipientLicenceRef = licenceRef ?? generateLicenceRef()
   const recipientEmail = email ?? 'additional@returns-notice.com'
 
   const recipient = {
@@ -49,7 +47,7 @@ function additionalEmailRecipient(licenceRef = null, email = null) {
  * @returns {object} The ad-hoc returns notice additional postal recipient fixture
  */
 function additionalPostalRecipient(licenceRef = null, contact = null) {
-  const recipientLicenceRef = licenceRef ?? LicenceHelper.generateLicenceRef()
+  const recipientLicenceRef = licenceRef ?? generateLicenceRef()
 
   // NOTE: We take what our helper function would generate for a contact and modify it to match would be set after
   // completing the address lookup journey, when the additional recipient is added to the session
@@ -92,7 +90,7 @@ function alertNoticeAdditionalContact() {
     contact_hash_id: _emailContactHashId(email),
     contact_type: 'Additional contact',
     email,
-    licence_refs: [LicenceHelper.generateLicenceRef()],
+    licence_refs: [generateLicenceRef()],
     message_type: 'Email'
   }
 }
@@ -113,7 +111,7 @@ function alertNoticeLicenceHolder() {
     contact_hash_id: _contactHashId(contact),
     contact_type: 'licence holder',
     email: null,
-    licence_refs: [LicenceHelper.generateLicenceRef()],
+    licence_refs: [generateLicenceRef()],
     message_type: 'Letter'
   }
 }
@@ -134,7 +132,7 @@ function alertNoticePrimaryUser() {
     contact_hash_id: _emailContactHashId(email),
     contact_type: 'primary user',
     email,
-    licence_refs: [LicenceHelper.generateLicenceRef()],
+    licence_refs: [generateLicenceRef()],
     message_type: 'Email'
   }
 }
@@ -155,7 +153,7 @@ function renewalInvitationLicenceHolder() {
     contact_hash_id: _contactHashId(contact),
     contact_type: 'licence holder',
     email: null,
-    licence_ref: LicenceHelper.generateLicenceRef(),
+    licence_ref: generateLicenceRef(),
     message_type: 'Letter'
   }
 
@@ -178,7 +176,7 @@ function renewalInvitationPrimaryUser() {
     contact_hash_id: _emailContactHashId(email),
     contact_type: 'primary user',
     email,
-    licence_ref: LicenceHelper.generateLicenceRef(),
+    licence_ref: generateLicenceRef(),
     message_type: 'Email'
   }
 
@@ -207,10 +205,10 @@ function returnsNoticeLicenceHolder(download = false) {
     end_date: new Date('2025-03-31'),
     email: null,
     latest_due_date: null,
-    licence_ref: LicenceHelper.generateLicenceRef(),
+    licence_ref: generateLicenceRef(),
     message_type: 'Letter',
     notificationDueDate: futureDueDate('letter'),
-    return_reference: ReturnRequirementHelper.generateReference(),
+    return_reference: generateReference(),
     start_date: new Date('2024-04-01')
   }
 
@@ -243,10 +241,10 @@ function returnsNoticePrimaryUser(download = false) {
     end_date: new Date('2025-03-31'),
     email,
     latest_due_date: null,
-    licence_ref: LicenceHelper.generateLicenceRef(),
+    licence_ref: generateLicenceRef(),
     message_type: 'Email',
     notificationDueDate: futureDueDate('email'),
-    return_reference: ReturnRequirementHelper.generateReference(),
+    return_reference: generateReference(),
     start_date: new Date('2024-04-01')
   }
 
@@ -279,10 +277,10 @@ function returnsNoticeReturnsAgent(download = false) {
     end_date: new Date('2025-03-31'),
     email,
     latest_due_date: null,
-    licence_ref: LicenceHelper.generateLicenceRef(),
+    licence_ref: generateLicenceRef(),
     message_type: 'Email',
     notificationDueDate: futureDueDate('email'),
-    return_reference: ReturnRequirementHelper.generateReference(),
+    return_reference: generateReference(),
     start_date: new Date('2024-04-01')
   }
 
@@ -315,11 +313,11 @@ function returnsNoticeReturnsTo(download = false) {
     end_date: new Date('2025-03-31'),
     email: null,
     latest_due_date: null,
-    licence_ref: LicenceHelper.generateLicenceRef(),
+    licence_ref: generateLicenceRef(),
     message_type: 'Letter',
     notificationDueDate: futureDueDate('letter'),
     return_log_id: generateUUID(),
-    return_reference: ReturnRequirementHelper.generateReference(),
+    return_reference: generateReference(),
     start_date: new Date('2024-04-01')
   }
 
@@ -364,7 +362,7 @@ function recipients() {
 // an additional contact will always be associated with a primary user or licence holder by the licence ref
 function _addAdditionalContact() {
   return {
-    licence_refs: [LicenceHelper.generateLicenceRef()],
+    licence_refs: [generateLicenceRef()],
     contact: null,
     contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
     contact_type: 'additional contact',
@@ -379,7 +377,7 @@ function _addLicenceHolder() {
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
     contact_type: 'licence holder',
     email: null,
-    licence_refs: [LicenceHelper.generateLicenceRef()],
+    licence_refs: [generateLicenceRef()],
     message_type: 'Letter',
     return_log_ids: [generateUUID()]
   }
@@ -387,7 +385,7 @@ function _addLicenceHolder() {
 
 function _addPrimaryUser() {
   return {
-    licence_refs: [LicenceHelper.generateLicenceRef()],
+    licence_refs: [generateLicenceRef()],
     contact: null,
     contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
     contact_type: 'primary user',
@@ -399,7 +397,7 @@ function _addPrimaryUser() {
 
 function _addReturnsAgent() {
   return {
-    licence_refs: [LicenceHelper.generateLicenceRef()],
+    licence_refs: [generateLicenceRef()],
     contact: null,
     contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
     contact_type: 'returns user',
@@ -421,7 +419,7 @@ function _addReturnTo() {
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed679893',
     contact_type: 'returns to',
     email: null,
-    licence_refs: [LicenceHelper.generateLicenceRef()],
+    licence_refs: [generateLicenceRef()],
     message_type: 'Letter',
     return_log_ids: [generateUUID()]
   }
@@ -433,7 +431,7 @@ function _addLicenceHolderWithMultipleLicences() {
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed09878075',
     contact_type: 'licence holder',
     email: null,
-    licence_refs: [LicenceHelper.generateLicenceRef(), LicenceHelper.generateLicenceRef()],
+    licence_refs: [generateLicenceRef(), generateLicenceRef()],
     message_type: 'Letter',
     return_log_ids: [generateUUID()]
   }

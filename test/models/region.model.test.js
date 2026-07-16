@@ -9,6 +9,7 @@ import CompanyModel from '../../app/models/company.model.js'
 import LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
 import RegionHelper from '../support/helpers/region.helper.js'
+import { generateLicenceRef } from '../support/generators.js'
 
 // Thing under test
 import RegionModel from '../../app/models/region.model.js'
@@ -39,7 +40,7 @@ describe('Region model', () => {
 
       // Create test licences
       const licence = await LicenceHelper.add({
-        licenceRef: LicenceHelper.generateLicenceRef(),
+        licenceRef: generateLicenceRef(),
         regionId: testRecord.id
       })
 

@@ -2,8 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 import http2 from 'node:http2'
+
+import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 
 // Things we need to stub
 import * as NotifyRequest from '../../../app/requests/notify.request.js'

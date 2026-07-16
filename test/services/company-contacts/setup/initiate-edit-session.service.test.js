@@ -4,9 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
 import SessionModel from '../../../../app/models/session.model.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchCompanyContactDal from '../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js'
@@ -24,7 +23,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
     company = CustomersFixtures.company()
     contact = CustomersFixtures.contact()
 
-    licences = [{ id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }]
+    licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
 
     companyContact = CompanyContactModel.fromJson({
       id: generateUUID(),
@@ -77,9 +76,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
         describe('and there are abstraction alert licences', () => {
           beforeEach(() => {
-            companyContact.abstractionAlertLicences = [
-              { id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }
-            ]
+            companyContact.abstractionAlertLicences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
           })
 
           it('returns "some"', async () => {
@@ -123,9 +120,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
         describe('and there are abstraction alert licences', () => {
           beforeEach(() => {
-            companyContact.abstractionAlertLicences = [
-              { id: generateUUID(), licenceRef: LicenceHelper.generateLicenceRef() }
-            ]
+            companyContact.abstractionAlertLicences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
           })
 
           it('returns "no"', async () => {

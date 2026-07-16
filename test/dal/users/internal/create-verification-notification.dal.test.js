@@ -4,8 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 // Test helpers
 import NotificationModel from '../../../../app/models/notification.model.js'
 import ServerConfig from '../../../../config/server.config.js'
-import UserHelper from '../../../support/helpers/user.helper.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUUID, generateUserName } from '../../../support/generators.js'
 
 // Thing under test
 import CreateVerificationNotificationDal from '../../../../app/dal/users/internal/create-verification-notification.dal.js'
@@ -18,7 +17,7 @@ describe('Users - Internal - Create Verification Notification DAL', () => {
 
   describe('when called', () => {
     beforeEach(() => {
-      email = UserHelper.generateUserName()
+      email = generateUserName()
       resetGuid = generateUUID()
     })
 

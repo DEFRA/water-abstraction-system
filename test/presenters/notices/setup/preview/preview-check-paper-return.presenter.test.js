@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
 import PreviewCheckPaperReturnPresenter from '../../../../../app/presenters/notices/setup/preview/preview-check-paper-return.presenter.js'
