@@ -61,7 +61,7 @@ describe('Fetch Bill Runs service', () => {
       it('returns a full page of 3 matching "results" and the correct "total"', async () => {
         const { results, total } = await FetchBillRunsService(filters, page)
 
-        expect(results.length).toEqual(3)
+        expect(results).toHaveLength(3)
         expect(total >= 5).toBe(true)
       })
     })

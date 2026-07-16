@@ -49,7 +49,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
 
       const licenceEndDateChanges = await LicenceEndDateChangeModel.query().where('licenceId', licence.id)
 
-      expect(licenceEndDateChanges.length).toEqual(0)
+      expect(licenceEndDateChanges).toHaveLength(0)
     })
   })
 
@@ -64,7 +64,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
 
       const licenceEndDateChanges = await LicenceEndDateChangeModel.query().where('licenceId', licence.id)
 
-      expect(licenceEndDateChanges.length).toEqual(1)
+      expect(licenceEndDateChanges).toHaveLength(1)
     })
   })
 

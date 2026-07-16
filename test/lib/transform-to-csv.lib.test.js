@@ -130,7 +130,7 @@ describe('Transform to csv', () => {
       it('returns undefined', () => {
         const result = transformArrayToCSVRow()
 
-        expect(result).toEqual(undefined)
+        expect(result).toBeUndefined()
       })
     })
   })

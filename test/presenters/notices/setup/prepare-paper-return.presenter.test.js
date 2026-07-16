@@ -291,7 +291,7 @@ describe('Notices - Setup - Prepare Paper Return presenter', () => {
           it('should return entries', () => {
             const result = PreparePaperReturnPresenter(notification)
 
-            expect(result.pageEntries.length).toEqual(1)
+            expect(result.pageEntries).toHaveLength(1)
             expect(result.pageEntries).toEqual([
               // Page
               [
@@ -337,8 +337,8 @@ describe('Notices - Setup - Prepare Paper Return presenter', () => {
           it('should return entries', () => {
             const result = PreparePaperReturnPresenter(notification)
 
-            expect(result.pageEntries.length).toEqual(2)
-            expect(result.pageEntries.length).toEqual(2)
+            expect(result.pageEntries).toHaveLength(2)
+            expect(result.pageEntries).toHaveLength(2)
             expect(result.pageEntries).toEqual([
               // Page 1
               [

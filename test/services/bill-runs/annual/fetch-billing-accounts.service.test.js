@@ -339,7 +339,7 @@ describe('Fetch Billing Accounts service', () => {
 
         const { chargeVersions } = billingAccountRecord
 
-        expect(chargeVersions.length).toEqual(1)
+        expect(chargeVersions).toHaveLength(1)
         expect(chargeVersions[0].id).toEqual(chargeVersion.id)
       })
     })

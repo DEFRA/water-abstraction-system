@@ -422,7 +422,7 @@ describe('Notices - Setup - Check presenter', () => {
       it('returns all the recipients', () => {
         const result = CheckPresenter(recipients, page, session)
 
-        expect(result.recipients.length).toEqual(recipients.length)
+        expect(result.recipients).toHaveLength(recipients.length)
       })
     })
 
@@ -435,7 +435,7 @@ describe('Notices - Setup - Check presenter', () => {
         it('returns the first 25 recipients', () => {
           const result = CheckPresenter(recipients, page, session)
 
-          expect(result.recipients.length).toEqual(25)
+          expect(result.recipients).toHaveLength(25)
         })
       })
 
@@ -447,7 +447,7 @@ describe('Notices - Setup - Check presenter', () => {
         it('returns the remaining recipients', () => {
           const result = CheckPresenter(recipients, page, session)
 
-          expect(result.recipients.length).toEqual(1)
+          expect(result.recipients).toHaveLength(1)
         })
       })
     })

@@ -55,7 +55,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       it('saves the submitted value', async () => {
         await SubmitContactTypeService(session.id, payload, yarStub)
 
-        expect(session.contactType).toEqual(undefined)
+        expect(session.contactType).toBeUndefined()
         expect(session.additionalRecipients).toEqual([
           {
             contact: null,
@@ -105,7 +105,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       it('saves the submitted value', async () => {
         await SubmitContactTypeService(session.id, payload, yarStub)
 
-        expect(session.contactType).toEqual(undefined)
+        expect(session.contactType).toBeUndefined()
         expect(session.additionalRecipients).toEqual([
           {
             contact: null,
@@ -148,7 +148,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       it('saves the submitted value with the email address in lowercase', async () => {
         await SubmitContactTypeService(session.id, payload, yarStub)
 
-        expect(session.contactType).toEqual(undefined)
+        expect(session.contactType).toBeUndefined()
         expect(session.additionalRecipients).toEqual([
           {
             contact: null,
@@ -203,7 +203,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       it('saves the submitted value', async () => {
         await SubmitContactTypeService(session.id, payload, yarStub)
 
-        expect(session.contactType).toEqual(undefined)
+        expect(session.contactType).toBeUndefined()
         expect(session.additionalRecipients).toEqual([
           {
             contact: null,

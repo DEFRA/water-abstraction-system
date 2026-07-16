@@ -406,7 +406,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.contactSelected).toEqual(null)
+        expect(result.contactSelected).toBeNull()
       })
     })
 

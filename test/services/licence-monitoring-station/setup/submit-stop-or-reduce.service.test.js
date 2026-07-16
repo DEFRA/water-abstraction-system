@@ -40,7 +40,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
         await SubmitStopOrReduceService(session.id, payload)
 
         expect(session.stopOrReduce).toEqual('stop')
-        expect(session.reduceAtThreshold).toEqual(null)
+        expect(session.reduceAtThreshold).toBeNull()
         expect(session.$update).toHaveBeenCalled()
       })
 

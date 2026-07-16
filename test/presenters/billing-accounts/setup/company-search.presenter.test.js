@@ -37,7 +37,7 @@ describe('Billing Accounts - Setup - Company Search Presenter', () => {
       it('returns null', () => {
         const result = CompanySearchPresenter(session)
 
-        expect(result.companySearch).toEqual(null)
+        expect(result.companySearch).toBeNull()
       })
     })
 

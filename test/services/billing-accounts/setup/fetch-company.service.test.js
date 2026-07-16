@@ -59,7 +59,7 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
     it('returns an empty array', async () => {
       const result = await FetchCompanyService(companiesHouseNumber)
 
-      expect(result).toEqual(null)
+      expect(result).toBeNull()
     })
   })
 })

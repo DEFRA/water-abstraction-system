@@ -106,7 +106,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       it('returns null', () => {
         const result = SelectCompanyPresenter(session, companies)
 
-        expect(result.companiesHouseNumber).toEqual(null)
+        expect(result.companiesHouseNumber).toBeNull()
       })
     })
   })

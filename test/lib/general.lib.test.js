@@ -326,7 +326,7 @@ describe('GeneralLib', () => {
       const result = GeneralLib.generateNoticeReferenceCode('TEST-')
 
       expect(result.startsWith('TEST-')).toBe(true)
-      expect(result.length).toEqual(11)
+      expect(result).toHaveLength(11)
     })
   })
 
@@ -523,7 +523,7 @@ describe('GeneralLib', () => {
       it('returns the provided array grouped by the given group size', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).toEqual(4)
+        expect(result).toHaveLength(4)
 
         expect(result).toEqual([
           [1, 2], // Group One
@@ -551,7 +551,7 @@ describe('GeneralLib', () => {
       it('returns the provided array grouped by the given group size', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).toEqual(3)
+        expect(result).toHaveLength(3)
 
         expect(result).toEqual([
           [{ number: 1 }, { number: 2 }, { number: 3 }], // Group One
@@ -570,7 +570,7 @@ describe('GeneralLib', () => {
       it('returns an empty array', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).toEqual(0)
+        expect(result).toHaveLength(0)
 
         expect(result).toEqual([])
       })
@@ -585,7 +585,7 @@ describe('GeneralLib', () => {
       it('returns the provided array (not grouped)', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).toEqual(7)
+        expect(result).toHaveLength(7)
 
         expect(result).toEqual([1, 2, 3, 4, 5, 6, 7])
       })
@@ -600,7 +600,7 @@ describe('GeneralLib', () => {
       it('returns the provided array grouped by the given group size', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).toEqual(1)
+        expect(result).toHaveLength(1)
 
         expect(result).toEqual([[1, 2]])
       })
