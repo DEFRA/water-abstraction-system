@@ -1,18 +1,18 @@
 /**
- * Wraps the `tar` package so its `create()` function can be stubbed in tests
+ * Wraps `tar.create()` so it can be stubbed in tests
+ *
+ * `tar` is a genuine ES module, so its exports are non-configurable and cannot be stubbed directly with
+ * `vi.spyOn()`. This first-party wrapper gives tests something stubbable to spy on instead.
  * @module TarWrapperLib
  */
 
 import * as tar from 'tar'
 
 /**
- * Wraps `tar.create()`
+ * Creates a tarball, passing its arguments straight through to `tar.create()`
  *
- * `tar` is a genuine ES module, so its exports are non-configurable and cannot be stubbed directly with
- * `vi.spyOn()`. This first-party wrapper gives tests something stubbable to spy on instead.
- *
- * @param {object} options - Options passed straight through to `tar.create()`
- * @param {string[]} fileList - The list of files/folders passed straight through to `tar.create()`
+ * @param {object} options
+ * @param {string[]} fileList
  *
  * @returns {Promise<void>}
  */
