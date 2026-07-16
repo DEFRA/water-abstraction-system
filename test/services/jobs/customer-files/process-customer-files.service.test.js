@@ -2,9 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import http2 from 'node:http2'
 import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
 import BillingAccountModel from '../../../../app/models/billing-account.model.js'
-import http2 from 'node:http2'
 
 // Things we need to stub
 import * as ChargingModuleViewCustomerFilesRequest from '../../../../app/requests/charging-module/view-customer-files.request.js'

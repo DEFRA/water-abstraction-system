@@ -3,8 +3,8 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 
 // Test helpers
 import Boom from '@hapi/boom'
-import SessionNotFoundError from '../../app/errors/session-not-found.error.js'
 import http2 from 'node:http2'
+import SessionNotFoundError from '../../app/errors/session-not-found.error.js'
 
 // Things we need to stub
 import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
