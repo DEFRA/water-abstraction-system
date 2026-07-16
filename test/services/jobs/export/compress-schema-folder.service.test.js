@@ -1,40 +1,37 @@
 // Test framework
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-// Things we need to stub (dynamically required in beforeEach to support mocking)
-let tar
+// Test helpers
+import fs from 'fs'
+import path from 'path'
 
-// Thing under test (dynamically required in beforeEach to support mocking)
-let CompressSchemaFolderService
+// Thing under test
+import CompressSchemaFolderService from '../../../../app/services/jobs/export/compress-schema-folder.service.js'
 
-// TODO: Remove describe.skip once the project migrates to ESM. In CJS mode, Node.js v22's require(esm)
-// compatibility layer runs before Vitest's module interceptor so vi.doMock('tar') cannot replace the ESM
-// package's live bindings. We do not use vi.mock() / vi.doMock() here or once the project is ESM — see the
-// testing skill's Mocking section for why. Once test files are ESM, replace this dynamic require with a static
-// `import * as Tar from 'tar'` and stub its export with `vi.spyOn(Tar, 'create')`.
-describe.skip('Jobs - Export - Compress Schema Folder service', () => {
+describe('Jobs - Export - Compress Schema Folder service', () => {
+  // NOTE: 'tar' is a native ESM package, so its module namespace is frozen and cannot be stubbed with vi.spyOn()
+  // (and we don't use vi.mock() — see the testing skill's Mocking section for why). So instead we exercise the real
+  // thing: create a real folder with a file in it, compress it, and assert the tarball exists on disk.
+  let schemaFolderPath
+  let tarballPath
+
   beforeEach(() => {
-    vi.doMock('tar', () => {
-      return { create: vi.fn().mockResolvedValue(undefined) }
-    })
-    vi.resetModules()
+    schemaFolderPath = '/tmp/compress-schema-folder-test'
+    tarballPath = `${schemaFolderPath}.tgz`
 
-    tar = require('tar')
-    CompressSchemaFolderService = require('../../../../app/services/jobs/export/compress-schema-folder.service.js')
+    fs.mkdirSync(schemaFolderPath, { recursive: true })
+    fs.writeFileSync(path.join(schemaFolderPath, 'test-file.csv'), 'some,csv,data')
   })
 
   afterEach(() => {
-    vi.resetAllMocks()
-    vi.resetModules()
+    fs.rmSync(schemaFolderPath, { recursive: true, force: true })
+    fs.rmSync(tarballPath, { force: true })
   })
 
   it('creates a compressed tarball from the given schema folder', async () => {
-    const schemaFolderPath = '/tmp/water'
-    const expectedTarballPath = '/tmp/water.tgz'
-
     const result = await CompressSchemaFolderService(schemaFolderPath)
 
-    expect(tar.create).toHaveBeenCalledOnce()
-    expect(result).toEqual(expectedTarballPath)
+    expect(result).toEqual(tarballPath)
+    expect(fs.existsSync(tarballPath)).toBe(true)
   })
 })
