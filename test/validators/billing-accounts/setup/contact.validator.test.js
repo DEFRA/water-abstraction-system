@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Test helpers
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 

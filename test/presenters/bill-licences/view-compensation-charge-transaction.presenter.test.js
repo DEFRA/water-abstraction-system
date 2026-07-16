@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import ViewCompensationChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js'
 

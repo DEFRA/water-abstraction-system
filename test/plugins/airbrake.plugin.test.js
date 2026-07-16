@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import serverConfig from '../../config/server.config.js'
 

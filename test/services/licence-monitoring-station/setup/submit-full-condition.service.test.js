@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import LicenceVersionPurposeConditionHelper from '../../../support/helpers/licence-version-purpose-condition.helper.js'
 import LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'

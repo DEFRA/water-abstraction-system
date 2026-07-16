@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import * as CheckNotificationStatusService from '../../../../../app/services/notifications/check-notification-status.service.js'
 import * as CreateEmailRequest from '../../../../../app/requests/notify/create-email.request.js'

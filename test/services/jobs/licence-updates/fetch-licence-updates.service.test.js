@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import BillRunChargeVersionYearHelper from '../../../support/helpers/bill-run-charge-version-year.helper.js'
 import BillRunHelper from '../../../support/helpers/bill-run.helper.js'

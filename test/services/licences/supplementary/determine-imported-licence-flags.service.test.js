@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import * as FetchExistingLicenceDetailsService from '../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js'
 

@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
 import CompanyContactModel from '../../../../app/models/company-contact.model.js'

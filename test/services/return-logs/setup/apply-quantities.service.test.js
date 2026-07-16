@@ -1,3 +1,6 @@
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
+
 // Thing under test
 import ApplyQuantitiesService from '../../../../app/services/return-logs/setup/apply-quantities.service.js'
 

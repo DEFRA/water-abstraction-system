@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import DatabaseConfig from '../../../config/database.config.js'
 

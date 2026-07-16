@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import HapiPinoIgnoreRequestService from '../../../app/services/plugins/hapi-pino-ignore-request.service.js'
 

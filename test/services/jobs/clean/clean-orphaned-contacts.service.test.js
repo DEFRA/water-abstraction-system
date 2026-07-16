@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import BillingAccountAddressHelper from '../../../support/helpers/billing-account-address.helper.js'
 import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'

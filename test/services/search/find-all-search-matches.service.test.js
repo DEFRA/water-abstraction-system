@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things to stub
 import * as DetermineSearchItemsService from '../../../app/services/search/determine-search-items.service.js'
 import * as FetchSearchResultsDetailsService from '../../../app/services/search/fetch-search-results-details.service.js'

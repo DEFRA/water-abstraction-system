@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things to stub
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
 import CompanyModel from '../../../app/models/company.model.js'

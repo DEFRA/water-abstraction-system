@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import PayloadCleaningService from '../../../app/services/plugins/payload-cleaning.service.js'
 

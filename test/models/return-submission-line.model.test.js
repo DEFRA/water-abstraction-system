@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import ReturnSubmissionHelper from '../support/helpers/return-submission.helper.js'
 import ReturnSubmissionLineHelper from '../support/helpers/return-submission-line.helper.js'

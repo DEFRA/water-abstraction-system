@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import LicencesValidator from '../../../../../app/validators/users/external/setup/licences.validator.js'
 

@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import * as LegacyDbSnakeCaseMappersLib from '../../app/lib/legacy-db-snake-case-mappers.lib.js'
 

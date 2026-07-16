@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import PointsValidator from '../../../../app/validators/return-versions/setup/points.validator.js'
 

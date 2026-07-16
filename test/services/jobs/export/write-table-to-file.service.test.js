@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import { data as chargeCategories } from '../../../../db/seeds/data/charge-categories.js'
 import { db } from '../../../../db/db.js'

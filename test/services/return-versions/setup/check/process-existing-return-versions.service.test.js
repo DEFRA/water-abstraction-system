@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import * as FetchCurrentReturnVersionsDal from '../../../../../app/dal/return-versions/fetch-current-return-versions.dal.js'
 import * as UpdateReturnVersionEndDateDal from '../../../../../app/dal/return-versions/update-return-version-end-date.dal.js'

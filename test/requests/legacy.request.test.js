@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import http2 from 'node:http2'
 import legacyConfig from '../../config/legacy.config.js'

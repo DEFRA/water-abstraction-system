@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import http2 from 'node:http2'
 

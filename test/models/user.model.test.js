@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import ChargeVersionNoteHelper from '../support/helpers/charge-version-note.helper.js'
 import ChargeVersionNoteModel from '../../app/models/charge-version-note.model.js'

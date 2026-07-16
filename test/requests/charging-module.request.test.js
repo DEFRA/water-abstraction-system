@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
 import http2 from 'node:http2'
 
 // Things we need to stub

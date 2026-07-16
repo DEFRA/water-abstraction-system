@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import FullConditionPresenter from '../../../../app/presenters/licence-monitoring-station/setup/full-condition.presenter.js'
 

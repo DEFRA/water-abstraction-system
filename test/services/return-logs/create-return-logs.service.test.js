@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
 import * as ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'

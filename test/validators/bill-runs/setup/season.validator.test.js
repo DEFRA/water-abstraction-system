@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import SeasonValidator from '../../../../app/validators/bill-runs/setup/season.validator.js'
 

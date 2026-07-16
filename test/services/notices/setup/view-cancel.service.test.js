@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'

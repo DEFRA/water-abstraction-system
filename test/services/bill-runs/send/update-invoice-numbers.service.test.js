@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test framework dependencies
 import BillModel from '../../../../app/models/bill.model.js'
 import BillRunModel from '../../../../app/models/bill-run.model.js'

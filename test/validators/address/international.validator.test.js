@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import InternationalValidator from '../../../app/validators/address/international.validator.js'
 

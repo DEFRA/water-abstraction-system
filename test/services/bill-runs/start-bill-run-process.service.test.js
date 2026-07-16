@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import NoBillingPeriodsError from '../../../app/errors/no-billing-periods.error.js'
 

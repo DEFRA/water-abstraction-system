@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import { generateUUID } from '../../app/lib/general.lib.js'
 import http2 from 'node:http2'

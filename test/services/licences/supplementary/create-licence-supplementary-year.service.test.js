@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import LicenceSupplementaryYearHelper from '../../../support/helpers/licence-supplementary-year.helper.js'
 import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'

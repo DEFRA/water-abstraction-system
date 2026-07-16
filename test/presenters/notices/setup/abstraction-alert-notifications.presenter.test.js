@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as AbstractionAlertSessionDataFixture from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import http2 from 'node:http2'
 import { postRequestOptions } from '../support/general.js'

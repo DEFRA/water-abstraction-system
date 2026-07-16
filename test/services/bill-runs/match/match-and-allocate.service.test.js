@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import * as AllocateReturnsToChargeElementService from '../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js'
 import * as DetermineLicenceIssuesService from '../../../../app/services/bill-runs/match/determine-licence-issues.service.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import DatabaseHealthCheckService from '../../../app/services/health/database-health-check.service.js'
 

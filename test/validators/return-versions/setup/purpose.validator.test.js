@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import PurposeValidator from '../../../../app/validators/return-versions/setup/purpose.validator.js'
 

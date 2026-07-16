@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import SessionHelper from '../support/helpers/session.helper.js'
 import SessionNotFoundError from '../../app/errors/session-not-found.error.js'

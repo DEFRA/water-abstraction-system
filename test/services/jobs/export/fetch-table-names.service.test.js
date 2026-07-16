@@ -1,3 +1,6 @@
+// Test framework
+import { describe, expect, it } from 'vitest'
+
 // Thing under test
 import FetchTableNamesService from '../../../../app/services/jobs/export/fetch-table-names.service.js'
 

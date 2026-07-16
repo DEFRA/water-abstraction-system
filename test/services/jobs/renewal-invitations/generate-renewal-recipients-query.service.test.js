@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as RecipientScenariosSeeder from '../../../support/seeders/recipient-scenarios.seeder.js'
 import { db } from '../../../../db/db.js'

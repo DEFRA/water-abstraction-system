@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Thing under test
 import AlertEmailAddressValidator from '../../../../app/validators/notices/setup/alert-email-address.validator.js'
 

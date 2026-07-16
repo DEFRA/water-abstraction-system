@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'

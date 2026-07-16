@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import YarStub from '../support/stubs/yar.stub.js'
 

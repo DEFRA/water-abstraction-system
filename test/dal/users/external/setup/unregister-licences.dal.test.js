@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import * as UsersFixture from '../../../../support/fixtures/users.fixture.js'
 import LicenceDocumentHeaderHelper from '../../../../support/helpers/licence-document-header.helper.js'

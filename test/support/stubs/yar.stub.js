@@ -1,3 +1,6 @@
+// Test framework
+import { vi } from 'vitest'
+
 /**
  * Creates a stubbed instance of the Yar session plugin for testing purposes.
  *

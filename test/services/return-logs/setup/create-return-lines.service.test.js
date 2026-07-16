@@ -1,3 +1,6 @@
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
+
 // Test helpers
 import ReturnSubmissionLineModel from '../../../../app/models/return-submission-line.model.js'
 import { generateUUID, timestampForPostgres } from '../../../../app/lib/general.lib.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import ChargeElementHelper from '../support/helpers/charge-element.helper.js'
 import ChargeElementModel from '../../app/models/charge-element.model.js'

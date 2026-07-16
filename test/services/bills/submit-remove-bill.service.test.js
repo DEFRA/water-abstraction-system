@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import * as LegacyDeleteBillRequest from '../../../app/requests/legacy/delete-bill.request.js'
 import * as ProcessBillingFlagService from '../../../app/services/licences/supplementary/process-billing-flag.service.js'

@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Test helpers
 import EventModel from '../../../../app/models/event.model.js'
 import GroupHelper from '../../../support/helpers/group.helper.js'

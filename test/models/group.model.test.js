@@ -1,3 +1,6 @@
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
+
 // Test helpers
 import GroupHelper from '../support/helpers/group.helper.js'
 import GroupRoleHelper from '../support/helpers/group-role.helper.js'

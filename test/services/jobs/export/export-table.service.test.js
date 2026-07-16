@@ -1,3 +1,6 @@
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
 // Things we need to stub
 import * as FetchTableService from '../../../../app/services/jobs/export/fetch-table.service.js'
 import * as WriteTableToFileService from '../../../../app/services/jobs/export/write-table-to-file.service.js'
