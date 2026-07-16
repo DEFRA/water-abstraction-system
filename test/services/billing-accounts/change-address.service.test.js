@@ -99,7 +99,7 @@ describe('Change address service', () => {
 
             const result = await AddressModel.query().where('uprn', address.uprn)
 
-            expect(result.length).toEqual(1)
+            expect(result).toHaveLength(1)
             expect(result[0].address1).toEqual(address.addressLine1)
             expect(result[0].postcode).toEqual(address.postcode)
           })
@@ -124,7 +124,7 @@ describe('Change address service', () => {
 
           const result = await AddressModel.query().where('postcode', address.postcode)
 
-          expect(result.length).toEqual(1)
+          expect(result).toHaveLength(1)
           expect(result[0].address1).toEqual('2 Matrix Rd')
         })
 
@@ -208,7 +208,7 @@ describe('Change address service', () => {
 
           const result = await CompanyModel.query().where('companyNumber', agentCompany.companyNumber)
 
-          expect(result.length).toEqual(1)
+          expect(result).toHaveLength(1)
           expect(result[0].name).toEqual(agentCompany.name)
         })
 
@@ -267,7 +267,7 @@ describe('Change address service', () => {
 
           const result = await ContactModel.query().where('department', 'Humanoid Risk Assessment')
 
-          expect(result.length).toEqual(1)
+          expect(result).toHaveLength(1)
         })
 
         it('links the billing account address record to the new contact', async () => {
@@ -293,7 +293,7 @@ describe('Change address service', () => {
 
           const result = await ContactModel.query().where('lastName', 'Villa')
 
-          expect(result.length).toEqual(1)
+          expect(result).toHaveLength(1)
           expect(result[0].firstName).toEqual('Margarita')
           expect(result[0].lastName).toEqual('Villa')
         })

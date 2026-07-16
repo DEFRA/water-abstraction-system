@@ -46,7 +46,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter(session)
 
-        expect(result.addressLine1).toEqual(null)
+        expect(result.addressLine1).toBeNull()
       })
     })
 
@@ -68,7 +68,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter(session)
 
-        expect(result.addressLine2).toEqual(null)
+        expect(result.addressLine2).toBeNull()
       })
     })
 
@@ -90,7 +90,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter(session)
 
-        expect(result.addressLine3).toEqual(null)
+        expect(result.addressLine3).toBeNull()
       })
     })
 
@@ -112,7 +112,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter(session)
 
-        expect(result.addressLine4).toEqual(null)
+        expect(result.addressLine4).toBeNull()
       })
     })
 
@@ -162,7 +162,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter(session)
 
-        expect(result.pageTitleCaption).toEqual(null)
+        expect(result.pageTitleCaption).toBeNull()
       })
     })
 
@@ -188,7 +188,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter(session)
 
-        expect(result.postcode).toEqual(null)
+        expect(result.postcode).toBeNull()
       })
     })
 

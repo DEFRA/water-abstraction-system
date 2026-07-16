@@ -114,7 +114,7 @@ describe('Address - Select Presenter', () => {
       it('returns null', () => {
         const result = SelectPresenter(session, addresses)
 
-        expect(result.pageTitleCaption).toEqual(null)
+        expect(result.pageTitleCaption).toBeNull()
       })
     })
 

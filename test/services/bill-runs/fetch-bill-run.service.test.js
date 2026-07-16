@@ -175,7 +175,7 @@ describe('Fetch Bill Run service', () => {
       const result = await FetchBillRunService('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeDefined()
-      expect(result.billRun).toEqual(undefined)
+      expect(result.billRun).toBeUndefined()
       expect(result.billSummaries).toEqual([])
     })
   })

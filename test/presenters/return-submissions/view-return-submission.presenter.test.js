@@ -165,7 +165,7 @@ describe('View Return Submissions presenter', () => {
         it('includes the expected rows', () => {
           const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
-          expect(result.tableData.rows.length).toEqual(28)
+          expect(result.tableData.rows).toHaveLength(28)
           // We use include() as a row can also include a reading key which we don't care about for volumes
           expect(result.tableData.rows[0]).toMatchObject({
             cubicMetresQuantity: '1,000',
@@ -201,7 +201,7 @@ describe('View Return Submissions presenter', () => {
         it('includes the expected rows', () => {
           const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
-          expect(result.tableData.rows.length).toEqual(28)
+          expect(result.tableData.rows).toHaveLength(28)
           // We use include() as a row can also include a reading key which we don't care about for volumes
           expect(result.tableData.rows[0]).toMatchObject({
             cubicMetresQuantity: '1,000',
@@ -238,7 +238,7 @@ describe('View Return Submissions presenter', () => {
       it('includes the expected rows', () => {
         const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
-        expect(result.tableData.rows.length).toEqual(28)
+        expect(result.tableData.rows).toHaveLength(28)
         // We use include() as a row can also include a reading key which we don't care about for volumes
         expect(result.tableData.rows[0]).toMatchObject({
           reading: 1001,
@@ -290,7 +290,7 @@ describe('View Return Submissions presenter', () => {
       it('includes the expected rows', () => {
         const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
-        expect(result.tableData.rows.length).toEqual(28)
+        expect(result.tableData.rows).toHaveLength(28)
         expect(result.tableData.rows[0]).toMatchObject({ date: '1 February 2025' })
         expect(result.tableData.rows[27]).toMatchObject({ date: '28 February 2025' })
       })
@@ -316,7 +316,7 @@ describe('View Return Submissions presenter', () => {
       it('includes the expected rows that end within the month', () => {
         const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-3')
 
-        expect(result.tableData.rows.length).toEqual(4)
+        expect(result.tableData.rows).toHaveLength(4)
         expect(result.tableData.rows[0]).toMatchObject({ date: '5 April 2025' })
         expect(result.tableData.rows).not.toContainEqual({ date: '3 May 2025' })
       })

@@ -26,7 +26,7 @@ describe('Notices - Base presenter', () => {
         it('returns a fixed array of 7 strings with all the address lines', () => {
           const result = BasePresenter.addressToCSV(address)
 
-          expect(result.length).toEqual(7)
+          expect(result).toHaveLength(7)
           expect(result).toEqual([
             'Returnsholder',
             '4',
@@ -49,7 +49,7 @@ describe('Notices - Base presenter', () => {
         it('returns a fixed array of 7 strings with some of the address lines, and missing strings at the end of the array', () => {
           const result = BasePresenter.addressToCSV(address)
 
-          expect(result.length).toEqual(7)
+          expect(result).toHaveLength(7)
           expect(result).toEqual(['Returnsholder', '4', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', ''])
         })
       })
@@ -70,7 +70,7 @@ describe('Notices - Base presenter', () => {
         it('returns a fixed array of 7 strings with the contact name as address line 1, and the "INVALID ADDRESS" message', () => {
           const result = BasePresenter.addressToCSV(address)
 
-          expect(result.length).toEqual(7)
+          expect(result).toHaveLength(7)
           expect(result).toEqual([
             'Returnsholder',
             'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
@@ -92,7 +92,7 @@ describe('Notices - Base presenter', () => {
       it('returns a fixed array of 7 empty strings', () => {
         const result = BasePresenter.addressToCSV(address)
 
-        expect(result.length).toEqual(7)
+        expect(result).toHaveLength(7)
         expect(result).toEqual(['', '', '', '', '', '', ''])
       })
     })

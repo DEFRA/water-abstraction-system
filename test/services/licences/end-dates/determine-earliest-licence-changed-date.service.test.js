@@ -29,7 +29,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
     it('returns null', async () => {
       const result = await DetermineEarliestLicenceChangedDateService(licence)
 
-      expect(result).toEqual(null)
+      expect(result).toBeNull()
     })
   })
 

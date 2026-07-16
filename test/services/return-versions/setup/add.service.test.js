@@ -44,7 +44,7 @@ describe('Return Versions Setup - Add service', () => {
     it('adds another empty object to the requirement array in the current setup session record', async () => {
       await AddService(session.id)
 
-      expect(session.requirements.length).toEqual(2)
+      expect(session.requirements).toHaveLength(2)
       expect(session.requirements).toEqual([{}, {}])
       expect(session.$update).toHaveBeenCalled()
     })

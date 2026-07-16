@@ -86,7 +86,7 @@ describe('Charging Module Create Transaction presenter', () => {
       expect(result.section127Agreement).toEqual(false)
       expect(result.section130Agreement).toEqual(false)
       expect(result.supportedSource).toEqual(false)
-      expect(result.supportedSourceName).toEqual(null)
+      expect(result.supportedSourceName).toBeNull()
       expect(result.twoPartTariff).toEqual(false)
       expect(result.waterCompanyCharge).toEqual(false)
       expect(result.waterUndertaker).toEqual(false)

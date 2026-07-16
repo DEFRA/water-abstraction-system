@@ -477,7 +477,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).toEqual(10)
+          expect(rows).toHaveLength(10)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
@@ -611,7 +611,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).toEqual(13)
+          expect(rows).toHaveLength(13)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
@@ -766,7 +766,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).toEqual(9)
+          expect(rows).toHaveLength(9)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
@@ -899,7 +899,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).toEqual(12)
+          expect(rows).toHaveLength(12)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
@@ -1049,7 +1049,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
         // That means we cannot assert the order that the records come out. But we can assert the number of records,
         // and that all we expect are present
-        expect(rows.length).toEqual(8)
+        expect(rows).toHaveLength(8)
       })
 
       it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
