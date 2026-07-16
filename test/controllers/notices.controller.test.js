@@ -2,8 +2,9 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateNoticeReferenceCode } from '../../app/lib/general.lib.js'
 import http2 from 'node:http2'
+
+import { generateNoticeReferenceCode } from '../../app/lib/general.lib.js'
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub

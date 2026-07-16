@@ -6,8 +6,7 @@ import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateLicenceRef } from '../../../support/generators.js'
-import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'

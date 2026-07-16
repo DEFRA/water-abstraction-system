@@ -9,8 +9,7 @@ import LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-
 import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
 import MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
 import NotificationHelper from '../../support/helpers/notification.helper.js'
-import { generateNationalGridReference } from '../../support/generators.js'
-import { generateRandomInteger } from '../../../app/lib/general.lib.js'
+import { generateNationalGridReference, generateRandomInteger } from '../../support/generators.js'
 
 // Thing under test
 import FetchMonitoringStationDetailsDal from '../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'

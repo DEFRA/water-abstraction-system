@@ -3,8 +3,7 @@
  */
 
 import UserVerificationModel from '../../../app/models/user-verification.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateVerificationCode } from '../generators.js'
+import { generateUUID, generateVerificationCode } from '../generators.js'
 
 /**
  * Add a new user verification

@@ -2,8 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../../app/lib/general.lib.js'
-import { generateAccountNumber, generateLicenceRef } from '../../../support/generators.js'
+import { generateAccountNumber, generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js'

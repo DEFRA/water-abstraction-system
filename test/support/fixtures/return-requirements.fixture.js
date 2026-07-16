@@ -2,8 +2,7 @@ import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
 import PurposeHelper from '../helpers/purpose.helper.js'
 import RegionHelper from '../helpers/region.helper.js'
 import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef, generateNationalGridReference, generateReference } from '../generators.js'
+import { generateLicenceRef, generateNationalGridReference, generateReference, generateUUID } from '../generators.js'
 
 /**
  * Generates the return log prefix in the format v1:regionCode:licenceRef:reference from a return requirement

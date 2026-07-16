@@ -3,8 +3,7 @@
  */
 
 import BillLicenceModel from '../../../app/models/bill-licence.model.js'
-import { generateLicenceRef } from '../generators.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../generators.js'
 
 /**
  * Add a new bill licence

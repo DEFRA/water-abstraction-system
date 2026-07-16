@@ -3,8 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
-import { generateReturnId } from '../../../support/generators.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateReturnId, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import PersistAllocatedLicenceToResultsService from '../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js'

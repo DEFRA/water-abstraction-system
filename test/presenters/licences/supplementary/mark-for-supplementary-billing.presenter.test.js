@@ -2,8 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef } from '../../../support/generators.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import MarkForSupplementaryBillingPresenter from '../../../../app/presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js'

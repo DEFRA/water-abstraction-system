@@ -3,8 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import LicenceFixture from '../../support/fixtures/licence.fixture.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateUserId } from '../../support/generators.js'
+import { generateUUID, generateUserId } from '../../support/generators.js'
 
 // Things we need to stub
 import * as FetchLicenceMonitoringStationsDal from '../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'

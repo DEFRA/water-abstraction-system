@@ -3,8 +3,8 @@
  */
 
 import ReturnLogModel from '../../../app/models/return-log.model.js'
-import { generateLicenceRef, generateReference, generateReturnId } from '../generators.js'
-import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateReference, generateReturnId, generateUUID } from '../generators.js'
 
 /**
  * Add a new return log

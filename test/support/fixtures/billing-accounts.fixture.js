@@ -1,7 +1,6 @@
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
 import ContactModel from '../../../app/models/contact.model.js'
-import { generateAccountNumber } from '../generators.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateAccountNumber, generateUUID } from '../generators.js'
 
 /**
  * Represents a complete response from `FetchBillingAccountService`

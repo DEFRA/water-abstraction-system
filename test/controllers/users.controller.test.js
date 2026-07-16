@@ -2,8 +2,9 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import FeatureFlagsConfig from '../../config/feature-flags.config.js'
 import http2 from 'node:http2'
+
+import FeatureFlagsConfig from '../../config/feature-flags.config.js'
 import { postRequestOptions } from '../support/general.js'
 import { generateUUID, today } from '../../app/lib/general.lib.js'
 

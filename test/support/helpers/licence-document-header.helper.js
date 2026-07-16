@@ -3,8 +3,7 @@
  */
 
 import LicenceDocumentHeaderModel from '../../../app/models/licence-document-header.model.js'
-import { generateLicenceRef } from '../generators.js'
-import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateRandomInteger, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence document header

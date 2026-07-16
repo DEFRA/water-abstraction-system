@@ -4,8 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateReference } from '../../../support/generators.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateReference, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'

@@ -5,7 +5,9 @@
 import crypto from 'crypto'
 
 import { formatDateObjectToISO } from '../../app/lib/dates.lib.js'
-import { generateRandomInteger, generateUUID } from '../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode, generateRandomInteger, generateUUID } from '../../app/lib/general.lib.js'
+
+export { generateNoticeReferenceCode, generateRandomInteger, generateUUID }
 
 const VERIFICATION_CODE_CHARACTERS = '23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXY'
 const VERIFICATION_CODE_LENGTH = 5

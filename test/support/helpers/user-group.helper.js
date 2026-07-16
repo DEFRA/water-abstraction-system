@@ -4,10 +4,9 @@
 
 import GroupHelper from './group.helper.js'
 import UserGroupModel from '../../../app/models/user-group.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateUserId } from '../generators.js'
 import { selectRandomEntry } from '../general.js'
 import { data as userGroups } from '../../../db/seeds/data/user-groups.js'
+import { generateUUID, generateUserId } from '../generators.js'
 
 const data = userGroups
 

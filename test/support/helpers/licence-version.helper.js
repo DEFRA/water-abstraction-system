@@ -3,8 +3,8 @@
  */
 
 import LicenceVersionModel from '../../../app/models/licence-version.model.js'
-import { generateLicenceVersionExternalId } from '../generators.js'
-import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { generateLicenceVersionExternalId, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence version

@@ -6,8 +6,8 @@ import LicenceVersionPurposeModel from '../../../app/models/licence-version-purp
 import PrimaryPurposeHelper from './primary-purpose.helper.js'
 import PurposeHelper from './purpose.helper.js'
 import SecondaryPurposeHelper from './secondary-purpose.helper.js'
-import { generateLicenceVersionPurposeExternalId } from '../generators.js'
-import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { generateLicenceVersionPurposeExternalId, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence version purpose

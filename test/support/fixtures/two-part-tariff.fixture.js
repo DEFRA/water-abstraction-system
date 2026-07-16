@@ -1,5 +1,4 @@
-import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateAccountNumber, generateLicenceRef } from '../generators.js'
+import { generateAccountNumber, generateLicenceRef, generateUUID } from '../generators.js'
 
 /**
  * Represents a bill run object with generated UUIDs for the ID and external ID

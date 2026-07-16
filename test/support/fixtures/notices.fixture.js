@@ -1,5 +1,4 @@
-import { generateLicenceRef } from '../generators.js'
-import { generateNoticeReferenceCode, generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateNoticeReferenceCode, generateRandomInteger, generateUUID } from '../generators.js'
 
 /**
  * Represents a notice of type 'alert reduce'

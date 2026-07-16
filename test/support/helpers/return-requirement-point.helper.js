@@ -3,8 +3,7 @@
  */
 
 import ReturnRequirementPointModel from '../../../app/models/return-requirement-point.model.js'
-import { generateReturnRequirementPointExternalId } from '../generators.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateReturnRequirementPointExternalId, generateUUID } from '../generators.js'
 
 /**
  * Add a new return requirement point

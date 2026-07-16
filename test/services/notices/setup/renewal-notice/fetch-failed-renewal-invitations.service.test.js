@@ -6,8 +6,8 @@ import EventHelper from '../../../../support/helpers/event.helper.js'
 import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import NotificationHelper from '../../../../support/helpers/notification.helper.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
-import { generateLicenceRef } from '../../../../support/generators.js'
-import { compareStrings, generateUUID } from '../../../../../app/lib/general.lib.js'
+import { compareStrings } from '../../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
 import FetchFailedRenewalInvitationsService from '../../../../../app/services/notices/setup/renewal-notice/fetch-failed-renewal-invitations.service.js'

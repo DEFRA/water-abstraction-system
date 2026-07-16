@@ -4,8 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import LicenceModel from '../../../../app/models/licence.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateLicenceRef } from '../../../support/generators.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchLicenceDal from '../../../../app/dal/licence-monitoring-station/fetch-licence.dal.js'

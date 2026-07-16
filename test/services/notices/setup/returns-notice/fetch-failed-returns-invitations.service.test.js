@@ -6,9 +6,9 @@ import EventHelper from '../../../../support/helpers/event.helper.js'
 import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import NotificationHelper from '../../../../support/helpers/notification.helper.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
+import { compareStrings } from '../../../../../app/lib/general.lib.js'
 import { futureDueDate } from '../../../../../app/presenters/notices/base.presenter.js'
-import { generateLicenceRef } from '../../../../support/generators.js'
-import { compareStrings, generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
 import FetchFailedReturnsInvitationsService from '../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js'

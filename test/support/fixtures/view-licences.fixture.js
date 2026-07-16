@@ -5,8 +5,7 @@
 import LicenceModel from '../../../app/models/licence.model.js'
 import LicenceVersionModel from '../../../app/models/licence-version.model.js'
 import PointModel from '../../../app/models/point.model.js'
-import { generateLicenceRef } from '../generators.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../generators.js'
 
 /**
  * Represents a licence condition

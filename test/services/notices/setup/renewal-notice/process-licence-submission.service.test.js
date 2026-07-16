@@ -3,8 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Helpers
 import LicenceModel from '../../../../../app/models/licence.model.js'
-import { generateLicenceRef } from '../../../../support/generators.js'
-import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchRenewalLicenceDal from '../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js'

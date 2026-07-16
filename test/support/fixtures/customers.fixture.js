@@ -2,8 +2,7 @@ import BillingAccountModel from '../../../app/models/billing-account.model.js'
 import CompanyContactModel from '../../../app/models/company-contact.model.js'
 import ContactModel from '../../../app/models/contact.model.js'
 import LicenceModel from '../../../app/models/licence.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateAccountNumber, generateLicenceRef } from '../generators.js'
+import { generateAccountNumber, generateLicenceRef, generateUUID } from '../generators.js'
 
 /**
  * A representation from the billing accounts 'FetchBillingAccountsService'

@@ -5,8 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
 import SessionModel from '../../../../app/models/session.model.js'
-import { generateLicenceRef } from '../../../support/generators.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchCompanyContactDal from '../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js'

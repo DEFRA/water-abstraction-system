@@ -2,8 +2,9 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../app/lib/general.lib.js'
 import http2 from 'node:http2'
+
+import { generateUUID } from '../../app/lib/general.lib.js'
 
 // Things we need to stub
 import * as ViewBillingAccountsService from '../../app/services/companies/view-billing-accounts.service.js'

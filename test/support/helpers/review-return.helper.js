@@ -3,8 +3,7 @@
  */
 
 import ReviewReturnModel from '../../../app/models/review-return.model.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef, generateReference, generateReturnId } from '../generators.js'
+import { generateLicenceRef, generateReference, generateReturnId, generateUUID } from '../generators.js'
 
 /**
  * Add a new review return for 2pt matching

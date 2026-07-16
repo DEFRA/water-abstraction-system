@@ -1,5 +1,4 @@
-import { generateLicenceRef } from '../generators.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../generators.js'
 
 /**
  * Create licence monitoring station test data

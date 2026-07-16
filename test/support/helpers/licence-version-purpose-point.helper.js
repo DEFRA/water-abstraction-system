@@ -3,8 +3,7 @@
  */
 
 import LicenceVersionPurposePointModel from '../../../app/models/licence-version-purpose-point.model.js'
-import { generateLicenceVersionPurposePointExternalId } from '../generators.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceVersionPurposePointExternalId, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence version purpose point

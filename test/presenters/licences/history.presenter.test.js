@@ -3,8 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import LicenceVersionModel from '../../../app/models/licence-version.model.js'
-import { generateLicenceRef } from '../../support/generators.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import HistoryPresenter from '../../../app/presenters/licences/history.presenter.js'

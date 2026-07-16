@@ -3,8 +3,8 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
 import ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
-import { generateLicenceRef } from '../../support/generators.js'
-import { compareStrings, generateUUID } from '../../../app/lib/general.lib.js'
+import { compareStrings } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import FetchImpactedLicencesDal from '../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js'

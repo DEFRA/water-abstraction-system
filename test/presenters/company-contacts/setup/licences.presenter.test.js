@@ -3,8 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import { generateLicenceRef } from '../../../support/generators.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import LicencesPresenter from '../../../../app/presenters/company-contacts/setup/licences.presenter.js'

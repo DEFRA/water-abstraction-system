@@ -3,8 +3,7 @@
  */
 
 import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
-import { generateName } from '../generators.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateName, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence entity

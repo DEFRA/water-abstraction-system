@@ -5,8 +5,8 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import ReturnLogModel from '../../../../app/models/return-log.model.js'
 import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
 import ReturnSubmissionModel from '../../../../app/models/return-submission.model.js'
-import { generateReturnId } from '../../../support/generators.js'
-import { generateUUID, timestampForPostgres } from '../../../../app/lib/general.lib.js'
+import { timestampForPostgres } from '../../../../app/lib/general.lib.js'
+import { generateReturnId, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
 import CreateReturnSubmissionService from '../../../../app/services/return-logs/setup/create-return-submission.service.js'

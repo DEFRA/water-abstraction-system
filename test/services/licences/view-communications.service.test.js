@@ -4,8 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test Helpers
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateLicenceRef } from '../../support/generators.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
 import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'

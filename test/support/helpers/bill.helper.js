@@ -3,8 +3,7 @@
  */
 
 import BillModel from '../../../app/models/bill.model.js'
-import { generateAccountNumber } from '../generators.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateAccountNumber, generateUUID } from '../generators.js'
 
 /**
  * Add a new bill

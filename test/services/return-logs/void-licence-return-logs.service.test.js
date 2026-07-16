@@ -3,8 +3,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
 import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef, generateReference } from '../../support/generators.js'
+import { generateLicenceRef, generateReference, generateUUID } from '../../support/generators.js'
 
 // Thing under test
 import VoidLicenceReturnLogsService from '../../../app/services/return-logs/void-licence-return-logs.service.js'

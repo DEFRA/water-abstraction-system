@@ -3,8 +3,7 @@
  */
 
 import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
-import { generateReturnId } from '../generators.js'
-import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateReturnId, generateUUID } from '../generators.js'
 
 /**
  * Add a new return submission
