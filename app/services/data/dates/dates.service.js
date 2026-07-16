@@ -48,7 +48,7 @@ function go() {
   const billingPeriods = {
     annual: DetermineBillingPeriodsService.go('annual', currentFinancialYear.endDate.getFullYear()),
     supplementary: DetermineBillingPeriodsService.go('supplementary', currentFinancialYear.endDate.getFullYear()),
-    twoPartTariff: DetermineBillingPeriodsService.go('two_part_tariff', currentFinancialYear.endDate.getFullYear()),
+    twoPartTariff: DetermineBillingPeriodsService.go('two_part_tariff', currentFinancialYear.endDate.getFullYear() - 1),
     twoPartSupplementary: DetermineBillingPeriodsService.go(
       'two_part_supplementary',
       currentFinancialYear.endDate.getFullYear()
