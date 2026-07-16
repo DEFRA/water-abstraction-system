@@ -103,7 +103,7 @@ describe('Annual Process billing period service', () => {
 
           const result = await BillModel.query().findOne('billRunId', billRun.id).withGraphFetched('billLicences')
 
-          expect(result.billLicences.length).toEqual(1)
+          expect(result.billLicences).toHaveLength(1)
           expect(result.billLicences[0].licenceId).toEqual(billingAccount.chargeVersions[0].licence.id)
         })
       })

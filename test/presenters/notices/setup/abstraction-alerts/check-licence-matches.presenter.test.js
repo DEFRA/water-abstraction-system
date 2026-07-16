@@ -149,7 +149,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
           it('returns only the thresholds previously selected and not removed', () => {
             const result = CheckLicenceMatchesPresenter(session)
 
-            expect(result.restrictions.length).toEqual(2)
+            expect(result.restrictions).toHaveLength(2)
 
             expect(result.restrictions).toEqual([
               {

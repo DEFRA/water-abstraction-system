@@ -42,7 +42,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
               expect(result.licenceId).toEqual('aad74a3d-59ea-4c18-8091-02b0f8b0a147')
               expect(result.regionId).toEqual('ff92e0b1-3934-430b-8b16-5b89a3ea258f')
-              expect(result.startDate).toEqual(null)
+              expect(result.startDate).toBeNull()
               expect(result.endDate).toEqual(new Date('2025-03-31'))
             })
 
@@ -65,7 +65,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
               expect(result.licenceId).toEqual('aad74a3d-59ea-4c18-8091-02b0f8b0a147')
               expect(result.regionId).toEqual('ff92e0b1-3934-430b-8b16-5b89a3ea258f')
-              expect(result.startDate).toEqual(null)
+              expect(result.startDate).toBeNull()
               expect(result.endDate).toEqual(new Date('2025-03-31'))
             })
 

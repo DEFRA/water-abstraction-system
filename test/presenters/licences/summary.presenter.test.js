@@ -730,7 +730,7 @@ describe('Licences - Summary Presenter', () => {
       it('returns null', () => {
         const result = SummaryPresenter(licence, summary)
 
-        expect(result.purposes).toEqual(null)
+        expect(result.purposes).toBeNull()
       })
     })
 
@@ -743,7 +743,7 @@ describe('Licences - Summary Presenter', () => {
         it('returns null', () => {
           const result = SummaryPresenter(licence, summary)
 
-          expect(result.purposes).toEqual(null)
+          expect(result.purposes).toBeNull()
         })
       })
 
@@ -802,7 +802,7 @@ describe('Licences - Summary Presenter', () => {
       it('returns null', () => {
         const result = SummaryPresenter(licence, summary)
 
-        expect(result.sourceOfSupply).toEqual(null)
+        expect(result.sourceOfSupply).toBeNull()
       })
     })
 
@@ -815,7 +815,7 @@ describe('Licences - Summary Presenter', () => {
         it('returns null', () => {
           const result = SummaryPresenter(licence, summary)
 
-          expect(result.sourceOfSupply).toEqual(null)
+          expect(result.sourceOfSupply).toBeNull()
         })
       })
 
@@ -828,7 +828,7 @@ describe('Licences - Summary Presenter', () => {
           it('returns null', () => {
             const result = SummaryPresenter(licence, summary)
 
-            expect(result.sourceOfSupply).toEqual(null)
+            expect(result.sourceOfSupply).toBeNull()
           })
         })
 

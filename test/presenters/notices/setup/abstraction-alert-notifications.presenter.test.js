@@ -721,7 +721,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           it('correctly sets the default message ref', () => {
             const [result] = AbstractionAlertNotificationsPresenter(session, testRecipients, noticeId)
 
-            expect(result.templateId).toEqual(null)
+            expect(result.templateId).toBeNull()
           })
         })
       })

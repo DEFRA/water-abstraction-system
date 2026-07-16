@@ -76,7 +76,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
         alertType
       )
 
-      expect(result.length).toEqual(2)
+      expect(result).toHaveLength(2)
 
       expect(result).toEqual([licenceMonitoringStationTwo, licenceMonitoringStationThree])
     })

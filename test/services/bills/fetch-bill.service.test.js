@@ -102,7 +102,7 @@ describe('Fetch Bill service', () => {
       const result = await FetchBillService('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeDefined()
-      expect(result.bill).toEqual(undefined)
+      expect(result.bill).toBeUndefined()
       expect(result.licenceSummaries).toEqual([])
     })
   })

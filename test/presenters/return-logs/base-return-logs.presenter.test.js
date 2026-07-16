@@ -37,7 +37,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
       it('returns null', () => {
         const result = BaseReturnLogsPresenter.formatMeterDetails(null)
 
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
 
@@ -45,7 +45,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
       it('returns null', () => {
         const result = BaseReturnLogsPresenter.formatMeterDetails({ ...testMeter, manufacturer: null })
 
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
   })
