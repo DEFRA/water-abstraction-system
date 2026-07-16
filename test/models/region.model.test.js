@@ -6,10 +6,10 @@ import BillRunHelper from '../support/helpers/bill-run.helper.js'
 import BillRunModel from '../../app/models/bill-run.model.js'
 import CompanyHelper from '../support/helpers/company.helper.js'
 import CompanyModel from '../../app/models/company.model.js'
-import GenerateHelper from '../support/helpers/generate.helper.js'
 import LicenceHelper from '../support/helpers/licence.helper.js'
 import LicenceModel from '../../app/models/licence.model.js'
 import RegionHelper from '../support/helpers/region.helper.js'
+import { generateLicenceRef } from '../support/generators.js'
 
 // Thing under test
 import RegionModel from '../../app/models/region.model.js'
@@ -40,7 +40,7 @@ describe('Region model', () => {
 
       // Create test licences
       const licence = await LicenceHelper.add({
-        licenceRef: GenerateHelper.generateLicenceRef(),
+        licenceRef: generateLicenceRef(),
         regionId: testRecord.id
       })
 

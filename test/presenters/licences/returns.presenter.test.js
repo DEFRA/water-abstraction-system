@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../support/helpers/generate.helper.js'
+import { generateLicenceRef } from '../../support/generators.js'
 
 // Thing under test
 import ReturnsPresenter from '../../../app/presenters/licences/returns.presenter.js'
@@ -17,7 +17,7 @@ describe('Licences - Returns presenter', () => {
     returnLogs = _returnLogs()
 
     licence = {
-      licenceRef: GenerateHelper.generateLicenceRef()
+      licenceRef: generateLicenceRef()
     }
   })
 

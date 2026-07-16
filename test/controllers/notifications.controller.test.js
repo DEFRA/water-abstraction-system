@@ -2,9 +2,9 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../support/helpers/generate.helper.js'
 import NoticesFixture from '../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../support/fixtures/notifications.fixture.js'
+import { generateLicenceRef } from '../support/generators.js'
 import { generateUUID } from '../../app/lib/general.lib.js'
 import http2 from 'node:http2'
 
@@ -64,7 +64,7 @@ describe('Notifications controller', () => {
           beforeEach(async () => {
             licence = {
               id: generateUUID(),
-              licenceRef: GenerateHelper.generateLicenceRef()
+              licenceRef: generateLicenceRef()
             }
 
             const notice = NoticesFixture.returnsInvitation()
@@ -118,7 +118,7 @@ describe('Notifications controller', () => {
           beforeEach(async () => {
             licence = {
               id: generateUUID(),
-              licenceRef: GenerateHelper.generateLicenceRef()
+              licenceRef: generateLicenceRef()
             }
 
             const notice = NoticesFixture.returnsInvitation()
@@ -172,7 +172,7 @@ describe('Notifications controller', () => {
           beforeEach(async () => {
             licence = {
               id: generateUUID(),
-              licenceRef: GenerateHelper.generateLicenceRef()
+              licenceRef: generateLicenceRef()
             }
 
             const returnLogId = generateUUID()

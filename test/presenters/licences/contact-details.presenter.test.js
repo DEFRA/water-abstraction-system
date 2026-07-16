@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test Helpers
-import GenerateHelper from '../../support/helpers/generate.helper.js'
+import { generateLicenceRef } from '../../support/generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -16,7 +16,7 @@ describe('Licences - Contact Details presenter', () => {
   beforeEach(() => {
     licence = {
       id: generateUUID(),
-      licenceRef: GenerateHelper.generateLicenceRef()
+      licenceRef: generateLicenceRef()
     }
 
     companyId = generateUUID()

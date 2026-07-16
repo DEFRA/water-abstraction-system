@@ -1,9 +1,9 @@
-import GenerateHelper from '../helpers/generate.helper.js'
 import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
 import PurposeHelper from '../helpers/purpose.helper.js'
 import RegionHelper from '../helpers/region.helper.js'
 import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateNationalGridReference, generateReference } from '../generators.js'
 
 /**
  * Generates the return log prefix in the format v1:regionCode:licenceRef:reference from a return requirement
@@ -34,7 +34,7 @@ function returnLogPrefix(returnRequirement) {
  */
 function summerReturnRequirement() {
   const returnVersion = _returnVersion(false)
-  const reference = GenerateHelper.generateReference()
+  const reference = generateReference()
 
   return {
     abstractionPeriodEndDay: 31,
@@ -72,7 +72,7 @@ function summerReturnRequirement() {
  */
 function winterReturnRequirement(quarterlyReturns = false) {
   const returnVersion = _returnVersion(quarterlyReturns)
-  const reference = GenerateHelper.generateReference()
+  const reference = generateReference()
 
   return {
     abstractionPeriodEndDay: 31,
@@ -97,7 +97,7 @@ function winterReturnRequirement(quarterlyReturns = false) {
 function _point(description) {
   return {
     description,
-    ngr1: GenerateHelper.generateNationalGridReference(),
+    ngr1: generateNationalGridReference(),
     ngr2: null,
     ngr3: null,
     ngr4: null
@@ -127,7 +127,7 @@ function _returnVersion(quarterlyReturns) {
       expiredDate: null,
       id: generateUUID(),
       lapsedDate: null,
-      licenceRef: GenerateHelper.generateLicenceRef(),
+      licenceRef: generateLicenceRef(),
       revokedDate: null,
       region: {
         id: region.id,

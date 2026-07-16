@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import ReturnLogModel from '../../../../app/models/return-log.model.js'
 import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
 import ReturnSubmissionModel from '../../../../app/models/return-submission.model.js'
+import { generateReturnId } from '../../../support/generators.js'
 import { generateUUID, timestampForPostgres } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -23,7 +23,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       session = {
         journey: 'enterReturn',
         note: { content: 'TEST_NOTE' },
-        returnId: GenerateHelper.generateReturnId(),
+        returnId: generateReturnId(),
         returnLogId: generateUUID()
       }
     })

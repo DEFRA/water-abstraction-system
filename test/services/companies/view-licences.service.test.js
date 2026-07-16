@@ -3,8 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
-import GenerateHelper from '../../support/helpers/generate.helper.js'
 import LicenceModel from '../../../app/models/licence.model.js'
+import { generateLicenceRef } from '../../support/generators.js'
 
 // Things we need to stub
 import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
@@ -32,7 +32,7 @@ describe('Companies - View Licences service', () => {
         expiredDate: null,
         id: generateUUID(),
         lapsedDate: null,
-        licenceRef: GenerateHelper.generateLicenceRef(),
+        licenceRef: generateLicenceRef(),
         revokedDate: null,
         startDate: new Date('2022-01-01'),
         currentLicenceHolderId: company.id,

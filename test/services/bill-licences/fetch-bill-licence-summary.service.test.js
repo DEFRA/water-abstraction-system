@@ -9,9 +9,9 @@ import BillingAccountAddressHelper from '../../support/helpers/billing-account-a
 import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
 import CompanyHelper from '../../support/helpers/company.helper.js'
 import ContactHelper from '../../support/helpers/contact.helper.js'
-import GenerateHelper from '../../support/helpers/generate.helper.js'
 import RegionHelper from '../../support/helpers/region.helper.js'
 import TransactionHelper from '../../support/helpers/transaction.helper.js'
+import { generateLicenceRef } from '../../support/generators.js'
 
 // Thing under test
 import FetchBillLicenceSummaryService from '../../../app/services/bill-licences/fetch-bill-licence-summary.service.js'
@@ -34,7 +34,7 @@ describe('Fetch Bill Licence Summary service', () => {
     const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
 
     regionId = region.id
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
 
     const company = await CompanyHelper.add()
 

@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../../../support/helpers/generate.helper.js'
+import { generateLicenceRef } from '../../../../support/generators.js'
 import http2 from 'node:http2'
 
 import RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
@@ -128,7 +128,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
 
       recipients = [fixtureData.primaryUser]
 
-      const licenceRef = GenerateHelper.generateLicenceRef()
+      const licenceRef = generateLicenceRef()
       const referenceCode = generateNoticeReferenceCode('RINV-')
       const sessionId = generateUUID()
       const dueReturns = [

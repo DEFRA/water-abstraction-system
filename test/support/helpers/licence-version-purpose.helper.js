@@ -2,11 +2,11 @@
  * @module LicenceVersionPurposesHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import LicenceVersionPurposeModel from '../../../app/models/licence-version-purpose.model.js'
 import PrimaryPurposeHelper from './primary-purpose.helper.js'
 import PurposeHelper from './purpose.helper.js'
 import SecondaryPurposeHelper from './secondary-purpose.helper.js'
+import { generateLicenceVersionPurposeExternalId } from '../generators.js'
 import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
@@ -59,7 +59,7 @@ function defaults(data = {}) {
     abstractionPeriodStartMonth: 1,
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,
-    externalId: GenerateHelper.generateLicenceVersionPurposeExternalId(),
+    externalId: generateLicenceVersionPurposeExternalId(),
     licenceVersionId: generateUUID(),
     primaryPurposeId,
     purposeId,

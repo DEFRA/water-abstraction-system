@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -19,7 +19,7 @@ describe('Company Contacts - Setup - Licences Presenter', () => {
 
     licence = {
       id: generateUUID(),
-      licenceRef: GenerateHelper.generateLicenceRef()
+      licenceRef: generateLicenceRef()
     }
 
     session = { id: generateUUID(), company, licences: [licence] }

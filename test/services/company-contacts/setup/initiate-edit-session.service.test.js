@@ -4,8 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import CompanyContactModel from '../../../../app/models/company-contact.model.js'
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import SessionModel from '../../../../app/models/session.model.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -24,7 +24,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
     company = CustomersFixtures.company()
     contact = CustomersFixtures.contact()
 
-    licences = [{ id: generateUUID(), licenceRef: GenerateHelper.generateLicenceRef() }]
+    licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
 
     companyContact = CompanyContactModel.fromJson({
       id: generateUUID(),
@@ -77,9 +77,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
         describe('and there are abstraction alert licences', () => {
           beforeEach(() => {
-            companyContact.abstractionAlertLicences = [
-              { id: generateUUID(), licenceRef: GenerateHelper.generateLicenceRef() }
-            ]
+            companyContact.abstractionAlertLicences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
           })
 
           it('returns "some"', async () => {
@@ -123,9 +121,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
         describe('and there are abstraction alert licences', () => {
           beforeEach(() => {
-            companyContact.abstractionAlertLicences = [
-              { id: generateUUID(), licenceRef: GenerateHelper.generateLicenceRef() }
-            ]
+            companyContact.abstractionAlertLicences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
           })
 
           it('returns "no"', async () => {

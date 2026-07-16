@@ -2,8 +2,8 @@
  * @module LicenceDocumentHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import LicenceDocumentModel from '../../../app/models/licence-document.model.js'
+import { generateLicenceRef } from '../generators.js'
 
 /**
  * Add a new licence document
@@ -37,7 +37,7 @@ async function add(data = {}) {
  */
 function defaults(data = {}) {
   const defaults = {
-    licenceRef: GenerateHelper.generateLicenceRef(),
+    licenceRef: generateLicenceRef(),
     startDate: new Date('2022-01-01')
   }
 

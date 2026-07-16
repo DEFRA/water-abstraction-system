@@ -2,9 +2,9 @@
  * @module PointHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import PointModel from '../../../app/models/point.model.js'
 import SourceHelper from './source.helper.js'
+import { generateNaldPointId, generateNationalGridReference } from '../generators.js'
 
 /**
  * Add a new licence version purpose point
@@ -40,8 +40,8 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const { id: sourceId } = SourceHelper.select()
-  const naldPointId = data.naldPointId ? data.naldPointId : GenerateHelper.generateNaldPointId()
-  const ngr1 = data.ngr1 ? data.ngr1 : GenerateHelper.generateNationalGridReference()
+  const naldPointId = data.naldPointId ? data.naldPointId : generateNaldPointId()
+  const ngr1 = data.ngr1 ? data.ngr1 : generateNationalGridReference()
 
   const defaults = {
     description: 'WELL AT WELLINGTON',

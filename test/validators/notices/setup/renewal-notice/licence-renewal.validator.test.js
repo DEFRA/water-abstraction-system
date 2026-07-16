@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Helpers
-import GenerateHelper from '../../../../support/helpers/generate.helper.js'
 import LicenceModel from '../../../../../app/models/licence.model.js'
+import { generateLicenceRef } from '../../../../support/generators.js'
 import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -17,7 +17,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   beforeEach(() => {
     vi.useFakeTimers({ now: new Date('2026-05-21') })
 
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
 
     payload = { licenceRef }
 

@@ -2,8 +2,8 @@
  * @module LicenceEntityHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
+import { generateName } from '../generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -40,7 +40,7 @@ async function add(data = {}) {
 function defaults(data = {}) {
   const defaults = {
     id: generateUUID(),
-    name: GenerateHelper.generateName(),
+    name: generateName(),
     type: 'individual'
   }
 

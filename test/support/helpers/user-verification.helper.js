@@ -2,9 +2,9 @@
  * @module UserVerificationHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import UserVerificationModel from '../../../app/models/user-verification.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateVerificationCode } from '../generators.js'
 
 /**
  * Add a new user verification
@@ -46,7 +46,7 @@ function defaults(data = {}) {
     createdAt: new Date(),
     id: generateUUID(),
     licenceEntityId: generateUUID(),
-    verificationCode: GenerateHelper.generateVerificationCode(),
+    verificationCode: generateVerificationCode(),
     verificationMethod: 'post',
     verifiedAt: null
   }

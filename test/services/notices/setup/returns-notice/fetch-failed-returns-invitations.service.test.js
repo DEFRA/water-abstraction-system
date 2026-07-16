@@ -3,11 +3,11 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import EventHelper from '../../../../support/helpers/event.helper.js'
-import GenerateHelper from '../../../../support/helpers/generate.helper.js'
 import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import NotificationHelper from '../../../../support/helpers/notification.helper.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
 import { futureDueDate } from '../../../../../app/presenters/notices/base.presenter.js'
+import { generateLicenceRef } from '../../../../support/generators.js'
 import { compareStrings, generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -57,13 +57,11 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
           beforeEach(async () => {
             // The notifications will share some of the same licence references and return log IDs. We can then test
             // what the service returns doesn't contain duplicates
-            licenceRefs = [
-              GenerateHelper.generateLicenceRef(),
-              GenerateHelper.generateLicenceRef(),
-              GenerateHelper.generateLicenceRef()
-            ].sort((referenceString, compareString) => {
-              return compareStrings(referenceString, compareString)
-            })
+            licenceRefs = [generateLicenceRef(), generateLicenceRef(), generateLicenceRef()].sort(
+              (referenceString, compareString) => {
+                return compareStrings(referenceString, compareString)
+              }
+            )
             returnLogIds = [generateUUID(), generateUUID(), generateUUID()].sort((referenceString, compareString) => {
               return compareStrings(referenceString, compareString)
             })

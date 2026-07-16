@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../support/helpers/generate.helper.js'
+import { generateLicenceRef } from '../../support/generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -21,7 +21,7 @@ describe('Licences - View Contact Details service', () => {
 
   beforeEach(() => {
     licenceId = generateUUID()
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
 
     auth = {
       credentials: {

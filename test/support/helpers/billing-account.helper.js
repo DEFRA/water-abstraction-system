@@ -3,7 +3,7 @@
  */
 
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
-import GenerateHelper from './generate.helper.js'
+import { generateAccountNumber } from '../generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -38,7 +38,7 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const defaults = {
-    accountNumber: GenerateHelper.generateAccountNumber(),
+    accountNumber: generateAccountNumber(),
     companyId: generateUUID()
   }
 

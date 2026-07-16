@@ -2,9 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as GeneratePaperReturnRequest from '../../../../app/requests/gotenberg/generate-paper-return.request.js'
@@ -24,7 +24,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
   beforeEach(async () => {
     dueReturnLog = ReturnLogFixture.dueReturn()
 
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
 
     notification = {
       eventId: null,

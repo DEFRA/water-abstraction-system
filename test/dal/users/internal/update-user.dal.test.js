@@ -3,7 +3,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import EventModel from '../../../../app/models/event.model.js'
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import GroupHelper from '../../../support/helpers/group.helper.js'
 import RoleHelper from '../../../support/helpers/role.helper.js'
 import UserGroupHelper from '../../../support/helpers/user-group.helper.js'
@@ -12,6 +11,7 @@ import UserHelper from '../../../support/helpers/user.helper.js'
 import UserModel from '../../../../app/models/user.model.js'
 import UserRoleHelper from '../../../support/helpers/user-role.helper.js'
 import UserRoleModel from '../../../../app/models/user-role.model.js'
+import { generateUserName } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
@@ -116,7 +116,7 @@ describe('Users - Internal - Update User DAL', () => {
 
     describe('and the email has changed', () => {
       beforeEach(() => {
-        session.email = GenerateHelper.generateUserName()
+        session.email = generateUserName()
       })
 
       it('updates the username', async () => {

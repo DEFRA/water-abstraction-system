@@ -2,9 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateReference } from '../../../support/generators.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -29,7 +29,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       receivedDateOptions: 'today',
       receivedDate: new Date('2025-02-14'),
       returnLogId,
-      returnReference: GenerateHelper.generateReference()
+      returnReference: generateReference()
     }
 
     session = SessionModelStub(sessionData)

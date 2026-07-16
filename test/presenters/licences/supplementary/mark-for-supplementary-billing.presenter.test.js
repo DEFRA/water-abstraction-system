@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -19,7 +19,7 @@ describe('Mark For Supplementary Billing presenter', () => {
     let licence
 
     beforeEach(() => {
-      licence = { id: generateUUID(), licenceRef: GenerateHelper.generateLicenceRef() }
+      licence = { id: generateUUID(), licenceRef: generateLicenceRef() }
     })
 
     describe('and the current date is before April', () => {

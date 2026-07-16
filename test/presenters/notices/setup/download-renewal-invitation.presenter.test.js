@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
 
 // Thing under test
@@ -58,7 +58,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
   describe('when the recipient has multiple licences', () => {
     beforeEach(() => {
       recipient = RecipientsFixture.renewalInvitationPrimaryUser()
-      recipient.licence_refs = [GenerateHelper.generateLicenceRef(), GenerateHelper.generateLicenceRef()]
+      recipient.licence_refs = [generateLicenceRef(), generateLicenceRef()]
     })
 
     it('joins the licence refs with a comma', () => {

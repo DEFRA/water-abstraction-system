@@ -1,9 +1,9 @@
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
 import CompanyContactModel from '../../../app/models/company-contact.model.js'
 import ContactModel from '../../../app/models/contact.model.js'
-import GenerateHelper from '../helpers/generate.helper.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateAccountNumber, generateLicenceRef } from '../generators.js'
 
 /**
  * A representation from the billing accounts 'FetchBillingAccountsService'
@@ -13,7 +13,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
 function billingAccounts() {
   return [
     BillingAccountModel.fromJson({
-      accountNumber: GenerateHelper.generateAccountNumber(),
+      accountNumber: generateAccountNumber(),
       billingAccountAddresses: [
         {
           address: {
@@ -168,7 +168,7 @@ function licences() {
       expiredDate: null,
       id: generateUUID(),
       lapsedDate: null,
-      licenceRef: GenerateHelper.generateLicenceRef(),
+      licenceRef: generateLicenceRef(),
       licenceVersions: [
         {
           endDate: null,

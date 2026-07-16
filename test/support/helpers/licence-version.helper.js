@@ -2,8 +2,8 @@
  * @module LicenceVersionHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import LicenceVersionModel from '../../../app/models/licence-version.model.js'
+import { generateLicenceVersionExternalId } from '../generators.js'
 import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
@@ -51,7 +51,7 @@ function defaults(data = {}) {
     increment: 0,
     status: 'current',
     startDate: new Date('2022-01-01'),
-    externalId: GenerateHelper.generateLicenceVersionExternalId(),
+    externalId: generateLicenceVersionExternalId(),
     createdAt: timestamp,
     updatedAt: timestamp
   }

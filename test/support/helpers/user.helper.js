@@ -2,8 +2,8 @@
  * @module UserHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import UserModel from '../../../app/models/user.model.js'
+import { generateUserName } from '../generators.js'
 import { selectRandomEntry } from '../general.js'
 import { data as users } from '../../../db/seeds/data/users.js'
 
@@ -57,7 +57,7 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const defaults = {
-    username: GenerateHelper.generateUserName(),
+    username: generateUserName(),
     password: 'P@55word',
     resetRequired: 0,
     badLogins: 0,

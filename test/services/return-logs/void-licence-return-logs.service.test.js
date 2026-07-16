@@ -2,9 +2,9 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../support/helpers/generate.helper.js'
 import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateReference } from '../../support/generators.js'
 
 // Thing under test
 import VoidLicenceReturnLogsService from '../../../app/services/return-logs/void-licence-return-logs.service.js'
@@ -28,7 +28,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     beforeAll(async () => {
       changeDate = new Date('2022-12-31')
 
-      licenceRef = GenerateHelper.generateLicenceRef()
+      licenceRef = generateLicenceRef()
       returnCycleId = generateUUID()
     })
 
@@ -53,7 +53,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
 
         describe('and one return log for the matching return cycle that is after the "change date" [C]', () => {
           beforeAll(async () => {
-            returnReference = GenerateHelper.generateReference()
+            returnReference = generateReference()
             endsAfterTheChangeDateReturnLog = await ReturnLogHelper.add({
               endDate: new Date('2023-03-31'),
               licenceRef,
@@ -101,7 +101,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     beforeAll(async () => {
       changeDate = new Date('2022-12-31')
 
-      licenceRef = GenerateHelper.generateLicenceRef()
+      licenceRef = generateLicenceRef()
       returnCycleId = generateUUID()
     })
 
@@ -126,7 +126,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
 
         describe('and one return log for the matching return cycle that matched the "change date" [C]', () => {
           beforeAll(async () => {
-            returnReference = GenerateHelper.generateReference()
+            returnReference = generateReference()
             endsAfterTheChangeDateReturnLog = await ReturnLogHelper.add({
               endDate: changeDate,
               licenceRef,
@@ -174,7 +174,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     beforeAll(async () => {
       changeDate = new Date('2022-04-01')
 
-      licenceRef = GenerateHelper.generateLicenceRef()
+      licenceRef = generateLicenceRef()
       returnCycleId = generateUUID()
     })
 
@@ -190,7 +190,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
 
       describe('and now the reissued return log [B]', () => {
         beforeAll(async () => {
-          returnReference = GenerateHelper.generateReference()
+          returnReference = generateReference()
           reissuedReturnLog1 = await ReturnLogHelper.add({
             endDate: new Date('2023-03-31'),
             licenceRef,
@@ -221,13 +221,13 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     beforeAll(async () => {
       changeDate = new Date('2022-09-01')
 
-      licenceRef = GenerateHelper.generateLicenceRef()
+      licenceRef = generateLicenceRef()
       returnCycleId = generateUUID()
     })
 
     describe('and the licence has an existing return log for the existing return version [A]', () => {
       beforeAll(async () => {
-        returnReference = GenerateHelper.generateReference()
+        returnReference = generateReference()
 
         existingReturnLog = await ReturnLogHelper.add({
           endDate: new Date('2023-03-31'),

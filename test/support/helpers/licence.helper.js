@@ -2,9 +2,9 @@
  * @module LicenceHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import RegionHelper from './region.helper.js'
+import { generateLicenceRef } from '../generators.js'
 
 /**
  * Add a new licence
@@ -44,7 +44,7 @@ function defaults(data = {}) {
 
   const defaults = {
     waterUndertaker: false,
-    licenceRef: GenerateHelper.generateLicenceRef(),
+    licenceRef: generateLicenceRef(),
     regionId,
     regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' },
     startDate: new Date('2022-01-01')

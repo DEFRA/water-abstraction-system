@@ -2,9 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../support/helpers/generate.helper.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import { generateLicenceRef } from '../../support/generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -40,7 +40,7 @@ describe('Notifications - View Notification service', () => {
       beforeEach(() => {
         licence = {
           id: generateUUID(),
-          licenceRef: GenerateHelper.generateLicenceRef()
+          licenceRef: generateLicenceRef()
         }
 
         vi.spyOn(FetchNotificationService, 'default').mockResolvedValue({ licence, notification })

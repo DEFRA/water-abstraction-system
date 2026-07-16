@@ -1,5 +1,5 @@
-import GenerateHelper from '../helpers/generate.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateAccountNumber, generateLicenceRef } from '../generators.js'
 
 /**
  * Represents a bill run object with generated UUIDs for the ID and external ID
@@ -24,7 +24,7 @@ function billRun(regionId) {
 function billingAccount() {
   return {
     id: generateUUID(),
-    accountNumber: GenerateHelper.generateAccountNumber()
+    accountNumber: generateAccountNumber()
   }
 }
 
@@ -135,7 +135,7 @@ function chargeVersion(billingAccountId, licence) {
 function licence(region) {
   return {
     id: generateUUID(),
-    licenceRef: GenerateHelper.generateLicenceRef(),
+    licenceRef: generateLicenceRef(),
     waterUndertaker: true,
     historicalAreaCode: 'SAAR',
     regionalChargeArea: 'Southern',

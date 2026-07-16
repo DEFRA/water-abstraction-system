@@ -2,8 +2,8 @@
  * @module ReviewLicenceHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import ReviewLicenceModel from '../../../app/models/review-licence.model.js'
+import { generateLicenceRef } from '../generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -43,7 +43,7 @@ function defaults(data = {}) {
   const defaults = {
     billRunId: generateUUID(),
     licenceId: generateUUID(),
-    licenceRef: GenerateHelper.generateLicenceRef(),
+    licenceRef: generateLicenceRef(),
     licenceHolder: 'Licence Holder Ltd',
     issues: ''
   }

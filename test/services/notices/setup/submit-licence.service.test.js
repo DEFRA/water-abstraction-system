@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 
 // Test helpers
 import YarStub from '../../../support/stubs/yar.stub.js'
@@ -24,7 +24,7 @@ describe('Notices - Setup - Submit Licence service', () => {
   let yarStub
 
   beforeEach(() => {
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
 
     vi.useFakeTimers({ now: new Date('2020-06-06') })
 

@@ -2,8 +2,8 @@
  * @module ReturnRequirementPointHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import ReturnRequirementPointModel from '../../../app/models/return-requirement-point.model.js'
+import { generateReturnRequirementPointExternalId } from '../generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -39,7 +39,7 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const defaults = {
-    externalId: GenerateHelper.generateReturnRequirementPointExternalId(),
+    externalId: generateReturnRequirementPointExternalId(),
     pointId: generateUUID(),
     returnRequirementId: generateUUID()
   }

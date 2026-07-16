@@ -2,7 +2,6 @@
  * @module RequirementsForReturnsSeeder
  */
 
-import GenerateHelper from '../helpers/generate.helper.js'
 import LicenceHelper from '../helpers/licence.helper.js'
 import PointHelper from '../helpers/point.helper.js'
 import PurposeHelper from '../helpers/purpose.helper.js'
@@ -11,6 +10,7 @@ import ReturnRequirementPointHelper from '../helpers/return-requirement-point.he
 import ReturnRequirementPurposeHelper from '../helpers/return-requirement-purpose.helper.js'
 import ReturnVersionHelper from '../helpers/return-version.helper.js'
 import UserHelper from '../helpers/user.helper.js'
+import { generateReference } from '../generators.js'
 
 /**
  * Add a complete 'requirements for returns' record, including return version, requirements, points and purposes
@@ -75,8 +75,8 @@ export async function seed() {
  * @private
  */
 function _legacyIds() {
-  const legacyId1 = GenerateHelper.generateReference()
-  const legacyId2 = GenerateHelper.generateReference()
+  const legacyId1 = generateReference()
+  const legacyId2 = generateReference()
 
   return legacyId1 > legacyId2 ? [legacyId1, legacyId2] : [legacyId2, legacyId1]
 }

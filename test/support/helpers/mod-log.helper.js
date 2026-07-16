@@ -2,9 +2,9 @@
  * @module ModLogHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import ModLogModel from '../../../app/models/mod-log.model.js'
 import { randomRegionCode } from '../general.js'
+import { generateLicenceRef, generateRegionNaldPatternExternalId } from '../generators.js'
 
 /**
  * Add a new mod log
@@ -45,14 +45,14 @@ function defaults(data = {}) {
   const regionCode = randomRegionCode()
 
   const defaults = {
-    externalId: GenerateHelper.generateRegionNaldPatternExternalId(regionCode),
+    externalId: generateRegionNaldPatternExternalId(regionCode),
     eventCode: 'DRFVER',
     eventDescription: 'Draft version created',
     naldDate: new Date('2012-06-01'),
     userId: 'TTESTER',
-    licenceRef: GenerateHelper.generateLicenceRef(),
+    licenceRef: generateLicenceRef(),
     // The licence and mod log share the same external ID pattern: [region code:NALD ID]
-    licenceExternalId: GenerateHelper.generateRegionNaldPatternExternalId(regionCode)
+    licenceExternalId: generateRegionNaldPatternExternalId(regionCode)
   }
 
   return {

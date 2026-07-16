@@ -2,10 +2,10 @@
  * @module ViewLicencesFixture
  */
 
-import GenerateHelper from '../helpers/generate.helper.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 import LicenceVersionModel from '../../../app/models/licence-version.model.js'
 import PointModel from '../../../app/models/point.model.js'
+import { generateLicenceRef } from '../generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -53,7 +53,7 @@ function condition() {
 function licence() {
   return LicenceModel.fromJson({
     id: generateUUID(),
-    licenceRef: GenerateHelper.generateLicenceRef(),
+    licenceRef: generateLicenceRef(),
     includeInPresrocBilling: 'no',
     includeInSrocBilling: false,
     includeInTwoPartTariffBilling: true,
@@ -97,7 +97,7 @@ function licenceVersion() {
     issueDate: null,
     licence: {
       id: generateUUID(),
-      licenceRef: GenerateHelper.generateLicenceRef()
+      licenceRef: generateLicenceRef()
     },
     licenceVersionPurposes: [],
     modLogs: [

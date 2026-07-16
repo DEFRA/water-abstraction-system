@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 
 // Things we need to stub
 import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
@@ -17,7 +17,7 @@ describe('Notices - Setup - View Licence service', () => {
   let sessionData
 
   beforeEach(() => {
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
 
     sessionData = { licenceRef }
 

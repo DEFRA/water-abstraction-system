@@ -2,8 +2,8 @@
  * @module LicenceVersionPurposePointHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import LicenceVersionPurposePointModel from '../../../app/models/licence-version-purpose-point.model.js'
+import { generateLicenceVersionPurposePointExternalId } from '../generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -39,7 +39,7 @@ function add(data = {}) {
  */
 function defaults(data = {}) {
   const defaults = {
-    externalId: GenerateHelper.generateLicenceVersionPurposePointExternalId(),
+    externalId: generateLicenceVersionPurposePointExternalId(),
     licenceVersionPurposeId: generateUUID(),
     pointId: generateUUID()
   }

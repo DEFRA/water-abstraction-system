@@ -1,6 +1,6 @@
-import GenerateHelper from '../helpers/generate.helper.js'
 import RegionHelper from '../helpers/region.helper.js'
 import { NoticeJourney, NoticeType, NoticeTypes } from '../../../app/lib/static-lookups.lib.js'
+import { generateLicenceRef, generateReference } from '../generators.js'
 import { generateNoticeReferenceCode, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -15,7 +15,7 @@ import { generateNoticeReferenceCode, generateUUID } from '../../../app/lib/gene
  */
 function abstractionAlertStop(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -94,7 +94,7 @@ function abstractionAlertStop(licenceRef = null) {
  */
 function adHocRenewalInvitation(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -127,7 +127,7 @@ function adHocRenewalInvitation(licenceRef = null) {
  */
 function adHocInvitation(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -170,7 +170,7 @@ function adHocInvitation(licenceRef = null) {
  */
 function adHocReminder(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -215,7 +215,7 @@ function adHocReminder(licenceRef = null) {
  */
 function paperReturn(licenceRef = null, selectedReturnLog = null) {
   if (!licenceRef) {
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -260,7 +260,7 @@ function paperReturn(licenceRef = null, selectedReturnLog = null) {
  */
 function standardInvitation(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -311,7 +311,7 @@ function standardInvitation(licenceRef = null) {
  */
 function standardReminder(licenceRef = null) {
   if (!licenceRef) {
-    licenceRef = GenerateHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
   }
 
   const id = generateUUID()
@@ -351,7 +351,7 @@ function standardReminder(licenceRef = null) {
 }
 
 function _generateReturnLog(licenceRef) {
-  const returnReference = GenerateHelper.generateReference()
+  const returnReference = generateReference()
   const region = RegionHelper.select()
 
   return {

@@ -2,8 +2,8 @@
  * @module ReturnLogHelper
  */
 
-import GenerateHelper from './generate.helper.js'
 import ReturnLogModel from '../../../app/models/return-log.model.js'
+import { generateLicenceRef, generateReference, generateReturnId } from '../generators.js'
 import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
@@ -47,8 +47,8 @@ function add(data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults(data = {}) {
-  const licenceRef = data.licenceRef ? data.licenceRef : GenerateHelper.generateLicenceRef()
-  const returnReference = data.returnReference ? data.returnReference : GenerateHelper.generateReference()
+  const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
+  const returnReference = data.returnReference ? data.returnReference : generateReference()
   const timestamp = timestampForPostgres()
   const receivedDate = data.receivedDate ? data.receivedDate : null
   const startDate = data.startDate ? new Date(data.startDate) : new Date('2022-04-01')
@@ -82,7 +82,7 @@ function defaults(data = {}) {
       version: 1
     },
     receivedDate,
-    returnId: GenerateHelper.generateReturnId(startDate, endDate, 1, licenceRef, returnReference),
+    returnId: generateReturnId(startDate, endDate, 1, licenceRef, returnReference),
     returnReference,
     returnsFrequency: 'month',
     startDate,

@@ -2,9 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import LicenceModel from '../../../../app/models/licence.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -27,7 +27,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       expiredDate: null,
       id: generateUUID(),
       lapsedDate: null,
-      licenceRef: GenerateHelper.generateLicenceRef(),
+      licenceRef: generateLicenceRef(),
       revokedDate: null
     })
 

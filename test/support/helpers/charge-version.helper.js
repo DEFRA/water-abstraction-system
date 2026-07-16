@@ -3,7 +3,7 @@
  */
 
 import ChargeVersionModel from '../../../app/models/charge-version.model.js'
-import GenerateHelper from './generate.helper.js'
+import { generateLicenceRef } from '../generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -45,7 +45,7 @@ async function add(data = {}) {
  */
 function defaults(data = {}) {
   const defaults = {
-    licenceRef: GenerateHelper.generateLicenceRef(),
+    licenceRef: generateLicenceRef(),
     scheme: 'sroc',
     versionNumber: 1,
     startDate: new Date('2022-04-01'),

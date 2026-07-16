@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -36,7 +36,7 @@ describe('Notices - Setup - Submit Check service', () => {
   beforeEach(() => {
     const fixtureData = RecipientsFixture.recipients()
     const sessionId = generateUUID()
-    const licenceRef = GenerateHelper.generateLicenceRef()
+    const licenceRef = generateLicenceRef()
     const dueReturns = [
       {
         dueDate: '2025-04-28T00:00:00.000Z',

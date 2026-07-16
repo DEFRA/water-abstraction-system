@@ -3,7 +3,7 @@
  */
 
 import ChargeVersionNoteModel from '../../../app/models/charge-version-note.model.js'
-import GenerateHelper from './generate.helper.js'
+import { generateUserId } from '../generators.js'
 
 /**
  * Add a new charge version note
@@ -38,7 +38,7 @@ function add(data = {}) {
 function defaults(data = {}) {
   const defaults = {
     note: 'This is a test note',
-    userId: GenerateHelper.generateUserId()
+    userId: generateUserId()
   }
 
   return {

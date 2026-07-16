@@ -2,7 +2,6 @@
  * @module LicenceAbstractionDataSeeder
  */
 
-import GenerateHelper from '../helpers/generate.helper.js'
 import LicenceHelper from '../helpers/licence.helper.js'
 import LicenceVersionHelper from '../helpers/licence-version.helper.js'
 import LicenceVersionPurposeHelper from '../helpers/licence-version-purpose.helper.js'
@@ -12,8 +11,11 @@ import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
 import PurposeHelper from '../helpers/purpose.helper.js'
 import RegionHelper from '../helpers/region.helper.js'
 import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
-
-const { generateLicenceRef, generateLicenceVersionExternalId, generateLicenceVersionPurposeExternalId } = GenerateHelper
+import {
+  generateLicenceRef,
+  generateLicenceVersionExternalId,
+  generateLicenceVersionPurposeExternalId
+} from '../generators.js'
 
 /**
  * Seeds a licence with all the related records to get a 'real' set of abstraction data

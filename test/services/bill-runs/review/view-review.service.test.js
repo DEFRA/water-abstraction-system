@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../../support/helpers/generate.helper.js'
 import RegionHelper from '../../../support/helpers/region.helper.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Test helpers
@@ -44,7 +44,7 @@ describe('Bill Runs - Review - View Review Service', () => {
               issues: 'Aggregate',
               licenceId: generateUUID(),
               licenceHolder: 'ACME Water PLC',
-              licenceRef: GenerateHelper.generateLicenceRef(),
+              licenceRef: generateLicenceRef(),
               progress: true,
               status: 'review'
             },
@@ -53,7 +53,7 @@ describe('Bill Runs - Review - View Review Service', () => {
               issues: '',
               licenceId: generateUUID(),
               licenceHolder: 'SCEP Holdings Ltd',
-              licenceRef: GenerateHelper.generateLicenceRef(),
+              licenceRef: generateLicenceRef(),
               progress: false,
               status: 'ready'
             }

@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import GenerateHelper from '../../support/helpers/generate.helper.js'
 import LicenceModel from '../../../app/models/licence.model.js'
+import { generateLicenceRef } from '../../support/generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -24,7 +24,7 @@ describe('Licences - View Summary service', () => {
       lapsedDate: null,
       includeInPresrocBilling: 'no',
       includeInSrocBilling: false,
-      licenceRef: GenerateHelper.generateLicenceRef(),
+      licenceRef: generateLicenceRef(),
       revokedDate: null,
       licenceSupplementaryYears: [],
       startDate: new Date('2019-04-01')

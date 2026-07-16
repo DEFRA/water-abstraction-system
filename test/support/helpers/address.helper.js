@@ -3,7 +3,7 @@
  */
 
 import AddressModel from '../../../app/models/address.model.js'
-import GenerateHelper from './generate.helper.js'
+import { generateUprn } from '../generators.js'
 
 /**
  * Add a new address
@@ -50,7 +50,7 @@ function defaults(data = {}) {
     postcode: 'BS1 5AH',
     country: 'United Kingdom',
     dataSource: 'wrls',
-    uprn: GenerateHelper.generateUprn()
+    uprn: generateUprn()
   }
 
   return {

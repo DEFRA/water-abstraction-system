@@ -3,7 +3,7 @@
  */
 
 import BillLicenceModel from '../../../app/models/bill-licence.model.js'
-import GenerateHelper from './generate.helper.js'
+import { generateLicenceRef } from '../generators.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
@@ -40,7 +40,7 @@ async function add(data = {}) {
 function defaults(data = {}) {
   const defaults = {
     billId: generateUUID(),
-    licenceRef: GenerateHelper.generateLicenceRef(),
+    licenceRef: generateLicenceRef(),
     licenceId: data.licenceId || generateUUID()
   }
 
