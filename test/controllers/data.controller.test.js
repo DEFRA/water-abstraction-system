@@ -86,7 +86,7 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the LoadService errors', () => {
           beforeEach(async () => {
-            vi.spyOn(LoadService, 'default').mockRejectedValue()
+            vi.spyOn(LoadService, 'default').mockRejectedValue(Error('LoadService error'))
           })
 
           it('returns a 500 status', async () => {
@@ -121,7 +121,7 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the SeedService errors', () => {
           beforeEach(async () => {
-            vi.spyOn(SeedService, 'default').mockRejectedValue()
+            vi.spyOn(SeedService, 'default').mockRejectedValue(Error('SeedService error'))
           })
 
           it('returns a 500 status', async () => {
@@ -156,7 +156,7 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the TearDownService errors', () => {
           beforeEach(async () => {
-            vi.spyOn(TearDownService, 'default').mockRejectedValue()
+            vi.spyOn(TearDownService, 'default').mockRejectedValue(Error('TearDownService error'))
           })
 
           it('returns a 500 status', async () => {
