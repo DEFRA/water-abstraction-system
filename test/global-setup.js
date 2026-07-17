@@ -10,7 +10,7 @@ import * as Database from './support/database.js'
  *
  * @returns {Promise} resolves when the database has been cleaned and seeded
  */
-export default async function setup() {
+export default async function globalSetup() {
   await Database.clean()
   await Database.closeConnection()
 }

@@ -10,6 +10,6 @@ import * as Database from './support/database.js'
  *
  * @returns {Promise} resolves when the database connection has been closed
  */
-export default async function teardown() {
+export default async function globalTeardown() {
   await Database.closeConnection()
 }
