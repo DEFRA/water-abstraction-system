@@ -13,7 +13,6 @@ const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Charging Module View Bill Run Status request', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
-  const transactionData = { billingTransactionId: '2395429b-e703-43bc-8522-ce3f67507ffa' }
 
   afterEach(() => {
     vi.restoreAllMocks()
@@ -37,13 +36,13 @@ describe('Charging Module View Bill Run Status request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewBillRunStatusRequest(billRunId, transactionData)
+      const result = await ViewBillRunStatusRequest(billRunId)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the bill run status in the "response"', async () => {
-      const result = await ViewBillRunStatusRequest(billRunId, transactionData)
+      const result = await ViewBillRunStatusRequest(billRunId)
 
       expect(result.response.body.status).toEqual('initialised')
     })
@@ -71,13 +70,13 @@ describe('Charging Module View Bill Run Status request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewBillRunStatusRequest(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest(billRunId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewBillRunStatusRequest(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest(billRunId)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -94,13 +93,13 @@ describe('Charging Module View Bill Run Status request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewBillRunStatusRequest(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest(billRunId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewBillRunStatusRequest(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest(billRunId)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()
