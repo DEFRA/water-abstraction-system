@@ -85,7 +85,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
       vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
-      vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
+      vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -181,7 +181,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
       vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
-      vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
+      vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -247,7 +247,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
       vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
-      vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
+      vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,

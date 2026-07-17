@@ -26,7 +26,7 @@ describe('Billing Accounts - Setup - Fetch Companies service', () => {
 
   describe('when called with a "companySearch" that has responses', () => {
     beforeEach(async () => {
-      vi.spyOn(SearchCompaniesRequest, 'send').mockResolvedValue({
+      vi.spyOn(SearchCompaniesRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -53,7 +53,7 @@ describe('Billing Accounts - Setup - Fetch Companies service', () => {
 
   describe('when called with a "companySearch" that has no responses', () => {
     beforeEach(async () => {
-      vi.spyOn(SearchCompaniesRequest, 'send').mockResolvedValue({
+      vi.spyOn(SearchCompaniesRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -74,7 +74,7 @@ describe('Billing Accounts - Setup - Fetch Companies service', () => {
 
   describe('when called with a "companySearch" and a not 200 status is returned', () => {
     beforeEach(async () => {
-      vi.spyOn(SearchCompaniesRequest, 'send').mockResolvedValue({
+      vi.spyOn(SearchCompaniesRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_NOT_FOUND,

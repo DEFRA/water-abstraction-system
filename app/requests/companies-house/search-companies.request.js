@@ -12,7 +12,7 @@ import { getRequest } from '../companies-house.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(queryString) {
+export default async function searchCompaniesRequest(queryString) {
   const path = `search/companies`
   const searchParams = {
     q: queryString,

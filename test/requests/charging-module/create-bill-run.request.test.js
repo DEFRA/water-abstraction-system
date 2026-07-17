@@ -10,7 +10,7 @@ import RegionHelper from '../../support/helpers/region.helper.js'
 import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-import * as CreateBillRunRequest from '../../../app/requests/charging-module/create-bill-run.request.js'
+import CreateBillRunRequest from '../../../app/requests/charging-module/create-bill-run.request.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
@@ -46,13 +46,13 @@ describe('Charging Module Create Bill Run request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+      const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the bill run id and number in the "response"', async () => {
-      const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+      const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
       expect(result.response.body.billRun.id).toEqual('2bbbe459-966e-4026-b5d2-2f10867bdddd')
       expect(result.response.body.billRun.billRunNumber).toEqual(10004)
@@ -81,13 +81,13 @@ describe('Charging Module Create Bill Run request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+        const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+        const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -104,13 +104,13 @@ describe('Charging Module Create Bill Run request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+        const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+        const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

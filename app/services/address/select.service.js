@@ -5,8 +5,8 @@
  */
 
 import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import LookupPostcodeRequest from '../../requests/address-facade/lookup-postcode.request.js'
 import SelectPresenter from '../../presenters/address/select.presenter.js'
-import { send } from '../../requests/address-facade/lookup-postcode.request.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/select` page
@@ -18,7 +18,7 @@ import { send } from '../../requests/address-facade/lookup-postcode.request.js'
 export default async function selectService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const result = await send(session.addressJourney.address.postcode)
+  const result = await LookupPostcodeRequest(session.addressJourney.address.postcode)
 
   if (result.succeeded === false || result.matches.length === 0) {
     return {

@@ -6,10 +6,10 @@
 import BillRunError from '../../../errors/bill-run.error.js'
 import BillRunModel from '../../../models/bill-run.model.js'
 import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
+import GenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
 import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
 import ProcessBillingPeriodService from './process-billing-period.service.js'
-import { send as generateBillRun } from '../../../requests/charging-module/generate-bill-run.request.js'
-import { send as refreshBillRun } from '../../../requests/legacy/refresh-bill-run.request.js'
+import RefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
@@ -73,9 +73,9 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
 
   // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
   // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
-  await generateBillRun(billRun.externalId)
+  await GenerateBillRunRequest(billRun.externalId)
 
-  await refreshBillRun(billRun.id)
+  await RefreshBillRunRequest(billRun.id)
 }
 
 async function _processBillingPeriod(billingPeriod, billRun) {

@@ -61,7 +61,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "pending" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -83,7 +83,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns "sent" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -114,7 +114,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns "failed" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -144,7 +144,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -173,7 +173,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "pending" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -195,7 +195,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns "sent" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -226,7 +226,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns "failed" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -256,7 +256,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -296,7 +296,7 @@ describe('Notifications - Check Notification Status service', () => {
       beforeEach(() => {
         // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
         // representation look at test/requests/notify/view-message-data.request.test.js
-        vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+        vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: 200,
@@ -320,7 +320,7 @@ describe('Notifications - Check Notification Status service', () => {
       beforeEach(() => {
         // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
         // representation look at test/requests/notify/view-message-data.request.test.js
-        vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+        vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: 200,
@@ -375,7 +375,7 @@ describe('Notifications - Check Notification Status service', () => {
 
     describe('and Notify returns a "failed" status', () => {
       beforeEach(() => {
-        vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+        vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: 200,
@@ -399,7 +399,7 @@ describe('Notifications - Check Notification Status service', () => {
 
     describe('and Notify returns a "cancelled" status', () => {
       beforeEach(() => {
-        vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+        vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: 200,
@@ -423,7 +423,7 @@ describe('Notifications - Check Notification Status service', () => {
 
     describe('and Notify returns an "unknown" status', () => {
       beforeEach(() => {
-        vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+        vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: 200,
@@ -466,7 +466,7 @@ describe('Notifications - Check Notification Status service', () => {
         beforeEach(() => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -490,7 +490,7 @@ describe('Notifications - Check Notification Status service', () => {
         beforeEach(() => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -545,7 +545,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -569,7 +569,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -598,7 +598,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "pending" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -620,7 +620,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "sent" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -675,7 +675,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -699,7 +699,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -743,7 +743,7 @@ describe('Notifications - Check Notification Status service', () => {
         beforeEach(() => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -767,7 +767,7 @@ describe('Notifications - Check Notification Status service', () => {
         beforeEach(() => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -822,7 +822,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -846,7 +846,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -875,7 +875,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "pending" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -897,7 +897,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "sent" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -952,7 +952,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -976,7 +976,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -1019,7 +1019,7 @@ describe('Notifications - Check Notification Status service', () => {
       beforeEach(() => {
         // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
         // representation look at test/requests/notify/view-message-data.request.test.js
-        vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+        vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: 200,
@@ -1043,7 +1043,7 @@ describe('Notifications - Check Notification Status service', () => {
       beforeEach(() => {
         // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
         // representation look at test/requests/notify/view-message-data.request.test.js
-        vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+        vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: 200,
@@ -1098,7 +1098,7 @@ describe('Notifications - Check Notification Status service', () => {
 
     describe('and Notify returns a "failed" status', () => {
       beforeEach(() => {
-        vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+        vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: 200,
@@ -1122,7 +1122,7 @@ describe('Notifications - Check Notification Status service', () => {
 
     describe('and Notify returns an "unknown" status', () => {
       beforeEach(() => {
-        vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+        vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: 200,
@@ -1158,7 +1158,7 @@ describe('Notifications - Check Notification Status service', () => {
         beforeEach(() => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -1182,7 +1182,7 @@ describe('Notifications - Check Notification Status service', () => {
         beforeEach(() => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -1203,7 +1203,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -1227,7 +1227,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -1256,7 +1256,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "pending" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -1278,7 +1278,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "sent" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -1299,7 +1299,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -1323,7 +1323,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
-          vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+          vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: 200,
@@ -1347,7 +1347,7 @@ describe('Notifications - Check Notification Status service', () => {
 
   describe('when checking the notification status fails', () => {
     beforeEach(() => {
-      vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+      vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
         succeeded: false,
         response: {
           statusCode: 404,
@@ -1405,7 +1405,7 @@ describe('Notifications - Check Notification Status service', () => {
       notification = NotificationsFixture.returnsInvitationEmail(notice)
       notification.status = 'pending'
 
-      vi.spyOn(ViewMessageDataRequest, 'send').mockResolvedValue({
+      vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: 200,

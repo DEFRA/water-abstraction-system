@@ -18,7 +18,7 @@ import { postRequest } from '../legacy.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(batchType, regionId, financialYearEnding, user, summer = false) {
+export default async function createBillRunRequest(batchType, regionId, financialYearEnding, user, summer = false) {
   const { userId, username: userEmail } = user
 
   const path = 'billing/batches'

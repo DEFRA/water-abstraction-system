@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-import * as ViewBillRunStatusRequest from '../../../app/requests/charging-module/view-bill-run-status.request.js'
+import ViewBillRunStatusRequest from '../../../app/requests/charging-module/view-bill-run-status.request.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
@@ -37,13 +37,13 @@ describe('Charging Module View Bill Run Status request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
+      const result = await ViewBillRunStatusRequest(billRunId, transactionData)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the bill run status in the "response"', async () => {
-      const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
+      const result = await ViewBillRunStatusRequest(billRunId, transactionData)
 
       expect(result.response.body.status).toEqual('initialised')
     })
@@ -71,13 +71,13 @@ describe('Charging Module View Bill Run Status request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest(billRunId, transactionData)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest(billRunId, transactionData)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -94,13 +94,13 @@ describe('Charging Module View Bill Run Status request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest(billRunId, transactionData)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest(billRunId, transactionData)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

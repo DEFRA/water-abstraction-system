@@ -45,7 +45,7 @@ describe('Initiate Bill Run service', () => {
     beforeEach(() => {
       batchType = 'supplementary'
 
-      vi.spyOn(ChargingModuleCreateBillRunRequest, 'send').mockResolvedValue({
+      vi.spyOn(ChargingModuleCreateBillRunRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -89,7 +89,7 @@ describe('Initiate Bill Run service', () => {
   describe('when initiating a bill run fails', () => {
     describe('because a bill run could not be created in the Charging Module', () => {
       beforeEach(() => {
-        vi.spyOn(ChargingModuleCreateBillRunRequest, 'send').mockResolvedValue({
+        vi.spyOn(ChargingModuleCreateBillRunRequest, 'default').mockResolvedValue({
           succeeded: false,
           response: {
             info: {

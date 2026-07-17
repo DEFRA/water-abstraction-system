@@ -3,8 +3,8 @@
  * @module SendEmailNotificationService
  */
 
+import CreateEmailRequest from '../../../../requests/notify/create-email.request.js'
 import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
-import { send } from '../../../../requests/notify/create-email.request.js'
 
 /**
  * Orchestrates sending an email notification to Notify
@@ -15,7 +15,7 @@ import { send } from '../../../../requests/notify/create-email.request.js'
  * @returns {Promise<object>} a notification with the Notify response
  */
 export default async function sendEmailNotificationService(notification, referenceCode) {
-  const notifyResult = await send(notification.templateId, notification.recipient, {
+  const notifyResult = await CreateEmailRequest(notification.templateId, notification.recipient, {
     personalisation: notification.personalisation,
     reference: referenceCode
   })

@@ -54,7 +54,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
       }
     }
 
-    vi.spyOn(GeneratePaperReturnRequest, 'send').mockResolvedValue({
+    vi.spyOn(GeneratePaperReturnRequest, 'default').mockResolvedValue({
       succeeded: true,
       response: {
         body: buffer
@@ -93,9 +93,9 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
     it('should call "GeneratePaperReturnRequest" with the page data for the provided "returnLogId"', async () => {
       await PreparePaperReturnService(notification)
 
-      expect(GeneratePaperReturnRequest.send).toHaveBeenCalledOnce()
+      expect(GeneratePaperReturnRequest.default).toHaveBeenCalledOnce()
 
-      const actualCallArgs = GeneratePaperReturnRequest.send.mock.calls[0][0]
+      const actualCallArgs = GeneratePaperReturnRequest.default.mock.calls[0][0]
       expect(actualCallArgs).toEqual({
         address: {
           address_line_1: 'Harry Potter',

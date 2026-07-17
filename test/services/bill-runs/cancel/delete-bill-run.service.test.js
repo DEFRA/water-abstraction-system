@@ -31,7 +31,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
   beforeEach(() => {
     chargingModuleDeleteBillRunRequestStub = vi
-      .spyOn(ChargingModuleDeleteBillRunRequest, 'send')
+      .spyOn(ChargingModuleDeleteBillRunRequest, 'default')
       .mockImplementation(() => {})
 
     // The service depends on GlobalNotifier to have been set. This happens in

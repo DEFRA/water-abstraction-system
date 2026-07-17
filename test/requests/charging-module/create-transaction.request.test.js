@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-import * as CreateTransactionRequest from '../../../app/requests/charging-module/create-transaction.request.js'
+import CreateTransactionRequest from '../../../app/requests/charging-module/create-transaction.request.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
@@ -40,13 +40,13 @@ describe('Charging Module Create Transaction request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CreateTransactionRequest.send(billRunId, transactionData)
+      const result = await CreateTransactionRequest(billRunId, transactionData)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the CM transaction ID and our ID in the "response"', async () => {
-      const result = await CreateTransactionRequest.send(billRunId, transactionData)
+      const result = await CreateTransactionRequest(billRunId, transactionData)
 
       expect(result.response.body.transaction.id).toEqual('fd88e6c5-8da8-4e4f-b22f-c66554cd5bf3')
       expect(result.response.body.transaction.clientId).toEqual(transactionData.billingTransactionId)
@@ -75,13 +75,13 @@ describe('Charging Module Create Transaction request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateTransactionRequest.send(billRunId, transactionData)
+        const result = await CreateTransactionRequest(billRunId, transactionData)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateTransactionRequest.send(billRunId, transactionData)
+        const result = await CreateTransactionRequest(billRunId, transactionData)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -98,13 +98,13 @@ describe('Charging Module Create Transaction request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateTransactionRequest.send(billRunId, transactionData)
+        const result = await CreateTransactionRequest(billRunId, transactionData)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateTransactionRequest.send(billRunId, transactionData)
+        const result = await CreateTransactionRequest(billRunId, transactionData)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

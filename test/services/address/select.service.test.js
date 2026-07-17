@@ -51,7 +51,7 @@ describe('Address - Select service', () => {
 
     vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    lookupPostcodeRequestStub = vi.spyOn(LookupPostcodeRequest, 'send').mockImplementation(() => {})
+    lookupPostcodeRequestStub = vi.spyOn(LookupPostcodeRequest, 'default').mockImplementation(() => {})
   })
 
   afterEach(() => {

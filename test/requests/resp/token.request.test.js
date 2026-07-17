@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as BaseRequest from '../../../app/requests/base.request.js'
 
 // Thing under test
-import * as TokenRequest from '../../../app/requests/resp/token.request.js'
+import TokenRequest from '../../../app/requests/resp/token.request.js'
 
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
@@ -28,7 +28,7 @@ describe('ReSP API Token request', () => {
     })
 
     it('returns an object with the access token and how long till it expires', async () => {
-      const result = await TokenRequest.send()
+      const result = await TokenRequest()
 
       expect(result.accessToken).toEqual('reallylong.stringoflettersandnumbers.in3parts')
       expect(result.expiresIn).toEqual(3600)
@@ -47,7 +47,7 @@ describe('ReSP API Token request', () => {
     })
 
     it('returns an object with empty access token expires in properties', async () => {
-      const result = await TokenRequest.send()
+      const result = await TokenRequest()
 
       expect(result.accessToken).toBeNull()
       expect(result.expiresIn).toBeNull()

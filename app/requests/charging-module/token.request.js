@@ -11,7 +11,7 @@ import { postRequest } from '../base.request.js'
  *
  * @returns {Promise<object>} An object containing the `accessToken:` to use in future Charging Module requests
  */
-export async function send() {
+export default async function tokenRequest() {
   const url = new URL('/oauth2/token', config.token.url)
 
   const result = await postRequest(url.href, _options())

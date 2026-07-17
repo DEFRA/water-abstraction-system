@@ -6,9 +6,9 @@
 import BillModel from '../../../models/bill.model.js'
 import BillRunModel from '../../../models/bill-run.model.js'
 import ExpandedError from '../../../errors/expanded.error.js'
+import SendBillRunRequest from '../../../requests/charging-module/send-bill-run.request.js'
 import UnflagBilledSupplementaryLicencesService from '../unflag-billed-supplementary-licences.service.js'
-import { send as sendBillRun } from '../../../requests/charging-module/send-bill-run.request.js'
-import { send as viewBillRun } from '../../../requests/charging-module/view-bill-run.request.js'
+import ViewBillRunRequest from '../../../requests/charging-module/view-bill-run.request.js'
 import { calculateAndLogTimeTaken, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
@@ -30,7 +30,7 @@ export default async function updateInvoiceNumbersService(billRun) {
 
     const { id: billRunId, batchType, externalId } = billRun
 
-    await sendBillRun(externalId)
+    await SendBillRunRequest(externalId)
 
     const externalBillRun = await _fetchChargingModuleBillRun(externalId)
 
@@ -49,7 +49,7 @@ export default async function updateInvoiceNumbersService(billRun) {
 }
 
 async function _fetchChargingModuleBillRun(externalId) {
-  const result = await viewBillRun(externalId)
+  const result = await ViewBillRunRequest(externalId)
 
   if (!result.succeeded) {
     throw new ExpandedError('Charging Module view bill run request failed', { billRunExternalId: externalId })

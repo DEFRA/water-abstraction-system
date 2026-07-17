@@ -21,7 +21,7 @@ import { postRequest } from '../notify.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(content, reference) {
+export default async function createPrecompiledFileRequest(content, reference) {
   const path = 'v2/notifications/letter'
 
   const body = {

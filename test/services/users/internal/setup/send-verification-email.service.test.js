@@ -29,7 +29,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
   beforeEach(() => {
     vi.spyOn(CheckNotificationStatusService, 'default').mockResolvedValue()
 
-    createEmailRequestStub = vi.spyOn(CreateEmailRequest, 'send').mockResolvedValue({
+    createEmailRequestStub = vi.spyOn(CreateEmailRequest, 'default').mockResolvedValue({
       succeeded: true,
       response: {
         statusCode: 200,

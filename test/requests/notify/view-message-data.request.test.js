@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
-import * as ViewMessageDataRequest from '../../../app/requests/notify/view-message-data.request.js'
+import ViewMessageDataRequest from '../../../app/requests/notify/view-message-data.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
@@ -65,13 +65,13 @@ describe('Notify - View Message Data request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewMessageDataRequest.send(notificationId)
+      const result = await ViewMessageDataRequest(notificationId)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from Notify in the "response"', async () => {
-      const result = await ViewMessageDataRequest.send(notificationId)
+      const result = await ViewMessageDataRequest(notificationId)
 
       expect(result.response.body).toEqual(response.body)
     })
@@ -100,13 +100,13 @@ describe('Notify - View Message Data request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewMessageDataRequest.send(notificationId)
+        const result = await ViewMessageDataRequest(notificationId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewMessageDataRequest.send(notificationId)
+        const result = await ViewMessageDataRequest(notificationId)
 
         expect(result.response.body).toEqual(response.body)
       })

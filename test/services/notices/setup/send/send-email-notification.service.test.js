@@ -23,7 +23,7 @@ describe('Notices - Setup - Send - Send Email Notification service', () => {
 
     notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).email
 
-    vi.spyOn(CreateEmailRequest, 'send').mockResolvedValue(notifyResponse)
+    vi.spyOn(CreateEmailRequest, 'default').mockResolvedValue(notifyResponse)
   })
 
   afterEach(() => {

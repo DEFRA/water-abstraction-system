@@ -21,7 +21,7 @@ describe('Bill Runs - Setup - Create service', () => {
   let session
   let sessionData
   beforeEach(() => {
-    legacyCreateBillRunRequestStub = vi.spyOn(LegacyCreateBillRunRequest, 'send').mockImplementation(() => {})
+    legacyCreateBillRunRequestStub = vi.spyOn(LegacyCreateBillRunRequest, 'default').mockImplementation(() => {})
     vi.spyOn(StartBillRunProcessService, 'default').mockResolvedValue()
   })
 

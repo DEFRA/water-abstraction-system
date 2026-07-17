@@ -42,7 +42,7 @@ describe('Bill Runs Review - Preview service', () => {
 
       describe('and the request to the Charging Module API succeeds', () => {
         beforeEach(async () => {
-          calculateChargeRequestStub = vi.spyOn(CalculateChargeRequest, 'send').mockResolvedValue({
+          calculateChargeRequestStub = vi.spyOn(CalculateChargeRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               info: {
@@ -160,7 +160,7 @@ describe('Bill Runs Review - Preview service', () => {
 
       describe('and the request to the Charging Module API fails', () => {
         beforeEach(async () => {
-          vi.spyOn(CalculateChargeRequest, 'send').mockResolvedValue({
+          vi.spyOn(CalculateChargeRequest, 'default').mockResolvedValue({
             succeeded: false,
             response: {
               info: { gitCommit: undefined, dockerTag: undefined },
@@ -190,7 +190,7 @@ describe('Bill Runs Review - Preview service', () => {
       beforeEach(() => {
         vi.spyOn(FetchReviewChargeReferenceService, 'default').mockResolvedValue(reviewChargeReference)
 
-        calculateChargeRequestStub = vi.spyOn(CalculateChargeRequest, 'send').mockResolvedValue()
+        calculateChargeRequestStub = vi.spyOn(CalculateChargeRequest, 'default').mockResolvedValue()
       })
 
       it('adds a flash message stating the example charge is £0.00 and skips calling the Charging Module API', async () => {

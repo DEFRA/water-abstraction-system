@@ -27,7 +27,7 @@ describe('Bill Runs - Send Transactions service', () => {
 
   beforeEach(() => {
     chargingModuleCreateTransactionRequestStub = vi
-      .spyOn(ChargingModuleCreateTransactionRequest, 'send')
+      .spyOn(ChargingModuleCreateTransactionRequest, 'default')
       .mockImplementation(() => {})
 
     transactions = [

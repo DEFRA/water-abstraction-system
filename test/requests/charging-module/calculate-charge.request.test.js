@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-import * as CalculateChargeRequest from '../../../app/requests/charging-module/calculate-charge.request.js'
+import CalculateChargeRequest from '../../../app/requests/charging-module/calculate-charge.request.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
@@ -45,13 +45,13 @@ describe('Charging Module Calculate Charge request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CalculateChargeRequest.send(transactionData)
+      const result = await CalculateChargeRequest(transactionData)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the results of the calculation in the "response"', async () => {
-      const result = await CalculateChargeRequest.send(transactionData)
+      const result = await CalculateChargeRequest(transactionData)
 
       expect(result.response.body.calculation.chargeValue).toEqual(7000)
       expect(result.response.body.calculation.baseCharge).toEqual(9700)
@@ -86,13 +86,13 @@ describe('Charging Module Calculate Charge request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CalculateChargeRequest.send(transactionData)
+        const result = await CalculateChargeRequest(transactionData)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CalculateChargeRequest.send(transactionData)
+        const result = await CalculateChargeRequest(transactionData)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -109,13 +109,13 @@ describe('Charging Module Calculate Charge request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CalculateChargeRequest.send(transactionData)
+        const result = await CalculateChargeRequest(transactionData)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CalculateChargeRequest.send(transactionData)
+        const result = await CalculateChargeRequest(transactionData)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

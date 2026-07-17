@@ -4,12 +4,12 @@
  */
 
 import CheckNotificationStatusService from '../../../notifications/check-notification-status.service.js'
+import CreateEmailRequest from '../../../../requests/notify/create-email.request.js'
 import { NOTIFY_TEMPLATES } from '../../../../lib/notify-templates.lib.js'
 import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
 import UpdateNotificationDal from '../../../../dal/users/internal/update-notification.dal.js'
 import notifyConfig from '../../../../../config/notify.config.js'
 import { pause } from '../../../../lib/general.lib.js'
-import { send } from '../../../../requests/notify/create-email.request.js'
 
 /**
  * Orchestrates sending the verification email to the new user, recording the results, and checking the status
@@ -41,7 +41,7 @@ async function _createEmailRequest(notification) {
 
   const templateId = NOTIFY_TEMPLATES.users.verificationEmail
 
-  const notifyResult = await send(templateId, recipient, { personalisation })
+  const notifyResult = await CreateEmailRequest(templateId, recipient, { personalisation })
 
   return NotifyUpdatePresenter(notifyResult)
 }

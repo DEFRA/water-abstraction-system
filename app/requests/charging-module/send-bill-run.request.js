@@ -5,7 +5,7 @@
 
 import ExpandedError from '../../errors/expanded.error.js'
 import { patchRequest } from '../charging-module.request.js'
-import { send as waitForStatus } from './wait-for-status.request.js'
+import waitForStatusRequest from './wait-for-status.request.js'
 
 /**
  * Approve then send a bill run in the Charging Module API
@@ -31,7 +31,7 @@ import { send as waitForStatus } from './wait-for-status.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(billRunId) {
+export default async function sendBillRunRequest(billRunId) {
   await _approve(billRunId)
   await _send(billRunId)
 
@@ -67,7 +67,7 @@ async function _send(billRunId) {
 }
 
 async function _waitForSent(billRunId) {
-  const result = await waitForStatus(billRunId, ['billed', 'billing_not_required'])
+  const result = await waitForStatusRequest(billRunId, ['billed', 'billing_not_required'])
 
   if (!result.succeeded) {
     const error = new ExpandedError('Charging Module wait request failed', {

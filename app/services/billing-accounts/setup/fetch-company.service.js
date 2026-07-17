@@ -3,7 +3,7 @@
  * @module FetchCompanyService
  */
 
-import { send } from '../../../requests/companies-house/lookup-companies-house-number.request.js'
+import LookupCompaniesHouseNumberRequest from '../../../requests/companies-house/lookup-companies-house-number.request.js'
 
 /**
  * Fetches the data from Companies House for the provided Companies House Number
@@ -17,7 +17,7 @@ export default async function fetchCompanyService(companiesHouseNumber) {
     return null
   }
 
-  const result = await send(companiesHouseNumber)
+  const result = await LookupCompaniesHouseNumberRequest(companiesHouseNumber)
 
   if (!result.succeeded) {
     return null

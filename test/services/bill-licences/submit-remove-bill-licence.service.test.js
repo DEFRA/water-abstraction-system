@@ -34,7 +34,7 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
       modifyGraph: billLicenceStub
     })
 
-    legacyDeleteBillLicenceRequestStub = vi.spyOn(LegacyDeleteBillLicenceRequest, 'send').mockResolvedValue()
+    legacyDeleteBillLicenceRequestStub = vi.spyOn(LegacyDeleteBillLicenceRequest, 'default').mockResolvedValue()
     vi.spyOn(ProcessBillingFlagService, 'default').mockResolvedValue()
     vi.spyOn(UnassignLicencesToBillRunService, 'default').mockResolvedValue()
   })

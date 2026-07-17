@@ -1,4 +1,4 @@
-import { send } from '../requests/resp/token.request.js'
+import tokenRequest from '../requests/resp/token.request.js'
 
 /**
  * Adds a server method which returns a Azure AD token for the ReSP API.
@@ -19,7 +19,7 @@ export default {
     server.method(
       'getRespToken',
       async (flags) => {
-        const token = await send()
+        const token = await tokenRequest()
 
         // If the token request was successful it returns an expiry time, so use this to set the cache expiry
         // Otherwise, set the expiry time to 0 to avoid caching the unsuccessful attempt

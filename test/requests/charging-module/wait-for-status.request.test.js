@@ -11,7 +11,7 @@ import billingConfig from '../../../config/billing.config.js'
 import * as ChargingModuleViewBillRunStatusRequest from '../../../app/requests/charging-module/view-bill-run-status.request.js'
 
 // Thing under test
-import * as ChargingModuleWaitForStatusRequest from '../../../app/requests/charging-module/wait-for-status.request.js'
+import ChargingModuleWaitForStatusRequest from '../../../app/requests/charging-module/wait-for-status.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
@@ -24,7 +24,7 @@ describe('Charging Module Wait For Status request', () => {
 
   beforeEach(async () => {
     chargingModuleViewBillRunStatusRequestStub = vi
-      .spyOn(ChargingModuleViewBillRunStatusRequest, 'send')
+      .spyOn(ChargingModuleViewBillRunStatusRequest, 'default')
       .mockImplementation(() => {})
 
     // Set the pause between requests to just 50ms so our tests are not slowed down or cause a timeout
@@ -42,19 +42,19 @@ describe('Charging Module Wait For Status request', () => {
       })
 
       it('returns a "true" succeeded status', async () => {
-        const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor)
+        const result = await ChargingModuleWaitForStatusRequest(billRunId, statusesToWaitFor)
 
         expect(result.succeeded).toBe(true)
       })
 
       it('returns the last status received', async () => {
-        const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor)
+        const result = await ChargingModuleWaitForStatusRequest(billRunId, statusesToWaitFor)
 
         expect(result.status).toEqual('billing_not_required')
       })
 
       it('returns the number of attempts', async () => {
-        const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor)
+        const result = await ChargingModuleWaitForStatusRequest(billRunId, statusesToWaitFor)
 
         expect(result.attempts).toEqual(1)
       })
@@ -72,19 +72,19 @@ describe('Charging Module Wait For Status request', () => {
       })
 
       it('returns a "true" success status', async () => {
-        const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
+        const result = await ChargingModuleWaitForStatusRequest(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
         expect(result.succeeded).toBe(true)
       })
 
       it('returns the last status received', async () => {
-        const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
+        const result = await ChargingModuleWaitForStatusRequest(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
         expect(result.status).toEqual('billed')
       })
 
       it('returns the number of attempts', async () => {
-        const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
+        const result = await ChargingModuleWaitForStatusRequest(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
         expect(result.attempts).toEqual(3)
       })
@@ -102,19 +102,19 @@ describe('Charging Module Wait For Status request', () => {
     })
 
     it('returns a "false" success status', async () => {
-      const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
+      const result = await ChargingModuleWaitForStatusRequest(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
       expect(result.succeeded).toBe(false)
     })
 
     it('returns the last status received', async () => {
-      const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
+      const result = await ChargingModuleWaitForStatusRequest(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
       expect(result.status).toEqual('processing')
     })
 
     it('returns the number of attempts', async () => {
-      const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
+      const result = await ChargingModuleWaitForStatusRequest(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
       expect(result.attempts).toEqual(3)
     })
@@ -137,7 +137,7 @@ describe('Charging Module Wait For Status request', () => {
     })
 
     it('throws an error', async () => {
-      const error = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor).catch((e) => {
+      const error = await ChargingModuleWaitForStatusRequest(billRunId, statusesToWaitFor).catch((e) => {
         return e
       })
 

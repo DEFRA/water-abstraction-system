@@ -47,7 +47,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
 
     const buffer = new TextEncoder().encode('mock file').buffer
 
-    vi.spyOn(GeneratePaperReturnRequest, 'send').mockResolvedValue({
+    vi.spyOn(GeneratePaperReturnRequest, 'default').mockResolvedValue({
       response: {
         body: buffer
       }
@@ -83,9 +83,9 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
     it('should call "GeneratePaperReturnRequest"', async () => {
       await ProcessPreviewPaperReturnService(session.id, contactHashId, returnLogId)
 
-      expect(GeneratePaperReturnRequest.send).toHaveBeenCalledOnce()
+      expect(GeneratePaperReturnRequest.default).toHaveBeenCalledOnce()
 
-      const actualCallArgs = GeneratePaperReturnRequest.send.mock.calls[0][0]
+      const actualCallArgs = GeneratePaperReturnRequest.default.mock.calls[0][0]
 
       expect(actualCallArgs).toEqual({
         address: {

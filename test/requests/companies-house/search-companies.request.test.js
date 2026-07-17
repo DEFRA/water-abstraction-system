@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as CompaniesHouseRequest from '../../../app/requests/companies-house.request.js'
 
 // Thing under test
-import * as SearchCompaniesRequest from '../../../app/requests/companies-house/search-companies.request.js'
+import SearchCompaniesRequest from '../../../app/requests/companies-house/search-companies.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
@@ -40,7 +40,7 @@ describe('Companies House - Search Companies request', () => {
     })
 
     it('hits the correct endpoint', async () => {
-      await SearchCompaniesRequest.send(queryString)
+      await SearchCompaniesRequest(queryString)
 
       const requestArgs = CompaniesHouseRequest.getRequest.mock.calls[0]
 
@@ -48,13 +48,13 @@ describe('Companies House - Search Companies request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await SearchCompaniesRequest.send(queryString)
+      const result = await SearchCompaniesRequest(queryString)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the matching addresses', async () => {
-      const result = await SearchCompaniesRequest.send(queryString)
+      const result = await SearchCompaniesRequest(queryString)
 
       expect(result.matches).toEqual(matches)
     })
@@ -74,13 +74,13 @@ describe('Companies House - Search Companies request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns an error in the "response"', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.response.body).toEqual({
           statusCode: HTTP_STATUS_NOT_FOUND,
@@ -90,7 +90,7 @@ describe('Companies House - Search Companies request', () => {
       })
 
       it('does not returns any matches', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.response.body.items).toBeUndefined()
         expect(result.matches).toBeInstanceOf(Array)
@@ -108,13 +108,13 @@ describe('Companies House - Search Companies request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()
@@ -122,7 +122,7 @@ describe('Companies House - Search Companies request', () => {
       })
 
       it('does not returns any matches', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.matches).toBeDefined()
         expect(result.matches).toBeInstanceOf(Array)

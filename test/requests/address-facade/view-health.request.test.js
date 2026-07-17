@@ -8,7 +8,7 @@ import * as BaseRequest from '../../../app/requests/base.request.js'
 import addressFacadeConfig from '../../../config/address-facade.config.js'
 
 // Thing under test
-import * as ViewHealthRequest from '../../../app/requests/address-facade/view-health.request.js'
+import ViewHealthRequest from '../../../app/requests/address-facade/view-health.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
@@ -34,13 +34,13 @@ describe('Address Facade - View Health request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewHealthRequest.send()
+      const result = await ViewHealthRequest()
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from the Address Facade in the "response"', async () => {
-      const result = await ViewHealthRequest.send()
+      const result = await ViewHealthRequest()
 
       expect(result.response.body).toEqual(response.body)
     })
@@ -68,13 +68,13 @@ describe('Address Facade - View Health request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewHealthRequest.send()
+        const result = await ViewHealthRequest()
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewHealthRequest.send()
+        const result = await ViewHealthRequest()
 
         expect(result.response.body).toEqual(response.body)
       })

@@ -4,9 +4,9 @@
  */
 
 import BillLicenceModel from '../../models/bill-licence.model.js'
+import DeleteBillLicenceRequest from '../../requests/legacy/delete-bill-licence.request.js'
 import ProcessBillingFlagService from '../licences/supplementary/process-billing-flag.service.js'
 import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-bill-run.service.js'
-import { send } from '../../requests/legacy/delete-bill-licence.request.js'
 
 /**
  * Orchestrates the removing of a bill licence from a bill run
@@ -31,7 +31,7 @@ export default async function submitRemoveBillLicenceService(billLicenceId, user
 
   await UnassignLicencesToBillRunService([licenceId], bill.billRunId)
   await ProcessBillingFlagService({ billLicenceId })
-  await send(billLicenceId, user)
+  await DeleteBillLicenceRequest(billLicenceId, user)
 
   return `/billing/batch/${bill.billRunId}/processing?invoiceId=${bill.id}`
 }

@@ -70,12 +70,16 @@ describe('Health - Info service', () => {
   let respViewHealthRequestStub
 
   beforeEach(() => {
-    addressFacadeViewStatusRequestStub = vi.spyOn(AddressFacadeViewHealthRequest, 'send').mockImplementation(() => {})
-    chargingModuleViewHealthRequestStub = vi.spyOn(ChargingModuleViewHealthRequest, 'send').mockImplementation(() => {})
-    gotenbergViewHealthRequestStub = vi.spyOn(GotenbergViewHealthRequest, 'send').mockImplementation(() => {})
-    legacyViewHealthRequestStub = vi.spyOn(LegacyViewHealthRequest, 'send').mockImplementation(() => {})
-    notifyViewHealthRequestStub = vi.spyOn(NotifyViewHealthRequest, 'send').mockImplementation(() => {})
-    respViewHealthRequestStub = vi.spyOn(RespViewHealthRequest, 'send').mockImplementation(() => {})
+    addressFacadeViewStatusRequestStub = vi
+      .spyOn(AddressFacadeViewHealthRequest, 'default')
+      .mockImplementation(() => {})
+    chargingModuleViewHealthRequestStub = vi
+      .spyOn(ChargingModuleViewHealthRequest, 'default')
+      .mockImplementation(() => {})
+    gotenbergViewHealthRequestStub = vi.spyOn(GotenbergViewHealthRequest, 'default').mockImplementation(() => {})
+    legacyViewHealthRequestStub = vi.spyOn(LegacyViewHealthRequest, 'default').mockImplementation(() => {})
+    notifyViewHealthRequestStub = vi.spyOn(NotifyViewHealthRequest, 'default').mockImplementation(() => {})
+    respViewHealthRequestStub = vi.spyOn(RespViewHealthRequest, 'default').mockImplementation(() => {})
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.

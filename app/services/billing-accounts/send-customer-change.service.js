@@ -4,8 +4,8 @@
  */
 
 import CreateCustomerChangePresenter from '../../presenters/charging-module/create-customer-change.presenter.js'
+import CreateCustomerChangeRequest from '../../requests/charging-module/create-customer-change.request.js'
 import ExpandedError from '../../errors/expanded.error.js'
-import { send } from '../../requests/charging-module/create-customer-change.request.js'
 
 /**
  * Generates the customer change request data from the model instances provided and sends it to the Charging Module
@@ -31,7 +31,7 @@ import { send } from '../../requests/charging-module/create-customer-change.requ
 export default async function sendCustomerChangeService(billingAccount, address, company, contact) {
   const requestData = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
-  const result = await send(requestData)
+  const result = await CreateCustomerChangeRequest(requestData)
 
   if (!result.succeeded) {
     throw new ExpandedError('Customer change failed to send', { billingAccountId: billingAccount.id })

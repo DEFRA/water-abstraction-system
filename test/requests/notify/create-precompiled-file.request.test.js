@@ -9,7 +9,7 @@ import { generateNoticeReferenceCode } from '../../support/generators.js'
 import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
-import * as CreatePrecompiledFileRequest from '../../../app/requests/notify/create-precompiled-file.request.js'
+import CreatePrecompiledFileRequest from '../../../app/requests/notify/create-precompiled-file.request.js'
 
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED } = http2.constants
 
@@ -43,19 +43,19 @@ describe('Notify - Create precompiled file request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
+      const result = await CreatePrecompiledFileRequest(content, referenceCode)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from Notify in the "response"', async () => {
-      const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
+      const result = await CreatePrecompiledFileRequest(content, referenceCode)
 
       expect(result.response.body).toEqual(response.body)
     })
 
     it('calls NotifyRequest.postRequest with the correct arguments', async () => {
-      await CreatePrecompiledFileRequest.send(content, referenceCode)
+      await CreatePrecompiledFileRequest(content, referenceCode)
 
       expect(NotifyRequest.postRequest).toHaveBeenCalledOnce()
       expect(NotifyRequest.postRequest.mock.calls[0][0]).toEqual('v2/notifications/letter')
@@ -86,13 +86,13 @@ describe('Notify - Create precompiled file request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
+        const result = await CreatePrecompiledFileRequest(content, referenceCode)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
+        const result = await CreatePrecompiledFileRequest(content, referenceCode)
 
         expect(result.response.body).toEqual(response.body)
       })

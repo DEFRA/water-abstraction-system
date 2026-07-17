@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
-import * as DeleteBillRequest from '../../../app/requests/legacy/delete-bill.request.js'
+import DeleteBillRequest from '../../../app/requests/legacy/delete-bill.request.js'
 
 const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
@@ -32,13 +32,13 @@ describe('Legacy Delete Bill request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await DeleteBillRequest.send(billRunId, billId, user)
+      const result = await DeleteBillRequest(billRunId, billId, user)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns a 204 - ok', async () => {
-      const result = await DeleteBillRequest.send(billRunId, billId, user)
+      const result = await DeleteBillRequest(billRunId, billId, user)
 
       expect(result.response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
       expect(result.response.body).toBeNull()
@@ -63,13 +63,13 @@ describe('Legacy Delete Bill request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await DeleteBillRequest.send(billRunId, billId, user)
+        const result = await DeleteBillRequest(billRunId, billId, user)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await DeleteBillRequest.send(billRunId, billId, user)
+        const result = await DeleteBillRequest(billRunId, billId, user)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -86,13 +86,13 @@ describe('Legacy Delete Bill request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await DeleteBillRequest.send(billRunId, billId, user)
+        const result = await DeleteBillRequest(billRunId, billId, user)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await DeleteBillRequest.send(billRunId, billId, user)
+        const result = await DeleteBillRequest(billRunId, billId, user)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

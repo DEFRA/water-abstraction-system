@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as RespRequest from '../../../app/requests/resp.request.js'
 
 // Thing under test
-import * as ViewHealthRequest from '../../../app/requests/resp/view-health.request.js'
+import ViewHealthRequest from '../../../app/requests/resp/view-health.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
@@ -32,13 +32,13 @@ describe('ReSP - View Health request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewHealthRequest.send()
+      const result = await ViewHealthRequest()
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from the ReSP API in the "response"', async () => {
-      const result = await ViewHealthRequest.send()
+      const result = await ViewHealthRequest()
 
       expect(result.response.body).toEqual(response.body)
     })
@@ -63,13 +63,13 @@ describe('ReSP - View Health request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewHealthRequest.send()
+        const result = await ViewHealthRequest()
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewHealthRequest.send()
+        const result = await ViewHealthRequest()
 
         expect(result.response.body).toEqual(response.body)
       })

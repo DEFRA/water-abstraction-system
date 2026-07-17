@@ -6,7 +6,7 @@
 import BillRunError from '../../errors/bill-run.error.js'
 import BillRunModel from '../../models/bill-run.model.js'
 import ChargingModuleCreateTransactionPresenter from '../../presenters/charging-module/create-transaction.presenter.js'
-import { send } from '../../requests/charging-module/create-transaction.request.js'
+import CreateTransactionRequest from '../../requests/charging-module/create-transaction.request.js'
 
 /**
  * Sends the provided transactions to the Charging Module and returns an array of the sent transactions
@@ -41,7 +41,7 @@ async function _sendTransactionToChargingModule(transaction, billRunExternalId, 
   try {
     const chargingModuleRequest = ChargingModuleCreateTransactionPresenter(transaction, accountNumber, licence)
 
-    const chargingModuleResponse = await send(billRunExternalId, chargingModuleRequest)
+    const chargingModuleResponse = await CreateTransactionRequest(billRunExternalId, chargingModuleRequest)
 
     transaction.status = 'charge_created'
     transaction.externalId = chargingModuleResponse.response.body.transaction.id

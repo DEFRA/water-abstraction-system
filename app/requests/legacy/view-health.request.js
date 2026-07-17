@@ -13,6 +13,6 @@ import { getRequest } from '../legacy.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(serviceName) {
+export default async function viewHealthRequest(serviceName) {
   return getRequest(serviceName, 'health/info', null, false)
 }

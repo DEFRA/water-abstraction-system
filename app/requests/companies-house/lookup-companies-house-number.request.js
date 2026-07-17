@@ -12,7 +12,7 @@ import { getRequest } from '../companies-house.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(companiesHouseNumber) {
+export default async function lookupCompaniesHouseNumberRequest(companiesHouseNumber) {
   const path = `company/${companiesHouseNumber}`
 
   return getRequest(path)

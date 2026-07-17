@@ -6,7 +6,7 @@
 import ExpandedError from '../../errors/expanded.error.js'
 import billingConfig from '../../../config/billing.config.js'
 import { pause } from '../../lib/general.lib.js'
-import { send as viewBillRunStatus } from './view-bill-run-status.request.js'
+import viewBillRunStatusRequest from './view-bill-run-status.request.js'
 
 /**
  * Wait for a Charging Module bill run to have a specified state
@@ -41,12 +41,12 @@ import { send as viewBillRunStatus } from './view-bill-run-status.request.js'
  *
  * @returns {Promise<object>} returns the results of the wait
  */
-export async function send(billRunId, statusesToWaitFor, maximumAttempts = 120) {
+export default async function waitForStatusRequest(billRunId, statusesToWaitFor, maximumAttempts = 120) {
   let attempts = 0
   let status
 
   for (let i = 1; i <= maximumAttempts; i++) {
-    const result = await viewBillRunStatus(billRunId)
+    const result = await viewBillRunStatusRequest(billRunId)
 
     attempts = i
 

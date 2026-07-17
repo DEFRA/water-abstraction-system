@@ -15,7 +15,7 @@ import { postRequest } from '../charging-module.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(transactionData) {
+export default async function calculateChargeRequest(transactionData) {
   const path = 'v3/wrls/calculate-charge'
 
   return postRequest(path, transactionData)

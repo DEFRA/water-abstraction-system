@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
-import * as ViewHealthRequest from '../../../app/requests/legacy/view-health.request.js'
+import ViewHealthRequest from '../../../app/requests/legacy/view-health.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
@@ -37,13 +37,13 @@ describe('Legacy - View Health request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewHealthRequest.send(serviceName)
+      const result = await ViewHealthRequest(serviceName)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from a Legacy service in the "response"', async () => {
-      const result = await ViewHealthRequest.send(serviceName)
+      const result = await ViewHealthRequest(serviceName)
 
       expect(result.response.body).toEqual(response.body)
     })
@@ -68,13 +68,13 @@ describe('Legacy - View Health request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewHealthRequest.send(serviceName)
+        const result = await ViewHealthRequest(serviceName)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewHealthRequest.send(serviceName)
+        const result = await ViewHealthRequest(serviceName)
 
         expect(result.response.body).toEqual(response.body)
       })

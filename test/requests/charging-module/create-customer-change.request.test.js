@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-import * as CreateCustomerChangeRequest from '../../../app/requests/charging-module/create-customer-change.request.js'
+import CreateCustomerChangeRequest from '../../../app/requests/charging-module/create-customer-change.request.js'
 
 const { HTTP_STATUS_CREATED, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
@@ -44,7 +44,7 @@ describe('Charging Module Create Customer Change request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CreateCustomerChangeRequest.send(requestData)
+      const result = await CreateCustomerChangeRequest(requestData)
 
       expect(result.succeeded).toBe(true)
     })
@@ -72,13 +72,13 @@ describe('Charging Module Create Customer Change request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateCustomerChangeRequest.send(requestData)
+        const result = await CreateCustomerChangeRequest(requestData)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateCustomerChangeRequest.send(requestData)
+        const result = await CreateCustomerChangeRequest(requestData)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -95,13 +95,13 @@ describe('Charging Module Create Customer Change request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateCustomerChangeRequest.send(requestData)
+        const result = await CreateCustomerChangeRequest(requestData)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateCustomerChangeRequest.send(requestData)
+        const result = await CreateCustomerChangeRequest(requestData)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

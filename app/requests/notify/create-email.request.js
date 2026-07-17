@@ -32,7 +32,7 @@ import { postRequest } from '../notify.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(templateId, emailAddress, options) {
+export default async function createEmailRequest(templateId, emailAddress, options) {
   const path = 'v2/notifications/email'
 
   const body = {

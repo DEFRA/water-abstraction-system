@@ -17,7 +17,7 @@ import { postRequest } from '../charging-module.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(regionId, ruleset) {
+export default async function createBillRunRequest(regionId, ruleset) {
   const region = await _getChargeRegionId(regionId)
 
   const result = await postRequest('v3/wrls/bill-runs', { region, ruleset })

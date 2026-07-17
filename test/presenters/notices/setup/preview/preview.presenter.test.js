@@ -73,7 +73,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
+          vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
             succeeded: true,
             response
           })
@@ -137,7 +137,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
+          vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
             succeeded: true,
             response
           })
@@ -214,7 +214,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
+          vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
             succeeded: true,
             response
           })
@@ -284,7 +284,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
+          vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
             succeeded: true,
             response
           })
@@ -344,7 +344,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         }
       }
 
-      vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
+      vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
         succeeded: false,
         response
       })

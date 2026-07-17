@@ -17,7 +17,7 @@ import { getRequest } from '../base.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send() {
+export default async function viewHealthRequest() {
   const statusUrl = new URL('/address-service/hola', addressFacadeConfig.url)
 
   return getRequest(statusUrl.href, { responseType: 'text' })

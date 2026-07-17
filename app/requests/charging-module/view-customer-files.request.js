@@ -17,7 +17,7 @@ import { getRequest } from '../../requests/charging-module.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(days) {
+export default async function viewCustomerFilesRequest(days) {
   const path = `v3/wrls/customer-files/${days}`
   const result = await getRequest(path)
 

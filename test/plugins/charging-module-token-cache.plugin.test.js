@@ -25,7 +25,7 @@ describe('Charging Module Token Cache plugin', () => {
   describe('When the first call returns a valid token', () => {
     describe('and the second request is made before the cache expires', () => {
       beforeAll(() => {
-        vi.spyOn(ChargingModuleTokenRequest, 'send')
+        vi.spyOn(ChargingModuleTokenRequest, 'default')
           .mockResolvedValueOnce({ accessToken: 'FIRST_TOKEN', expiresIn: LONG_EXPIRY_TIME })
           .mockResolvedValueOnce({ accessToken: 'SECOND_TOKEN', expiresIn: LONG_EXPIRY_TIME })
       })
@@ -41,7 +41,7 @@ describe('Charging Module Token Cache plugin', () => {
 
     describe('and the second request is made after the cache expires', () => {
       beforeAll(() => {
-        vi.spyOn(ChargingModuleTokenRequest, 'send')
+        vi.spyOn(ChargingModuleTokenRequest, 'default')
           .mockResolvedValueOnce({ accessToken: 'FIRST_TOKEN', expiresIn: SHORT_EXPIRY_TIME })
           .mockResolvedValueOnce({ accessToken: 'SECOND_TOKEN', expiresIn: LONG_EXPIRY_TIME })
       })
@@ -57,7 +57,7 @@ describe('Charging Module Token Cache plugin', () => {
 
   describe('When the first call returns an invalid token', () => {
     beforeEach(() => {
-      vi.spyOn(ChargingModuleTokenRequest, 'send')
+      vi.spyOn(ChargingModuleTokenRequest, 'default')
         .mockResolvedValueOnce({ accessToken: null, expiresIn: null })
         .mockResolvedValueOnce({ accessToken: 'VALID_TOKEN', expiresIn: LONG_EXPIRY_TIME })
     })

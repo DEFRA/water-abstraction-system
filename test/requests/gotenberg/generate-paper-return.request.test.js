@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as GotenbergRequest from '../../../app/requests/gotenberg.request.js'
 
 // Thing under test
-import * as GeneratePaperReturnRequest from '../../../app/requests/gotenberg/generate-paper-return.request.js'
+import GeneratePaperReturnRequest from '../../../app/requests/gotenberg/generate-paper-return.request.js'
 
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
@@ -44,13 +44,13 @@ describe('Gotenberg - Generate Paper Return Request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await GeneratePaperReturnRequest.send(pageData)
+      const result = await GeneratePaperReturnRequest(pageData)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the data', async () => {
-      const result = await GeneratePaperReturnRequest.send(pageData)
+      const result = await GeneratePaperReturnRequest(pageData)
 
       expect(result.response).toEqual({
         statusCode: HTTP_STATUS_NO_CONTENT,
@@ -60,7 +60,7 @@ describe('Gotenberg - Generate Paper Return Request', () => {
 
     describe('calls "GotenbergRequest.postRequest" with FormData', () => {
       it('containing the expected fields', async () => {
-        await GeneratePaperReturnRequest.send(pageData)
+        await GeneratePaperReturnRequest(pageData)
 
         expect(GotenbergRequest.postRequest).toHaveBeenCalledWith('forms/chromium/convert/html', expect.any(FormData))
 
@@ -81,7 +81,7 @@ describe('Gotenberg - Generate Paper Return Request', () => {
       })
 
       it('containing the html', async () => {
-        await GeneratePaperReturnRequest.send(pageData)
+        await GeneratePaperReturnRequest(pageData)
 
         expect(GotenbergRequest.postRequest).toHaveBeenCalledWith('forms/chromium/convert/html', expect.any(FormData))
 
@@ -102,7 +102,7 @@ describe('Gotenberg - Generate Paper Return Request', () => {
       })
 
       it('containing the footer', async () => {
-        await GeneratePaperReturnRequest.send(pageData)
+        await GeneratePaperReturnRequest(pageData)
 
         expect(GotenbergRequest.postRequest).toHaveBeenCalledWith('forms/chromium/convert/html', expect.any(FormData))
 

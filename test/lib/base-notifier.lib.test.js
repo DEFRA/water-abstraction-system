@@ -270,7 +270,7 @@ describe('BaseNotifierLib class', () => {
       beforeEach(async () => {
         vi.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
         vi.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
-        vi.spyOn(CreateEmailRequest, 'send').mockImplementation(createEmailRequestFake.send)
+        vi.spyOn(CreateEmailRequest, 'default').mockImplementation(createEmailRequestFake.send)
         vi.replaceProperty(NotifyConfig, 'alertEmailAddresses', 'admin-internal@wrls.gov.uk')
       })
 
@@ -332,7 +332,7 @@ describe('BaseNotifierLib class', () => {
 
         pinoFake = { info: vi.fn(), error: vi.fn() }
         vi.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
-        vi.spyOn(CreateEmailRequest, 'send').mockRejectedValue(new Error('CreateEmailRequest errored'))
+        vi.spyOn(CreateEmailRequest, 'default').mockRejectedValue(new Error('CreateEmailRequest errored'))
       })
 
       it('logs the error', async () => {

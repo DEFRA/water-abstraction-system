@@ -87,12 +87,12 @@ describe('Reissue Bill service', () => {
   beforeEach(async () => {
     reissueBillRun = { externalId: generateUUID() }
 
-    vi.spyOn(ChargingModuleReissueBillRequest, 'send').mockResolvedValue({
+    vi.spyOn(ChargingModuleReissueBillRequest, 'default').mockResolvedValue({
       succeeded: true,
       response: { body: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE }
     })
 
-    vi.spyOn(ChargingModuleViewBillRequest, 'send')
+    vi.spyOn(ChargingModuleViewBillRequest, 'default')
       .mockResolvedValueOnce({
         succeeded: true,
         response: { body: CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE }
@@ -102,7 +102,7 @@ describe('Reissue Bill service', () => {
         response: { body: CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE }
       })
 
-    vi.spyOn(ChargingModuleViewBillRunStatusRequest, 'send').mockResolvedValue({
+    vi.spyOn(ChargingModuleViewBillRunStatusRequest, 'default').mockResolvedValue({
       succeeded: true,
       response: {
         body: {
@@ -225,7 +225,7 @@ describe('Reissue Bill service', () => {
 
       beforeEach(() => {
         billRunStatusStub = vi
-          .spyOn(ChargingModuleViewBillRunStatusRequest, 'send')
+          .spyOn(ChargingModuleViewBillRunStatusRequest, 'default')
 
           .mockResolvedValueOnce({
             succeeded: true,
@@ -249,7 +249,7 @@ describe('Reissue Bill service', () => {
   describe('and the Charging Module returns an error', () => {
     describe('when sending the reissue request', () => {
       beforeEach(() => {
-        vi.spyOn(ChargingModuleReissueBillRequest, 'send').mockResolvedValue({
+        vi.spyOn(ChargingModuleReissueBillRequest, 'default').mockResolvedValue({
           succeeded: false,
           response: {
             body: {
@@ -291,7 +291,7 @@ describe('Reissue Bill service', () => {
 
     describe('when viewing a bill', () => {
       beforeEach(() => {
-        vi.spyOn(ChargingModuleViewBillRequest, 'send')
+        vi.spyOn(ChargingModuleViewBillRequest, 'default')
           .mockReset()
           .mockResolvedValue({
             succeeded: false,

@@ -75,8 +75,10 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
       let legacyRefreshBillRunRequestStub
 
       beforeEach(() => {
-        chargingModuleGenerateRequestStub = vi.spyOn(ChargingModuleGenerateRequest, 'send').mockImplementation(() => {})
-        legacyRefreshBillRunRequestStub = vi.spyOn(LegacyRefreshBillRunRequest, 'send').mockImplementation(() => {})
+        chargingModuleGenerateRequestStub = vi
+          .spyOn(ChargingModuleGenerateRequest, 'default')
+          .mockImplementation(() => {})
+        legacyRefreshBillRunRequestStub = vi.spyOn(LegacyRefreshBillRunRequest, 'default').mockImplementation(() => {})
 
         vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(true)
       })
@@ -167,7 +169,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
 
         vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue([])
         vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(true)
-        vi.spyOn(ChargingModuleGenerateRequest, 'send').mockRejectedValue(thrownError)
+        vi.spyOn(ChargingModuleGenerateRequest, 'default').mockRejectedValue(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {

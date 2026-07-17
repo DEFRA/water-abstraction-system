@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-import * as ChargingModuleViewBillRunRequest from '../../../app/requests/charging-module/view-bill-run.request.js'
+import ChargingModuleViewBillRunRequest from '../../../app/requests/charging-module/view-bill-run.request.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
@@ -40,20 +40,20 @@ describe('Charging Module View Bill Run request', () => {
     })
 
     it('hits the correct endpoint', async () => {
-      await ChargingModuleViewBillRunRequest.send(billRunId)
+      await ChargingModuleViewBillRunRequest(billRunId)
       const endpoint = ChargingModuleRequest.getRequest.mock.calls[0][0]
 
       expect(endpoint).toEqual(`v3/wrls/bill-runs/${billRunId}`)
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ChargingModuleViewBillRunRequest.send(billRunId)
+      const result = await ChargingModuleViewBillRunRequest(billRunId)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the bill run in the "response"', async () => {
-      const result = await ChargingModuleViewBillRunRequest.send(billRunId)
+      const result = await ChargingModuleViewBillRunRequest(billRunId)
 
       expect(result.response.body.invoice.billRunId).toEqual(billRunId)
     })
@@ -81,13 +81,13 @@ describe('Charging Module View Bill Run request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ChargingModuleViewBillRunRequest.send(billRunId)
+        const result = await ChargingModuleViewBillRunRequest(billRunId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ChargingModuleViewBillRunRequest.send(billRunId)
+        const result = await ChargingModuleViewBillRunRequest(billRunId)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -104,13 +104,13 @@ describe('Charging Module View Bill Run request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ChargingModuleViewBillRunRequest.send(billRunId)
+        const result = await ChargingModuleViewBillRunRequest(billRunId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ChargingModuleViewBillRunRequest.send(billRunId)
+        const result = await ChargingModuleViewBillRunRequest(billRunId)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

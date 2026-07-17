@@ -31,7 +31,7 @@ import { postRequest } from '../notify.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(templateId, personalisation) {
+export default async function generatePreviewRequest(templateId, personalisation) {
   const path = `v2/template/${templateId}/preview`
 
   const body = { personalisation }

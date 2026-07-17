@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as AddressFacadeRequest from '../../../app/requests/address-facade.request.js'
 
 // Thing under test
-import * as LookupUPRNRequest from '../../../app/requests/address-facade/lookup-uprn.request.js'
+import LookupUPRNRequest from '../../../app/requests/address-facade/lookup-uprn.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
@@ -44,7 +44,7 @@ describe('Address Facade - Lookup UPRN request', () => {
     })
 
     it('hits the correct endpoint', async () => {
-      await LookupUPRNRequest.send(uprn)
+      await LookupUPRNRequest(uprn)
 
       const requestArgs = AddressFacadeRequest.getRequest.mock.calls[0]
 
@@ -52,13 +52,13 @@ describe('Address Facade - Lookup UPRN request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await LookupUPRNRequest.send(uprn)
+      const result = await LookupUPRNRequest(uprn)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the matching addresses', async () => {
-      const result = await LookupUPRNRequest.send(uprn)
+      const result = await LookupUPRNRequest(uprn)
 
       expect(result.matches).toEqual([match])
     })
@@ -78,13 +78,13 @@ describe('Address Facade - Lookup UPRN request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await LookupUPRNRequest.send(uprn)
+        const result = await LookupUPRNRequest(uprn)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await LookupUPRNRequest.send(uprn)
+        const result = await LookupUPRNRequest(uprn)
 
         expect(result.response.body).toEqual({
           statusCode: HTTP_STATUS_NOT_FOUND,
@@ -94,7 +94,7 @@ describe('Address Facade - Lookup UPRN request', () => {
       })
 
       it('does not returns any matches', async () => {
-        const result = await LookupUPRNRequest.send(uprn)
+        const result = await LookupUPRNRequest(uprn)
 
         expect(result.matches).toBeDefined()
         expect(result.matches).toBeInstanceOf(Array)
@@ -112,13 +112,13 @@ describe('Address Facade - Lookup UPRN request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await LookupUPRNRequest.send(uprn)
+        const result = await LookupUPRNRequest(uprn)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await LookupUPRNRequest.send(uprn)
+        const result = await LookupUPRNRequest(uprn)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()
@@ -126,7 +126,7 @@ describe('Address Facade - Lookup UPRN request', () => {
       })
 
       it('does not returns any matches', async () => {
-        const result = await LookupUPRNRequest.send(uprn)
+        const result = await LookupUPRNRequest(uprn)
 
         expect(result.matches).toBeDefined()
         expect(result.matches).toBeInstanceOf(Array)

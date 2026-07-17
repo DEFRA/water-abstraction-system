@@ -6,11 +6,11 @@
 import BillRunError from '../../../errors/bill-run.error.js'
 import BillRunModel from '../../../models/bill-run.model.js'
 import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
+import GenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
 import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
 import ProcessBillingPeriodService from './process-billing-period.service.js'
+import RefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
 import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-supplementary-licences.service.js'
-import { send as generateBillRun } from '../../../requests/charging-module/generate-bill-run.request.js'
-import { send as refreshBillRun } from '../../../requests/legacy/refresh-bill-run.request.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
@@ -87,11 +87,11 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
   if (billRunPopulated) {
     // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
     // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
-    await generateBillRun(billRun.externalId)
+    await GenerateBillRunRequest(billRun.externalId)
 
     // TODO: The legacy service still handles refreshing the billing information on our side after the Charging Module API
     // has finished generating the bill run. We need to take this over when we next get the opportunity.
-    await refreshBillRun(billRun.id)
+    await RefreshBillRunRequest(billRun.id)
   } else {
     // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
     // this in the UI

@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
-import * as RefreshBillRunRequest from '../../../app/requests/legacy/refresh-bill-run.request.js'
+import RefreshBillRunRequest from '../../../app/requests/legacy/refresh-bill-run.request.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
@@ -30,13 +30,13 @@ describe('Legacy Refresh Bill Run request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await RefreshBillRunRequest.send(billRunId)
+      const result = await RefreshBillRunRequest(billRunId)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns a 200 - ok', async () => {
-      const result = await RefreshBillRunRequest.send(billRunId)
+      const result = await RefreshBillRunRequest(billRunId)
 
       expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       expect(result.response.body).toBeNull()
@@ -61,13 +61,13 @@ describe('Legacy Refresh Bill Run request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await RefreshBillRunRequest.send(billRunId)
+        const result = await RefreshBillRunRequest(billRunId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await RefreshBillRunRequest.send(billRunId)
+        const result = await RefreshBillRunRequest(billRunId)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -84,13 +84,13 @@ describe('Legacy Refresh Bill Run request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await RefreshBillRunRequest.send(billRunId)
+        const result = await RefreshBillRunRequest(billRunId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await RefreshBillRunRequest.send(billRunId)
+        const result = await RefreshBillRunRequest(billRunId)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

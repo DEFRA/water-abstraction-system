@@ -15,7 +15,7 @@ import { postRequest } from '../charging-module.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(customerChangeData) {
+export default async function createCustomerChangeRequest(customerChangeData) {
   const path = 'v3/wrls/customer-changes'
 
   return postRequest(path, customerChangeData)

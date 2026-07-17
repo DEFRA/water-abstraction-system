@@ -25,10 +25,10 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
   beforeEach(async () => {
     chargingModuleSendBillRunRequestStub = vi
-      .spyOn(ChargingModuleSendBillRunRequest, 'send')
+      .spyOn(ChargingModuleSendBillRunRequest, 'default')
       .mockImplementation(() => {})
     chargingModuleViewBillRunRequestStub = vi
-      .spyOn(ChargingModuleViewBillRunRequest, 'send')
+      .spyOn(ChargingModuleViewBillRunRequest, 'default')
       .mockImplementation(() => {})
     vi.spyOn(UnflagBilledSupplementaryLicencesService, 'default').mockResolvedValue()
 

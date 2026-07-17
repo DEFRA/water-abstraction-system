@@ -35,7 +35,7 @@ describe('Send Transactions service', () => {
 
   describe('when calling the Charging Module API is successful', () => {
     beforeEach(() => {
-      vi.spyOn(ChargingModuleCreateCustomerChangeRequest, 'send').mockResolvedValue({
+      vi.spyOn(ChargingModuleCreateCustomerChangeRequest, 'default').mockResolvedValue({
         succeeded: true
       })
     })
@@ -47,7 +47,7 @@ describe('Send Transactions service', () => {
 
   describe('when calling the Charging Module API is unsuccessful', () => {
     beforeEach(() => {
-      vi.spyOn(ChargingModuleCreateCustomerChangeRequest, 'send').mockResolvedValue({
+      vi.spyOn(ChargingModuleCreateCustomerChangeRequest, 'default').mockResolvedValue({
         succeeded: false
       })
     })

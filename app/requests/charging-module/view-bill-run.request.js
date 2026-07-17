@@ -15,7 +15,7 @@ import { getRequest } from '../../requests/charging-module.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(billRunId) {
+export default async function viewBillRunRequest(billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}`
   const result = await getRequest(path)
 

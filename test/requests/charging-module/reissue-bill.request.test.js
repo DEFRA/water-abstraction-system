@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-import * as ReissueBillRequest from '../../../app/requests/charging-module/reissue-bill.request.js'
+import ReissueBillRequest from '../../../app/requests/charging-module/reissue-bill.request.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
@@ -46,20 +46,20 @@ describe('Charging Module Reissue Bill request', () => {
     })
 
     it('hits the correct endpoint', async () => {
-      await ReissueBillRequest.send(billRunId, billId)
+      await ReissueBillRequest(billRunId, billId)
       const endpoint = ChargingModuleRequest.patchRequest.mock.calls[0][0]
 
       expect(endpoint).toEqual(`v3/wrls/bill-runs/${billRunId}/invoices/${billId}/rebill`)
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ReissueBillRequest.send(billRunId, billId)
+      const result = await ReissueBillRequest(billRunId, billId)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the bill in the "response"', async () => {
-      const result = await ReissueBillRequest.send(billRunId, billId)
+      const result = await ReissueBillRequest(billRunId, billId)
 
       expect(result.response.body.invoices[0].id).toEqual('f62faabc-d65e-4242-a106-9777c1d57db7')
       expect(result.response.body.invoices[0].rebilledType).toEqual('C')
@@ -90,13 +90,13 @@ describe('Charging Module Reissue Bill request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ReissueBillRequest.send(billRunId, billId)
+        const result = await ReissueBillRequest(billRunId, billId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ReissueBillRequest.send(billRunId, billId)
+        const result = await ReissueBillRequest(billRunId, billId)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -113,13 +113,13 @@ describe('Charging Module Reissue Bill request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ReissueBillRequest.send(billRunId, billId)
+        const result = await ReissueBillRequest(billRunId, billId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ReissueBillRequest.send(billRunId, billId)
+        const result = await ReissueBillRequest(billRunId, billId)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

@@ -13,7 +13,7 @@ import { postRequest } from '../base.request.js'
  *
  * @returns {Promise<object>} An object containing the `accessToken:` to use in future ReSP requests
  */
-export async function send() {
+export default async function tokenRequest() {
   const url = new URL(`/${config.tenantId}/oauth2/v2.0/token`, config.tokenUrl)
 
   const result = await postRequest(url.href, _options())

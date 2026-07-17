@@ -53,8 +53,8 @@ describe('Address - Submit Select Service', () => {
       }
     }
 
-    lookupPostcodeRequestStub = vi.spyOn(LookupPostcodeRequest, 'send').mockImplementation(() => {})
-    lookupUPRNRequestStub = vi.spyOn(LookupUPRNRequest, 'send').mockImplementation(() => {})
+    lookupPostcodeRequestStub = vi.spyOn(LookupPostcodeRequest, 'default').mockImplementation(() => {})
+    lookupUPRNRequestStub = vi.spyOn(LookupUPRNRequest, 'default').mockImplementation(() => {})
 
     session = SessionModelStub(sessionData)
 

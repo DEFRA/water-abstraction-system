@@ -11,7 +11,7 @@ import * as ChargingModuleRequest from '../../../app/requests/charging-module.re
 import * as WaitForStatusRequest from '../../../app/requests/charging-module/wait-for-status.request.js'
 
 // Thing under test
-import * as SendBillRunRequest from '../../../app/requests/charging-module/send-bill-run.request.js'
+import SendBillRunRequest from '../../../app/requests/charging-module/send-bill-run.request.js'
 
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
@@ -41,23 +41,23 @@ describe('Charging Module Send Bill Run request', () => {
           body: null
         }
       })
-      vi.spyOn(WaitForStatusRequest, 'send').mockResolvedValue({ succeeded: true, status: 'billed', attempts: 1 })
+      vi.spyOn(WaitForStatusRequest, 'default').mockResolvedValue({ succeeded: true, status: 'billed', attempts: 1 })
     })
 
     it('returns a "true" success status', async () => {
-      const result = await SendBillRunRequest.send(billRunId)
+      const result = await SendBillRunRequest(billRunId)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the last status received', async () => {
-      const result = await SendBillRunRequest.send(billRunId)
+      const result = await SendBillRunRequest(billRunId)
 
       expect(result.status).toEqual('billed')
     })
 
     it('returns the number of attempts', async () => {
-      const result = await SendBillRunRequest.send(billRunId)
+      const result = await SendBillRunRequest(billRunId)
 
       expect(result.attempts).toEqual(1)
     })
@@ -73,7 +73,7 @@ describe('Charging Module Send Bill Run request', () => {
       })
 
       it('throws an error', async () => {
-        const error = await SendBillRunRequest.send(billRunId).catch((e) => {
+        const error = await SendBillRunRequest(billRunId).catch((e) => {
           return e
         })
 
@@ -94,7 +94,7 @@ describe('Charging Module Send Bill Run request', () => {
       })
 
       it('throws an error', async () => {
-        const error = await SendBillRunRequest.send(billRunId).catch((e) => {
+        const error = await SendBillRunRequest(billRunId).catch((e) => {
           return e
         })
 
@@ -109,7 +109,7 @@ describe('Charging Module Send Bill Run request', () => {
       beforeEach(async () => {
         chargingModuleRequestStub.mockResolvedValueOnce({ succeeded: true })
         chargingModuleRequestStub.mockResolvedValueOnce({ succeeded: true })
-        vi.spyOn(WaitForStatusRequest, 'send').mockResolvedValue({
+        vi.spyOn(WaitForStatusRequest, 'default').mockResolvedValue({
           succeeded: false,
           attempts: 100,
           response: { body: 'Boom' }
@@ -117,7 +117,7 @@ describe('Charging Module Send Bill Run request', () => {
       })
 
       it('throws an error', async () => {
-        const error = await SendBillRunRequest.send(billRunId).catch((e) => {
+        const error = await SendBillRunRequest(billRunId).catch((e) => {
           return e
         })
 

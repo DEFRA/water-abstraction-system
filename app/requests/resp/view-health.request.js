@@ -13,7 +13,7 @@ import { getRequest } from '../resp.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send() {
+export default async function viewHealthRequest() {
   const path = 'rsp/v1/monitoringFrequency'
 
   return getRequest(path)

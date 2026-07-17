@@ -22,7 +22,7 @@ import { deleteRequest } from '../legacy.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(billLicenceId, user) {
+export default async function deleteBillLicenceRequest(billLicenceId, user) {
   const { userId } = user
   const path = `billing/invoice-licences/${billLicenceId}`
 

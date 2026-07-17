@@ -46,7 +46,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
         lastTransactionFileCreatedAt: new Date('2025-08-10T12:34:56.789Z')
       })
 
-      vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'send').mockResolvedValue({
+      vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -119,7 +119,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
 
   describe('when the Charging Module API response is empty', () => {
     beforeEach(() => {
-      vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'send').mockResolvedValue({
+      vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -158,7 +158,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
 
   describe('when the Charging Module API request fails', () => {
     beforeEach(() => {
-      vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'send').mockResolvedValue({
+      vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'default').mockResolvedValue({
         succeeded: false,
         response: {
           info: {

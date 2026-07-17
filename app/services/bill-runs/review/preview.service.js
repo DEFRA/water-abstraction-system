@@ -3,8 +3,8 @@
  * @module PreviewService
  */
 
+import CalculateChargeRequest from '../../../requests/charging-module/calculate-charge.request.js'
 import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
-import { send } from '../../../requests/charging-module/calculate-charge.request.js'
 import { formatChargingModuleDate, formatMoney } from '../../../presenters/base.presenter.js'
 
 /**
@@ -48,7 +48,7 @@ async function _calculateCharge(transaction) {
     return { charge: 0 }
   }
 
-  const result = await send(transaction)
+  const result = await CalculateChargeRequest(transaction)
 
   if (result.succeeded) {
     return { charge: result.response.body.calculation.chargeValue }

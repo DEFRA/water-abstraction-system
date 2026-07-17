@@ -8,12 +8,12 @@ import BillModel from '../../../models/bill.model.js'
 import BillRunChargeVersionYearModel from '../../../models/bill-run-charge-version-year.model.js'
 import BillRunModel from '../../../models/bill-run.model.js'
 import BillRunVolumeModel from '../../../models/bill-run-volume.model.js'
+import DeleteBillRunRequest from '../../../requests/charging-module/delete-bill-run.request.js'
 import ReviewChargeVersionModel from '../../../models/review-charge-version.model.js'
 import ReviewLicenceModel from '../../../models/review-licence.model.js'
 import ReviewReturnModel from '../../../models/review-return.model.js'
 import { calculateAndLogTimeTaken } from '../../../lib/general.lib.js'
 import { db } from '../../../../db/db.js'
-import { send } from '../../../requests/charging-module/delete-bill-run.request.js'
 
 /**
  * Deletes a bill run, all its associated records and its match in the Charging Module API
@@ -44,7 +44,7 @@ export default async function deleteBillRunService(billRun) {
     const results = await Promise.allSettled([
       // If the Charging Module errors whilst doing this it shouldn't block us carrying on with deleting the bill run on
       // our side. It just means the the CHA will be storing an 'orphaned' bill run that will never get sent.
-      send(externalId),
+      DeleteBillRunRequest(externalId),
       // We can be deleting these records whilst getting on with deleting the other things. But should it fail we'll
       // just be left with orphaned review results. As long as it's an incidental occurrence this wouldn't be a problem.
       _deleteReviewResults(billRunId),

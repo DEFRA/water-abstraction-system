@@ -41,7 +41,7 @@ import { postRequest } from '../notify.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(templateId, options) {
+export default async function createLetterRequest(templateId, options) {
   const path = 'v2/notifications/letter'
 
   const body = {

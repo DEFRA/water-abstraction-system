@@ -38,9 +38,9 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
     })
 
     chargingModuleGenerateBillRunRequestStub = vi
-      .spyOn(ChargingModuleGenerateBillRunRequest, 'send')
+      .spyOn(ChargingModuleGenerateBillRunRequest, 'default')
       .mockImplementation(() => {})
-    legacyRefreshBillRunRequestStub = vi.spyOn(LegacyRefreshBillRunRequest, 'send').mockImplementation(() => {})
+    legacyRefreshBillRunRequestStub = vi.spyOn(LegacyRefreshBillRunRequest, 'default').mockImplementation(() => {})
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this

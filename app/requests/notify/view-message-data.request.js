@@ -20,7 +20,7 @@ import { getRequest } from '../notify.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(notificationId) {
+export default async function viewMessageDataRequest(notificationId) {
   const path = `v2/notifications/${notificationId}`
 
   return getRequest(path)

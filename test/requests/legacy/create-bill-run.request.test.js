@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
-import * as CreateBillRunRequest from '../../../app/requests/legacy/create-bill-run.request.js'
+import CreateBillRunRequest from '../../../app/requests/legacy/create-bill-run.request.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
@@ -34,13 +34,13 @@ describe('Legacy Create Bill Run request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CreateBillRunRequest.send(batchType, regionId, financialYearEnding, user, summer)
+      const result = await CreateBillRunRequest(batchType, regionId, financialYearEnding, user, summer)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns a 200 - ok', async () => {
-      const result = await CreateBillRunRequest.send(batchType, regionId, financialYearEnding, user, summer)
+      const result = await CreateBillRunRequest(batchType, regionId, financialYearEnding, user, summer)
 
       expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       expect(result.response.body).toBeNull()
@@ -65,13 +65,13 @@ describe('Legacy Create Bill Run request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateBillRunRequest.send(batchType, regionId, financialYearEnding, user, summer)
+        const result = await CreateBillRunRequest(batchType, regionId, financialYearEnding, user, summer)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateBillRunRequest.send(batchType, regionId, financialYearEnding, user, summer)
+        const result = await CreateBillRunRequest(batchType, regionId, financialYearEnding, user, summer)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -88,13 +88,13 @@ describe('Legacy Create Bill Run request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateBillRunRequest.send(batchType, regionId, financialYearEnding, user, summer)
+        const result = await CreateBillRunRequest(batchType, regionId, financialYearEnding, user, summer)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateBillRunRequest.send(batchType, regionId, financialYearEnding, user, summer)
+        const result = await CreateBillRunRequest(batchType, regionId, financialYearEnding, user, summer)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

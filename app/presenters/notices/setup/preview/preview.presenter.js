@@ -4,7 +4,7 @@
  */
 
 import { NoticeType } from '../../../../lib/static-lookups.lib.js'
-import { send } from '../../../../requests/notify/generate-preview.request.js'
+import generatePreviewRequest from '../../../../requests/notify/generate-preview.request.js'
 import { sentenceCase } from '../../../base.presenter.js'
 
 /**
@@ -62,7 +62,7 @@ function _backLink(contactHashId, noticeType, sessionId) {
 }
 
 async function _notifyPreview(personalisation, templateId) {
-  const previewResult = await send(templateId, personalisation)
+  const previewResult = await generatePreviewRequest(templateId, personalisation)
 
   if (previewResult.succeeded) {
     return previewResult.response.body.body

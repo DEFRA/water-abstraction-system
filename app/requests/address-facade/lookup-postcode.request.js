@@ -12,7 +12,7 @@ import { getRequest } from '../address-facade.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-export async function send(postcode) {
+export default async function lookupPostcodeRequest(postcode) {
   const path = `address-service/v1/addresses/postcode?query-string=${postcode}&key=client1`
 
   return getRequest(path)

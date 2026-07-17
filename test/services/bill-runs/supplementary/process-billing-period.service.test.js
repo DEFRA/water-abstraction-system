@@ -211,7 +211,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
           ]
 
           vi.spyOn(SendTransactionsService, 'default').mockResolvedValue(sentTransactions)
-          vi.spyOn(ChargingModuleGenerateBillRunRequest, 'send').mockResolvedValue({
+          vi.spyOn(ChargingModuleGenerateBillRunRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {}
           })

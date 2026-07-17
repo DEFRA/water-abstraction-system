@@ -6,14 +6,14 @@
 import ChildProcess from 'node:child_process'
 import util from 'node:util'
 
+import AddressFacadeViewHealthRequest from '../../requests/address-facade/view-health.request.js'
+import ChargingModuleViewHealthRequest from '../../requests/charging-module/view-health.request.js'
 import CreateRedisClientService from './create-redis-client.service.js'
 import FetchSystemInfoService from './fetch-system-info.service.js'
-import { send as addressFacadeViewHealth } from '../../requests/address-facade/view-health.request.js'
-import { send as chargingModuleViewHealth } from '../../requests/charging-module/view-health.request.js'
-import { send as gotenbergViewHealth } from '../../requests/gotenberg/view-health.request.js'
-import { send as legacyViewHealth } from '../../requests/legacy/view-health.request.js'
-import { send as notifyViewHealth } from '../../requests/notify/view-health.request.js'
-import { send as respViewHealth } from '../../requests/resp/view-health.request.js'
+import GotenbergViewHealthRequest from '../../requests/gotenberg/view-health.request.js'
+import LegacyViewHealthRequest from '../../requests/legacy/view-health.request.js'
+import NotifyViewHealthRequest from '../../requests/notify/view-health.request.js'
+import RespViewHealthRequest from '../../requests/resp/view-health.request.js'
 import { sentenceCase } from '../../presenters/base.presenter.js'
 
 const SERVICE_RUNNING_MESSAGE = 'Up and running'
@@ -61,7 +61,7 @@ async function _addSystemInfoToLegacyAppData(appData) {
 }
 
 async function _addressFacadeData() {
-  const result = await addressFacadeViewHealth()
+  const result = await AddressFacadeViewHealthRequest()
 
   if (result.succeeded) {
     return result.response.body
@@ -71,7 +71,7 @@ async function _addressFacadeData() {
 }
 
 async function _chargingModuleData() {
-  const result = await chargingModuleViewHealth()
+  const result = await ChargingModuleViewHealthRequest()
 
   if (result.succeeded) {
     return result.response.info.dockerTag
@@ -81,7 +81,7 @@ async function _chargingModuleData() {
 }
 
 async function _gotenbergData() {
-  const result = await gotenbergViewHealth()
+  const result = await GotenbergViewHealthRequest()
 
   if (result.succeeded) {
     const body = result.response.body
@@ -105,7 +105,7 @@ async function _legacyAppData() {
   ]
 
   for (const service of services) {
-    const result = await legacyViewHealth(service.serviceName)
+    const result = await LegacyViewHealthRequest(service.serviceName)
 
     if (result.succeeded) {
       service.version = result.response.body.version
@@ -128,7 +128,7 @@ function _parseFailedRequestResult(result) {
 }
 
 async function _notifyData() {
-  const result = await notifyViewHealth()
+  const result = await NotifyViewHealthRequest()
 
   if (result.succeeded) {
     return SERVICE_RUNNING_MESSAGE
@@ -156,7 +156,7 @@ async function _redisConnectivityData() {
 }
 
 async function _respData() {
-  const result = await respViewHealth()
+  const result = await RespViewHealthRequest()
 
   if (result.succeeded) {
     return SERVICE_RUNNING_MESSAGE

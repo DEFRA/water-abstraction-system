@@ -9,7 +9,7 @@ import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
-import * as CreateLetterRequest from '../../../app/requests/notify/create-letter.request.js'
+import CreateLetterRequest from '../../../app/requests/notify/create-letter.request.js'
 
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 
@@ -69,13 +69,13 @@ describe('Notify - Create Letter request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CreateLetterRequest.send(templateId, options)
+      const result = await CreateLetterRequest(templateId, options)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from Notify in the "response"', async () => {
-      const result = await CreateLetterRequest.send(templateId, options)
+      const result = await CreateLetterRequest(templateId, options)
 
       expect(result.response.body).toEqual(response.body)
     })
@@ -104,13 +104,13 @@ describe('Notify - Create Letter request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateLetterRequest.send(templateId, options)
+        const result = await CreateLetterRequest(templateId, options)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateLetterRequest.send(templateId, options)
+        const result = await CreateLetterRequest(templateId, options)
 
         expect(result.response.body).toEqual(response.body)
       })

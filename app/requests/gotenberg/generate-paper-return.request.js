@@ -19,7 +19,7 @@ import { postRequest } from '../gotenberg.request.js'
  * @returns {Promise<object>} An object representing the result of the request, including the response 'body' as a
  * {@link https://nodejs.org/api/buffer.html|Buffer}
  */
-export async function send(pageData) {
+export default async function generatePaperReturnRequest(pageData) {
   const htmlContent = await _generateHtmlContent('preview-return-forms.njk', pageData)
   const footerContent = await _generateHtmlContent('layout/footer.html', pageData)
 

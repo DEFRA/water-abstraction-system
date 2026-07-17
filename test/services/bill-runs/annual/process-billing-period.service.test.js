@@ -29,7 +29,7 @@ describe('Annual Process billing period service', () => {
     }
 
     chargingModuleCreateTransactionRequestStub = vi
-      .spyOn(ChargingModuleCreateTransactionRequest, 'send')
+      .spyOn(ChargingModuleCreateTransactionRequest, 'default')
       .mockImplementation(() => {})
   })
 
