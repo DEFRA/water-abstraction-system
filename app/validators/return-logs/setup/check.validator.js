@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/check` page
  * @module CheckValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/check` page
@@ -17,7 +15,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(session) {
+export default function checkValidator(session) {
   const lineValuesExist = _lineValuesExist(session)
 
   const schema = Joi.valid(true).messages({ 'any.only': 'At least one return line must contain a value.' })
@@ -35,8 +33,4 @@ function _lineValuesExist(session) {
   return session.lines.some((line) => {
     return typeof line.reading === 'number'
   })
-}
-
-module.exports = {
-  go
 }

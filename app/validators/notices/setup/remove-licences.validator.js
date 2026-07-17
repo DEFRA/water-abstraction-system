@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/remove-licences` page
  * @module RemoveLicencesValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
+import { transformStringOfLicencesToArray } from '../../../lib/general.lib.js'
 
 /**
  * Validates data submitted for the `/notices/setup/remove-licences` page
@@ -19,7 +17,7 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @returns {object} The result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, licenceRefsWithDueReturns) {
+export default function removeLicencesValidator(payload, licenceRefsWithDueReturns) {
   const schema = Joi.object({
     removeLicences: Joi.custom((value, helpers) => {
       return _removedLicencesWithDueReturnsValidator(value, helpers, licenceRefsWithDueReturns)
@@ -57,8 +55,4 @@ function _removedLicencesWithDueReturnsValidator(value, helpers, licenceRefsWith
   }
 
   return result
-}
-
-module.exports = {
-  go
 }

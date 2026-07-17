@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../support/generators.js'
 
 // Test helpers
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Thing under test
-const SubmitReviewService = require('../../../../app/services/bill-runs/review/submit-review.service.js')
+import SubmitReviewService from '../../../../app/services/bill-runs/review/submit-review.service.js'
 
 describe('Bill Runs - Review - Submit Review Service', () => {
   const billRunId = generateUUID()
@@ -19,11 +17,11 @@ describe('Bill Runs - Review - Submit Review Service', () => {
   let yarStub
 
   beforeEach(() => {
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -35,9 +33,9 @@ describe('Bill Runs - Review - Submit Review Service', () => {
       })
 
       it('clears the filter object from the session', async () => {
-        await SubmitReviewService.go(billRunId, payload, yarStub)
+        await SubmitReviewService(billRunId, payload, yarStub)
 
-        expect(yarStub.clear.called).toBe(true)
+        expect(yarStub.clear).toHaveBeenCalled()
       })
     })
 
@@ -47,9 +45,9 @@ describe('Bill Runs - Review - Submit Review Service', () => {
       })
 
       it('saves a default filter object in the session', async () => {
-        await SubmitReviewService.go(billRunId, payload, yarStub)
+        await SubmitReviewService(billRunId, payload, yarStub)
 
-        const setArgs = yarStub.set.args[0]
+        const setArgs = yarStub.set.mock.calls[0]
 
         expect(setArgs[0]).toEqual(`review-${billRunId}`)
         expect(setArgs[1]).toEqual({
@@ -72,9 +70,9 @@ describe('Bill Runs - Review - Submit Review Service', () => {
       })
 
       it('saves the submitted filters as the "usersFilter" object in the session', async () => {
-        await SubmitReviewService.go(billRunId, payload, yarStub)
+        await SubmitReviewService(billRunId, payload, yarStub)
 
-        const setArgs = yarStub.set.args[0]
+        const setArgs = yarStub.set.mock.calls[0]
 
         expect(setArgs[0]).toEqual(`review-${billRunId}`)
         expect(setArgs[1]).toEqual({

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/contact-name` page
  *
  * @module ViewContactNameService
  */
 
-const ContactNamePresenter = require('../../../presenters/billing-accounts/setup/contact-name.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import ContactNamePresenter from '../../../presenters/billing-accounts/setup/contact-name.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/contact-name` page
@@ -16,16 +14,12 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewContactNameService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = ContactNamePresenter.go(session)
+  const pageData = ContactNamePresenter(session)
 
   return {
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

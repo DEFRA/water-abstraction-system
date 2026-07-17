@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const LicencesValidator = require('../../../../app/validators/company-contacts/setup/licences.validator.js')
+import LicencesValidator from '../../../../app/validators/company-contacts/setup/licences.validator.js'
 
 describe('Company Contacts - Setup - Licences Validator', () => {
   let payload
@@ -15,7 +16,7 @@ describe('Company Contacts - Setup - Licences Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = LicencesValidator.go(payload)
+      const result = LicencesValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -29,7 +30,7 @@ describe('Company Contacts - Setup - Licences Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicencesValidator.go(payload)
+        const result = LicencesValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -45,7 +46,7 @@ describe('Company Contacts - Setup - Licences Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicencesValidator.go(payload)
+        const result = LicencesValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -61,7 +62,7 @@ describe('Company Contacts - Setup - Licences Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicencesValidator.go(payload)
+        const result = LicencesValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

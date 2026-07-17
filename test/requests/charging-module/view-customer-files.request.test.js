@@ -1,26 +1,26 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Things we need to stub
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
+import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-const ChargingModuleViewCustomerFilesRequest = require('../../../app/requests/charging-module/view-customer-files.request.js')
+import ChargingModuleViewCustomerFilesRequest from '../../../app/requests/charging-module/view-customer-files.request.js'
+
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Charging Module - View Customer Files request', () => {
   const days = 7
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service can view a bill run', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequest, 'get').resolves({
+      vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -49,20 +49,20 @@ describe('Charging Module - View Customer Files request', () => {
     })
 
     it('hits the correct endpoint', async () => {
-      await ChargingModuleViewCustomerFilesRequest.send(days)
-      const endpoint = ChargingModuleRequest.get.firstCall.firstArg
+      await ChargingModuleViewCustomerFilesRequest(days)
+      const endpoint = ChargingModuleRequest.getRequest.mock.calls[0][0]
 
       expect(endpoint).toEqual(`v3/wrls/customer-files/${days}`)
     })
 
     it('returns a true success status', async () => {
-      const result = await ChargingModuleViewCustomerFilesRequest.send(days)
+      const result = await ChargingModuleViewCustomerFilesRequest(days)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the customer files in the response', async () => {
-      const result = await ChargingModuleViewCustomerFilesRequest.send(days)
+      const result = await ChargingModuleViewCustomerFilesRequest(days)
 
       expect(result.response.body[0].id).toEqual('9523ff61-bd21-4800-aa7d-d97aa6c923aa')
       expect(result.response.body[1].id).toEqual('aa271bc5-0e36-4aeb-b636-64d95482825f')
@@ -72,7 +72,7 @@ describe('Charging Module - View Customer Files request', () => {
   describe('when the service cannot view customer files', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'get').resolves({
+        vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: {
             info: {
@@ -91,13 +91,13 @@ describe('Charging Module - View Customer Files request', () => {
       })
 
       it('returns a false success status', async () => {
-        const result = await ChargingModuleViewCustomerFilesRequest.send(days)
+        const result = await ChargingModuleViewCustomerFilesRequest(days)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the response', async () => {
-        const result = await ChargingModuleViewCustomerFilesRequest.send(days)
+        const result = await ChargingModuleViewCustomerFilesRequest(days)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -107,20 +107,20 @@ describe('Charging Module - View Customer Files request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'get').resolves({
+        vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })
       })
 
       it('returns a false success status', async () => {
-        const result = await ChargingModuleViewCustomerFilesRequest.send(days)
+        const result = await ChargingModuleViewCustomerFilesRequest(days)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the response', async () => {
-        const result = await ChargingModuleViewCustomerFilesRequest.send(days)
+        const result = await ChargingModuleViewCustomerFilesRequest(days)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

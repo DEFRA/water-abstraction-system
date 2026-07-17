@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Plugin to add bearer token support
  * @module BearerPlugin
  */
 
-const Bearer = require('hapi-auth-bearer-token')
+import Bearer from 'hapi-auth-bearer-token'
 
 /**
  * {@link https://github.com/johnbrett/hapi-auth-bearer-token | hapi auth bearer token} is a plugin that adds the ability
@@ -33,8 +31,6 @@ const Bearer = require('hapi-auth-bearer-token')
  * environment variables.
  *
  */
-const BearerPlugin = {
+export default {
   plugin: Bearer
 }
-
-module.exports = BearerPlugin

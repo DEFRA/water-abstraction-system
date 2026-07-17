@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/access' page
  *
  * @module ViewAccessService
  */
 
-const AccessPresenter = require('../../../../presenters/users/internal/setup/access.presenter.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import AccessPresenter from '../../../../presenters/users/internal/setup/access.presenter.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/access' page
@@ -16,14 +14,10 @@ const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewAccessService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = AccessPresenter.go(session)
+  const pageData = AccessPresenter(session)
 
   return pageData
-}
-
-module.exports = {
-  go
 }

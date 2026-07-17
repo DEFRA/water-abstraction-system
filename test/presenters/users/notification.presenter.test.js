@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Thing under test
-const NotificationPresenter = require('../../../app/presenters/users/notification.presenter.js')
+import NotificationPresenter from '../../../app/presenters/users/notification.presenter.js'
 
 describe('Users - Notification presenter', () => {
   let notification
@@ -24,7 +25,7 @@ describe('Users - Notification presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = NotificationPresenter.go(notification, user, type, superUser)
+    const result = NotificationPresenter(notification, user, type, superUser)
 
     expect(result).toEqual({
       backLink: { href: `/system/users/${type}/${user.id}/communications`, text: 'Go back to user' },
@@ -46,7 +47,7 @@ describe('Users - Notification presenter', () => {
       })
 
       it('returns null', () => {
-        const result = NotificationPresenter.go(notification, user, type, superUser)
+        const result = NotificationPresenter(notification, user, type, superUser)
 
         expect(result.contents).toBeNull()
       })
@@ -63,7 +64,7 @@ describe('Users - Notification presenter', () => {
         })
 
         it('returns the notification "plaintext"', () => {
-          const result = NotificationPresenter.go(notification, user, type, superUser)
+          const result = NotificationPresenter(notification, user, type, superUser)
 
           expect(result.contents).toEqual(notification.plaintext)
         })
@@ -76,7 +77,7 @@ describe('Users - Notification presenter', () => {
           })
 
           it('returns the notification "plaintext"', () => {
-            const result = NotificationPresenter.go(notification, user, type, superUser)
+            const result = NotificationPresenter(notification, user, type, superUser)
 
             expect(result.contents).toEqual(notification.plaintext)
           })
@@ -84,7 +85,7 @@ describe('Users - Notification presenter', () => {
 
         describe('but the user is not a super user', () => {
           it('returns the a "content protected" message', () => {
-            const result = NotificationPresenter.go(notification, user, type, superUser)
+            const result = NotificationPresenter(notification, user, type, superUser)
 
             expect(result.contents).toEqual('## This content is protected.')
           })

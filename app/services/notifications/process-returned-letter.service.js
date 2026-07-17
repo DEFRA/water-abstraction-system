@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Processes a returned letter callback from GOV.UK Notify
  *
  * @module ProcessReturnedLetterService
  */
 
-const NotificationModel = require('../../models/notification.model.js')
-const UpdateNoticeService = require('../notices/update-notice.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } = require('../../lib/general.lib.js')
+import NotificationModel from '../../models/notification.model.js'
+import UpdateNoticeService from '../notices/update-notice.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Processes a returned letter callback from GOV.UK Notify
@@ -20,7 +18,7 @@ const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres
  *
  * @param {string} payload - Payload from the Notify callback
  */
-async function go(payload) {
+export default async function processReturnedLetterService(payload) {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -33,7 +31,7 @@ async function go(payload) {
 
     if (updatedNotifications.length) {
       // Recalculate the overall status and status counts on the linked notice.
-      await UpdateNoticeService.go([updatedNotifications[0].eventId])
+      await UpdateNoticeService([updatedNotifications[0].eventId])
     }
 
     calculateAndLogTimeTaken(startTime, 'Returned letter complete', {
@@ -43,8 +41,4 @@ async function go(payload) {
   } catch (error) {
     globalThis.GlobalNotifier.omfg('Returned letter failed', payload, error)
   }
-}
-
-module.exports = {
-  go
 }

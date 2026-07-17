@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Consolidates an array of date ranges by merging overlapping ranges, returning an array of the resulting date ranges
  * @module ConsolidateDateRangesService
@@ -58,7 +56,7 @@
  *
  * @returns {object[]} An array of the consolidated date ranges
  */
-function go(dateRanges) {
+export default function consolidateDateRangesService(dateRanges) {
   // We sort the date ranges by start date from earliest to latest to make life easier when consolidating them
   const sortedDates = _sortDates(dateRanges)
 
@@ -117,8 +115,4 @@ function _consolidateDates(dateRanges) {
     // Start with an empty array
     []
   )
-}
-
-module.exports = {
-  go
 }

@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ApplyQuantitiesService = require('../../../../app/services/return-logs/setup/apply-quantities.service.js')
+import ApplyQuantitiesService from '../../../../app/services/return-logs/setup/apply-quantities.service.js'
 
 describe('Return Logs Setup - Update Quantities service', () => {
   let session
@@ -35,7 +36,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       it('updates the session data with the correct quantities', () => {
-        const result = ApplyQuantitiesService.go(session)
+        const result = ApplyQuantitiesService(session)
 
         expect(result).toEqual({
           lines: [
@@ -96,7 +97,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
         })
 
         it('updates the session data with the correct quantities', () => {
-          const result = ApplyQuantitiesService.go(session)
+          const result = ApplyQuantitiesService(session)
 
           expect(result).toEqual({
             lines: [
@@ -159,7 +160,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       it('updates the session data with the correct quantities', () => {
-        const result = ApplyQuantitiesService.go(session)
+        const result = ApplyQuantitiesService(session)
 
         expect(result).toEqual({
           lines: [
@@ -220,7 +221,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
         })
 
         it('updates the session data with the correct quantities', () => {
-          const result = ApplyQuantitiesService.go(session)
+          const result = ApplyQuantitiesService(session)
 
           expect(result).toEqual({
             lines: [
@@ -286,7 +287,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       it('updates the session data with the correct quantities', () => {
-        const result = ApplyQuantitiesService.go(session)
+        const result = ApplyQuantitiesService(session)
 
         expect(result).toEqual({
           lines: [

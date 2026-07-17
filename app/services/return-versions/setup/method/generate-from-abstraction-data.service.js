@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches a licence's abstraction data and generates setup return requirements from it
  * @module GenerateFromAbstractionDataService
  */
 
-const DetermineTwoPartTariffAgreementService = require('./determine-two-part-tariff-agreement.service.js')
-const FetchAbstractionDataService = require('./fetch-abstraction-data.service.js')
-const { compareStrings } = require('../../../../lib/general.lib.js')
+import DetermineTwoPartTariffAgreementService from './determine-two-part-tariff-agreement.service.js'
+import FetchAbstractionDataService from './fetch-abstraction-data.service.js'
+import { compareStrings } from '../../../../lib/general.lib.js'
 
 const SUMMER_RETURN_CYCLE = 'summer'
 const WINTER_RETURN_CYCLE = 'winter-and-all-year'
@@ -37,9 +35,9 @@ const TWO_PART_IRRIGATION_IDS = new Set(['380', '390', '400', '410', '420', '600
  * @returns {Promise<object[]>} an array of return requirements generated from the licence's abstraction data and ready
  * to be persisted to the setup session
  */
-async function go(licenceId, licenceVersionId, startDate) {
-  const licence = await FetchAbstractionDataService.go(licenceId, licenceVersionId)
-  licence.twoPartTariffAgreement = await DetermineTwoPartTariffAgreementService.go(licence.licenceRef, startDate)
+export default async function generateFromAbstractionDataService(licenceId, licenceVersionId, startDate) {
+  const licence = await FetchAbstractionDataService(licenceId, licenceVersionId)
+  licence.twoPartTariffAgreement = await DetermineTwoPartTariffAgreementService(licence.licenceRef, startDate)
 
   const returnRequirements = _transformForSetup(licence)
 
@@ -249,8 +247,4 @@ function _transformForSetup(licence) {
       agreementsExceptions: _agreementExceptions(purpose)
     }
   })
-}
-
-module.exports = {
-  go
 }

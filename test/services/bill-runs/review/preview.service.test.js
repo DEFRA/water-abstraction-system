@@ -1,21 +1,21 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } = require('node:http2').constants
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import http2 from 'node:http2'
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Test helpers
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const CalculateChargeRequest = require('../../../../app/requests/charging-module/calculate-charge.request.js')
-const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
+import * as CalculateChargeRequest from '../../../../app/requests/charging-module/calculate-charge.request.js'
+import * as FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
 
 // Thing under test
-const PreviewService = require('../../../../app/services/bill-runs/review/preview.service.js')
+import PreviewService from '../../../../app/services/bill-runs/review/preview.service.js'
+
+const { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } = http2.constants
 
 describe('Bill Runs Review - Preview service', () => {
   let calculateChargeRequestStub
@@ -25,11 +25,11 @@ describe('Bill Runs Review - Preview service', () => {
   beforeEach(() => {
     reviewChargeReference = BillRunsReviewFixture.reviewChargeReference()
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -37,12 +37,12 @@ describe('Bill Runs Review - Preview service', () => {
       beforeEach(() => {
         reviewChargeReference.reviewChargeElements[0].amendedAllocated = 9.092
 
-        Sinon.stub(FetchReviewChargeReferenceService, 'go').resolves(reviewChargeReference)
+        vi.spyOn(FetchReviewChargeReferenceService, 'default').mockResolvedValue(reviewChargeReference)
       })
 
       describe('and the request to the Charging Module API succeeds', () => {
         beforeEach(async () => {
-          calculateChargeRequestStub = Sinon.stub(CalculateChargeRequest, 'send').resolves({
+          calculateChargeRequestStub = vi.spyOn(CalculateChargeRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {
               info: {
@@ -68,9 +68,9 @@ describe('Bill Runs Review - Preview service', () => {
 
         describe('for a charge reference with no additional charges (null)', () => {
           it('makes the correct request to the Charging Module API', async () => {
-            await PreviewService.go(reviewChargeReference.id, yarStub)
+            await PreviewService(reviewChargeReference.id, yarStub)
 
-            const generatedTransaction = calculateChargeRequestStub.args[0][0]
+            const generatedTransaction = calculateChargeRequestStub.mock.calls[0][0]
 
             expect(generatedTransaction).toEqual({
               abatementFactor: 1,
@@ -99,11 +99,11 @@ describe('Bill Runs Review - Preview service', () => {
           })
 
           it('adds a flash message stating the example charge returned by the Charging Module API', async () => {
-            await PreviewService.go(reviewChargeReference.id, yarStub)
+            await PreviewService(reviewChargeReference.id, yarStub)
 
-            const [flashType, bannerMessage] = yarStub.flash.args[0]
+            const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
-            expect(yarStub.flash.called).toBe(true)
+            expect(yarStub.flash).toHaveBeenCalled()
             expect(flashType).toEqual('charge')
             expect(bannerMessage).toEqual('Based on this information the example charge is £20.00')
           })
@@ -116,9 +116,9 @@ describe('Bill Runs Review - Preview service', () => {
           })
 
           it('makes the correct request to the Charging Module API', async () => {
-            await PreviewService.go(reviewChargeReference.id, yarStub)
+            await PreviewService(reviewChargeReference.id, yarStub)
 
-            const generatedTransaction = calculateChargeRequestStub.args[0][0]
+            const generatedTransaction = calculateChargeRequestStub.mock.calls[0][0]
 
             expect(generatedTransaction).toEqual({
               abatementFactor: 1,
@@ -147,11 +147,11 @@ describe('Bill Runs Review - Preview service', () => {
           })
 
           it('adds a flash message stating the example charge returned by the Charging Module API', async () => {
-            await PreviewService.go(reviewChargeReference.id, yarStub)
+            await PreviewService(reviewChargeReference.id, yarStub)
 
-            const [flashType, bannerMessage] = yarStub.flash.args[0]
+            const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
-            expect(yarStub.flash.called).toBe(true)
+            expect(yarStub.flash).toHaveBeenCalled()
             expect(flashType).toEqual('charge')
             expect(bannerMessage).toEqual('Based on this information the example charge is £20.00')
           })
@@ -160,7 +160,7 @@ describe('Bill Runs Review - Preview service', () => {
 
       describe('and the request to the Charging Module API fails', () => {
         beforeEach(async () => {
-          Sinon.stub(CalculateChargeRequest, 'send').resolves({
+          vi.spyOn(CalculateChargeRequest, 'default').mockResolvedValue({
             succeeded: false,
             response: {
               info: { gitCommit: undefined, dockerTag: undefined },
@@ -175,11 +175,11 @@ describe('Bill Runs Review - Preview service', () => {
         })
 
         it('adds a flash message stating the charge could not be calculated', async () => {
-          await PreviewService.go(reviewChargeReference.id, yarStub)
+          await PreviewService(reviewChargeReference.id, yarStub)
 
-          const [flashType, bannerMessage] = yarStub.flash.args[0]
+          const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
-          expect(yarStub.flash.called).toBe(true)
+          expect(yarStub.flash).toHaveBeenCalled()
           expect(flashType).toEqual('charge')
           expect(bannerMessage).toEqual('Could not calculate a charge. "section127Agreement" must be [true].')
         })
@@ -188,19 +188,19 @@ describe('Bill Runs Review - Preview service', () => {
 
     describe('for a review charge reference with a total allocation that is 0', () => {
       beforeEach(() => {
-        Sinon.stub(FetchReviewChargeReferenceService, 'go').resolves(reviewChargeReference)
+        vi.spyOn(FetchReviewChargeReferenceService, 'default').mockResolvedValue(reviewChargeReference)
 
-        calculateChargeRequestStub = Sinon.stub(CalculateChargeRequest, 'send').resolves()
+        calculateChargeRequestStub = vi.spyOn(CalculateChargeRequest, 'default').mockResolvedValue()
       })
 
       it('adds a flash message stating the example charge is £0.00 and skips calling the Charging Module API', async () => {
-        await PreviewService.go(reviewChargeReference.id, yarStub)
+        await PreviewService(reviewChargeReference.id, yarStub)
 
-        expect(calculateChargeRequestStub.called).toBe(false)
+        expect(calculateChargeRequestStub).not.toHaveBeenCalled()
 
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
-        expect(yarStub.flash.called).toBe(true)
+        expect(yarStub.flash).toHaveBeenCalled()
         expect(flashType).toEqual('charge')
         expect(bannerMessage).toEqual('Based on this information the example charge is £0.00')
       })

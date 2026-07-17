@@ -1,15 +1,15 @@
-'use strict'
-
 /**
  * Model for charge_version_notes (water.notes)
  * @module ChargeVersionNote
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import ChargeVersionModel from './charge-version.model.js'
+import UserModel from './user.model.js'
 
-class ChargeVersionNote extends BaseModel {
+export default class ChargeVersionNote extends BaseModel {
   static get tableName() {
     return 'chargeVersionNotes'
   }
@@ -18,7 +18,7 @@ class ChargeVersionNote extends BaseModel {
     return {
       chargeVersion: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-version.model',
+        modelClass: ChargeVersionModel,
         join: {
           from: 'chargeVersionNotes.id',
           to: 'chargeVersions.noteId'
@@ -26,7 +26,7 @@ class ChargeVersionNote extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'chargeVersionNotes.userId',
           to: 'users.userId'
@@ -35,5 +35,3 @@ class ChargeVersionNote extends BaseModel {
     }
   }
 }
-
-module.exports = ChargeVersionNote

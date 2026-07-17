@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/agreements-exceptions` page
  * @module SubmitAgreementsExceptions
  */
 
-const AgreementsExceptionsPresenter = require('../../../presenters/return-versions/setup/agreements-exceptions.presenter.js')
-const AgreementsExceptionsValidator = require('../../../validators/return-versions/setup/agreements-exceptions.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import AgreementsExceptionsPresenter from '../../../presenters/return-versions/setup/agreements-exceptions.presenter.js'
+import AgreementsExceptionsValidator from '../../../validators/return-versions/setup/agreements-exceptions.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/agreements-exceptions` page
@@ -29,8 +27,8 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the agreements exceptions page including the validation error details
  */
-async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitAgreementsExceptionsService(sessionId, requirementIndex, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'agreementsExceptions')
 
@@ -40,9 +38,9 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
+      flashNotification(yar, 'Updated', 'Requirements for returns updated')
     } else {
-      GeneralLib.flashNotification(yar, 'Added', 'New requirement added')
+      flashNotification(yar, 'Added', 'New requirement added')
     }
 
     return {
@@ -50,7 +48,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     }
   }
 
-  const formattedData = AgreementsExceptionsPresenter.go(session, requirementIndex, payload)
+  const formattedData = AgreementsExceptionsPresenter(session, requirementIndex)
 
   return {
     error,
@@ -65,11 +63,7 @@ async function _save(session, requirementIndex, payload) {
 }
 
 function _validate(payload) {
-  const validation = AgreementsExceptionsValidator.go(payload)
+  const validation = AgreementsExceptionsValidator(payload)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

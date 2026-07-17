@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/check` page
  * @module CheckService
  */
 
-const AllowedBillRunPresenter = require('../../../presenters/bill-runs/setup/check/allowed-bill-run.presenter.js')
-const BlockedBillRunPresenter = require('../../../../app/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js')
-const DetermineBlockingBillRunService = require('./determine-blocking-bill-run.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NoAnnualBillRunPresenter = require('../../../presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js')
-const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
+import AllowedBillRunPresenter from '../../../presenters/bill-runs/setup/check/allowed-bill-run.presenter.js'
+import BlockedBillRunPresenter from '../../../../app/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js'
+import DetermineBlockingBillRunService from './determine-blocking-bill-run.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NoAnnualBillRunPresenter from '../../../presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js'
+import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/check` page
@@ -19,9 +17,9 @@ const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
  *
  * @returns {Promise<object>} The view data for the check page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
-  const blockingResults = await DetermineBlockingBillRunService.go(session)
+export default async function checkService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
+  const blockingResults = await DetermineBlockingBillRunService(session)
 
   const formattedData = _formattedData(session, blockingResults)
 
@@ -33,16 +31,12 @@ async function go(sessionId) {
 
 function _formattedData(session, blockingResults) {
   if (blockingResults.toFinancialYearEnding === 0) {
-    return NoAnnualBillRunPresenter.go(session)
+    return NoAnnualBillRunPresenter(session)
   }
 
   if (blockingResults.trigger === engineTriggers.neither) {
-    return BlockedBillRunPresenter.go(session, blockingResults)
+    return BlockedBillRunPresenter(session, blockingResults)
   }
 
-  return AllowedBillRunPresenter.go(session, blockingResults)
-}
-
-module.exports = {
-  go
+  return AllowedBillRunPresenter(session, blockingResults)
 }

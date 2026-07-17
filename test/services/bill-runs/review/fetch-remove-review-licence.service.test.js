@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
+import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
 
 // Thing under test
-const FetchRemoveReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js')
+import FetchRemoveReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js'
 
 describe('Bill Runs - Review - Fetch Remove Review Licence service', () => {
   let billRun
@@ -23,7 +24,7 @@ describe('Bill Runs - Review - Fetch Remove Review Licence service', () => {
 
   describe('when a matching review licence exists', () => {
     it('returns the match', async () => {
-      const result = await FetchRemoveReviewLicenceService.go(reviewLicence.id)
+      const result = await FetchRemoveReviewLicenceService(reviewLicence.id)
 
       expect(result).toEqual({
         id: reviewLicence.id,
@@ -47,7 +48,7 @@ describe('Bill Runs - Review - Fetch Remove Review Licence service', () => {
 
   describe('when no matching review licence exists', () => {
     it('returns nothing', async () => {
-      const result = await FetchRemoveReviewLicenceService.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchRemoveReviewLicenceService('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result).toBeUndefined()
     })

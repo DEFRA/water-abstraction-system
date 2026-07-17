@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches the selected review charge element instance and related data for the 2PT review charge element pages
  * @module FetchReviewChargeReferenceService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
+import ReviewChargeElementModel from '../../../models/review-charge-element.model.js'
 
 /**
  * Fetches the selected review charge element instance and related data for the 2PT review charge element pages
@@ -19,7 +17,7 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
  * @returns {Promise<object>} the matching `ReviewChargeElementModel` instance and related data needed for the
  * two-part tariff review charge element page
  */
-async function go(reviewChargeElementId) {
+export default async function fetchReviewChargeElementService(reviewChargeElementId) {
   return _fetch(reviewChargeElementId)
 }
 
@@ -93,8 +91,4 @@ async function _fetch(reviewChargeElementId) {
           ])
         })
     })
-}
-
-module.exports = {
-  go
 }

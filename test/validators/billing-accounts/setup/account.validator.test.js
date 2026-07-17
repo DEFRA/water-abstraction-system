@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const AccountValidator = require('../../../../app/validators/billing-accounts/setup/account.validator.js')
+import AccountValidator from '../../../../app/validators/billing-accounts/setup/account.validator.js'
 
 describe('Billing Accounts - Setup - Account Validator', () => {
   let payload
@@ -16,7 +17,7 @@ describe('Billing Accounts - Setup - Account Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = AccountValidator.go(payload)
+        const result = AccountValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -30,7 +31,7 @@ describe('Billing Accounts - Setup - Account Validator', () => {
         })
 
         it('returns with no errors', () => {
-          const result = AccountValidator.go(payload)
+          const result = AccountValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeUndefined()
@@ -43,7 +44,7 @@ describe('Billing Accounts - Setup - Account Validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AccountValidator.go(payload)
+          const result = AccountValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -57,7 +58,7 @@ describe('Billing Accounts - Setup - Account Validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AccountValidator.go(payload)
+          const result = AccountValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -73,7 +74,7 @@ describe('Billing Accounts - Setup - Account Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = AccountValidator.go(payload)
+      const result = AccountValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

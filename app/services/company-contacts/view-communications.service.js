@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/communications' page
  *
  * @module ViewCommunicationsService
  */
 
-const CommunicationsPresenter = require('../../presenters/company-contacts/communications.presenter.js')
-const FetchCompanyContactDal = require('../../dal/company-contacts/fetch-company-contact.dal.js')
-const FetchCompanyService = require('../../dal/companies/fetch-company.dal.js')
-const FetchNotificationsDal = require('../../dal/company-contacts/fetch-notifications.dal.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+import CommunicationsPresenter from '../../presenters/company-contacts/communications.presenter.js'
+import FetchCompanyContactDal from '../../dal/company-contacts/fetch-company-contact.dal.js'
+import FetchCompanyService from '../../dal/companies/fetch-company.dal.js'
+import FetchNotificationsDal from '../../dal/company-contacts/fetch-notifications.dal.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/communications' page
@@ -20,16 +18,16 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(id, page) {
-  const companyContact = await FetchCompanyContactDal.go(id)
+export default async function viewCommunicationsService(id, page) {
+  const companyContact = await FetchCompanyContactDal(id)
 
-  const company = await FetchCompanyService.go(companyContact.companyId)
+  const company = await FetchCompanyService(companyContact.companyId)
 
-  const { notifications, totalNumber } = await FetchNotificationsDal.go(companyContact.contact.email, page)
+  const { notifications, totalNumber } = await FetchNotificationsDal(companyContact.contact.email, page)
 
-  const pageData = CommunicationsPresenter.go(company, companyContact, notifications)
+  const pageData = CommunicationsPresenter(company, companyContact, notifications)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/company-contacts/${companyContact.id}/communications`,
@@ -42,8 +40,4 @@ async function go(id, page) {
     pagination,
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

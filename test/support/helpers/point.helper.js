@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module PointHelper
  */
 
-const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
-const PointModel = require('../../../app/models/point.model.js')
-const SourceHelper = require('./source.helper.js')
+import PointModel from '../../../app/models/point.model.js'
+import SourceHelper from './source.helper.js'
+import { generateNaldPointId, generateNationalGridReference } from '../generators.js'
 
 /**
  * Add a new licence version purpose point
@@ -58,31 +56,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Returns a randomly generated National Grid Reference NGR (TL 5143 7153)
- *
- * @returns {string} - A randomly National Grid Reference NGR
- */
-function generateNationalGridReference() {
-  // NOTE: These are taken from https://en.wikipedia.org/wiki/Ordnance_Survey_National_Grid and are the 100KM
-  // square references that cover the majority of the UK (sorry far North!)
-  const codes = ['SD', 'SE', 'SJ', 'SK', 'SO', 'SP', 'ST', 'SU', 'SY', 'SZ', 'TA', 'TF', 'TL', 'TQ', 'TV', 'TG', 'TM']
-
-  return `${codes[generateRandomInteger(0, 16)]} ${generateRandomInteger(100, 999)} ${generateRandomInteger(100, 999)}`
-}
-
-/**
- * Returns a randomly generated NALD point ID (55944)
- *
- * @returns {string} - A randomly generated point ID
- */
-function generateNaldPointId() {
-  return generateRandomInteger(1, 99999)
-}
-
-module.exports = {
+export default {
   add,
-  defaults,
-  generateNationalGridReference,
-  generateNaldPointId
+  defaults
 }

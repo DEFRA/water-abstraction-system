@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Thing under test
-const ReviewChargeReferencePresenter = require('../../../../app/presenters/bill-runs/review/review-charge-reference.presenter.js')
+import ReviewChargeReferencePresenter from '../../../../app/presenters/bill-runs/review/review-charge-reference.presenter.js'
 
 describe('Bill Runs Review - Review Charge Reference presenter', () => {
   let reviewChargeReference
@@ -15,7 +16,7 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
 
   describe('when provided with the result of fetch review charge reference service', () => {
     it('correctly presents the data', () => {
-      const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
+      const result = ReviewChargeReferencePresenter(reviewChargeReference)
 
       expect(result).toEqual({
         additionalCharges: '',
@@ -58,7 +59,7 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
         })
 
         it('adds it to the ""adjustments" property and displays both amended and original values', () => {
-          const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
+          const result = ReviewChargeReferencePresenter(reviewChargeReference)
 
           expect(result.adjustments).toEqual(['Aggregate factor (0.6 / 0.5)', 'Charge adjustment (1 / 1)'])
         })
@@ -71,7 +72,7 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
         })
 
         it('adds it to the ""adjustments" property and displays both amended and original values', () => {
-          const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
+          const result = ReviewChargeReferencePresenter(reviewChargeReference)
 
           expect(result.adjustments).toEqual(['Aggregate factor (1 / 1)', 'Charge adjustment (0.8 / 0.7)'])
         })
@@ -85,7 +86,7 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
         })
 
         it('adds it to the ""adjustments" property along with the factors', () => {
-          const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
+          const result = ReviewChargeReferencePresenter(reviewChargeReference)
 
           expect(result.adjustments).toEqual([
             'Aggregate factor (0.9 / 0.9)',
@@ -106,7 +107,7 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
         })
 
         it('does not add either factor to "adjustments"', () => {
-          const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
+          const result = ReviewChargeReferencePresenter(reviewChargeReference)
 
           expect(result.adjustments).not.toContain('Aggregate factor (1)')
           expect(result.adjustments).not.toContain('Charge adjustment (1)')
@@ -121,7 +122,7 @@ describe('Bill Runs Review - Review Charge Reference presenter', () => {
         })
 
         it('adds just the adjustment to the ""adjustments" property', () => {
-          const result = ReviewChargeReferencePresenter.go(reviewChargeReference)
+          const result = ReviewChargeReferencePresenter(reviewChargeReference)
 
           expect(result.adjustments).toEqual(['Two part tariff agreement'])
         })

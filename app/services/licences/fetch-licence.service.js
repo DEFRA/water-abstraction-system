@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the matching licence for the view '/licences/{id}/*' pages
  * @module FetchLicenceService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
-const { db } = require('../../../db/db.js')
+import LicenceModel from '../../models/licence.model.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetches the matching licence for the view '/licences/{id}/*' pages
@@ -15,7 +13,7 @@ const { db } = require('../../../db/db.js')
  *
  * @returns {Promise<module:LicenceModel>} the matching `LicenceModel`
  */
-async function go(licenceId) {
+export default async function fetchLicenceService(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select([
@@ -41,8 +39,4 @@ async function go(licenceId) {
     `)
     ])
     .modify('currentVersion')
-}
-
-module.exports = {
-  go
 }

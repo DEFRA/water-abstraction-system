@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/season` page
  * @module BillRunsCreateSeasonService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SeasonPresenter = require('../../../presenters/bill-runs/setup/season.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SeasonPresenter from '../../../presenters/bill-runs/setup/season.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/season` page
@@ -18,17 +16,13 @@ const SeasonPresenter = require('../../../presenters/bill-runs/setup/season.pres
  *
  * @returns {Promise<object>} The view data for the season page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function seasonService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = SeasonPresenter.go(session)
+  const formattedData = SeasonPresenter(session)
 
   return {
     activeNavBar: 'bill-runs',
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,15 +1,12 @@
-'use strict'
-
 /**
  * Fetches data needed for the view '/system/users/internal/{id}/communications' page
  * @module FetchNotificationsDal
  */
 
-const NotificationModel = require('../../../models/notification.model.js')
-const { userNotificationTypes } = require('../../../lib/static-lookups.lib.js')
-
-const DatabaseConfig = require('../../../../config/database.config.js')
-const ServerConfig = require('../../../../config/server.config.js')
+import DatabaseConfig from '../../../../config/database.config.js'
+import NotificationModel from '../../../models/notification.model.js'
+import ServerConfig from '../../../../config/server.config.js'
+import { userNotificationTypes } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Fetches data needed for the view '/system/users/internal/{id}/communications' page
@@ -19,7 +16,7 @@ const ServerConfig = require('../../../../config/server.config.js')
  *
  * @returns {Promise<object[]>} the notifications linked to the user
  */
-async function go(username, page = '1') {
+export default async function fetchNotificationsDal(username, page = '1') {
   const { results: notifications, total: totalNumber } = await _fetch(username, page)
 
   return { notifications, totalNumber }
@@ -56,8 +53,4 @@ function _messageRefs() {
   }
 
   return messageRefs
-}
-
-module.exports = {
-  go
 }

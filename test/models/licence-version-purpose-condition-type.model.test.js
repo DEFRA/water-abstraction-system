@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../support/helpers/licence-version-purpose-condition-type.helper.js')
+import LicenceVersionPurposeConditionHelper from '../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionModel from '../../app/models/licence-version-purpose-condition.model.js'
+import LicenceVersionPurposeConditionTypeHelper from '../support/helpers/licence-version-purpose-condition-type.helper.js'
 
 // Thing under test
-const LicenceVersionPurposeConditionTypeModel = require('../../app/models/licence-version-purpose-condition-type.model.js')
+import LicenceVersionPurposeConditionTypeModel from '../../app/models/licence-version-purpose-condition-type.model.js'
 
 describe('Licence Version Purposes Condition Type model', () => {
   let testLicenceVersionPurposeCondition

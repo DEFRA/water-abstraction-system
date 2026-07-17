@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines which supplementary billing flags should be added to a licence
  * @module DetermineLicenceFlagsService
  */
 
-const LicenceModel = require('../../../models/licence.model.js')
+import LicenceModel from '../../../models/licence.model.js'
 
 /**
  * Flags a licence for supplementary billing, based on the provided scheme
@@ -28,7 +26,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  *
  * @returns {object} - An object containing the related licenceId, regionId and licence supplementary billing flags
  */
-async function go(licenceId, scheme) {
+export default async function determineLicenceFlagsService(licenceId, scheme) {
   const licence = await _fetchLicence(licenceId)
 
   let flagForSrocSupplementary = licence.includeInSrocBilling
@@ -55,8 +53,4 @@ async function _fetchLicence(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select(['regionId', 'includeInSrocBilling', 'includeInPresrocBilling'])
-}
-
-module.exports = {
-  go
 }

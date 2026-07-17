@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/paper-return` page
  *
  * @module ViewPaperReturnService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-return.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PaperReturnPresenter from '../../../presenters/notices/setup/paper-return.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/paper-return` page
@@ -16,17 +14,13 @@ const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-re
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewPaperReturnService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = PaperReturnPresenter.go(session)
+  const pageData = PaperReturnPresenter(session)
 
   return {
     activeNavBar: 'notices',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

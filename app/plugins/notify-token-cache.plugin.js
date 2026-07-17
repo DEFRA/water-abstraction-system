@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Adds a server method which returns a signed JWT access token for GOV.UK Notify.
  *
@@ -8,14 +6,14 @@
  * @module NotifyTokenCachePlugin
  */
 
-const jwt = require('jsonwebtoken')
+import jwt from 'jsonwebtoken'
 
-const notifyConfig = require('../../config/notify.config.js')
+import notifyConfig from '../../config/notify.config.js'
 
 const FIVE_SECS_IN_MS = 5000
 const TWENTY_FIVE_SECS_IN_MS = 25000
 
-const NotifyTokenCachePlugin = {
+export default {
   name: 'NotifyTokenCache',
   register: (server, _options) => {
     // The following description comes from https://hapi.dev/tutorials/servermethods
@@ -93,5 +91,3 @@ function _credentials() {
     serviceId: apiKey.substring(apiKey.length - 73, apiKey.length - 37)
   }
 }
-
-module.exports = NotifyTokenCachePlugin

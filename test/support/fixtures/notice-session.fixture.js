@@ -1,10 +1,6 @@
-'use strict'
-
-const RegionHelper = require('../helpers/region.helper.js')
-const { generateNoticeReferenceCode, generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
-const { generateReference } = require('../helpers/return-requirement.helper.js')
-const { NoticeJourney, NoticeType, NoticeTypes } = require('../../../app/lib/static-lookups.lib.js')
+import RegionHelper from '../helpers/region.helper.js'
+import { NoticeJourney, NoticeType, NoticeTypes } from '../../../app/lib/static-lookups.lib.js'
+import { generateLicenceRef, generateNoticeReferenceCode, generateReference, generateUUID } from '../generators.js'
 
 /**
  * Creates an abstraction alert stop notice setup session fixture for testing purposes
@@ -395,11 +391,11 @@ function _transformReturnLog(returnLog) {
   }
 }
 
-module.exports = {
+export default {
   abstractionAlertStop,
+  adHocRenewalInvitation,
   adHocInvitation,
   adHocReminder,
-  adHocRenewalInvitation,
   paperReturn,
   standardInvitation,
   standardReminder

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Updates the session cookie with the filter data needed for the '/bill-runs/review/{id}' page
  * @module SubmitReviewService
  */
 
-const { clearFilters, handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import { clearFilters, handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Updates the session cookie with the filter data needed for the '/bill-runs/review/{id}' page
@@ -14,7 +12,7 @@ const { clearFilters, handleOneOptionSelected } = require('../../../lib/submit-p
  * @param {object} payload - The `request.payload` containing the filter data.
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go(billRunId, payload, yar) {
+export default async function submitReviewService(billRunId, payload, yar) {
   const filterKey = `review-${billRunId}`
 
   const filterCleared = clearFilters(payload, yar, filterKey)
@@ -36,8 +34,4 @@ function _save(payload, yar, filterKey) {
     licenceStatus: payload.licenceStatus ?? null,
     progress: payload.progress
   })
-}
-
-module.exports = {
-  go
 }

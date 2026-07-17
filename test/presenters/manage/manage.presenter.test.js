@@ -1,27 +1,25 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const AuthService = require('../../../app/services/plugins/auth.service.js')
-const { data: users } = require('../../../db/seeds/data/users.js')
+import AuthService from '../../../app/services/plugins/auth.service.js'
+import { data as users } from '../../../db/seeds/data/users.js'
 
 // Things to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
 
 // Thing under test
-const ManagePresenter = require('../../../app/presenters/manage/manage.presenter.js')
+import ManagePresenter from '../../../app/presenters/manage/manage.presenter.js'
 
 describe('Manage - Manage presenter', () => {
   let auth
 
   beforeEach(() => {
-    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
+    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersView', true)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the user is assigned "Super user" permissions', () => {
@@ -30,7 +28,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -50,7 +48,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -70,7 +68,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -90,7 +88,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -110,7 +108,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -130,7 +128,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -150,7 +148,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -170,7 +168,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -190,7 +188,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -210,5 +208,5 @@ async function _auth(username) {
     return user.username === username
   })
 
-  return AuthService.go(user.userId)
+  return AuthService(user.userId)
 }

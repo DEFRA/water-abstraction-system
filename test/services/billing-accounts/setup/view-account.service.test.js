@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewAccountService = require('../../../../app/services/billing-accounts/setup/view-account.service.js')
+import ViewAccountService from '../../../../app/services/billing-accounts/setup/view-account.service.js'
 
 describe('Billing Accounts - Setup - View Account Service', () => {
   let session
@@ -22,18 +20,18 @@ describe('Billing Accounts - Setup - View Account Service', () => {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewAccountService.go(session.id)
+      const result = await ViewAccountService(session.id)
 
       expect(result).toEqual({
         accountSelected: null,

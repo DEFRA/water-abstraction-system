@@ -1,29 +1,26 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Test helpers
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const UpdateCompanyContactDal = require('../../../../app/dal/company-contacts/setup/update-company-contact.dal.js')
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as UpdateCompanyContactDal from '../../../../app/dal/company-contacts/setup/update-company-contact.dal.js'
 
 // Thing under test
-const SubmitRestoreService = require('../../../../app/services/company-contacts/setup/submit-restore.service.js')
+import SubmitRestoreService from '../../../../app/services/company-contacts/setup/submit-restore.service.js'
 
 describe('Company Contacts - Setup - Submit Restore Service', () => {
   let auth
   let company
   let companyContact
-  let fetchSessionStub
   let session
   let sessionData
   let yarStub
@@ -43,31 +40,31 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
       name: 'Eric'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
 
-    Sinon.stub(UpdateCompanyContactDal, 'go').resolves()
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    vi.spyOn(UpdateCompanyContactDal, 'default').mockResolvedValue()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('continues the journey', async () => {
-      const result = await SubmitRestoreService.go(session.id, yarStub, auth)
+      const result = await SubmitRestoreService(session.id, yarStub, auth)
 
       expect(result).toEqual({ redirectUrl: `/system/companies/${company.id}/contacts` })
     })
 
     it('persists the company contact details', async () => {
-      await SubmitRestoreService.go(session.id, yarStub, auth)
+      await SubmitRestoreService(session.id, yarStub, auth)
 
-      const [actualContact] = UpdateCompanyContactDal.go.args[0]
+      const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
       expect(actualContact).toEqual({
         id: companyContact.id,
@@ -80,26 +77,26 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
     })
 
     it('sets a notification', async () => {
-      await SubmitRestoreService.go(session.id, yarStub, auth)
+      await SubmitRestoreService(session.id, yarStub, auth)
 
-      const [flashType, bannerMessage] = yarStub.flash.args[0]
+      const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(bannerMessage).toEqual({ titleText: 'Contact restored', text: `${session.name} was restored.` })
     })
 
     it('clears the session', async () => {
-      await SubmitRestoreService.go(session.id, yarStub, auth)
+      await SubmitRestoreService(session.id, yarStub, auth)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     describe('the "abstractionAlerts" property', () => {
       describe('when set to "yes"', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
-          await SubmitRestoreService.go(session.id, yarStub, auth)
+          await SubmitRestoreService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlerts).toBe(true)
         })
@@ -107,18 +104,18 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
 
       describe('when set to "no"', () => {
         beforeEach(async () => {
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             ...sessionData,
             abstractionAlerts: 'no'
           })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "abstractionAlerts" as "false"', async () => {
-          await SubmitRestoreService.go(session.id, yarStub, auth)
+          await SubmitRestoreService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlerts).toBe(false)
         })
@@ -128,18 +125,18 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
     describe('the "email" property', () => {
       describe('when email is in uppercase', () => {
         beforeEach(async () => {
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             ...sessionData,
             email: 'ERICE@TEST.COM'
           })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "email" in lowercase', async () => {
-          await SubmitRestoreService.go(session.id, yarStub, auth)
+          await SubmitRestoreService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.email).toEqual('erice@test.com')
         })

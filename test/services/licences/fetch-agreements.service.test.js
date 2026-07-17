@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const FinancialAgreementHelper = require('../../support/helpers/financial-agreement.helper.js')
-const LicenceAgreementHelper = require('../../support/helpers/licence-agreement.helper.js')
+import FinancialAgreementHelper from '../../support/helpers/financial-agreement.helper.js'
+import LicenceAgreementHelper from '../../support/helpers/licence-agreement.helper.js'
 
 // Thing under test
-const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
+import FetchAgreementsService from '../../../app/services/licences/fetch-agreements.service.js'
 
 const FINANCIAL_AGREEMENT_S130U_INDEX = 5
 
@@ -37,7 +38,7 @@ describe('Licences - Fetch Agreements service', () => {
       })
 
       it('returns the matching agreements data', async () => {
-        const results = await FetchAgreementsService.go(licenceAgreement.licenceRef)
+        const results = await FetchAgreementsService(licenceAgreement.licenceRef)
 
         expect(results[0]).toMatchObject({
           endDate,
@@ -63,7 +64,7 @@ describe('Licences - Fetch Agreements service', () => {
       })
 
       it('does not return the agreements data', async () => {
-        const results = await FetchAgreementsService.go(licenceAgreement.licenceRef)
+        const results = await FetchAgreementsService(licenceAgreement.licenceRef)
 
         expect(results).toHaveLength(0)
       })

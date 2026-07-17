@@ -1,21 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
-const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
-const ContactHelper = require('../../../support/helpers/contact.helper.js')
-const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.js')
-const UserHelper = require('../../../support/helpers/user.helper.js')
+import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
+import CompanyContactModel from '../../../../app/models/company-contact.model.js'
+import ContactHelper from '../../../support/helpers/contact.helper.js'
+import LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'
+import UserHelper from '../../../support/helpers/user.helper.js'
 
 // Thing under test
-const UpdateCompanyContactDal = require('../../../../app/dal/company-contacts/setup/update-company-contact.dal.js')
+import UpdateCompanyContactDal from '../../../../app/dal/company-contacts/setup/update-company-contact.dal.js'
 
 describe('Company Contacts - Update Company Contact dal', () => {
   let today
-  let clock
+
   let companyContact
   let contact
   let updatedCompanyContact
@@ -27,7 +25,7 @@ describe('Company Contacts - Update Company Contact dal', () => {
     seedDate = new Date('2021-01-01')
     today = new Date('2025-06-02')
 
-    clock = Sinon.useFakeTimers({ now: today, toFake: ['Date'] })
+    vi.useFakeTimers({ now: today, toFake: ['Date'] })
 
     licenceRole = LicenceRoleHelper.select('additionalContact')
 
@@ -58,8 +56,8 @@ describe('Company Contacts - Update Company Contact dal', () => {
   })
 
   afterAll(async () => {
-    Sinon.restore()
-    clock.restore()
+    vi.restoreAllMocks()
+    vi.useRealTimers()
 
     await contact.$query().delete()
     await companyContact.$query().delete()
@@ -67,7 +65,7 @@ describe('Company Contacts - Update Company Contact dal', () => {
 
   describe('when a updating a company contact', () => {
     it('updates the company contact and associated contact', async () => {
-      await UpdateCompanyContactDal.go(updatedCompanyContact)
+      await UpdateCompanyContactDal(updatedCompanyContact)
 
       const updatedCompanyContactResult = await CompanyContactModel.query()
         .findById(companyContact.id)

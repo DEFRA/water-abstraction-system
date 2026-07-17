@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Helper methods to deal with return cycle dates
  * @module ReturnCycleDatesLib
  */
 
-const { returnCycleDates } = require('./static-lookups.lib.js')
+import { returnCycleDates } from './static-lookups.lib.js'
 
 /**
  * Determine the due date of next provided cycle, either summer or winter and all year
@@ -15,7 +13,7 @@ const { returnCycleDates } = require('./static-lookups.lib.js')
  *
  * @returns {Date} the due date of the next cycle
  */
-function determineCycleDueDate(summer, determinationDate = new Date()) {
+export function determineCycleDueDate(summer, determinationDate = new Date()) {
   if (summer) {
     return _dueDate(determinationDate, returnCycleDates.summer)
   }
@@ -31,7 +29,7 @@ function determineCycleDueDate(summer, determinationDate = new Date()) {
  *
  * @returns {Date} the end date of the next cycle
  */
-function determineCycleEndDate(summer, determinationDate = new Date()) {
+export function determineCycleEndDate(summer, determinationDate = new Date()) {
   if (summer) {
     return _endDate(determinationDate, returnCycleDates.summer)
   }
@@ -48,7 +46,7 @@ function determineCycleEndDate(summer, determinationDate = new Date()) {
  *
  * @returns {Date} the start date of the next cycle.
  */
-function determineCycleStartDate(summer, determinationDate = new Date()) {
+export function determineCycleStartDate(summer, determinationDate = new Date()) {
   if (summer) {
     return _startDate(determinationDate, returnCycleDates.summer)
   }
@@ -87,10 +85,4 @@ function _startDate(determinationDate, cycle) {
   const cycleStartYear = month < cycle.startDate.month ? year - 1 : year
 
   return new Date(`${cycleStartYear}-${cycleStartMonth}-${cycleStartDay}`)
-}
-
-module.exports = {
-  determineCycleDueDate,
-  determineCycleEndDate,
-  determineCycleStartDate
 }

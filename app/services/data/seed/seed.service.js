@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Runs the Knex seed process programmatically
  * @module SeedService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Triggers the Knex seed process programmatically
@@ -19,10 +17,6 @@ const { db } = require('../../../../db/db.js')
  *
  * Credit to {@link https://stackoverflow.com/a/53169879 | Programmatically run knex seed:run}
  */
-async function go() {
+export default async function seedService() {
   await db.seed.run()
-}
-
-module.exports = {
-  go
 }

@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for events (water.events)
  * @module EventModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import NotificationModel from './notification.model.js'
 
-class EventModel extends BaseModel {
+export default class EventModel extends BaseModel {
   static get tableName() {
     return 'events'
   }
@@ -23,7 +22,7 @@ class EventModel extends BaseModel {
     return {
       notifications: {
         relation: Model.HasManyRelation,
-        modelClass: 'notification.model',
+        modelClass: NotificationModel,
         join: {
           from: 'events.id',
           to: 'notifications.eventId'
@@ -32,5 +31,3 @@ class EventModel extends BaseModel {
     }
   }
 }
-
-module.exports = EventModel

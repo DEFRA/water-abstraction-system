@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetch all licences linked to the given company via their licence version holders
  * @module FetchCompanyLicencesDal
  */
 
-const { currentLicenceVersionsJoin } = require('../notices/recipient-queries.dal.js')
-const { db } = require('../../../db/db.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import { currentLicenceVersionsJoin } from '../notices/recipient-queries.dal.js'
+import { db } from '../../../db/db.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Fetch all licences linked to the given company via their licence version holders
@@ -16,7 +14,7 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  *
  * @returns {Promise<object[]>} An array of licence objects with `id` and `licenceRef`, sorted by `licenceRef`
  */
-async function go(companyId) {
+export default async function fetchCompanyLicencesDal(companyId) {
   const query = `
   SELECT
     l.id,
@@ -36,8 +34,4 @@ async function go(companyId) {
   const { rows } = await db.raw(query, [today, today, today, companyId])
 
   return rows
-}
-
-module.exports = {
-  go
 }

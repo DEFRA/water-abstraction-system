@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const BaseLicencesPresenter = require('../../../app/presenters/licences/base-licences.presenter.js')
+import * as BaseLicencesPresenter from '../../../app/presenters/licences/base-licences.presenter.js'
 
 describe('Licences - Base Licences presenter', () => {
   describe('#formatAbstractionAmounts()', () => {

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Creates a compressed tarball (.tgz) from a given schema folder
  * @module CompressSchemaFolderService
  */
 
-const tar = require('tar')
+import { tarCreate } from '../../../lib/tar-wrapper.lib.js'
 
 /**
  * Create a compressed tarball (.tgz) from a given schema folder
@@ -14,10 +12,10 @@ const tar = require('tar')
  *
  * @returns {Promise<string>} The path to the created tarball file
  */
-async function go(schemaFolderPath) {
+export default async function compressSchemaFolderService(schemaFolderPath) {
   const file = `${schemaFolderPath}.tgz`
 
-  await tar.create(
+  await tarCreate(
     {
       gzip: true,
       file
@@ -26,8 +24,4 @@ async function go(schemaFolderPath) {
   )
 
   return file
-}
-
-module.exports = {
-  go
 }

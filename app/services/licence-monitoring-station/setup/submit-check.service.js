@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/check`
  *
  * @module SubmitCheckService
  */
 
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
-const { flashNotification, timestampForPostgres } = require('../../../lib/general.lib.js')
-const { flowUnits } = require('../../../lib/static-lookups.lib.js')
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import LicenceMonitoringStationModel from '../../../models/licence-monitoring-station.model.js'
+import { flowUnits } from '../../../lib/static-lookups.lib.js'
+import { flashNotification, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/check`
@@ -21,12 +19,12 @@ const { flowUnits } = require('../../../lib/static-lookups.lib.js')
  *
  * @returns {Promise<string>} The monitoring station id used to redirect back to the monitoring station page
  */
-async function go(sessionId, userId, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitCheckService(sessionId, userId, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   await _createTag(session, userId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   flashNotification(yar, 'Success', `Tag for licence ${session.licenceRef} added`)
 
@@ -59,8 +57,4 @@ function _determineMeasureType(unit) {
 
 function _determineRestrictionType(stopOrReduce, reduceAtThreshold) {
   return stopOrReduce === 'reduce' && reduceAtThreshold === 'yes' ? 'stop_or_reduce' : stopOrReduce
-}
-
-module.exports = {
-  go
 }

@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/return-logs/{id}/communications' page
  *
  * @module ViewCommunicationsService
  */
 
-const CommunicationsPresenter = require('../../presenters/return-logs/communications.presenter.js')
-const FetchNotificationsDal = require('../../dal/return-logs/fetch-notifications.dal.js')
-const FetchReturnLogService = require('./fetch-return-log.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+import CommunicationsPresenter from '../../presenters/return-logs/communications.presenter.js'
+import FetchNotificationsDal from '../../dal/return-logs/fetch-notifications.dal.js'
+import FetchReturnLogService from './fetch-return-log.service.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/return-logs/{id}/communications' page
@@ -19,14 +17,14 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(id, page) {
-  const returnLog = await FetchReturnLogService.go(id)
+export default async function viewCommunicationsService(id, page) {
+  const returnLog = await FetchReturnLogService(id)
 
-  const { notifications, totalNumber } = await FetchNotificationsDal.go(id, page)
+  const { notifications, totalNumber } = await FetchNotificationsDal(id, page)
 
-  const pageData = CommunicationsPresenter.go(returnLog, notifications)
+  const pageData = CommunicationsPresenter(returnLog, notifications)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/return-logs/${id}/communications`,
@@ -39,8 +37,4 @@ async function go(id, page) {
     pagination,
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

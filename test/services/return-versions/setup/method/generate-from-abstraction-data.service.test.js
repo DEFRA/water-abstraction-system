@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceModel = require('../../../../../app/models/licence.model.js')
-const LicenceVersionPurposeModel = require('../../../../../app/models/licence-version-purpose.model.js')
+import LicenceModel from '../../../../../app/models/licence.model.js'
+import LicenceVersionPurposeModel from '../../../../../app/models/licence-version-purpose.model.js'
 
 // Things we need to stub
-const DetermineTwoPartTariffAgreementService = require('../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js')
-const FetchAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
+import * as DetermineTwoPartTariffAgreementService from '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
+import * as FetchAbstractionDataService from '../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js'
 
 // Thing under test
-const GenerateFromAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js')
+import GenerateFromAbstractionDataService from '../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js'
 
 describe('Return Versions - Setup - Generate From Abstraction Data service', () => {
   const licenceId = 'af0e52a3-db43-4add-b388-1b2564a437c7'
@@ -23,7 +21,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
   let twoPartTariffAgreement
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a licence ID that exists', () => {
@@ -32,12 +30,12 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData = _fetchAbstractionDataResult(licenceId)
         twoPartTariffAgreement = false
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
-        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
+        vi.spyOn(FetchAbstractionDataService, 'default').mockResolvedValue(abstractionData)
+        vi.spyOn(DetermineTwoPartTariffAgreementService, 'default').mockResolvedValue(twoPartTariffAgreement)
       })
 
       it('generates return requirements setup data', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
+        const result = await GenerateFromAbstractionDataService(licenceId, licenceVersionId, startDate)
 
         expect(result).toEqual([
           {
@@ -112,12 +110,12 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData = _fetchAbstractionDataResult(licenceId)
         twoPartTariffAgreement = true
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
-        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
+        vi.spyOn(FetchAbstractionDataService, 'default').mockResolvedValue(abstractionData)
+        vi.spyOn(DetermineTwoPartTariffAgreementService, 'default').mockResolvedValue(twoPartTariffAgreement)
       })
 
       it('sets the collection frequency to "day" for the two-part tariff spray purpose', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
+        const result = await GenerateFromAbstractionDataService(licenceId, licenceVersionId, startDate)
 
         // We assert the others haven't changed because of this
         expect(result[0].frequencyCollected).toEqual('day')
@@ -136,12 +134,12 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData.licenceVersions[0].licenceVersionPurposes[1].purpose.twoPartTariff = true
         twoPartTariffAgreement = false
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
-        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
+        vi.spyOn(FetchAbstractionDataService, 'default').mockResolvedValue(abstractionData)
+        vi.spyOn(DetermineTwoPartTariffAgreementService, 'default').mockResolvedValue(twoPartTariffAgreement)
       })
 
       it('sets the agreements for each return requirement to be "two-part tariff"', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
+        const result = await GenerateFromAbstractionDataService(licenceId, licenceVersionId, startDate)
 
         expect(result[0].agreementsExceptions).toEqual(['none'])
         expect(result[1].agreementsExceptions).toEqual(['two-part-tariff'])
@@ -155,12 +153,12 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData.waterUndertaker = true
         twoPartTariffAgreement = false
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
-        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
+        vi.spyOn(FetchAbstractionDataService, 'default').mockResolvedValue(abstractionData)
+        vi.spyOn(DetermineTwoPartTariffAgreementService, 'default').mockResolvedValue(twoPartTariffAgreement)
       })
 
       it('sets the collection and reporting frequencies to "day"', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
+        const result = await GenerateFromAbstractionDataService(licenceId, licenceVersionId, startDate)
 
         expect(result[0].frequencyCollected).toEqual('day')
         expect(result[0].frequencyReported).toEqual('day')
@@ -175,7 +173,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
   describe('when called with a licence ID that does not exists', () => {
     it('throws an error', async () => {
       await expect(
-        GenerateFromAbstractionDataService.go('fc29a098-c1ab-4a2b-bc31-b713cccc505d', startDate)
+        GenerateFromAbstractionDataService('fc29a098-c1ab-4a2b-bc31-b713cccc505d', startDate)
       ).rejects.toThrow()
     })
   })

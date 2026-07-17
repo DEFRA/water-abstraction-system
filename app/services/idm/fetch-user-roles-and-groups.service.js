@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Looks up a user in the `idm` schema and returns the roles and groups assigned to them
  * @module FetchUserRolesAndGroupsService
  */
 
-const UserModel = require('../../models/user.model.js')
+import UserModel from '../../models/user.model.js'
 
 /**
  * A user can have roles assigned to them in two ways:
@@ -22,7 +20,7 @@ const UserModel = require('../../models/user.model.js')
  *
  * @returns {Promise<object>} returns an object containing the matching `UserModel` and an array of its roles and groups
  */
-async function go(userId) {
+export default async function fetchUserRolesAndGroupsService(userId) {
   const user = await UserModel.query()
     .where('userId', userId)
     .limit(1)
@@ -100,8 +98,4 @@ function _combineAndDedupeRoles(rolesArrayToDedupe) {
   }, [])
 
   return dedupedArray
-}
-
-module.exports = {
-  go
 }

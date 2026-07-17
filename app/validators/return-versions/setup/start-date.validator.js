@@ -1,13 +1,14 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/start-date` page
  * @module StartDateValidator
  */
 
-const Joi = require('joi').extend(require('@joi/date'))
+import base from 'joi'
+import joiDate from '@joi/date'
 
-const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
+import { leftPadZeroes } from '../../../presenters/base.presenter.js'
+
+const Joi = base.extend(joiDate)
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/start-date` page
@@ -31,7 +32,7 @@ const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, licenceStartDate, licenceEndDate) {
+export default function startDateValidator(payload, licenceStartDate, licenceEndDate) {
   const _payload = {
     startDateOptions: payload.startDateOptions,
     anotherStartDate: _fullDate(payload)
@@ -98,8 +99,4 @@ function _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

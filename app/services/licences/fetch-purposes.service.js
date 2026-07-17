@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the licenceVersionPurposes data needed for the purposes page
  * @module FetchPurposesService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+import LicenceModel from '../../models/licence.model.js'
 
 /**
  * Fetches the licenceVersionPurposes data needed for the purposes page
@@ -14,7 +12,7 @@ const LicenceModel = require('../../models/licence.model.js')
  *
  * @returns {Promise<object[]>} The licenceVersionPurposes data needed for the purposes page
  */
-async function go(licenceId) {
+export default async function fetchPurposesService(licenceId) {
   const licence = await _fetch(licenceId)
 
   return licence.licenceVersions?.[0]?.licenceVersionPurposes || []
@@ -57,8 +55,4 @@ async function _fetch(licenceId) {
     .modifyGraph('licenceVersions.licenceVersionPurposes.purpose', (builder) => {
       builder.select(['id', 'description'])
     })
-}
-
-module.exports = {
-  go
 }

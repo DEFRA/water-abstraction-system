@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
-const NotifyResponseFixture = require('../../../../support/fixtures/notify-response.fixture.js')
-const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.lib.js')
+import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
+import NotifyResponseFixture from '../../../../support/fixtures/notify-response.fixture.js'
+import { generateNoticeReferenceCode } from '../../../../support/generators.js'
 
 // Things we need to stub
-const CreatePrecompiledFileRequest = require('../../../../../app/requests/notify/create-precompiled-file.request.js')
-const PreparePaperReturnService = require('../../../../../app/services/notices/setup/prepare-paper-return.service.js')
+import * as CreatePrecompiledFileRequest from '../../../../../app/requests/notify/create-precompiled-file.request.js'
+import * as PreparePaperReturnService from '../../../../../app/services/notices/setup/prepare-paper-return.service.js'
 
 // Thing under test
-const SendPaperReturnNotificationService = require('../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js')
+import SendPaperReturnNotificationService from '../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js'
 
 describe('Notices - Setup - Send - Send Paper Return Notification service', () => {
   let buffer
@@ -27,25 +25,25 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
 
     notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).pdf
 
-    Sinon.stub(CreatePrecompiledFileRequest, 'send').onCall(0).resolves(notifyResponse)
+    vi.spyOn(CreatePrecompiledFileRequest, 'default').mockResolvedValue(notifyResponse)
 
     buffer = Buffer.from('mock file')
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the notification is successful', () => {
     beforeEach(() => {
-      Sinon.stub(PreparePaperReturnService, 'go').resolves({
+      vi.spyOn(PreparePaperReturnService, 'default').mockResolvedValue({
         succeeded: true,
         response: { body: buffer }
       })
     })
 
     it('should return the notification notify response', async () => {
-      const result = await SendPaperReturnNotificationService.go(notification, referenceCode)
+      const result = await SendPaperReturnNotificationService(notification, referenceCode)
 
       expect(result).toEqual({
         id: notification.id,
@@ -60,14 +58,14 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
 
   describe('when generating the return form fails', () => {
     beforeEach(() => {
-      Sinon.stub(PreparePaperReturnService, 'go').resolves({
+      vi.spyOn(PreparePaperReturnService, 'default').mockResolvedValue({
         succeeded: false,
         response: { code: 'ENOTFOUND', message: 'getaddrinfo ENOTFOUND gotenberg' }
       })
     })
 
     it('should return the notification notify response', async () => {
-      const result = await SendPaperReturnNotificationService.go(notification, referenceCode)
+      const result = await SendPaperReturnNotificationService(notification, referenceCode)
 
       expect(result).toEqual({
         id: notification.id,

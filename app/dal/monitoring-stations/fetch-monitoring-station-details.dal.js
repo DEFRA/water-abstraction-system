@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the matching monitoring station and additional records needed for the view monitoring station page
  * @module FetchMonitoringStationDetailsDal
  */
 
-const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
-const MonitoringStationModel = require('../../models/monitoring-station.model.js')
+import LicenceMonitoringStationModel from '../../models/licence-monitoring-station.model.js'
+import MonitoringStationModel from '../../models/monitoring-station.model.js'
 
 /**
  * Fetches the matching monitoring station and additional records needed for the view monitoring station page
@@ -16,7 +14,7 @@ const MonitoringStationModel = require('../../models/monitoring-station.model.js
  * @returns {Promise<object>} the matching instance of `MonitoringStationModel` and the `LicenceMonitoringStationModel`s
  * with the additional information needed for the view
  */
-async function go(monitoringStationId) {
+export default async function fetchMonitoringStationDetailsDal(monitoringStationId) {
   const monitoringStation = await _fetchMonitoringStation(monitoringStationId)
 
   const licenceMonitoringStations = await _fetchLicenceMonitoringStations(monitoringStationId)
@@ -74,8 +72,4 @@ async function _fetchLicenceMonitoringStations(monitoringStationId) {
     .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {
       licenceVersionPurposeConditionBuilder.select(['id', 'notes'])
     })
-}
-
-module.exports = {
-  go
 }

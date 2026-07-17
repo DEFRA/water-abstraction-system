@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
-const ReturnVersionModel = require('../../../app/models/return-version.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import ReturnVersionModel from '../../../app/models/return-version.model.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things under test
-const FetchCurrentReturnVersionsDal = require('../../../app/dal/return-versions/fetch-current-return-versions.dal.js')
+import FetchCurrentReturnVersionsDal from '../../../app/dal/return-versions/fetch-current-return-versions.dal.js'
 
 describe('DAL - Return Versions - Fetch Current Return Versions dal', () => {
   let licenceId
@@ -35,7 +36,7 @@ describe('DAL - Return Versions - Fetch Current Return Versions dal', () => {
 
   describe('when called without a transaction', () => {
     it('fetches the current return versions for the specified licence', async () => {
-      const result = await FetchCurrentReturnVersionsDal.go(licenceId)
+      const result = await FetchCurrentReturnVersionsDal(licenceId)
 
       expect(result).toHaveLength(2)
       expect(result[0].startDate.getTime()).toBeGreaterThan(result[1].startDate.getTime())
@@ -54,7 +55,7 @@ describe('DAL - Return Versions - Fetch Current Return Versions dal', () => {
     })
 
     it('fetches the current return versions for the specified licence', async () => {
-      const result = await FetchCurrentReturnVersionsDal.go(licenceId, trx)
+      const result = await FetchCurrentReturnVersionsDal(licenceId, trx)
 
       expect(result).toHaveLength(2)
       expect(result[0].startDate.getTime()).toBeGreaterThan(result[1].startDate.getTime())

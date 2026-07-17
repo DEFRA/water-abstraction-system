@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view licence bills tab
  * @module ViewBillsService
  */
 
-const BillsPresenter = require('../../presenters/licences/bills.presenter.js')
-const FetchBillsService = require('./fetch-bills.service.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import BillsPresenter from '../../presenters/licences/bills.presenter.js'
+import FetchBillsService from './fetch-bills.service.js'
+import FetchLicenceService from './fetch-licence.service.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the view licence bills tab
@@ -20,20 +18,14 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence bills template.
  */
-async function go(licenceId, auth, page) {
-  const licence = await FetchLicenceService.go(licenceId)
+export default async function viewBillsService(licenceId, auth, page) {
+  const licence = await FetchLicenceService(licenceId)
 
-  const { bills, totalNumber } = await FetchBillsService.go(licenceId, page)
+  const { bills, totalNumber } = await FetchBillsService(licenceId, page)
 
-  const pageData = BillsPresenter.go(bills, licence)
+  const pageData = BillsPresenter(bills, licence)
 
-  const pagination = PaginatorPresenter.go(
-    totalNumber,
-    page,
-    `/system/licences/${licenceId}/bills`,
-    bills.length,
-    'bills'
-  )
+  const pagination = PaginatorPresenter(totalNumber, page, `/system/licences/${licenceId}/bills`, bills.length, 'bills')
 
   return {
     ...pageData,
@@ -41,7 +33,4 @@ async function go(licenceId, auth, page) {
     pagination,
     roles: userRoles(auth)
   }
-}
-module.exports = {
-  go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/method` page
  * @module SetupValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['useAbstractionData', 'useExistingRequirements', 'setUpManually']
 
@@ -17,7 +15,7 @@ const VALID_VALUES = ['useAbstractionData', 'useExistingRequirements', 'setUpMan
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function methodValidator(payload) {
   const errorMessage = 'Select how you want to set up the requirements for returns'
   const schema = Joi.object({
     method: Joi.string()
@@ -31,8 +29,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

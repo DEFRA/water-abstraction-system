@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Thing under test
-const SubmitRecipientNameService = require('../../../../app/services/notices/setup/submit-recipient-name.service.js')
+import SubmitRecipientNameService from '../../../../app/services/notices/setup/submit-recipient-name.service.js'
 
 describe('Notices - Setup - Submit Recipient Name service', () => {
   let payload
@@ -27,29 +25,29 @@ describe('Notices - Setup - Submit Recipient Name service', () => {
       referenceCode
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitRecipientNameService.go(session.id, payload)
+      await SubmitRecipientNameService(session.id, payload)
 
       expect(session).toEqual({
         ...session,
         contactName: 'Ronald Weasley'
       })
 
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitRecipientNameService.go(session.id, payload)
+      const result = await SubmitRecipientNameService(session.id, payload)
 
       expect(result).toEqual({})
     })
@@ -61,7 +59,7 @@ describe('Notices - Setup - Submit Recipient Name service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitRecipientNameService.go(session.id, payload)
+      const result = await SubmitRecipientNameService(session.id, payload)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

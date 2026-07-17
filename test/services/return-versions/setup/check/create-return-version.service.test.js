@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const ReturnVersionModel = require('../../../../../app/models/return-version.model.js')
-const ReturnRequirementModel = require('../../../../../app/models/return-requirement.model.js')
-const ReturnRequirementPointModel = require('../../../../../app/models/return-requirement-point.model.js')
-const ReturnRequirementPurposeModel = require('../../../../../app/models/return-requirement-purpose.model.js')
+import ReturnRequirementModel from '../../../../../app/models/return-requirement.model.js'
+import ReturnRequirementPointModel from '../../../../../app/models/return-requirement-point.model.js'
+import ReturnRequirementPurposeModel from '../../../../../app/models/return-requirement-purpose.model.js'
+import ReturnVersionModel from '../../../../../app/models/return-version.model.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-const CreateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/create-return-version.service.js')
+import CreateReturnVersionService from '../../../../../app/services/return-versions/setup/check/create-return-version.service.js'
 
 describe('Return Versions Setup - Create Return Version service', () => {
   describe('when called with data to create', () => {
@@ -21,7 +22,7 @@ describe('Return Versions Setup - Create Return Version service', () => {
     })
 
     it('creates a new Return Version', async () => {
-      await CreateReturnVersionService.go(returnVersionData)
+      await CreateReturnVersionService(returnVersionData)
 
       const returnVersion = await ReturnVersionModel.query().where(
         'licenceId',

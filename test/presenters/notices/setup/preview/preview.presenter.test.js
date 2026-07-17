@@ -1,17 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.lib.js')
+import http2 from 'node:http2'
+
+import { generateNoticeReferenceCode } from '../../../../support/generators.js'
 
 // Things we need to stub
-const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
+import * as GeneratePreviewRequest from '../../../../../app/requests/notify/generate-preview.request.js'
 
 // Thing under test
-const PreviewPresenter = require('../../../../../app/presenters/notices/setup/preview/preview.presenter.js')
+import PreviewPresenter from '../../../../../app/presenters/notices/setup/preview/preview.presenter.js'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 
 describe('Notices - Setup - Preview - Preview presenter', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
@@ -28,7 +29,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when previewing the notification succeeds', () => {
@@ -72,14 +73,14 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+          vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
             succeeded: true,
             response
           })
         })
 
         it('correctly presents the data', async () => {
-          const result = await PreviewPresenter.go(
+          const result = await PreviewPresenter(
             contactHashId,
             noticeType,
             notification,
@@ -136,14 +137,14 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+          vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
             succeeded: true,
             response
           })
         })
 
         it('correctly presents the data', async () => {
-          const result = await PreviewPresenter.go(
+          const result = await PreviewPresenter(
             contactHashId,
             noticeType,
             notification,
@@ -213,14 +214,14 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+          vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
             succeeded: true,
             response
           })
         })
 
         it('correctly presents the data', async () => {
-          const result = await PreviewPresenter.go(
+          const result = await PreviewPresenter(
             contactHashId,
             noticeType,
             notification,
@@ -283,14 +284,14 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+          vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
             succeeded: true,
             response
           })
         })
 
         it('correctly presents the data', async () => {
-          const result = await PreviewPresenter.go(
+          const result = await PreviewPresenter(
             contactHashId,
             noticeType,
             notification,
@@ -343,14 +344,14 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         }
       }
 
-      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+      vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
         succeeded: false,
         response
       })
     })
 
     it('correctly presents the data', async () => {
-      const result = await PreviewPresenter.go(
+      const result = await PreviewPresenter(
         contactHashId,
         noticeType,
         notification,

@@ -1,23 +1,22 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const AddressModel = require('../../../app/models/address.model.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
-const BillingAccountAddressModel = require('../../../app/models/billing-account-address.model.js')
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const CompanyModel = require('../../../app/models/company.model.js')
-const ContactModel = require('../../../app/models/contact.model.js')
+import AddressHelper from '../../support/helpers/address.helper.js'
+import AddressModel from '../../../app/models/address.model.js'
+import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import BillingAccountAddressModel from '../../../app/models/billing-account-address.model.js'
+import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
+import CompanyModel from '../../../app/models/company.model.js'
+import ContactModel from '../../../app/models/contact.model.js'
+import { generateCompanyNumber, generateUprn } from '../../support/generators.js'
 
 // Things we need to stub
-const SendCustomerChangeService = require('../../../app/services/billing-accounts/send-customer-change.service.js')
+import * as SendCustomerChangeService from '../../../app/services/billing-accounts/send-customer-change.service.js'
 
 // Thing under test
-const ChangeAddressService = require('../../../app/services/billing-accounts/change-address.service.js')
+import ChangeAddressService from '../../../app/services/billing-accounts/change-address.service.js'
 
 describe('Change address service', () => {
   let address
@@ -30,12 +29,12 @@ describe('Change address service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request to the Charging Module API succeeds', () => {
     beforeEach(async () => {
-      Sinon.stub(SendCustomerChangeService, 'go').resolves()
+      vi.spyOn(SendCustomerChangeService, 'default').mockResolvedValue()
     })
 
     describe('and only an address is provided', () => {
@@ -44,7 +43,7 @@ describe('Change address service', () => {
       })
 
       it('creates the billing account address and address records and handles the null agent and contact', async () => {
-        const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+        const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
         const newAddress = await AddressModel.query().where('postcode', address.postcode).first()
 
@@ -64,7 +63,7 @@ describe('Change address service', () => {
             addressLine2: 'HORIZON HOUSE',
             town: 'BRISTOL',
             postcode: 'BS1 5AH',
-            uprn: AddressHelper.generateUprn()
+            uprn: generateUprn()
           }
         })
 
@@ -78,7 +77,7 @@ describe('Change address service', () => {
           })
 
           it('overwrites the existing address with the latest OS Places details', async () => {
-            await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+            await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
             const reFetchedExistingAddress = await existingAddress.$query()
 
@@ -88,7 +87,7 @@ describe('Change address service', () => {
           })
 
           it('links the billing account address record to the existing address', async () => {
-            const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+            const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
             expect(result.billingAccountAddress.addressId).toEqual(existingAddress.id)
           })
@@ -96,17 +95,17 @@ describe('Change address service', () => {
 
         describe('and a matching address does not exist', () => {
           it('creates a new address record', async () => {
-            await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+            await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
             const result = await AddressModel.query().where('uprn', address.uprn)
 
-            expect(result.length).toEqual(1)
+            expect(result).toHaveLength(1)
             expect(result[0].address1).toEqual(address.addressLine1)
             expect(result[0].postcode).toEqual(address.postcode)
           })
 
           it('links the billing account address record to the new address', async () => {
-            const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+            const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
             const newAddress = await AddressModel.query().where('uprn', address.uprn).first()
 
@@ -121,16 +120,16 @@ describe('Change address service', () => {
         })
 
         it('creates a new address record', async () => {
-          await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const result = await AddressModel.query().where('postcode', address.postcode)
 
-          expect(result.length).toEqual(1)
+          expect(result).toHaveLength(1)
           expect(result[0].address1).toEqual('2 Matrix Rd')
         })
 
         it('links the billing account address record to the new address', async () => {
-          const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const newAddress = await AddressModel.query().findById(result.address.id)
 
@@ -148,7 +147,7 @@ describe('Change address service', () => {
         })
 
         it('makes no changes to the existing address record', async () => {
-          await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const reFetchedExistingAddress = await existingAddress.$query()
 
@@ -159,7 +158,7 @@ describe('Change address service', () => {
         })
 
         it('links the billing account address record to the existing address', async () => {
-          const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           expect(result.billingAccountAddress.addressId).toEqual(existingAddress.id)
         })
@@ -172,7 +171,7 @@ describe('Change address service', () => {
         agentCompany = {
           type: 'organisation',
           name: 'SCP Foundation',
-          companyNumber: CompanyHelper.generateCompanyNumber(),
+          companyNumber: generateCompanyNumber(),
           organisationType: 'limitedCompany'
         }
       })
@@ -187,7 +186,7 @@ describe('Change address service', () => {
         })
 
         it('overwrites the existing company with the latest Companies House details', async () => {
-          await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const reFetchedExistingCompany = await existingCompany.$query()
 
@@ -197,7 +196,7 @@ describe('Change address service', () => {
         })
 
         it('links the billing account address record to the existing company', async () => {
-          const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           expect(result.billingAccountAddress.companyId).toEqual(existingCompany.id)
         })
@@ -205,16 +204,16 @@ describe('Change address service', () => {
 
       describe('has a company number that does not match an existing record', () => {
         it('creates a new company record', async () => {
-          await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const result = await CompanyModel.query().where('companyNumber', agentCompany.companyNumber)
 
-          expect(result.length).toEqual(1)
+          expect(result).toHaveLength(1)
           expect(result[0].name).toEqual(agentCompany.name)
         })
 
         it('links the billing account address record to the new company', async () => {
-          const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const newCompany = await CompanyModel.query().where('companyNumber', agentCompany.companyNumber).first()
 
@@ -232,7 +231,7 @@ describe('Change address service', () => {
         })
 
         it('makes no changes to the existing company record', async () => {
-          await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const reFetchedExistingCompany = await existingCompany.$query()
 
@@ -243,7 +242,7 @@ describe('Change address service', () => {
         })
 
         it('links the billing account address record to the existing company', async () => {
-          const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           expect(result.billingAccountAddress.companyId).toEqual(existingCompany.id)
         })
@@ -264,15 +263,15 @@ describe('Change address service', () => {
         })
 
         it('creates a new contact record', async () => {
-          await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const result = await ContactModel.query().where('department', 'Humanoid Risk Assessment')
 
-          expect(result.length).toEqual(1)
+          expect(result).toHaveLength(1)
         })
 
         it('links the billing account address record to the new contact', async () => {
-          const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const newContact = await ContactModel.query().findById(result.contact.id)
 
@@ -290,17 +289,17 @@ describe('Change address service', () => {
         })
 
         it('creates a new contact record', async () => {
-          await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const result = await ContactModel.query().where('lastName', 'Villa')
 
-          expect(result.length).toEqual(1)
+          expect(result).toHaveLength(1)
           expect(result[0].firstName).toEqual('Margarita')
           expect(result[0].lastName).toEqual('Villa')
         })
 
         it('links the billing account address record to the new contact', async () => {
-          const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const newContact = await ContactModel.query().findById(result.contact.id)
 
@@ -310,7 +309,6 @@ describe('Change address service', () => {
     })
 
     describe('and the "current" billing account address', () => {
-      let clock
       let existingBillingAccountAddress
 
       beforeEach(() => {
@@ -318,11 +316,11 @@ describe('Change address service', () => {
 
         const testDate = new Date(2023, 8, 4, 10, 31, 57, 2)
 
-        clock = Sinon.useFakeTimers({ now: testDate, toFake: ['Date'] })
+        vi.useFakeTimers({ now: testDate, toFake: ['Date'] })
       })
 
       afterEach(() => {
-        clock.restore()
+        vi.useRealTimers()
       })
 
       describe('has a matching start date', () => {
@@ -339,7 +337,7 @@ describe('Change address service', () => {
         })
 
         it('overwrites the existing record and ensures the end date is null', async () => {
-          const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const newBillingAccountAddress = await BillingAccountAddressModel.query().findById(
             result.billingAccountAddress.id
@@ -369,7 +367,7 @@ describe('Change address service', () => {
         })
 
         it('creates a new billing account record with a null end date', async () => {
-          const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const newBillingAccountAddress = await BillingAccountAddressModel.query().findById(
             result.billingAccountAddress.id
@@ -387,7 +385,7 @@ describe('Change address service', () => {
         })
 
         it("updates the end date of the existing record to yesterday's date", async () => {
-          await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+          await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
           const reFetchedExistingBillingAccountAddress = await existingBillingAccountAddress.$query()
           const yesterday = new Date(2023, 8, 3)
@@ -403,11 +401,11 @@ describe('Change address service', () => {
 
   describe('when the request to the Charging Module API fails', () => {
     beforeEach(() => {
-      Sinon.stub(SendCustomerChangeService, 'go').rejects()
+      vi.spyOn(SendCustomerChangeService, 'default').mockRejectedValue()
     })
 
     it('throws an error', async () => {
-      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).rejects.toThrow()
+      await expect(ChangeAddressService(billingAccount, address, agentCompany, contact)).rejects.toThrow()
     })
   })
 
@@ -417,7 +415,7 @@ describe('Change address service', () => {
       agentCompany = {
         type: 'organisation',
         name: 'WRLS Team',
-        companyNumber: CompanyHelper.generateCompanyNumber(),
+        companyNumber: generateCompanyNumber(),
         organisationType: 'limitedCompany'
       }
       contact = {
@@ -427,15 +425,15 @@ describe('Change address service', () => {
 
       // We just need something within the transaction to go bang. `fromJson() is ideal because a) we can stub it!, and
       // b) it gets called after we have supposedly persisted the address, company and contact records.
-      Sinon.stub(BillingAccountAddressModel, 'fromJson').rejects()
+      vi.spyOn(BillingAccountAddressModel, 'fromJson').mockRejectedValue()
     })
 
     it('throws an error', async () => {
-      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).rejects.toThrow()
+      await expect(ChangeAddressService(billingAccount, address, agentCompany, contact)).rejects.toThrow()
     })
 
     it('no changes are made to the DB', async () => {
-      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).rejects.toThrow()
+      await expect(ChangeAddressService(billingAccount, address, agentCompany, contact)).rejects.toThrow()
 
       const resultAddresses = await AddressModel.query().where('postcode', address.postcode)
       const resultCompanies = await CompanyModel.query().where('name', agentCompany.name)

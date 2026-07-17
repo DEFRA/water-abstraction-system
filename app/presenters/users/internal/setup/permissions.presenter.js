@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/permissions' page
  * @module PermissionsPresenter
  */
 
-const { checkUrl } = require('../../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/permissions' page
@@ -14,7 +12,7 @@ const { checkUrl } = require('../../../../lib/check-page.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function permissionsPresenter(session) {
   const { id: sessionId, permission } = session
 
   return {
@@ -27,8 +25,4 @@ function go(session) {
     pageTitleCaption: 'Internal',
     permission
   }
-}
-
-module.exports = {
-  go
 }

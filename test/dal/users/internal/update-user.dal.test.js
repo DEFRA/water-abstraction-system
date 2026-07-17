@@ -1,24 +1,23 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const EventModel = require('../../../../app/models/event.model.js')
-const GroupHelper = require('../../../support/helpers/group.helper.js')
-const RoleHelper = require('../../../support/helpers/role.helper.js')
-const UserGroupHelper = require('../../../support/helpers/user-group.helper.js')
-const UserGroupModel = require('../../../../app/models/user-group.model.js')
-const UserHelper = require('../../../support/helpers/user.helper.js')
-const UserModel = require('../../../../app/models/user.model.js')
-const UserRoleHelper = require('../../../support/helpers/user-role.helper.js')
-const UserRoleModel = require('../../../../app/models/user-role.model.js')
+import EventModel from '../../../../app/models/event.model.js'
+import GroupHelper from '../../../support/helpers/group.helper.js'
+import RoleHelper from '../../../support/helpers/role.helper.js'
+import UserGroupHelper from '../../../support/helpers/user-group.helper.js'
+import UserGroupModel from '../../../../app/models/user-group.model.js'
+import UserHelper from '../../../support/helpers/user.helper.js'
+import UserModel from '../../../../app/models/user.model.js'
+import UserRoleHelper from '../../../support/helpers/user-role.helper.js'
+import UserRoleModel from '../../../../app/models/user-role.model.js'
+import { generateUserName } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
+import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
-const UpdateUserDal = require('../../../../app/dal/users/internal/update-user.dal.js')
+import UpdateUserDal from '../../../../app/dal/users/internal/update-user.dal.js'
 
 describe('Users - Internal - Update User DAL', () => {
   let auth
@@ -56,7 +55,7 @@ describe('Users - Internal - Update User DAL', () => {
       }
     }
 
-    Sinon.stub(FetchUserDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
+    vi.spyOn(FetchUserDal, 'default').mockResolvedValue({ username: 'internal-user-creator@wrls.gov.uk' })
   })
 
   afterEach(async () => {
@@ -65,12 +64,12 @@ describe('Users - Internal - Update User DAL', () => {
     await UserRoleModel.query().delete().where({ userId: existingUser.userId })
     await existingUser.$query().delete()
 
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('updates the user', async () => {
-      await UpdateUserDal.go(auth, session)
+      await UpdateUserDal(auth, session)
 
       const user = await UserModel.query().findById(existingUser.id)
 
@@ -90,7 +89,7 @@ describe('Users - Internal - Update User DAL', () => {
     })
 
     it('creates an event', async () => {
-      await UpdateUserDal.go(auth, session)
+      await UpdateUserDal(auth, session)
 
       const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
 
@@ -117,11 +116,11 @@ describe('Users - Internal - Update User DAL', () => {
 
     describe('and the email has changed', () => {
       beforeEach(() => {
-        session.email = UserHelper.generateUserName()
+        session.email = generateUserName()
       })
 
       it('updates the username', async () => {
-        await UpdateUserDal.go(auth, session)
+        await UpdateUserDal(auth, session)
 
         const user = await UserModel.query().findById(existingUser.id)
 
@@ -129,7 +128,7 @@ describe('Users - Internal - Update User DAL', () => {
       })
 
       it('replaces the existing resetGuid with a new one and returns the updated users resetGuid', async () => {
-        const result = await UpdateUserDal.go(auth, session)
+        const result = await UpdateUserDal(auth, session)
 
         const { resetGuid } = await UserModel.query().findById(existingUser.id)
 
@@ -141,7 +140,7 @@ describe('Users - Internal - Update User DAL', () => {
 
     describe('and the email has not changed', () => {
       it('does not update the username and returns undefined', async () => {
-        const result = await UpdateUserDal.go(auth, session)
+        const result = await UpdateUserDal(auth, session)
 
         const user = await UserModel.query().findById(existingUser.id)
 
@@ -153,7 +152,7 @@ describe('Users - Internal - Update User DAL', () => {
     describe('and the permission has changed', () => {
       describe('and the new permission has no groups or roles', () => {
         it('does not create any user groups or user roles', async () => {
-          await UpdateUserDal.go(auth, session)
+          await UpdateUserDal(auth, session)
 
           const userGroup = await UserGroupModel.query().where({ userId: existingUser.userId })
           const userRole = await UserRoleModel.query().where({ userId: existingUser.userId })
@@ -169,7 +168,7 @@ describe('Users - Internal - Update User DAL', () => {
         })
 
         it('creates the user groups but no user roles', async () => {
-          await UpdateUserDal.go(auth, session)
+          await UpdateUserDal(auth, session)
 
           const userGroup = await UserGroupModel.query()
             .where({ userId: existingUser.userId })
@@ -189,7 +188,7 @@ describe('Users - Internal - Update User DAL', () => {
         })
 
         it('creates the user groups and user roles', async () => {
-          await UpdateUserDal.go(auth, session)
+          await UpdateUserDal(auth, session)
 
           const userGroup = await UserGroupModel.query()
             .where({ userId: existingUser.userId })
@@ -212,7 +211,7 @@ describe('Users - Internal - Update User DAL', () => {
       })
 
       it('does not remove the existing user groups or user roles', async () => {
-        await UpdateUserDal.go(auth, session)
+        await UpdateUserDal(auth, session)
 
         const userGroup = await UserGroupModel.query().where({ id: existingUserGroup.id, userId: existingUser.userId })
         const userRole = await UserRoleModel.query().where({ id: existingUserRole.id, userId: existingUser.userId })
@@ -228,7 +227,7 @@ describe('Users - Internal - Update User DAL', () => {
       })
 
       it('disables the user', async () => {
-        await UpdateUserDal.go(auth, session)
+        await UpdateUserDal(auth, session)
 
         const user = await UserModel.query().findById(existingUser.id)
 

@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/email' page
  *
  * @module SubmitEmailService
  */
 
-const CheckEmailExistsDal = require('../../../../dal/users/check-email-exists.dal.js')
-const EmailPresenter = require('../../../../presenters/users/internal/setup/email.presenter.js')
-const EmailValidator = require('../../../../validators/users/internal/setup/email.validator.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { formatEmail, formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { checkUrl } = require('../../../../lib/check-page.lib.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
+import CheckEmailExistsDal from '../../../../dal/users/check-email-exists.dal.js'
+import EmailPresenter from '../../../../presenters/users/internal/setup/email.presenter.js'
+import EmailValidator from '../../../../validators/users/internal/setup/email.validator.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { checkUrl } from '../../../../lib/check-page.lib.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
+import { formatEmail, formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/email' page
@@ -23,10 +21,10 @@ const { flashNotification } = require('../../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitEmailService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
-  const emailExists = await CheckEmailExistsDal.go(formatEmail(payload.email))
+  const emailExists = await CheckEmailExistsDal(formatEmail(payload.email))
 
   const validationResult = _validate(payload, emailExists)
 
@@ -42,7 +40,7 @@ async function go(sessionId, payload, yar) {
 
   session.email = payload.email
 
-  const pageData = EmailPresenter.go(session)
+  const pageData = EmailPresenter(session)
 
   return {
     error: validationResult,
@@ -63,11 +61,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, emailExists) {
-  const validationResult = EmailValidator.go(payload, emailExists)
+  const validationResult = EmailValidator(payload, emailExists)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

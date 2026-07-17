@@ -1,13 +1,18 @@
-'use strict'
-
 /**
  * Model for companies (crm_v2.companies)
  * @module CompanyModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import BillingAccountAddressModel from './billing-account-address.model.js'
+import BillingAccountModel from './billing-account.model.js'
+import CompanyAddressModel from './company-address.model.js'
+import CompanyContactModel from './company-contact.model.js'
+import LicenceDocumentRoleModel from './licence-document-role.model.js'
+import LicenceVersionModel from './licence-version.model.js'
+import RegionModel from './region.model.js'
 
 /**
  * Objection model that represents a `company` in the `crm_v2.companies` table
@@ -41,7 +46,7 @@ const BaseModel = require('./base.model.js')
  * We currently do not know how `organisationType` gets populated!
  *
  */
-class CompanyModel extends BaseModel {
+export default class CompanyModel extends BaseModel {
   static get tableName() {
     return 'companies'
   }
@@ -50,7 +55,7 @@ class CompanyModel extends BaseModel {
     return {
       billingAccountAddresses: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing-account-address.model',
+        modelClass: BillingAccountAddressModel,
         join: {
           from: 'companies.id',
           to: 'billingAccountAddresses.companyId'
@@ -58,7 +63,7 @@ class CompanyModel extends BaseModel {
       },
       billingAccounts: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing-account.model',
+        modelClass: BillingAccountModel,
         join: {
           from: 'companies.id',
           to: 'billingAccounts.companyId'
@@ -66,7 +71,7 @@ class CompanyModel extends BaseModel {
       },
       companyAddresses: {
         relation: Model.HasManyRelation,
-        modelClass: 'company-address.model',
+        modelClass: CompanyAddressModel,
         join: {
           from: 'companies.id',
           to: 'companyAddresses.companyId'
@@ -74,7 +79,7 @@ class CompanyModel extends BaseModel {
       },
       companyContacts: {
         relation: Model.HasManyRelation,
-        modelClass: 'company-contact.model',
+        modelClass: CompanyContactModel,
         join: {
           from: 'companies.id',
           to: 'companyContacts.companyId'
@@ -82,7 +87,7 @@ class CompanyModel extends BaseModel {
       },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-document-role.model',
+        modelClass: LicenceDocumentRoleModel,
         join: {
           from: 'companies.id',
           to: 'licenceDocumentRoles.companyId'
@@ -90,7 +95,7 @@ class CompanyModel extends BaseModel {
       },
       licenceVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-version.model',
+        modelClass: LicenceVersionModel,
         join: {
           from: 'companies.id',
           to: 'licenceVersions.companyId'
@@ -98,7 +103,7 @@ class CompanyModel extends BaseModel {
       },
       region: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'region.model',
+        modelClass: RegionModel,
         join: {
           from: 'companies.regionId',
           to: 'regions.id'
@@ -107,5 +112,3 @@ class CompanyModel extends BaseModel {
     }
   }
 }
-
-module.exports = CompanyModel

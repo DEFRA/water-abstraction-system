@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import LicenceFixture from '../../support/fixtures/licence.fixture.js'
 
 // Thing under test
-const RemoveCompanyContactPresenter = require('../../../app/presenters/company-contacts/remove-company-contact.presenter.js')
+import RemoveCompanyContactPresenter from '../../../app/presenters/company-contacts/remove-company-contact.presenter.js'
 
 describe('Company Contacts - Remove Company Contact Presenter', () => {
   let companyContact
@@ -22,7 +23,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
+      const result = RemoveCompanyContactPresenter(company, companyContact, licences)
 
       expect(result).toEqual({
         backLink: {
@@ -43,7 +44,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
     describe('the "licences" property', () => {
       describe('when the abstractionAlertType is not "some"', () => {
         it('returns an empty array', () => {
-          const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
+          const result = RemoveCompanyContactPresenter(company, companyContact, licences)
 
           expect(result.contact.licences).toEqual([])
         })
@@ -51,14 +52,14 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
 
       describe('when the abstractionAlertType is "some"', () => {
         beforeEach(() => {
-          licences = [licenceEnds()]
+          licences = [LicenceFixture.licenceEnds()]
 
           companyContact.abstractionAlerts = true
           companyContact.abstractionAlertLicences = [licences[0].id]
         })
 
         it('returns the licence refs', () => {
-          const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
+          const result = RemoveCompanyContactPresenter(company, companyContact, licences)
 
           expect(result.contact.licences).toEqual([licences[0].licenceRef])
         })
@@ -74,7 +75,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
           })
 
           it('returns the warning', () => {
-            const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
+            const result = RemoveCompanyContactPresenter(company, companyContact, licences)
 
             expect(result.warning).toEqual({
               iconFallbackText: 'Warning',
@@ -90,7 +91,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
           })
 
           it('does not return the warning', () => {
-            const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
+            const result = RemoveCompanyContactPresenter(company, companyContact, licences)
 
             expect(result.warning).toBeUndefined()
           })
@@ -104,7 +105,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
         })
 
         it('does not return the warning', () => {
-          const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
+          const result = RemoveCompanyContactPresenter(company, companyContact, licences)
 
           expect(result.warning).toBeUndefined()
         })

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/users` page
  * @module IndexUsersPresenter
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
 
 /**
  * Formats data for the `/users` page
@@ -15,7 +13,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(users, auth) {
+export default function indexUsersPresenter(users, auth) {
   const { scope } = auth.credentials
 
   return {
@@ -62,8 +60,4 @@ function _userRowData(users) {
       type: user.$internal() ? 'Internal' : 'External'
     }
   })
-}
-
-module.exports = {
-  go
 }

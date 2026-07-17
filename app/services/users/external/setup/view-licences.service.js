@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for '/users/external/setup/{sessionId}/licences' page
  * @module ViewLicencesService
  */
 
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const LicencesPresenter = require('../../../../presenters/users/external/setup/licences.presenter.js')
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import LicencesPresenter from '../../../../presenters/users/external/setup/licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for '/users/external/setup/{sessionId}/licences' page
@@ -15,14 +13,10 @@ const LicencesPresenter = require('../../../../presenters/users/external/setup/l
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewLicencesService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = LicencesPresenter.go(session)
+  const pageData = LicencesPresenter(session)
 
   return pageData
-}
-
-module.exports = {
-  go
 }

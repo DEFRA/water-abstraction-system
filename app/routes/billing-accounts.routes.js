@@ -1,13 +1,11 @@
-'use strict'
+import { changeAddress, view } from '../controllers/billing-accounts.controller.js'
 
-const BillingAccountsController = require('../controllers/billing-accounts.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/billing-accounts/{id}',
     options: {
-      handler: BillingAccountsController.view,
+      handler: view,
       auth: {
         access: {
           scope: ['billing']
@@ -19,7 +17,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/{billingAccountId}/change-address',
     options: {
-      handler: BillingAccountsController.changeAddress,
+      handler: changeAddress,
       app: {
         plainOutput: true
       },
@@ -34,5 +32,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

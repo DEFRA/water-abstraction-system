@@ -1,23 +1,25 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
 
 // Things we need to stub
-const ExportService = require('../../app/services/jobs/export/export.service.js')
-const ProcessCleanService = require('../../app/services/jobs/clean/process-clean.service.js')
-const ProcessCustomerFilesService = require('../../app/services/jobs/customer-files/process-customer-files.service.js')
-const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.service.js')
-const ProcessNotificationStatusService = require('../../app/services/jobs/notification-status/process-notification-status.service.js')
-const ProcessRenewalInvitationsService = require('../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js')
-const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
-const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
+import * as ExportService from '../../app/services/jobs/export/export.service.js'
+import * as ProcessCleanService from '../../app/services/jobs/clean/process-clean.service.js'
+import * as ProcessCustomerFilesService from '../../app/services/jobs/customer-files/process-customer-files.service.js'
+import * as ProcessLicenceUpdatesService from '../../app/services/jobs/licence-updates/process-licence-updates.service.js'
+import * as ProcessNotificationStatusService from '../../app/services/jobs/notification-status/process-notification-status.service.js'
+import * as ProcessRenewalInvitationsService from '../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js'
+import * as ProcessReturnLogsService from '../../app/services/jobs/return-logs/process-return-logs.service.js'
+import * as ProcessTimeLimitedLicencesService from '../../app/services/jobs/time-limited/process-time-limited-licences.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT } = http2.constants
 
 describe('Jobs controller', () => {
   let options
@@ -29,16 +31,15 @@ describe('Jobs controller', () => {
   })
 
   beforeEach(() => {
-    // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
-    Sinon.stub(server.logger, 'error')
-    Sinon.stub(server.logger, 'info')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -53,7 +54,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ProcessCleanService, 'go').resolves()
+          vi.spyOn(ProcessCleanService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -73,7 +74,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ProcessCustomerFilesService, 'go').resolves()
+          vi.spyOn(ProcessCustomerFilesService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -93,7 +94,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ExportService, 'go').resolves()
+          vi.spyOn(ExportService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -113,7 +114,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ProcessLicenceUpdatesService, 'go').resolves()
+          vi.spyOn(ProcessLicenceUpdatesService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -133,7 +134,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ProcessNotificationStatusService, 'go').resolves()
+          vi.spyOn(ProcessNotificationStatusService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -153,7 +154,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ProcessTimeLimitedLicencesService, 'go').resolves()
+          vi.spyOn(ProcessTimeLimitedLicencesService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -173,7 +174,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ProcessRenewalInvitationsService, 'go').resolves()
+          vi.spyOn(ProcessRenewalInvitationsService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -185,7 +186,7 @@ describe('Jobs controller', () => {
         it('calls the "ProcessRenewalInvitationsService"', async () => {
           await server.inject(options)
 
-          expect(ProcessRenewalInvitationsService.go.called).toBe(true)
+          expect(ProcessRenewalInvitationsService.default).toHaveBeenCalled()
         })
       })
     })
@@ -200,7 +201,7 @@ describe('Jobs controller', () => {
 
         describe('when the request succeeds', () => {
           beforeEach(() => {
-            Sinon.stub(ProcessReturnLogsService, 'go').resolves()
+            vi.spyOn(ProcessReturnLogsService, 'default').mockResolvedValue()
           })
 
           it('returns a 204 response', async () => {
@@ -220,7 +221,7 @@ describe('Jobs controller', () => {
 
         describe('when the request succeeds', () => {
           beforeEach(() => {
-            Sinon.stub(ProcessReturnLogsService, 'go').resolves()
+            vi.spyOn(ProcessReturnLogsService, 'default').mockResolvedValue()
           })
 
           it('returns a 204 response', async () => {

@@ -1,13 +1,53 @@
-'use strict'
+import {
+  processAddRecipient,
+  processDownloadRecipients,
+  processPreviewPaperReturn,
+  processRemoveThreshold,
+  setup,
+  submitAlertEmailAddress,
+  submitAlertThresholds,
+  submitAlertType,
+  submitCancel,
+  submitCancelAlerts,
+  submitCheck,
+  submitCheckLicenceMatches,
+  submitCheckNoticeType,
+  submitContactType,
+  submitLicence,
+  submitNoticeType,
+  submitPaperReturn,
+  submitRecipientName,
+  submitRemoveLicences,
+  submitReturnsPeriod,
+  submitSelectRecipients,
+  viewAlertEmailAddress,
+  viewAlertThresholds,
+  viewAlertType,
+  viewCancel,
+  viewCancelAlerts,
+  viewCheck,
+  viewCheckLicenceMatches,
+  viewCheckNoticeType,
+  viewConfirmation,
+  viewContactType,
+  viewLicence,
+  viewNoticeType,
+  viewPaperReturn,
+  viewPreview,
+  viewPreviewCheckAlert,
+  viewPreviewCheckPaperReturn,
+  viewRecipientName,
+  viewRemoveLicences,
+  viewReturnsPeriod,
+  viewSelectRecipients
+} from '../controllers/notices-setup.controller.js'
 
-const NoticesSetupController = require('../controllers/notices-setup.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/notices/setup/{journey}',
     options: {
-      handler: NoticesSetupController.setup,
+      handler: setup,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
@@ -19,7 +59,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/alert-email-address',
     options: {
-      handler: NoticesSetupController.viewAlertEmailAddress,
+      handler: viewAlertEmailAddress,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -31,7 +71,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/abstraction-alerts/alert-email-address',
     options: {
-      handler: NoticesSetupController.submitAlertEmailAddress,
+      handler: submitAlertEmailAddress,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -43,7 +83,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds',
     options: {
-      handler: NoticesSetupController.viewAlertThresholds,
+      handler: viewAlertThresholds,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -55,7 +95,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds',
     options: {
-      handler: NoticesSetupController.submitAlertThresholds,
+      handler: submitAlertThresholds,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -67,7 +107,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type',
     options: {
-      handler: NoticesSetupController.viewAlertType,
+      handler: viewAlertType,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -79,7 +119,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type',
     options: {
-      handler: NoticesSetupController.submitAlertType,
+      handler: submitAlertType,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -91,7 +131,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/cancel',
     options: {
-      handler: NoticesSetupController.viewCancelAlerts,
+      handler: viewCancelAlerts,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -103,7 +143,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/abstraction-alerts/cancel',
     options: {
-      handler: NoticesSetupController.submitCancelAlerts,
+      handler: submitCancelAlerts,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -115,7 +155,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
     options: {
-      handler: NoticesSetupController.viewCheckLicenceMatches,
+      handler: viewCheckLicenceMatches,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -127,7 +167,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
     options: {
-      handler: NoticesSetupController.submitCheckLicenceMatches,
+      handler: submitCheckLicenceMatches,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -139,7 +179,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}',
     options: {
-      handler: NoticesSetupController.processRemoveThreshold,
+      handler: processRemoveThreshold,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -151,7 +191,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/add-recipient',
     options: {
-      handler: NoticesSetupController.processAddRecipient,
+      handler: processAddRecipient,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
@@ -163,7 +203,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/cancel',
     options: {
-      handler: NoticesSetupController.viewCancel,
+      handler: viewCancel,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
@@ -175,7 +215,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/cancel',
     options: {
-      handler: NoticesSetupController.submitCancel,
+      handler: submitCancel,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
@@ -187,7 +227,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/check',
     options: {
-      handler: NoticesSetupController.viewCheck,
+      handler: viewCheck,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
@@ -199,7 +239,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/check',
     options: {
-      handler: NoticesSetupController.submitCheck,
+      handler: submitCheck,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
@@ -211,7 +251,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/check-notice-type',
     options: {
-      handler: NoticesSetupController.viewCheckNoticeType,
+      handler: viewCheckNoticeType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
@@ -223,7 +263,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/check-notice-type',
     options: {
-      handler: NoticesSetupController.submitCheckNoticeType,
+      handler: submitCheckNoticeType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
@@ -235,7 +275,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{eventId}/confirmation',
     options: {
-      handler: NoticesSetupController.viewConfirmation,
+      handler: viewConfirmation,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications', 'hof_notifications']
@@ -247,7 +287,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/contact-type',
     options: {
-      handler: NoticesSetupController.viewContactType,
+      handler: viewContactType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
@@ -259,7 +299,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/contact-type',
     options: {
-      handler: NoticesSetupController.submitContactType,
+      handler: submitContactType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
@@ -271,7 +311,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/download',
     options: {
-      handler: NoticesSetupController.processDownloadRecipients,
+      handler: processDownloadRecipients,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
@@ -283,7 +323,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/licence',
     options: {
-      handler: NoticesSetupController.viewLicence,
+      handler: viewLicence,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
@@ -295,7 +335,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/licence',
     options: {
-      handler: NoticesSetupController.submitLicence,
+      handler: submitLicence,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
@@ -307,7 +347,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/notice-type',
     options: {
-      handler: NoticesSetupController.viewNoticeType,
+      handler: viewNoticeType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
@@ -319,7 +359,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/notice-type',
     options: {
-      handler: NoticesSetupController.submitNoticeType,
+      handler: submitNoticeType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
@@ -331,7 +371,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/paper-return',
     options: {
-      handler: NoticesSetupController.viewPaperReturn,
+      handler: viewPaperReturn,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
@@ -343,7 +383,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/paper-return',
     options: {
-      handler: NoticesSetupController.submitPaperReturn,
+      handler: submitPaperReturn,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
@@ -355,7 +395,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}',
     options: {
-      handler: NoticesSetupController.viewPreview,
+      handler: viewPreview,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
@@ -367,7 +407,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}/alert/{licenceMonitoringStationId}',
     options: {
-      handler: NoticesSetupController.viewPreview,
+      handler: viewPreview,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -379,7 +419,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-alert',
     options: {
-      handler: NoticesSetupController.viewPreviewCheckAlert,
+      handler: viewPreviewCheckAlert,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -391,7 +431,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return',
     options: {
-      handler: NoticesSetupController.viewPreviewCheckPaperReturn,
+      handler: viewPreviewCheckPaperReturn,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
@@ -403,7 +443,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnLogId}',
     options: {
-      handler: NoticesSetupController.processPreviewPaperReturn,
+      handler: processPreviewPaperReturn,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
@@ -415,7 +455,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/recipient-name',
     options: {
-      handler: NoticesSetupController.viewRecipientName,
+      handler: viewRecipientName,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
@@ -427,7 +467,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/recipient-name',
     options: {
-      handler: NoticesSetupController.submitRecipientName,
+      handler: submitRecipientName,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
@@ -439,7 +479,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/remove-licences',
     options: {
-      handler: NoticesSetupController.viewRemoveLicences,
+      handler: viewRemoveLicences,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
@@ -451,7 +491,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/remove-licences',
     options: {
-      handler: NoticesSetupController.submitRemoveLicences,
+      handler: submitRemoveLicences,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
@@ -463,7 +503,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/returns-period',
     options: {
-      handler: NoticesSetupController.viewReturnsPeriod,
+      handler: viewReturnsPeriod,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
@@ -475,7 +515,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/returns-period',
     options: {
-      handler: NoticesSetupController.submitReturnsPeriod,
+      handler: submitReturnsPeriod,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
@@ -487,7 +527,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/select-recipients',
     options: {
-      handler: NoticesSetupController.viewSelectRecipients,
+      handler: viewSelectRecipients,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
@@ -499,7 +539,7 @@ const routes = [
     method: 'POST',
     path: '/notices/setup/{sessionId}/select-recipients',
     options: {
-      handler: NoticesSetupController.submitSelectRecipients,
+      handler: submitSelectRecipients,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
@@ -508,5 +548,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

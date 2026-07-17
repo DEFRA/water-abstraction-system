@@ -1,14 +1,9 @@
-'use strict'
-
 /**
  * Generates the SQL query for renewal invitations
  * @module GenerateRenewalRecipientsQueryService
  */
 
-const {
-  licenceHolderRecipientQuery,
-  primaryUserRecipientQuery
-} = require('../../../dal/notices/recipient-queries.dal.js')
+import { licenceHolderRecipientQuery, primaryUserRecipientQuery } from '../../../dal/notices/recipient-queries.dal.js'
 
 /**
  * Generates the SQL query for renewal invitations
@@ -24,7 +19,7 @@ const {
  *
  * @returns {string} the SQL query for all renewal recipients with expired licences
  */
-function go(expiredLicencesQuery) {
+export default function generateRenewalRecipientsQueryService(expiredLicencesQuery) {
   const licenceHolderQuery = _licenceHolderQuery()
   const primaryUserQuery = _primaryUserQuery()
   const processQuery = _processForSending()
@@ -107,8 +102,4 @@ function _processForSending() {
       ac.priority ASC
   )
   `
-}
-
-module.exports = {
-  go
 }

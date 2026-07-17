@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const WorkflowHelper = require('../support/helpers/workflow.helper.js')
+import LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import WorkflowHelper from '../support/helpers/workflow.helper.js'
 
 // Thing under test
-const WorkflowModel = require('../../app/models/workflow.model.js')
+import WorkflowModel from '../../app/models/workflow.model.js'
 
 describe('Workflow model', () => {
   let testLicence

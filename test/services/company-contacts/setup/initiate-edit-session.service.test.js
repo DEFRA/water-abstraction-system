@@ -1,29 +1,24 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionModel = require('../../../../app/models/session.model.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import CompanyContactModel from '../../../../app/models/company-contact.model.js'
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import SessionModel from '../../../../app/models/session.model.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchCompanyContactDal = require('../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js')
-const FetchCompanyLicencesDal = require('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
+import * as FetchCompanyContactDal from '../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js'
+import * as FetchCompanyLicencesDal from '../../../../app/dal/company-contacts/fetch-company-licences.dal.js'
 
 // Thing under test
-const InitiateEditSessionService = require('../../../../app/services/company-contacts/setup/initiate-edit-session.service.js')
+import InitiateEditSessionService from '../../../../app/services/company-contacts/setup/initiate-edit-session.service.js'
 
 describe('Company Contacts - Setup - Initiate edit Session service', () => {
   let company
   let companyContact
   let contact
   let licences
-  let stubFetchCompanyLicencesDal
-
   beforeEach(() => {
     company = CustomersFixtures.company()
     contact = CustomersFixtures.contact()
@@ -38,17 +33,17 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
       contact
     })
 
-    Sinon.stub(FetchCompanyContactDal, 'go').resolves(companyContact)
-    stubFetchCompanyLicencesDal = Sinon.stub(FetchCompanyLicencesDal, 'go').resolves(licences)
+    vi.spyOn(FetchCompanyContactDal, 'default').mockResolvedValue(companyContact)
+    vi.spyOn(FetchCompanyLicencesDal, 'default').mockResolvedValue(licences)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('creates a new session record with the "company contact" saved', async () => {
-      const result = await InitiateEditSessionService.go(companyContact.id)
+      const result = await InitiateEditSessionService(companyContact.id)
 
       const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -72,7 +67,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
         })
 
         it('returns "yes"', async () => {
-          const result = await InitiateEditSessionService.go(companyContact.id)
+          const result = await InitiateEditSessionService(companyContact.id)
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -85,7 +80,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
           })
 
           it('returns "some"', async () => {
-            const result = await InitiateEditSessionService.go(companyContact.id)
+            const result = await InitiateEditSessionService(companyContact.id)
 
             const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -96,7 +91,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
       describe('when the "abstractionAlerts" property is false', () => {
         it('returns "no"', async () => {
-          const result = await InitiateEditSessionService.go(companyContact.id)
+          const result = await InitiateEditSessionService(companyContact.id)
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -107,7 +102,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
     describe('and the company has no active licences', () => {
       beforeEach(() => {
-        stubFetchCompanyLicencesDal.resolves([])
+        vi.spyOn(FetchCompanyLicencesDal, 'default').mockResolvedValue([])
       })
 
       describe('when the "abstractionAlerts" property is true', () => {
@@ -116,7 +111,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
         })
 
         it('returns "yes"', async () => {
-          const result = await InitiateEditSessionService.go(companyContact.id)
+          const result = await InitiateEditSessionService(companyContact.id)
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -129,7 +124,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
           })
 
           it('returns "no"', async () => {
-            const result = await InitiateEditSessionService.go(companyContact.id)
+            const result = await InitiateEditSessionService(companyContact.id)
 
             const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -140,7 +135,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
       describe('when the "abstractionAlerts" property is false', () => {
         it('returns "no"', async () => {
-          const result = await InitiateEditSessionService.go(companyContact.id)
+          const result = await InitiateEditSessionService(companyContact.id)
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -152,7 +147,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
   describe('the "name" property', () => {
     it('formats the name', async () => {
-      const result = await InitiateEditSessionService.go(companyContact.id)
+      const result = await InitiateEditSessionService(companyContact.id)
 
       const matchingSession = await SessionModel.query().findById(result.id)
 

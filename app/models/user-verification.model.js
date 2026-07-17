@@ -1,13 +1,13 @@
-'use strict'
-
 /**
  * Model for user_verifications (crm.verification)
  * @module UserVerificationModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceDocumentHeaderModel from './licence-document-header.model.js'
+import LicenceEntityModel from './licence-entity.model.js'
 
 /**
  * Represents an instance of a user verification record
@@ -23,7 +23,7 @@ const BaseModel = require('./base.model.js')
  * (licence_entity) so this verification record is not needed to manage the licence, but is solely used to manage the
  * verification process.
  */
-class UserVerificationModel extends BaseModel {
+export default class UserVerificationModel extends BaseModel {
   static get tableName() {
     return 'userVerifications'
   }
@@ -33,7 +33,7 @@ class UserVerificationModel extends BaseModel {
       // The "company" entity (just a notional group of licences) that the user is claiming the licences for
       companyEntity: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-entity.model',
+        modelClass: LicenceEntityModel,
         join: {
           from: 'userVerifications.companyEntityId',
           to: 'licenceEntities.id'
@@ -42,7 +42,7 @@ class UserVerificationModel extends BaseModel {
       // The group of licences being claimed
       licenceDocumentHeaders: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'licence-document-header.model',
+        modelClass: LicenceDocumentHeaderModel,
         join: {
           from: 'userVerifications.id',
           through: {
@@ -55,7 +55,7 @@ class UserVerificationModel extends BaseModel {
       // The "individual" entity (the registered user) that is claiming the licence
       licenceEntity: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-entity.model',
+        modelClass: LicenceEntityModel,
         join: {
           from: 'userVerifications.licenceEntityId',
           to: 'licenceEntities.id'
@@ -64,5 +64,3 @@ class UserVerificationModel extends BaseModel {
     }
   }
 }
-
-module.exports = UserVerificationModel

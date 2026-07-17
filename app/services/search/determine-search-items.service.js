@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Determines which items to search for a given query on the /search page
  * @module DetermineSearchItemsService
@@ -24,7 +22,7 @@ const MAX_LICENCE_LENGTH = 20
  *
  * @returns {string[]} The list of items to search for
  */
-function go(query, selectedResultType, userScopes) {
+export default function determineSearchItemsService(query, selectedResultType, userScopes) {
   // Check if we've got a matching result type, otherwise default to all types the user has access to
   const resultTypeToUse = RESULT_TYPES.find((resultType) => {
     return resultType === selectedResultType
@@ -131,8 +129,4 @@ function _users(resultTypes, _query, selectedResultType) {
 
   // Current assumption is that a username could contain pretty much any text as it is an email address
   resultTypes.push('user')
-}
-
-module.exports = {
-  go
 }

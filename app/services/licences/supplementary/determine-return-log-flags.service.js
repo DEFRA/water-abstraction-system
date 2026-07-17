@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Determines if a licence with a change in return log should be flagged for supplementary billing
  * @module DetermineReturnLogFlagsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
+import ReturnLogModel from '../../../models/return-log.model.js'
 
 const SROC_START_DATE = new Date('2022-04-01')
 
@@ -38,7 +36,7 @@ const SROC_START_DATE = new Date('2022-04-01')
  * @returns {object} - An object containing the related licenceId, regionId, return start and end date and licence
  * supplementary billing flags
  */
-async function go(returnLogId) {
+export default async function determineReturnLogFlagsService(returnLogId) {
   const { twoPartTariff, licence, endDate, startDate } = await _fetchReturnLog(returnLogId)
 
   const result = {
@@ -76,8 +74,4 @@ async function _fetchReturnLog(returnLogId) {
     .modifyGraph('licence', (builder) => {
       builder.select(['id', 'regionId', 'includeInSrocBilling', 'includeInPresrocBilling'])
     })
-}
-
-module.exports = {
-  go
 }

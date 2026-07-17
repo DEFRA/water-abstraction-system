@@ -1,6 +1,4 @@
-'use strict'
-
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -17,7 +15,7 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session, conditions) {
+export default function fullConditionPresenter(session, conditions) {
   const { label, licenceRef, conditionId } = session
 
   const radioButtons = _generateRadioButtons(conditions, conditionId)
@@ -71,8 +69,4 @@ function _generateRadioButtons(conditions, conditionId) {
       checked: conditionId === 'no_condition'
     }
   ]
-}
-
-module.exports = {
-  go
 }

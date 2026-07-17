@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Things we need to stub
-const FetchNotificationDal = require('../../../app/dal/users/fetch-notification.dal.js')
-const FetchUserDal = require('../../../app/dal/users/fetch-user.dal.js')
+import * as FetchNotificationDal from '../../../app/dal/users/fetch-notification.dal.js'
+import * as FetchUserDal from '../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
-const ViewNotificationService = require('../../../app/services/users/view-notification.service.js')
+import ViewNotificationService from '../../../app/services/users/view-notification.service.js'
 
 describe('Users - Internal - View Notifications Service', () => {
   let auth
@@ -29,12 +27,12 @@ describe('Users - Internal - View Notifications Service', () => {
 
     notification = NotificationsFixture.userInternalPasswordResetEmail(user.username)
 
-    Sinon.stub(FetchUserDal, 'go').returns(user)
-    Sinon.stub(FetchNotificationDal, 'go').returns(notification)
+    vi.spyOn(FetchUserDal, 'default').mockReturnValue(user)
+    vi.spyOn(FetchNotificationDal, 'default').mockReturnValue(notification)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -44,7 +42,7 @@ describe('Users - Internal - View Notifications Service', () => {
       })
 
       it('returns "protected" page data for the view', async () => {
-        const result = await ViewNotificationService.go(notification.id, user.id, type, auth)
+        const result = await ViewNotificationService(notification.id, user.id, type, auth)
 
         expect(result).toEqual({
           activeNavBar: 'users',
@@ -70,7 +68,7 @@ describe('Users - Internal - View Notifications Service', () => {
       })
 
       it('returns "full" page data for the view', async () => {
-        const result = await ViewNotificationService.go(notification.id, user.id, type, auth)
+        const result = await ViewNotificationService(notification.id, user.id, type, auth)
 
         expect(result).toEqual({
           activeNavBar: 'users',

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Creates a bill run based on the regionId & billing period provided
  * @module CreateBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
+import BillRunModel from '../../models/bill-run.model.js'
 
 /**
  * Create a new bill run
@@ -23,7 +21,7 @@ const BillRunModel = require('../../models/bill-run.model.js')
  *
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance with the `.region` property populated
  */
-async function go(regionId, financialYearEndings, options) {
+export default async function createBillRunService(regionId, financialYearEndings, options) {
   const { fromFinancialYearEnding, toFinancialYearEnding } = financialYearEndings
   const optionsData = _defaultOptions(options)
 
@@ -54,8 +52,4 @@ function _defaultOptions(option) {
     ...defaults,
     ...option
   }
-}
-
-module.exports = {
-  go
 }

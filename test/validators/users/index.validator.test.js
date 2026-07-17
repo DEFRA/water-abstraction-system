@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const IndexValidator = require('../../../app/validators/users/index.validator.js')
+import IndexValidator from '../../../app/validators/users/index.validator.js'
 
 describe('Users - Index validator', () => {
   let payload
@@ -13,7 +14,7 @@ describe('Users - Index validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toEqual({
           email: 'test@test.com',
@@ -35,7 +36,7 @@ describe('Users - Index validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toEqual({
           email: 'test@test.com'
@@ -50,7 +51,7 @@ describe('Users - Index validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toEqual({})
         expect(result.error).toBeUndefined()
@@ -69,7 +70,7 @@ describe('Users - Index validator', () => {
       })
 
       it('fails validation', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('Email must be 255 characters or less')
@@ -83,7 +84,7 @@ describe('Users - Index validator', () => {
       })
 
       it('fails validation', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select a valid permission')
@@ -97,7 +98,7 @@ describe('Users - Index validator', () => {
       })
 
       it('fails validation', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select a valid status')
@@ -111,7 +112,7 @@ describe('Users - Index validator', () => {
       })
 
       it('fails validation', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select a valid type')

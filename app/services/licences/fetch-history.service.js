@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches data needed for the view '/licences/{id}/history` page
  * @module FetchHistoryService
  */
 
-const LicenceVersionModel = require('../../models/licence-version.model.js')
+import LicenceVersionModel from '../../models/licence-version.model.js'
 
 /**
  * Fetches data needed for the view '/licences/{id}/history` page
@@ -14,7 +12,7 @@ const LicenceVersionModel = require('../../models/licence-version.model.js')
  *
  * @returns {Promise<module:LicenceVersionModel>} the licence versions
  */
-async function go(licenceId) {
+export default async function fetchHistoryService(licenceId) {
   return _fetch(licenceId)
 }
 
@@ -29,8 +27,4 @@ async function _fetch(licenceId) {
       { column: 'increment', order: 'desc' }
     ])
     .modify('history')
-}
-
-module.exports = {
-  go
 }

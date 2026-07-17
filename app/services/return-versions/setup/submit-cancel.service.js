@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Manages cancelling the return requirement session when cancel is confirmed
  * @module SubmitCancelService
  */
 
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
 
 /**
  * Manages deleting the return requirement session when cancel is confirmed
@@ -15,10 +13,6 @@ const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
  *
  * @param {string} sessionId - The UUID for the return requirement setup session record
  */
-async function go(sessionId) {
-  await DeleteSessionDal.go(sessionId)
-}
-
-module.exports = {
-  go
+export default async function submitCancelService(sessionId) {
+  await DeleteSessionDal(sessionId)
 }

@@ -1,20 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchLicenceSupplementaryYearsService = require('../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchLicenceSupplementaryYearsService from '../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitYearService = require('../../../../app/services/bill-runs/setup/submit-year.service.js')
+import SubmitYearService from '../../../../app/services/bill-runs/setup/submit-year.service.js'
 
 describe('Bill Runs - Setup - Submit Year service', () => {
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -22,13 +19,13 @@ describe('Bill Runs - Setup - Submit Year service', () => {
   beforeEach(() => {
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -41,11 +38,11 @@ describe('Bill Runs - Setup - Submit Year service', () => {
         })
 
         it('saves the submitted value and returns an object confirming setup is complete', async () => {
-          const result = await SubmitYearService.go(session.id, payload)
+          const result = await SubmitYearService(session.id, payload)
 
           expect(session.year).toEqual('2026')
           expect(result.setupComplete).toBe(true)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -57,12 +54,12 @@ describe('Bill Runs - Setup - Submit Year service', () => {
         })
 
         it('saves the submitted value and returns an object confirming setup is not complete', async () => {
-          const result = await SubmitYearService.go(session.id, payload)
+          const result = await SubmitYearService(session.id, payload)
 
           expect(session.year).toEqual('2022')
           expect(result.setupComplete).toBe(false)
 
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
     })
@@ -70,23 +67,20 @@ describe('Bill Runs - Setup - Submit Year service', () => {
     describe('with an invalid payload', () => {
       describe('because the user has not selected anything', () => {
         const regionId = 'cff057a0-f3a7-4ae6-bc2b-01183e40fd05'
-
-        let yearsStub
-
         beforeEach(() => {
           sessionData = { region: regionId, type: 'two_part_supplementary' }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           payload = {}
-          yearsStub = Sinon.stub(FetchLicenceSupplementaryYearsService, 'go').resolves([{ financialYearEnd: 2024 }])
+          vi.spyOn(FetchLicenceSupplementaryYearsService, 'default').mockResolvedValue([{ financialYearEnd: 2024 }])
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitYearService.go(session.id, payload)
+          const result = await SubmitYearService(session.id, payload)
 
-          expect(yearsStub.calledWith(regionId, true)).toBe(true)
+          expect(FetchLicenceSupplementaryYearsService.default).toHaveBeenCalledWith(regionId, true)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',

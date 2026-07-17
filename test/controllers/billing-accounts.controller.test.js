@@ -1,19 +1,21 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } =
-  require('node:http2').constants
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
 
 // Things we need to stub
-const Boom = require('@hapi/boom')
-const ChangeAddressService = require('../../app/services/billing-accounts/change-address.service.js')
-const ViewBillingAccountService = require('../../app/services/billing-accounts/view-billing-account.service.js')
+import Boom from '@hapi/boom'
+import * as ChangeAddressService from '../../app/services/billing-accounts/change-address.service.js'
+import * as ViewBillingAccountService from '../../app/services/billing-accounts/view-billing-account.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } =
+  http2.constants
 
 describe('Billing Accounts controller', () => {
   // Though the ChangeAddressValidator accepts a payload with an empty address PayLoadCleanerPlugin will strip it
@@ -34,16 +36,15 @@ describe('Billing Accounts controller', () => {
 
   // Create server before each test
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -66,7 +67,7 @@ describe('Billing Accounts controller', () => {
 
         describe('when the request succeeds', () => {
           beforeEach(() => {
-            Sinon.stub(ViewBillingAccountService, 'go').resolves(_viewBillingAccount())
+            vi.spyOn(ViewBillingAccountService, 'default').mockResolvedValue(_viewBillingAccount())
           })
 
           it('returns the page successfully', async () => {
@@ -92,7 +93,7 @@ describe('Billing Accounts controller', () => {
 
         describe('when the request succeeds', () => {
           beforeEach(() => {
-            Sinon.stub(ViewBillingAccountService, 'go').resolves(_viewBillingAccount())
+            vi.spyOn(ViewBillingAccountService, 'default').mockResolvedValue(_viewBillingAccount())
           })
 
           it('returns the page successfully', async () => {
@@ -118,7 +119,7 @@ describe('Billing Accounts controller', () => {
 
         describe('when the request succeeds', () => {
           beforeEach(() => {
-            Sinon.stub(ViewBillingAccountService, 'go').resolves(_viewBillingAccount())
+            vi.spyOn(ViewBillingAccountService, 'default').mockResolvedValue(_viewBillingAccount())
           })
 
           it('returns the page successfully', async () => {
@@ -155,7 +156,7 @@ describe('Billing Accounts controller', () => {
       beforeEach(() => {
         options.payload = { ...validPayload }
 
-        Sinon.stub(ChangeAddressService, 'go').resolves(validResponse)
+        vi.spyOn(ChangeAddressService, 'default').mockResolvedValue(validResponse)
       })
 
       it('returns a 201 status', async () => {
@@ -192,10 +193,10 @@ describe('Billing Accounts controller', () => {
         beforeEach(async () => {
           options.payload = { ...validPayload }
 
-          Sinon.stub(Boom, 'badImplementation').returns(
+          vi.spyOn(Boom, 'badImplementation').mockReturnValue(
             new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
           )
-          Sinon.stub(ChangeAddressService, 'go').rejects()
+          vi.spyOn(ChangeAddressService, 'default').mockRejectedValue()
         })
 
         it('returns an error response', async () => {

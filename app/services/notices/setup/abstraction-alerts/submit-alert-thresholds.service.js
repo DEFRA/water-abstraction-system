@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  *
  * @module SubmitAlertThresholdsService
  */
 
-const AlertThresholdsPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js')
-const AlertThresholdsValidator = require('../../../../validators/notices/setup/alert-thresholds.validator.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../../lib/submit-page.lib.js')
+import AlertThresholdsPresenter from '../../../../presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js'
+import AlertThresholdsValidator from '../../../../validators/notices/setup/alert-thresholds.validator.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
@@ -20,8 +18,8 @@ const { handleOneOptionSelected } = require('../../../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitAlertThresholdsService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'alertThresholds')
 
@@ -35,7 +33,7 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = AlertThresholdsPresenter.go(session)
+  const pageData = AlertThresholdsPresenter(session)
 
   return {
     error,
@@ -48,11 +46,7 @@ async function _save(session) {
 }
 
 function _validate(payload) {
-  const validationResult = AlertThresholdsValidator.go(payload)
+  const validationResult = AlertThresholdsValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

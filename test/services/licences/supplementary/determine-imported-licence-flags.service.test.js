@@ -1,28 +1,25 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const FetchExistingLicenceDetailsService = require('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
+import * as FetchExistingLicenceDetailsService from '../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js'
 
 // Thing under test
-const DetermineImportedLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js')
+import DetermineImportedLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js'
 
 describe('Licences - Supplementary - Determine Imported Licence Flags service', () => {
   const licenceId = 'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
 
-  let clock
   let testDate
 
   beforeEach(() => {
     testDate = new Date('2024-10-31')
-    clock = Sinon.useFakeTimers(testDate)
+    vi.useFakeTimers({ now: testDate })
   })
 
   afterEach(() => {
-    clock.restore()
-    Sinon.restore()
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   describe('when processing an imported licence', () => {
@@ -37,20 +34,20 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
         describe('for a licence with no charge versions', () => {
           describe('and the licence is already flagged for billing', () => {
             beforeEach(async () => {
-              Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(true, false))
+              vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, false))
             })
 
             it('always returns the licenceId, regionId, startDate and endDate', async () => {
-              const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+              const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
               expect(result.licenceId).toEqual('aad74a3d-59ea-4c18-8091-02b0f8b0a147')
               expect(result.regionId).toEqual('ff92e0b1-3934-430b-8b16-5b89a3ea258f')
-              expect(result.startDate).toEqual(null)
+              expect(result.startDate).toBeNull()
               expect(result.endDate).toEqual(new Date('2025-03-31'))
             })
 
             it('returns the correct flags', async () => {
-              const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+              const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
               expect(result.flagForPreSrocSupplementary).toEqual(false)
               expect(result.flagForSrocSupplementary).toEqual(false)
@@ -60,20 +57,20 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
           describe('and the licence is not already flagged for billing', () => {
             beforeEach(async () => {
-              Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(false, false))
+              vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, false))
             })
 
             it('always returns the licenceId, regionId, startDate and endDate', async () => {
-              const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+              const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
               expect(result.licenceId).toEqual('aad74a3d-59ea-4c18-8091-02b0f8b0a147')
               expect(result.regionId).toEqual('ff92e0b1-3934-430b-8b16-5b89a3ea258f')
-              expect(result.startDate).toEqual(null)
+              expect(result.startDate).toBeNull()
               expect(result.endDate).toEqual(new Date('2025-03-31'))
             })
 
             it('returns the correct flags', async () => {
-              const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+              const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
               expect(result.flagForPreSrocSupplementary).toEqual(false)
               expect(result.flagForSrocSupplementary).toEqual(false)
@@ -85,11 +82,11 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
         describe('for a licence with pre-sroc and sroc charge versions', () => {
           describe('and the licence is already flagged for billing', () => {
             beforeEach(async () => {
-              Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(true, true))
+              vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, true))
             })
 
             it('returns the correct flags', async () => {
-              const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+              const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
               expect(result.flagForPreSrocSupplementary).toEqual(true)
               expect(result.flagForSrocSupplementary).toEqual(true)
@@ -99,11 +96,11 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
           describe('and the licence is not already flagged for billing', () => {
             beforeEach(async () => {
-              Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(false, true))
+              vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, true))
             })
 
             it('returns the correct flags', async () => {
-              const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+              const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
               expect(result.flagForPreSrocSupplementary).toEqual(false)
               expect(result.flagForSrocSupplementary).toEqual(false)
@@ -122,11 +119,11 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
       describe('for a licence with no charge versions', () => {
         describe('and the licence is already flagged for billing', () => {
           beforeEach(async () => {
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(true, false))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, false))
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+            const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
             expect(result.flagForPreSrocSupplementary).toEqual(false)
             expect(result.flagForSrocSupplementary).toEqual(false)
@@ -136,11 +133,11 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
         describe('and the licence is not already flagged for billing', () => {
           beforeEach(async () => {
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(false, false))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, false))
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+            const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
             expect(result.flagForPreSrocSupplementary).toEqual(false)
             expect(result.flagForSrocSupplementary).toEqual(false)
@@ -152,11 +149,11 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
       describe('for a licence with pre-sroc and sroc charge versions', () => {
         describe('and the licence is already flagged for billing', () => {
           beforeEach(async () => {
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(true, true))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, true))
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+            const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
             expect(result.flagForPreSrocSupplementary).toEqual(true)
             expect(result.flagForSrocSupplementary).toEqual(true)
@@ -166,11 +163,11 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
         describe('and the licence is not already flagged for billing', () => {
           beforeEach(async () => {
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(false, true))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, true))
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+            const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
             expect(result.flagForPreSrocSupplementary).toEqual(false)
             expect(result.flagForSrocSupplementary).toEqual(true)
@@ -188,11 +185,11 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
       describe('for a licence with no charge versions', () => {
         describe('and the licence is already flagged for billing', () => {
           beforeEach(async () => {
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(true, false))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, false))
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+            const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
             expect(result.flagForPreSrocSupplementary).toEqual(false)
             expect(result.flagForSrocSupplementary).toEqual(false)
@@ -202,11 +199,11 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
         describe('and the licence is not already flagged for billing', () => {
           beforeEach(async () => {
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(false, false))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, false))
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+            const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
             expect(result.flagForPreSrocSupplementary).toEqual(false)
             expect(result.flagForSrocSupplementary).toEqual(false)
@@ -218,11 +215,11 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
       describe('for a licence with pre-sroc and sroc charge versions', () => {
         describe('and the licence is already flagged for billing', () => {
           beforeEach(async () => {
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(true, true))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, true))
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+            const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
             expect(result.flagForPreSrocSupplementary).toEqual(true)
             expect(result.flagForSrocSupplementary).toEqual(true)
@@ -232,11 +229,11 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
         describe('and the licence is not already flagged for billing', () => {
           beforeEach(async () => {
-            Sinon.stub(FetchExistingLicenceDetailsService, 'go').resolves(_licenceData(false, true))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, true))
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
+            const result = await DetermineImportedLicenceFlagsService(licenceId, changeDate)
 
             expect(result.flagForPreSrocSupplementary).toEqual(true)
             expect(result.flagForSrocSupplementary).toEqual(true)

@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CompanyModel = require('../../../../app/models/company.model.js')
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
+import CompanyHelper from '../../../support/helpers/company.helper.js'
+import CompanyModel from '../../../../app/models/company.model.js'
 
 // Thing under test
-const FetchExistingCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js')
+import FetchExistingCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js'
 
 describe('Billing Accounts - Setup - Fetch Existing Companies service', () => {
   let acmeFakeCompany
@@ -32,7 +33,7 @@ describe('Billing Accounts - Setup - Fetch Existing Companies service', () => {
 
   describe('when called with a searchInput', () => {
     it('returns the matching companies', async () => {
-      const result = await FetchExistingCompaniesService.go('Fake')
+      const result = await FetchExistingCompaniesService('Fake')
 
       expect(result).toEqual([
         CompanyModel.fromJson({

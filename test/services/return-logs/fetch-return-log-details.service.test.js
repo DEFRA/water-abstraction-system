@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
-const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
+import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 
 // Thing under test
-const FetchReturnLogDetailsService = require('../../../app/services/return-logs/fetch-return-log-details.service.js')
+import FetchReturnLogDetailsService from '../../../app/services/return-logs/fetch-return-log-details.service.js'
 
 describe('Return Logs - Fetch Return Log Details service', () => {
   let licence
@@ -27,11 +25,11 @@ describe('Return Logs - Fetch Return Log Details service', () => {
   beforeEach(async () => {
     // We stub on the model prototype so that any created instances have $applyReadings stubbed. We don't set any return
     // value as we don't need it to actually do anything; we just want to be able to assert that it was called.
-    Sinon.stub(ReturnSubmissionModel.prototype, '$applyReadings')
+    vi.spyOn(ReturnSubmissionModel.prototype, '$applyReadings').mockImplementation(() => {})
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -50,7 +48,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
   describe('when called', () => {
     describe('and the return log has no submissions', () => {
       it('fetches the matching return log with the linked licence and no submissions', async () => {
-        const result = await FetchReturnLogDetailsService.go(returnLog.id)
+        const result = await FetchReturnLogDetailsService(returnLog.id)
 
         expect(result).toEqual({
           dueDate: returnLog.dueDate,
@@ -118,7 +116,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
       })
 
       it('fetches the matching return log with the linked licence and all submission versions', async () => {
-        const result = await FetchReturnLogDetailsService.go(returnLog.id)
+        const result = await FetchReturnLogDetailsService(returnLog.id)
 
         expect(result).toMatchObject({
           dueDate: returnLog.dueDate,
@@ -171,7 +169,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
 
       describe('and when no version is specified', () => {
         it('selects the latest submission', async () => {
-          const result = await FetchReturnLogDetailsService.go(returnLog.id)
+          const result = await FetchReturnLogDetailsService(returnLog.id)
 
           expect(result.returnSubmissions).toEqual([
             {
@@ -203,9 +201,9 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         })
 
         it('automatically applies readings to the submission', async () => {
-          await FetchReturnLogDetailsService.go(returnLog.id)
+          await FetchReturnLogDetailsService(returnLog.id)
 
-          expect(returnSubmissions[2].$applyReadings.calledOnce).toBe(true)
+          expect(returnSubmissions[2].$applyReadings).toHaveBeenCalledOnce()
         })
       })
 
@@ -215,7 +213,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         })
 
         it('selects the matching submission', async () => {
-          const result = await FetchReturnLogDetailsService.go(returnLog.id, version)
+          const result = await FetchReturnLogDetailsService(returnLog.id, version)
 
           expect(result.returnSubmissions).toEqual([
             {
@@ -240,9 +238,9 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         })
 
         it('automatically applies readings to the submission', async () => {
-          await FetchReturnLogDetailsService.go(returnLog.id, version)
+          await FetchReturnLogDetailsService(returnLog.id, version)
 
-          expect(returnSubmissions[1].$applyReadings.calledOnce).toBe(true)
+          expect(returnSubmissions[1].$applyReadings).toHaveBeenCalledOnce()
         })
       })
     })

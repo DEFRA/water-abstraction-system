@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Fetches the return log details needed for the view '/system/return-logs/{id}/return-details' page
  * @module FetchReturnLogDetailsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnSubmissionModel = require('../../models/return-submission.model.js')
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import ReturnSubmissionModel from '../../models/return-submission.model.js'
 
 /**
  * Fetches the return log details needed for the view '/system/return-logs/{id}/return-details' page
@@ -20,7 +18,7 @@ const ReturnSubmissionModel = require('../../models/return-submission.model.js')
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
  * and licence data
  */
-async function go(returnLogId, version = 0) {
+export default async function fetchReturnLogDetailsService(returnLogId, version = 0) {
   const allReturnSubmissions = await _fetchAllReturnSubmissions(returnLogId)
 
   const selectedReturnSubmission = _returnSubmission(allReturnSubmissions, version)
@@ -103,8 +101,4 @@ function _returnSubmission(allReturnSubmissions, version) {
   })
 
   return selectedReturnSubmission
-}
-
-module.exports = {
-  go
 }

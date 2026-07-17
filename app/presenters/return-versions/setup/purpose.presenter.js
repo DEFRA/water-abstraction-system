@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/purpose` page
  * @module PurposePresenter
@@ -14,7 +12,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, requirementIndex, licencePurposes) {
+export default function purposePresenter(session, requirementIndex, licencePurposes) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
@@ -61,8 +59,4 @@ function _purposes(licencePurposes, requirementPurposes) {
       id: licencePurpose.id
     }
   })
-}
-
-module.exports = {
-  go
 }

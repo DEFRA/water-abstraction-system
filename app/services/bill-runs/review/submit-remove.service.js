@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates removing a review licence from a two-part tariff bill run whilst it is at the review stage
  * @module SubmitRemoveService
  */
 
-const CreateLicenceSupplementaryYearService = require('../../licences/supplementary/create-licence-supplementary-year.service.js')
-const FetchRemoveReviewLicenceModel = require('./fetch-remove-review-licence.service.js')
-const UnassignLicencesToBillRunService = require('../unassign-licences-to-bill-run.service.js')
-const ProcessBillRunPostRemove = require('./process-bill-run-post-remove.service.js')
-const RemoveReviewLicenceService = require('./remove-review-licence.service.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
+import CreateLicenceSupplementaryYearService from '../../licences/supplementary/create-licence-supplementary-year.service.js'
+import FetchRemoveReviewLicenceModel from './fetch-remove-review-licence.service.js'
+import ProcessBillRunPostRemove from './process-bill-run-post-remove.service.js'
+import RemoveReviewLicenceService from './remove-review-licence.service.js'
+import UnassignLicencesToBillRunService from '../unassign-licences-to-bill-run.service.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates removing a review licence from a two-part tariff bill run whilst it is at the review stage
@@ -27,10 +25,10 @@ const { flashNotification } = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} an object containing the bill run ID plus a boolean flag that indicates whether this was
  * the last licence in the bill run (bill run is now empty)
  */
-async function go(reviewLicenceId, yar) {
-  const reviewLicence = await FetchRemoveReviewLicenceModel.go(reviewLicenceId)
+export default async function submitRemoveService(reviewLicenceId, yar) {
+  const reviewLicence = await FetchRemoveReviewLicenceModel(reviewLicenceId)
 
-  await RemoveReviewLicenceService.go(reviewLicenceId)
+  await RemoveReviewLicenceService(reviewLicenceId)
 
   await _flagForSupplementaryBilling(reviewLicence)
 
@@ -52,7 +50,7 @@ async function go(reviewLicenceId, yar) {
 async function _empty(reviewLicence) {
   const { billRun } = reviewLicence
 
-  return ProcessBillRunPostRemove.go(billRun.id)
+  return ProcessBillRunPostRemove(billRun.id)
 }
 
 async function _flagForSupplementaryBilling(reviewLicence) {
@@ -62,7 +60,7 @@ async function _flagForSupplementaryBilling(reviewLicence) {
   // caused it to be included in the bill run. If we are removing the licence, we need to unassign it so that it will
   // be processed by the next TPT supplementary bill run.
   if (billRun.batchType === 'two_part_supplementary') {
-    await UnassignLicencesToBillRunService.go([licenceId], billRun.id)
+    await UnassignLicencesToBillRunService([licenceId], billRun.id)
 
     return
   }
@@ -70,9 +68,5 @@ async function _flagForSupplementaryBilling(reviewLicence) {
   // If the batch type is not supplementary, then it wasn't a supplementary year record that caused the licence to be
   // included in the bill run. If we remove the licence, we want to ensure it gets picked up and processed by the next
   // supplementary bill run.
-  await CreateLicenceSupplementaryYearService.go(licenceId, [billRun.toFinancialYearEnding], true)
-}
-
-module.exports = {
-  go
+  await CreateLicenceSupplementaryYearService(licenceId, [billRun.toFinancialYearEnding], true)
 }

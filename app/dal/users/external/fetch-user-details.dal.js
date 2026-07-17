@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches an external user for display on the `/users/external/{id}/details` page
  * @module FetchUserDetailsDal
  */
 
-const UserModel = require('../../../models/user.model.js')
+import UserModel from '../../../models/user.model.js'
 
 /**
  * Fetches an external user for display on the `/users/external/{id}/details` page
@@ -14,7 +12,7 @@ const UserModel = require('../../../models/user.model.js')
  *
  * @returns {Promise<module:UserModel>} the requested user
  */
-async function go(id) {
+export default async function fetchUserDetailsDal(id) {
   const user = await UserModel.query()
     .select(['id', 'licenceEntityId', 'username'])
     .modify('permissions')
@@ -22,8 +20,4 @@ async function go(id) {
     .findById(id)
 
   return user
-}
-
-module.exports = {
-  go
 }

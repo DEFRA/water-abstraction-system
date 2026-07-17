@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches matching debit transactions from previous bill runs, then compares them as credits to those just generated
  * @module ProcessSupplementaryTransactionsService
  */
 
-const { transactionsMatch } = require('../../lib/general.lib.js')
-const ReverseTransactionsService = require('./reverse-supplementary-transactions.service.js')
+import ReverseTransactionsService from './reverse-supplementary-transactions.service.js'
+import { transactionsMatch } from '../../lib/general.lib.js'
 
 /**
  * Fetches matching debit transactions from previous bill runs, then compares them as credits to those just generated
@@ -32,12 +30,16 @@ const ReverseTransactionsService = require('./reverse-supplementary-transactions
  * @returns {Promise<object[]>} An array of the remaining generated transactions and reversed debits from previous
  * transactions (ie. those which were not cancelled out when the generated and reversed were compared)
  */
-async function go(previousTransactions, generatedTransactions, billLicenceId) {
+export default async function processSupplementaryTransactionsService(
+  previousTransactions,
+  generatedTransactions,
+  billLicenceId
+) {
   if (previousTransactions.length === 0) {
     return generatedTransactions
   }
 
-  const reversedTransactions = ReverseTransactionsService.go(previousTransactions, billLicenceId)
+  const reversedTransactions = ReverseTransactionsService(previousTransactions, billLicenceId)
 
   return _cleanseTransactions(generatedTransactions, reversedTransactions)
 }
@@ -93,8 +95,4 @@ function _cleanseTransactions(calculatedTransactions, reverseTransactions) {
   cleansedTransactionLines.push(...reverseTransactions)
 
   return cleansedTransactionLines
-}
-
-module.exports = {
-  go
 }

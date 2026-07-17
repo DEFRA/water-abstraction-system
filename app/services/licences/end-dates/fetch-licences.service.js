@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches all licences that are in NALD, joins them to those in WRLS, and returns the end dates for both
  * @module FetchLicences
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Fetches all licences that are in NALD, joins them to those in WRLS, and returns the end dates for both
@@ -15,7 +13,7 @@ const { db } = require('../../../../db/db.js')
  * @returns {Promise<object[]>} - An array of objects representing each licence, including end dates for both and the
  * WRLS ID
  */
-async function go() {
+export default async function fetchLicencesService() {
   const query = `
     SELECT DISTINCT ON (nal."LIC_NO")
       l.id AS id,
@@ -36,8 +34,4 @@ async function go() {
   const { rows } = await db.raw(query)
 
   return rows
-}
-
-module.exports = {
-  go
 }

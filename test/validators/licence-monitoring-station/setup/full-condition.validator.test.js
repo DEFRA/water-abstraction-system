@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const FullConditionValidator = require('../../../../app/validators/licence-monitoring-station/setup/full-condition.validator.js')
+import FullConditionValidator from '../../../../app/validators/licence-monitoring-station/setup/full-condition.validator.js'
 
 describe('Full Condition Validator', () => {
   let payload
@@ -15,7 +16,7 @@ describe('Full Condition Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = FullConditionValidator.go(payload)
+        const result = FullConditionValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -30,7 +31,7 @@ describe('Full Condition Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = FullConditionValidator.go(payload)
+        const result = FullConditionValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -45,7 +46,7 @@ describe('Full Condition Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = FullConditionValidator.go(payload)
+        const result = FullConditionValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -61,7 +62,7 @@ describe('Full Condition Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = FullConditionValidator.go(payload)
+        const result = FullConditionValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

@@ -1,6 +1,4 @@
-'use strict'
-
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Format data for the `/return-log/setup/{sessionId}/units` page
@@ -14,7 +12,7 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function unitsPresenter(session) {
   const { id: sessionId, returnReference, units } = session
 
   return {
@@ -36,8 +34,4 @@ function _backLink(session) {
     href: checkUrl(session, url),
     text: 'Back'
   }
-}
-
-module.exports = {
-  go
 }

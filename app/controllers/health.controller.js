@@ -1,16 +1,16 @@
-'use strict'
-
 /**
  * Controller for /health endpoints
  * @module HealthController
  */
 
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
 
-const DatabaseHealthCheckService = require('../services/health/database-health-check.service.js')
-const InfoService = require('../services/health/info.service.js')
+import DatabaseHealthCheckService from '../services/health/database-health-check.service.js'
+import InfoService from '../services/health/info.service.js'
 
-async function airbrake(request, _h) {
+const { HTTP_STATUS_OK } = http2.constants
+
+export async function airbrake(request, _h) {
   // First section tests connecting to Airbrake through a manual notification
   request.server.app.airbrake.notify({
     message: 'Airbrake manual health check',
@@ -26,20 +26,14 @@ async function airbrake(request, _h) {
   throw new Error('Airbrake automatic health check error')
 }
 
-async function database(_request, h) {
-  const result = await DatabaseHealthCheckService.go()
+export async function database(_request, h) {
+  const result = await DatabaseHealthCheckService()
 
   return h.response(result).code(HTTP_STATUS_OK)
 }
 
-async function info(_request, h) {
-  const pageData = await InfoService.go()
+export async function info(_request, h) {
+  const pageData = await InfoService()
 
   return h.view('health/info.njk', pageData)
-}
-
-module.exports = {
-  airbrake,
-  database,
-  info
 }

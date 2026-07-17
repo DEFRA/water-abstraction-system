@@ -1,30 +1,28 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const ViewCompensationChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js')
-const ViewMinimumChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js')
-const ViewStandardChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-standard-charge-transaction.presenter.js')
+import * as ViewCompensationChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js'
+import * as ViewMinimumChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js'
+import * as ViewStandardChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-standard-charge-transaction.presenter.js'
 
 // Thing under test
-const ViewBillLicencePresenter = require('../../../app/presenters/bill-licences/view-bill-licence.presenter.js')
+import ViewBillLicencePresenter from '../../../app/presenters/bill-licences/view-bill-licence.presenter.js'
 
 describe('View Bill Licence presenter', () => {
   let billLicence
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when provided with a populated bill licence', () => {
     beforeEach(() => {
       billLicence = _testBillLicence()
 
-      Sinon.stub(ViewCompensationChargeTransactionPresenter, 'go').returns({ chargeType: 'compensation' })
-      Sinon.stub(ViewMinimumChargeTransactionPresenter, 'go').returns({ chargeType: 'minimum_charge' })
-      Sinon.stub(ViewStandardChargeTransactionPresenter, 'go').returns({ chargeType: 'standard' })
+      vi.spyOn(ViewCompensationChargeTransactionPresenter, 'default').mockReturnValue({ chargeType: 'compensation' })
+      vi.spyOn(ViewMinimumChargeTransactionPresenter, 'default').mockReturnValue({ chargeType: 'minimum_charge' })
+      vi.spyOn(ViewStandardChargeTransactionPresenter, 'default').mockReturnValue({ chargeType: 'standard' })
     })
 
     describe('the "removeLicenceLink" property', () => {
@@ -34,7 +32,7 @@ describe('View Bill Licence presenter', () => {
         })
 
         it('returns the path to the remove bill licence endpoint', () => {
-          const result = ViewBillLicencePresenter.go(billLicence)
+          const result = ViewBillLicencePresenter(billLicence)
 
           expect(result.removeLicenceLink).toEqual('/system/bill-licences/a4fbaa27-a91c-4328-a1b8-774ade11027b/remove')
         })
@@ -46,7 +44,7 @@ describe('View Bill Licence presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewBillLicencePresenter.go(billLicence)
+          const result = ViewBillLicencePresenter(billLicence)
 
           expect(result.removeLicenceLink).toBeNull()
         })
@@ -60,7 +58,7 @@ describe('View Bill Licence presenter', () => {
         })
 
         it('returns the count and caption singular', () => {
-          const result = ViewBillLicencePresenter.go(billLicence)
+          const result = ViewBillLicencePresenter(billLicence)
 
           expect(result.tableCaption).toEqual('1 transaction')
         })
@@ -68,7 +66,7 @@ describe('View Bill Licence presenter', () => {
 
       describe('when there are multiple transactions', () => {
         it('returns the count and caption pluralised', () => {
-          const result = ViewBillLicencePresenter.go(billLicence)
+          const result = ViewBillLicencePresenter(billLicence)
 
           expect(result.tableCaption).toEqual('4 transactions')
         })
@@ -77,7 +75,7 @@ describe('View Bill Licence presenter', () => {
 
     describe('and the total for the transactions is a debit', () => {
       it('correctly presents the data', () => {
-        const result = ViewBillLicencePresenter.go(billLicence)
+        const result = ViewBillLicencePresenter(billLicence)
 
         // NOTE: The transaction details we pass in and what we get back is not what would actually happen. Our
         // transaction presenter tests exhaust what we expect back for all scenarios. What we are confirming though is
@@ -115,7 +113,7 @@ describe('View Bill Licence presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = ViewBillLicencePresenter.go(billLicence)
+        const result = ViewBillLicencePresenter(billLicence)
 
         // NOTE: The transaction details we pass in and what we get back is not what would actually happen. Our
         // transaction presenter tests exhaust what we expect back for all scenarios. What we are confirming though is

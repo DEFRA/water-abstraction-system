@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-const CancelPresenter = require('../../../../../app/presenters/users/internal/setup/cancel.presenter.js')
+import CancelPresenter from '../../../../../app/presenters/users/internal/setup/cancel.presenter.js'
 
 describe('Users - Internal - Setup - Cancel Presenter', () => {
   let session
@@ -15,7 +16,7 @@ describe('Users - Internal - Setup - Cancel Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CancelPresenter.go(session)
+      const result = CancelPresenter(session)
 
       expect(result).toEqual({
         activeNavBar: 'users',

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Manages updating the licence monitoring station record as deleted when remove tag is confirmed
  * @module SubmitRemoveService
  */
 
-const { flashNotification, timestampForPostgres } = require('../../lib/general.lib.js')
-const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
+import LicenceMonitoringStationModel from '../../models/licence-monitoring-station.model.js'
+import { flashNotification, timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Manages updating the licence monitoring station record as deleted when remove tag is confirmed
@@ -18,14 +16,10 @@ const LicenceMonitoringStationModel = require('../../models/licence-monitoring-s
  * @param {string} licenceRef - The reference of the licence
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go(licenceMonitoringStationId, licenceRef, yar) {
+export default async function submitRemoveService(licenceMonitoringStationId, licenceRef, yar) {
   await LicenceMonitoringStationModel.query()
     .update({ deletedAt: timestampForPostgres() })
     .where('id', licenceMonitoringStationId)
 
   flashNotification(yar, 'Updated', `Tag removed for ${licenceRef}`)
-}
-
-module.exports = {
-  go
 }

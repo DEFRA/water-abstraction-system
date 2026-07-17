@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const FetchRelevantLicenceVersionService = require('../../../../app/services/return-versions/setup/fetch-relevant-licence-version.service.js')
+import FetchRelevantLicenceVersionService from '../../../../app/services/return-versions/setup/fetch-relevant-licence-version.service.js'
 
 describe('Return Versions - Setup - Fetch Relevant Licence Version service', () => {
   const licenceId = generateUUID()
@@ -60,7 +61,7 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
     })
 
     it('returns the first licence version for the licence', async () => {
-      const result = await FetchRelevantLicenceVersionService.go(licenceId, startDate)
+      const result = await FetchRelevantLicenceVersionService(licenceId, startDate)
 
       expect(result).toEqual({
         endDate: licenceVersions.firstLicenceVersion.endDate,
@@ -76,7 +77,7 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
     })
 
     it('returns the "current" licence version for the licence', async () => {
-      const result = await FetchRelevantLicenceVersionService.go(licenceId, startDate)
+      const result = await FetchRelevantLicenceVersionService(licenceId, startDate)
 
       expect(result).toEqual({
         endDate: licenceVersions.currentLicence.endDate,
@@ -92,7 +93,7 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
     })
 
     it('returns the "relevant" licence version for the licence', async () => {
-      const result = await FetchRelevantLicenceVersionService.go(licenceId, startDate)
+      const result = await FetchRelevantLicenceVersionService(licenceId, startDate)
 
       expect(result).toEqual({
         endDate: licenceVersions.secondLicenceVersion.endDate,
@@ -114,7 +115,7 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
       })
 
       it('returns the licence version with the latest end date', async () => {
-        const result = await FetchRelevantLicenceVersionService.go(licenceId, startDate)
+        const result = await FetchRelevantLicenceVersionService(licenceId, startDate)
 
         expect(result).toEqual({
           endDate: licenceVersions.secondLicenceVersion.endDate,
@@ -130,7 +131,7 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
       })
 
       it('returns the "current" licence version', async () => {
-        const result = await FetchRelevantLicenceVersionService.go(licenceId, startDate)
+        const result = await FetchRelevantLicenceVersionService(licenceId, startDate)
 
         expect(result).toEqual({
           endDate: licenceVersions.currentLicence.endDate,
@@ -147,7 +148,7 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
     })
 
     it('returns "null"', async () => {
-      const result = await FetchRelevantLicenceVersionService.go('1d7f6806-43b1-4cce-9ab1-adb28448aef2', startDate)
+      const result = await FetchRelevantLicenceVersionService('1d7f6806-43b1-4cce-9ab1-adb28448aef2', startDate)
 
       expect(result).toBeNull()
     })

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches all billing accounts for the supplied charge versions
  * @module FetchBillingAccountsService
  */
 
-const BillingAccountModel = require('../../../models/billing-account.model.js')
+import BillingAccountModel from '../../../models/billing-account.model.js'
 
 /**
  * Fetch all billing accounts for the supplied charge versions
@@ -14,7 +12,7 @@ const BillingAccountModel = require('../../../models/billing-account.model.js')
  *
  * @returns {Promise<object[]>} Array of objects in the format { billingAccountId: '...', accountNumber: '...' }
  */
-async function go(chargeVersions) {
+export default async function fetchBillingAccountsService(chargeVersions) {
   const uniqueBillingAccountIds = _extractUniqueBillingAccountIds(chargeVersions)
   const billingAccountModels = await _fetch(uniqueBillingAccountIds)
 
@@ -45,8 +43,4 @@ function _makeObjects(models) {
   return models.map((model) => {
     return model.toJSON()
   })
-}
-
-module.exports = {
-  go
 }

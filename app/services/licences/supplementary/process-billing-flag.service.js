@@ -1,20 +1,18 @@
-'use strict'
-
 /**
  * Orchestrates flagging a licence for supplementary billing
  * @module ProcessBillingFlagService
  */
 
-const DetermineBillingYearsService = require('./determine-billing-years.service.js')
-const DetermineBillLicenceFlagsService = require('./determine-bill-licence-flags.service.js')
-const DetermineChargeVersionFlagsService = require('./determine-charge-version-flags.service.js')
-const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
-const DetermineImportedLicenceFlagsService = require('./determine-imported-licence-flags.service.js')
-const DetermineLicenceFlagsService = require('./determine-licence-flags.service.js')
-const DetermineReturnLogFlagsService = require('./determine-return-log-flags.service.js')
-const DetermineWorkflowFlagsService = require('./determine-workflow-flags.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const PersistSupplementaryBillingFlagsService = require('./persist-supplementary-billing-flags.service.js')
+import DetermineBillLicenceFlagsService from './determine-bill-licence-flags.service.js'
+import DetermineBillingYearsService from './determine-billing-years.service.js'
+import DetermineChargeVersionFlagsService from './determine-charge-version-flags.service.js'
+import DetermineExistingBillRunYearsService from './determine-existing-bill-run-years.service.js'
+import DetermineImportedLicenceFlagsService from './determine-imported-licence-flags.service.js'
+import DetermineLicenceFlagsService from './determine-licence-flags.service.js'
+import DetermineReturnLogFlagsService from './determine-return-log-flags.service.js'
+import DetermineWorkflowFlagsService from './determine-workflow-flags.service.js'
+import PersistSupplementaryBillingFlagsService from './persist-supplementary-billing-flags.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates flagging a licence for supplementary billing
@@ -36,7 +34,7 @@ const PersistSupplementaryBillingFlagsService = require('./persist-supplementary
  *
  * @param {object} payload - The payload from the request
  */
-async function go(payload) {
+export default async function processBillingFlagService(payload) {
   try {
     const startTime = currentTimeInNanoseconds()
     const result = await _determineFlags(payload)
@@ -61,22 +59,22 @@ async function go(payload) {
  */
 async function _determineFlags(payload) {
   if (payload.changedDateDetails) {
-    return DetermineImportedLicenceFlagsService.go(payload.licenceId, payload.changedDateDetails.changeDate)
+    return DetermineImportedLicenceFlagsService(payload.licenceId, payload.changedDateDetails.changeDate)
   }
   if (payload.chargeVersionId) {
-    return DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
+    return DetermineChargeVersionFlagsService(payload.chargeVersionId)
   }
   if (payload.returnLogId) {
-    return DetermineReturnLogFlagsService.go(payload.returnLogId)
+    return DetermineReturnLogFlagsService(payload.returnLogId)
   }
   if (payload.workflowId) {
-    return DetermineWorkflowFlagsService.go(payload.workflowId)
+    return DetermineWorkflowFlagsService(payload.workflowId)
   }
   if (payload.billLicenceId) {
-    return DetermineBillLicenceFlagsService.go(payload.billLicenceId)
+    return DetermineBillLicenceFlagsService(payload.billLicenceId)
   }
   if (payload.licenceId) {
-    return DetermineLicenceFlagsService.go(payload.licenceId, payload.scheme)
+    return DetermineLicenceFlagsService(payload.licenceId, payload.scheme)
   }
 
   throw new Error('Invalid payload for process billing flags service')
@@ -84,13 +82,13 @@ async function _determineFlags(payload) {
 
 async function _determineTwoPartTariffYears(twoPartTariffBillingYears, result) {
   const { endDate, startDate, regionId, flagForTwoPartTariffSupplementary } = result
-  const years = DetermineBillingYearsService.go(startDate, endDate)
+  const years = DetermineBillingYearsService(startDate, endDate)
 
   if (!years) {
     return twoPartTariffBillingYears
   }
 
-  return DetermineExistingBillRunYearsService.go(regionId, years, flagForTwoPartTariffSupplementary)
+  return DetermineExistingBillRunYearsService(regionId, years, flagForTwoPartTariffSupplementary)
 }
 
 async function _setFlagForLicence(result) {
@@ -102,14 +100,10 @@ async function _setFlagForLicence(result) {
     twoPartTariffBillingYears = await _determineTwoPartTariffYears(twoPartTariffBillingYears, result)
   }
 
-  await PersistSupplementaryBillingFlagsService.go(
+  await PersistSupplementaryBillingFlagsService(
     twoPartTariffBillingYears,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
     licenceId
   )
-}
-
-module.exports = {
-  go
 }

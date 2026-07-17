@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page
  * @module ViewPreviewService
  */
 
-const AbstractionAlertNotificationsPresenter = require('../../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
-const FetchRecipientsService = require('../fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const PreviewPresenter = require('../../../../presenters/notices/setup/preview/preview.presenter.js')
-const RenewalInvitationNotificationsPresenter = require('../../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js')
-const ReturnsNoticeNotificationsPresenter = require('../../../../presenters/notices/setup/returns-notice-notifications.presenter.js')
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
+import AbstractionAlertNotificationsPresenter from '../../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js'
+import FetchRecipientsService from '../fetch-recipients.service.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { NoticeType } from '../../../../lib/static-lookups.lib.js'
+import PreviewPresenter from '../../../../presenters/notices/setup/preview/preview.presenter.js'
+import RenewalInvitationNotificationsPresenter from '../../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
+import ReturnsNoticeNotificationsPresenter from '../../../../presenters/notices/setup/returns-notice-notifications.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page
@@ -23,13 +21,13 @@ const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
  *
  * @returns {Promise<object>} The view data for the preview page
  */
-async function go(sessionId, contactHashId, licenceMonitoringStationId = null) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewPreviewService(sessionId, contactHashId, licenceMonitoringStationId = null) {
+  const session = await FetchSessionDal(sessionId)
 
   const recipient = await _recipient(contactHashId, session)
   const notification = _notification(recipient, session, licenceMonitoringStationId)
 
-  const formattedData = await PreviewPresenter.go(
+  const formattedData = await PreviewPresenter(
     contactHashId,
     session.noticeType,
     notification,
@@ -48,28 +46,24 @@ function _notification(recipient, session, licenceMonitoringStationId) {
   let notification
 
   if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
-    const unfilteredNotifications = AbstractionAlertNotificationsPresenter.go(session, [recipient], null)
+    const unfilteredNotifications = AbstractionAlertNotificationsPresenter(session, [recipient], null)
 
     notification = unfilteredNotifications.find((unfilteredNotification) => {
       return unfilteredNotification.personalisation.licenceGaugingStationId === licenceMonitoringStationId
     })
   } else if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    notification = RenewalInvitationNotificationsPresenter.go(session, [recipient], null)[0]
+    notification = RenewalInvitationNotificationsPresenter(session, [recipient], null)[0]
   } else {
-    notification = ReturnsNoticeNotificationsPresenter.go(session, [recipient], null)[0]
+    notification = ReturnsNoticeNotificationsPresenter(session, [recipient], null)[0]
   }
 
   return notification
 }
 
 async function _recipient(contactHashId, session) {
-  const recipients = await FetchRecipientsService.go(session)
+  const recipients = await FetchRecipientsService(session)
 
   return recipients.find((recipient) => {
     return recipient.contact_hash_id === contactHashId
   })
-}
-
-module.exports = {
-  go
 }

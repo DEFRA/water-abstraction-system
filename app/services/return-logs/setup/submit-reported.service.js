@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/reported` page
  * @module SubmitReportedService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const ReportedPresenter = require('../../../presenters/return-logs/setup/reported.presenter.js')
-const ReportedValidator = require('../../../validators/return-logs/setup/reported.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReportedPresenter from '../../../presenters/return-logs/setup/reported.presenter.js'
+import ReportedValidator from '../../../validators/return-logs/setup/reported.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/reported` page
@@ -26,8 +24,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} If no errors the page data for the reported page else the validation error details
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitReportedService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload)
 
@@ -35,7 +33,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Reporting details changed')
+      flashNotification(yar, 'Updated', 'Reporting details changed')
     }
 
     return {
@@ -44,7 +42,7 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const pageData = ReportedPresenter.go(session)
+  const pageData = ReportedPresenter(session)
 
   return {
     error,
@@ -59,11 +57,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = ReportedValidator.go(payload)
+  const validationResult = ReportedValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

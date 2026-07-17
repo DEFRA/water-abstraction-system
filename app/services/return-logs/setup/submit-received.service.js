@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/received` page
  * @module SubmitReceivedService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ReceivedDateValidator = require('../../../validators/return-logs/setup/received-date.validator.js')
-const ReceivedPresenter = require('../../../presenters/return-logs/setup/received.presenter.js')
-const { flashNotification, today } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReceivedDateValidator from '../../../validators/return-logs/setup/received-date.validator.js'
+import ReceivedPresenter from '../../../presenters/return-logs/setup/received.presenter.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { flashNotification, today } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/received` page
@@ -27,8 +25,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} If no errors the page data for the received page else the validation error details
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitReceivedService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const { startDate } = session
   const error = _validate(payload, startDate)
@@ -85,16 +83,12 @@ function _submittedSessionData(session, payload) {
   session.receivedDateYear = payload.receivedDateYear ?? null
   session.receivedDateOptions = payload.receivedDateOptions ?? null
 
-  const data = ReceivedPresenter.go(session)
+  const data = ReceivedPresenter(session)
   return data
 }
 
 function _validate(payload, startDate) {
-  const validation = ReceivedDateValidator.go(payload, startDate)
+  const validation = ReceivedDateValidator(payload, startDate)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

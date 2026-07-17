@@ -1,15 +1,16 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const SessionModel = require('../../app/models/session.model.js')
+import SessionModel from '../../app/models/session.model.js'
 
 // Thing under test
-const CreateSessionDal = require('../../app/dal/create-session.dal.js')
+import CreateSessionDal from '../../app/dal/create-session.dal.js'
 
 describe('DAL - Create Session DAL', () => {
   describe('when there is no data', () => {
     it('creates an empty session and returns the session ID', async () => {
-      const result = await CreateSessionDal.go()
+      const result = await CreateSessionDal()
 
       const session = await SessionModel.query().findById(result.id)
 
@@ -28,7 +29,7 @@ describe('DAL - Create Session DAL', () => {
     })
 
     it('creates a session with the data and returns the session ID', async () => {
-      const result = await CreateSessionDal.go(data)
+      const result = await CreateSessionDal(data)
 
       const session = await SessionModel.query().findById(result.id)
 

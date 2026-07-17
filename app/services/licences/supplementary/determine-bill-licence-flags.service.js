@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines which supplementary billing flag should be added to a licence removed from a bill run
  * @module DetermineBillLicenceFlagsService
  */
 
-const BillLicenceModel = require('../../../models/bill-licence.model.js')
+import BillLicenceModel from '../../../models/bill-licence.model.js'
 
 /**
  * Determines which supplementary billing flag should be added to a licence that is removed from a bill run.
@@ -39,7 +37,7 @@ const BillLicenceModel = require('../../../models/bill-licence.model.js')
  * @returns {object} - An object containing the related licenceId, regionId, start and end date and
  * licence supplementary billing flags
  */
-async function go(billLicenceId) {
+export default async function determineBillLicenceFlagsService(billLicenceId) {
   const { licence, bill, licenceId } = await _fetchBillLicence(billLicenceId)
 
   const { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary } = _updateFlags(
@@ -93,8 +91,4 @@ function _updateFlags(billRun, licence) {
   }
 
   return { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary }
-}
-
-module.exports = {
-  go
 }

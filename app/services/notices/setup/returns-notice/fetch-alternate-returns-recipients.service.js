@@ -1,15 +1,12 @@
-'use strict'
-
 /**
  * Fetches recipient data for an alternate returns notice
  * @module FetchAlternateReturnsRecipientsService
  */
 
-const GenerateReturnLogsByIdQueryService = require('./generate-return-logs-by-id-query.service.js')
-const GenerateRecipientsQueryService = require('./generate-recipients-query.service.js')
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
-
-const { db } = require('../../../../../db/db.js')
+import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
+import GenerateReturnLogsByIdQueryService from './generate-return-logs-by-id-query.service.js'
+import { NoticeType } from '../../../../lib/static-lookups.lib.js'
+import { db } from '../../../../../db/db.js'
 
 /**
  * Fetches recipient data for an alternate returns notice
@@ -20,9 +17,9 @@ const { db } = require('../../../../../db/db.js')
  *
  * @returns {Promise<object[]>} The recipient data for the alternate returns notice
  */
-async function go(returnLogIds, notificationDueDate) {
-  const { bindings, query: dueReturnLogsQuery } = GenerateReturnLogsByIdQueryService.go(returnLogIds)
-  const query = GenerateRecipientsQueryService.go(NoticeType.ALTERNATE_INVITATION, dueReturnLogsQuery, false)
+export default async function fetchAlternateReturnsRecipientsService(returnLogIds, notificationDueDate) {
+  const { bindings, query: dueReturnLogsQuery } = GenerateReturnLogsByIdQueryService(returnLogIds)
+  const query = GenerateRecipientsQueryService(NoticeType.ALTERNATE_INVITATION, dueReturnLogsQuery, false)
 
   const { rows } = await db.raw(query, bindings)
 
@@ -35,8 +32,4 @@ function _applyNotificationDueDate(rows, notificationDueDate) {
   for (const row of rows) {
     row.notificationDueDate = notificationDueDate
   }
-}
-
-module.exports = {
-  go
 }

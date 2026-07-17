@@ -1,10 +1,8 @@
-'use strict'
+import LicenceRoleModel from '../../app/models/licence-role.model.js'
+import { data as licenceRoles } from './data/licence-roles.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: licenceRoles } = require('./data/licence-roles.js')
-const LicenceRoleModel = require('../../app/models/licence-role.model.js')
-
-async function seed() {
+export default async function seed() {
   for (const licenceRole of licenceRoles) {
     const exists = await _exists(licenceRole)
 
@@ -40,8 +38,4 @@ async function _update(licenceRole) {
     .patch({ label, name, updatedAt: timestampForPostgres() })
     .where('name', name)
     .andWhere('label', label)
-}
-
-module.exports = {
-  seed
 }

@@ -1,11 +1,12 @@
-'use strict'
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
+import globals from 'globals'
+import jsdocPlugin from 'eslint-plugin-jsdoc'
+import neostandard from 'neostandard'
 
-const jsdocPlugin = require('eslint-plugin-jsdoc')
-const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended')
-const globals = require('globals')
-const neostandard = require('neostandard')
+import noMixedExports from './eslint-rules/no-mixed-exports.js'
+import orderWithinImportGroups from './eslint-rules/order-within-import-groups.js'
 
-module.exports = [
+export default [
   // Ignore the folder created when JSDocs are generated
   // NOTE: In an ESLint Flat Config, an object is only treated as a Global Ignore if it contains the ignores key and
   // nothing else.
@@ -36,19 +37,25 @@ module.exports = [
       globals: {
         ...globals.node
       },
-      sourceType: 'commonjs'
+      sourceType: 'module'
     },
     plugins: {
       // https://github.com/gajus/eslint-plugin-jsdoc
       jsdoc: jsdocPlugin,
-      import: neostandard.plugins['import-x']
+      import: neostandard.plugins['import-x'],
+      local: {
+        rules: {
+          'no-mixed-exports': noMixedExports,
+          'order-within-import-groups': orderWithinImportGroups
+        }
+      }
     },
     // NOTE: Special case for arrow-body-style below
     rules: {
-      // Enforce .js extension when requiring files
-      'import/extensions': ['error', 'always'],
-      // Enforce 'use strict' declarations in all modules
-      strict: ['error', 'global'],
+      // Enforce .js extension when importing local files; ignore bare package specifiers (e.g. 'dotenv/config')
+      'import/extensions': ['error', 'always', { ignorePackages: true }],
+      // A file must use one export style only: either a single default export, or one or more named exports, never both
+      'local/no-mixed-exports': 'error',
       'jsdoc/check-alignment': 'error',
       'jsdoc/check-indentation': 'error',
       'jsdoc/check-types': 'error',
@@ -59,7 +66,27 @@ module.exports = [
       'jsdoc/require-hyphen-before-param-description': 'error',
       'jsdoc/require-jsdoc': ['error', { publicOnly: true }],
       'jsdoc/require-param': ['error', { exemptedBy: ['private'] }],
-      'jsdoc/require-returns': ['error', { publicOnly: true }]
+      'jsdoc/require-returns': ['error', { publicOnly: true }],
+      // Enforce `import * as X` before `import X` before `import { x }`, alphabetically sorted within each group.
+      // allowSeparatedGroups lets us keep the "Test helpers" / "Thing under test" blocks independently sorted
+      'sort-imports': [
+        'error',
+        { memberSyntaxSortOrder: ['all', 'single', 'multiple', 'none'], allowSeparatedGroups: true }
+      ],
+      // Group external imports (Node builtins and node_modules packages) before internal (relative path) imports,
+      // with a blank line between the two groups
+      'import/order': [
+        'error',
+        {
+          groups: [
+            ['builtin', 'external'],
+            ['internal', 'parent', 'sibling', 'index']
+          ],
+          'newlines-between': 'always'
+        }
+      ],
+      // Require a blank line after the last import statement, separating imports from the rest of the file
+      'import/newline-after-import': 'error'
     },
     settings: {
       jsdoc: {
@@ -72,26 +99,9 @@ module.exports = [
   // in the `app/controllers` and `db/seeds` directories. The controllers purposefully do very little and the purpose of
   // the seed files is obvious
   {
-    files: ['app/controllers/**/*', 'db/seeds/**/*'],
+    files: ['app/controllers/**/*', 'db/seeds/**/*', 'db/migrations/**/*'],
     rules: {
       'jsdoc/require-jsdoc': 'off'
-    }
-  },
-  // Vitest injects test globals (describe, it, expect, etc.) via globals: true in vitest.config.js. This tells ESLint
-  // about those globals so it does not flag them as undefined in test files.
-  {
-    files: ['templates/*.test.js', 'test/**/*.test.js'],
-    languageOptions: {
-      globals: {
-        afterAll: 'readonly',
-        afterEach: 'readonly',
-        beforeAll: 'readonly',
-        beforeEach: 'readonly',
-        describe: 'readonly',
-        expect: 'readonly',
-        it: 'readonly',
-        vi: 'readonly'
-      }
     }
   },
   // This section adds another override to the configuration object above. It tells the import/extensions plugin to
@@ -101,6 +111,26 @@ module.exports = [
     files: ['eslint.config.js'],
     rules: {
       'import/extensions': 'off'
+    }
+  },
+  // Test files use blank lines to separate "Test helpers" / "Things we need to stub" / "Thing under test" blocks,
+  // a different convention to external-vs-internal grouping, so exempt them from import/order. Instead,
+  // 'local/order-within-import-groups' enforces external-before-internal ordering *within* each of those
+  // blank-line-separated blocks, replacing sort-imports (which has no concept of external vs internal) for these files
+  {
+    files: ['templates/*.test.js', 'test/**/*'],
+    rules: {
+      'import/order': 'off',
+      'sort-imports': 'off',
+      'local/order-within-import-groups': 'error'
+    }
+  },
+  // This file deliberately separates its two imports with a large explanatory comment, which import/order treats as
+  // a disallowed blank line within the group
+  {
+    files: ['knexfile.application.js'],
+    rules: {
+      'import/order': 'off'
     }
   },
   // Adds prettier ESLint rules. It automatically sets up eslint-config-prettier, which turns off any rules declared

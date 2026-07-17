@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/billing-accounts/setup/{sessionId}/existing-account` page
  *
  * @module ExistingAccountValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/billing-accounts/setup/{sessionId}/existing-account` page
@@ -16,7 +14,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function existingAccountValidator(payload) {
   const errorMessage = 'Select does this account already exist?'
 
   const schema = Joi.object({
@@ -28,8 +26,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

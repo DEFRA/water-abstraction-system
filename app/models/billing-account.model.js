@@ -1,15 +1,17 @@
-'use strict'
-
 /**
  * Model for billing_accounts (crm_v2.invoice_accounts)
  * @module BillingAccountModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import BillModel from './bill.model.js'
+import BillingAccountAddressModel from './billing-account-address.model.js'
+import ChargeVersionModel from './charge-version.model.js'
+import CompanyModel from './company.model.js'
 
-class BillingAccountModel extends BaseModel {
+export default class BillingAccountModel extends BaseModel {
   static get tableName() {
     return 'billingAccounts'
   }
@@ -18,7 +20,7 @@ class BillingAccountModel extends BaseModel {
     return {
       billingAccountAddresses: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing-account-address.model',
+        modelClass: BillingAccountAddressModel,
         join: {
           from: 'billingAccounts.id',
           to: 'billingAccountAddresses.billingAccountId'
@@ -26,7 +28,7 @@ class BillingAccountModel extends BaseModel {
       },
       bills: {
         relation: Model.HasManyRelation,
-        modelClass: 'bill.model',
+        modelClass: BillModel,
         join: {
           from: 'billingAccounts.id',
           to: 'bills.billingAccountId'
@@ -34,7 +36,7 @@ class BillingAccountModel extends BaseModel {
       },
       chargeVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-version.model',
+        modelClass: ChargeVersionModel,
         join: {
           from: 'billingAccounts.id',
           to: 'chargeVersions.billingAccountId'
@@ -42,7 +44,7 @@ class BillingAccountModel extends BaseModel {
       },
       company: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'company.model',
+        modelClass: CompanyModel,
         join: {
           from: 'billingAccounts.companyId',
           to: 'companies.id'
@@ -239,5 +241,3 @@ class BillingAccountModel extends BaseModel {
     return [addressCompanyName, contactName, ...address].filter(Boolean)
   }
 }
-
-module.exports = BillingAccountModel

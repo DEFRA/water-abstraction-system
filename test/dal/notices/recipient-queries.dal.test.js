@@ -1,16 +1,17 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
-const EmptyLicence = require('../../support/seeders/empty-licence.seeder.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const RecipientScenariosSeeder = require('../../support/seeders/recipient-scenarios.seeder.js')
-const RecipientsFormatter = require('../../support/seeders/recipients.formatter.js')
-const { db } = require('../../../db/db.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
+import * as EmptyLicence from '../../support/seeders/empty-licence.seeder.js'
+import * as RecipientScenariosSeeder from '../../support/seeders/recipient-scenarios.seeder.js'
+import * as RecipientsFormatter from '../../support/seeders/recipients.formatter.js'
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import { db } from '../../../db/db.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const RecipientQueriesDal = require('../../../app/dal/notices/recipient-queries.dal.js')
+import * as RecipientQueriesDal from '../../../app/dal/notices/recipient-queries.dal.js'
 
 describe('Notices - Recipient Queries DAL', () => {
   describe('#currentLicenceVersionsJoin', () => {

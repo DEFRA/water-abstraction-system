@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Creates a new session
  * @module CreateSessionDal
  */
 
-const SessionModel = require('../models/session.model.js')
+import SessionModel from '../models/session.model.js'
 
 /**
  * Creates a new session
@@ -17,10 +15,6 @@ const SessionModel = require('../models/session.model.js')
  *
  * @returns {Promise<module:SessionModel>} The newly created session.
  */
-async function go(data = {}) {
+export default async function createSessionDal(data = {}) {
   return SessionModel.query().insert({ data }).returning('id')
-}
-
-module.exports = {
-  go
 }

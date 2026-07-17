@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Determines if an existing bill run will block a user from creating a new annual bill run
  * @module DetermineBlockingAnnualService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const FetchLiveBillRunService = require('./fetch-live-bill-run.service.js')
-const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
-const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import FetchLiveBillRunService from './fetch-live-bill-run.service.js'
+import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
+import { engineTriggers } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Determines if an existing bill run will block a user from creating a new annual bill run
@@ -32,13 +30,13 @@ const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
  * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
  * when creating it, and which bill run engine to trigger the creation with (if any)
  */
-async function go(regionId) {
+export default async function determineBlockingAnnualService(regionId) {
   const toFinancialYearEnding = _toFinancialYearEnding()
 
   let match = await _fetchMatches(regionId, toFinancialYearEnding)
 
   if (!match) {
-    match = await FetchLiveBillRunService.go(regionId, toFinancialYearEnding)
+    match = await FetchLiveBillRunService(regionId, toFinancialYearEnding)
   }
 
   const matches = match ? [match] : []
@@ -67,8 +65,4 @@ function _toFinancialYearEnding() {
   const currentFinancialYear = determineCurrentFinancialYear()
 
   return currentFinancialYear.endDate.getFullYear()
-}
-
-module.exports = {
-  go
 }

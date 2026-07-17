@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ReturnSubmissionLineHelper = require('../support/helpers/return-submission-line.helper.js')
-const ReturnSubmissionHelper = require('../support/helpers/return-submission.helper.js')
-const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
+import ReturnSubmissionHelper from '../support/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from '../support/helpers/return-submission-line.helper.js'
+import ReturnSubmissionModel from '../../app/models/return-submission.model.js'
 
 // Thing under test
-const ReturnSubmissionLineModel = require('../../app/models/return-submission-line.model.js')
+import ReturnSubmissionLineModel from '../../app/models/return-submission-line.model.js'
 
 describe('Return Submission Line model', () => {
   let testRecord

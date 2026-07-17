@@ -1,15 +1,12 @@
-'use strict'
-
 /**
  * Fetches the matching billing account and additional records needed for the view billing account page
  * @module FetchViewBillingAccountService
  */
 
-const BillingAccountModel = require('../../models/billing-account.model.js')
-const BillModel = require('../../models/bill.model.js')
-const BillRunModel = require('../../models/bill-run.model.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import BillModel from '../../models/bill.model.js'
+import BillRunModel from '../../models/bill-run.model.js'
+import BillingAccountModel from '../../models/billing-account.model.js'
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches the matching billing account and additional records needed for the view billing account page
@@ -20,7 +17,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * @returns {Promise<object>} an object containing the billing account and matching bills needed to populate the view
  * billing account page
  */
-async function go(id, page = '1') {
+export default async function fetchViewBillingAccountService(id, page = '1') {
   const billingAccount = await _fetchBillingAccount(id)
   const { results: bills, total: totalNumber } = await _fetchBills(id, page)
 
@@ -57,8 +54,4 @@ async function _fetchBills(billingAccountId, page) {
       builder.select(['id', 'batchType', 'billRunNumber', 'scheme', 'source', 'summer', 'status'])
     })
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
-}
-
-module.exports = {
-  go
 }

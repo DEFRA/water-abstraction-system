@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ExpandedError = require('../../app/errors/expanded.error.js')
+import ExpandedError from '../../app/errors/expanded.error.js'
 
 describe('ExpandedError', () => {
   describe('when instantiated with additional data properties', () => {

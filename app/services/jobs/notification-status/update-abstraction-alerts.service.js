@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Orchestrates the process of updating the licence monitoring stations last abstraction alert.
  * @module UpdateAbstractionAlertsService
  */
 
-const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
+import LicenceMonitoringStationModel from '../../../models/licence-monitoring-station.model.js'
 
 /**
  * Orchestrates the process of updating the licence monitoring stations last abstraction alert.
@@ -18,7 +16,7 @@ const LicenceMonitoringStationModel = require('../../../models/licence-monitorin
  *
  * @param {object[]} notifications
  */
-async function go(notifications) {
+export default async function updateAbstractionAlertsService(notifications) {
   const toUpdateStations = _stations(notifications)
 
   await Promise.all(toUpdateStations)
@@ -41,8 +39,4 @@ function _stations(notifications) {
       statusUpdatedAt: createdAt
     })
   })
-}
-
-module.exports = {
-  go
 }

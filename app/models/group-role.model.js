@@ -1,15 +1,15 @@
-'use strict'
-
 /**
  * Model for group_roles (idm.group_roles)
  * @module GroupRoleModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import GroupModel from './group.model.js'
+import RoleModel from './role.model.js'
 
-class GroupRoleModel extends BaseModel {
+export default class GroupRoleModel extends BaseModel {
   static get tableName() {
     return 'groupRoles'
   }
@@ -18,7 +18,7 @@ class GroupRoleModel extends BaseModel {
     return {
       role: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'role.model',
+        modelClass: RoleModel,
         join: {
           from: 'groupRoles.roleId',
           to: 'roles.id'
@@ -26,7 +26,7 @@ class GroupRoleModel extends BaseModel {
       },
       group: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'group.model',
+        modelClass: GroupModel,
         join: {
           from: 'groupRoles.groupId',
           to: 'groups.id'
@@ -35,5 +35,3 @@ class GroupRoleModel extends BaseModel {
     }
   }
 }
-
-module.exports = GroupRoleModel

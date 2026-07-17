@@ -1,17 +1,16 @@
-'use strict'
-
 /**
  * @module RequirementsForReturnsSeeder
  */
 
-const LicenceHelper = require('../helpers/licence.helper.js')
-const PointHelper = require('../helpers/point.helper.js')
-const PurposeHelper = require('../helpers/purpose.helper.js')
-const ReturnRequirementHelper = require('../helpers/return-requirement.helper.js')
-const ReturnRequirementPointHelper = require('../helpers/return-requirement-point.helper.js')
-const ReturnRequirementPurposeHelper = require('../helpers/return-requirement-purpose.helper.js')
-const ReturnVersionHelper = require('../helpers/return-version.helper.js')
-const UserHelper = require('../helpers/user.helper.js')
+import LicenceHelper from '../helpers/licence.helper.js'
+import PointHelper from '../helpers/point.helper.js'
+import PurposeHelper from '../helpers/purpose.helper.js'
+import ReturnRequirementHelper from '../helpers/return-requirement.helper.js'
+import ReturnRequirementPointHelper from '../helpers/return-requirement-point.helper.js'
+import ReturnRequirementPurposeHelper from '../helpers/return-requirement-purpose.helper.js'
+import ReturnVersionHelper from '../helpers/return-version.helper.js'
+import UserHelper from '../helpers/user.helper.js'
+import { generateReference } from '../generators.js'
 
 /**
  * Add a complete 'requirements for returns' record, including return version, requirements, points and purposes
@@ -31,7 +30,7 @@ const UserHelper = require('../helpers/user.helper.js')
  * point and a purpose plus an instance of `UserModel` for the user that created it and `LicenceModel` for the licence
  * it is linked to
  */
-async function seed() {
+export async function seed() {
   // Select a user
   const user = UserHelper.select()
 
@@ -76,8 +75,8 @@ async function seed() {
  * @private
  */
 function _legacyIds() {
-  const legacyId1 = ReturnRequirementHelper.generateReference()
-  const legacyId2 = ReturnRequirementHelper.generateReference()
+  const legacyId1 = generateReference()
+  const legacyId2 = generateReference()
 
   return legacyId1 > legacyId2 ? [legacyId1, legacyId2] : [legacyId2, legacyId1]
 }
@@ -120,8 +119,4 @@ async function _returnRequirement(returnVersionId, legacyId, reportingFrequency,
   returnRequirement.returnRequirementPurposes = [returnRequirementPurpose]
 
   return returnRequirement
-}
-
-module.exports = {
-  seed
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit`
  * page
  * @module ThresholdAndUnitService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ThresholdAndUnitPresenter = require('../../../presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ThresholdAndUnitPresenter from '../../../presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit`
@@ -20,16 +18,12 @@ const ThresholdAndUnitPresenter = require('../../../presenters/licence-monitorin
  *
  * @returns {Promise<object>} The view data for the threshold and unit page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function thresholdAndUnitService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = ThresholdAndUnitPresenter.go(session)
+  const formattedData = ThresholdAndUnitPresenter(session)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

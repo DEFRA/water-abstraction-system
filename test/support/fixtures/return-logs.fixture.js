@@ -1,18 +1,11 @@
-'use strict'
-
-const LicenceModel = require('../../../app/models/licence.model.js')
-const ReturnLogHelper = require('../helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
-const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
-const {
-  formatDateObjectToISO,
-  daysFromPeriod,
-  weeksFromPeriod,
-  monthsFromPeriod
-} = require('../../../app/lib/dates.lib.js')
-const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
-const { relativeToToday } = require('../general.js')
+import LicenceModel from '../../../app/models/licence.model.js'
+import ReturnLogHelper from '../helpers/return-log.helper.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
+import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
+import { relativeToToday } from '../general.js'
+import { daysFromPeriod, formatDateObjectToISO, monthsFromPeriod, weeksFromPeriod } from '../../../app/lib/dates.lib.js'
+import { generateRandomInteger, generateUUID } from '../generators.js'
 
 /**
  * Applies the fields that are returned by the FetchReturnLogService to a return log instance
@@ -226,7 +219,7 @@ function _returnSubmissionLines(returnLog, returnSubmissionId, type, userUnit) {
   })
 }
 
-module.exports = {
+export default {
   applyFetchReturnLogFields,
   dueReturn,
   returnLog,

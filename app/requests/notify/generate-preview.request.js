@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generate a preview of a notification using GOV.UK Notify
  * @module GeneratePreviewRequest
  */
 
-const NotifyRequest = require('../notify.request.js')
+import { postRequest } from '../notify.request.js'
 
 /**
  * Generate a preview of a notification using GOV.UK Notify
@@ -33,14 +31,10 @@ const NotifyRequest = require('../notify.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(templateId, personalisation) {
+export default async function generatePreviewRequest(templateId, personalisation) {
   const path = `v2/template/${templateId}/preview`
 
   const body = { personalisation }
 
-  return NotifyRequest.post(path, body)
-}
-
-module.exports = {
-  send
+  return postRequest(path, body)
 }

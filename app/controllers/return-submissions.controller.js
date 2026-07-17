@@ -1,20 +1,14 @@
-'use strict'
-
 /**
  * Controller for /return-submissions endpoints
  * @module ReturnSubmissionsController
  */
 
-const ViewReturnSubmissionService = require('../services/return-submissions/view-return-submission.service.js')
+import ViewReturnSubmissionService from '../services/return-submissions/view-return-submission.service.js'
 
-async function view(request, h) {
+export async function view(request, h) {
   const { yearMonth, returnSubmissionId } = request.params
 
-  const pageData = await ViewReturnSubmissionService.go(returnSubmissionId, yearMonth)
+  const pageData = await ViewReturnSubmissionService(returnSubmissionId, yearMonth)
 
   return h.view('return-submissions/view.njk', pageData)
-}
-
-module.exports = {
-  view
 }

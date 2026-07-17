@@ -1,6 +1,4 @@
-'use strict'
-
-const data = [
+export const data = [
   {
     id: 'a5f868ec-f51c-478d-924c-37852626b7c1',
     chargeRegionId: 'A',
@@ -72,7 +70,3 @@ const data = [
     displayName: 'Bill Run Testing Region'
   }
 ]
-
-module.exports = {
-  data
-}

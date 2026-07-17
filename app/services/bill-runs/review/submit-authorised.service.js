@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Handles user submission for the review charge reference authorised page
  * @module SubmitAuthorisedService
  */
 
-const AuthorisedPresenter = require('../../../presenters/bill-runs/review/authorised.presenter.js')
-const AuthorisedValidator = require('../../../validators/bill-runs/review/authorised.validator.js')
-const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
-const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
+import AuthorisedPresenter from '../../../presenters/bill-runs/review/authorised.presenter.js'
+import AuthorisedValidator from '../../../validators/bill-runs/review/authorised.validator.js'
+import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
+import ReviewChargeReferenceModel from '../../../models/review-charge-reference.model.js'
 
 /**
  * Orchestrates validating the data for the amend authorised volume page and patching the db value
@@ -20,7 +18,7 @@ const ReviewChargeReferenceModel = require('../../../models/review-charge-refere
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the page including the
  * validation error details
  */
-async function go(reviewChargeReferenceId, yar, payload) {
+export default async function submitAuthorisedService(reviewChargeReferenceId, yar, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -30,8 +28,8 @@ async function go(reviewChargeReferenceId, yar, payload) {
     return {}
   }
 
-  const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
-  const pageData = AuthorisedPresenter.go(reviewChargeReference)
+  const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
+  const pageData = AuthorisedPresenter(reviewChargeReference)
 
   return {
     activeNavBar: 'bill-runs',
@@ -48,7 +46,7 @@ async function _save(reviewChargeReferenceId, payload) {
 }
 
 function _validate(payload) {
-  const validation = AuthorisedValidator.go(payload)
+  const validation = AuthorisedValidator(payload)
 
   if (!validation.error) {
     return null
@@ -59,8 +57,4 @@ function _validate(payload) {
   return {
     text: message
   }
-}
-
-module.exports = {
-  go
 }

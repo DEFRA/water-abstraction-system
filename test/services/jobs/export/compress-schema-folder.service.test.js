@@ -1,37 +1,28 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-// Things we need to stub (dynamically required in beforeEach to support mocking)
-let tar
+// Things we need to stub
+import * as TarWrapperLib from '../../../../app/lib/tar-wrapper.lib.js'
 
-// Thing under test (dynamically required in beforeEach to support mocking)
-let CompressSchemaFolderService
+// Thing under test
+import CompressSchemaFolderService from '../../../../app/services/jobs/export/compress-schema-folder.service.js'
 
-// TODO: Remove describe.skip once the project migrates to ESM. In CJS mode, Node.js v22's require(esm)
-// compatibility layer runs before Vitest's module interceptor so vi.doMock('tar') cannot replace the ESM
-// package's live bindings. Once test files are ESM, vi.mock('tar') with a static import will work correctly.
-describe.skip('Jobs - Export - Compress Schema Folder service', () => {
+describe('Jobs - Export - Compress Schema Folder service', () => {
   beforeEach(() => {
-    vi.doMock('tar', () => {
-      return { create: vi.fn().mockResolvedValue(undefined) }
-    })
-    vi.resetModules()
-
-    tar = require('tar')
-    CompressSchemaFolderService = require('../../../../app/services/jobs/export/compress-schema-folder.service.js')
+    vi.spyOn(TarWrapperLib, 'tarCreate').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    vi.resetAllMocks()
-    vi.resetModules()
+    vi.restoreAllMocks()
   })
 
   it('creates a compressed tarball from the given schema folder', async () => {
     const schemaFolderPath = '/tmp/water'
     const expectedTarballPath = '/tmp/water.tgz'
 
-    const result = await CompressSchemaFolderService.go(schemaFolderPath)
+    const result = await CompressSchemaFolderService(schemaFolderPath)
 
-    expect(tar.create).toHaveBeenCalledOnce()
+    expect(TarWrapperLib.tarCreate).toHaveBeenCalledOnce()
     expect(result).toEqual(expectedTarballPath)
   })
 })

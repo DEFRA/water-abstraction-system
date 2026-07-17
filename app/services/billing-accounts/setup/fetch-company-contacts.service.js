@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches all contacts for a specified company
  * @module FetchCompanyContactsService
  */
 
-const CompanyModel = require('../../../models/company.model.js')
-const ContactModel = require('../../../models/contact.model.js')
+import CompanyModel from '../../../models/company.model.js'
+import ContactModel from '../../../models/contact.model.js'
 
 /**
  * Fetches all contacts for a specified company
@@ -15,7 +13,7 @@ const ContactModel = require('../../../models/contact.model.js')
  *
  * @returns {Promise<object[]>} an object containing the matching contacts needed to populate the view
  */
-async function go(companyId) {
+export default async function fetchCompanyContactsService(companyId) {
   const company = await CompanyModel.query().select(['id', 'name']).findById(companyId)
   const contacts = await ContactModel.query()
     .select([
@@ -37,8 +35,4 @@ async function go(companyId) {
     company,
     contacts
   }
-}
-
-module.exports = {
-  go
 }

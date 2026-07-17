@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const SingleVolumeValidator = require('../../../../app/validators/return-logs/setup/single-volume.validator.js')
+import SingleVolumeValidator from '../../../../app/validators/return-logs/setup/single-volume.validator.js'
 
 describe('Return Logs Setup - Single Volume validator', () => {
   let payload
@@ -13,7 +14,7 @@ describe('Return Logs Setup - Single Volume validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = SingleVolumeValidator.go(payload)
+        const result = SingleVolumeValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -25,7 +26,7 @@ describe('Return Logs Setup - Single Volume validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = SingleVolumeValidator.go(payload)
+        const result = SingleVolumeValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -39,7 +40,7 @@ describe('Return Logs Setup - Single Volume validator', () => {
       })
 
       it('fails validation with the message "Select if its a single volume"', () => {
-        const result = SingleVolumeValidator.go(payload)
+        const result = SingleVolumeValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual("Select if it's a single volume")
@@ -53,7 +54,7 @@ describe('Return Logs Setup - Single Volume validator', () => {
 
       describe('but then entered no volume', () => {
         it('fails validation with the message "Enter a total amount"', () => {
-          const result = SingleVolumeValidator.go(payload)
+          const result = SingleVolumeValidator(payload)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a total amount')
@@ -66,7 +67,7 @@ describe('Return Logs Setup - Single Volume validator', () => {
         })
 
         it('fails validation with the message "Enter a number for the total amount"', () => {
-          const result = SingleVolumeValidator.go(payload)
+          const result = SingleVolumeValidator(payload)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a number for the total amount')
@@ -79,7 +80,7 @@ describe('Return Logs Setup - Single Volume validator', () => {
         })
 
         it('fails validation with the message "Enter a total amount greater than zero"', () => {
-          const result = SingleVolumeValidator.go(payload)
+          const result = SingleVolumeValidator(payload)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a total amount greater than zero')
@@ -92,7 +93,7 @@ describe('Return Logs Setup - Single Volume validator', () => {
         })
 
         it('fails validation with the message "Enter a total amount greater than zero"', () => {
-          const result = SingleVolumeValidator.go(payload)
+          const result = SingleVolumeValidator(payload)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a total amount greater than zero')
@@ -107,7 +108,7 @@ describe('Return Logs Setup - Single Volume validator', () => {
         })
 
         it('fails validation with the message "Enter a positive total amount up to a maximum of 9007199254740991"', () => {
-          const result = SingleVolumeValidator.go(payload)
+          const result = SingleVolumeValidator(payload)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual(
@@ -122,7 +123,7 @@ describe('Return Logs Setup - Single Volume validator', () => {
         })
 
         it('fails validation with the message "Enter a total amount with no more than 6 decimal places"', () => {
-          const result = SingleVolumeValidator.go(payload)
+          const result = SingleVolumeValidator(payload)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a total amount with no more than 6 decimal places')

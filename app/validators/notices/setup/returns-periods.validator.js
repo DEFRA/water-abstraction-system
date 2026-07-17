@@ -1,12 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/returns-period` page
  * @module ReturnsPeriodValidator
  */
 
-const Joi = require('joi')
-const { returnPeriodDates } = require('../../../lib/static-lookups.lib.js')
+import Joi from 'joi'
+
+import { returnPeriodDates } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Validates data submitted for the `/notices/setup/returns-period` page
@@ -17,7 +16,7 @@ const { returnPeriodDates } = require('../../../lib/static-lookups.lib.js')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, noticeType) {
+export default function returnsPeriodsValidator(payload, noticeType) {
   const validValues = Object.keys(returnPeriodDates)
 
   const errorMessage = `Select the returns periods for the ${noticeType}`
@@ -34,8 +33,4 @@ function go(payload, noticeType) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

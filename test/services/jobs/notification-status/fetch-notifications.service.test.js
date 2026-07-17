@@ -1,21 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
-const NotificationHelper = require('../../../support/helpers/notification.helper.js')
-const NotificationModel = require('../../../../app/models/notification.model.js')
-const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
-const { today } = require('../../../../app/lib/general.lib.js')
-const { yesterday } = require('../../../support/general.js')
+import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
+import NotificationHelper from '../../../support/helpers/notification.helper.js'
+import NotificationModel from '../../../../app/models/notification.model.js'
+import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
+import { today } from '../../../../app/lib/general.lib.js'
+import { yesterday } from '../../../support/general.js'
 
 // Things we need to stub
-const notifyConfig = require('../../../../config/notify.config.js')
+import notifyConfig from '../../../../config/notify.config.js'
 
 // Thing under test
-const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
+import FetchNotificationsService from '../../../../app/services/jobs/notification-status/fetch-notifications.service.js'
 
 const DAYS_OF_RETENTION = 7
 
@@ -70,11 +68,11 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
 
   beforeEach(() => {
     // As this can change, we stub it so the tests can assert with confidence
-    Sinon.stub(notifyConfig, 'daysOfRetention').value(DAYS_OF_RETENTION)
+    vi.replaceProperty(notifyConfig, 'daysOfRetention', DAYS_OF_RETENTION)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -85,7 +83,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
   })
 
   it('returns "pending" notifications created within the Notify retention period', async () => {
-    const results = await FetchNotificationsService.go()
+    const results = await FetchNotificationsService()
 
     for (const result of results) {
       expect(result.status).toEqual('pending')
@@ -94,7 +92,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
   })
 
   it('contains the test records we expect and excludes those we do not', async () => {
-    const results = await FetchNotificationsService.go()
+    const results = await FetchNotificationsService()
 
     expect(results).toContainEqual(_transformToResult(returnsInvitation))
 

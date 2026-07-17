@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for permit_licences (permit.licence)
  * @module PermitLicenceModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceModel from './licence.model.js'
 
-class PermitLicenceModel extends BaseModel {
+export default class PermitLicenceModel extends BaseModel {
   static get tableName() {
     return 'permitLicences'
   }
@@ -23,7 +22,7 @@ class PermitLicenceModel extends BaseModel {
     return {
       permitLicence: {
         relation: Model.HasOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'permitLicences.licenceRef',
           to: 'licences.licenceRef'
@@ -32,5 +31,3 @@ class PermitLicenceModel extends BaseModel {
     }
   }
 }
-
-module.exports = PermitLicenceModel

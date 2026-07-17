@@ -1,25 +1,23 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceModel = require('../../../../app/models/licence.model.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceModel from '../../../../app/models/licence.model.js'
 
 // Things we need to stub
-const CreateLicenceSupplementaryYearService = require('../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js')
+import * as CreateLicenceSupplementaryYearService from '../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js'
 
 // Thing under test
-const PersistSupplementaryBillingFlagsService = require('../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js')
+import PersistSupplementaryBillingFlagsService from '../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js'
 
 describe('Persist Supplementary Billing Flags Service', () => {
   beforeEach(async () => {
-    Sinon.stub(CreateLicenceSupplementaryYearService, 'go').resolves()
+    vi.spyOn(CreateLicenceSupplementaryYearService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a licence id', () => {
@@ -41,7 +39,7 @@ describe('Persist Supplementary Billing Flags Service', () => {
         })
 
         it('persists the flags on the licence', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
+          await PersistSupplementaryBillingFlagsService(
             twoPartTariffFinancialYears,
             preSrocFlag,
             srocFlag,
@@ -56,14 +54,14 @@ describe('Persist Supplementary Billing Flags Service', () => {
         })
 
         it('calls `CreateLicenceSupplementaryYearsService` to handle persisting the financial years', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
+          await PersistSupplementaryBillingFlagsService(
             twoPartTariffFinancialYears,
             preSrocFlag,
             srocFlag,
             testLicence.id
           )
 
-          expect(CreateLicenceSupplementaryYearService.go.called).toBe(true)
+          expect(CreateLicenceSupplementaryYearService.default).toHaveBeenCalled()
         })
       })
 
@@ -75,7 +73,7 @@ describe('Persist Supplementary Billing Flags Service', () => {
         })
 
         it('persists the flags on the licence', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
+          await PersistSupplementaryBillingFlagsService(
             twoPartTariffFinancialYears,
             preSrocFlag,
             srocFlag,
@@ -90,14 +88,14 @@ describe('Persist Supplementary Billing Flags Service', () => {
         })
 
         it('does not call `CreateLicenceSupplementaryYearsService`', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
+          await PersistSupplementaryBillingFlagsService(
             twoPartTariffFinancialYears,
             preSrocFlag,
             srocFlag,
             testLicence.id
           )
 
-          expect(CreateLicenceSupplementaryYearService.go.called).toBe(false)
+          expect(CreateLicenceSupplementaryYearService.default).not.toHaveBeenCalled()
         })
       })
     })

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/returns-cycle` page
  * @module ReturnsCyclePresenter
@@ -13,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, requirementIndex) {
+export default function returnsCyclePresenter(session, requirementIndex) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
@@ -36,8 +34,4 @@ function _backLinkHref(session, requirementIndex) {
   }
 
   return `/system/return-versions/setup/${id}/abstraction-period/${requirementIndex}`
-}
-
-module.exports = {
-  go
 }

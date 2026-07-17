@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const { transformArrayToCSVRow } = require('../../app/lib/transform-to-csv.lib.js')
+import { transformArrayToCSVRow } from '../../app/lib/transform-to-csv.lib.js'
 
 describe('Transform to csv', () => {
   describe('#transformArrayToCSVRow', () => {
@@ -129,7 +130,7 @@ describe('Transform to csv', () => {
       it('returns undefined', () => {
         const result = transformArrayToCSVRow()
 
-        expect(result).toEqual(undefined)
+        expect(result).toBeUndefined()
       })
     })
   })

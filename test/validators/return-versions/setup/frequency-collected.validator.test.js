@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const FrequencyCollectedValidator = require('../../../../app/validators/return-versions/setup/frequency-collected.validator.js')
+import FrequencyCollectedValidator from '../../../../app/validators/return-versions/setup/frequency-collected.validator.js'
 
 describe('Return Versions Setup - Frequency Collected validator', () => {
   let payload
@@ -14,7 +15,7 @@ describe('Return Versions Setup - Frequency Collected validator', () => {
     })
 
     it('confirms the data is valid', async () => {
-      const result = FrequencyCollectedValidator.go(payload)
+      const result = FrequencyCollectedValidator(payload)
 
       expect(result.error).toBeUndefined()
       expect(result.value.frequencyCollected).toEqual('month')
@@ -29,7 +30,7 @@ describe('Return Versions Setup - Frequency Collected validator', () => {
     })
 
     it('fails validation', () => {
-      const result = FrequencyCollectedValidator.go(payload)
+      const result = FrequencyCollectedValidator(payload)
 
       expect(result.error.details[0].message).toEqual('Select how often readings or volumes are collected')
     })
@@ -41,7 +42,7 @@ describe('Return Versions Setup - Frequency Collected validator', () => {
     })
 
     it('fails validation', () => {
-      const result = FrequencyCollectedValidator.go(payload)
+      const result = FrequencyCollectedValidator(payload)
 
       expect(result.error.details[0].message).toEqual('Select how often readings or volumes are collected')
     })

@@ -1,16 +1,13 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const FetchOtherPurposeIdsDal = require('../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js')
+import * as FetchOtherPurposeIdsDal from '../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'
 
 // Thing under test
-const GenerateReturnVersionRequirementsService = require('../../../../../app/services/return-versions/setup/check/generate-return-version-requirements.service.js')
+import GenerateReturnVersionRequirementsService from '../../../../../app/services/return-versions/setup/check/generate-return-version-requirements.service.js'
 
 describe('Return Versions - Setup - Generate Return Version Requirements service', () => {
-  let fetchOtherPurposeIdsStub
   let licenceId
   let sessionRequirements
 
@@ -84,31 +81,28 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
       }
     ]
 
-    fetchOtherPurposeIdsStub = Sinon.stub(FetchOtherPurposeIdsDal, 'go')
-      .onFirstCall()
-      .resolves({
+    vi.spyOn(FetchOtherPurposeIdsDal, 'default')
+      .mockResolvedValueOnce({
         primaryPurposeId: 'c6fd4b2a-82b5-42b0-a98a-087ba52f9a4f',
         secondaryPurposeId: '0a80d135-9bd4-40ec-90ff-f4a365ccac3f'
       })
-      .onSecondCall()
-      .resolves({
+      .mockResolvedValueOnce({
         primaryPurposeId: 'c6fd4b2a-82b5-42b0-a98a-087ba52f9a4f',
         secondaryPurposeId: '0a80d135-9bd4-40ec-90ff-f4a365ccac3f'
       })
-      .onThirdCall()
-      .resolves({
+      .mockResolvedValueOnce({
         primaryPurposeId: '6f1bb87e-02f6-4cfb-87cb-57dc2af3e2af',
         secondaryPurposeId: '8391fe23-a85e-4e7e-a0f8-d819be97d789'
       })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('generates return requirements for persisting from the session requirements data', async () => {
-      const results = await GenerateReturnVersionRequirementsService.go(licenceId, sessionRequirements)
+      const results = await GenerateReturnVersionRequirementsService(licenceId, sessionRequirements)
 
       // We expect two return requirements to be generated from our session data
       expect(results).toHaveLength(2)
@@ -171,10 +165,10 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
 
       // Because the two session data requirements share the same purpose, but the second has an additional one, we
       // expect the FetchOtherPurposeIdsService to be called three times - once for each 'valid' purpose
-      expect(fetchOtherPurposeIdsStub.callCount).toEqual(3)
-      expect(fetchOtherPurposeIdsStub.getCall(0).args).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
-      expect(fetchOtherPurposeIdsStub.getCall(1).args).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
-      expect(fetchOtherPurposeIdsStub.getCall(2).args).toEqual([licenceId, '58855070-25d1-4f17-92e5-2a67721a4434'])
+      expect(FetchOtherPurposeIdsDal.default).toHaveBeenCalledTimes(3)
+      expect(FetchOtherPurposeIdsDal.default.mock.calls[0]).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
+      expect(FetchOtherPurposeIdsDal.default.mock.calls[1]).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
+      expect(FetchOtherPurposeIdsDal.default.mock.calls[2]).toEqual([licenceId, '58855070-25d1-4f17-92e5-2a67721a4434'])
     })
   })
 })

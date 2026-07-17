@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const ContactModel = require('../../../app/models/contact.model.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const ReturnVersionModel = require('../../../app/models/return-version.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import ContactModel from '../../../app/models/contact.model.js'
+import LicenceModel from '../../../app/models/licence.model.js'
+import ReturnVersionModel from '../../../app/models/return-version.model.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we want to stub
-const FetchReturnVersionService = require('../../../app/services/return-versions/fetch-return-version.service.js')
+import * as FetchReturnVersionService from '../../../app/services/return-versions/fetch-return-version.service.js'
 
 // Thing under test
-const ViewService = require('../../../app/services/return-versions/view.service.js')
+import ViewService from '../../../app/services/return-versions/view.service.js'
 
 describe('Return Versions - View service', () => {
   const returnVersionId = generateUUID()
@@ -22,16 +20,16 @@ describe('Return Versions - View service', () => {
   const returnVersion = returnVersionData.returnVersion
 
   beforeEach(() => {
-    Sinon.stub(FetchReturnVersionService, 'go').resolves(returnVersionData)
+    vi.spyOn(FetchReturnVersionService, 'default').mockResolvedValue(returnVersionData)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewService.go(returnVersionId)
+      const result = await ViewService(returnVersionId)
 
       expect(result).toEqual({
         backLink: {

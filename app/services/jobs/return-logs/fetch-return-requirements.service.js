@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Fetches the matching return requirements for a given return cycle
  * @module FetchReturnRequirementsService
  */
 
-const { db } = require('../../../../db/db.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
-const ReturnVersionModel = require('../../../models/return-version.model.js')
+import ReturnLogModel from '../../../models/return-log.model.js'
+import ReturnRequirementModel from '../../../models/return-requirement.model.js'
+import ReturnVersionModel from '../../../models/return-version.model.js'
+import { db } from '../../../../db/db.js'
 
 /**
  * Fetches the matching return requirements for a given return cycle
@@ -17,7 +15,7 @@ const ReturnVersionModel = require('../../../models/return-version.model.js')
  *
  * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the given return cycle
  */
-async function go(returnCycle) {
+export default async function fetchReturnRequirementsService(returnCycle) {
   return _fetch(returnCycle)
 }
 
@@ -109,8 +107,4 @@ async function _fetch(returnCycle) {
           secondaryPurposeBuilder.select(['description', 'id', 'legacyId'])
         })
     })
-}
-
-module.exports = {
-  go
 }

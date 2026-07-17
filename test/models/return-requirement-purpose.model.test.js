@@ -1,18 +1,19 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
-const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
-const PurposeHelper = require('../support/helpers/purpose.helper.js')
-const PurposeModel = require('../../app/models/purpose.model.js')
-const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
-const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
-const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
-const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
-const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
+import PrimaryPurposeHelper from '../support/helpers/primary-purpose.helper.js'
+import PrimaryPurposeModel from '../../app/models/primary-purpose.model.js'
+import PurposeHelper from '../support/helpers/purpose.helper.js'
+import PurposeModel from '../../app/models/purpose.model.js'
+import ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
+import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
+import ReturnRequirementPurposeHelper from '../support/helpers/return-requirement-purpose.helper.js'
+import SecondaryPurposeHelper from '../support/helpers/secondary-purpose.helper.js'
+import SecondaryPurposeModel from '../../app/models/secondary-purpose.model.js'
 
 // Thing under test
-const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
+import ReturnRequirementPurposeModel from '../../app/models/return-requirement-purpose.model.js'
 
 describe('Return Requirement Purpose model', () => {
   let testPrimaryPurpose

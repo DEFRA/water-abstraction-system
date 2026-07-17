@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @module FullConditionValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -16,7 +14,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function fullConditionValidator(payload) {
   const conditionErrorMessage = 'Select a condition'
 
   const schema = Joi.object({
@@ -28,8 +26,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

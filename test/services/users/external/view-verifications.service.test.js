@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Things we want to stub
-const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
-const FetchVerificationsDal = require('../../../../app/dal/users/external/fetch-verifications.dal.js')
+import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchVerificationsDal from '../../../../app/dal/users/external/fetch-verifications.dal.js'
 
 // Thing under test
-const ViewVerificationsService = require('../../../../app/services/users/external/view-verifications.service.js')
+import ViewVerificationsService from '../../../../app/services/users/external/view-verifications.service.js'
 
 describe('Users - External - View Verifications service', () => {
   const auth = {
@@ -27,20 +25,20 @@ describe('Users - External - View Verifications service', () => {
 
     user = { id, licenceEntityId: 'b2c55396-9bbb-448d-85e7-2be1dbefc02b', username }
 
-    Sinon.stub(FetchUserDal, 'go').resolves(user)
-    Sinon.stub(FetchVerificationsDal, 'go').resolves({
+    vi.spyOn(FetchUserDal, 'default').mockResolvedValue(user)
+    vi.spyOn(FetchVerificationsDal, 'default').mockResolvedValue({
       verifications: [],
       totalNumber: 0
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewVerificationsService.go(user.id, auth, page, back)
+      const result = await ViewVerificationsService(user.id, auth, page, back)
 
       expect(result).toEqual({
         activeNavBar: 'users',

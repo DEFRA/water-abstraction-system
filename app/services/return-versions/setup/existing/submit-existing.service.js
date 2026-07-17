@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/existing` page
  * @module SubmitExistingService
  */
 
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-
-const ExistingPresenter = require('../../../../presenters/return-versions/setup/existing.presenter.js')
-const ExistingValidator = require('../../../../validators/return-versions/setup/existing.validator.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const GenerateFromExistingRequirementsService = require('./generate-from-existing-requirements.service.js')
+import ExistingPresenter from '../../../../presenters/return-versions/setup/existing.presenter.js'
+import ExistingValidator from '../../../../validators/return-versions/setup/existing.validator.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import GenerateFromExistingRequirementsService from './generate-from-existing-requirements.service.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/existing` page
@@ -28,8 +25,8 @@ const GenerateFromExistingRequirementsService = require('./generate-from-existin
  * @returns {Promise<object>} If no errors an empty object else the page data for the existing page including the
  * validation error details
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitExistingService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload, session)
 
@@ -39,7 +36,7 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const formattedData = ExistingPresenter.go(session)
+  const formattedData = ExistingPresenter(session)
 
   return {
     error: validationResult,
@@ -48,7 +45,7 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  const { requirements, multipleUpload, quarterlyReturns } = await GenerateFromExistingRequirementsService.go(
+  const { requirements, multipleUpload, quarterlyReturns } = await GenerateFromExistingRequirementsService(
     payload.existing
   )
 
@@ -64,11 +61,7 @@ function _validate(payload, session) {
     licence: { returnVersions }
   } = session
 
-  const validation = ExistingValidator.go(payload, returnVersions)
+  const validation = ExistingValidator(payload, returnVersions)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

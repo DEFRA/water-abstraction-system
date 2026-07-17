@@ -1,13 +1,14 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const FetchExistingLicenceDetailsService = require('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
+import FetchExistingLicenceDetailsService from '../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js'
 
 describe('Fetch Existing Licence Details Service', () => {
   describe('when passed a licence ID for a licence that exists', () => {
@@ -25,7 +26,7 @@ describe('Fetch Existing Licence Details Service', () => {
       })
 
       it('fetches the licence data', async () => {
-        const result = await FetchExistingLicenceDetailsService.go(licence.id)
+        const result = await FetchExistingLicenceDetailsService(licence.id)
 
         expect(result.id).toEqual(licence.id)
         expect(result.region_id).toEqual(licence.regionId)
@@ -37,7 +38,7 @@ describe('Fetch Existing Licence Details Service', () => {
       })
 
       it('outlines which charge versions the licence does not have', async () => {
-        const result = await FetchExistingLicenceDetailsService.go(licence.id)
+        const result = await FetchExistingLicenceDetailsService(licence.id)
 
         expect(result.pre_sroc_charge_versions).toEqual(false)
         expect(result.sroc_charge_versions).toEqual(false)
@@ -64,19 +65,19 @@ describe('Fetch Existing Licence Details Service', () => {
       })
 
       it('fetches the licence data', async () => {
-        const result = await FetchExistingLicenceDetailsService.go(licence.id)
+        const result = await FetchExistingLicenceDetailsService(licence.id)
 
         expect(result.id).toEqual(licence.id)
         expect(result.region_id).toEqual(licence.regionId)
-        expect(result.revoked_date).toEqual(null)
-        expect(result.lapsed_date).toEqual(null)
-        expect(result.expired_date).toEqual(null)
+        expect(result.revoked_date).toBeNull()
+        expect(result.lapsed_date).toBeNull()
+        expect(result.expired_date).toBeNull()
         expect(result.flagged_for_presroc).toEqual(false)
         expect(result.flagged_for_sroc).toEqual(false)
       })
 
       it('outlines which charge versions the licence has', async () => {
-        const result = await FetchExistingLicenceDetailsService.go(licence.id)
+        const result = await FetchExistingLicenceDetailsService(licence.id)
 
         expect(result.pre_sroc_charge_versions).toEqual(true)
         expect(result.sroc_charge_versions).toEqual(true)

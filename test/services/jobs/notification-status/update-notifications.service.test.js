@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const EventHelper = require('../../../support/helpers/event.helper.js')
-const NotificationHelper = require('../../../support/helpers/notification.helper.js')
-const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
+import EventHelper from '../../../support/helpers/event.helper.js'
+import NotificationHelper from '../../../support/helpers/notification.helper.js'
+import { timestampForPostgres } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const UpdateNotificationsService = require('../../../../app/services/jobs/notification-status/update-notifications.service.js')
+import UpdateNotificationsService from '../../../../app/services/jobs/notification-status/update-notifications.service.js'
 
 describe('Job - Notification Status - Update Notifications service', () => {
   let eventId
@@ -42,7 +43,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
     })
 
     it("updates only the notification's required values", async () => {
-      await UpdateNotificationsService.go(notifications)
+      await UpdateNotificationsService(notifications)
 
       const result = await notification.$query()
 
@@ -97,7 +98,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
     })
 
     it('updates the first notification', async () => {
-      await UpdateNotificationsService.go(notifications)
+      await UpdateNotificationsService(notifications)
 
       const result = await notification.$query()
 
@@ -128,7 +129,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
     })
 
     it('updates the second notification', async () => {
-      await UpdateNotificationsService.go(notifications)
+      await UpdateNotificationsService(notifications)
 
       const result = await notification2.$query()
 

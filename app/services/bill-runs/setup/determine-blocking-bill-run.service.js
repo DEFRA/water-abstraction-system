@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Determines if an existing bill run blocks the one a user is trying to setup
  * @module DetermineBlockingBillRunService
  */
 
-const DetermineBlockingAnnualService = require('./determine-blocking-annual.service.js')
-const DetermineBlockingSupplementaryService = require('./determine-blocking-supplementary.service.js')
-const DetermineBlockingTwoPartAnnualService = require('./determine-blocking-two-part-annual.service.js')
-const DetermineBlockingTwoPartSupplementaryService = require('./determine-blocking-two-part-supplementary.service.js')
+import DetermineBlockingAnnualService from './determine-blocking-annual.service.js'
+import DetermineBlockingSupplementaryService from './determine-blocking-supplementary.service.js'
+import DetermineBlockingTwoPartAnnualService from './determine-blocking-two-part-annual.service.js'
+import DetermineBlockingTwoPartSupplementaryService from './determine-blocking-two-part-supplementary.service.js'
 
 /**
  * Determines if an existing bill run blocks the one a user is trying to setup
@@ -39,26 +37,22 @@ const DetermineBlockingTwoPartSupplementaryService = require('./determine-blocki
  * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
  * when creating it, and which bill run engine to trigger the creation with (if any)
  */
-async function go(session) {
+export default async function determineBlockingBillRunService(session) {
   const { region, season, type, year } = session
 
   if (type === 'supplementary') {
-    return DetermineBlockingSupplementaryService.go(region)
+    return DetermineBlockingSupplementaryService(region)
   }
 
   if (type === 'two_part_supplementary') {
-    return DetermineBlockingTwoPartSupplementaryService.go(region, year)
+    return DetermineBlockingTwoPartSupplementaryService(region, year)
   }
 
   if (type === 'two_part_tariff') {
     const summer = season === 'summer'
 
-    return DetermineBlockingTwoPartAnnualService.go(region, year, summer)
+    return DetermineBlockingTwoPartAnnualService(region, year, summer)
   }
 
-  return DetermineBlockingAnnualService.go(region)
-}
-
-module.exports = {
-  go
+  return DetermineBlockingAnnualService(region)
 }

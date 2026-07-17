@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Thing under test
-const AuthorisedPresenter = require('../../../../app/presenters/bill-runs/review/authorised.presenter.js')
+import AuthorisedPresenter from '../../../../app/presenters/bill-runs/review/authorised.presenter.js'
 
 describe('Bill Runs Review - Authorised presenter', () => {
   let reviewChargeReference
@@ -15,7 +16,7 @@ describe('Bill Runs Review - Authorised presenter', () => {
 
   describe('when provided with the result of fetch review charge reference service', () => {
     it('correctly presents the data', () => {
-      const result = AuthorisedPresenter.go(reviewChargeReference)
+      const result = AuthorisedPresenter(reviewChargeReference)
 
       expect(result).toEqual({
         amendedAuthorisedVolume: 9.092,

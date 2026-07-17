@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const YarStub = require('../../support/stubs/yar.stub.js')
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchMonitoringStationDetailsDal = require('../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
+import * as FetchMonitoringStationDetailsDal from '../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 // Thing under test
-const ViewService = require('../../../app/services/monitoring-stations/view.service.js')
+import ViewService from '../../../app/services/monitoring-stations/view.service.js'
 
 describe('Monitoring Stations - View service', () => {
   let auth
@@ -55,19 +53,22 @@ describe('Monitoring Stations - View service', () => {
       }
     ]
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns(['Tag removed for 99/999/9999'])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue(['Tag removed for 99/999/9999'])
 
-    Sinon.stub(FetchMonitoringStationDetailsDal, 'go').resolves({ licenceMonitoringStations, monitoringStation })
+    vi.spyOn(FetchMonitoringStationDetailsDal, 'default').mockResolvedValue({
+      licenceMonitoringStations,
+      monitoringStation
+    })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await ViewService.go(auth, monitoringStation.id, yarStub)
+      const result = await ViewService(auth, monitoringStation.id, yarStub)
 
       expect(result).toEqual({
         notification: 'Tag removed for 99/999/9999',

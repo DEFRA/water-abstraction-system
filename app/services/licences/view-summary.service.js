@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
  * @module ViewSummaryService
  */
 
-const FetchLicenceService = require('./fetch-licence.service.js')
-const FetchSummaryService = require('./fetch-summary.service.js')
-const SummaryHeadingPresenter = require('../../presenters/licences/summary-heading.presenter.js')
-const SummaryPresenter = require('../../presenters/licences/summary.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import FetchLicenceService from './fetch-licence.service.js'
+import FetchSummaryService from './fetch-summary.service.js'
+import SummaryHeadingPresenter from '../../presenters/licences/summary-heading.presenter.js'
+import SummaryPresenter from '../../presenters/licences/summary.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
@@ -19,12 +17,12 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
-async function go(licenceId, auth) {
-  const licence = await FetchLicenceService.go(licenceId)
-  const summary = await FetchSummaryService.go(licenceId)
+export default async function viewSummaryService(licenceId, auth) {
+  const licence = await FetchLicenceService(licenceId)
+  const summary = await FetchSummaryService(licenceId)
 
-  const summaryHeadingData = SummaryHeadingPresenter.go(licence, summary)
-  const pageData = SummaryPresenter.go(licence, summary)
+  const summaryHeadingData = SummaryHeadingPresenter(licence, summary)
+  const pageData = SummaryPresenter(licence, summary)
 
   return {
     ...summaryHeadingData,
@@ -32,8 +30,4 @@ async function go(licenceId, auth) {
     activeSecondaryNav: 'summary',
     roles: userRoles(auth)
   }
-}
-
-module.exports = {
-  go
 }

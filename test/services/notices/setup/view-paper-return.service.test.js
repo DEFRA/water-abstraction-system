@@ -1,18 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewPaperReturnService = require('../../../../app/services/notices/setup/view-paper-return.service.js')
+import ViewPaperReturnService from '../../../../app/services/notices/setup/view-paper-return.service.js'
 
 describe('Notices - Setup - View Paper Return service', () => {
   let dueReturn
@@ -33,18 +30,18 @@ describe('Notices - Setup - View Paper Return service', () => {
 
     sessionData = { licenceRef, dueReturns: [dueReturn] }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewPaperReturnService.go(session.id)
+      const result = await ViewPaperReturnService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

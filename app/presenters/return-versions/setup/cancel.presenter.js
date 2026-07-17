@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/cancel` page
  * @module CancelRequirementsPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
-const { returnRequirementFrequencies, returnRequirementReasons } = require('../../../lib/static-lookups.lib.js')
+import { formatLongDate } from '../../base.presenter.js'
+import { returnRequirementFrequencies, returnRequirementReasons } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/cancel` page
@@ -15,7 +13,7 @@ const { returnRequirementFrequencies, returnRequirementReasons } = require('../.
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function cancelPresenter(session) {
   const { id: sessionId, journey, licence, reason, requirements } = session
 
   return {
@@ -59,8 +57,4 @@ function _startDate(session) {
   }
 
   return formatLongDate(date)
-}
-
-module.exports = {
-  go
 }

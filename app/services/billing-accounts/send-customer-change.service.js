@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Sends customer changes to the Charging Module
  * @module SendCustomerChangeService
  */
 
-const ChargingModuleCreateCustomerChangeRequest = require('../../requests/charging-module/create-customer-change.request.js')
-const CreateCustomerChangePresenter = require('../../presenters/charging-module/create-customer-change.presenter.js')
-const ExpandedError = require('../../errors/expanded.error.js')
+import CreateCustomerChangePresenter from '../../presenters/charging-module/create-customer-change.presenter.js'
+import CreateCustomerChangeRequest from '../../requests/charging-module/create-customer-change.request.js'
+import ExpandedError from '../../errors/expanded.error.js'
 
 /**
  * Generates the customer change request data from the model instances provided and sends it to the Charging Module
@@ -30,16 +28,12 @@ const ExpandedError = require('../../errors/expanded.error.js')
  * @param {module:ContactModel} contact - The new contact for the billing account if an FAO was setup by the user during
  * the change address journey
  */
-async function go(billingAccount, address, company, contact) {
-  const requestData = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+export default async function sendCustomerChangeService(billingAccount, address, company, contact) {
+  const requestData = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
-  const result = await ChargingModuleCreateCustomerChangeRequest.send(requestData)
+  const result = await CreateCustomerChangeRequest(requestData)
 
   if (!result.succeeded) {
     throw new ExpandedError('Customer change failed to send', { billingAccountId: billingAccount.id })
   }
-}
-
-module.exports = {
-  go
 }

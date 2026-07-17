@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/abstraction-period`
  *
  * @module SubmitAbstractionPeriodService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
-const AbstractionPeriodPresenter = require('../../../presenters/licence-monitoring-station/setup/abstraction-period.presenter.js')
-const AbstractionPeriodValidator = require('../../../validators/abstraction-period.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import AbstractionPeriodPresenter from '../../../presenters/licence-monitoring-station/setup/abstraction-period.presenter.js'
+import AbstractionPeriodValidator from '../../../validators/abstraction-period.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/abstraction-period`
@@ -20,8 +17,8 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitAbstractionPeriodService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -54,15 +51,11 @@ function _submittedSessionData(session, payload) {
   session.abstractionPeriodStartDay = payload.abstractionPeriodStartDay ?? null
   session.abstractionPeriodStartMonth = payload.abstractionPeriodStartMonth ?? null
 
-  return AbstractionPeriodPresenter.go(session)
+  return AbstractionPeriodPresenter(session)
 }
 
 function _validate(payload) {
-  const validation = AbstractionPeriodValidator.go(payload)
+  const validation = AbstractionPeriodValidator(payload)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the water-abstraction-service to delete a bill
  * @module DeleteBillRequest
  */
 
-const LegacyRequest = require('../legacy.request.js')
+import { deleteRequest } from '../legacy.request.js'
 
 /**
  * Send a request to the legacy water-abstraction-service to delete a bill
@@ -25,13 +23,9 @@ const LegacyRequest = require('../legacy.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(billRunId, billId, user) {
+export default async function deleteBillRequest(billRunId, billId, user) {
   const { userId } = user
   const path = `billing/batches/${billRunId}/invoices/${billId}`
 
-  return LegacyRequest.delete('water', path, userId)
-}
-
-module.exports = {
-  send
+  return deleteRequest('water', path, userId)
 }

@@ -1,22 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitAgreementsExceptionsService = require('../../../../app/services/return-versions/setup/submit-agreements-exceptions.service.js')
+import SubmitAgreementsExceptionsService from '../../../../app/services/return-versions/setup/submit-agreements-exceptions.service.js'
 
 describe('Return Versions Setup - Submit Agreements and Exceptions service', () => {
   const requirementIndex = 0
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -47,16 +43,16 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -68,19 +64,19 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
+        await SubmitAgreementsExceptionsService(session.id, requirementIndex, payload, yarStub)
 
         expect(session.requirements[0].agreementsExceptions).toEqual([
           'gravity-fill',
           'two-part-tariff',
           '56-returns-exception'
         ])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitAgreementsExceptionsService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: false
@@ -88,9 +84,9 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
         })
 
         it('sets the notification message title to "Added" and the text to "New requirement added" ', async () => {
-          await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
+          await SubmitAgreementsExceptionsService(session.id, requirementIndex, payload, yarStub)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({ titleText: 'Added', text: 'New requirement added' })
@@ -99,16 +95,16 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
 
       describe('and the page has been visited', () => {
         beforeEach(() => {
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             ...sessionData,
             checkPageVisited: true
           })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitAgreementsExceptionsService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: true
@@ -116,9 +112,9 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
         })
 
         it('sets the notification message title to "Updated" and the text to "Requirements for returns updated" ', async () => {
-          await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
+          await SubmitAgreementsExceptionsService(session.id, requirementIndex, payload, yarStub)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({
@@ -136,7 +132,7 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
     })
 
     it('returns page data for the view', async () => {
-      const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
+      const result = await SubmitAgreementsExceptionsService(session.id, requirementIndex, payload, yarStub)
 
       expect(result).toMatchObject({
         pageTitle: 'Select agreements and exceptions for the requirements for returns',
@@ -153,7 +149,7 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
 
     describe('because the user has not submitted anything', () => {
       it('includes an error for the input element', async () => {
-        const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
+        const result = await SubmitAgreementsExceptionsService(session.id, requirementIndex, payload, yarStub)
 
         expect(result.error).toEqual({
           errorList: [

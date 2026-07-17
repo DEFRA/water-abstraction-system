@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generates returns setup requirements from an existing return version
  * @module GenerateFromExistingRequirementsService
  */
 
-const FetchExistingRequirementsService = require('./fetch-existing-requirements.service.js')
+import FetchExistingRequirementsService from './fetch-existing-requirements.service.js'
 
 /**
  * Generates returns setup requirements from an existing return version
@@ -24,8 +22,8 @@ const FetchExistingRequirementsService = require('./fetch-existing-requirements.
  * requirements ready to be persisted to the setup session, plus whether the return version allows multiple uploads and
  * quarterly returns
  */
-async function go(returnVersionId) {
-  const returnVersion = await FetchExistingRequirementsService.go(returnVersionId)
+export default async function generateFromExistingRequirementsService(returnVersionId) {
+  const returnVersion = await FetchExistingRequirementsService(returnVersionId)
 
   return {
     multipleUpload: returnVersion.multipleUpload,
@@ -121,8 +119,4 @@ function _transformForSetup(returnVersion) {
       agreementsExceptions: _agreementExceptions(returnRequirement)
     }
   })
-}
-
-module.exports = {
-  go
 }

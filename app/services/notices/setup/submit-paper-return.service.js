@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/paper-return` page
  *
  * @module SubmitPaperReturnService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-return.presenter.js')
-const PaperReturnValidator = require('../../../validators/notices/setup/paper-return.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PaperReturnPresenter from '../../../presenters/notices/setup/paper-return.presenter.js'
+import PaperReturnValidator from '../../../validators/notices/setup/paper-return.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/paper-return` page
@@ -22,8 +20,8 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitPaperReturnService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'returns')
 
@@ -31,7 +29,7 @@ async function go(sessionId, payload, yar) {
 
   if (!error) {
     if (session.checkPageVisited && _arraysDiffer(payload.returns, session.selectedReturns)) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Returns updated')
+      flashNotification(yar, 'Updated', 'Returns updated')
     }
 
     await _save(session, payload)
@@ -41,7 +39,7 @@ async function go(sessionId, payload, yar) {
 
   session.selectedReturns = []
 
-  const pageData = PaperReturnPresenter.go(session)
+  const pageData = PaperReturnPresenter(session)
 
   return {
     activeNavBar: 'notices',
@@ -90,11 +88,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = PaperReturnValidator.go(payload)
+  const validationResult = PaperReturnValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

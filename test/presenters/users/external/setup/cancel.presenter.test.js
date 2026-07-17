@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
+import UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
 
 // Thing under test
-const CancelPresenter = require('../../../../../app/presenters/users/external/setup/cancel.presenter.js')
+import CancelPresenter from '../../../../../app/presenters/users/external/setup/cancel.presenter.js'
 
 describe('Users - External - Setup - Cancel Presenter', () => {
   let session
@@ -16,7 +17,7 @@ describe('Users - External - Setup - Cancel Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CancelPresenter.go(session)
+      const result = CancelPresenter(session)
 
       expect(result).toEqual({
         activeNavBar: 'users',

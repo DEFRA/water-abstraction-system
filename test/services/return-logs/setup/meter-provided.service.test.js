@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const MeterProvidedService = require('../../../../app/services/return-logs/setup/meter-provided.service.js')
+import MeterProvidedService from '../../../../app/services/return-logs/setup/meter-provided.service.js'
 
 describe('Return Logs Setup - Meter Provided service', () => {
   let session
@@ -21,24 +19,24 @@ describe('Return Logs Setup - Meter Provided service', () => {
       returnReference: '012345'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await MeterProvidedService.go(session.id)
+      const result = await MeterProvidedService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await MeterProvidedService.go(session.id)
+      const result = await MeterProvidedService(session.id)
 
       expect(result).toMatchObject({
         backLink: { href: `/system/return-logs/setup/${session.id}/units`, text: 'Back' },

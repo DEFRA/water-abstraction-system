@@ -1,12 +1,8 @@
-'use strict'
-
-const { db } = require('../db.js')
-
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: regions } = require('./data/regions.js')
-const RegionModel = require('../../app/models/region.model.js')
-
-const ServerConfig = require('../../config/server.config.js')
+import RegionModel from '../../app/models/region.model.js'
+import ServerConfig from '../../config/server.config.js'
+import { db } from '../db.js'
+import { data as regions } from './data/regions.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
 /**
  * Seed the regions reference data
@@ -18,7 +14,7 @@ const ServerConfig = require('../../config/server.config.js')
  * We manually check if the combination exits already and update / insert accordingly.
  *
  */
-async function seed() {
+export default async function seed() {
   for (const region of regions) {
     const exists = await _exists(region)
 
@@ -69,8 +65,4 @@ async function _update(region) {
     .patch({ displayName, name, updatedAt: timestampForPostgres() })
     .where('chargeRegionId', chargeRegionId)
     .andWhere('naldRegionId', naldRegionId)
-}
-
-module.exports = {
-  seed
 }

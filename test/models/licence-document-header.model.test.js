@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
-const LicenceEntityRoleModel = require('../../app/models/licence-entity-role.model.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
+import LicenceDocumentHeaderHelper from '../support/helpers/licence-document-header.helper.js'
+import LicenceEntityRoleHelper from '../support/helpers/licence-entity-role.helper.js'
+import LicenceEntityRoleModel from '../../app/models/licence-entity-role.model.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
 
 // Thing under test
-const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
+import LicenceDocumentHeaderModel from '../../app/models/licence-document-header.model.js'
 
 describe('Licence Document Header model', () => {
   let testLicenceEntityRole

@@ -1,17 +1,11 @@
-'use strict'
-
 /**
  * Puts licences into workflow that have a licence version created in last 2 months and no existing workflow record
  * @module ProcessLicenceUpdatesService
  */
 
-const FetchLicenceUpdatesService = require('./fetch-licence-updates.service.js')
-const {
-  calculateAndLogTimeTaken,
-  currentTimeInNanoseconds,
-  timestampForPostgres
-} = require('../../../lib/general.lib.js')
-const Workflow = require('../../../models/workflow.model.js')
+import FetchLicenceUpdatesService from './fetch-licence-updates.service.js'
+import Workflow from '../../../models/workflow.model.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Puts licences into workflow that have a licence version created in last 2 months and no existing workflow record
@@ -34,11 +28,11 @@ const Workflow = require('../../../models/workflow.model.js')
  * in future bill runs until Billing & Data have had a chance to review the existing charge versions. This is because
  * the change to the licence might require changes to the charge versions.
  */
-async function go() {
+export default async function processLicenceUpdatesService() {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const licenceUpdateResults = await FetchLicenceUpdatesService.go()
+    const licenceUpdateResults = await FetchLicenceUpdatesService()
 
     await _addWorkflowRecords(licenceUpdateResults)
 
@@ -66,8 +60,4 @@ async function _addWorkflowRecords(licenceVersions) {
       updatedAt: timestamp
     })
   }
-}
-
-module.exports = {
-  go
 }

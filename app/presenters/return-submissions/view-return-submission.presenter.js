@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Formats return submission data ready for presenting in the view return submission page
  * @module ViewReturnSubmissionPresenter
  */
 
-const Big = require('big.js')
+import Big from 'big.js'
 
-const { formatLongDate, formatNumber, formatQuantityToUnit, sentenceCase } = require('../base.presenter.js')
-const { convertFromCubicMetres } = require('../../lib/general.lib.js')
-
-const { returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
+import { convertFromCubicMetres } from '../../lib/general.lib.js'
+import { formatLongDate, formatNumber, formatQuantityToUnit, sentenceCase } from '../base.presenter.js'
+import { returnUnits, unitNames } from '../../lib/static-lookups.lib.js'
 
 /**
  * Formats return submission data ready for presenting in the view return submission page
@@ -20,7 +17,7 @@ const { returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
  *
  * @returns {object} page data needed by the view template
  */
-function go(returnSubmission, yearMonth) {
+export default function viewReturnSubmissionPresenter(returnSubmission, yearMonth) {
   const { returnSubmissionLines } = returnSubmission
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
@@ -137,8 +134,4 @@ function _total(lines, units) {
     cubicMetresTotal: formatNumber(totalQuantityCubicMetres),
     unitTotal: formatNumber(totalQuantityUnits)
   }
-}
-
-module.exports = {
-  go
 }

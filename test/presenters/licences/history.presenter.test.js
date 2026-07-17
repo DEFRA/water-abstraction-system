@@ -1,12 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import LicenceVersionModel from '../../../app/models/licence-version.model.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const HistoryPresenter = require('../../../app/presenters/licences/history.presenter.js')
+import HistoryPresenter from '../../../app/presenters/licences/history.presenter.js'
 
 describe('Licences - History presenter', () => {
   let licence
@@ -31,7 +31,7 @@ describe('Licences - History presenter', () => {
 
   describe('when provided with populated licence history', () => {
     it('correctly presents the data', () => {
-      const result = HistoryPresenter.go(licenceHistory, licence)
+      const result = HistoryPresenter(licenceHistory, licence)
 
       expect(result).toEqual({
         backLink: {

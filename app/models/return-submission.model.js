@@ -1,17 +1,17 @@
-'use strict'
-
 /**
  * Model for return_submissions (returns.versions)
  * @module ReturnSubmissionModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
-const { formatDateObjectToISO } = require('../lib/dates.lib.js')
-const { unitNames } = require('../lib/static-lookups.lib.js')
+import BaseModel from './base.model.js'
+import ReturnLogModel from './return-log.model.js'
+import ReturnSubmissionLineModel from './return-submission-line.model.js'
+import { formatDateObjectToISO } from '../lib/dates.lib.js'
+import { unitNames } from '../lib/static-lookups.lib.js'
 
-class ReturnSubmissionModel extends BaseModel {
+export default class ReturnSubmissionModel extends BaseModel {
   static get tableName() {
     return 'returnSubmissions'
   }
@@ -25,7 +25,7 @@ class ReturnSubmissionModel extends BaseModel {
     return {
       returnLog: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'return-log.model',
+        modelClass: ReturnLogModel,
         join: {
           from: 'returnSubmissions.returnLogId',
           to: 'returnLogs.id'
@@ -33,7 +33,7 @@ class ReturnSubmissionModel extends BaseModel {
       },
       returnSubmissionLines: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-submission-line.model',
+        modelClass: ReturnSubmissionLineModel,
         join: {
           from: 'returnSubmissions.id',
           to: 'returnSubmissionLines.returnSubmissionId'
@@ -102,5 +102,3 @@ class ReturnSubmissionModel extends BaseModel {
     return this.metadata.units
   }
 }
-
-module.exports = ReturnSubmissionModel

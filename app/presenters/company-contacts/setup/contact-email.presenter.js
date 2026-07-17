@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/contact-email' page
  * @module ContactEmailPresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
-const { formatEmail } = require('../../base.presenter.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
+import { formatEmail } from '../../base.presenter.js'
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/contact-email' page
@@ -15,7 +13,7 @@ const { formatEmail } = require('../../base.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function contactEmailPresenter(session) {
   const { id: sessionId, company } = session
 
   return {
@@ -27,8 +25,4 @@ function go(session) {
     pageTitleCaption: company.name,
     email: formatEmail(session.email)
   }
-}
-
-module.exports = {
-  go
 }

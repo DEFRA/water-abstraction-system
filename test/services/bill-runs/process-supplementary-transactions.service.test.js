@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ProcessSupplementaryTransactionsService = require('../../../app/services/bill-runs/process-supplementary-transactions.service.js')
+import ProcessSupplementaryTransactionsService from '../../../app/services/bill-runs/process-supplementary-transactions.service.js'
 
 describe('Bill Runs - Process Supplementary Transactions service', () => {
   const billLicenceId = '9d587a65-aa00-4be6-969e-5bbb9fc6c885'
@@ -30,7 +31,7 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
           })
 
           it('returns the unmatched generated transactions', async () => {
-            const result = await ProcessSupplementaryTransactionsService.go(
+            const result = await ProcessSupplementaryTransactionsService(
               previousTransactions,
               generatedTransactions,
               billLicenceId
@@ -51,7 +52,7 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
           })
 
           it('returns no transactions', async () => {
-            const result = await ProcessSupplementaryTransactionsService.go(
+            const result = await ProcessSupplementaryTransactionsService(
               previousTransactions,
               generatedTransactions,
               billLicenceId
@@ -70,7 +71,7 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
           })
 
           it('returns only the previous transactions', async () => {
-            const result = await ProcessSupplementaryTransactionsService.go(previousTransactions, [], billLicenceId)
+            const result = await ProcessSupplementaryTransactionsService(previousTransactions, [], billLicenceId)
 
             expect(result).toHaveLength(2)
             expect(result[0].purposes).toEqual(['I_WILL_NOT_BE_REMOVED_1'])
@@ -88,7 +89,7 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
           })
 
           it('returns the unmatched generated transactions and previous transactions (reversed)', async () => {
-            const result = await ProcessSupplementaryTransactionsService.go(
+            const result = await ProcessSupplementaryTransactionsService(
               previousTransactions,
               generatedTransactions,
               billLicenceId
@@ -105,7 +106,7 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
 
     describe('do not match to transactions on a previous bill run', () => {
       it('returns the generated transactions unchanged', async () => {
-        const result = await ProcessSupplementaryTransactionsService.go([], generatedTransactions, billLicenceId)
+        const result = await ProcessSupplementaryTransactionsService([], generatedTransactions, billLicenceId)
 
         expect(result).toHaveLength(3)
         expect(result[0].purposes).toEqual('GENERATED_TRANSACTION_1')

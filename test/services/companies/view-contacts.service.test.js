@@ -1,21 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Test helpers
-const YarStub = require('../../support/stubs/yar.stub.js')
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchCompanyContactsDal = require('../../../app/dal/companies/fetch-company-crm-data.dal.js')
-const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
+import * as FetchCompanyContactsDal from '../../../app/dal/companies/fetch-company-crm-data.dal.js'
+import * as FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-const ViewContactsService = require('../../../app/services/companies/view-contacts.service.js')
+import ViewContactsService from '../../../app/services/companies/view-contacts.service.js'
 
 describe('Companies - View Contacts service', () => {
   let auth
@@ -37,26 +35,28 @@ describe('Companies - View Contacts service', () => {
       }
     ]
 
-    Sinon.stub(FetchCompanyDal, 'go').returns(company)
+    vi.spyOn(FetchCompanyDal, 'default').mockReturnValue(company)
 
-    Sinon.stub(FetchCompanyContactsDal, 'go').returns({
+    vi.spyOn(FetchCompanyContactsDal, 'default').mockReturnValue({
       contacts,
       totalNumber: contacts.length
     })
 
     page = '1'
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([{ titleText: 'Contact removed', text: 'Rachael Tyrell was removed from this company.' }])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([
+      { titleText: 'Contact removed', text: 'Rachael Tyrell was removed from this company.' }
+    ])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewContactsService.go(company.id, auth, page, yarStub)
+      const result = await ViewContactsService(company.id, auth, page, yarStub)
 
       expect(result).toEqual({
         activeSecondaryNav: 'contacts',

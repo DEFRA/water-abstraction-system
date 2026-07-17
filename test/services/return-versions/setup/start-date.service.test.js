@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const StartDateService = require('../../../../app/services/return-versions/setup/start-date.service.js')
+import StartDateService from '../../../../app/services/return-versions/setup/start-date.service.js'
 
 describe('Return Versions Setup - Start Date service', () => {
   let session
@@ -38,24 +36,24 @@ describe('Return Versions Setup - Start Date service', () => {
       requirements: [{}]
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await StartDateService.go(session.id)
+      const result = await StartDateService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await StartDateService.go(session.id)
+      const result = await StartDateService(session.id)
 
       expect(result).toMatchObject({
         pageTitle: 'Select the start date for the requirements for returns',

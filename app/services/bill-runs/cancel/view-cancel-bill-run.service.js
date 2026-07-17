@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page
  * @module ViewCancelBillRunService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const ViewCancelBillRunPresenter = require('../../../presenters/bill-runs/view-cancel-bill-run.presenter.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import ViewCancelBillRunPresenter from '../../../presenters/bill-runs/view-cancel-bill-run.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page
@@ -16,10 +14,10 @@ const ViewCancelBillRunPresenter = require('../../../presenters/bill-runs/view-c
  * @returns {Promise<object>} an object representing the `pageData` needed by the cancel bill run template. It contains
  * details of the bill run.
  */
-async function go(id) {
+export default async function viewCancelBillRunService(id) {
   const billRun = await _fetchBillRun(id)
 
-  const formattedData = ViewCancelBillRunPresenter.go(billRun)
+  const formattedData = ViewCancelBillRunPresenter(billRun)
 
   return {
     activeNavBar: 'bill-runs',
@@ -35,8 +33,4 @@ async function _fetchBillRun(id) {
     .modifyGraph('region', (builder) => {
       builder.select(['id', 'displayName'])
     })
-}
-
-module.exports = {
-  go
 }

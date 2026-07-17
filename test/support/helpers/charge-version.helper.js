@@ -1,12 +1,9 @@
-'use strict'
-
 /**
  * @module ChargeVersionHelper
  */
 
-const ChargeVersionModel = require('../../../app/models/charge-version.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('./licence.helper.js')
+import ChargeVersionModel from '../../../app/models/charge-version.model.js'
+import { generateLicenceRef, generateUUID } from '../generators.js'
 
 /**
  * Add a new charge version
@@ -64,7 +61,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

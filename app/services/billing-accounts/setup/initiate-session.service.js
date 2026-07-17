@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Initiates the session record used for setting up a new billing account journey
  * @module InitiateSessionService
  */
 
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
-const FetchViewBillingAccountService = require('../fetch-view-billing-account.service.js')
+import CreateSessionDal from '../../../dal/create-session.dal.js'
+import FetchViewBillingAccountService from '../fetch-view-billing-account.service.js'
 
 /**
  * Initiates the session record used for setting up a new billing account journey
@@ -23,16 +21,12 @@ const FetchViewBillingAccountService = require('../fetch-view-billing-account.se
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(billingAccountId) {
-  const { billingAccount } = await FetchViewBillingAccountService.go(billingAccountId)
+export default async function initiateSessionService(billingAccountId) {
+  const { billingAccount } = await FetchViewBillingAccountService(billingAccountId)
 
   const data = {
     billingAccount
   }
 
-  return CreateSessionDal.go(data)
-}
-
-module.exports = {
-  go
+  return CreateSessionDal(data)
 }

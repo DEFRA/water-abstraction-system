@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ExistingPresenter = require('../../../../app/presenters/return-versions/setup/existing.presenter.js')
+import ExistingPresenter from '../../../../app/presenters/return-versions/setup/existing.presenter.js'
 
 describe('Return Versions - Setup - Existing presenter', () => {
   let session
@@ -49,7 +50,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = ExistingPresenter.go(session)
+      const result = ExistingPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -67,7 +68,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
 
   describe('the "backLink" property', () => {
     it('returns a link back to the "setup" page', () => {
-      const result = ExistingPresenter.go(session)
+      const result = ExistingPresenter(session)
 
       expect(result.backLink).toEqual({
         href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
@@ -80,7 +81,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
     describe('when the return versions do not contain a "reason"', () => {
       describe('and do not contain any mod logs', () => {
         it('returns the version ID as the option value and just the start date as the option text', () => {
-          const result = ExistingPresenter.go(session)
+          const result = ExistingPresenter(session)
 
           expect(result.existingOptions).toEqual([
             { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
@@ -95,7 +96,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
           })
 
           it('returns the version ID as the option value and just the start date as the option text', () => {
-            const result = ExistingPresenter.go(session)
+            const result = ExistingPresenter(session)
 
             expect(result.existingOptions).toEqual([
               { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
@@ -111,7 +112,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
           })
 
           it('returns the version ID as the option value and the start date and reason as the option text', () => {
-            const result = ExistingPresenter.go(session)
+            const result = ExistingPresenter(session)
 
             expect(result.existingOptions).toEqual([
               { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023 - Record Loaded During Migration' }
@@ -131,7 +132,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
       })
 
       it('returns the version ID as the option value and the start date and reason as the option text', () => {
-        const result = ExistingPresenter.go(session)
+        const result = ExistingPresenter(session)
 
         expect(result.existingOptions).toEqual([
           { value: '22ecef19-3a13-44a0-a55e-8f4d34dd59a5', text: '7 May 2024 - Major change' },

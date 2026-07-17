@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/site-description` page
  * @module SiteDescriptionService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SiteDescriptionPresenter = require('../../../presenters/return-versions/setup/site-description.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SiteDescriptionPresenter from '../../../presenters/return-versions/setup/site-description.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/site-description` page
@@ -19,16 +17,12 @@ const SiteDescriptionPresenter = require('../../../presenters/return-versions/se
  *
  * @returns {Promise<object>} The view data for the site description page
  */
-async function go(sessionId, requirementIndex) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function siteDescriptionService(sessionId, requirementIndex) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = SiteDescriptionPresenter.go(session, requirementIndex)
+  const formattedData = SiteDescriptionPresenter(session, requirementIndex)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

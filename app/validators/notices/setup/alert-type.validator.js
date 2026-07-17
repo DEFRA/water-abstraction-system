@@ -1,13 +1,12 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
  * @module AlertTypeValidator
  */
 
-const Joi = require('joi')
-const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
+import Joi from 'joi'
+
+import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from '../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js'
 
 const errorMessage = 'Select the type of alert you need to send'
 
@@ -20,7 +19,7 @@ const errorMessage = 'Select the type of alert you need to send'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, licenceMonitoringStations) {
+export default function alertTypeValidator(payload, licenceMonitoringStations) {
   const schema = Joi.object({
     alertType: Joi.required()
       .custom((value, helpers) => {
@@ -74,7 +73,7 @@ function _availableRestrictionTypeCustomError(value, helpers, licenceMonitoringS
  * @private
  */
 function _availableRestrictionType(licenceMonitoringStations, alertType) {
-  const relevantLicenceMonitoringStation = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
+  const relevantLicenceMonitoringStation = DetermineRelevantLicenceMonitoringStationsByAlertTypeService(
     licenceMonitoringStations,
     alertType
   )
@@ -94,8 +93,4 @@ function _availableRestrictionType(licenceMonitoringStations, alertType) {
   }
 
   return Array.from(types)
-}
-
-module.exports = {
-  go
 }

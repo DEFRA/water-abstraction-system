@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for
  * `/return-versions/setup/{sessionId}/additional-submission-options` page
  * @module AdditionalSubmissionOptionsService
  */
 
-const AdditionalSubmissionOptionsPresenter = require('../../../presenters/return-versions/setup/additional-submission-options.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import AdditionalSubmissionOptionsPresenter from '../../../presenters/return-versions/setup/additional-submission-options.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for
@@ -20,16 +18,12 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} The view data for the points page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function additionalSubmissionOptionsService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = AdditionalSubmissionOptionsPresenter.go(session)
+  const formattedData = AdditionalSubmissionOptionsPresenter(session)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

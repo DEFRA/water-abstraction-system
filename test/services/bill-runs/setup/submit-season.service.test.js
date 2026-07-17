@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitSeasonService = require('../../../../app/services/bill-runs/setup/submit-season.service.js')
+import SubmitSeasonService from '../../../../app/services/bill-runs/setup/submit-season.service.js'
 
 describe('Bill Runs - Setup - Submit Season service', () => {
   let payload
@@ -20,13 +18,13 @@ describe('Bill Runs - Setup - Submit Season service', () => {
   beforeEach(() => {
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -38,14 +36,14 @@ describe('Bill Runs - Setup - Submit Season service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSeasonService.go(session.id, payload)
+        await SubmitSeasonService(session.id, payload)
 
         expect(session.season).toEqual('summer')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
-        const result = await SubmitSeasonService.go(session.id, payload)
+        const result = await SubmitSeasonService(session.id, payload)
 
         expect(result).toEqual({})
       })
@@ -58,7 +56,7 @@ describe('Bill Runs - Setup - Submit Season service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitSeasonService.go(session.id, payload)
+          const result = await SubmitSeasonService(session.id, payload)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',

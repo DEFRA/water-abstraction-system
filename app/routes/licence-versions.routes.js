@@ -1,15 +1,11 @@
-'use strict'
+import { view } from '../controllers/licence-versions.controller.js'
 
-const LicenceVersionsController = require('../controllers/licence-versions.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/licence-versions/{id}',
     options: {
-      handler: LicenceVersionsController.view
+      handler: view
     }
   }
 ]
-
-module.exports = routes

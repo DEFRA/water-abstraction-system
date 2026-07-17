@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
+import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Thing under test
-const ConditionsPresenter = require('../../../app/presenters/licences/conditions.presenter.js')
+import ConditionsPresenter from '../../../app/presenters/licences/conditions.presenter.js'
 
 describe('Licences - Conditions presenter', () => {
   let conditions
@@ -17,7 +18,7 @@ describe('Licences - Conditions presenter', () => {
 
   describe('when provided with a populated licence with licence conditions', () => {
     it('returns the expected licence conditions', () => {
-      const result = ConditionsPresenter.go(conditions, licence)
+      const result = ConditionsPresenter(conditions, licence)
 
       expect(result).toEqual({
         backLink: {

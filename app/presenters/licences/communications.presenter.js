@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
  * @module CommunicationsPresenter
  */
 
-const NotificationsTablePresenter = require('../notifications/notifications-table.presenter.js')
+import NotificationsTablePresenter from '../notifications/notifications-table.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
@@ -15,10 +13,10 @@ const NotificationsTablePresenter = require('../notifications/notifications-tabl
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notifications, licence) {
+export default function communicationsPresenter(notifications, licence) {
   const { id: licenceId, licenceRef } = licence
 
-  const notificationsTableData = NotificationsTablePresenter.go(notifications, licenceId)
+  const notificationsTableData = NotificationsTablePresenter(notifications, licenceId)
 
   return {
     backLink: {
@@ -29,8 +27,4 @@ function go(notifications, licence) {
     pageTitle: 'Communications',
     pageTitleCaption: `Licence ${licenceRef}`
   }
-}
-
-module.exports = {
-  go
 }

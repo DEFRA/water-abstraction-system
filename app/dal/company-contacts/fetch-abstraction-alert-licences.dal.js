@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetch all licences for abstraction alert licences ids
  * @module FetchAbstractionAlertLicencesDal
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+import LicenceModel from '../../models/licence.model.js'
 
 /**
  * Fetch all licences for abstraction alert licences ids
@@ -14,7 +12,7 @@ const LicenceModel = require('../../models/licence.model.js')
  *
  * @returns {Promise<object[]>} An array of licences
  */
-async function go(abstractionAlertLicences) {
+export default async function fetchAbstractionAlertLicencesDal(abstractionAlertLicences) {
   if (abstractionAlertLicences === null) {
     return []
   }
@@ -23,8 +21,4 @@ async function go(abstractionAlertLicences) {
     .select(['id', 'licenceRef', 'revokedDate', 'lapsedDate', 'expiredDate'])
     .whereIn('id', abstractionAlertLicences)
     .orderBy('licenceRef')
-}
-
-module.exports = {
-  go
 }

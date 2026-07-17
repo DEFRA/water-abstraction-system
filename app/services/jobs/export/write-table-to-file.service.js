@@ -1,17 +1,16 @@
-'use strict'
-
 /**
  * Export converted data to a temporary file
  * @module WriteTableToFileService
  */
 
-const fs = require('node:fs')
-const fsPromises = fs.promises
-const { pipeline, Transform } = require('node:stream')
-const path = require('node:path')
-const util = require('node:util')
+import fs from 'node:fs'
+import path from 'node:path'
+import util from 'node:util'
+import { Transform, pipeline } from 'node:stream'
 
-const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
+import { transformArrayToCSVRow } from '../../../lib/transform-to-csv.lib.js'
+
+const fsPromises = fs.promises
 
 /**
  * Converts data into CSV format and writes it to a file
@@ -21,7 +20,7 @@ const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js
  * @param {string} schemaFolderPath - The folder path of the schema
  * @param {string} tableName - The name of the table
  */
-async function go(headers, rows, schemaFolderPath, tableName) {
+export default async function writeTableToFileService(headers, rows, schemaFolderPath, tableName) {
   const filePath = await _filenameWithPath(tableName, schemaFolderPath)
   const writeToFileStream = fs.createWriteStream(filePath, { flags: 'a' })
   const promisifiedPipeline = util.promisify(pipeline)
@@ -75,8 +74,4 @@ async function _filenameWithPath(tableName, schemaFolderPath) {
       name: `${tableName}.csv`
     })
   )
-}
-
-module.exports = {
-  go
 }

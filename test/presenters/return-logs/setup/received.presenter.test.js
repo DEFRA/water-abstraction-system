@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { today } = require('../../../../app/lib/general.lib.js')
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { today } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const ReceivedPresenter = require('../../../../app/presenters/return-logs/setup/received.presenter.js')
+import ReceivedPresenter from '../../../../app/presenters/return-logs/setup/received.presenter.js'
 
 describe('Return Logs - Setup - Received presenter', () => {
   let session
@@ -21,7 +22,7 @@ describe('Return Logs - Setup - Received presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = ReceivedPresenter.go(session)
+      const result = ReceivedPresenter(session)
 
       expect(result).toEqual({
         pageTitle: 'When was the return received?',
@@ -48,7 +49,7 @@ describe('Return Logs - Setup - Received presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = ReceivedPresenter.go(session)
+        const result = ReceivedPresenter(session)
 
         expect(result.backLink).toEqual({
           href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -59,7 +60,7 @@ describe('Return Logs - Setup - Received presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the view "Return Log" page', () => {
-        const result = ReceivedPresenter.go(session)
+        const result = ReceivedPresenter(session)
 
         expect(result.backLink).toEqual({
           href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3/details',
@@ -76,7 +77,7 @@ describe('Return Logs - Setup - Received presenter', () => {
       })
 
       it('returns the "receivedDateOption" property populated to re-select the option', () => {
-        const result = ReceivedPresenter.go(session)
+        const result = ReceivedPresenter(session)
 
         const { receivedDateOption, receivedDateDay, receivedDateMonth, receivedDateYear } = result
 
@@ -93,7 +94,7 @@ describe('Return Logs - Setup - Received presenter', () => {
       })
 
       it('returns the "receivedDateOption" property populated to re-select the option', () => {
-        const result = ReceivedPresenter.go(session)
+        const result = ReceivedPresenter(session)
 
         const { receivedDateOption, receivedDateDay, receivedDateMonth, receivedDateYear } = result
 
@@ -113,7 +114,7 @@ describe('Return Logs - Setup - Received presenter', () => {
       })
 
       it('returns the properties needed to re-populate the fields', () => {
-        const result = ReceivedPresenter.go(session)
+        const result = ReceivedPresenter(session)
 
         const { receivedDateOption, receivedDateDay, receivedDateMonth, receivedDateYear } = result
 

@@ -1,25 +1,21 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchExistingCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchExistingCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitExistingAccountService = require('../../../../app/services/billing-accounts/setup/submit-existing-account.service.js')
+import SubmitExistingAccountService from '../../../../app/services/billing-accounts/setup/submit-existing-account.service.js'
 
 describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   const companies = _companies()
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -30,13 +26,13 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the user picks an existing account', () => {
@@ -47,16 +43,16 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitExistingAccountService.go(session.id, payload)
+      await SubmitExistingAccountService(session.id, payload)
 
       expect(session).toMatchObject({
         existingAccount: payload.existingAccount
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitExistingAccountService.go(session.id, payload)
+      const result = await SubmitExistingAccountService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -70,22 +66,22 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
           existingAccount: payload.existingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAccountService.go(session.id, payload)
+        await SubmitExistingAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           existingAccount: payload.existingAccount
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAccountService.go(session.id, payload)
+        const result = await SubmitExistingAccountService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -101,23 +97,23 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
           existingAccount: payload.existingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAccountService.go(session.id, payload)
+        await SubmitExistingAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           checkPageVisited: true,
           existingAccount: payload.existingAccount
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAccountService.go(session.id, payload)
+        const result = await SubmitExistingAccountService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -129,23 +125,23 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       beforeEach(() => {
         sessionData = _newAccountSessionData(session)
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value and deletes the previously saved data', async () => {
-        await SubmitExistingAccountService.go(session.id, payload)
+        await SubmitExistingAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           ..._newAccountExpectedValues(),
           existingAccount: companies[0].id
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAccountService.go(session.id, payload)
+        const result = await SubmitExistingAccountService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -162,16 +158,16 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitExistingAccountService.go(session.id, payload)
+      await SubmitExistingAccountService(session.id, payload)
 
       expect(session).toMatchObject({
         existingAccount: 'new'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitExistingAccountService.go(session.id, payload)
+      const result = await SubmitExistingAccountService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/account-type`
@@ -185,22 +181,22 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
           existingAccount: payload.existingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAccountService.go(session.id, payload)
+        await SubmitExistingAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           existingAccount: payload.existingAccount
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAccountService.go(session.id, payload)
+        const result = await SubmitExistingAccountService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/account-type`
@@ -212,23 +208,23 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       beforeEach(() => {
         sessionData = _existingAccountSessionData(session)
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAccountService.go(session.id, payload)
+        await SubmitExistingAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           ..._commonExpectedValues(),
           existingAccount: 'new'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAccountService.go(session.id, payload)
+        const result = await SubmitExistingAccountService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/account-type`
@@ -240,11 +236,11 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   describe('when validation fails', () => {
     beforeEach(() => {
       payload = {}
-      Sinon.stub(FetchExistingCompaniesService, 'go').returns(companies)
+      vi.spyOn(FetchExistingCompaniesService, 'default').mockReturnValue(companies)
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitExistingAccountService.go(session.id, payload)
+      const result = await SubmitExistingAccountService(session.id, payload)
 
       expect(result.error).toEqual({
         errorList: [

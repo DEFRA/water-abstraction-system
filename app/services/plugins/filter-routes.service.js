@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Used by the `RouterPlugin` to determine if a route should be registered with Hapi
  * @module FilterRoutesService
@@ -29,7 +27,7 @@
  * @returns {object[]} an array of Hapi routes, filtered depending on the current environment and whether any paths
  * have been registered as needing filtering
  */
-function go(routes, environment) {
+export default function filterRoutesService(routes, environment) {
   if (_protectedEnvironment(environment)) {
     return _filteredRoutes(routes)
   }
@@ -45,8 +43,4 @@ function _filteredRoutes(routes) {
   return routes.filter((route) => {
     return !route?.options?.app?.excludeFromProd
   })
-}
-
-module.exports = {
-  go
 }

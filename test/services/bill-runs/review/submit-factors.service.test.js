@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
-const ReviewChargeReferenceModel = require('../../../../app/models/review-charge-reference.model.js')
+import * as FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
+import ReviewChargeReferenceModel from '../../../../app/models/review-charge-reference.model.js'
 
 // Thing under test
-const SubmitFactorsService = require('../../../../app/services/bill-runs/review/submit-factors.service.js')
+import SubmitFactorsService from '../../../../app/services/bill-runs/review/submit-factors.service.js'
 
 describe('Bill Runs Review - Submit Factors Service', () => {
   let payload
@@ -23,19 +21,19 @@ describe('Bill Runs Review - Submit Factors Service', () => {
   beforeEach(() => {
     reviewChargeReference = BillRunsReviewFixture.reviewChargeReference()
 
-    Sinon.stub(FetchReviewChargeReferenceService, 'go').resolves(reviewChargeReference)
+    vi.spyOn(FetchReviewChargeReferenceService, 'default').mockResolvedValue(reviewChargeReference)
 
-    patchStub = Sinon.stub().resolves()
-    Sinon.stub(ReviewChargeReferenceModel, 'query').returns({
-      findById: Sinon.stub().withArgs(reviewChargeReference.id).returnsThis(),
+    patchStub = vi.fn().mockResolvedValue()
+    vi.spyOn(ReviewChargeReferenceModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
       patch: patchStub
     })
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -45,15 +43,15 @@ describe('Bill Runs Review - Submit Factors Service', () => {
       })
 
       it('saves the submitted value, adds a flash message and returns an empty object', async () => {
-        const result = await SubmitFactorsService.go(reviewChargeReference.id, yarStub, payload)
+        const result = await SubmitFactorsService(reviewChargeReference.id, yarStub, payload)
 
         // Check we save the change
-        const [patchObject] = patchStub.args[0]
+        const [patchObject] = patchStub.mock.calls[0]
 
         expect(patchObject).toEqual({ amendedAggregate: 0.5, amendedChargeAdjustment: 0.5 })
 
         // Check we add the flash message
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('banner')
         expect(bannerMessage).toEqual('The adjustment factors for this licence have been updated')
@@ -69,13 +67,13 @@ describe('Bill Runs Review - Submit Factors Service', () => {
       })
 
       it('does not save the submitted value or add a flash message, and returns the page data including an error', async () => {
-        const result = await SubmitFactorsService.go(reviewChargeReference.id, yarStub, payload)
+        const result = await SubmitFactorsService(reviewChargeReference.id, yarStub, payload)
 
         // Check we didn't save
-        expect(patchStub.called).toBe(false)
+        expect(patchStub).not.toHaveBeenCalled()
 
         // Check we didn't add the flash message
-        expect(yarStub.flash.called).toBe(false)
+        expect(yarStub.flash).not.toHaveBeenCalled()
 
         // Check we return page data including error (controller knows POST failed so re-renders)
         expect(result).toEqual({

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/no-returns-required` page
  * @module NoReturnsRequiredService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NoReturnsRequiredPresenter = require('../../../presenters/return-versions/setup/no-returns-required.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NoReturnsRequiredPresenter from '../../../presenters/return-versions/setup/no-returns-required.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/no-returns-required` page
@@ -18,16 +16,12 @@ const NoReturnsRequiredPresenter = require('../../../presenters/return-versions/
  *
  * @returns {Promise<object>} The view data for the no returns required page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function noReturnsRequiredService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = NoReturnsRequiredPresenter.go(session)
+  const formattedData = NoReturnsRequiredPresenter(session)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

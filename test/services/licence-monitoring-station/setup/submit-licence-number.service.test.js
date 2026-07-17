@@ -1,24 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceModel = require('../../../../app/models/licence.model.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import LicenceModel from '../../../../app/models/licence.model.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchLicenceDal = require('../../../../app/dal/licence-monitoring-station/fetch-licence.dal.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchLicenceDal from '../../../../app/dal/licence-monitoring-station/fetch-licence.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitLicenceNumberService = require('../../../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js')
+import SubmitLicenceNumberService from '../../../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js'
 
 describe('Licence Monitoring Station Setup - Licence Number Service', () => {
-  let fetchLicenceStub
-  let fetchSessionStub
   let licence
   let payload
   let session
@@ -39,15 +34,15 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       label: 'LABEL'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    fetchLicenceStub = Sinon.stub(FetchLicenceDal, 'go').resolves(licence)
+    vi.spyOn(FetchLicenceDal, 'default').mockResolvedValue(licence)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -58,21 +53,21 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
       describe("and the submitted licence isn't already stored in the session", () => {
         it('saves the submitted value', async () => {
-          await SubmitLicenceNumberService.go(session.id, payload)
+          await SubmitLicenceNumberService(session.id, payload)
 
           expect(session.licenceRef).toEqual(payload.licenceRef)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('saves the licence id', async () => {
-          await SubmitLicenceNumberService.go(session.id, payload)
+          await SubmitLicenceNumberService(session.id, payload)
 
           expect(session.licenceId).toEqual(licence.id)
         })
 
         describe('and the check page has not been visited', () => {
           it('returns a false value so the controller can redirect to the next page', async () => {
-            const result = await SubmitLicenceNumberService.go(session.id, payload)
+            const result = await SubmitLicenceNumberService(session.id, payload)
 
             expect(result).toEqual({
               checkPageVisited: false
@@ -84,13 +79,13 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
           beforeEach(() => {
             sessionData = { ...sessionData, checkPageVisited: true }
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            fetchSessionStub.resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('still returns a false value so the controller can redirect to the check page', async () => {
-            const result = await SubmitLicenceNumberService.go(session.id, payload)
+            const result = await SubmitLicenceNumberService(session.id, payload)
 
             expect(result).toEqual({
               checkPageVisited: false
@@ -104,13 +99,13 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
           beforeEach(() => {
             sessionData = { ...sessionData, licenceRef: licence.licenceRef }
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            fetchSessionStub.resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a falsy value so the controller can redirect to the next page', async () => {
-            const result = await SubmitLicenceNumberService.go(session.id, payload)
+            const result = await SubmitLicenceNumberService(session.id, payload)
 
             expect(result).toEqual({
               checkPageVisited: undefined
@@ -122,19 +117,19 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
           beforeEach(() => {
             sessionData = { ...sessionData, licenceRef: licence.licenceRef, checkPageVisited: true }
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            fetchSessionStub.resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('leaves the checkPageVisited flag in the session as true', async () => {
-            await SubmitLicenceNumberService.go(session.id, payload)
+            await SubmitLicenceNumberService(session.id, payload)
 
             expect(session.checkPageVisited).toBe(true)
           })
 
           it('returns a true value so the controller can redirect to the next page', async () => {
-            const result = await SubmitLicenceNumberService.go(session.id, payload)
+            const result = await SubmitLicenceNumberService(session.id, payload)
 
             expect(result).toEqual({
               checkPageVisited: true
@@ -149,11 +144,11 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
     beforeEach(() => {
       payload = { licenceRef: '1234567890' }
 
-      fetchLicenceStub.resolves(null)
+      vi.spyOn(FetchLicenceDal, 'default').mockResolvedValue(null)
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitLicenceNumberService.go(session.id, payload)
+      const result = await SubmitLicenceNumberService(session.id, payload)
 
       expect(result).toEqual({
         error: { text: 'Licence could not be found' },
@@ -171,7 +166,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitLicenceNumberService.go(session.id, payload)
+      const result = await SubmitLicenceNumberService(session.id, payload)
 
       expect(result).toEqual({
         error: { text: 'Enter a licence number' },

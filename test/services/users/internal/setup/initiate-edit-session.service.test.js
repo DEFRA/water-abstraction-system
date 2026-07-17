@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModel = require('../../../../../app/models/session.model.js')
+import SessionModel from '../../../../../app/models/session.model.js'
 
 // Things we need to stub
-const FetchUserDetailsDal = require('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
+import * as FetchUserDetailsDal from '../../../../../app/dal/users/internal/fetch-user-details.dal.js'
 
 // Thing under test
-const InitiateEditSessionService = require('../../../../../app/services/users/internal/setup/initiate-edit-session.service.js')
+import InitiateEditSessionService from '../../../../../app/services/users/internal/setup/initiate-edit-session.service.js'
 
 describe('Users - Internal - Setup - Initiate Edit Session service', () => {
   const id = 'd26787fc-6df4-4606-aa9d-c04951b3761f'
@@ -18,14 +16,14 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
   let user
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('for a user that has no groups or roles', () => {
       beforeEach(() => {
         user = {
-          $status: Sinon.stub().returns('enabled'),
+          $status: vi.fn().mockReturnValue('enabled'),
           enabled: true,
           groups: [],
           id,
@@ -33,11 +31,11 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           username: 'bob.bobbles@environment-agency.gov.uk'
         }
 
-        Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
+        vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
       })
 
       it('returns the session Id and a formatted data object', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         expect(result).toEqual({
           access: 'enabled',
@@ -55,7 +53,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       })
 
       it('initiates the session for the journey ', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -79,7 +77,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
     describe('for a user that has groups and roles', () => {
       beforeEach(() => {
         user = {
-          $status: Sinon.stub().returns('enabled'),
+          $status: vi.fn().mockReturnValue('enabled'),
           enabled: true,
           groups: [{ group: 'nps' }],
           id,
@@ -87,11 +85,11 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           username: 'bob.bobbles@environment-agency.gov.uk'
         }
 
-        Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
+        vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
       })
 
       it('returns the session Id and a formatted data object', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         expect(result).toEqual({
           access: 'enabled',
@@ -109,7 +107,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       })
 
       it('initiates the session for the journey ', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -133,7 +131,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
     describe('for a user that is enabled', () => {
       beforeEach(() => {
         user = {
-          $status: Sinon.stub().returns('awaiting'),
+          $status: vi.fn().mockReturnValue('awaiting'),
           enabled: true,
           groups: [],
           id,
@@ -141,11 +139,11 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           username: 'bob.bobbles@environment-agency.gov.uk'
         }
 
-        Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
+        vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
       })
 
       it('returns the users access status of "enabled"', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         expect(result.access).toEqual('enabled')
       })
@@ -154,7 +152,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
     describe('for a user that is disabled', () => {
       beforeEach(() => {
         user = {
-          $status: Sinon.stub().returns('disabled'),
+          $status: vi.fn().mockReturnValue('disabled'),
           enabled: false,
           groups: [],
           id,
@@ -162,11 +160,11 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           username: 'bob.bobbles@environment-agency.gov.uk'
         }
 
-        Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
+        vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
       })
 
       it('returns the users access status of "disabled"', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         expect(result.access).toEqual('disabled')
       })

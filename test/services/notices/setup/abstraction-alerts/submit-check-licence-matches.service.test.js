@@ -1,20 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitCheckLicenceMatchesService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
+import SubmitCheckLicenceMatchesService from '../../../../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js'
 
 describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches service', () => {
-  let fetchSessionStub
   let licenceMonitoringStationDuplicate
   let licenceMonitoringStations
   let session
@@ -38,19 +35,19 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
       ]
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('and there are no licence monitoring stations removed', () => {
       it('saves the "licenceRefs" to the session', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.licenceRefs).toEqual([
           licenceMonitoringStations.one.licence.licenceRef,
@@ -58,11 +55,11 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
           licenceMonitoringStations.three.licence.licenceRef
         ])
 
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.relevantLicenceMonitoringStations).toEqual([
           licenceMonitoringStations.one,
@@ -76,19 +73,19 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
       beforeEach(() => {
         sessionData.licenceMonitoringStations = [licenceMonitoringStations.one, licenceMonitoringStationDuplicate]
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the "licenceRefs" to the session with duplicates removed', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.licenceRefs).toEqual([licenceMonitoringStations.one.licence.licenceRef])
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.relevantLicenceMonitoringStations).toEqual([
           licenceMonitoringStations.one,
@@ -101,19 +98,19 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
       beforeEach(() => {
         sessionData.removedThresholds = [licenceMonitoringStations.one.id, licenceMonitoringStations.two.id]
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the "licenceRefs" to the session without the removed thresholds', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.licenceRefs).toEqual([licenceMonitoringStations.three.licence.licenceRef])
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.relevantLicenceMonitoringStations).toEqual([licenceMonitoringStations.three])
       })

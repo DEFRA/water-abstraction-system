@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Submit page helper methods
  * @module SubmitPageLib
@@ -17,7 +15,7 @@
  *
  * @returns {boolean} True if filters were cleared, false otherwise
  */
-function clearFilters(payload, yar, filterKey) {
+export function clearFilters(payload, yar, filterKey) {
   const clearFilter = payload.clearFilters
 
   if (clearFilter) {
@@ -63,7 +61,7 @@ function clearFilters(payload, yar, filterKey) {
  * handleOneOptionSelected(payload3, 'options')
  * // payload3.options remains ['value1', 'value2']
  */
-function handleOneOptionSelected(payload, key) {
+export function handleOneOptionSelected(payload, key) {
   if (!payload?.[key]) {
     payload[key] = []
 
@@ -106,7 +104,7 @@ function handleOneOptionSelected(payload, key) {
  * processSavedFilters(yar, 'billRunsFilter')
  * // Returns { regions: [], status: null, openFilter: false }
  */
-function processSavedFilters(yar, filterKey) {
+export function processSavedFilters(yar, filterKey) {
   let openFilter = false
 
   const savedFilters = yar.get(filterKey)
@@ -129,10 +127,4 @@ function processSavedFilters(yar, filterKey) {
     ...savedFilters,
     openFilter
   }
-}
-
-module.exports = {
-  clearFilters,
-  handleOneOptionSelected,
-  processSavedFilters
 }

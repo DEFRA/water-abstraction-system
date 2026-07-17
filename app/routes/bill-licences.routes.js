@@ -1,13 +1,11 @@
-'use strict'
+import { remove, submitRemove, view } from '../controllers/bill-licences.controller.js'
 
-const BillLicencesController = require('../controllers/bill-licences.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/bill-licences/{id}',
     options: {
-      handler: BillLicencesController.view,
+      handler: view,
       auth: {
         access: {
           scope: ['billing']
@@ -19,7 +17,7 @@ const routes = [
     method: 'GET',
     path: '/bill-licences/{id}/remove',
     options: {
-      handler: BillLicencesController.remove,
+      handler: remove,
       auth: {
         access: {
           scope: ['billing']
@@ -31,7 +29,7 @@ const routes = [
     method: 'POST',
     path: '/bill-licences/{id}/remove',
     options: {
-      handler: BillLicencesController.submitRemove,
+      handler: submitRemove,
       auth: {
         access: {
           scope: ['billing']
@@ -40,5 +38,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

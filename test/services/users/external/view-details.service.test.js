@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Things we want to stub
-const FetchUserDetailsDal = require('../../../../app/dal/users/external/fetch-user-details.dal.js')
+import * as FetchUserDetailsDal from '../../../../app/dal/users/external/fetch-user-details.dal.js'
 
 // Thing under test
-const ViewDetailsService = require('../../../../app/services/users/external/view-details.service.js')
+import ViewDetailsService from '../../../../app/services/users/external/view-details.service.js'
 
 describe('Users - External - View Details service', () => {
   const auth = {
@@ -21,16 +19,16 @@ describe('Users - External - View Details service', () => {
   let back
 
   beforeEach(() => {
-    Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
+    vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the external user view', async () => {
-      const result = await ViewDetailsService.go(user.id, auth, back)
+      const result = await ViewDetailsService(user.id, auth, back)
 
       expect(result).toEqual({
         activeNavBar: 'users',

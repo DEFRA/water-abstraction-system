@@ -1,20 +1,20 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_OK } = require('node:http2').constants
-const Hapi = require('@hapi/hapi')
+import Hapi from '@hapi/hapi'
+import http2 from 'node:http2'
 
 // Test helpers
-const YarStub = require('../support/stubs/yar.stub.js')
+import YarStub from '../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const KeepYarAlivePlugin = require('../../app/plugins/keep-yar-alive.plugin.js')
+import KeepYarAlivePlugin from '../../app/plugins/keep-yar-alive.plugin.js'
+
+const { HTTP_STATUS_OK } = http2.constants
 
 describe('Keep Yar Alive plugin', () => {
   let notifierStub
@@ -49,12 +49,12 @@ describe('Keep Yar Alive plugin', () => {
       }
     })
 
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -64,7 +64,7 @@ describe('Keep Yar Alive plugin', () => {
 
   describe('when the route does not have the "skipSessionTouch" setting applied', () => {
     beforeEach(() => {
-      yarStub = YarStub.build(Sinon)
+      yarStub = YarStub()
 
       _attachYarStub(server, yarStub)
     })
@@ -75,15 +75,15 @@ describe('Keep Yar Alive plugin', () => {
       expect(response.statusCode).toEqual(HTTP_STATUS_OK)
       expect(response.result).toEqual('ok')
 
-      expect(yarStub.touch.called).toBe(true)
+      expect(yarStub.touch).toHaveBeenCalled()
 
-      expect(globalThis.GlobalNotifier.omfg.called).toBe(false)
+      expect(globalThis.GlobalNotifier.omfg).not.toHaveBeenCalled()
     })
   })
 
   describe('when the route does have the "skipSessionTouch" setting applied', () => {
     beforeEach(() => {
-      yarStub = YarStub.build(Sinon)
+      yarStub = YarStub()
 
       _attachYarStub(server, yarStub)
     })
@@ -94,9 +94,9 @@ describe('Keep Yar Alive plugin', () => {
       expect(res.statusCode).toEqual(HTTP_STATUS_OK)
       expect(res.result).toEqual('skipped')
 
-      expect(yarStub.touch.called).toBe(false)
+      expect(yarStub.touch).not.toHaveBeenCalled()
 
-      expect(globalThis.GlobalNotifier.omfg.called).toBe(false)
+      expect(globalThis.GlobalNotifier.omfg).not.toHaveBeenCalled()
     })
   })
 
@@ -107,16 +107,18 @@ describe('Keep Yar Alive plugin', () => {
       expect(res.statusCode).toEqual(HTTP_STATUS_OK)
       expect(res.result).toEqual('skipped')
 
-      expect(yarStub.touch.called).toBe(false)
+      expect(yarStub.touch).not.toHaveBeenCalled()
 
-      expect(globalThis.GlobalNotifier.omfg.called).toBe(false)
+      expect(globalThis.GlobalNotifier.omfg).not.toHaveBeenCalled()
     })
   })
 
   describe('should an error be thrown when trying to keep the session alive', () => {
     beforeEach(() => {
-      yarStub = YarStub.build(Sinon)
-      yarStub.touch.throws(new Error('boom'))
+      yarStub = YarStub()
+      yarStub.touch.mockImplementation(() => {
+        throw new Error('boom')
+      })
 
       _attachYarStub(server, yarStub)
     })
@@ -127,7 +129,7 @@ describe('Keep Yar Alive plugin', () => {
       expect(response.statusCode).toEqual(HTTP_STATUS_OK)
       expect(response.result).toEqual('ok')
 
-      expect(globalThis.GlobalNotifier.omfg.firstCall.args[0]).toContain('Failed to keep session alive')
+      expect(globalThis.GlobalNotifier.omfg.mock.calls[0][0]).toContain('Failed to keep session alive')
     })
   })
 })

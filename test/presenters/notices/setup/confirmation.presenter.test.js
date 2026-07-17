@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const ConfirmationPresenter = require('../../../../app/presenters/notices/setup/confirmation.presenter.js')
+import ConfirmationPresenter from '../../../../app/presenters/notices/setup/confirmation.presenter.js'
 
 describe('Notices - Setup - Confirmation presenter', () => {
   const referenceCode = generateNoticeReferenceCode('RINV-')
@@ -21,7 +22,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ConfirmationPresenter.go(event)
+    const result = ConfirmationPresenter(event)
 
     expect(result).toEqual({
       forwardLink: `/system/notices/${event.id}`,
@@ -37,7 +38,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(event)
+      const result = ConfirmationPresenter(event)
 
       expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
@@ -54,7 +55,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(event)
+      const result = ConfirmationPresenter(event)
 
       expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
@@ -73,7 +74,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(event)
+      const result = ConfirmationPresenter(event)
 
       expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
@@ -90,7 +91,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(event)
+      const result = ConfirmationPresenter(event)
 
       expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
@@ -107,7 +108,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(event)
+      const result = ConfirmationPresenter(event)
 
       expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,

@@ -1,15 +1,16 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Test helper
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+import RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Thing under test
-const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
+import FetchRegionsService from '../../../../app/services/bill-runs/setup/fetch-regions.service.js'
 
 describe('Bill Runs Setup - Setup - Fetch Regions service', () => {
   describe('when called', () => {
     it('returns the ID and display name for each region ordered by display name', async () => {
-      const results = await FetchRegionsService.go()
+      const results = await FetchRegionsService()
 
       // TODO: This is necessary because other region helpers are adding regions into the database as part
       //  of their tests. (Remove when cleans have been removed)

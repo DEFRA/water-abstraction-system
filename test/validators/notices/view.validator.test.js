@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ViewValidator = require('../../../app/validators/notices/view.validator.js')
+import ViewValidator from '../../../app/validators/notices/view.validator.js'
 
 describe('Notices - View validator', () => {
   let payload
@@ -17,7 +18,7 @@ describe('Notices - View validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = ViewValidator.go(payload)
+        const result = ViewValidator(payload)
 
         expect(result.value).toEqual({
           licence: '01/123',
@@ -36,7 +37,7 @@ describe('Notices - View validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = ViewValidator.go(payload)
+        const result = ViewValidator(payload)
 
         expect(result.value).toEqual({
           licence: '01/123'
@@ -51,7 +52,7 @@ describe('Notices - View validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = ViewValidator.go(payload)
+        const result = ViewValidator(payload)
 
         expect(result.value).toEqual({})
         expect(result.error).toBeUndefined()
@@ -70,7 +71,7 @@ describe('Notices - View validator', () => {
       })
 
       it('fails validation', () => {
-        const result = ViewValidator.go(payload)
+        const result = ViewValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('Licence number must be 25 characters or less')
@@ -84,7 +85,7 @@ describe('Notices - View validator', () => {
       })
 
       it('fails validation', () => {
-        const result = ViewValidator.go(payload)
+        const result = ViewValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('Recipient must be 255 characters or less')
@@ -98,7 +99,7 @@ describe('Notices - View validator', () => {
       })
 
       it('fails validation', () => {
-        const result = ViewValidator.go(payload)
+        const result = ViewValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select a valid status type')

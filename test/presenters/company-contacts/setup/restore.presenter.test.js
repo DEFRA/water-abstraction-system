@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const RestorePresenter = require('../../../../app/presenters/company-contacts/setup/restore.presenter.js')
+import RestorePresenter from '../../../../app/presenters/company-contacts/setup/restore.presenter.js'
 
 describe('Company Contacts - Setup - Restore Presenter', () => {
   let company
@@ -19,7 +20,7 @@ describe('Company Contacts - Setup - Restore Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = RestorePresenter.go(session)
+      const result = RestorePresenter(session)
 
       expect(result).toEqual({
         abstractionAlerts: 'Yes',

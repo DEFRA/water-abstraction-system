@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Thing under test
-const NoReturnsRequiredValidator = require('../../../../app/validators/return-versions/setup/no-returns-required.validator.js')
+import NoReturnsRequiredValidator from '../../../../app/validators/return-versions/setup/no-returns-required.validator.js'
 
 describe('Return Versions Setup - No Returns Required validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = NoReturnsRequiredValidator.go({ reason: 'licence-conditions-do-not-require-returns' })
+      const result = NoReturnsRequiredValidator({ reason: 'licence-conditions-do-not-require-returns' })
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -16,7 +17,7 @@ describe('Return Versions Setup - No Returns Required validator', () => {
   describe('when valid data is provided', () => {
     describe('because no "reason" is given', () => {
       it('fails validation', () => {
-        const result = NoReturnsRequiredValidator.go({ reason: '' })
+        const result = NoReturnsRequiredValidator({ reason: '' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -26,7 +27,7 @@ describe('Return Versions Setup - No Returns Required validator', () => {
 
     describe('because an unknown "reason" is given', () => {
       it('fails validation', () => {
-        const result = NoReturnsRequiredValidator.go({ reason: 'no-water' })
+        const result = NoReturnsRequiredValidator({ reason: 'no-water' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

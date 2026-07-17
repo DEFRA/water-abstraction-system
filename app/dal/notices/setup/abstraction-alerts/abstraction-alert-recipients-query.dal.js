@@ -1,10 +1,8 @@
-'use strict'
-
-const {
+import {
   additionalContactRecipientQuery,
   licenceHolderRecipientQuery,
   primaryUserRecipientQuery
-} = require('../../recipient-queries.dal.js')
+} from '../../recipient-queries.dal.js'
 
 /**
  * Generates the SQL query for abstraction alert recipients
@@ -39,7 +37,7 @@ const {
  * `addresses` tables, convert them to lowercase, and then generate an `md5()` result from it.
  *
  */
-const abstractionAlertRecipientsQuery = `
+export const abstractionAlertRecipientsQuery = `
   WITH additional_contacts AS (
     ${additionalContactRecipientQuery}
   ),
@@ -129,7 +127,3 @@ const abstractionAlertRecipientsQuery = `
   ORDER BY
     licence_refs::text;
 `
-
-module.exports = {
-  abstractionAlertRecipientsQuery
-}

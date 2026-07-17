@@ -1,15 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/note` page
  * @module SubmitNoteService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NotePresenter = require('../../../presenters/return-versions/setup/note.presenter.js')
-const NoteValidator = require('../../../validators/return-versions/setup/note.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NotePresenter from '../../../presenters/return-versions/setup/note.presenter.js'
+import NoteValidator from '../../../validators/return-versions/setup/note.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/note` page
@@ -28,8 +25,8 @@ const NoteValidator = require('../../../validators/return-versions/setup/note.va
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the note page including the
  * validation error details
  */
-async function go(sessionId, payload, user, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitNoteService(sessionId, payload, user, yar) {
+  const session = await FetchSessionDal(sessionId)
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -84,15 +81,11 @@ async function _save(session, payload, user) {
 function _submittedSessionData(session, payload) {
   session.note = payload.note ? payload.note : null
 
-  return NotePresenter.go(session)
+  return NotePresenter(session)
 }
 
 function _validate(payload) {
-  const validation = NoteValidator.go(payload)
+  const validation = NoteValidator(payload)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

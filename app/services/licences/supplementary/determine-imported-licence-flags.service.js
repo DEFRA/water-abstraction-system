@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Determines if a licence should be flagged for supplementary billing based on changes to its 'end dates'
  * @module DetermineImportedLicenceFlagsService
  */
 
-const FetchExistingLicenceDetailsService = require('./fetch-existing-licence-details.service.js')
-const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
+import FetchExistingLicenceDetailsService from './fetch-existing-licence-details.service.js'
+import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
 
 const SROC_START_DATE = new Date('2022-04-01')
 
@@ -37,8 +35,8 @@ const SROC_START_DATE = new Date('2022-04-01')
  *
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
-async function go(licenceId, changeDate) {
-  const existingLicenceDetails = await FetchExistingLicenceDetailsService.go(licenceId)
+export default async function determineImportedLicenceFlagsService(licenceId, changeDate) {
+  const existingLicenceDetails = await FetchExistingLicenceDetailsService(licenceId)
   const { endDate } = determineCurrentFinancialYear()
   const { flagForSrocSupplementary, flagForPreSrocSupplementary } = _determineExistingFlags(existingLicenceDetails)
 
@@ -112,8 +110,4 @@ function _updateFlags(existingLicenceDetails, flagForPreSrocSupplementary, resul
 
   result.flagForSrocSupplementary = existingLicenceDetails.sroc_charge_versions
   result.flagForTwoPartTariffSupplementary = existingLicenceDetails.two_part_tariff_charge_versions
-}
-
-module.exports = {
-  go
 }

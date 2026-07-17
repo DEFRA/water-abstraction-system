@@ -1,16 +1,18 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const {
+import { generateUUID } from '../../support/generators.js'
+import { today } from '../../../app/lib/general.lib.js'
+import {
   exLicenceHolderWithSingleLicences,
   licenceHolderWithMultipleLicences,
   licenceHolderWithSingleLicence
-} = require('../../support/seeders/licence.seeder.js')
-const { generateUUID, today } = require('../../../app/lib/general.lib.js')
-const { tomorrow, yesterday } = require('../../support/general.js')
+} from '../../support/seeders/licence.seeder.js'
+import { tomorrow, yesterday } from '../../support/general.js'
 
 // Thing under test
-const FetchCompanyLicencesDal = require('../../../app/dal/company-contacts/fetch-company-licences.dal.js')
+import FetchCompanyLicencesDal from '../../../app/dal/company-contacts/fetch-company-licences.dal.js'
 
 describe('Company Contacts - Fetch Company Licences Dal', () => {
   let scenarios
@@ -42,7 +44,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when there are licences linked to the company', () => {
     it('returns the matching licences', async () => {
-      const result = await FetchCompanyLicencesDal.go(scenarios.licence.company.id)
+      const result = await FetchCompanyLicencesDal(scenarios.licence.company.id)
 
       expect(result).toEqual([
         {
@@ -55,7 +57,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when a licence linked to the company has an expiredDate in the past', () => {
     it('returns an empty array', async () => {
-      const result = await FetchCompanyLicencesDal.go(scenarios.expiredPast.company.id)
+      const result = await FetchCompanyLicencesDal(scenarios.expiredPast.company.id)
 
       expect(result).toEqual([])
     })
@@ -63,7 +65,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when a licence linked to the company has a lapsedDate in the past', () => {
     it('returns an empty array', async () => {
-      const result = await FetchCompanyLicencesDal.go(scenarios.lapsedPast.company.id)
+      const result = await FetchCompanyLicencesDal(scenarios.lapsedPast.company.id)
 
       expect(result).toEqual([])
     })
@@ -71,7 +73,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when a licence linked to the company has a revokedDate in the past', () => {
     it('returns an empty array', async () => {
-      const result = await FetchCompanyLicencesDal.go(scenarios.revokedPast.company.id)
+      const result = await FetchCompanyLicencesDal(scenarios.revokedPast.company.id)
 
       expect(result).toEqual([])
     })
@@ -79,7 +81,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when a licence linked to the company has "ended" today', () => {
     it('returns an empty array', async () => {
-      const result = await FetchCompanyLicencesDal.go(scenarios.endedToday.company.id)
+      const result = await FetchCompanyLicencesDal(scenarios.endedToday.company.id)
 
       expect(result).toEqual([])
     })
@@ -87,7 +89,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when a licence linked to the company has one end date in the past and another in the future', () => {
     it('returns an empty array', async () => {
-      const result = await FetchCompanyLicencesDal.go(scenarios.mixedDates.company.id)
+      const result = await FetchCompanyLicencesDal(scenarios.mixedDates.company.id)
 
       expect(result).toEqual([])
     })
@@ -95,7 +97,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when a licence linked to the company has an expiredDate in the future', () => {
     it('returns the licences', async () => {
-      const result = await FetchCompanyLicencesDal.go(scenarios.expiredFuture.company.id)
+      const result = await FetchCompanyLicencesDal(scenarios.expiredFuture.company.id)
 
       expect(result).toEqual([
         {
@@ -108,7 +110,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when a licence linked to the company has a lapsedDate in the future', () => {
     it('returns the licences', async () => {
-      const result = await FetchCompanyLicencesDal.go(scenarios.lapsedFuture.company.id)
+      const result = await FetchCompanyLicencesDal(scenarios.lapsedFuture.company.id)
 
       expect(result).toEqual([
         {
@@ -121,7 +123,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when a licence linked to the company has a revokedDate in the future', () => {
     it('returns the licences', async () => {
-      const result = await FetchCompanyLicencesDal.go(scenarios.revokedFuture.company.id)
+      const result = await FetchCompanyLicencesDal(scenarios.revokedFuture.company.id)
 
       expect(result).toEqual([
         {
@@ -134,7 +136,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when there are no licences linked to the company', () => {
     it('returns an empty array', async () => {
-      const result = await FetchCompanyLicencesDal.go(generateUUID())
+      const result = await FetchCompanyLicencesDal(generateUUID())
 
       expect(result).toEqual([])
     })
@@ -142,7 +144,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when a current version is not linked to the company id', () => {
     it('returns an empty array', async () => {
-      const result = await FetchCompanyLicencesDal.go(scenarios.licenceCurrentVersion.company.id)
+      const result = await FetchCompanyLicencesDal(scenarios.licenceCurrentVersion.company.id)
 
       expect(result).toEqual([])
     })
@@ -150,7 +152,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
 
   describe('when there are multiple licences linked to the company', () => {
     it('returns the licences ordered by licence ref', async () => {
-      const result = await FetchCompanyLicencesDal.go(scenarios.multpleLicences.company.id)
+      const result = await FetchCompanyLicencesDal(scenarios.multpleLicences.company.id)
 
       const expectedLicences = [
         {

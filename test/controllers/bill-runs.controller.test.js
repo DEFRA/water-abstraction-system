@@ -1,25 +1,27 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const Boom = require('@hapi/boom')
-const GenerateTwoPartTariffBillRunService = require('../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
-const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
-const SubmitCancelBillRunService = require('../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
-const SubmitIndexBillRunsService = require('../../app/services/bill-runs/submit-index-bill-runs.service.js')
-const SubmitSendBillRunService = require('../../app/services/bill-runs/send/submit-send-bill-run.service.js')
-const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
-const ViewCancelBillRunService = require('../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js')
-const ViewSendBillRunService = require('../../app/services/bill-runs/send/view-send-bill-run.service.js')
+import Boom from '@hapi/boom'
+import * as GenerateTwoPartTariffBillRunService from '../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
+import * as IndexBillRunsService from '../../app/services/bill-runs/index-bill-runs.service.js'
+import * as SubmitCancelBillRunService from '../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js'
+import * as SubmitIndexBillRunsService from '../../app/services/bill-runs/submit-index-bill-runs.service.js'
+import * as SubmitSendBillRunService from '../../app/services/bill-runs/send/submit-send-bill-run.service.js'
+import * as ViewBillRunService from '../../app/services/bill-runs/view-bill-run.service.js'
+import * as ViewCancelBillRunService from '../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js'
+import * as ViewSendBillRunService from '../../app/services/bill-runs/send/view-send-bill-run.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Bill Runs controller', () => {
   let options
@@ -31,16 +33,15 @@ describe('Bill Runs controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -62,7 +63,7 @@ describe('Bill Runs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(IndexBillRunsService, 'go').resolves({
+          vi.spyOn(IndexBillRunsService, 'default').mockResolvedValue({
             billRuns: [
               {
                 id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -112,7 +113,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitIndexBillRunsService, 'go').resolves({})
+          vi.spyOn(SubmitIndexBillRunsService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the bill runs page', async () => {
@@ -128,7 +129,7 @@ describe('Bill Runs controller', () => {
           const pageData = { error: 'There is a validation error', pageTitle: 'Bill runs' }
 
           beforeEach(() => {
-            Sinon.stub(SubmitIndexBillRunsService, 'go').resolves(pageData)
+            vi.spyOn(SubmitIndexBillRunsService, 'default').mockResolvedValue(pageData)
           })
 
           it('re-renders the bill runs page with an error', async () => {
@@ -152,7 +153,7 @@ describe('Bill Runs controller', () => {
       describe('when the request succeeds', () => {
         describe('and it is for a bill run with multiple bill groups', () => {
           beforeEach(() => {
-            Sinon.stub(ViewBillRunService, 'go').resolves(_multiGroupBillRun())
+            vi.spyOn(ViewBillRunService, 'default').mockResolvedValue(_multiGroupBillRun())
           })
 
           it('returns the page successfully', async () => {
@@ -167,7 +168,7 @@ describe('Bill Runs controller', () => {
 
         describe('and it is for a bill run with a single bill group', () => {
           beforeEach(() => {
-            Sinon.stub(ViewBillRunService, 'go').resolves(_singleGroupBillRun())
+            vi.spyOn(ViewBillRunService, 'default').mockResolvedValue(_singleGroupBillRun())
           })
 
           it('returns the page successfully', async () => {
@@ -192,7 +193,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(ViewCancelBillRunService, 'go').resolves({
+          vi.spyOn(ViewCancelBillRunService, 'default').mockResolvedValue({
             id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
             billRunType: 'Two-part tariff',
             pageTitle: "You're about to cancel this bill run"
@@ -216,7 +217,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitCancelBillRunService, 'go').resolves()
+          vi.spyOn(SubmitCancelBillRunService, 'default').mockResolvedValue()
         })
 
         it('redirects to the bill runs page', async () => {
@@ -230,10 +231,10 @@ describe('Bill Runs controller', () => {
       describe('when the request fails', () => {
         describe('because the cancelling service threw an error', () => {
           beforeEach(() => {
-            Sinon.stub(Boom, 'badImplementation').returns(
+            vi.spyOn(Boom, 'badImplementation').mockReturnValue(
               new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
             )
-            Sinon.stub(SubmitCancelBillRunService, 'go').rejects()
+            vi.spyOn(SubmitCancelBillRunService, 'default').mockRejectedValue()
           })
 
           it('returns the error page', async () => {
@@ -255,7 +256,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(ViewSendBillRunService, 'go').resolves({
+          vi.spyOn(ViewSendBillRunService, 'default').mockResolvedValue({
             id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
             billRunType: 'Two-part tariff',
             pageTitle: "You're about to send this bill run"
@@ -279,7 +280,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSendBillRunService, 'go').resolves()
+          vi.spyOn(SubmitSendBillRunService, 'default').mockResolvedValue()
         })
 
         it('redirects to the legacy processing bill run page', async () => {
@@ -293,10 +294,10 @@ describe('Bill Runs controller', () => {
       describe('when the request fails', () => {
         describe('because the sending service threw an error', () => {
           beforeEach(() => {
-            Sinon.stub(Boom, 'badImplementation').returns(
+            vi.spyOn(Boom, 'badImplementation').mockReturnValue(
               new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
             )
-            Sinon.stub(SubmitSendBillRunService, 'go').rejects()
+            vi.spyOn(SubmitSendBillRunService, 'default').mockRejectedValue()
           })
 
           it('returns the error page', async () => {
@@ -318,7 +319,9 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(GenerateTwoPartTariffBillRunService, 'go').resolves('97db1a27-8308-4aba-b463-8a6af2558b28')
+          vi.spyOn(GenerateTwoPartTariffBillRunService, 'default').mockResolvedValue(
+            '97db1a27-8308-4aba-b463-8a6af2558b28'
+          )
         })
 
         it('redirects to the bill runs page', async () => {
@@ -332,10 +335,10 @@ describe('Bill Runs controller', () => {
       describe('when the request fails', () => {
         describe('because the generate service threw an error', () => {
           beforeEach(() => {
-            Sinon.stub(Boom, 'badImplementation').returns(
+            vi.spyOn(Boom, 'badImplementation').mockReturnValue(
               new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
             )
-            Sinon.stub(GenerateTwoPartTariffBillRunService, 'go').rejects()
+            vi.spyOn(GenerateTwoPartTariffBillRunService, 'default').mockRejectedValue()
           })
 
           it('returns the error page', async () => {

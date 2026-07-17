@@ -1,13 +1,33 @@
-'use strict'
+import {
+  setup,
+  submitAccount,
+  submitAccountType,
+  submitCheck,
+  submitCompanySearch,
+  submitContact,
+  submitContactName,
+  submitExistingAccount,
+  submitExistingAddress,
+  submitFAO,
+  submitSelectCompany,
+  viewAccount,
+  viewAccountType,
+  viewCheck,
+  viewCompanySearch,
+  viewContact,
+  viewContactName,
+  viewExistingAccount,
+  viewExistingAddress,
+  viewFAO,
+  viewSelectCompany
+} from '../controllers/billing-accounts-setup.controller.js'
 
-const BillingAccountsSetupController = require('../controllers/billing-accounts-setup.controller.js')
-
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/billing-accounts/setup/{billingAccountId}',
     options: {
-      handler: BillingAccountsSetupController.setup,
+      handler: setup,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -19,7 +39,7 @@ const routes = [
     method: 'GET',
     path: '/billing-accounts/setup/{sessionId}/account',
     options: {
-      handler: BillingAccountsSetupController.viewAccount,
+      handler: viewAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -31,7 +51,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/setup/{sessionId}/account',
     options: {
-      handler: BillingAccountsSetupController.submitAccount,
+      handler: submitAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -43,7 +63,7 @@ const routes = [
     method: 'GET',
     path: '/billing-accounts/setup/{sessionId}/existing-address',
     options: {
-      handler: BillingAccountsSetupController.viewExistingAddress,
+      handler: viewExistingAddress,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -55,7 +75,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/setup/{sessionId}/existing-address',
     options: {
-      handler: BillingAccountsSetupController.submitExistingAddress,
+      handler: submitExistingAddress,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -67,7 +87,7 @@ const routes = [
     method: 'GET',
     path: '/billing-accounts/setup/{sessionId}/existing-account',
     options: {
-      handler: BillingAccountsSetupController.viewExistingAccount,
+      handler: viewExistingAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -79,7 +99,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/setup/{sessionId}/existing-account',
     options: {
-      handler: BillingAccountsSetupController.submitExistingAccount,
+      handler: submitExistingAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -91,7 +111,7 @@ const routes = [
     method: 'GET',
     path: '/billing-accounts/setup/{sessionId}/fao',
     options: {
-      handler: BillingAccountsSetupController.viewFAO,
+      handler: viewFAO,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -103,7 +123,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/setup/{sessionId}/fao',
     options: {
-      handler: BillingAccountsSetupController.submitFAO,
+      handler: submitFAO,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -115,7 +135,7 @@ const routes = [
     method: 'GET',
     path: '/billing-accounts/setup/{sessionId}/check',
     options: {
-      handler: BillingAccountsSetupController.viewCheck,
+      handler: viewCheck,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -127,7 +147,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/setup/{sessionId}/check',
     options: {
-      handler: BillingAccountsSetupController.submitCheck,
+      handler: submitCheck,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -139,7 +159,7 @@ const routes = [
     method: 'GET',
     path: '/billing-accounts/setup/{sessionId}/account-type',
     options: {
-      handler: BillingAccountsSetupController.viewAccountType,
+      handler: viewAccountType,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -151,7 +171,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/setup/{sessionId}/account-type',
     options: {
-      handler: BillingAccountsSetupController.submitAccountType,
+      handler: submitAccountType,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -163,7 +183,7 @@ const routes = [
     method: 'GET',
     path: '/billing-accounts/setup/{sessionId}/contact',
     options: {
-      handler: BillingAccountsSetupController.viewContact,
+      handler: viewContact,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -175,7 +195,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/setup/{sessionId}/contact',
     options: {
-      handler: BillingAccountsSetupController.submitContact,
+      handler: submitContact,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -187,7 +207,7 @@ const routes = [
     method: 'GET',
     path: '/billing-accounts/setup/{sessionId}/contact-name',
     options: {
-      handler: BillingAccountsSetupController.viewContactName,
+      handler: viewContactName,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -199,7 +219,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/setup/{sessionId}/contact-name',
     options: {
-      handler: BillingAccountsSetupController.submitContactName,
+      handler: submitContactName,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -211,7 +231,7 @@ const routes = [
     method: 'GET',
     path: '/billing-accounts/setup/{sessionId}/company-search',
     options: {
-      handler: BillingAccountsSetupController.viewCompanySearch,
+      handler: viewCompanySearch,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -223,7 +243,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/setup/{sessionId}/company-search',
     options: {
-      handler: BillingAccountsSetupController.submitCompanySearch,
+      handler: submitCompanySearch,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -235,7 +255,7 @@ const routes = [
     method: 'GET',
     path: '/billing-accounts/setup/{sessionId}/select-company',
     options: {
-      handler: BillingAccountsSetupController.viewSelectCompany,
+      handler: viewSelectCompany,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -247,7 +267,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/setup/{sessionId}/select-company',
     options: {
-      handler: BillingAccountsSetupController.submitSelectCompany,
+      handler: submitSelectCompany,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -256,5 +276,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

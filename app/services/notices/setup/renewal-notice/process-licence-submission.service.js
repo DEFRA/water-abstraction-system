@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates validating renewal notice types for the `/notices/setup/{sessionId}/licence` page
  * @module ProcessRenewalsNoticeLicenceSubmission
  */
 
-const FetchRenewalLicenceDal = require('../../../../dal/notices/setup/fetch-renewal-licence.dal.js')
-const LicenceRenewalValidator = require('../../../../validators/notices/setup/renewal-notice/licence-renewal.validator.js')
-const { renewalNoticeDate } = require('../../../../lib/dates.lib.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+import FetchRenewalLicenceDal from '../../../../dal/notices/setup/fetch-renewal-licence.dal.js'
+import LicenceRenewalValidator from '../../../../validators/notices/setup/renewal-notice/licence-renewal.validator.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
+import { renewalNoticeDate } from '../../../../lib/dates.lib.js'
 
 /**
  * Orchestrates validating the renewal notice types for the `/notices/setup/{sessionId}/licence` page
@@ -20,7 +18,7 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
  *
  * @returns {Promise<object>} The validation result (null if valid)
  */
-async function go(payload) {
+export default async function processLicenceSubmissionService(payload) {
   const licenceRenewal = await _licenceRenewal(payload)
 
   const validationResult = _validate(payload, licenceRenewal)
@@ -47,15 +45,11 @@ async function _licenceRenewal(payload) {
     return null
   }
 
-  return FetchRenewalLicenceDal.go(payload.licenceRef)
+  return FetchRenewalLicenceDal(payload.licenceRef)
 }
 
 function _validate(payload, licenceRenewal) {
-  const validationResult = LicenceRenewalValidator.go(payload, licenceRenewal)
+  const validationResult = LicenceRenewalValidator(payload, licenceRenewal)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

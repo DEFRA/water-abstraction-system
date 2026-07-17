@@ -1,13 +1,12 @@
-'use strict'
-
 /**
  * Model for licence_entity_roles (crm.entity_roles)
  * @module LicenceEntityRoleModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceEntityModel from './licence-entity.model.js'
 
 /**
  * Represents an instance of a licence entity role record
@@ -21,7 +20,7 @@ const BaseModel = require('./base.model.js')
  *
  * Through it we can identify which 'entities' have which roles for licences.
  */
-class LicenceEntityRoleModel extends BaseModel {
+export default class LicenceEntityRoleModel extends BaseModel {
   static get tableName() {
     return 'licenceEntityRoles'
   }
@@ -30,7 +29,7 @@ class LicenceEntityRoleModel extends BaseModel {
     return {
       companyEntity: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-entity.model',
+        modelClass: LicenceEntityModel,
         join: {
           from: 'licenceEntityRoles.companyEntityId',
           to: 'licenceEntities.id'
@@ -38,7 +37,7 @@ class LicenceEntityRoleModel extends BaseModel {
       },
       licenceEntity: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-entity.model',
+        modelClass: LicenceEntityModel,
         join: {
           from: 'licenceEntityRoles.licenceEntityId',
           to: 'licenceEntities.id'
@@ -46,7 +45,7 @@ class LicenceEntityRoleModel extends BaseModel {
       },
       regimeEntity: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-entity.model',
+        modelClass: LicenceEntityModel,
         join: {
           from: 'licenceEntityRoles.regimeEntityId',
           to: 'licenceEntities.id'
@@ -55,5 +54,3 @@ class LicenceEntityRoleModel extends BaseModel {
     }
   }
 }
-
-module.exports = LicenceEntityRoleModel

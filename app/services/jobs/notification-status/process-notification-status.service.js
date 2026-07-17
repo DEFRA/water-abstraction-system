@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates the process of fetching and updating the status of 'notification' from the Notify service.
  * @module ProcessNotificationStatusService
  */
 
-const CheckNotificationStatusService = require('../../notifications/check-notification-status.service.js')
-const FetchNotificationsService = require('./fetch-notifications.service.js')
-const SendAlternateNoticesService = require('./send-alternate-notices.service.js')
-const UpdateNoticeService = require('../../notices/update-notice.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+import CheckNotificationStatusService from '../../notifications/check-notification-status.service.js'
+import FetchNotificationsService from './fetch-notifications.service.js'
+import SendAlternateNoticesService from './send-alternate-notices.service.js'
+import UpdateNoticeService from '../../notices/update-notice.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates the process of fetching and updating the status of 'notification' from the Notify service.
@@ -35,19 +33,19 @@ const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../..
  * If the request to Notify for the message details fails, the notification is not updated. This means we can try again
  * later.
  */
-async function go() {
+export default async function processNotificationStatusService() {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const notifications = await FetchNotificationsService.go()
+    const notifications = await FetchNotificationsService()
 
     for (const notification of notifications) {
-      await CheckNotificationStatusService.go(notification)
+      await CheckNotificationStatusService(notification)
     }
 
     await _updateEventErrorCount(notifications)
 
-    await SendAlternateNoticesService.go(notifications)
+    await SendAlternateNoticesService(notifications)
 
     calculateAndLogTimeTaken(startTime, 'Notification status job complete', { count: notifications.length })
   } catch (error) {
@@ -71,9 +69,5 @@ async function _updateEventErrorCount(notifications) {
 
   const dedupeEventIds = [...new Set(eventIds)]
 
-  await UpdateNoticeService.go(dedupeEventIds)
-}
-
-module.exports = {
-  go
+  await UpdateNoticeService(dedupeEventIds)
 }

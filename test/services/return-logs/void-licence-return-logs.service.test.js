@@ -1,13 +1,12 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import { generateLicenceRef, generateReference, generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const VoidLicenceReturnLogsService = require('../../../app/services/return-logs/void-licence-return-logs.service.js')
+import VoidLicenceReturnLogsService from '../../../app/services/return-logs/void-licence-return-logs.service.js'
 
 describe('Return Logs - Void Licence Return Logs service', () => {
   let reissuedReturnIds
@@ -28,7 +27,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     beforeAll(async () => {
       changeDate = new Date('2022-12-31')
 
-      licenceRef = LicenceHelper.generateLicenceRef()
+      licenceRef = generateLicenceRef()
       returnCycleId = generateUUID()
     })
 
@@ -53,7 +52,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
 
         describe('and one return log for the matching return cycle that is after the "change date" [C]', () => {
           beforeAll(async () => {
-            returnReference = ReturnRequirementHelper.generateReference()
+            returnReference = generateReference()
             endsAfterTheChangeDateReturnLog = await ReturnLogHelper.add({
               endDate: new Date('2023-03-31'),
               licenceRef,
@@ -75,7 +74,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
             })
 
             it('voids only the return log [C] that matches the cycle and ends after the "change date"', async () => {
-              await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
+              await VoidLicenceReturnLogsService(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
               let returnLogBeingChecked
 
@@ -101,7 +100,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     beforeAll(async () => {
       changeDate = new Date('2022-12-31')
 
-      licenceRef = LicenceHelper.generateLicenceRef()
+      licenceRef = generateLicenceRef()
       returnCycleId = generateUUID()
     })
 
@@ -126,7 +125,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
 
         describe('and one return log for the matching return cycle that matched the "change date" [C]', () => {
           beforeAll(async () => {
-            returnReference = ReturnRequirementHelper.generateReference()
+            returnReference = generateReference()
             endsAfterTheChangeDateReturnLog = await ReturnLogHelper.add({
               endDate: changeDate,
               licenceRef,
@@ -148,7 +147,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
             })
 
             it('voids only the return log [C] that matches the cycle', async () => {
-              await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
+              await VoidLicenceReturnLogsService(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
               let returnLogBeingChecked
 
@@ -174,7 +173,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     beforeAll(async () => {
       changeDate = new Date('2022-04-01')
 
-      licenceRef = LicenceHelper.generateLicenceRef()
+      licenceRef = generateLicenceRef()
       returnCycleId = generateUUID()
     })
 
@@ -190,7 +189,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
 
       describe('and now the reissued return log [B]', () => {
         beforeAll(async () => {
-          returnReference = ReturnRequirementHelper.generateReference()
+          returnReference = generateReference()
           reissuedReturnLog1 = await ReturnLogHelper.add({
             endDate: new Date('2023-03-31'),
             licenceRef,
@@ -203,7 +202,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
         })
 
         it('voids only the existing return log [A]', async () => {
-          await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
+          await VoidLicenceReturnLogsService(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
           let returnLogBeingChecked
 
@@ -221,13 +220,13 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     beforeAll(async () => {
       changeDate = new Date('2022-09-01')
 
-      licenceRef = LicenceHelper.generateLicenceRef()
+      licenceRef = generateLicenceRef()
       returnCycleId = generateUUID()
     })
 
     describe('and the licence has an existing return log for the existing return version [A]', () => {
       beforeAll(async () => {
-        returnReference = ReturnRequirementHelper.generateReference()
+        returnReference = generateReference()
 
         existingReturnLog = await ReturnLogHelper.add({
           endDate: new Date('2023-03-31'),
@@ -258,7 +257,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
         })
 
         it('voids only the existing return log [A]', async () => {
-          await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
+          await VoidLicenceReturnLogsService(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
           let returnLogBeingChecked
 

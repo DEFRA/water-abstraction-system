@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/licence-versions/{id}` page
  *
  * @module ViewService
  */
 
-const FetchConditionsService = require('../licences/fetch-conditions.service.js')
-const FetchLicenceVersionDal = require('../../dal/licence-versions/fetch-licence-version.dal.js')
-const ViewPresenter = require('../../presenters/licence-versions/view.presenter.js')
+import FetchConditionsService from '../licences/fetch-conditions.service.js'
+import FetchLicenceVersionDal from '../../dal/licence-versions/fetch-licence-version.dal.js'
+import ViewPresenter from '../../presenters/licence-versions/view.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/licence-versions/{id}` page
@@ -18,17 +16,13 @@ const ViewPresenter = require('../../presenters/licence-versions/view.presenter.
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(licenceVersionId, auth) {
-  const licenceVersionData = await FetchLicenceVersionDal.go(licenceVersionId)
-  const conditions = await FetchConditionsService.go(licenceVersionId)
+export default async function viewService(licenceVersionId, auth) {
+  const licenceVersionData = await FetchLicenceVersionDal(licenceVersionId)
+  const conditions = await FetchConditionsService(licenceVersionId)
 
-  const pageData = ViewPresenter.go(licenceVersionData, auth, conditions)
+  const pageData = ViewPresenter(licenceVersionData, auth, conditions)
 
   return {
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

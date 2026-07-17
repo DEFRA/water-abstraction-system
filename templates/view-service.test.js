@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('__STUBS_SESSION_PATH__')
+import SessionModelStub from '__STUBS_SESSION_PATH__'
 
 // Things we need to stub
-const FetchSessionDal = require('__FETCH_SESSION_DAL_TEST_PATH__')
+import * as FetchSessionDal from '__FETCH_SESSION_DAL_TEST_PATH__'
 
 // Thing under test
-const __MODULE_NAME__ = require('__REQUIRE_PATH__')
+import __MODULE_NAME__ from '__REQUIRE_PATH__'
 
 describe('__DESCRIBE_LABEL__', () => {
   let session
@@ -19,18 +17,18 @@ describe('__DESCRIBE_LABEL__', () => {
   beforeEach(() => {
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub.build(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await __MODULE_NAME__.go(session.id)
+      const result = await __MODULE_NAME__(session.id)
 
       expect(result).toEqual({
         backLink: {

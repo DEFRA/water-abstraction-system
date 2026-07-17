@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/bill-runs/review/licence/{reviewLicenceId}/remove' page
  * @module ViewRemoveService
  */
 
-const FetchRemoveReviewLicenceService = require('./fetch-remove-review-licence.service.js')
-const RemovePresenter = require('../../../presenters/bill-runs/review/remove.presenter.js')
+import FetchRemoveReviewLicenceService from './fetch-remove-review-licence.service.js'
+import RemovePresenter from '../../../presenters/bill-runs/review/remove.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/bill-runs/review/licence/{reviewLicenceId}/remove' page
@@ -15,17 +13,13 @@ const RemovePresenter = require('../../../presenters/bill-runs/review/remove.pre
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(reviewLicenceId) {
-  const reviewLicence = await FetchRemoveReviewLicenceService.go(reviewLicenceId)
+export default async function viewRemoveService(reviewLicenceId) {
+  const reviewLicence = await FetchRemoveReviewLicenceService(reviewLicenceId)
 
-  const pageData = RemovePresenter.go(reviewLicence)
+  const pageData = RemovePresenter(reviewLicence)
 
   return {
     activeNavBar: 'bill-runs',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

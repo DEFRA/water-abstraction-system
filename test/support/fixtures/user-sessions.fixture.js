@@ -1,8 +1,5 @@
-'use strict'
-
-const UsersFixture = require('./users.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
+import UsersFixture from './users.fixture.js'
+import { generateLicenceRef, generateUUID } from '../generators.js'
 
 /**
  * Creates an external user unregistration session fixture for testing purposes
@@ -65,6 +62,6 @@ function unregistrationSession() {
   }
 }
 
-module.exports = {
+export default {
   unregistrationSession
 }

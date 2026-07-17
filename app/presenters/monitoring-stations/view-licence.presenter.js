@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page
  * @module ViewLicencePresenter
  */
 
-const { formatLongDate, formatRestrictionType, formatValueUnit, sentenceCase } = require('../base.presenter.js')
-const { licenceEndsWarning } = require('../licence.presenter.js')
+import { licenceEndsWarning } from '../licence.presenter.js'
+import { formatLongDate, formatRestrictionType, formatValueUnit, sentenceCase } from '../base.presenter.js'
 
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page
@@ -20,7 +18,7 @@ const { licenceEndsWarning } = require('../licence.presenter.js')
  *
  * @returns {object} page data needed by the view template
  */
-function go(licence, licenceMonitoringStations, monitoringStation, auth) {
+export default function viewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth) {
   const canRemoveTags = auth.credentials.scope.includes('manage_gauging_station_licence_links')
 
   return {
@@ -160,8 +158,4 @@ function _monitoringStationName(monitoringStation) {
   }
 
   return label
-}
-
-module.exports = {
-  go
 }

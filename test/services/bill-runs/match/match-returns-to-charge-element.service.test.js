@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
+import MatchReturnsToChargeElementService from '../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js'
 
 describe('Match Returns To Charge Element Service', () => {
   let chargeElement
@@ -35,7 +36,7 @@ describe('Match Returns To Charge Element Service', () => {
     })
 
     it('adds the matching return logs to the charge element', () => {
-      MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+      MatchReturnsToChargeElementService(chargeElement, returnLogs)
 
       expect(chargeElement).toEqual({
         abstractionPeriods: [
@@ -68,7 +69,7 @@ describe('Match Returns To Charge Element Service', () => {
     })
 
     it('changes the matched property on the return log to be true', () => {
-      MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+      MatchReturnsToChargeElementService(chargeElement, returnLogs)
 
       expect(returnLogs[0].matched).toBe(true)
     })
@@ -82,7 +83,7 @@ describe('Match Returns To Charge Element Service', () => {
       })
 
       it('records only the matching return logs against the charge element', () => {
-        MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+        MatchReturnsToChargeElementService(chargeElement, returnLogs)
 
         expect(chargeElement.returnLogs).toEqual([
           {
@@ -93,7 +94,7 @@ describe('Match Returns To Charge Element Service', () => {
       })
 
       it('only flags the matching return logs as "matched"', () => {
-        MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+        MatchReturnsToChargeElementService(chargeElement, returnLogs)
 
         expect(returnLogs[0].matched).toBe(true)
         expect(returnLogs[1].matched).toBe(false)
@@ -109,7 +110,7 @@ describe('Match Returns To Charge Element Service', () => {
       })
 
       it('records only the matching return logs against the charge element', () => {
-        MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+        MatchReturnsToChargeElementService(chargeElement, returnLogs)
 
         expect(chargeElement.returnLogs).toEqual([
           {
@@ -120,7 +121,7 @@ describe('Match Returns To Charge Element Service', () => {
       })
 
       it('only flags the matching return logs as "matched"', () => {
-        MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+        MatchReturnsToChargeElementService(chargeElement, returnLogs)
 
         expect(returnLogs[0].matched).toBe(true)
         expect(returnLogs[1].matched).toBe(false)
@@ -136,13 +137,13 @@ describe('Match Returns To Charge Element Service', () => {
     })
 
     it('adds no matching return logs to the charge element', () => {
-      MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+      MatchReturnsToChargeElementService(chargeElement, returnLogs)
 
       expect(chargeElement.returnLogs).toHaveLength(0)
     })
 
     it('leaves the matched property on the return logs as false', () => {
-      MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+      MatchReturnsToChargeElementService(chargeElement, returnLogs)
 
       expect(returnLogs[0].matched).toBe(false)
       expect(returnLogs[1].matched).toBe(false)

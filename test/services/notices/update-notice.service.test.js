@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const EventHelper = require('../../support/helpers/event.helper.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
+import EventHelper from '../../support/helpers/event.helper.js'
+import NotificationHelper from '../../support/helpers/notification.helper.js'
+import { generateNoticeReferenceCode } from '../../support/generators.js'
 
 // Thing under test
-const UpdateEventService = require('../../../app/services/notices/update-notice.service.js')
+import UpdateEventService from '../../../app/services/notices/update-notice.service.js'
 
 describe('Notices - Update Notice service', () => {
   let noticeIds
@@ -129,7 +130,7 @@ describe('Notices - Update Notice service', () => {
 
   describe('when called with', () => {
     it('correctly updates the ""overallStatus" and "statusCount" of each notice that is a notification', async () => {
-      await UpdateEventService.go(noticeIds)
+      await UpdateEventService(noticeIds)
 
       // Check notice with only sent notifications - SENT
       let refreshedNotice = await sentNotice.$query()

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/additional-submission-options` page
  * @module AdditionalSubmissionOptionsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/additional-submission-options` page
@@ -20,7 +18,7 @@ const Joi = require('joi')
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go(payload, session) {
+export default function additionalSubmissionOptionsValidator(payload, session) {
   const errorMessage = 'Select additional submission options for the requirements for returns'
 
   const schema = Joi.object({
@@ -54,8 +52,4 @@ function _noQuarterlyReturnsForSummerCycle(value, helpers, session) {
   }
 
   return value
-}
-
-module.exports = {
-  go
 }

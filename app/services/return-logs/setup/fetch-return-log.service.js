@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches return log data needed for the confirmed view
  * @module FetchReturnLogService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
+import ReturnLogModel from '../../../models/return-log.model.js'
 
 /**
  * Fetches return log data needed for the confirmed view
@@ -16,7 +14,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  *
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and licence data
  */
-async function go(returnLogId) {
+export default async function fetchReturnLogService(returnLogId) {
   return ReturnLogModel.query()
     .findById(returnLogId)
     .select(
@@ -30,8 +28,4 @@ async function go(returnLogId) {
       ReturnLogModel.relatedQuery('returnSubmissions').count().as('submissionCount')
     )
     .innerJoinRelated('licence')
-}
-
-module.exports = {
-  go
 }

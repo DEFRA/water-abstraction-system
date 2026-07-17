@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats the summary data for each bill run for use in the /bill-runs page
  * @module IndexBillRunsPresenter
  */
 
-const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
-const { formatBillRunType } = require('../billing.presenter.js')
-const { billRunStatuses, billRunTypes } = require('../../lib/static-lookups.lib.js')
+import { formatBillRunType } from '../billing.presenter.js'
+import { billRunStatuses, billRunTypes } from '../../lib/static-lookups.lib.js'
+import { formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
 
 /**
  * Formats the summary data for each bill run for use in the /bill-runs page
@@ -19,7 +17,7 @@ const { billRunStatuses, billRunTypes } = require('../../lib/static-lookups.lib.
  *
  * @returns {object} The data formatted for the view template
  */
-function go(billRuns, busyResult, filters, regions) {
+export default function indexBillRunsPresenter(billRuns, busyResult, filters, regions) {
   return {
     billRuns: _billRuns(billRuns),
     notification: busyResult === 'none' ? null : _notification(busyResult),
@@ -131,8 +129,4 @@ function _statusItems(filters) {
       value: key
     }
   })
-}
-
-module.exports = {
-  go
 }

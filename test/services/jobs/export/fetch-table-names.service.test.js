@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Thing under test
-const FetchTableNamesService = require('../../../../app/services/jobs/export/fetch-table-names.service.js')
+import FetchTableNamesService from '../../../../app/services/jobs/export/fetch-table-names.service.js'
 
 describe('Fetch table names', () => {
   describe('when given a schema name', () => {
     it('returns a list of the schemas table names', async () => {
-      const result = await FetchTableNamesService.go('water')
+      const result = await FetchTableNamesService('water')
 
       expect(result).toContain('billing_charge_categories')
       expect(result).toContain('charge_purposes')
@@ -16,7 +17,7 @@ describe('Fetch table names', () => {
 
   describe('when not given a schema name', () => {
     it('throws an error', async () => {
-      const result = await FetchTableNamesService.go().catch((e) => {
+      const result = await FetchTableNamesService().catch((e) => {
         return e
       })
 

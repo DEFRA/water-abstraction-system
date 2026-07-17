@@ -1,11 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const CheckNoticeTypePresenter = require('../../../../app/presenters/notices/setup/check-notice-type.presenter.js')
+import CheckNoticeTypePresenter from '../../../../app/presenters/notices/setup/check-notice-type.presenter.js'
 
 describe('Notices - Setup - Check Notice Type presenter', () => {
   let licenceRef
@@ -19,7 +19,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckNoticeTypePresenter.go(session)
+      const result = CheckNoticeTypePresenter(session)
 
       expect(result).toEqual({
         ..._expectedPageData(session),
@@ -33,7 +33,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
       })
 
       it('returns page data including "licenceRef"', () => {
-        const result = CheckNoticeTypePresenter.go(session)
+        const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
           ..._expectedPageData(session),
@@ -55,7 +55,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
       })
 
       it('returns page data including "returnsPeriodText"', () => {
-        const result = CheckNoticeTypePresenter.go(session)
+        const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
           ..._expectedPageData(session),
@@ -71,7 +71,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
       })
 
       it('returns page data', () => {
-        const result = CheckNoticeTypePresenter.go(session)
+        const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
           ..._expectedPageData(session),
@@ -108,7 +108,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
       })
 
       it('returns the page data', () => {
-        const result = CheckNoticeTypePresenter.go(session)
+        const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
           ..._expectedPageData(session),
@@ -124,7 +124,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
         })
 
         it('returns an array of "selectedDueReturns"', () => {
-          const result = CheckNoticeTypePresenter.go(session)
+          const result = CheckNoticeTypePresenter(session)
 
           expect(result.returns).toEqual([
             '3135 - 1 April 2002 to 31 March 2003',
@@ -140,7 +140,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
       })
 
       it('returns page data', () => {
-        const result = CheckNoticeTypePresenter.go(session)
+        const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
           ..._expectedPageData(session),

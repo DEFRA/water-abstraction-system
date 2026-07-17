@@ -1,15 +1,15 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Things we need to stub
-const LegacyRequest = require('../../../app/requests/legacy.request.js')
+import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
-const ViewHealthRequest = require('../../../app/requests/legacy/view-health.request.js')
+import ViewHealthRequest from '../../../app/requests/legacy/view-health.request.js'
+
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Legacy - View Health request', () => {
   const serviceName = 'import'
@@ -17,7 +17,7 @@ describe('Legacy - View Health request', () => {
   let response
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -30,20 +30,20 @@ describe('Legacy - View Health request', () => {
         }
       }
 
-      Sinon.stub(LegacyRequest, 'get').withArgs(serviceName).resolves({
+      vi.spyOn(LegacyRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response
-      })
+      }) // TODO: withArgs(serviceName) not converted
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewHealthRequest.send(serviceName)
+      const result = await ViewHealthRequest(serviceName)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from a Legacy service in the "response"', async () => {
-      const result = await ViewHealthRequest.send(serviceName)
+      const result = await ViewHealthRequest(serviceName)
 
       expect(result.response.body).toEqual(response.body)
     })
@@ -61,20 +61,20 @@ describe('Legacy - View Health request', () => {
           }
         }
 
-        Sinon.stub(LegacyRequest, 'get').withArgs(serviceName).resolves({
+        vi.spyOn(LegacyRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response
-        })
+        }) // TODO: withArgs(serviceName) not converted
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewHealthRequest.send(serviceName)
+        const result = await ViewHealthRequest(serviceName)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewHealthRequest.send(serviceName)
+        const result = await ViewHealthRequest(serviceName)
 
         expect(result.response.body).toEqual(response.body)
       })

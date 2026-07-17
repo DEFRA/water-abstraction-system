@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/summary` page
  * @module SummaryPresenter
  */
 
-const { compareStrings } = require('../../lib/general.lib.js')
-const { formatLongDate, formatAbstractionDate } = require('../base.presenter.js')
-const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
+import { compareStrings } from '../../lib/general.lib.js'
+import { formatAbstractionAmounts } from './base-licences.presenter.js'
+import { formatAbstractionDate, formatLongDate } from '../base.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/summary` page
@@ -17,7 +15,7 @@ const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licence, summary) {
+export default function summaryPresenter(licence, summary) {
   const { expiredDate, issueDate, licenceMonitoringStations, region, startDate } = summary
 
   const licenceVersionPurposes = _licenceVersionPurposes(summary)
@@ -218,8 +216,4 @@ function _startDate(licence, startDate) {
   }
 
   return formatLongDate(startDate)
-}
-
-module.exports = {
-  go
 }

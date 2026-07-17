@@ -1,24 +1,25 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AddressModel = require('../../app/models/address.model.js')
-const AddressHelper = require('../support/helpers/address.helper.js')
-const CompanyHelper = require('../support/helpers/company.helper.js')
-const CompanyModel = require('../../app/models/company.model.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
-const LicenceVersionPurposesHelper = require('../support/helpers/licence-version-purpose.helper.js')
-const ModLogHelper = require('../support/helpers/mod-log.helper.js')
-const ModLogModel = require('../../app/models/mod-log.model.js')
-const PurposeHelper = require('../support/helpers/purpose.helper.js')
-const PurposeModel = require('../../app/models/purpose.model.js')
-const RegionHelper = require('../support/helpers/region.helper.js')
-const { generateRandomInteger } = require('../../app/lib/general.lib.js')
+import AddressHelper from '../support/helpers/address.helper.js'
+import AddressModel from '../../app/models/address.model.js'
+import CompanyHelper from '../support/helpers/company.helper.js'
+import CompanyModel from '../../app/models/company.model.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import LicenceVersionHelper from '../support/helpers/licence-version.helper.js'
+import LicenceVersionPurposeModel from '../../app/models/licence-version-purpose.model.js'
+import LicenceVersionPurposesHelper from '../support/helpers/licence-version-purpose.helper.js'
+import ModLogHelper from '../support/helpers/mod-log.helper.js'
+import ModLogModel from '../../app/models/mod-log.model.js'
+import PurposeHelper from '../support/helpers/purpose.helper.js'
+import PurposeModel from '../../app/models/purpose.model.js'
+import RegionHelper from '../support/helpers/region.helper.js'
+import { generateRandomInteger } from '../support/generators.js'
 
 // Thing under test
-const LicenceVersionModel = require('../../app/models/licence-version.model.js')
+import LicenceVersionModel from '../../app/models/licence-version.model.js'
 
 describe('Licence Version model', () => {
   let address

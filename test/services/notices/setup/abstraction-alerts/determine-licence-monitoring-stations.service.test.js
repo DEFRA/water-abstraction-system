@@ -1,25 +1,21 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { licenceEnds } = require('../../../../support/fixtures/licence.fixture.js')
-const { yesterday } = require('../../../../support/general.js')
+import LicenceFixture from '../../../../support/fixtures/licence.fixture.js'
+import { generateUUID } from '../../../../support/generators.js'
+import { yesterday } from '../../../../support/general.js'
 
 // Things we need to stub
-const FetchMonitoringStationDetailsDal = require('../../../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
+import * as FetchMonitoringStationDetailsDal from '../../../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 // Thing under test
-const DetermineLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js')
+import DetermineLicenceMonitoringStationsService from '../../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
 
 describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stations service', () => {
   let licenceMonitoringStations
   let monitoringStation
   let monitoringStationId
-  let stubFetchMonitoringStationDetailsDal
-
   beforeEach(() => {
     monitoringStationId = generateUUID()
 
@@ -45,7 +41,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         thresholdUnit: 'm3/s',
         thresholdValue: 100,
         latestNotification: null,
-        licence: licenceEnds(),
+        licence: LicenceFixture.licenceEnds(),
         licenceVersionPurposeCondition: null
       },
       {
@@ -59,7 +55,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         thresholdUnit: 'm3/s',
         thresholdValue: 100,
         latestNotification: null,
-        licence: licenceEnds(),
+        licence: LicenceFixture.licenceEnds(),
         licenceVersionPurposeCondition: {
           id: generateUUID(),
           notes: 'I have a bad feeling about this'
@@ -72,7 +68,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         abstractionPeriodStartMonth: 1,
         id: generateUUID(),
         latestNotification: null,
-        licence: licenceEnds(),
+        licence: LicenceFixture.licenceEnds(),
         licenceVersionPurposeCondition: {
           id: generateUUID(),
           notes: '"                   "             "                    "'
@@ -84,18 +80,18 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
       }
     ]
 
-    stubFetchMonitoringStationDetailsDal = Sinon.stub(FetchMonitoringStationDetailsDal, 'go').resolves({
+    vi.spyOn(FetchMonitoringStationDetailsDal, 'default').mockResolvedValue({
       licenceMonitoringStations,
       monitoringStation
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly returns the data', async () => {
-    const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+    const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
     expect(result).toEqual({
       licenceMonitoringStations: [
@@ -174,14 +170,14 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
       licenceMonitoringStations[1].licence.revokedDate = yesterday()
       licenceMonitoringStations[2].licence.expiredDate = yesterday()
 
-      stubFetchMonitoringStationDetailsDal.resolves({
+      vi.spyOn(FetchMonitoringStationDetailsDal, 'default').mockResolvedValue({
         licenceMonitoringStations,
         monitoringStation
       })
     })
 
     it('does not return ended licences', async () => {
-      const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+      const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
       expect(result).toEqual({
         licenceMonitoringStations: [
@@ -218,7 +214,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
     describe('the "notes" property', () => {
       describe('when there are "notes"', () => {
         it('returns the "notes"', async () => {
-          const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+          const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
           expect(result.licenceMonitoringStations[1].notes).toEqual('I have a bad feeling about this')
         })
@@ -226,15 +222,15 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
 
       describe('when "notes" is null', () => {
         it('returns null', async () => {
-          const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+          const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
-          expect(result.licenceMonitoringStations[0].notes).toEqual(null)
+          expect(result.licenceMonitoringStations[0].notes).toBeNull()
         })
       })
 
       describe('when the "notes" is weird! `"                   "             "                    "`', () => {
         it('returns the weird notes', async () => {
-          const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+          const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
           expect(result.licenceMonitoringStations[2].notes).toEqual(
             '"                   "             "                    "'
@@ -245,7 +241,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
 
     describe('the "thresholdGroup" property', () => {
       it('generates a "thresholdGroup" for each licence monitoring station', async () => {
-        const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+        const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
         expect(result.licenceMonitoringStations[0].thresholdGroup).toEqual('flow-100-m3/s')
       })

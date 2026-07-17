@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Prepares the return logs to be matched to a charge element
  * @module PrepareReturnLogsService
  */
 
-const Big = require('big.js')
+import Big from 'big.js'
 
-const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
-const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licence.service.js')
-const { periodsOverlap } = require('../../../lib/general.lib.js')
+import FetchReturnLogsForLicenceService from './fetch-return-logs-for-licence.service.js'
+import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
+import { periodsOverlap } from '../../../lib/general.lib.js'
 
 /**
  * Prepares return logs for matching with abstraction periods and performs checks for potential issues
@@ -21,7 +19,7 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  * @param {module:LicenceModel} licence - An individual licence to prepare the return logs for
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  */
-async function go(licence, billingPeriod) {
+export default async function prepareReturnLogsService(licence, billingPeriod) {
   await _prepareReturnLogs(licence, billingPeriod)
 }
 
@@ -32,7 +30,7 @@ function _abstractionOutsidePeriod(returnAbstractionPeriods, returnLine) {
 }
 
 async function _prepareReturnLogs(licence, billingPeriod) {
-  licence.returnLogs = await FetchReturnLogsForLicenceService.go(licence.licenceRef, billingPeriod)
+  licence.returnLogs = await FetchReturnLogsForLicenceService(licence.licenceRef, billingPeriod)
 
   _prepReturnsForMatching(licence.returnLogs, billingPeriod)
 }
@@ -66,8 +64,4 @@ function _prepReturnsForMatching(returnLogs, billingPeriod) {
     returnLog.abstractionOutsidePeriod = abstractionOutsidePeriod
     returnLog.matched = false
   })
-}
-
-module.exports = {
-  go
 }

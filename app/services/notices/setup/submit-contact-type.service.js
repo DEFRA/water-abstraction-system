@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/contact-type` page
  *
  * @module SubmitContactTypeService
  */
 
-const crypto = require('node:crypto')
+import crypto from 'node:crypto'
 
-const ContactTypePresenter = require('../../../presenters/notices/setup/contact-type.presenter.js')
-const ContactTypeValidator = require('../../../validators/notices/setup/contact-type.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
+import ContactTypePresenter from '../../../presenters/notices/setup/contact-type.presenter.js'
+import ContactTypeValidator from '../../../validators/notices/setup/contact-type.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/contact-type` page
@@ -23,8 +21,8 @@ const { flashNotification } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitContactTypeService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -39,7 +37,7 @@ async function go(sessionId, payload, yar) {
   session.contactType = payload?.contactType ?? null
   session.contactName = payload?.contactName ?? null
 
-  const pageData = ContactTypePresenter.go(session)
+  const pageData = ContactTypePresenter(session)
 
   return {
     activeNavBar: 'notices',
@@ -88,11 +86,7 @@ async function _save(session, payload, yar) {
 }
 
 function _validate(payload) {
-  const validationResult = ContactTypeValidator.go(payload)
+  const validationResult = ContactTypeValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

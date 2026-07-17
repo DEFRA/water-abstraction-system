@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/notices/setup/{sessionId}/licence` page
  * @module ViewLicenceService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import LicencePresenter from '../../../presenters/notices/setup/licence.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/notices/setup/{sessionId}/licence` page
@@ -18,17 +16,13 @@ const LicencePresenter = require('../../../presenters/notices/setup/licence.pres
  *
  * @returns {Promise<object>} The view data for the licence page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewLicenceService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = LicencePresenter.go(session)
+  const formattedData = LicencePresenter(session)
 
   return {
     activeNavBar: 'notices',
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

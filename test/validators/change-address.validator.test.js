@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ChangeAddressValidator = require('../../app/validators/change-address.validator.js')
+import ChangeAddressValidator from '../../app/validators/change-address.validator.js'
 
 describe('Create Bill Run validator', () => {
   const completeAddress = {
@@ -48,7 +49,7 @@ describe('Create Bill Run validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = ChangeAddressValidator.go(data)
+        const result = ChangeAddressValidator(data)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -65,7 +66,7 @@ describe('Create Bill Run validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = ChangeAddressValidator.go(data)
+        const result = ChangeAddressValidator(data)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -84,7 +85,7 @@ describe('Create Bill Run validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = ChangeAddressValidator.go(data)
+        const result = ChangeAddressValidator(data)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -103,7 +104,7 @@ describe('Create Bill Run validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = ChangeAddressValidator.go(data)
+        const result = ChangeAddressValidator(data)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -122,7 +123,7 @@ describe('Create Bill Run validator', () => {
       })
 
       it('returns an error', () => {
-        const result = ChangeAddressValidator.go(data)
+        const result = ChangeAddressValidator(data)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -146,7 +147,7 @@ describe('Create Bill Run validator', () => {
         })
 
         it('returns an error', () => {
-          const result = ChangeAddressValidator.go(data)
+          const result = ChangeAddressValidator(data)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -160,7 +161,7 @@ describe('Create Bill Run validator', () => {
         })
 
         it('returns an error', () => {
-          const result = ChangeAddressValidator.go(data)
+          const result = ChangeAddressValidator(data)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -187,7 +188,7 @@ describe('Create Bill Run validator', () => {
         })
 
         it('returns an error', () => {
-          const result = ChangeAddressValidator.go(data)
+          const result = ChangeAddressValidator(data)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -201,7 +202,7 @@ describe('Create Bill Run validator', () => {
         })
 
         it('returns an error', () => {
-          const result = ChangeAddressValidator.go(data)
+          const result = ChangeAddressValidator(data)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()

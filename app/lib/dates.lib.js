@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Date helper methods
  * @module DatesLib
@@ -24,7 +22,7 @@ const LAST_DAY_OF_FEB_LEAP_YEAR = 29
  *
  * @returns {number} -1 if dateA is before dateB, 1 if dateA is after dateB, 0 if they are the same date
  */
-function compareDates(dateA, dateB) {
+export function compareDates(dateA, dateB) {
   // Math.sign() clamps the result of the subtraction to a minimum of -1 and a maximum of 1
   return Math.sign(dateA - dateB)
 }
@@ -40,7 +38,7 @@ function compareDates(dateA, dateB) {
  *
  * @returns {object[]} An array of day objects, each containing startDate and endDate properties.
  */
-function daysFromPeriod(periodStartDate, periodEndDate) {
+export function daysFromPeriod(periodStartDate, periodEndDate) {
   const days = []
 
   // We have to clone the date, else as we increment in the loop we'd be incrementing the param passed in!
@@ -71,7 +69,7 @@ function daysFromPeriod(periodStartDate, periodEndDate) {
  *
  * @returns {number} The year in which the financial year ends
  */
-function determineFinancialYearEnd(date) {
+export function determineFinancialYearEnd(date) {
   let year = date.getFullYear()
 
   if (date.getMonth() >= APRIL) {
@@ -92,7 +90,7 @@ function determineFinancialYearEnd(date) {
  *
  * @returns {Date} The earliest date
  */
-function determineEarliestDate(dates) {
+export function determineEarliestDate(dates) {
   const allEmptyValuesRemoved = dates.filter(Boolean)
 
   if (allEmptyValuesRemoved.length === 0) {
@@ -114,7 +112,7 @@ function determineEarliestDate(dates) {
  *
  * @returns {Date} The latest date
  */
-function determineLatestDate(dates) {
+export function determineLatestDate(dates) {
   const allEmptyValuesRemoved = dates.filter(Boolean)
 
   if (allEmptyValuesRemoved.length === 0) {
@@ -140,7 +138,7 @@ function determineLatestDate(dates) {
  * @param {string} date - The date in the format 01/01/2001
  * @returns {string | null} - a date in the iso format 2001-01-01
  */
-function formatStandardDateToISO(date) {
+export function formatStandardDateToISO(date) {
   if (date === 'null' || date === null) {
     return null
   }
@@ -162,7 +160,7 @@ function formatStandardDateToISO(date) {
  * @param {Date | string } date - a date object to be formatted
  * @returns {Date | null} - the date formatted in YYYY-MM-DD.
  */
-function formatDateObjectToISO(date) {
+export function formatDateObjectToISO(date) {
   if (!date) {
     return null
   }
@@ -178,7 +176,7 @@ function formatDateObjectToISO(date) {
  * @param {dateString | undefined } dateString - The date in the iso format 2001-01-01
  * @returns {boolean}
  */
-function isValidDate(dateString) {
+export function isValidDate(dateString) {
   if (!dateString) {
     return false
   }
@@ -198,7 +196,7 @@ function isValidDate(dateString) {
  * @param {dateString} dateString - The date in the iso format 2001-01-01
  * @returns {boolean}
  */
-function isISODateFormat(dateString) {
+export function isISODateFormat(dateString) {
   const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/
 
   return isoDatePattern.test(dateString)
@@ -243,7 +241,7 @@ function _isLeapYear(year) {
  *
  * @returns {Date} The renewal notice start date
  */
-function renewalNoticeDate(expiryDate) {
+export function renewalNoticeDate(expiryDate) {
   const noticeDate = new Date(expiryDate)
 
   const nintyDays = 90
@@ -262,7 +260,7 @@ function renewalNoticeDate(expiryDate) {
  *
  * @returns {Date} The target expiry date
  */
-function renewalExpiryDate(days = 0) {
+export function renewalExpiryDate(days = 0) {
   const targetDate = new Date()
 
   targetDate.setDate(targetDate.getDate() + Number(days))
@@ -282,7 +280,7 @@ function renewalExpiryDate(days = 0) {
  *
  * @private
  */
-function isQuarterlyReturnSubmissions(date) {
+export function isQuarterlyReturnSubmissions(date) {
   return new Date(date).getTime() >= new Date('2025-04-01').getTime()
 }
 
@@ -299,7 +297,7 @@ function isQuarterlyReturnSubmissions(date) {
  * @returns {object[]} An array of month objects, each containing `startDate` and `endDate` properties representing full
  * months.
  */
-function monthsFromPeriod(periodStartDate, periodEndDate) {
+export function monthsFromPeriod(periodStartDate, periodEndDate) {
   const months = []
 
   // We have to clone the date, else as we increment in the loop we'd be incrementing the param passed in!
@@ -340,7 +338,7 @@ function monthsFromPeriod(periodStartDate, periodEndDate) {
  *
  * @returns {boolean} `true` if they are the same date, otherwise `false`
  */
-function sameDate(dateA, dateB) {
+export function sameDate(dateA, dateB) {
   return compareDates(dateA, dateB) === 0
 }
 
@@ -356,7 +354,7 @@ function sameDate(dateA, dateB) {
  *
  * @returns {object[]} An array of week objects, each containing startDate and endDate properties.
  */
-function weeksFromPeriod(periodStartDate, periodEndDate) {
+export function weeksFromPeriod(periodStartDate, periodEndDate) {
   const weeks = []
 
   // We have to clone the date, else as we increment in the loop we'd be incrementing the param passed in!
@@ -405,22 +403,4 @@ function _cloneDate(dateToClone) {
   const day = dateToClone.getDate()
 
   return new Date(`${year}-${month}-${day}`)
-}
-
-module.exports = {
-  compareDates,
-  daysFromPeriod,
-  determineFinancialYearEnd,
-  determineEarliestDate,
-  determineLatestDate,
-  formatDateObjectToISO,
-  formatStandardDateToISO,
-  isISODateFormat,
-  isQuarterlyReturnSubmissions,
-  isValidDate,
-  monthsFromPeriod,
-  renewalExpiryDate,
-  renewalNoticeDate,
-  sameDate,
-  weeksFromPeriod
 }

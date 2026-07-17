@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/companies/{id}/contacts' page
  * @module ContactsPresenter
  */
 
-const { formatContact } = require('../crm.presenter.js')
+import { formatContact } from '../crm.presenter.js'
 
 /**
  * Formats data for the '/companies/{id}/contacts' page
@@ -15,7 +13,7 @@ const { formatContact } = require('../crm.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, contacts) {
+export default function contactsPresenter(company, contacts) {
   return {
     backLink: {
       href: '/',
@@ -40,8 +38,4 @@ function _links(company) {
   return {
     createContact: `/system/company-contacts/setup/${company.id}`
   }
-}
-
-module.exports = {
-  go
 }

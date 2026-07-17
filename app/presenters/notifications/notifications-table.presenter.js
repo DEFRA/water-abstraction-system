@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats notifications data for display in communications tables on view licence communications and return log pages
  * @module NotificationsTablePresenter
  */
 
-const { formatLongDate, formatNoticeType, sentenceCase } = require('../base.presenter.js')
+import { formatLongDate, formatNoticeType, sentenceCase } from '../base.presenter.js'
 
 /**
  * Formats data for display in communications tables on view licence communications and return log pages
@@ -17,7 +15,7 @@ const { formatLongDate, formatNoticeType, sentenceCase } = require('../base.pres
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notifications, licenceId, returnLogId, companyContactId) {
+export default function notificationsTablePresenter(notifications, licenceId, returnLogId, companyContactId) {
   return notifications.map((notification) => {
     const { createdAt, event, messageType, status } = notification
     const sentDate = formatLongDate(createdAt)
@@ -61,8 +59,4 @@ function _queryParam(licenceId, returnLogId, companyContactId) {
   }
 
   return ''
-}
-
-module.exports = {
-  go
 }

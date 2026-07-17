@@ -1,16 +1,17 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
-const LicenceDocumentHeaderHelper = require('../../../support/helpers/licence-document-header.helper.js')
-const LicenceEntityHelper = require('../../../support/helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../../../support/helpers/licence-entity-role.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import CompanyHelper from '../../../support/helpers/company.helper.js'
+import LicenceDocumentHeaderHelper from '../../../support/helpers/licence-document-header.helper.js'
+import LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
+import LicenceEntityRoleHelper from '../../../support/helpers/licence-entity-role.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const FetchLicencesDal = require('../../../../app/dal/users/external/fetch-licences.dal.js')
+import FetchLicencesDal from '../../../../app/dal/users/external/fetch-licences.dal.js'
 
 describe('Users - External - Fetch Licences DAL', () => {
   let licenceData1
@@ -44,7 +45,7 @@ describe('Users - External - Fetch Licences DAL', () => {
 
   describe('when called', () => {
     it('returns the matching licences and the total', async () => {
-      const result = await FetchLicencesDal.go(userEntity.id)
+      const result = await FetchLicencesDal(userEntity.id)
 
       expect(result).toEqual({
         licences: [

@@ -1,13 +1,24 @@
-'use strict'
+import {
+  check,
+  noLicences,
+  region,
+  season,
+  setup,
+  submitCheck,
+  submitRegion,
+  submitSeason,
+  submitType,
+  submitYear,
+  type,
+  year
+} from '../controllers/bill-runs-setup.controller.js'
 
-const BillRunsSetupController = require('../controllers/bill-runs-setup.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/bill-runs/setup/{sessionId}/check',
     options: {
-      handler: BillRunsSetupController.check,
+      handler: check,
       auth: {
         access: {
           scope: ['billing']
@@ -19,7 +30,7 @@ const routes = [
     method: 'POST',
     path: '/bill-runs/setup/{sessionId}/check',
     options: {
-      handler: BillRunsSetupController.submitCheck,
+      handler: submitCheck,
       auth: {
         access: {
           scope: ['billing']
@@ -31,7 +42,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/setup/{sessionId}/no-licences',
     options: {
-      handler: BillRunsSetupController.noLicences,
+      handler: noLicences,
       auth: {
         access: {
           scope: ['billing']
@@ -43,7 +54,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/setup/{sessionId}/region',
     options: {
-      handler: BillRunsSetupController.region,
+      handler: region,
       auth: {
         access: {
           scope: ['billing']
@@ -55,7 +66,7 @@ const routes = [
     method: 'POST',
     path: '/bill-runs/setup/{sessionId}/region',
     options: {
-      handler: BillRunsSetupController.submitRegion,
+      handler: submitRegion,
       auth: {
         access: {
           scope: ['billing']
@@ -67,7 +78,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/setup/{sessionId}/season',
     options: {
-      handler: BillRunsSetupController.season,
+      handler: season,
       auth: {
         access: {
           scope: ['billing']
@@ -79,7 +90,7 @@ const routes = [
     method: 'POST',
     path: '/bill-runs/setup/{sessionId}/season',
     options: {
-      handler: BillRunsSetupController.submitSeason,
+      handler: submitSeason,
       auth: {
         access: {
           scope: ['billing']
@@ -91,7 +102,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/setup',
     options: {
-      handler: BillRunsSetupController.setup,
+      handler: setup,
       auth: {
         access: {
           scope: ['billing']
@@ -103,7 +114,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/setup/{sessionId}/type',
     options: {
-      handler: BillRunsSetupController.type,
+      handler: type,
       auth: {
         access: {
           scope: ['billing']
@@ -115,7 +126,7 @@ const routes = [
     method: 'POST',
     path: '/bill-runs/setup/{sessionId}/type',
     options: {
-      handler: BillRunsSetupController.submitType,
+      handler: submitType,
       auth: {
         access: {
           scope: ['billing']
@@ -127,7 +138,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/setup/{sessionId}/year',
     options: {
-      handler: BillRunsSetupController.year,
+      handler: year,
       auth: {
         access: {
           scope: ['billing']
@@ -139,7 +150,7 @@ const routes = [
     method: 'POST',
     path: '/bill-runs/setup/{sessionId}/year',
     options: {
-      handler: BillRunsSetupController.submitYear,
+      handler: submitYear,
       auth: {
         access: {
           scope: ['billing']
@@ -148,5 +159,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

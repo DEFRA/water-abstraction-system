@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const PrepareChargeVersionService = require('../../../../app/services/bill-runs/match/prepare-charge-version.service.js')
+import PrepareChargeVersionService from '../../../../app/services/bill-runs/match/prepare-charge-version.service.js'
 
 describe('Prepare Charge Version Service', () => {
   const billingPeriod = {
@@ -17,14 +18,14 @@ describe('Prepare Charge Version Service', () => {
     })
 
     it('sorts the charge references by their subsistence charge', async () => {
-      await PrepareChargeVersionService.go(chargeVersion, billingPeriod)
+      await PrepareChargeVersionService(chargeVersion, billingPeriod)
 
       expect(chargeVersion.chargeReferences[0].chargeCategory.subsistenceCharge).toEqual(70000)
       expect(chargeVersion.chargeReferences[1].chargeCategory.subsistenceCharge).toEqual(68400)
     })
 
     it('preps the charge elements correctly', async () => {
-      await PrepareChargeVersionService.go(chargeVersion, billingPeriod)
+      await PrepareChargeVersionService(chargeVersion, billingPeriod)
 
       expect(chargeVersion.chargeReferences[0].chargeElements[0]).toEqual({
         id: '8eac5976-d16c-4818-8bc8-384d958ce863',

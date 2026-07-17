@@ -1,13 +1,11 @@
-'use strict'
+import { placeholder } from '../controllers/check.controller.js'
 
-const CheckController = require('../controllers/check.controller.js')
-
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/check/placeholder',
     options: {
-      handler: CheckController.placeholder,
+      handler: placeholder,
       app: {
         excludeFromProd: true,
         plainOutput: true
@@ -19,5 +17,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

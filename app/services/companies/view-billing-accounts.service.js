@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/billing-accounts' page
  *
  * @module ViewBillingAccountsService
  */
 
-const BillingAccountsPresenter = require('../../presenters/companies/billing-accounts.presenter.js')
-const FetchBillingAccountsDal = require('../../dal/companies/fetch-billing-accounts.dal.js')
-const FetchCompanyDal = require('../../dal/companies/fetch-company.dal.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import BillingAccountsPresenter from '../../presenters/companies/billing-accounts.presenter.js'
+import FetchBillingAccountsDal from '../../dal/companies/fetch-billing-accounts.dal.js'
+import FetchCompanyDal from '../../dal/companies/fetch-company.dal.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/billing-accounts' page
@@ -21,14 +19,14 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(companyId, auth, page) {
-  const company = await FetchCompanyDal.go(companyId)
+export default async function viewBillingAccountsService(companyId, auth, page) {
+  const company = await FetchCompanyDal(companyId)
 
-  const { billingAccounts, totalNumber } = await FetchBillingAccountsDal.go(companyId, page)
+  const { billingAccounts, totalNumber } = await FetchBillingAccountsDal(companyId, page)
 
-  const pageData = BillingAccountsPresenter.go(company, billingAccounts)
+  const pageData = BillingAccountsPresenter(company, billingAccounts)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/companies/${companyId}/billing-accounts`,
@@ -42,8 +40,4 @@ async function go(companyId, auth, page) {
     pagination,
     roles: userRoles(auth)
   }
-}
-
-module.exports = {
-  go
 }

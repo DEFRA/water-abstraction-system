@@ -1,30 +1,25 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
+import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
+import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
-const CheckNotificationStatusService = require('../../../../app/services/notifications/check-notification-status.service.js')
-const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const SendAlternateNoticesService = require('../../../../app/services/jobs/notification-status/send-alternate-notices.service.js')
-const UpdateNoticeService = require('../../../../app/services/notices/update-notice.service.js')
+import * as CheckNotificationStatusService from '../../../../app/services/notifications/check-notification-status.service.js'
+import * as FetchNotificationsService from '../../../../app/services/jobs/notification-status/fetch-notifications.service.js'
+import * as SendAlternateNoticesService from '../../../../app/services/jobs/notification-status/send-alternate-notices.service.js'
+import * as UpdateNoticeService from '../../../../app/services/notices/update-notice.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ProcessNotificationStatusService = require('../../../../app/services/jobs/notification-status/process-notification-status.service.js')
+import ProcessNotificationStatusService from '../../../../app/services/jobs/notification-status/process-notification-status.service.js'
 
 describe('Job - Notifications - Process Notification Status service', () => {
   let noticeA
   let noticeB
   let notifications
   let notifierStub
-  let sendAlternateNoticesStub
-  let updateEventStub
-
   beforeEach(async () => {
     notifications = []
 
@@ -47,48 +42,48 @@ describe('Job - Notifications - Process Notification Status service', () => {
     notification = NotificationsFixture.abstractionAlertEmail(noticeB)
     notifications.push(_transformNotificationToResult(notification))
 
-    Sinon.stub(FetchNotificationsService, 'go').resolves(notifications)
+    vi.spyOn(FetchNotificationsService, 'default').mockResolvedValue(notifications)
 
-    updateEventStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
-    sendAlternateNoticesStub = Sinon.stub(SendAlternateNoticesService, 'go').resolves()
+    vi.spyOn(UpdateNoticeService, 'default').mockResolvedValue()
+    vi.spyOn(SendAlternateNoticesService, 'default').mockResolvedValue()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when the notification status check does not error', () => {
     beforeEach(() => {
-      Sinon.stub(CheckNotificationStatusService, 'go').resolves()
+      vi.spyOn(CheckNotificationStatusService, 'default').mockResolvedValue()
     })
 
     it('updates the linked notices overall status and counts', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
-      expect(updateEventStub.called).toBe(true)
-      expect(updateEventStub.firstCall.args[0]).toEqual([noticeA.id, noticeB.id])
+      expect(UpdateNoticeService.default).toHaveBeenCalled()
+      expect(UpdateNoticeService.default.mock.calls[0][0]).toEqual([noticeA.id, noticeB.id])
     })
 
     it('checks whether any alternate notices need to be sent', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
-      expect(sendAlternateNoticesStub.called).toBe(true)
-      expect(sendAlternateNoticesStub.firstCall.args[0]).toEqual(notifications)
+      expect(SendAlternateNoticesService.default).toHaveBeenCalled()
+      expect(SendAlternateNoticesService.default.mock.calls[0][0]).toEqual(notifications)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Notification status job complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Notification status job complete', expect.any(Object))
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.count).toEqual(3)
@@ -97,19 +92,19 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
   describe('when the notification status check errors', () => {
     beforeEach(() => {
-      Sinon.stub(CheckNotificationStatusService, 'go').rejects()
+      vi.spyOn(CheckNotificationStatusService, 'default').mockRejectedValue(new Error())
     })
 
     it('does not update the linked notices', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
-      expect(updateEventStub.called).toBe(false)
+      expect(UpdateNoticeService.default).not.toHaveBeenCalled()
     })
 
     it('records the error by calling "omfg()"', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = notifierStub.omfg.mock.calls[0]
 
       expect(args[0]).toEqual('Notification status job failed')
       expect(args[1]).toBeNull()
@@ -117,15 +112,15 @@ describe('Job - Notifications - Process Notification Status service', () => {
     })
 
     it('notifies the team by calling "redAlert()"', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
-      const args = notifierStub.redAlert.firstCall.args
+      const args = notifierStub.redAlert.mock.calls[0]
 
       expect(args[0]).toEqual('Notification status job failed')
     })
 
     it('does not throw an error', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
     })
   })
 })

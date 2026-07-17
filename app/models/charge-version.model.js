@@ -1,15 +1,21 @@
-'use strict'
-
 /**
  * Model for charge_versions (water.charge_versions)
  * @module ChargeVersionModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import BillRunChargeVersionYearModel from './bill-run-charge-version-year.model.js'
+import BillingAccountModel from './billing-account.model.js'
+import ChangeReasonModel from './change-reason.model.js'
+import ChargeReferenceModel from './charge-reference.model.js'
+import ChargeVersionNoteModel from './charge-version-note.model.js'
+import LicenceModel from './licence.model.js'
+import ModLogModel from './mod-log.model.js'
+import ReviewChargeVersionModel from './review-charge-version.model.js'
 
-class ChargeVersionModel extends BaseModel {
+export default class ChargeVersionModel extends BaseModel {
   static get tableName() {
     return 'chargeVersions'
   }
@@ -23,7 +29,7 @@ class ChargeVersionModel extends BaseModel {
     return {
       billingAccount: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'billing-account.model',
+        modelClass: BillingAccountModel,
         join: {
           from: 'chargeVersions.billingAccountId',
           to: 'billingAccounts.id'
@@ -31,7 +37,7 @@ class ChargeVersionModel extends BaseModel {
       },
       billRunChargeVersionYears: {
         relation: Model.HasManyRelation,
-        modelClass: 'bill-run-charge-version-year.model',
+        modelClass: BillRunChargeVersionYearModel,
         join: {
           from: 'chargeVersions.id',
           to: 'billRunChargeVersionYears.chargeVersionId'
@@ -39,7 +45,7 @@ class ChargeVersionModel extends BaseModel {
       },
       changeReason: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'change-reason.model',
+        modelClass: ChangeReasonModel,
         join: {
           from: 'chargeVersions.changeReasonId',
           to: 'changeReasons.id'
@@ -47,7 +53,7 @@ class ChargeVersionModel extends BaseModel {
       },
       chargeReferences: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-reference.model',
+        modelClass: ChargeReferenceModel,
         join: {
           from: 'chargeVersions.id',
           to: 'chargeReferences.chargeVersionId'
@@ -55,7 +61,7 @@ class ChargeVersionModel extends BaseModel {
       },
       chargeVersionNote: {
         relation: Model.HasOneRelation,
-        modelClass: 'charge-version-note.model',
+        modelClass: ChargeVersionNoteModel,
         join: {
           from: 'chargeVersions.noteId',
           to: 'chargeVersionNotes.id'
@@ -63,7 +69,7 @@ class ChargeVersionModel extends BaseModel {
       },
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'chargeVersions.licenceId',
           to: 'licences.id'
@@ -71,7 +77,7 @@ class ChargeVersionModel extends BaseModel {
       },
       modLogs: {
         relation: Model.HasManyRelation,
-        modelClass: 'mod-log.model',
+        modelClass: ModLogModel,
         join: {
           from: 'chargeVersions.id',
           to: 'modLogs.chargeVersionId'
@@ -79,7 +85,7 @@ class ChargeVersionModel extends BaseModel {
       },
       reviewChargeVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-charge-version.model',
+        modelClass: ReviewChargeVersionModel,
         join: {
           from: 'chargeVersions.id',
           to: 'reviewChargeVersions.chargeVersionId'
@@ -263,5 +269,3 @@ class ChargeVersionModel extends BaseModel {
     return null
   }
 }
-
-module.exports = ChargeVersionModel

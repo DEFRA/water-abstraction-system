@@ -1,32 +1,27 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const FetchTableService = require('../../../../app/services/jobs/export/fetch-table.service.js')
-const WriteTableToFileService = require('../../../../app/services/jobs/export/write-table-to-file.service.js')
+import * as FetchTableService from '../../../../app/services/jobs/export/fetch-table.service.js'
+import * as WriteTableToFileService from '../../../../app/services/jobs/export/write-table-to-file.service.js'
 
 // Thing under test
-const ExportTableService = require('../../../../app/services/jobs/export/export-table.service.js')
+import ExportTableService from '../../../../app/services/jobs/export/export-table.service.js'
 
 describe('Table Export service', () => {
-  let fetchTableServiceStub
-  let writeTableToFileServiceStub
-
   beforeEach(async () => {
-    fetchTableServiceStub = Sinon.stub(FetchTableService, 'go').resolves({ headers: [], rows: [] })
-    writeTableToFileServiceStub = Sinon.stub(WriteTableToFileService, 'go').resolves()
+    vi.spyOn(FetchTableService, 'default').mockResolvedValue({ headers: [], rows: [] })
+    vi.spyOn(WriteTableToFileService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('runs the db export services', async () => {
-    await ExportTableService.go()
+    await ExportTableService()
 
-    expect(writeTableToFileServiceStub.called).toBe(true)
-    expect(fetchTableServiceStub.called).toBe(true)
+    expect(WriteTableToFileService.default).toHaveBeenCalled()
+    expect(FetchTableService.default).toHaveBeenCalled()
   })
 })

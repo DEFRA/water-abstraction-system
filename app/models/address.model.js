@@ -1,15 +1,17 @@
-'use strict'
-
 /**
  * Model for addresses (crm_v2.addresses)
  * @module AddressModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import BillingAccountAddressModel from './billing-account-address.model.js'
+import CompanyAddressModel from './company-address.model.js'
+import LicenceDocumentRoleModel from './licence-document-role.model.js'
+import LicenceVersionModel from './licence-version.model.js'
 
-class AddressModel extends BaseModel {
+export default class AddressModel extends BaseModel {
   static get tableName() {
     return 'addresses'
   }
@@ -18,7 +20,7 @@ class AddressModel extends BaseModel {
     return {
       billingAccountAddresses: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing-account-address.model',
+        modelClass: BillingAccountAddressModel,
         join: {
           from: 'addresses.id',
           to: 'billingAccountAddresses.addressId'
@@ -26,7 +28,7 @@ class AddressModel extends BaseModel {
       },
       companyAddresses: {
         relation: Model.HasManyRelation,
-        modelClass: 'company-address.model',
+        modelClass: CompanyAddressModel,
         join: {
           from: 'addresses.id',
           to: 'companyAddresses.addressId'
@@ -34,7 +36,7 @@ class AddressModel extends BaseModel {
       },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-document-role.model',
+        modelClass: LicenceDocumentRoleModel,
         join: {
           from: 'addresses.id',
           to: 'licenceDocumentRoles.addressId'
@@ -42,7 +44,7 @@ class AddressModel extends BaseModel {
       },
       licenceVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-version.model',
+        modelClass: LicenceVersionModel,
         join: {
           from: 'addresses.id',
           to: 'licenceVersions.addressId'
@@ -51,5 +53,3 @@ class AddressModel extends BaseModel {
     }
   }
 }
-
-module.exports = AddressModel

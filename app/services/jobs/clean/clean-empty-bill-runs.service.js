@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Deletes empty bill runs
  * @module CleanEmptyBillRunsService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const CancelBillBunService = require('../../bill-runs/cancel/cancel-bill-run.service.js')
-const DeleteBillRunService = require('../../bill-runs/cancel/delete-bill-run.service.js')
-const UnassignBillRunToLicencesService = require('../../bill-runs/unassign-bill-run-to-licences.service.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import CancelBillBunService from '../../bill-runs/cancel/cancel-bill-run.service.js'
+import DeleteBillRunService from '../../bill-runs/cancel/delete-bill-run.service.js'
+import UnassignBillRunToLicencesService from '../../bill-runs/unassign-bill-run-to-licences.service.js'
 
 /**
  * Deletes empty bill runs
@@ -23,7 +21,7 @@ const UnassignBillRunToLicencesService = require('../../bill-runs/unassign-bill-
  *
  * @returns {Promise<number>} The number of rows deleted
  */
-async function go() {
+export default async function cleanEmptyBillRunsService() {
   let billRunId
   let deletedCount = 0
 
@@ -46,22 +44,18 @@ async function go() {
 }
 
 async function _deleteEmptyBillRun(billRunId) {
-  const billRun = await CancelBillBunService.go(billRunId)
+  const billRun = await CancelBillBunService(billRunId)
 
   if (billRun.status !== 'cancel') {
     return false
   }
 
-  await UnassignBillRunToLicencesService.go(billRun.id)
-  await DeleteBillRunService.go(billRun)
+  await UnassignBillRunToLicencesService(billRun.id)
+  await DeleteBillRunService(billRun)
 
   return true
 }
 
 async function _fetch() {
   return BillRunModel.query().select(['id']).where('status', 'empty')
-}
-
-module.exports = {
-  go
 }

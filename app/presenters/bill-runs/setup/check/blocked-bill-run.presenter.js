@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page when the bill run is blocked from creation
  * @module BlockedBillRunPresenter
  */
 
-const { formatLongDate } = require('../../../base.presenter.js')
-const { checkPageBackLink } = require('./base-check.presenter.js')
-const { formatBillRunType, formatChargeScheme } = require('../../../billing.presenter.js')
+import { checkPageBackLink } from './base-check.presenter.js'
+import { formatLongDate } from '../../../base.presenter.js'
+import { formatBillRunType, formatChargeScheme } from '../../../billing.presenter.js'
 
 const LAST_PRESROC_YEAR = 2022
 
@@ -19,7 +17,7 @@ const LAST_PRESROC_YEAR = 2022
  *
  * @returns {object} - The data formatted for the /check view template
  */
-function go(session, blockingResults) {
+export default function blockedBillRunPresenter(session, blockingResults) {
   const { id: sessionId, regionName } = session
 
   const { matches, toFinancialYearEnding } = blockingResults
@@ -80,8 +78,4 @@ function _messages(firstMatch, billRunType) {
     title: 'This bill run already exists',
     warning: `You can only have one ${billRunType} bill run per region in a financial year`
   }
-}
-
-module.exports = {
-  go
 }

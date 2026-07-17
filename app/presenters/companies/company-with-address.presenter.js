@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/companies/{id}/address/{addressId}/{role}' page
  * @module CompanyPresenter
  */
 
-const { roles } = require('../../lib/static-lookups.lib.js')
+import { roles } from '../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the '/companies/{id}/address/{addressId}/{role}' page
@@ -17,7 +15,7 @@ const { roles } = require('../../lib/static-lookups.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, address, role, licenceId) {
+export default function companyWithAddressPresenter(company, address, role, licenceId) {
   const { id: companyId, name: companyName } = company
 
   return {
@@ -56,8 +54,4 @@ function _formatCompanyAddress(address) {
     address.postcode,
     address.country
   ].filter(Boolean)
-}
-
-module.exports = {
-  go
 }

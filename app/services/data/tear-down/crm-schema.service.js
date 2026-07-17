@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Removes all data created for acceptance tests from the crm and crm_v2 schemas
  * @module CrmV2SchemaService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Removes all data created for acceptance tests from the crm schema
  *
  * @returns {Promise<object>}
  */
-async function go() {
+export default async function crmSchemaService() {
   return _deleteAllTestData()
 }
 
@@ -170,8 +168,4 @@ async function _deleteAllTestData() {
   ALTER TABLE crm_v2.invoice_accounts ENABLE TRIGGER ALL;
   ALTER TABLE crm_v2.invoice_account_addresses ENABLE TRIGGER ALL;
   `)
-}
-
-module.exports = {
-  go
 }

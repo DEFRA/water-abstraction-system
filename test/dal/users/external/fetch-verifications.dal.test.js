@@ -1,19 +1,20 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
-const LicenceDocumentHeaderHelper = require('../../../support/helpers/licence-document-header.helper.js')
-const LicenceEntityHelper = require('../../../support/helpers/licence-entity.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const UserHelper = require('../../../support/helpers/user.helper.js')
-const UserVerificationHelper = require('../../../support/helpers/user-verification.helper.js')
-const UserVerificationDocumentHelper = require('../../../support/helpers/user-verification-document.helper.js')
-const { today } = require('../../../../app/lib/general.lib.js')
-const { yesterday } = require('../../../support/general.js')
+import CompanyHelper from '../../../support/helpers/company.helper.js'
+import LicenceDocumentHeaderHelper from '../../../support/helpers/licence-document-header.helper.js'
+import LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import UserHelper from '../../../support/helpers/user.helper.js'
+import UserVerificationDocumentHelper from '../../../support/helpers/user-verification-document.helper.js'
+import UserVerificationHelper from '../../../support/helpers/user-verification.helper.js'
+import { today } from '../../../../app/lib/general.lib.js'
+import { yesterday } from '../../../support/general.js'
 
 // Thing under test
-const FetchVerificationsDal = require('../../../../app/dal/users/external/fetch-verifications.dal.js')
+import FetchVerificationsDal from '../../../../app/dal/users/external/fetch-verifications.dal.js'
 
 describe('Users - External - Fetch Verifications DAL', () => {
   let licenceData1
@@ -75,7 +76,7 @@ describe('Users - External - Fetch Verifications DAL', () => {
 
   describe('when the user has verifications', () => {
     it('returns the matching verifications and the total', async () => {
-      const result = await FetchVerificationsDal.go(user.licenceEntityId)
+      const result = await FetchVerificationsDal(user.licenceEntityId)
 
       expect(result).toEqual({
         totalNumber: 3,
@@ -199,7 +200,7 @@ describe('Users - External - Fetch Verifications DAL', () => {
 
   describe('when the user has no verifications', () => {
     it('returns an empty array and zero', async () => {
-      const result = await FetchVerificationsDal.go('c02ac8b8-e5d4-41f3-b3df-3a370c95ff0a')
+      const result = await FetchVerificationsDal('c02ac8b8-e5d4-41f3-b3df-3a370c95ff0a')
 
       expect(result).toEqual({ verifications: [], totalNumber: 0 })
     })

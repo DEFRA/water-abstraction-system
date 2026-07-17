@@ -1,18 +1,18 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
-const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const PointHelper = require('../../support/helpers/point.helper.js')
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
+import NotificationHelper from '../../support/helpers/notification.helper.js'
+import { generateNationalGridReference, generateRandomInteger } from '../../support/generators.js'
 
 // Thing under test
-const FetchMonitoringStationDetailsDal = require('../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
+import FetchMonitoringStationDetailsDal from '../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
   let monitoringStation
@@ -26,7 +26,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
   describe('when a matching monitoring station exists', () => {
     beforeEach(async () => {
       monitoringStation = await MonitoringStationHelper.add({
-        gridReference: PointHelper.generateNationalGridReference(),
+        gridReference: generateNationalGridReference(),
         label: 'GROSSE POINT BLANK'
       })
     })
@@ -93,7 +93,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
       })
 
       it('returns the matching monitoring station with its licence monitoring stations correctly ordered', async () => {
-        const result = await FetchMonitoringStationDetailsDal.go(monitoringStation.id)
+        const result = await FetchMonitoringStationDetailsDal(monitoringStation.id)
 
         expect(result.monitoringStation).toEqual({
           catchmentName: null,
@@ -179,7 +179,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
 
     describe('but it has no tagged licences with restrictions', () => {
       it('returns the matching monitoring station with no licence monitoring stations', async () => {
-        const result = await FetchMonitoringStationDetailsDal.go(monitoringStation.id)
+        const result = await FetchMonitoringStationDetailsDal(monitoringStation.id)
 
         expect(result.monitoringStation).toEqual({
           catchmentName: null,
@@ -198,7 +198,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
 
   describe('when no matching monitoring station exists', () => {
     it('returns empty values', async () => {
-      const result = await FetchMonitoringStationDetailsDal.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchMonitoringStationDetailsDal('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result.monitoringStation).toBeUndefined()
       expect(result.licenceMonitoringStations).toEqual([])

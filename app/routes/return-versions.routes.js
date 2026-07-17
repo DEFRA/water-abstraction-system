@@ -1,13 +1,11 @@
-'use strict'
+import { view } from '../controllers/return-versions.controller.js'
 
-const ReturnVersionsController = require('../controllers/return-versions.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/return-versions/{id}',
     options: {
-      handler: ReturnVersionsController.view,
+      handler: view,
       auth: {
         access: {
           scope: ['view_charge_versions']
@@ -16,5 +14,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

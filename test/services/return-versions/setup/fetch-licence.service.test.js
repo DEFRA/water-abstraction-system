@@ -1,15 +1,16 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const ModLogHelper = require('../../../support/helpers/mod-log.helper.js')
-const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
-const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
+import CompanyHelper from '../../../support/helpers/company.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import ModLogHelper from '../../../support/helpers/mod-log.helper.js'
+import ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
+import ReturnVersionHelper from '../../../support/helpers/return-version.helper.js'
 
 // Thing under test
-const FetchLicenceService = require('../../../../app/services/return-versions/setup/fetch-licence.service.js')
+import FetchLicenceService from '../../../../app/services/return-versions/setup/fetch-licence.service.js'
 
 describe('Return Versions - Setup - Fetch Licence service', () => {
   let company
@@ -101,7 +102,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
 
   describe('when the matching licence exists', () => {
     it('returns the matching licence and associated records', async () => {
-      const result = await FetchLicenceService.go(licence.id)
+      const result = await FetchLicenceService(licence.id)
 
       expect(result).toEqual({
         id: licence.id,
@@ -143,7 +144,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
 
     describe('and the associated data records', () => {
       it('includes only the "current" licence version', async () => {
-        const result = await FetchLicenceService.go(licence.id)
+        const result = await FetchLicenceService(licence.id)
 
         const resultLicenceVersionIds = result.licenceVersions.map((licenceVersion) => {
           return licenceVersion.id
@@ -153,7 +154,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
       })
 
       it('includes only return versions that can be copied from', async () => {
-        const result = await FetchLicenceService.go(licence.id)
+        const result = await FetchLicenceService(licence.id)
 
         const resultReturnVersionIds = result.returnVersions.map((returnVersion) => {
           return returnVersion.id
@@ -166,7 +167,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
 
   describe('when the matching licence does not exist', () => {
     it('returns undefined', async () => {
-      const result = await FetchLicenceService.go('7f665e1b-a2cf-4241-9dc9-9351edc16533')
+      const result = await FetchLicenceService('7f665e1b-a2cf-4241-9dc9-9351edc16533')
 
       expect(result).toBeUndefined()
     })

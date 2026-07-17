@@ -1,20 +1,18 @@
-'use strict'
-
 /**
  * Creates a Redis client
  * @module CreateRedisClient
  */
 
-const Redis = require('ioredis')
+import Redis from 'ioredis'
 
-const redisConfig = require('../../../config/redis.config.js')
+import redisConfig from '../../../config/redis.config.js'
 
 /**
  * Connect to Redis and return a client
  *
  * @returns {Promise<Redis>} - a new redis instance
  */
-async function go() {
+export default async function createRedisClientService() {
   return new Redis({
     host: redisConfig.host,
     port: redisConfig.port,
@@ -26,8 +24,4 @@ async function go() {
     // Don't attempt to retry a request to Redis if a command fails
     maxRetriesPerRequest: 0
   })
-}
-
-module.exports = {
-  go
 }

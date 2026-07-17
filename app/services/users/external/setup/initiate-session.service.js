@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Initiates the session record used for unlinking licences from an external user account
  * @module InitiateSessionService
  */
 
-const CreateSessionDal = require('../../../../dal/create-session.dal.js')
-const FetchLicencesDal = require('../../../../dal/users/external/setup/fetch-licences.dal.js')
-const FetchUserDal = require('../../../../dal/users/fetch-user.dal.js')
+import CreateSessionDal from '../../../../dal/create-session.dal.js'
+import FetchLicencesDal from '../../../../dal/users/external/setup/fetch-licences.dal.js'
+import FetchUserDal from '../../../../dal/users/fetch-user.dal.js'
 
 /**
  * Initiates the session record used for unlinking licences from an external user account
@@ -25,18 +23,14 @@ const FetchUserDal = require('../../../../dal/users/fetch-user.dal.js')
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(id, back) {
-  const user = await FetchUserDal.go(id)
+export default async function initiateSessionService(id, back) {
+  const user = await FetchUserDal(id)
 
-  const licences = await FetchLicencesDal.go(user.licenceEntityId)
+  const licences = await FetchLicencesDal(user.licenceEntityId)
 
   const activeNavBar = back === 'users' ? 'users' : 'search'
 
   const data = { activeNavBar, licences, selectedLicences: [], user }
 
-  return CreateSessionDal.go(data)
-}
-
-module.exports = {
-  go
+  return CreateSessionDal(data)
 }

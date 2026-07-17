@@ -1,6 +1,4 @@
-'use strict'
-
-const { titleCase } = require('./base.presenter.js')
+import { titleCase } from './base.presenter.js'
 
 /**
  * Formats how the bill run type for display in views
@@ -11,7 +9,7 @@ const { titleCase } = require('./base.presenter.js')
  *
  * @returns {string} The bill run type formatted for display
  */
-function formatBillRunType(batchType, scheme, summer) {
+export function formatBillRunType(batchType, scheme, summer) {
   if (!['two_part_tariff', 'two_part_supplementary'].includes(batchType)) {
     return titleCase(batchType)
   }
@@ -38,7 +36,7 @@ function formatBillRunType(batchType, scheme, summer) {
  *
  * @returns {string} The scheme formatted for display
  */
-function formatChargeScheme(scheme) {
+export function formatChargeScheme(scheme) {
   if (scheme === 'sroc') {
     return 'Current'
   }
@@ -60,7 +58,7 @@ function formatChargeScheme(scheme) {
  *
  * @returns `true` if both credit and debit totals should be displayed, else `false`
  */
-function displayCreditDebitTotals(batchType) {
+export function displayCreditDebitTotals(batchType) {
   return ['supplementary', 'two_part_supplementary'].includes(batchType)
 }
 
@@ -78,15 +76,8 @@ function displayCreditDebitTotals(batchType) {
  *
  * @returns The bill run title to use in bill run pages
  */
-function generateBillRunTitle(regionName, batchType, scheme, summer) {
+export function generateBillRunTitle(regionName, batchType, scheme, summer) {
   const billRunType = formatBillRunType(batchType, scheme, summer)
 
   return `${titleCase(regionName)} ${billRunType.toLowerCase()}`
-}
-
-module.exports = {
-  formatBillRunType,
-  formatChargeScheme,
-  displayCreditDebitTotals,
-  generateBillRunTitle
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  * @module CheckLicenceMatchesPresenter
  */
 
-const DetermineRelevantLicenceMonitoringStationsService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
-const { determineRestrictionHeading, formatRestrictions } = require('../../../monitoring-stations/base.presenter.js')
+import DetermineRelevantLicenceMonitoringStationsService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js'
+import { determineRestrictionHeading, formatRestrictions } from '../../../monitoring-stations/base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
@@ -15,7 +13,7 @@ const { determineRestrictionHeading, formatRestrictions } = require('../../../mo
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function checkLicenceMatchesPresenter(session) {
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(session)
 
   return {
@@ -38,7 +36,7 @@ function _action(sessionId, licenceMonitoringStation) {
 function _relevantLicenceMonitoringStations(session) {
   const { alertThresholds, alertType, licenceMonitoringStations, removedThresholds } = session
 
-  return DetermineRelevantLicenceMonitoringStationsService.go(
+  return DetermineRelevantLicenceMonitoringStationsService(
     licenceMonitoringStations,
     alertThresholds,
     removedThresholds,
@@ -60,8 +58,4 @@ function _restrictions(relevantLicenceMonitoringStations, sessionId) {
   })
 
   return formatRestrictions(preparedLicenceMonitoringStations)
-}
-
-module.exports = {
-  go
 }

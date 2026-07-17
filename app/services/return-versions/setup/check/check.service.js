@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/check` page
  * @module CheckService
  */
 
-const CheckPresenter = require('../../../../presenters/return-versions/setup/check/check.presenter.js')
-const FetchPointsService = require('../fetch-points.service.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const ReturnRequirementsPresenter = require('../../../../presenters/return-versions/setup/check/returns-requirements.presenter.js')
-const { readFlashNotification } = require('../../../../lib/general.lib.js')
+import CheckPresenter from '../../../../presenters/return-versions/setup/check/check.presenter.js'
+import FetchPointsService from '../fetch-points.service.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import ReturnRequirementsPresenter from '../../../../presenters/return-versions/setup/check/returns-requirements.presenter.js'
+import { readFlashNotification } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/check` page
@@ -19,14 +17,14 @@ const { readFlashNotification } = require('../../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go(sessionId, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function checkService(sessionId, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   await _markCheckPageVisited(session)
 
   const returnRequirements = await _returnRequirements(session)
 
-  const formattedData = CheckPresenter.go(session)
+  const formattedData = CheckPresenter(session)
 
   const notification = readFlashNotification(yar)
 
@@ -46,11 +44,7 @@ async function _markCheckPageVisited(session) {
 async function _returnRequirements(session) {
   const { licenceVersion, requirements, journey } = session
 
-  const points = await FetchPointsService.go(licenceVersion.id)
+  const points = await FetchPointsService(licenceVersion.id)
 
-  return ReturnRequirementsPresenter.go(requirements, points, journey)
-}
-
-module.exports = {
-  go
+  return ReturnRequirementsPresenter(requirements, points, journey)
 }

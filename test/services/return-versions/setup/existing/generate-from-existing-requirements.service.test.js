@@ -1,13 +1,11 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const FetchExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
+import * as FetchExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js'
 
 // Thing under test
-const GenerateFromExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js')
+import GenerateFromExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js'
 
 describe('Return Versions Setup - Generate From Existing Requirements service', () => {
   const returnVersionId = '7af310df-8bd1-476e-8476-eac7ce4153e9'
@@ -15,7 +13,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
   let fetchResult
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a matching return version exists', () => {
@@ -23,11 +21,11 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       beforeEach(() => {
         fetchResult = _fetchResult(returnVersionId)
 
-        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
+        vi.spyOn(FetchExistingRequirementsService, 'default').mockResolvedValue(fetchResult)
       })
 
       it('returns the saved value', async () => {
-        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
+        const result = await GenerateFromExistingRequirementsService(returnVersionId)
 
         expect(result.multipleUpload).toBe(false)
       })
@@ -37,11 +35,11 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       beforeEach(() => {
         fetchResult = _fetchResult(returnVersionId)
 
-        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
+        vi.spyOn(FetchExistingRequirementsService, 'default').mockResolvedValue(fetchResult)
       })
 
       it('returns the saved value', async () => {
-        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
+        const result = await GenerateFromExistingRequirementsService(returnVersionId)
 
         expect(result.quarterlyReturns).toBe(false)
       })
@@ -51,11 +49,11 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       beforeEach(() => {
         fetchResult = _fetchResult(returnVersionId)
 
-        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
+        vi.spyOn(FetchExistingRequirementsService, 'default').mockResolvedValue(fetchResult)
       })
 
       it('returns the details of its return requirements transformed for use in the journey', async () => {
-        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
+        const result = await GenerateFromExistingRequirementsService(returnVersionId)
 
         expect(result.requirements).toEqual([
           {
@@ -114,11 +112,11 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
         fetchResult = _fetchResult()
         fetchResult.returnRequirements[1].siteDescription = null
 
-        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
+        vi.spyOn(FetchExistingRequirementsService, 'default').mockResolvedValue(fetchResult)
       })
 
       it('returns the details of its return requirements transformed, falling back to point description for the missing site description', async () => {
-        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
+        const result = await GenerateFromExistingRequirementsService(returnVersionId)
 
         expect(result.requirements).toEqual([
           {
@@ -175,7 +173,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
 
   describe('when a matching return version does not exist', () => {
     it('throws an error', async () => {
-      await expect(GenerateFromExistingRequirementsService.go('6d436e7b-c3c9-493c-97f3-b397c899c926')).rejects.toThrow()
+      await expect(GenerateFromExistingRequirementsService('6d436e7b-c3c9-493c-97f3-b397c899c926')).rejects.toThrow()
     })
   })
 })

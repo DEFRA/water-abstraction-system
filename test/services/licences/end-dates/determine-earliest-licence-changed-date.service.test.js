@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const DetermineEarliestLicenceChangedDateService = require('../../../../app/services/licences/end-dates/determine-earliest-licence-changed-date.service.js')
+import DetermineEarliestLicenceChangedDateService from '../../../../app/services/licences/end-dates/determine-earliest-licence-changed-date.service.js'
 
 describe('Licences - End Dates - Determine Earliest Licence Changed Date service', () => {
   let licence
@@ -26,9 +27,9 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
     })
 
     it('returns null', async () => {
-      const result = await DetermineEarliestLicenceChangedDateService.go(licence)
+      const result = await DetermineEarliestLicenceChangedDateService(licence)
 
-      expect(result).toEqual(null)
+      expect(result).toBeNull()
     })
   })
 
@@ -40,7 +41,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the NALD date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.nald_expired_date,
@@ -58,7 +59,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the WRLS date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.wrls_expired_date,
@@ -76,7 +77,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the NALD date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.nald_expired_date,
@@ -94,7 +95,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the WRLS date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.wrls_expired_date,
@@ -114,7 +115,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the NALD date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.nald_lapsed_date,
@@ -132,7 +133,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the WRLS date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.wrls_lapsed_date,
@@ -150,7 +151,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the NALD date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.nald_lapsed_date,
@@ -168,7 +169,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the WRLS date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.wrls_lapsed_date,
@@ -188,7 +189,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the NALD date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.nald_revoked_date,
@@ -206,7 +207,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the WRLS date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.wrls_revoked_date,
@@ -224,7 +225,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the NALD date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.nald_revoked_date,
@@ -242,7 +243,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
       })
 
       it('returns details of the changed date with "changeDate" set as the WRLS date', () => {
-        const result = DetermineEarliestLicenceChangedDateService.go(licence)
+        const result = DetermineEarliestLicenceChangedDateService(licence)
 
         expect(result).toEqual({
           changeDate: licence.wrls_revoked_date,
@@ -263,7 +264,7 @@ describe('Licences - End Dates - Determine Earliest Licence Changed Date service
     })
 
     it('returns just the details of the earliest changed date', async () => {
-      const result = DetermineEarliestLicenceChangedDateService.go(licence)
+      const result = DetermineEarliestLicenceChangedDateService(licence)
 
       expect(result).toEqual({
         changeDate: licence.nald_revoked_date,

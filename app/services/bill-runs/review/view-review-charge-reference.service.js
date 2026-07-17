@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}' page
  * @module ViewReviewChargeReferenceService
  */
 
-const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
-const ReviewChargeReferencePresenter = require('../../../presenters/bill-runs/review/review-charge-reference.presenter.js')
+import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
+import ReviewChargeReferencePresenter from '../../../presenters/bill-runs/review/review-charge-reference.presenter.js'
 
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}' page
@@ -17,13 +15,13 @@ const ReviewChargeReferencePresenter = require('../../../presenters/bill-runs/re
  * @returns {Promise<object>} the 'pageData' needed for the review charge reference page. It contains details of the
  * bill run, charge reference and the charge adjustments
  */
-async function go(reviewChargeReferenceId, yar) {
-  const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
+export default async function viewReviewChargeReferenceService(reviewChargeReferenceId, yar) {
+  const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
 
   const [bannerMessage] = yar.flash('banner')
   const [chargeMessage] = yar.flash('charge')
 
-  const pagedata = ReviewChargeReferencePresenter.go(reviewChargeReference)
+  const pagedata = ReviewChargeReferencePresenter(reviewChargeReference)
 
   return {
     activeNavBar: 'bill-runs',
@@ -31,8 +29,4 @@ async function go(reviewChargeReferenceId, yar) {
     chargeMessage,
     ...pagedata
   }
-}
-
-module.exports = {
-  go
 }

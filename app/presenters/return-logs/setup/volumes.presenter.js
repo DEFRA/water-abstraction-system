@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Format data for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
  * @module VolumesPresenter
  */
 
-const { formatDateMonthYear, formatLongDate, sentenceCase } = require('../../base.presenter.js')
+import { formatDateMonthYear, formatLongDate, sentenceCase } from '../../base.presenter.js'
 
 /**
  * Format data for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
@@ -15,7 +13,7 @@ const { formatDateMonthYear, formatLongDate, sentenceCase } = require('../../bas
  *
  * @returns {object} page data needed by the view template
  */
-function go(session, yearMonth) {
+export default function volumesPresenter(session, yearMonth) {
   const { id: sessionId, lines, returnsFrequency, returnReference, units } = session
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
@@ -79,8 +77,4 @@ function _pageTitle(date) {
   const titleDate = formatDateMonthYear(date)
 
   return `Water abstracted ${titleDate}`
-}
-
-module.exports = {
-  go
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Determine the billing periods needed when generating a bill run
  * @module DetermineBillingPeriodsService
@@ -31,7 +29,7 @@ const SROC_FIRST_FIN_YEAR_END = 2023
  *
  * @returns {object[]} An array of billing periods each containing a `startDate` and `endDate`.
  */
-function go(billRunType, financialYearEnding) {
+export default function determineBillingPeriodsService(billRunType, financialYearEnding) {
   const financialYear = _financialYear(financialYearEnding)
 
   return _billingPeriods(billRunType, financialYear)
@@ -77,8 +75,4 @@ function _financialYear(financialYearEnding) {
     startDate: new Date(financialYearEnding - 1, APRIL, 1),
     endDate: new Date(financialYearEnding, MARCH, 31)
   }
-}
-
-module.exports = {
-  go
 }

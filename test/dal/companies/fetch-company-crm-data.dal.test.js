@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CRMSeeder = require('../../support/seeders/crm.seeder.js')
+import * as CRMSeeder from '../../support/seeders/crm.seeder.js'
 
 // Things we need to stub
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 // Thing under test
-const FetchCompanyCRMDataDal = require('../../../app/dal/companies/fetch-company-crm-data.dal.js')
+import FetchCompanyCRMDataDal from '../../../app/dal/companies/fetch-company-crm-data.dal.js'
 
 describe('Companies - Fetch Company CRM Data dal', () => {
   let company
@@ -33,12 +31,12 @@ describe('Companies - Fetch Company CRM Data dal', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when there are contacts', () => {
     it('returns the matching contacts', async () => {
-      const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
+      const result = await FetchCompanyCRMDataDal(company.record.id, roles, page)
 
       expect(result).toEqual({
         contacts: [
@@ -94,7 +92,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
 
     describe('when paginating', () => {
       beforeEach(() => {
-        Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)
+        vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1)
       })
 
       describe('and the page is not set', () => {
@@ -103,7 +101,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
+          const result = await FetchCompanyCRMDataDal(company.record.id, roles, page)
 
           expect(result).toEqual({
             contacts: [
@@ -124,7 +122,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
+          const result = await FetchCompanyCRMDataDal(company.record.id, roles, page)
 
           expect(result).toEqual({
             contacts: [
@@ -145,7 +143,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
         })
 
         it('returns the matching contacts for the page (the second page) with the total number', async () => {
-          const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
+          const result = await FetchCompanyCRMDataDal(company.record.id, roles, page)
 
           expect(result).toEqual({
             contacts: [

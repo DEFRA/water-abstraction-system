@@ -1,29 +1,27 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
-const FetchBillService = require('../../../app/services/bills/fetch-bill-service.js')
-const ViewBillPresenter = require('../../../app/presenters/bills/view-bill.presenter.js')
-const ViewLicenceSummariesPresenter = require('../../../app/presenters/bills/view-licence-summaries.presenter.js')
-const ViewBillLicencePresenter = require('../../../app/presenters/bill-licences/view-bill-licence.presenter.js')
+import * as FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
+import * as ViewBillLicencePresenter from '../../../app/presenters/bill-licences/view-bill-licence.presenter.js'
+import * as ViewBillPresenter from '../../../app/presenters/bills/view-bill.presenter.js'
+import * as ViewLicenceSummariesPresenter from '../../../app/presenters/bills/view-licence-summaries.presenter.js'
+import BillingAccountModel from '../../../app/models/billing-account.model.js'
 
 // Thing under test
-const ViewBillService = require('../../../app/services/bills/view-bill.service.js')
+import ViewBillService from '../../../app/services/bills/view-bill.service.js'
 
 describe('View Bill service', () => {
   const testId = '64924759-8142-4a08-9d1e-1e902cd9d316'
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a bill with a matching ID exists', () => {
     describe('and it is linked to multiple licences', () => {
       beforeEach(() => {
-        Sinon.stub(FetchBillService, 'go').resolves({
+        vi.spyOn(FetchBillService, 'default').mockResolvedValue({
           bill: {
             id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
             billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
@@ -34,16 +32,16 @@ describe('View Bill service', () => {
           ]
         })
 
-        Sinon.stub(BillingAccountModel, 'query').returns({
-          findById: Sinon.stub().returnsThis(),
-          modify: Sinon.stub().resolves()
+        vi.spyOn(BillingAccountModel, 'query').mockReturnValue({
+          findById: vi.fn().mockReturnThis(),
+          modify: vi.fn().mockResolvedValue()
         })
 
-        Sinon.stub(ViewBillPresenter, 'go').returns({
+        vi.spyOn(ViewBillPresenter, 'default').mockReturnValue({
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
         })
 
-        Sinon.stub(ViewLicenceSummariesPresenter, 'go').returns({
+        vi.spyOn(ViewLicenceSummariesPresenter, 'default').mockReturnValue({
           billLicences: [
             {
               id: 'e37320ba-10c8-4954-8bc4-6982e56ded41',
@@ -61,7 +59,7 @@ describe('View Bill service', () => {
       })
 
       it('will fetch the data and format it using the bill and licence summaries presenters', async () => {
-        const result = await ViewBillService.go(testId)
+        const result = await ViewBillService(testId)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -85,7 +83,7 @@ describe('View Bill service', () => {
 
     describe('and it is linked to a single licence', () => {
       beforeEach(() => {
-        Sinon.stub(FetchBillService, 'go').resolves({
+        vi.spyOn(FetchBillService, 'default').mockResolvedValue({
           bill: {
             id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
             billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
@@ -93,18 +91,18 @@ describe('View Bill service', () => {
           licenceSummaries: [{ id: '82c106dd-ee90-4566-b06b-a66d9e56b4b1' }]
         })
 
-        Sinon.stub(ViewBillPresenter, 'go').returns({
+        vi.spyOn(ViewBillPresenter, 'default').mockReturnValue({
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
         })
 
-        Sinon.stub(ViewBillLicencePresenter, 'go').returns({
+        vi.spyOn(ViewBillLicencePresenter, 'default').mockReturnValue({
           tableCaption: '2 transactions',
           transactions: [{ chargeType: 'standard' }, { chargeType: 'compensation' }]
         })
       })
 
       it('will fetch the data and format it using the bill and view bill licence presenters', async () => {
-        const result = await ViewBillService.go(testId)
+        const result = await ViewBillService(testId)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -118,19 +116,19 @@ describe('View Bill service', () => {
 
   describe('when a bill with a matching ID does not exist', () => {
     beforeEach(() => {
-      Sinon.stub(FetchBillService, 'go').resolves({
+      vi.spyOn(FetchBillService, 'default').mockResolvedValue({
         bill: undefined,
         licenceSummaries: []
       })
 
-      Sinon.stub(BillingAccountModel, 'query').returns({
-        findById: Sinon.stub().returnsThis(),
-        modify: Sinon.stub().resolves(undefined)
+      vi.spyOn(BillingAccountModel, 'query').mockReturnValue({
+        findById: vi.fn().mockReturnThis(),
+        modify: vi.fn().mockResolvedValue(undefined)
       })
     })
 
     it('throws an exception', async () => {
-      await expect(ViewBillService.go('testId')).rejects.toThrow()
+      await expect(ViewBillService('testId')).rejects.toThrow()
     })
   })
 })

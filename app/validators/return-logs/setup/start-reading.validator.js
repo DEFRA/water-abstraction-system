@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/{sessionId}/start-reading` page
  * @module StartReadingValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const MAX_ALLOWED_READING = 99999999999
 
@@ -18,7 +16,7 @@ const MAX_ALLOWED_READING = 99999999999
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, lines) {
+export default function startReadingValidator(payload, lines) {
   // Use the `MAX_ALLOWED_READING` if no meter reading exists in the return submission
   const maxMeterReading = _maxMeterReading(lines) || MAX_ALLOWED_READING
 
@@ -68,8 +66,4 @@ function _maxMeterReading(lines) {
   })
 
   return Number(firstLine?.reading)
-}
-
-module.exports = {
-  go
 }

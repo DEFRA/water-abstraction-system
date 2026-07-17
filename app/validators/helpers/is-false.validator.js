@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Custom Joi validator that fails when the provided flag is true
  *
@@ -12,7 +10,7 @@
  * - returns the validated field value when booleanToCheck is false
  * - returns helpers.error(errorKey) when booleanToCheck is true, defaulting to 'custom.isFalse'
  */
-function isFalse(booleanToCheck, errorKey = 'custom.isFalse') {
+export function isFalse(booleanToCheck, errorKey = 'custom.isFalse') {
   return function (value, helpers) {
     if (booleanToCheck === false) {
       return value
@@ -20,7 +18,4 @@ function isFalse(booleanToCheck, errorKey = 'custom.isFalse') {
 
     return helpers.error(errorKey)
   }
-}
-module.exports = {
-  isFalse
 }

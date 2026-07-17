@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Thing under test
-const CompanyWithAddressPresenter = require('../../../app/presenters/companies/company-with-address.presenter.js')
+import CompanyWithAddressPresenter from '../../../app/presenters/companies/company-with-address.presenter.js'
 
 describe('Companies - Company With Address Presenter', () => {
   const licenceId = 'fbf2df24-ac78-4ee2-b5bb-eb7f9cf6b59a'
@@ -20,7 +21,7 @@ describe('Companies - Company With Address Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CompanyWithAddressPresenter.go(company, address, role, licenceId)
+      const result = CompanyWithAddressPresenter(company, address, role, licenceId)
 
       expect(result).toEqual({
         backLink: {
@@ -48,7 +49,7 @@ describe('Companies - Company With Address Presenter', () => {
     describe('the "backLink" property', () => {
       describe('when the "licenceId" is provide', () => {
         it('returns a link to the licence contact details page', () => {
-          const result = CompanyWithAddressPresenter.go(company, address, role, licenceId)
+          const result = CompanyWithAddressPresenter(company, address, role, licenceId)
 
           expect(result.backLink).toEqual({
             href: `/system/licences/${licenceId}/contact-details`,
@@ -59,7 +60,7 @@ describe('Companies - Company With Address Presenter', () => {
 
       describe('when the "licenceId" is not provided', () => {
         it('returns a link to the licence holder contacts page', () => {
-          const result = CompanyWithAddressPresenter.go(company, address, role)
+          const result = CompanyWithAddressPresenter(company, address, role)
 
           expect(result.backLink).toEqual({
             href: `/system/companies/${company.id}/contacts`,

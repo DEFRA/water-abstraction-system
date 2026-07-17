@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const NoticeTypePresenter = require('../../../../app/presenters/notices/setup/notice-type.presenter.js')
+import NoticeTypePresenter from '../../../../app/presenters/notices/setup/notice-type.presenter.js'
 
 describe('Notice - Setup - Notice Type Presenter', () => {
   let auth
@@ -20,7 +21,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = NoticeTypePresenter.go(session, auth)
+      const result = NoticeTypePresenter(session, auth)
 
       expect(result).toEqual({
         backLink: {
@@ -60,7 +61,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
         })
 
         it('correctly set the back link to the check page', () => {
-          const result = NoticeTypePresenter.go(session, auth)
+          const result = NoticeTypePresenter(session, auth)
 
           expect(result.backLink).toEqual({
             href: '/system/notices',
@@ -75,7 +76,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
         })
 
         it('correctly set the back link to the check page', () => {
-          const result = NoticeTypePresenter.go(session, auth)
+          const result = NoticeTypePresenter(session, auth)
 
           expect(result.backLink).toEqual({
             href: `/system/notices/setup/${session.id}/check-notice-type`,
@@ -93,7 +94,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
           })
 
           it('returns the invitations checked', () => {
-            const result = NoticeTypePresenter.go(session, auth)
+            const result = NoticeTypePresenter(session, auth)
 
             expect(result.options).toEqual([
               {
@@ -126,7 +127,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
           })
 
           it('returns the invitations checked', () => {
-            const result = NoticeTypePresenter.go(session, auth)
+            const result = NoticeTypePresenter(session, auth)
 
             expect(result.options).toEqual([
               {
@@ -159,7 +160,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
           })
 
           it('returns the Return forms checked', () => {
-            const result = NoticeTypePresenter.go(session, auth)
+            const result = NoticeTypePresenter(session, auth)
 
             expect(result.options).toEqual([
               {
@@ -192,7 +193,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
           })
 
           it('returns page data for the view', () => {
-            const result = NoticeTypePresenter.go(session, auth)
+            const result = NoticeTypePresenter(session, auth)
 
             expect(result).toEqual({
               backLink: {
@@ -221,7 +222,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
             })
 
             it('returns page data for the view', () => {
-              const result = NoticeTypePresenter.go(session, auth)
+              const result = NoticeTypePresenter(session, auth)
 
               expect(result).toEqual({
                 backLink: {
@@ -249,7 +250,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
         describe('and the journey is the "adhoc" journey', () => {
           describe('and the user has both the "bulk_return_notifications" and "renewal_notifications" scopes', () => {
             it('returns both "returns" and "renewal" based notice types', () => {
-              const result = NoticeTypePresenter.go(session, auth)
+              const result = NoticeTypePresenter(session, auth)
 
               expect(result).toEqual({
                 backLink: {
@@ -289,7 +290,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
             })
 
             it('returns only "returns" based notice types', () => {
-              const result = NoticeTypePresenter.go(session, auth)
+              const result = NoticeTypePresenter(session, auth)
 
               expect(result).toEqual({
                 backLink: {
@@ -324,7 +325,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
             })
 
             it('returns only "renewal" based notice types', () => {
-              const result = NoticeTypePresenter.go(session, auth)
+              const result = NoticeTypePresenter(session, auth)
 
               expect(result).toEqual({
                 backLink: {
@@ -349,7 +350,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
             })
 
             it('returns no options', () => {
-              const result = NoticeTypePresenter.go(session, auth)
+              const result = NoticeTypePresenter(session, auth)
 
               expect(result.options).toEqual([])
             })

@@ -1,13 +1,14 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
+import AddressHelper from '../../support/helpers/address.helper.js'
+import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
 
 // Thing under test
-const FetchCompanyDal = require('../../../app/dal/companies/fetch-billing-accounts.dal.js')
+import FetchCompanyDal from '../../../app/dal/companies/fetch-billing-accounts.dal.js'
 
 describe('Companies - Fetch Billing Accounts dal', () => {
   let address
@@ -33,7 +34,7 @@ describe('Companies - Fetch Billing Accounts dal', () => {
   })
 
   it('returns the billing accounts for the company', async () => {
-    const result = await FetchCompanyDal.go(company.id)
+    const result = await FetchCompanyDal(company.id)
 
     expect(result).toEqual({
       billingAccounts: [

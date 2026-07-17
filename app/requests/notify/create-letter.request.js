@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Create and send a letter using GOV.UK Notify
  * @module CreateLetterRequest
  */
 
-const NotifyRequest = require('../notify.request.js')
+import { postRequest } from '../notify.request.js'
 
 /**
  * Create and send a letter using GOV.UK Notify
@@ -43,7 +41,7 @@ const NotifyRequest = require('../notify.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(templateId, options) {
+export default async function createLetterRequest(templateId, options) {
   const path = 'v2/notifications/letter'
 
   const body = {
@@ -51,9 +49,5 @@ async function send(templateId, options) {
     ...options
   }
 
-  return NotifyRequest.post(path, body)
-}
-
-module.exports = {
-  send
+  return postRequest(path, body)
 }

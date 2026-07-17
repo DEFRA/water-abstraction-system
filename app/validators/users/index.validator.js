@@ -1,14 +1,14 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/users` page
  * @module IndexValidator
  */
 
-const Joi = require('joi').extend(require('@joi/date'))
+import base from 'joi'
+import joiDate from '@joi/date'
 
-const { userPermissions } = require('../../lib/static-lookups.lib.js')
+import { userPermissions } from '../../lib/static-lookups.lib.js'
 
+const Joi = base.extend(joiDate)
 const MAX_EMAIL_LENGTH = 255
 const VALID_STATUSES = ['awaiting', 'disabled', 'enabled', 'locked']
 const VALID_TYPES = ['water_admin', 'water_vml']
@@ -21,7 +21,7 @@ const VALID_TYPES = ['water_admin', 'water_vml']
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function indexValidator(payload) {
   const permissions = Object.keys(userPermissions)
 
   const schema = Joi.object({
@@ -58,8 +58,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
-}
-
-module.exports = {
-  go
 }

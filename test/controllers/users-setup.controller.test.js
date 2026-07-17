@@ -1,36 +1,38 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { generateUUID } from '../support/generators.js'
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const InitiateExternalSessionService = require('../../app/services/users/external/setup/initiate-session.service.js')
-const InitiateInternalEditSessionService = require('../../app/services/users/internal/setup/initiate-edit-session.service.js')
-const InitiateInternalSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
-const SubmitExternalCancelService = require('../../app/services/users/external/setup/submit-cancel.service.js')
-const SubmitExternalCheckService = require('../../app/services/users/external/setup/submit-check.service.js')
-const SubmitExternalLicencesService = require('../../app/services/users/external/setup/submit-licences.service.js')
-const SubmitInternalAccessService = require('../../app/services/users/internal/setup/submit-access.service.js')
-const SubmitInternalCancelService = require('../../app/services/users/internal/setup/submit-cancel.service.js')
-const SubmitInternalCheckService = require('../../app/services/users/internal/setup/submit-check.service.js')
-const SubmitInternalEmailService = require('../../app/services/users/internal/setup/submit-email.service.js')
-const SubmitInternalPermissionsService = require('../../app/services/users/internal/setup/submit-permissions.service.js')
-const ViewExternalCancelService = require('../../app/services/users/external/setup/view-cancel.service.js')
-const ViewExternalCheckService = require('../../app/services/users/external/setup/view-check.service.js')
-const ViewExternalLicencesService = require('../../app/services/users/external/setup/view-licences.service.js')
-const ViewInternalAccessService = require('../../app/services/users/internal/setup/view-access.service.js')
-const ViewInternalCancelService = require('../../app/services/users/internal/setup/view-cancel.service.js')
-const ViewInternalCheckService = require('../../app/services/users/internal/setup/view-check.service.js')
-const ViewInternalEmailService = require('../../app/services/users/internal/setup/view-email.service.js')
-const ViewInternalPermissionsService = require('../../app/services/users/internal/setup/view-permissions.service.js')
+import * as InitiateExternalSessionService from '../../app/services/users/external/setup/initiate-session.service.js'
+import * as InitiateInternalEditSessionService from '../../app/services/users/internal/setup/initiate-edit-session.service.js'
+import * as InitiateInternalSessionService from '../../app/services/users/internal/setup/initiate-session.service.js'
+import * as SubmitExternalCancelService from '../../app/services/users/external/setup/submit-cancel.service.js'
+import * as SubmitExternalCheckService from '../../app/services/users/external/setup/submit-check.service.js'
+import * as SubmitExternalLicencesService from '../../app/services/users/external/setup/submit-licences.service.js'
+import * as SubmitInternalAccessService from '../../app/services/users/internal/setup/submit-access.service.js'
+import * as SubmitInternalCancelService from '../../app/services/users/internal/setup/submit-cancel.service.js'
+import * as SubmitInternalCheckService from '../../app/services/users/internal/setup/submit-check.service.js'
+import * as SubmitInternalEmailService from '../../app/services/users/internal/setup/submit-email.service.js'
+import * as SubmitInternalPermissionsService from '../../app/services/users/internal/setup/submit-permissions.service.js'
+import * as ViewExternalCancelService from '../../app/services/users/external/setup/view-cancel.service.js'
+import * as ViewExternalCheckService from '../../app/services/users/external/setup/view-check.service.js'
+import * as ViewExternalLicencesService from '../../app/services/users/external/setup/view-licences.service.js'
+import * as ViewInternalAccessService from '../../app/services/users/internal/setup/view-access.service.js'
+import * as ViewInternalCancelService from '../../app/services/users/internal/setup/view-cancel.service.js'
+import * as ViewInternalCheckService from '../../app/services/users/internal/setup/view-check.service.js'
+import * as ViewInternalEmailService from '../../app/services/users/internal/setup/view-email.service.js'
+import * as ViewInternalPermissionsService from '../../app/services/users/internal/setup/view-permissions.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Users Setup controller', () => {
   const sessionId = generateUUID()
@@ -46,16 +48,15 @@ describe('Users Setup controller', () => {
   })
 
   beforeEach(() => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -69,7 +70,7 @@ describe('Users Setup controller', () => {
 
         postOptions = postRequestOptions(`/users/external/${userId}/setup`, {}, ['unlink_licences'])
 
-        Sinon.stub(InitiateExternalSessionService, 'go').resolves({
+        vi.spyOn(InitiateExternalSessionService, 'default').mockResolvedValue({
           data: { selectedLicences: [], userId },
           id: sessionId
         })
@@ -89,7 +90,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/external/setup/${sessionId}/cancel`, { scope: ['unlink_licences'] })
 
-        Sinon.stub(ViewExternalCancelService, 'go').resolves({
+        vi.spyOn(ViewExternalCancelService, 'default').mockResolvedValue({
           pageTitle: 'You are about to cancel unregistering these licences'
         })
       })
@@ -113,7 +114,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitExternalCancelService, 'go').resolves({
+          vi.spyOn(SubmitExternalCancelService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/external/${userId}/licences?back=users`
           })
         })
@@ -133,7 +134,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/external/setup/${sessionId}/check`, { scope: ['unlink_licences'] })
 
-        Sinon.stub(ViewExternalCheckService, 'go').resolves({
+        vi.spyOn(ViewExternalCheckService, 'default').mockResolvedValue({
           pageTitle: 'Check licences to unregister'
         })
       })
@@ -157,7 +158,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitExternalCheckService, 'go').resolves({
+          vi.spyOn(SubmitExternalCheckService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/external/${userId}/licences?back=users`
           })
         })
@@ -177,7 +178,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/external/setup/${sessionId}/licences`, { scope: ['unlink_licences'] })
 
-        Sinon.stub(ViewExternalLicencesService, 'go').resolves({
+        vi.spyOn(ViewExternalLicencesService, 'default').mockResolvedValue({
           pageTitle: 'Select licences to unregister'
         })
       })
@@ -201,7 +202,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitExternalLicencesService, 'go').resolves({
+          vi.spyOn(SubmitExternalLicencesService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/external/setup/${sessionId}/check`
           })
         })
@@ -223,7 +224,7 @@ describe('Users Setup controller', () => {
       beforeEach(() => {
         options = _getOptions('/users/internal/setup', { scope: ['manage_accounts'] })
 
-        Sinon.stub(InitiateInternalSessionService, 'go').resolves({ data: {}, id })
+        vi.spyOn(InitiateInternalSessionService, 'default').mockResolvedValue({ data: {}, id })
       })
 
       it('initiates a session and redirects to the "Enter an email address for the user" page', async () => {
@@ -243,7 +244,7 @@ describe('Users Setup controller', () => {
       beforeEach(() => {
         options = _getOptions(`/users/internal/setup/${userId}/edit`, { scope: ['manage_accounts'] })
 
-        Sinon.stub(InitiateInternalEditSessionService, 'go').resolves({
+        vi.spyOn(InitiateInternalEditSessionService, 'default').mockResolvedValue({
           data: {
             email: 'bob.bobbles@environment-agency.gov.uk',
             permission: 'basic',
@@ -270,7 +271,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/access`, { scope: ['manage_accounts'] })
 
-        Sinon.stub(ViewInternalAccessService, 'go').resolves({
+        vi.spyOn(ViewInternalAccessService, 'default').mockResolvedValue({
           pageTitle: 'Select access for the user'
         })
       })
@@ -292,7 +293,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternalAccessService, 'go').resolves({
+          vi.spyOn(SubmitInternalAccessService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/internal/setup/${sessionId}/check`
           })
         })
@@ -307,7 +308,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternalAccessService, 'go').resolves({
+          vi.spyOn(SubmitInternalAccessService, 'default').mockResolvedValue({
             error: {
               errorList: [{ text: 'Select access for the user' }]
             },
@@ -330,7 +331,7 @@ describe('Users Setup controller', () => {
       beforeEach(() => {
         options = _getOptions(`/users/internal/setup/${sessionId}/cancel`, { scope: ['manage_accounts'] })
 
-        Sinon.stub(ViewInternalCancelService, 'go').resolves({
+        vi.spyOn(ViewInternalCancelService, 'default').mockResolvedValue({
           pageTitle: 'You are about to cancel this user'
         })
       })
@@ -352,7 +353,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternalCancelService, 'go').resolves({
+          vi.spyOn(SubmitInternalCancelService, 'default').mockResolvedValue({
             redirectUrl: '/system/users'
           })
         })
@@ -372,7 +373,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/check`, { scope: ['manage_accounts'] })
 
-        Sinon.stub(ViewInternalCheckService, 'go').resolves({
+        vi.spyOn(ViewInternalCheckService, 'default').mockResolvedValue({
           pageTitle: 'Check user'
         })
       })
@@ -394,7 +395,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternalCheckService, 'go').resolves({
+          vi.spyOn(SubmitInternalCheckService, 'default').mockResolvedValue({
             redirectUrl: '/system/users'
           })
         })
@@ -414,7 +415,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/email`, { scope: ['manage_accounts'] })
 
-        Sinon.stub(ViewInternalEmailService, 'go').resolves({
+        vi.spyOn(ViewInternalEmailService, 'default').mockResolvedValue({
           pageTitle: 'Enter an email address for the user'
         })
       })
@@ -436,7 +437,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternalEmailService, 'go').resolves({
+          vi.spyOn(SubmitInternalEmailService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/internal/setup/${sessionId}/permissions`
           })
         })
@@ -451,7 +452,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternalEmailService, 'go').resolves({
+          vi.spyOn(SubmitInternalEmailService, 'default').mockResolvedValue({
             error: {
               errorList: [{ text: 'Enter a gov.uk email address, like name@environment-agency.gov.uk' }]
             },
@@ -475,7 +476,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/permissions`, { scope: ['manage_accounts'] })
 
-        Sinon.stub(ViewInternalPermissionsService, 'go').resolves({
+        vi.spyOn(ViewInternalPermissionsService, 'default').mockResolvedValue({
           pageTitle: 'Select permissions for the user'
         })
       })
@@ -497,7 +498,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternalPermissionsService, 'go').resolves({
+          vi.spyOn(SubmitInternalPermissionsService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/internal/setup/${sessionId}/check`
           })
         })
@@ -512,7 +513,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternalPermissionsService, 'go').resolves({
+          vi.spyOn(SubmitInternalPermissionsService, 'default').mockResolvedValue({
             error: {
               errorList: [{ text: 'Select a permission' }]
             },

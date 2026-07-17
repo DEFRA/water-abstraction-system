@@ -1,13 +1,20 @@
-'use strict'
+import {
+  clean,
+  customerFiles,
+  exportDb,
+  licenceUpdates,
+  notificationStatus,
+  renewalInvitations,
+  returnLogs,
+  timeLimited
+} from '../controllers/jobs.controller.js'
 
-const JobsController = require('../controllers/jobs.controller.js')
-
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/jobs/clean',
     options: {
-      handler: JobsController.clean,
+      handler: clean,
       app: {
         plainOutput: true
       },
@@ -21,7 +28,7 @@ const routes = [
     method: 'POST',
     path: '/jobs/customer-files/{days}',
     options: {
-      handler: JobsController.customerFiles,
+      handler: customerFiles,
       app: {
         plainOutput: true
       },
@@ -35,7 +42,7 @@ const routes = [
     method: 'POST',
     path: '/jobs/export',
     options: {
-      handler: JobsController.exportDb,
+      handler: exportDb,
       app: {
         plainOutput: true
       },
@@ -49,7 +56,7 @@ const routes = [
     method: 'POST',
     path: '/jobs/licence-updates',
     options: {
-      handler: JobsController.licenceUpdates,
+      handler: licenceUpdates,
       app: {
         plainOutput: true
       },
@@ -63,7 +70,7 @@ const routes = [
     method: 'POST',
     path: '/jobs/notification-status',
     options: {
-      handler: JobsController.notificationStatus,
+      handler: notificationStatus,
       app: {
         plainOutput: true
       },
@@ -77,7 +84,7 @@ const routes = [
     method: 'POST',
     path: '/jobs/notifications-status-updates',
     options: {
-      handler: JobsController.notificationStatus,
+      handler: notificationStatus,
       app: {
         plainOutput: true
       },
@@ -91,7 +98,7 @@ const routes = [
     method: 'POST',
     path: '/jobs/renewal-invitations/{days}',
     options: {
-      handler: JobsController.renewalInvitations,
+      handler: renewalInvitations,
       app: {
         plainOutput: true
       },
@@ -105,7 +112,7 @@ const routes = [
     method: 'POST',
     path: '/jobs/return-logs/{cycle}',
     options: {
-      handler: JobsController.returnLogs,
+      handler: returnLogs,
       app: {
         plainOutput: true
       },
@@ -119,7 +126,7 @@ const routes = [
     method: 'POST',
     path: '/jobs/time-limited',
     options: {
-      handler: JobsController.timeLimited,
+      handler: timeLimited,
       app: {
         plainOutput: true
       },
@@ -130,5 +137,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

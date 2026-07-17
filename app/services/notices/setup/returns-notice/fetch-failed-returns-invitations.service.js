@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Fetches the licence refs and return logs IDs from failed returns invitation notifications to primary users
  * @module FetchFailedReturnsInvitationsService
  */
 
-const NotificationModel = require('../../../../models/notification.model.js')
-const { futureDueDate } = require('../../../../presenters/notices/base.presenter.js')
-const { compareDates } = require('../../../../lib/dates.lib.js')
-const { compareStrings } = require('../../../../lib/general.lib.js')
+import NotificationModel from '../../../../models/notification.model.js'
+import { compareDates } from '../../../../lib/dates.lib.js'
+import { compareStrings } from '../../../../lib/general.lib.js'
+import { futureDueDate } from '../../../../presenters/notices/base.presenter.js'
 
 /**
  * Fetches the licence refs and return logs IDs from failed returns invitation notifications to primary users
@@ -22,7 +20,7 @@ const { compareStrings } = require('../../../../lib/general.lib.js')
  * @returns {Promise<object>} An object containing the IDs of the failed notifications, plus the combined return log IDs
  * and licence references from them
  */
-async function go(noticeId) {
+export default async function fetchFailedReturnsInvitationsService(noticeId) {
   const notifications = await _fetch(noticeId)
 
   const dueDate = _dueDate(notifications)
@@ -102,8 +100,4 @@ async function _fetch(eventId) {
     .where('contactType', 'primary user')
     .where('messageType', 'email')
     .whereNull('alternateNoticeId')
-}
-
-module.exports = {
-  go
 }

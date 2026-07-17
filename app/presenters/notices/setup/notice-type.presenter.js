@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/notice-type` page
  * @module NoticeTypePresenter
  */
 
-const { NoticeType, NoticeJourney, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+import { NoticeJourney, NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/notice-type` page
@@ -15,7 +13,7 @@ const { NoticeType, NoticeJourney, NoticeTypes } = require('../../../lib/static-
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, auth) {
+export default function noticeTypePresenter(session, auth) {
   const { checkPageVisited, id: sessionId, noticeType, journey } = session
 
   return {
@@ -89,8 +87,4 @@ function _options(noticeType, journey, auth) {
   }
 
   return options
-}
-
-module.exports = {
-  go
 }

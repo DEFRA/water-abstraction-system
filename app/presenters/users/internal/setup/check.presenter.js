@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/check' page
  * @module CheckPresenter
  */
 
-const { sentenceCase } = require('../../../base.presenter.js')
-const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
+import { sentenceCase } from '../../../base.presenter.js'
+import { userPermissions } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/check' page
@@ -15,7 +13,7 @@ const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function checkPresenter(session) {
   const { access, email, id: sessionId, permission, user } = session
 
   return {
@@ -34,8 +32,4 @@ function go(session) {
     // Only allow changing the email address if this is a new user or the user has not yet verified their email address
     showEmailChangeLink: !user || user.currentStatus === 'awaiting'
   }
-}
-
-module.exports = {
-  go
 }

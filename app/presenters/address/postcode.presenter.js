@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `address/{sessionId}/postcode` page
  * @module PostcodeAddressPresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function postcodePresenter(session) {
   const { addressJourney, id } = session
 
   return {
@@ -23,8 +21,4 @@ function go(session) {
     pageTitleCaption: addressJourney.pageTitleCaption ?? null,
     postcode: addressJourney.address?.postcode ?? null
   }
-}
-
-module.exports = {
-  go
 }

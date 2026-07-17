@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/returns-cycle` page
  * @module SubmitReturnsCycleService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const ReturnsCyclePresenter = require('../../../presenters/return-versions/setup/returns-cycle.presenter.js')
-const ReturnsCycleValidator = require('../../../validators/return-versions/setup/returns-cycle.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReturnsCyclePresenter from '../../../presenters/return-versions/setup/returns-cycle.presenter.js'
+import ReturnsCycleValidator from '../../../validators/return-versions/setup/returns-cycle.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/returns-cycle` page
@@ -29,8 +26,8 @@ const ReturnsCycleValidator = require('../../../validators/return-versions/setup
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the returns cycle page including the validation error details
  */
-async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitReturnsCycleService(sessionId, requirementIndex, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload, session)
 
@@ -38,7 +35,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
+      flashNotification(yar, 'Updated', 'Requirements for returns updated')
     }
 
     return {
@@ -46,7 +43,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     }
   }
 
-  const formattedData = ReturnsCyclePresenter.go(session, requirementIndex)
+  const formattedData = ReturnsCyclePresenter(session, requirementIndex)
 
   return {
     error: validationResult,
@@ -61,11 +58,7 @@ async function _save(session, requirementIndex, payload) {
 }
 
 function _validate(payload, session) {
-  const validation = ReturnsCycleValidator.go(payload, session)
+  const validation = ReturnsCycleValidator(payload, session)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

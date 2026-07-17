@@ -1,13 +1,11 @@
-'use strict'
+import { index } from '../controllers/root.controller.js'
 
-const RootController = require('../controllers/root.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/',
     options: {
-      handler: RootController.index,
+      handler: index,
       app: {
         plainOutput: true
       },
@@ -28,7 +26,7 @@ const routes = [
     method: 'GET',
     path: '/status',
     options: {
-      handler: RootController.index,
+      handler: index,
       app: {
         plainOutput: true
       },
@@ -36,5 +34,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

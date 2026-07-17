@@ -1,10 +1,8 @@
-'use strict'
-
 /**
  * @module SessionHelper
  */
 
-const SessionModel = require('../../../app/models/session.model.js')
+import SessionModel from '../../../app/models/session.model.js'
 
 /**
  * Add a new session
@@ -45,7 +43,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

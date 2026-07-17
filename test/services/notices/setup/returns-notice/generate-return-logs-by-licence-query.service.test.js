@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { db } = require('../../../../../db/db.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
-const { tomorrow } = require('../../../../support/general.js')
-const { NoticeType } = require('../../../../../app/lib/static-lookups.lib.js')
+import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import { db } from '../../../../../db/db.js'
+import { generateLicenceRef } from '../../../../support/generators.js'
+import { tomorrow } from '../../../../support/general.js'
 
 // Thing under test
-const GenerateReturnLogsByLicenceQueryService = require('../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-licence-query.service.js')
+import GenerateReturnLogsByLicenceQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-licence-query.service.js'
 
 describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Query Service', () => {
   let licenceRef
@@ -59,7 +60,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
       })
 
       it('returns the expected query and bindings', () => {
-        const result = GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
+        const result = GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
 
         const todayAsString = new Date().toISOString().split('T')[0]
 
@@ -91,7 +92,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
       })
 
       it('returns the expected query and bindings', () => {
-        const result = GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
+        const result = GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
 
         const todayAsString = new Date().toISOString().split('T')[0]
 
@@ -125,7 +126,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
       })
 
       it('returns the expected return logs', async () => {
-        const { bindings, query } = GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
+        const { bindings, query } = GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
         const { rows } = await db.raw(query, bindings)
 
         expect(rows).toEqual([
@@ -147,7 +148,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
       })
 
       it('returns the expected return logs', async () => {
-        const { bindings, query } = GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
+        const { bindings, query } = GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
         const { rows } = await db.raw(query, bindings)
 
         expect(rows).toEqual([

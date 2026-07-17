@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view notification page
  * @module ViewNotificationService
  */
 
-const FetchNotificationDal = require('../../dal/users/fetch-notification.dal.js')
-const FetchUserDal = require('../../dal/users/fetch-user.dal.js')
-const NotificationPresenter = require('../../presenters/users/notification.presenter.js')
+import FetchNotificationDal from '../../dal/users/fetch-notification.dal.js'
+import FetchUserDal from '../../dal/users/fetch-user.dal.js'
+import NotificationPresenter from '../../presenters/users/notification.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the view notification page
@@ -19,12 +17,12 @@ const NotificationPresenter = require('../../presenters/users/notification.prese
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view notification template.
  */
-async function go(notificationId, userId, type, auth) {
-  const notification = await FetchNotificationDal.go(notificationId)
-  const user = await FetchUserDal.go(userId)
+export default async function viewNotificationService(notificationId, userId, type, auth) {
+  const notification = await FetchNotificationDal(notificationId)
+  const user = await FetchUserDal(userId)
   const superUser = _superUser(auth)
 
-  const pageData = NotificationPresenter.go(notification, user, type, superUser)
+  const pageData = NotificationPresenter(notification, user, type, superUser)
 
   return {
     activeNavBar: 'users',
@@ -36,8 +34,4 @@ function _superUser(auth) {
   return auth.credentials.groups.find((group) => {
     return group.group === 'super'
   })
-}
-
-module.exports = {
-  go
 }

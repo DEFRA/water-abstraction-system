@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Initiates the session record used for creating a new internal user account
  * @module InitiateSessionService
  */
 
-const CreateSessionDal = require('../../../../dal/create-session.dal.js')
+import CreateSessionDal from '../../../../dal/create-session.dal.js'
 
 /**
  * Initiates the session record used for creating a new internal user account
@@ -19,10 +17,6 @@ const CreateSessionDal = require('../../../../dal/create-session.dal.js')
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go() {
-  return CreateSessionDal.go()
-}
-
-module.exports = {
-  go
+export default async function initiateSessionService() {
+  return CreateSessionDal()
 }

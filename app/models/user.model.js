@@ -1,18 +1,26 @@
-'use strict'
-
 /**
  * Model for users (idm.users)
  * @module UserModel
  */
 
-const { hashSync } = require('bcryptjs')
-const { Model } = require('objection')
+import { Model } from 'objection'
+import { hashSync } from 'bcryptjs'
 
-const BaseModel = require('./base.model.js')
-const { db } = require('../../db/db.js')
-const { userPermissions } = require('../lib/static-lookups.lib.js')
+import BaseModel from './base.model.js'
+import ChargeVersionNoteModel from './charge-version-note.model.js'
+import CompanyContactModel from './company-contact.model.js'
+import GroupModel from './group.model.js'
+import LicenceEntityModel from './licence-entity.model.js'
+import LicenceMonitoringStationModel from './licence-monitoring-station.model.js'
+import LicenceUnregistrationModel from './licence-unregistration.model.js'
+import ReturnVersionModel from './return-version.model.js'
+import RoleModel from './role.model.js'
+import UserGroupModel from './user-group.model.js'
+import UserRoleModel from './user-role.model.js'
+import { db } from '../../db/db.js'
+import { userPermissions } from '../lib/static-lookups.lib.js'
 
-class UserModel extends BaseModel {
+export default class UserModel extends BaseModel {
   static get tableName() {
     return 'users'
   }
@@ -21,7 +29,7 @@ class UserModel extends BaseModel {
     return {
       chargeVersionNotes: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-version-note.model',
+        modelClass: ChargeVersionNoteModel,
         join: {
           from: 'users.userId',
           to: 'chargeVersionNotes.userId'
@@ -29,7 +37,7 @@ class UserModel extends BaseModel {
       },
       createdCompanyContacts: {
         relation: Model.HasManyRelation,
-        modelClass: 'company-contact.model',
+        modelClass: CompanyContactModel,
         join: {
           from: 'users.id',
           to: 'companyContacts.createdBy'
@@ -37,7 +45,7 @@ class UserModel extends BaseModel {
       },
       groups: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'group.model',
+        modelClass: GroupModel,
         join: {
           from: 'users.userId',
           through: {
@@ -49,7 +57,7 @@ class UserModel extends BaseModel {
       },
       licenceEntity: {
         relation: Model.HasOneRelation,
-        modelClass: 'licence-entity.model',
+        modelClass: LicenceEntityModel,
         join: {
           from: 'users.licenceEntityId',
           to: 'licenceEntities.id'
@@ -57,7 +65,7 @@ class UserModel extends BaseModel {
       },
       licenceMonitoringStations: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-monitoring-station.model',
+        modelClass: LicenceMonitoringStationModel,
         join: {
           from: 'users.userId',
           to: 'licenceMonitoringStations.createdBy'
@@ -65,7 +73,7 @@ class UserModel extends BaseModel {
       },
       licenceUnregistrations: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-unregistration.model',
+        modelClass: LicenceUnregistrationModel,
         join: {
           from: 'users.id',
           to: 'licenceUnregistrations.createdBy'
@@ -73,7 +81,7 @@ class UserModel extends BaseModel {
       },
       returnVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-version.model',
+        modelClass: ReturnVersionModel,
         join: {
           from: 'users.userId',
           to: 'returnVersions.createdBy'
@@ -81,7 +89,7 @@ class UserModel extends BaseModel {
       },
       roles: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'role.model',
+        modelClass: RoleModel,
         join: {
           from: 'users.userId',
           through: {
@@ -93,7 +101,7 @@ class UserModel extends BaseModel {
       },
       updatedCompanyContacts: {
         relation: Model.HasManyRelation,
-        modelClass: 'company-contact.model',
+        modelClass: CompanyContactModel,
         join: {
           from: 'users.id',
           to: 'companyContacts.updatedBy'
@@ -101,7 +109,7 @@ class UserModel extends BaseModel {
       },
       userGroups: {
         relation: Model.HasManyRelation,
-        modelClass: 'user-group.model',
+        modelClass: UserGroupModel,
         join: {
           from: 'users.userId',
           to: 'userGroups.userId'
@@ -109,7 +117,7 @@ class UserModel extends BaseModel {
       },
       userRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'user-role.model',
+        modelClass: UserRoleModel,
         join: {
           from: 'users.userId',
           to: 'userRoles.userId'
@@ -377,5 +385,3 @@ class UserModel extends BaseModel {
     return userPermissions[digitisePermission]
   }
 }
-
-module.exports = UserModel

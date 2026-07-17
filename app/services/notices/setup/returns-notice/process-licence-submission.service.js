@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates validating returns notice types for the `/notices/setup/{sessionId}/licence` page
  * @module ProcessReturnsNoticeLicenceSubmission
  */
 
-const CheckLicenceExistsDal = require('../../../../dal/notices/setup/check-licence-exists.dal.js')
-const FetchDueReturnsForLicenceService = require('../returns-notice/fetch-due-returns-for-licence.service.js')
-const LicenceDueReturnsValidator = require('../../../../validators/notices/setup/returns-notice/licence-due-returns.validator.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+import CheckLicenceExistsDal from '../../../../dal/notices/setup/check-licence-exists.dal.js'
+import FetchDueReturnsForLicenceService from '../returns-notice/fetch-due-returns-for-licence.service.js'
+import LicenceDueReturnsValidator from '../../../../validators/notices/setup/returns-notice/licence-due-returns.validator.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the returns notice types for the `/notices/setup/{sessionId}/licence` page
@@ -23,7 +21,7 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
  *
  * @returns {Promise<object>} The due returns fetched alongside the validation result (null if valid)
  */
-async function go(payload) {
+export default async function processLicenceSubmissionService(payload) {
   const dueReturns = await _dueReturns(payload)
 
   const validationResult = await _validate(payload, dueReturns)
@@ -39,7 +37,7 @@ async function _dueReturns(payload) {
     return []
   }
 
-  return FetchDueReturnsForLicenceService.go(payload.licenceRef)
+  return FetchDueReturnsForLicenceService(payload.licenceRef)
 }
 
 async function _validate(payload, dueReturns) {
@@ -48,14 +46,10 @@ async function _validate(payload, dueReturns) {
   let licenceExists = false
 
   if (payload.licenceRef) {
-    licenceExists = await CheckLicenceExistsDal.go(payload.licenceRef)
+    licenceExists = await CheckLicenceExistsDal(payload.licenceRef)
   }
 
-  const validationResult = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
+  const validationResult = LicenceDueReturnsValidator(payload, licenceExists, dueReturnsExist)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

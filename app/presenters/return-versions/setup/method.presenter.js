@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/method` page
  * @module MethodPresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function methodPresenter(session) {
   const { id: sessionId, licence, licenceVersion, method } = session
 
   return {
@@ -27,8 +25,4 @@ function go(session) {
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     sessionId
   }
-}
-
-module.exports = {
-  go
 }

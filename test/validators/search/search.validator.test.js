@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const SearchValidator = require('../../../app/validators/search/search.validator.js')
+import SearchValidator from '../../../app/validators/search/search.validator.js'
 
 describe('Search - Search validator', () => {
   let payload
@@ -13,7 +14,7 @@ describe('Search - Search validator', () => {
       })
 
       it('confirms the search is valid', () => {
-        const result = SearchValidator.go(payload)
+        const result = SearchValidator(payload)
 
         expect(result.error).toBeUndefined()
         expect(result.value.query).toEqual('This is a valid search term')
@@ -26,7 +27,7 @@ describe('Search - Search validator', () => {
       })
 
       it('confirms the search is valid', () => {
-        const result = SearchValidator.go(payload)
+        const result = SearchValidator(payload)
 
         expect(result.error).toBeUndefined()
         expect(result.value.query).toBeUndefined()
@@ -39,7 +40,7 @@ describe('Search - Search validator', () => {
       })
 
       it('confirms the search is valid', () => {
-        const result = SearchValidator.go(payload)
+        const result = SearchValidator(payload)
 
         expect(result.error).toBeUndefined()
         expect(result.value.query).toEqual('')
@@ -54,7 +55,7 @@ describe('Search - Search validator', () => {
       })
 
       it('fails validation with the error "Enter a licence number, customer name, returns ID, registered email address or monitoring station"', () => {
-        const result = SearchValidator.go(payload)
+        const result = SearchValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual(
@@ -71,7 +72,7 @@ describe('Search - Search validator', () => {
       })
 
       it('fails validation with the error "Search query must be 100 characters or less"', () => {
-        const result = SearchValidator.go(payload)
+        const result = SearchValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Search query must be 100 characters or less')

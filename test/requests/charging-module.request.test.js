@@ -1,17 +1,17 @@
-'use strict'
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Things we need to stub
-const BaseRequest = require('../../app/requests/base.request.js')
-const chargingModuleConfig = require('../../config/charging-module.config.js')
-const serverConfig = require('../../config/server.config.js')
+import * as BaseRequest from '../../app/requests/base.request.js'
+import chargingModuleConfig from '../../config/charging-module.config.js'
+import serverConfig from '../../config/server.config.js'
 
 // Thing under test
-const ChargingModuleRequest = require('../../app/requests/charging-module.request.js')
+import * as ChargingModuleRequest from '../../app/requests/charging-module.request.js'
+
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 describe('Charging Module Request', () => {
   const headers = {
@@ -22,9 +22,9 @@ describe('Charging Module Request', () => {
 
   beforeAll(async () => {
     // ChargingModuleRequest makes use of the getChargingModuleToken() server method, which we therefore need to stub
-    // Note that we only need to do this once as it is unaffected by the Sinon.restore() in our afterEach()
+    // Note that we only need to do this once as it is unaffected by the vi.restoreAllMocks() in our afterEach()
     globalThis.HapiServerMethods = {
-      getChargingModuleToken: Sinon.stub().resolves({
+      getChargingModuleToken: vi.fn().mockResolvedValue({
         accessToken: 'ACCESS_TOKEN',
         expiresIn: 3600
       })
@@ -34,12 +34,12 @@ describe('Charging Module Request', () => {
   beforeEach(() => {
     // Set the timeout value to 1234ms for these tests. We don't trigger a timeout but we do test that the module
     // uses it when making a request to the charging module, rather than the default request timeout config value
-    Sinon.replace(chargingModuleConfig, 'timeout', 1234)
-    Sinon.replace(serverConfig, 'requestTimeout', 1000)
+    vi.replaceProperty(chargingModuleConfig, 'timeout', 1234)
+    vi.replaceProperty(serverConfig, 'requestTimeout', 1000)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(() => {
@@ -50,7 +50,7 @@ describe('Charging Module Request', () => {
   describe('#delete', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'delete').resolves({
+        vi.spyOn(BaseRequest, 'deleteRequest').mockResolvedValue({
           succeeded: true,
           response: {
             headers,
@@ -61,42 +61,42 @@ describe('Charging Module Request', () => {
       })
 
       it('calls the Charging Module with the required options', async () => {
-        await ChargingModuleRequest.delete(testRoute)
+        await ChargingModuleRequest.deleteRequest(testRoute)
 
-        const requestArgs = BaseRequest.delete.firstCall.args
+        const requestArgs = BaseRequest.deleteRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
       })
 
       it('uses the charging module timeout', async () => {
-        await ChargingModuleRequest.delete(testRoute)
+        await ChargingModuleRequest.deleteRequest(testRoute)
 
-        const requestArgs = BaseRequest.delete.firstCall.args
+        const requestArgs = BaseRequest.deleteRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
 
       it('returns a "true" success status', async () => {
-        const result = await ChargingModuleRequest.delete(testRoute)
+        const result = await ChargingModuleRequest.deleteRequest(testRoute)
 
         expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
-        const result = await ChargingModuleRequest.delete(testRoute)
+        const result = await ChargingModuleRequest.deleteRequest(testRoute)
 
         expect(result.response.body).toEqual({})
       })
 
       it('returns the status code', async () => {
-        const result = await ChargingModuleRequest.delete(testRoute)
+        const result = await ChargingModuleRequest.deleteRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
       })
 
       it('returns the information about the running Charging Module API', async () => {
-        const result = await ChargingModuleRequest.delete(testRoute)
+        const result = await ChargingModuleRequest.deleteRequest(testRoute)
 
         expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
@@ -107,7 +107,7 @@ describe('Charging Module Request', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'delete').resolves({
+        vi.spyOn(BaseRequest, 'deleteRequest').mockResolvedValue({
           succeeded: false,
           response: {
             headers,
@@ -119,25 +119,25 @@ describe('Charging Module Request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ChargingModuleRequest.delete(testRoute)
+        const result = await ChargingModuleRequest.deleteRequest(testRoute)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
-        const result = await ChargingModuleRequest.delete(testRoute)
+        const result = await ChargingModuleRequest.deleteRequest(testRoute)
 
         expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
-        const result = await ChargingModuleRequest.delete(testRoute)
+        const result = await ChargingModuleRequest.deleteRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
 
       it('returns the information about the running Charging Module API', async () => {
-        const result = await ChargingModuleRequest.delete(testRoute)
+        const result = await ChargingModuleRequest.deleteRequest(testRoute)
 
         expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
@@ -150,7 +150,7 @@ describe('Charging Module Request', () => {
   describe('#get', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'get').resolves({
+        vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
           succeeded: true,
           response: {
             headers,
@@ -161,42 +161,42 @@ describe('Charging Module Request', () => {
       })
 
       it('calls the Charging Module with the required options', async () => {
-        await ChargingModuleRequest.get(testRoute)
+        await ChargingModuleRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.get.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
       })
 
       it('uses the charging module timeout', async () => {
-        await ChargingModuleRequest.get(testRoute)
+        await ChargingModuleRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.get.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
 
       it('returns a "true" success status', async () => {
-        const result = await ChargingModuleRequest.get(testRoute)
+        const result = await ChargingModuleRequest.getRequest(testRoute)
 
         expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
-        const result = await ChargingModuleRequest.get(testRoute)
+        const result = await ChargingModuleRequest.getRequest(testRoute)
 
         expect(result.response.body.testObject.test).toEqual('yes')
       })
 
       it('returns the status code', async () => {
-        const result = await ChargingModuleRequest.get(testRoute)
+        const result = await ChargingModuleRequest.getRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
 
       it('returns the information about the running Charging Module API', async () => {
-        const result = await ChargingModuleRequest.get(testRoute)
+        const result = await ChargingModuleRequest.getRequest(testRoute)
 
         expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
@@ -207,7 +207,7 @@ describe('Charging Module Request', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'get').resolves({
+        vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: {
             headers,
@@ -219,25 +219,25 @@ describe('Charging Module Request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ChargingModuleRequest.get(testRoute)
+        const result = await ChargingModuleRequest.getRequest(testRoute)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
-        const result = await ChargingModuleRequest.get(testRoute)
+        const result = await ChargingModuleRequest.getRequest(testRoute)
 
         expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
-        const result = await ChargingModuleRequest.get(testRoute)
+        const result = await ChargingModuleRequest.getRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
 
       it('returns the information about the running Charging Module API', async () => {
-        const result = await ChargingModuleRequest.get(testRoute)
+        const result = await ChargingModuleRequest.getRequest(testRoute)
 
         expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
@@ -250,7 +250,7 @@ describe('Charging Module Request', () => {
   describe('#patch', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'patch').resolves({
+        vi.spyOn(BaseRequest, 'patchRequest').mockResolvedValue({
           succeeded: true,
           response: {
             headers,
@@ -261,42 +261,42 @@ describe('Charging Module Request', () => {
       })
 
       it('calls the Charging Module with the required options', async () => {
-        await ChargingModuleRequest.patch(testRoute)
+        await ChargingModuleRequest.patchRequest(testRoute)
 
-        const requestArgs = BaseRequest.patch.firstCall.args
+        const requestArgs = BaseRequest.patchRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
       })
 
       it('uses the charging module timeout', async () => {
-        await ChargingModuleRequest.patch(testRoute)
+        await ChargingModuleRequest.patchRequest(testRoute)
 
-        const requestArgs = BaseRequest.patch.firstCall.args
+        const requestArgs = BaseRequest.patchRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
 
       it('returns a "true" success status', async () => {
-        const result = await ChargingModuleRequest.patch(testRoute)
+        const result = await ChargingModuleRequest.patchRequest(testRoute)
 
         expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
-        const result = await ChargingModuleRequest.patch(testRoute)
+        const result = await ChargingModuleRequest.patchRequest(testRoute)
 
         expect(result.response.body).toEqual({})
       })
 
       it('returns the status code', async () => {
-        const result = await ChargingModuleRequest.patch(testRoute)
+        const result = await ChargingModuleRequest.patchRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
       })
 
       it('returns the information about the running Charging Module API', async () => {
-        const result = await ChargingModuleRequest.patch(testRoute)
+        const result = await ChargingModuleRequest.patchRequest(testRoute)
 
         expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
@@ -307,7 +307,7 @@ describe('Charging Module Request', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'patch').resolves({
+        vi.spyOn(BaseRequest, 'patchRequest').mockResolvedValue({
           succeeded: false,
           response: {
             headers,
@@ -319,25 +319,25 @@ describe('Charging Module Request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ChargingModuleRequest.patch(testRoute)
+        const result = await ChargingModuleRequest.patchRequest(testRoute)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
-        const result = await ChargingModuleRequest.patch(testRoute)
+        const result = await ChargingModuleRequest.patchRequest(testRoute)
 
         expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
-        const result = await ChargingModuleRequest.patch(testRoute)
+        const result = await ChargingModuleRequest.patchRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
 
       it('returns the information about the running Charging Module API', async () => {
-        const result = await ChargingModuleRequest.patch(testRoute)
+        const result = await ChargingModuleRequest.patchRequest(testRoute)
 
         expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
@@ -350,7 +350,7 @@ describe('Charging Module Request', () => {
   describe('#post', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'post').resolves({
+        vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
           succeeded: true,
           response: {
             headers,
@@ -361,9 +361,9 @@ describe('Charging Module Request', () => {
       })
 
       it('calls the Charging Module with the required options', async () => {
-        await ChargingModuleRequest.post(testRoute, { test: 'yes' })
+        await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
-        const requestArgs = BaseRequest.post.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
@@ -371,33 +371,33 @@ describe('Charging Module Request', () => {
       })
 
       it('uses the charging module timeout', async () => {
-        await ChargingModuleRequest.post(testRoute)
+        await ChargingModuleRequest.postRequest(testRoute)
 
-        const requestArgs = BaseRequest.post.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
 
       it('returns a "true" success status', async () => {
-        const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
+        const result = await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
-        const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
+        const result = await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.response.body.testObject.test).toEqual('yes')
       })
 
       it('returns the status code', async () => {
-        const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
+        const result = await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
 
       it('returns the information about the running Charging Module API', async () => {
-        const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
+        const result = await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
@@ -408,7 +408,7 @@ describe('Charging Module Request', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'post').resolves({
+        vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: {
             headers,
@@ -420,25 +420,25 @@ describe('Charging Module Request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
+        const result = await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
-        const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
+        const result = await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
-        const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
+        const result = await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
 
       it('returns the information about the running Charging Module API', async () => {
-        const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
+        const result = await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',

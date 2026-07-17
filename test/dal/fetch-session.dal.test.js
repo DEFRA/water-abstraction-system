@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const SessionHelper = require('../support/helpers/session.helper.js')
-const SessionNotFoundError = require('../../app/errors/session-not-found.error.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
+import SessionHelper from '../support/helpers/session.helper.js'
+import SessionNotFoundError from '../../app/errors/session-not-found.error.js'
+import { generateUUID } from '../support/generators.js'
 
 // Thing under test
-const FetchSessionDal = require('../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../app/dal/fetch-session.dal.js'
 
 describe('DAL - Fetch session dal', () => {
   let session
@@ -23,7 +24,7 @@ describe('DAL - Fetch session dal', () => {
 
   describe('when the session exists', () => {
     it('returns the session', async () => {
-      const result = await FetchSessionDal.go(sessionId)
+      const result = await FetchSessionDal(sessionId)
 
       expect(result).toEqual(session)
     })
@@ -31,7 +32,7 @@ describe('DAL - Fetch session dal', () => {
 
   describe('when the session does not exists', () => {
     it('throws a "SessionNotFoundError"', async () => {
-      const promise = FetchSessionDal.go(generateUUID())
+      const promise = FetchSessionDal(generateUUID())
 
       await expect(promise).rejects.toBeInstanceOf(SessionNotFoundError)
     })

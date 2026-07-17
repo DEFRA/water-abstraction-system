@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const CheckNotificationStatusService = require('../../../../../app/services/notifications/check-notification-status.service.js')
-const CreateEmailRequest = require('../../../../../app/requests/notify/create-email.request.js')
-const GeneralLib = require('../../../../../app/lib/general.lib.js')
-const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
-const NotifyConfig = require('../../../../../config/notify.config.js')
-const NotifyUpdatePresenter = require('../../../../../app/presenters/notifications/notify-update.presenter.js')
-const UpdateNotificationDal = require('../../../../../app/dal/users/internal/update-notification.dal.js')
+import * as CheckNotificationStatusService from '../../../../../app/services/notifications/check-notification-status.service.js'
+import * as CreateEmailRequest from '../../../../../app/requests/notify/create-email.request.js'
+import * as GeneralLib from '../../../../../app/lib/general.lib.js'
+import * as NotifyUpdatePresenter from '../../../../../app/presenters/notifications/notify-update.presenter.js'
+import * as UpdateNotificationDal from '../../../../../app/dal/users/internal/update-notification.dal.js'
+import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
+import NotifyConfig from '../../../../../config/notify.config.js'
 
 // Thing under test
-const SendVerificationEmailService = require('../../../../../app/services/users/internal/setup/send-verification-email.service.js')
+import SendVerificationEmailService from '../../../../../app/services/users/internal/setup/send-verification-email.service.js'
 
 describe('Users - Internal - Setup - Send Verification Email service', () => {
   const notificationId = '46dd6e22-dfd3-4b2d-a618-ba88662db03e'
@@ -24,19 +22,14 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     '\r\n' +
     'To complete your account set up, visit:\r\n' +
     'https://internal.com/reset_password_change_password?resetGuid=6e7a6b97-f5c4-4c30-965e-ee67ee6d9f25\r\n'
-
-  let checkNotificationStatusStub
   let createEmailRequestStub
   let notification
   let notifierStub
-  let notifyUpdatePresenterStub
   let pauseStub
-  let updateNotificationDalStub
-
   beforeEach(() => {
-    checkNotificationStatusStub = Sinon.stub(CheckNotificationStatusService, 'go').resolves()
+    vi.spyOn(CheckNotificationStatusService, 'default').mockResolvedValue()
 
-    createEmailRequestStub = Sinon.stub(CreateEmailRequest, 'send').resolves({
+    createEmailRequestStub = vi.spyOn(CreateEmailRequest, 'default').mockResolvedValue({
       succeeded: true,
       response: {
         statusCode: 200,
@@ -59,30 +52,28 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
       recipient: 'new.user@environment-agency.gov.uk'
     }
 
-    notifyUpdatePresenterStub = Sinon.stub(NotifyUpdatePresenter, 'go')
+    pauseStub = vi.spyOn(GeneralLib, 'pause').mockResolvedValue()
 
-    pauseStub = Sinon.stub(GeneralLib, 'pause').resolves()
-
-    updateNotificationDalStub = Sinon.stub(UpdateNotificationDal, 'go').resolves()
+    vi.spyOn(UpdateNotificationDal, 'default').mockResolvedValue()
 
     // We have to set wait for status to 25ms to avoid the tests timing out. By default it would be 5 seconds and is
     // used to give Notify a chance to process the email notifications.
-    Sinon.stub(NotifyConfig, 'waitForStatus').value(25)
+    vi.replaceProperty(NotifyConfig, 'waitForStatus', 25)
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the email is sent to Notify successfully', () => {
     beforeEach(() => {
-      notifyUpdatePresenterStub.returns({
+      vi.spyOn(NotifyUpdatePresenter, 'default').mockReturnValue({
         notifyId,
         notifyStatus: 'created',
         plaintext: verificationEmailPlaintext,
@@ -91,21 +82,21 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     })
 
     it('sends the email via Notify with the correct recipient and personalisation', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
-      const args = createEmailRequestStub.firstCall.args
+      const args = createEmailRequestStub.mock.calls[0]
 
-      expect(createEmailRequestStub.calledOnce).toBe(true)
+      expect(createEmailRequestStub).toHaveBeenCalledOnce()
       expect(args[1]).toEqual(notification.recipient)
       expect(args[2]).toEqual({ personalisation: notification.personalisation })
     })
 
     it('records the Notify response to the notification', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
-      expect(updateNotificationDalStub.calledOnce).toBe(true)
-      expect(updateNotificationDalStub.firstCall.args[0]).toEqual(notification)
-      expect(updateNotificationDalStub.firstCall.args[1]).toEqual({
+      expect(UpdateNotificationDal.default).toHaveBeenCalledOnce()
+      expect(UpdateNotificationDal.default.mock.calls[0][0]).toEqual(notification)
+      expect(UpdateNotificationDal.default.mock.calls[0][1]).toEqual({
         notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
         notifyStatus: 'created',
         plaintext: verificationEmailPlaintext,
@@ -114,10 +105,10 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     })
 
     it('checks the status of the updated notification', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
-      expect(checkNotificationStatusStub.calledOnce).toBe(true)
-      const notificationPassedToCheck = checkNotificationStatusStub.firstCall.args[0]
+      expect(CheckNotificationStatusService.default).toHaveBeenCalledOnce()
+      const notificationPassedToCheck = CheckNotificationStatusService.default.mock.calls[0][0]
 
       expect(notificationPassedToCheck).toEqual(notification)
     })
@@ -136,39 +127,39 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
         status: 400
       })
 
-      notifyUpdatePresenterStub.returns({
+      vi.spyOn(NotifyUpdatePresenter, 'default').mockReturnValue({
         notifyError: errorMessage,
         status: 'error'
       })
     })
 
     it('records the error against the notification', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
-      expect(updateNotificationDalStub.calledOnce).toBe(true)
-      const patchData = updateNotificationDalStub.firstCall.args[1]
+      expect(UpdateNotificationDal.default).toHaveBeenCalledOnce()
+      const patchData = UpdateNotificationDal.default.mock.calls[0][1]
 
       expect(patchData.status).toEqual('error')
       expect(patchData.notifyError).toBeDefined()
     })
 
     it('does not wait or check the notification status', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
-      expect(pauseStub.called).toBe(false)
-      expect(checkNotificationStatusStub.called).toBe(false)
+      expect(pauseStub).not.toHaveBeenCalled()
+      expect(CheckNotificationStatusService.default).not.toHaveBeenCalled()
     })
   })
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      checkNotificationStatusStub.rejects()
+      vi.spyOn(CheckNotificationStatusService, 'default').mockRejectedValue(new Error())
     })
 
     it('handles the error', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = notifierStub.omfg.mock.calls[0]
 
       expect(args[0]).toEqual('Failed when trying to send internal user verification email')
       expect(args[1]).toEqual({ notification })

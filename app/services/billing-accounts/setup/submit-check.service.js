@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/check` page
  *
  * @module SubmitCheckService
  */
 
-const AddressModel = require('../../../models/address.model.js')
-const ChangeAddressService = require('../change-address.service.js')
-const FetchCompanyService = require('./fetch-company.service.js')
-const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import AddressModel from '../../../models/address.model.js'
+import ChangeAddressService from '../change-address.service.js'
+import FetchCompanyContactsService from './fetch-company-contacts.service.js'
+import FetchCompanyService from './fetch-company.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/check` page
@@ -19,19 +17,19 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitCheckService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
   const { billingAccount } = session
 
   const existingAccount = !!session.existingAccount && session.existingAccount !== 'new'
   const id = existingAccount ? session.existingAccount : session.billingAccount.company.id
-  const companyContacts = await FetchCompanyContactsService.go(id)
+  const companyContacts = await FetchCompanyContactsService(id)
 
   const address = await _address(session)
   const agentCompany = await _agentCompany(session, companyContacts, existingAccount)
   const contact = _contact(session, companyContacts)
 
-  const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+  const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
   return {
     redirectUrl: `/system/billing-accounts/${billingAccount.id}`,
@@ -69,7 +67,7 @@ async function _agentCompany(session, companyContacts, existingAccount) {
   const anotherAccountSelected = session.accountSelected === 'another'
 
   if (session.companiesHouseNumber) {
-    const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
+    const companysHouseResult = await FetchCompanyService(session.companiesHouseNumber)
 
     companyName = companysHouseResult.title
   } else if (session.individualName) {
@@ -117,8 +115,4 @@ function _contact(session, companyContacts) {
     type: 'department',
     department: name
   }
-}
-
-module.exports = {
-  go
 }

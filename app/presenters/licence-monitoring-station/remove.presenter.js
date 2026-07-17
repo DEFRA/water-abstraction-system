@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Format data for the `/licence-monitoring-station/{licenceMonitoringStationId}/remove` page
  * @module RemovePresenter
  */
 
-const { formatRestrictionType, formatValueUnit } = require('../base.presenter.js')
+import { formatRestrictionType, formatValueUnit } from '../base.presenter.js'
 
 /**
  * Format data for the `/licence-monitoring-station/{licenceMonitoringStationId}/remove` page
@@ -15,7 +13,7 @@ const { formatRestrictionType, formatValueUnit } = require('../base.presenter.js
  *
  * @returns {object} page data needed by the view template
  */
-function go(licenceMonitoringStation) {
+export default function removePresenter(licenceMonitoringStation) {
   const {
     licence,
     licenceVersionPurposeCondition,
@@ -61,8 +59,4 @@ function _monitoringStationName(monitoringStation) {
   }
 
   return label
-}
-
-module.exports = {
-  go
 }

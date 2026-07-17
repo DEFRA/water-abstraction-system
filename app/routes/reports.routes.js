@@ -1,13 +1,11 @@
-'use strict'
+import { invalidAddresses } from '../controllers/reports.controller.js'
 
-const ReportsController = require('../controllers/reports.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/reports/invalid-addresses',
     options: {
-      handler: ReportsController.invalidAddresses,
+      handler: invalidAddresses,
       auth: {
         access: {
           scope: [
@@ -24,5 +22,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

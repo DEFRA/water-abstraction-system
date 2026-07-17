@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats summary data of bills connected to a bill run for the bill run summary page
  * @module ViewBillSummariesPresenter
  */
 
-const { formatMoney } = require('../base.presenter.js')
+import { formatMoney } from '../base.presenter.js'
 
 /**
  * Formats summary data of bills connected to a bill run for the bill run summary page
@@ -16,7 +14,7 @@ const { formatMoney } = require('../base.presenter.js')
  * are water company bills, they are grouped under 'water-companies'. If there are other abstractor bills, they are
  * grouped under 'other-abstractors'.
  */
-function go(billSummaries) {
+export default function viewBillSummariesPresenter(billSummaries) {
   const waterCompanies = _waterCompanies(billSummaries)
   const otherAbstractors = _otherAbstractors(billSummaries)
 
@@ -91,8 +89,4 @@ function _waterCompanies(summaries) {
   })
 
   return _bills(filteredSummaries)
-}
-
-module.exports = {
-  go
 }

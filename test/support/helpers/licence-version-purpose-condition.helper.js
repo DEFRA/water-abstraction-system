@@ -1,12 +1,11 @@
-'use strict'
-
 /**
  * @module LicenceVersionPurposeConditionHelper
  */
 
-const { generateRandomInteger, generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
-const LicenceVersionPurposeConditionModel = require('../../../app/models/licence-version-purpose-condition.model.js')
-const LicenceVersionPurposeConditionTypeHelper = require('./licence-version-purpose-condition-type.helper.js')
+import LicenceVersionPurposeConditionModel from '../../../app/models/licence-version-purpose-condition.model.js'
+import LicenceVersionPurposeConditionTypeHelper from './licence-version-purpose-condition-type.helper.js'
+import { timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { generateRandomInteger, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence version purpose condition
@@ -62,7 +61,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

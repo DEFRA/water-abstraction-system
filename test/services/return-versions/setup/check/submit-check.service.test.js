@@ -1,39 +1,29 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const CreateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/create-return-version.service.js')
-const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
-const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
-const ProcessExistingReturnVersionsService = require('../../../../../app/services/return-versions/setup/check/process-existing-return-versions.service.js')
-const ProcessLicenceReturnLogsService = require('../../../../../app/services/return-logs/process-licence-return-logs.service.js')
-const UpdateSucceededReturnLogsDal = require('../../../../../app/dal/return-versions/update-succeeded-return-logs.dal.js')
-const VoidReturnLogsService = require('../../../../../app/services/return-logs/void-return-logs.service.js')
+import * as CreateReturnVersionService from '../../../../../app/services/return-versions/setup/check/create-return-version.service.js'
+import * as DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as GenerateReturnVersionService from '../../../../../app/services/return-versions/setup/check/generate-return-version.service.js'
+import * as ProcessExistingReturnVersionsService from '../../../../../app/services/return-versions/setup/check/process-existing-return-versions.service.js'
+import * as ProcessLicenceReturnLogsService from '../../../../../app/services/return-logs/process-licence-return-logs.service.js'
+import * as UpdateSucceededReturnLogsDal from '../../../../../app/dal/return-versions/update-succeeded-return-logs.dal.js'
+import * as VoidReturnLogsService from '../../../../../app/services/return-logs/void-return-logs.service.js'
+import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const SubmitCheckService = require('../../../../../app/services/return-versions/setup/check/submit-check.service.js')
+import SubmitCheckService from '../../../../../app/services/return-versions/setup/check/submit-check.service.js'
 
 describe('Return Versions - Setup - Submit Check service', () => {
-  let createReturnVersionStub
-  let fetchSessionStub
   let generatedReturnVersionData
-  let generateReturnVersionStub
   let notifierStub
-  let processExistingReturnVersionsStub
-  let processLicenceReturnLogsStub
   let session
   let sessionData
-  let updateSucceededReturnLogsStub
   let userId
-  let voidReturnLogsStub
-
   beforeEach(() => {
     userId = 12345
 
@@ -131,70 +121,68 @@ describe('Return Versions - Setup - Submit Check service', () => {
       }
     }
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go')
-    generateReturnVersionStub = Sinon.stub(GenerateReturnVersionService, 'go')
-    processExistingReturnVersionsStub = Sinon.stub(ProcessExistingReturnVersionsService, 'go').resolves()
-    createReturnVersionStub = Sinon.stub(CreateReturnVersionService, 'go')
-    processLicenceReturnLogsStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go')
-    voidReturnLogsStub = Sinon.stub(VoidReturnLogsService, 'go').resolves()
-    updateSucceededReturnLogsStub = Sinon.stub(UpdateSucceededReturnLogsDal, 'go').resolves()
+    vi.spyOn(ProcessExistingReturnVersionsService, 'default').mockResolvedValue()
+    vi.spyOn(VoidReturnLogsService, 'default').mockResolvedValue()
+    vi.spyOn(UpdateSucceededReturnLogsDal, 'default').mockResolvedValue()
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when called to create a new return version', () => {
     beforeEach(() => {
-      session = SessionModelStub.build(Sinon, sessionData)
-      fetchSessionStub.resolves(session)
+      session = SessionModelStub(sessionData)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-      generateReturnVersionStub.resolves(generatedReturnVersionData)
+      vi.spyOn(GenerateReturnVersionService, 'default').mockResolvedValue(generatedReturnVersionData)
 
-      createReturnVersionStub.resolves({
+      vi.spyOn(CreateReturnVersionService, 'default').mockResolvedValue({
         ...generatedReturnVersionData.returnVersion,
         id: '3c87ff18-5930-480d-9a64-07a7c7b1fcae'
       })
 
-      processLicenceReturnLogsStub.resolves()
+      vi.spyOn(ProcessLicenceReturnLogsService, 'default').mockResolvedValue()
     })
 
     it('creates the new return version and associated data', async () => {
-      await SubmitCheckService.go(session.id, userId)
+      await SubmitCheckService(session.id, userId)
 
-      expect(createReturnVersionStub.called).toBe(true)
-      expect(createReturnVersionStub.firstCall.args[0]).toEqual(generatedReturnVersionData)
+      expect(CreateReturnVersionService.default).toHaveBeenCalled()
+      expect(CreateReturnVersionService.default.mock.calls[0][0]).toEqual(generatedReturnVersionData)
     })
 
     it('processes existing return logs for the licence', async () => {
-      await SubmitCheckService.go(session.id, userId)
+      await SubmitCheckService(session.id, userId)
 
-      expect(processLicenceReturnLogsStub.called).toBe(true)
-      expect(processLicenceReturnLogsStub.firstCall.args[0]).toEqual(generatedReturnVersionData.returnVersion.licenceId)
+      expect(ProcessLicenceReturnLogsService.default).toHaveBeenCalled()
+      expect(ProcessLicenceReturnLogsService.default.mock.calls[0][0]).toEqual(
+        generatedReturnVersionData.returnVersion.licenceId
+      )
 
       // The change date is the new return version start date minus one day
       const expectedChangeDate = new Date(generatedReturnVersionData.returnVersion.startDate)
 
       expectedChangeDate.setDate(expectedChangeDate.getDate() - 1)
 
-      expect(processLicenceReturnLogsStub.firstCall.args[1]).toEqual(expectedChangeDate)
+      expect(ProcessLicenceReturnLogsService.default.mock.calls[0][1]).toEqual(expectedChangeDate)
     })
 
     describe('and the setup journey', () => {
       describe('was "standard"', () => {
         it('does NOT attempt to void all return logs in the period it covers', async () => {
-          await SubmitCheckService.go(session.id, userId)
+          await SubmitCheckService(session.id, userId)
 
-          expect(voidReturnLogsStub.called).toBe(false)
+          expect(VoidReturnLogsService.default).not.toHaveBeenCalled()
         })
       })
 
@@ -203,48 +191,52 @@ describe('Return Versions - Setup - Submit Check service', () => {
           sessionData.journey = 'no-returns-required'
           sessionData.reason = 'returns-exception'
           sessionData.requirements = []
-          session = SessionModelStub.build(Sinon, sessionData)
-          fetchSessionStub.resolves(session)
+          session = SessionModelStub(sessionData)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('does attempt to void all return logs in the period it covers', async () => {
-          await SubmitCheckService.go(session.id, userId)
+          await SubmitCheckService(session.id, userId)
 
-          expect(voidReturnLogsStub.called).toBe(true)
-          expect(voidReturnLogsStub.firstCall.args[0]).toEqual(sessionData.licence.licenceRef)
-          expect(voidReturnLogsStub.firstCall.args[1]).toEqual(generatedReturnVersionData.returnVersion.startDate)
-          expect(voidReturnLogsStub.firstCall.args[2]).toEqual(generatedReturnVersionData.returnVersion.endDate)
+          expect(VoidReturnLogsService.default).toHaveBeenCalled()
+          expect(VoidReturnLogsService.default.mock.calls[0][0]).toEqual(sessionData.licence.licenceRef)
+          expect(VoidReturnLogsService.default.mock.calls[0][1]).toEqual(
+            generatedReturnVersionData.returnVersion.startDate
+          )
+          expect(VoidReturnLogsService.default.mock.calls[0][2]).toEqual(
+            generatedReturnVersionData.returnVersion.endDate
+          )
         })
       })
     })
 
     describe('and it is the first return version for the licence', () => {
       it('skips processing existing return versions', async () => {
-        await SubmitCheckService.go(session.id, userId)
+        await SubmitCheckService(session.id, userId)
 
-        expect(processExistingReturnVersionsStub.called).toBe(false)
+        expect(ProcessExistingReturnVersionsService.default).not.toHaveBeenCalled()
       })
     })
 
     describe('and it is NOT the first return version for the licence', () => {
       beforeEach(() => {
         generatedReturnVersionData.returnVersion.version = 2
-        generateReturnVersionStub.resolves(generatedReturnVersionData)
+        vi.spyOn(GenerateReturnVersionService, 'default').mockResolvedValue(generatedReturnVersionData)
 
-        createReturnVersionStub.resolves({
+        vi.spyOn(CreateReturnVersionService, 'default').mockResolvedValue({
           ...generatedReturnVersionData.returnVersion,
           id: '3c87ff18-5930-480d-9a64-07a7c7b1fcae'
         })
       })
 
       it('processes existing return versions impacted by the new return version', async () => {
-        await SubmitCheckService.go(session.id, userId)
+        await SubmitCheckService(session.id, userId)
 
-        expect(processExistingReturnVersionsStub.called).toBe(true)
-        expect(processExistingReturnVersionsStub.firstCall.args[0]).toEqual(
+        expect(ProcessExistingReturnVersionsService.default).toHaveBeenCalled()
+        expect(ProcessExistingReturnVersionsService.default.mock.calls[0][0]).toEqual(
           generatedReturnVersionData.returnVersion.licenceId
         )
-        expect(processExistingReturnVersionsStub.firstCall.args[1]).toEqual(
+        expect(ProcessExistingReturnVersionsService.default.mock.calls[0][1]).toEqual(
           generatedReturnVersionData.returnVersion.startDate
         )
       })
@@ -253,45 +245,45 @@ describe('Return Versions - Setup - Submit Check service', () => {
     describe("and the new return version's reason", () => {
       describe('is NOT "succession-or-transfer-of-licence"', () => {
         it('does NOT update the existing return logs as succeeded', async () => {
-          await SubmitCheckService.go(session.id, userId)
+          await SubmitCheckService(session.id, userId)
 
-          expect(updateSucceededReturnLogsStub.called).toBe(false)
+          expect(UpdateSucceededReturnLogsDal.default).not.toHaveBeenCalled()
         })
       })
 
       describe('is "succession-or-transfer-of-licence"', () => {
         beforeEach(() => {
           sessionData.reason = 'succession-or-transfer-of-licence'
-          session = SessionModelStub.build(Sinon, sessionData)
-          fetchSessionStub.resolves(session)
+          session = SessionModelStub(sessionData)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
           generatedReturnVersionData.returnVersion.reason = 'succession-or-transfer-of-licence'
-          generateReturnVersionStub.resolves(generatedReturnVersionData)
+          vi.spyOn(GenerateReturnVersionService, 'default').mockResolvedValue(generatedReturnVersionData)
 
-          createReturnVersionStub.resolves({
+          vi.spyOn(CreateReturnVersionService, 'default').mockResolvedValue({
             ...generatedReturnVersionData.returnVersion,
             id: '3c87ff18-5930-480d-9a64-07a7c7b1fcae'
           })
         })
 
         it('updates the existing return logs as succeeded', async () => {
-          await SubmitCheckService.go(session.id, userId)
+          await SubmitCheckService(session.id, userId)
 
-          expect(updateSucceededReturnLogsStub.called).toBe(true)
-          expect(updateSucceededReturnLogsStub.firstCall.args[0]).toEqual(sessionData.licence.licenceRef)
+          expect(UpdateSucceededReturnLogsDal.default).toHaveBeenCalled()
+          expect(UpdateSucceededReturnLogsDal.default.mock.calls[0][0]).toEqual(sessionData.licence.licenceRef)
         })
       })
     })
 
     describe('but the service errors', () => {
       beforeEach(() => {
-        processLicenceReturnLogsStub.rejects()
+        vi.spyOn(ProcessLicenceReturnLogsService, 'default').mockRejectedValue(new Error())
       })
 
       it('logs the error and rethrows it', async () => {
-        await expect(SubmitCheckService.go(session.id, userId)).rejects.toThrow()
+        await expect(SubmitCheckService(session.id, userId)).rejects.toThrow()
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Failed to create return version')
         expect(args[1]).toEqual(session)

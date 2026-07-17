@@ -1,23 +1,21 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const TwoPartTariffFixture = require('../../../support/fixtures/two-part-tariff.fixture.js')
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import TwoPartTariffFixture from '../../../support/fixtures/two-part-tariff.fixture.js'
 
 // Things we need to stub
-const BillModel = require('../../../../app/models/bill.model.js')
-const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
-const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const GenerateTwoPartTariffTransactionService = require('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
-const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
-const TransactionModel = require('../../../../app/models/transaction.model.js')
+import * as GenerateTwoPartTariffTransactionService from '../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js'
+import * as SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
+import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
+import BillModel from '../../../../app/models/bill.model.js'
+import BillRunError from '../../../../app/errors/bill-run.error.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import TransactionModel from '../../../../app/models/transaction.model.js'
 
 // Thing under test
-const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
+import ProcessBillingPeriodService from '../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js'
 
 describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
   const billingPeriod = {
@@ -31,7 +29,6 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
   let billingAccount
   let licence
   let region
-  let sendTransactionsStub
   let transactionInsertStub
 
   beforeEach(async () => {
@@ -40,25 +37,24 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
     billingAccount = TwoPartTariffFixture.billingAccount()
     licence = TwoPartTariffFixture.licence(region)
 
-    sendTransactionsStub = Sinon.stub(SendTransactionsService, 'go')
+    billInsertStub = vi.fn()
+    billLicenceInsertStub = vi.fn()
+    transactionInsertStub = vi.fn()
 
-    billInsertStub = Sinon.stub()
-    billLicenceInsertStub = Sinon.stub()
-    transactionInsertStub = Sinon.stub()
-
-    Sinon.stub(BillModel, 'query').returns({ insert: billInsertStub })
-    Sinon.stub(BillLicenceModel, 'query').returns({ insert: billLicenceInsertStub })
-    Sinon.stub(TransactionModel, 'query').returns({ insert: transactionInsertStub })
+    vi.spyOn(BillModel, 'query').mockReturnValue({ insert: billInsertStub })
+    vi.spyOn(BillLicenceModel, 'query').mockReturnValue({ insert: billLicenceInsertStub })
+    vi.spyOn(TransactionModel, 'query').mockReturnValue({ insert: transactionInsertStub })
+    vi.spyOn(SendTransactionsService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service is called', () => {
     describe('and there are no billing accounts to process', () => {
       it('returns false (bill run is empty)', async () => {
-        const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [])
+        const result = await ProcessBillingPeriodService(billRun, billingPeriod, [])
 
         expect(result).toBe(false)
       })
@@ -70,7 +66,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
         // which we can then use in our response. In this case billLicenceId is generated inside the service but we want
         // to assert that the transactions we're persisting link to the bill licence we are persisting. This allows us
         // to replay back what has been generated with a 'faked' external ID from the Charging Module API
-        sendTransactionsStub.onFirstCall().callsFake(
+        SendTransactionsService.default.mockImplementationOnce(
           // NOTE: We could have just referenced processedTransactions as that is a JavaScript quirk. But we
           // wanted to highlight how you would access the other arguments
           async (generatedTransactions, _billRunExternalId, _accountNumber, _licence) => {
@@ -78,7 +74,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           }
         )
 
-        sendTransactionsStub.onSecondCall().callsFake(
+        SendTransactionsService.default.mockImplementationOnce(
           // NOTE: We could have just referenced processedTransactions as that is a JavaScript quirk. But we
           // wanted to highlight how you would access the other arguments
           async (generatedTransactions, _billRunExternalId, _accountNumber, _licence) => {
@@ -99,14 +95,14 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
         })
 
         it('returns true (bill run is not empty) and persists the generated bills', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           expect(result).toBe(true)
 
           // NOTE: We pass a single bill per billing account when persisting
-          const billInsertArgs = billInsertStub.args[0]
+          const billInsertArgs = billInsertStub.mock.calls[0]
 
-          expect(billInsertStub.calledOnce).toBe(true)
+          expect(billInsertStub).toHaveBeenCalledOnce()
           expect(billInsertArgs[0]).toMatchObject({
             accountNumber: billingAccount.accountNumber,
             address: {}, // Address is set to an empty object for SROC billing invoices
@@ -117,9 +113,9 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           })
 
           // NOTE: A bill may have multiple bill licences, so we always pass them as an array
-          const billLicenceInsertArgs = billLicenceInsertStub.args[0]
+          const billLicenceInsertArgs = billLicenceInsertStub.mock.calls[0]
 
-          expect(billLicenceInsertStub.calledOnce).toBe(true)
+          expect(billLicenceInsertStub).toHaveBeenCalledOnce()
           expect(billLicenceInsertArgs[0]).toHaveLength(1)
           expect(billLicenceInsertArgs[0][0]).toMatchObject({
             billId: billInsertArgs[0].id,
@@ -128,9 +124,9 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           })
 
           // NOTE: And for performance reasons, we pass _all_ transactions for all bill licences at once
-          const transactionInsertArgs = transactionInsertStub.args[0]
+          const transactionInsertArgs = transactionInsertStub.mock.calls[0]
 
-          expect(transactionInsertStub.calledOnce).toBe(true)
+          expect(transactionInsertStub).toHaveBeenCalledOnce()
           expect(transactionInsertArgs[0]).toHaveLength(2)
 
           // We just check that on of the transactions being persisted is linked to the records we expect
@@ -159,14 +155,14 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
         })
 
         it('returns true (bill run is not empty) and only persists the bill licences with transactions', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           expect(result).toBe(true)
 
           // NOTE: We pass a single bill per billing account when persisting
-          const billInsertArgs = billInsertStub.args[0]
+          const billInsertArgs = billInsertStub.mock.calls[0]
 
-          expect(billInsertStub.calledOnce).toBe(true)
+          expect(billInsertStub).toHaveBeenCalledOnce()
           expect(billInsertArgs[0]).toMatchObject({
             accountNumber: billingAccount.accountNumber,
             address: {}, // Address is set to an empty object for SROC billing invoices
@@ -177,9 +173,9 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           })
 
           // NOTE: A bill may have multiple bill licences, so we always pass them as an array
-          const billLicenceInsertArgs = billLicenceInsertStub.args[0]
+          const billLicenceInsertArgs = billLicenceInsertStub.mock.calls[0]
 
-          expect(billLicenceInsertStub.calledOnce).toBe(true)
+          expect(billLicenceInsertStub).toHaveBeenCalledOnce()
           expect(billLicenceInsertArgs[0]).toHaveLength(1)
           expect(billLicenceInsertArgs[0][0]).toMatchObject({
             billId: billInsertArgs[0].id,
@@ -188,9 +184,9 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           })
 
           // NOTE: And for performance reasons, we pass _all_ transactions for all bill licences at once
-          const transactionInsertArgs = transactionInsertStub.args[0]
+          const transactionInsertArgs = transactionInsertStub.mock.calls[0]
 
-          expect(transactionInsertStub.calledOnce).toBe(true)
+          expect(transactionInsertStub).toHaveBeenCalledOnce()
           expect(transactionInsertArgs[0]).toHaveLength(2)
 
           // We just check that on of the transactions being persisted is linked to the records we expect
@@ -213,11 +209,11 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           })
 
           it('returns false (bill run is empty) and persists nothing', async () => {
-            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+            const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
             expect(result).toBe(false)
 
-            expect(billInsertStub.called).toBe(false)
+            expect(billInsertStub).not.toHaveBeenCalled()
           })
         })
 
@@ -229,11 +225,11 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           })
 
           it('returns false (bill run is empty) and persists nothing', async () => {
-            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+            const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
             expect(result).toBe(false)
 
-            expect(billInsertStub.called).toBe(false)
+            expect(billInsertStub).not.toHaveBeenCalled()
           })
         })
       })
@@ -247,11 +243,13 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
     describe('because generating the calculated transaction fails', () => {
       beforeEach(async () => {
-        Sinon.stub(GenerateTwoPartTariffTransactionService, 'go').throws()
+        vi.spyOn(GenerateTwoPartTariffTransactionService, 'default').mockImplementation(() => {
+          throw new Error()
+        })
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount]).catch((e) => {
           return e
         })
 
@@ -262,11 +260,11 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        sendTransactionsStub.rejects()
+        vi.spyOn(SendTransactionsService, 'default').mockRejectedValue(new Error())
       })
 
       it('throws an error', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount]).catch((e) => {
           return e
         })
 

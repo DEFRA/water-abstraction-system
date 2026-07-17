@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Unassigns a bill run from licences with matching `LicenceSupplementaryYear` records
  * @module UnassignBillRunToLicencesService
  */
 
-const { timestampForPostgres } = require('../../lib/general.lib.js')
-const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
+import LicenceSupplementaryYearModel from '../../models/licence-supplementary-year.model.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Unassigns a bill run from licences with matching `LicenceSupplementaryYear` records
@@ -16,12 +14,8 @@ const LicenceSupplementaryYearModel = require('../../models/licence-supplementar
  *
  * @param {string} billRunId - The UUID of the bill run to be unassigned from the licences
  */
-async function go(billRunId) {
+export default async function unassignBillRunToLicencesService(billRunId) {
   await LicenceSupplementaryYearModel.query()
     .patch({ billRunId: null, updatedAt: timestampForPostgres() })
     .where('billRunId', billRunId)
-}
-
-module.exports = {
-  go
 }

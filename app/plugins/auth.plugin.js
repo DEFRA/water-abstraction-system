@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Plugin to authenticate and authorise users
  * @module AuthPlugin
  */
 
-const Boom = require('@hapi/boom')
+import Boom from '@hapi/boom'
 
-const AuthService = require('../services/plugins/auth.service.js')
-
-const AuthenticationConfig = require('../../config/authentication.config.js')
-const NotifyConfig = require('../../config/notify.config.js')
+import AuthService from '../services/plugins/auth.service.js'
+import AuthenticationConfig from '../../config/authentication.config.js'
+import NotifyConfig from '../../config/notify.config.js'
 
 const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
 
@@ -40,7 +37,7 @@ const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
  * More info on authorisation and scope can be found at https://hapi.dev/api/?v=21.3.2#-routeoptionsauthaccessscope
  */
 
-const AuthPlugin = {
+export default {
   name: 'authentication',
   register: async (server, _options) => {
     server.auth.strategy('session', 'cookie', {
@@ -56,7 +53,7 @@ const AuthPlugin = {
       keepAlive: true,
       redirectTo: '/signin',
       validate: async (_request, session) => {
-        return AuthService.go(session.userId)
+        return AuthService(session.userId)
       }
     })
 
@@ -80,5 +77,3 @@ const AuthPlugin = {
     server.auth.default('session')
   }
 }
-
-module.exports = AuthPlugin

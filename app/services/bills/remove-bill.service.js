@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the remove bill page
  * @module RemoveBillService
  */
 
-const FetchBillSummaryService = require('./fetch-bill-summary.service.js')
-const RemoveBillPresenter = require('../../presenters/bills/remove-bill.presenter.js')
+import FetchBillSummaryService from './fetch-bill-summary.service.js'
+import RemoveBillPresenter from '../../presenters/bills/remove-bill.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the remove bill page
@@ -16,17 +14,13 @@ const RemoveBillPresenter = require('../../presenters/bills/remove-bill.presente
  * @returns {Promise<object>} a formatted representation of the bill, its billing account and the bill run it is linked
  * to for the remove bill page
  */
-async function go(billId) {
-  const bill = await FetchBillSummaryService.go(billId)
+export default async function removeBillService(billId) {
+  const bill = await FetchBillSummaryService(billId)
 
-  const formattedData = RemoveBillPresenter.go(bill)
+  const formattedData = RemoveBillPresenter(bill)
 
   return {
     activeNavBar: 'bill-runs',
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates cancelling the data for the '/company-contacts/setup/{sessionId}/cancel' page
  *
  * @module SubmitCancelService
  */
 
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates cancelling the data for the '/company-contacts/setup/{sessionId}/cancel' page
@@ -16,10 +14,10 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitCancelService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   const { company, companyContact } = session
 
@@ -32,8 +30,4 @@ async function go(sessionId) {
   return {
     redirectUrl: `/system/companies/${company.id}/contacts`
   }
-}
-
-module.exports = {
-  go
 }

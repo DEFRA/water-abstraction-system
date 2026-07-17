@@ -1,15 +1,15 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Things we need to stub
-const LookupCompanysHouseNumberRequest = require('../../../../app/requests/companies-house/lookup-companies-house-number.request.js')
+import * as LookupCompanysHouseNumberRequest from '../../../../app/requests/companies-house/lookup-companies-house-number.request.js'
 
 // Thing under test
-const FetchCompanyService = require('../../../../app/services/billing-accounts/setup/fetch-company.service.js')
+import FetchCompanyService from '../../../../app/services/billing-accounts/setup/fetch-company.service.js'
+
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Billing Accounts - Setup - Fetch Company service', () => {
   const body = {
@@ -19,12 +19,12 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
   const companiesHouseNumber = body.company_number
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a "companiesHouseNumber" that has a reponse', () => {
     beforeEach(async () => {
-      Sinon.stub(LookupCompanysHouseNumberRequest, 'send').resolves({
+      vi.spyOn(LookupCompanysHouseNumberRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -34,7 +34,7 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
     })
 
     it('returns the matching company', async () => {
-      const result = await FetchCompanyService.go(companiesHouseNumber)
+      const result = await FetchCompanyService(companiesHouseNumber)
 
       expect(result).toEqual({
         companiesHouseNumber: body.company_number,
@@ -45,7 +45,7 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
 
   describe('when called with a "companySearch" that has no responses', () => {
     beforeEach(async () => {
-      Sinon.stub(LookupCompanysHouseNumberRequest, 'send').resolves({
+      vi.spyOn(LookupCompanysHouseNumberRequest, 'default').mockResolvedValue({
         succeeded: false,
         response: {
           statusCode: HTTP_STATUS_NOT_FOUND,
@@ -57,9 +57,9 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchCompanyService.go(companiesHouseNumber)
+      const result = await FetchCompanyService(companiesHouseNumber)
 
-      expect(result).toEqual(null)
+      expect(result).toBeNull()
     })
   })
 })

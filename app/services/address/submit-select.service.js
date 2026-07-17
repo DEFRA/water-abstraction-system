@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `address/{sessionId}/select` page
  *
  * @module SubmitSelectService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const LookupPostcodeRequest = require('../../requests/address-facade/lookup-postcode.request.js')
-const LookupUPRNRequest = require('../../requests/address-facade/lookup-uprn.request.js')
-const SelectPresenter = require('../../presenters/address/select.presenter.js')
-const SelectValidator = require('../../validators/address/select.validator.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import LookupPostcodeRequest from '../../requests/address-facade/lookup-postcode.request.js'
+import LookupUprnRequest from '../../requests/address-facade/lookup-uprn.request.js'
+import SelectPresenter from '../../presenters/address/select.presenter.js'
+import SelectValidator from '../../validators/address/select.validator.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `address/{sessionId}/select` page
@@ -21,13 +19,13 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitSelectService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload)
 
   if (!error) {
-    const uprnResult = await LookupUPRNRequest.send(payload.addresses)
+    const uprnResult = await LookupUprnRequest(payload.addresses)
 
     // NOTE: Handle the edge case that having selected a valid address, our call to the address facade fails. When this
     // happens we fall back to asking the user to enter the address manually
@@ -44,7 +42,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const postcodeResult = await LookupPostcodeRequest.send(session.addressJourney.address.postcode)
+  const postcodeResult = await LookupPostcodeRequest(session.addressJourney.address.postcode)
 
   // NOTE: Another edge case. The user forgot to select an address and hit submit. So, we need to lookup the matching
   // addresses by postcode again, only this time the request fails. Again, we simply fallback to entering it manually
@@ -54,7 +52,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = SelectPresenter.go(session, postcodeResult.matches)
+  const pageData = SelectPresenter(session, postcodeResult.matches)
 
   return {
     error,
@@ -89,11 +87,7 @@ async function _save(session, address) {
 }
 
 function _validate(payload) {
-  const validationResult = SelectValidator.go(payload)
+  const validationResult = SelectValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

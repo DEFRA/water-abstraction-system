@@ -1,65 +1,63 @@
-'use strict'
-
 /**
  * Controller for /bill-runs/setup endpoints
  * @module BillRunsSetupController
  */
 
-const CheckService = require('../services/bill-runs/setup/check.service.js')
-const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
-const NoLicencesService = require('../services/bill-runs/setup/no-licences.service.js')
-const RegionService = require('../services/bill-runs/setup/region.service.js')
-const SeasonService = require('../services/bill-runs/setup/season.service.js')
-const SubmitCheckService = require('../services/bill-runs/setup/submit-check.service.js')
-const SubmitRegionService = require('../services/bill-runs/setup/submit-region.service.js')
-const SubmitSeasonService = require('../services/bill-runs/setup/submit-season.service.js')
-const SubmitTypeService = require('../services/bill-runs/setup/submit-type.service.js')
-const SubmitYearService = require('../services/bill-runs/setup/submit-year.service.js')
-const TypeService = require('../services/bill-runs/setup/type.service.js')
-const YearService = require('../services/bill-runs/setup/year.service.js')
+import CheckService from '../services/bill-runs/setup/check.service.js'
+import InitiateSessionService from '../services/bill-runs/setup/initiate-session.service.js'
+import NoLicencesService from '../services/bill-runs/setup/no-licences.service.js'
+import RegionService from '../services/bill-runs/setup/region.service.js'
+import SeasonService from '../services/bill-runs/setup/season.service.js'
+import SubmitCheckService from '../services/bill-runs/setup/submit-check.service.js'
+import SubmitRegionService from '../services/bill-runs/setup/submit-region.service.js'
+import SubmitSeasonService from '../services/bill-runs/setup/submit-season.service.js'
+import SubmitTypeService from '../services/bill-runs/setup/submit-type.service.js'
+import SubmitYearService from '../services/bill-runs/setup/submit-year.service.js'
+import TypeService from '../services/bill-runs/setup/type.service.js'
+import YearService from '../services/bill-runs/setup/year.service.js'
 
-async function check(request, h) {
+export async function check(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await CheckService.go(sessionId)
+  const pageData = await CheckService(sessionId)
 
   return h.view('bill-runs/setup/check.njk', pageData)
 }
 
-async function noLicences(request, h) {
+export async function noLicences(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await NoLicencesService.go(sessionId)
+  const pageData = await NoLicencesService(sessionId)
 
   return h.view('bill-runs/setup/no-licences.njk', pageData)
 }
 
-async function region(request, h) {
+export async function region(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await RegionService.go(sessionId)
+  const pageData = await RegionService(sessionId)
 
   return h.view('bill-runs/setup/region.njk', pageData)
 }
 
-async function season(request, h) {
+export async function season(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SeasonService.go(sessionId)
+  const pageData = await SeasonService(sessionId)
 
   return h.view('bill-runs/setup/season.njk', pageData)
 }
 
-async function setup(_request, h) {
-  const session = await InitiateSessionService.go()
+export async function setup(_request, h) {
+  const session = await InitiateSessionService()
 
   return h.redirect(`/system/bill-runs/setup/${session.id}/type`)
 }
 
-async function submitCheck(request, h) {
+export async function submitCheck(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitCheckService.go(sessionId, request.auth)
+  const pageData = await SubmitCheckService(sessionId, request.auth)
 
   if (pageData.error) {
     return h.view('bill-runs/setup/check.njk', pageData)
@@ -68,10 +66,10 @@ async function submitCheck(request, h) {
   return h.redirect(`/system/bill-runs`)
 }
 
-async function submitRegion(request, h) {
+export async function submitRegion(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitRegionService.go(sessionId, request.payload)
+  const pageData = await SubmitRegionService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/setup/region.njk', pageData)
@@ -84,10 +82,10 @@ async function submitRegion(request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/year`)
 }
 
-async function submitSeason(request, h) {
+export async function submitSeason(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitSeasonService.go(sessionId, request.payload)
+  const pageData = await SubmitSeasonService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/setup/season.njk', pageData)
@@ -96,10 +94,10 @@ async function submitSeason(request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/check`)
 }
 
-async function submitType(request, h) {
+export async function submitType(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitTypeService.go(sessionId, request.payload)
+  const pageData = await SubmitTypeService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/setup/type.njk', pageData)
@@ -108,10 +106,10 @@ async function submitType(request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/region`)
 }
 
-async function submitYear(request, h) {
+export async function submitYear(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitYearService.go(sessionId, request.payload)
+  const pageData = await SubmitYearService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/setup/year.njk', pageData)
@@ -124,37 +122,22 @@ async function submitYear(request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/season`)
 }
 
-async function type(request, h) {
+export async function type(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await TypeService.go(sessionId)
+  const pageData = await TypeService(sessionId)
 
   return h.view('bill-runs/setup/type.njk', pageData)
 }
 
-async function year(request, h) {
+export async function year(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await YearService.go(sessionId)
+  const pageData = await YearService(sessionId)
 
   if (pageData.financialYearsData.length === 0) {
     return h.redirect(`/system/bill-runs/setup/${sessionId}/no-licences`)
   }
 
   return h.view('bill-runs/setup/year.njk', pageData)
-}
-
-module.exports = {
-  check,
-  noLicences,
-  region,
-  season,
-  setup,
-  submitCheck,
-  submitRegion,
-  submitSeason,
-  submitType,
-  submitYear,
-  type,
-  year
 }

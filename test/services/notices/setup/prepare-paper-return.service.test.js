@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 
 // Things we need to stub
-const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/generate-paper-return.request.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import * as GeneratePaperReturnRequest from '../../../../app/requests/gotenberg/generate-paper-return.request.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-paper-return.service.js')
+import PreparePaperReturnService from '../../../../app/services/notices/setup/prepare-paper-return.service.js'
 
 describe('Notices - Setup - Prepare Paper Return service', () => {
   const buffer = new TextEncoder().encode('mock file').buffer
@@ -56,25 +54,25 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
       }
     }
 
-    Sinon.stub(GeneratePaperReturnRequest, 'send').resolves({
+    vi.spyOn(GeneratePaperReturnRequest, 'default').mockResolvedValue({
       succeeded: true,
       response: {
         body: buffer
       }
     })
 
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when called', () => {
     it('returns the request object', async () => {
-      const result = await PreparePaperReturnService.go(notification)
+      const result = await PreparePaperReturnService(notification)
 
       expect(result).toEqual({
         response: {
@@ -85,7 +83,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
     })
 
     it('returns the generated pdf as an array buffer', async () => {
-      const result = await PreparePaperReturnService.go(notification)
+      const result = await PreparePaperReturnService(notification)
 
       expect(result.response.body).toBeInstanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -93,11 +91,11 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
     })
 
     it('should call "GeneratePaperReturnRequest" with the page data for the provided "returnLogId"', async () => {
-      await PreparePaperReturnService.go(notification)
+      await PreparePaperReturnService(notification)
 
-      expect(GeneratePaperReturnRequest.send.calledOnce).toBe(true)
+      expect(GeneratePaperReturnRequest.default).toHaveBeenCalledOnce()
 
-      const actualCallArgs = GeneratePaperReturnRequest.send.getCall(0).args[0]
+      const actualCallArgs = GeneratePaperReturnRequest.default.mock.calls[0][0]
       expect(actualCallArgs).toEqual({
         address: {
           address_line_1: 'Harry Potter',

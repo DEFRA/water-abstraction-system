@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitRemoveService = require('../../../../app/services/return-versions/setup/submit-remove.service.js')
+import SubmitRemoveService from '../../../../app/services/return-versions/setup/submit-remove.service.js'
 
 describe('Return Versions Setup - Submit Remove service', () => {
   const requirementIndex = 0
@@ -61,29 +59,29 @@ describe('Return Versions Setup - Submit Remove service', () => {
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a user submits the return requirements to be removed', () => {
     it('deletes the selected requirement from the session data', async () => {
-      await SubmitRemoveService.go(session.id, requirementIndex, yarStub)
+      await SubmitRemoveService(session.id, requirementIndex, yarStub)
 
       expect(session.requirements[requirementIndex]).toBeUndefined()
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('sets the notification message to "Requirements removed"', async () => {
-      await SubmitRemoveService.go(session.id, requirementIndex, yarStub)
+      await SubmitRemoveService(session.id, requirementIndex, yarStub)
 
-      const [flashType, notification] = yarStub.flash.args[0]
+      const [flashType, notification] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(notification).toEqual({ title: 'Removed', text: 'Requirement removed' })

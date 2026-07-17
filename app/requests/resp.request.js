@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Use for making http requests to the ReSP API
  * @module RespRequest
  */
 
-const BaseRequest = require('./base.request.js')
-
-const respConfig = require('../../config/resp.config.js')
+import { getRequest as baseGetRequest } from './base.request.js'
+import respConfig from '../../config/resp.config.js'
 
 /**
  * Sends a GET request to the ReSP API for the provided route
@@ -16,8 +13,8 @@ const respConfig = require('../../config/resp.config.js')
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function get(path) {
-  const result = await _sendRequest(path, BaseRequest.get)
+export async function getRequest(path) {
+  const result = await _sendRequest(path, baseGetRequest)
 
   return _parseResult(result)
 }
@@ -77,8 +74,4 @@ function _parseResult(result) {
   }
 
   return result
-}
-
-module.exports = {
-  get
 }

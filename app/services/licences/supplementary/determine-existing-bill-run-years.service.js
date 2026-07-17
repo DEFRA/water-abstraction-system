@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines from the years provided which ones have an annual or two-part tariff bill run created
  * @module DetermineExistingBillRunYearsService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
+import BillRunModel from '../../../models/bill-run.model.js'
 
 /**
  * Determines from the years provided which ones have an annual or two-part tariff bill run created
@@ -24,7 +22,7 @@ const BillRunModel = require('../../../models/bill-run.model.js')
  *
  * @returns {Promise<object[]>} - The years that can be flagged for supplementary billing
  */
-async function go(regionId, years, twoPartTariff) {
+export default async function determineExistingBillRunYearsService(regionId, years, twoPartTariff) {
   return _supplementaryBillingYears(regionId, years, twoPartTariff)
 }
 
@@ -49,8 +47,4 @@ async function _supplementaryBillingYears(regionId, years, twoPartTariff) {
   return billRuns.map((billRun) => {
     return billRun.toFinancialYearEnding
   })
-}
-
-module.exports = {
-  go
 }

@@ -1,28 +1,23 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const TransactionHelper = require('../support/helpers/transaction.helper.js')
-const YarStub = require('../support/stubs/yar.stub.js')
+import TransactionHelper from '../support/helpers/transaction.helper.js'
+import YarStub from '../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const GeneralLib = require('../../app/lib/general.lib.js')
+import * as GeneralLib from '../../app/lib/general.lib.js'
 
 describe('GeneralLib', () => {
-  let clock
   let testDate
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
 
-    if (clock) {
-      clock.restore()
-    }
+    vi.useRealTimers()
   })
 
   describe('#calculateAndLogTimeTaken', () => {
@@ -36,7 +31,7 @@ describe('GeneralLib', () => {
       // app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered. As we're not
       // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our own
       // stub
-      notifierStub = GlobalNotifierStub.build(Sinon)
+      notifierStub = GlobalNotifierStub()
       globalThis.GlobalNotifier = notifierStub
     })
 
@@ -48,9 +43,9 @@ describe('GeneralLib', () => {
       it('logs the message and time taken in milliseconds and seconds', () => {
         GeneralLib.calculateAndLogTimeTaken(startTime, 'I am the test with no data')
 
-        const logDataArg = notifierStub.omg.args[0][1]
+        const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg.calledWith('I am the test with no data')).toBe(true)
+        expect(notifierStub.omg).toHaveBeenCalledWith('I am the test with no data', expect.any(Object))
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.name).toBeUndefined()
@@ -61,9 +56,9 @@ describe('GeneralLib', () => {
       it('logs the message and time taken in milliseconds and seconds as well as the additional data', () => {
         GeneralLib.calculateAndLogTimeTaken(startTime, 'I am the test with data', { name: 'Foo Bar' })
 
-        const logDataArg = notifierStub.omg.args[0][1]
+        const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg.calledWith('I am the test with data')).toBe(true)
+        expect(notifierStub.omg).toHaveBeenCalledWith('I am the test with data', expect.any(Object))
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.name).toBeDefined()
       })
@@ -257,7 +252,7 @@ describe('GeneralLib', () => {
         beforeEach(() => {
           testDate = new Date(2023, 7, 21, 20, 31, 57)
 
-          clock = Sinon.useFakeTimers(testDate)
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the correct start and end dates for the financial year', () => {
@@ -272,7 +267,7 @@ describe('GeneralLib', () => {
         beforeEach(() => {
           testDate = new Date(2024, 2, 21, 20, 31, 57)
 
-          clock = Sinon.useFakeTimers(testDate)
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the correct start and end dates for the financial year', () => {
@@ -289,13 +284,13 @@ describe('GeneralLib', () => {
     let yarStub
 
     beforeEach(() => {
-      yarStub = YarStub.build(Sinon)
+      yarStub = YarStub()
     })
 
     it('returns the standard notification { titleText: "Updated", text: "Changes made" }', () => {
       GeneralLib.flashNotification(yarStub)
 
-      const [flashType, notification] = yarStub.flash.args[0]
+      const [flashType, notification] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(notification).toEqual({ titleText: 'Updated', text: 'Changes made' })
@@ -304,7 +299,7 @@ describe('GeneralLib', () => {
     it('returns the overridden notification { titleText: "Fancy new title", text: "better text" }', () => {
       GeneralLib.flashNotification(yarStub, 'Fancy new title', 'better text')
 
-      const [flashType, notification] = yarStub.flash.args[0]
+      const [flashType, notification] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(notification).toEqual({ titleText: 'Fancy new title', text: 'better text' })
@@ -315,8 +310,8 @@ describe('GeneralLib', () => {
     let yarStub
 
     beforeEach(() => {
-      yarStub = YarStub.build(Sinon)
-      yarStub.flash.returns([{ title: 'Updated', text: 'Changes made' }])
+      yarStub = YarStub()
+      yarStub.flash.mockReturnValue([{ title: 'Updated', text: 'Changes made' }])
     })
 
     it('returns the flash notification', () => {
@@ -331,7 +326,7 @@ describe('GeneralLib', () => {
       const result = GeneralLib.generateNoticeReferenceCode('TEST-')
 
       expect(result.startsWith('TEST-')).toBe(true)
-      expect(result.length).toEqual(11)
+      expect(result).toHaveLength(11)
     })
   })
 
@@ -528,7 +523,7 @@ describe('GeneralLib', () => {
       it('returns the provided array grouped by the given group size', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).toEqual(4)
+        expect(result).toHaveLength(4)
 
         expect(result).toEqual([
           [1, 2], // Group One
@@ -556,7 +551,7 @@ describe('GeneralLib', () => {
       it('returns the provided array grouped by the given group size', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).toEqual(3)
+        expect(result).toHaveLength(3)
 
         expect(result).toEqual([
           [{ number: 1 }, { number: 2 }, { number: 3 }], // Group One
@@ -575,7 +570,7 @@ describe('GeneralLib', () => {
       it('returns an empty array', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).toEqual(0)
+        expect(result).toHaveLength(0)
 
         expect(result).toEqual([])
       })
@@ -590,7 +585,7 @@ describe('GeneralLib', () => {
       it('returns the provided array (not grouped)', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).toEqual(7)
+        expect(result).toHaveLength(7)
 
         expect(result).toEqual([1, 2, 3, 4, 5, 6, 7])
       })
@@ -605,7 +600,7 @@ describe('GeneralLib', () => {
       it('returns the provided array grouped by the given group size', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).toEqual(1)
+        expect(result).toHaveLength(1)
 
         expect(result).toEqual([[1, 2]])
       })
@@ -616,7 +611,7 @@ describe('GeneralLib', () => {
     beforeEach(() => {
       testDate = new Date(2015, 9, 21, 20, 31, 57)
 
-      clock = Sinon.useFakeTimers(testDate)
+      vi.useFakeTimers({ now: testDate })
     })
 
     it('returns the current date and time as an ISO string', () => {
@@ -630,7 +625,7 @@ describe('GeneralLib', () => {
     beforeEach(() => {
       testDate = new Date(2025, 9, 19, 20, 31, 57, 234)
 
-      clock = Sinon.useFakeTimers(testDate)
+      vi.useFakeTimers({ now: testDate })
     })
 
     it('returns the current date and time as date-only (time set to midnight)', () => {

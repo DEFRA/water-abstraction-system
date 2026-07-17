@@ -1,15 +1,17 @@
-'use strict'
-
 /**
  * Model for review_charge_elements
  * @module ReviewChargeElementModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import ChargeElementModel from './charge-element.model.js'
+import ReviewChargeElementReturnModel from './review-charge-element-return.model.js'
+import ReviewChargeReferenceModel from './review-charge-reference.model.js'
+import ReviewReturnModel from './review-return.model.js'
 
-class ReviewChargeElementModel extends BaseModel {
+export default class ReviewChargeElementModel extends BaseModel {
   static get tableName() {
     return 'reviewChargeElements'
   }
@@ -18,7 +20,7 @@ class ReviewChargeElementModel extends BaseModel {
     return {
       chargeElement: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-element.model',
+        modelClass: ChargeElementModel,
         join: {
           from: 'reviewChargeElements.chargeElementId',
           to: 'chargeElements.id'
@@ -26,7 +28,7 @@ class ReviewChargeElementModel extends BaseModel {
       },
       reviewChargeElementReturns: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-charge-element-return.model',
+        modelClass: ReviewChargeElementReturnModel,
         join: {
           from: 'reviewChargeElements.id',
           to: 'reviewChargeElementReturns.reviewChargeElementId'
@@ -34,7 +36,7 @@ class ReviewChargeElementModel extends BaseModel {
       },
       reviewChargeReference: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'review-charge-reference.model',
+        modelClass: ReviewChargeReferenceModel,
         join: {
           from: 'reviewChargeElements.reviewChargeReferenceId',
           to: 'reviewChargeReferences.id'
@@ -42,7 +44,7 @@ class ReviewChargeElementModel extends BaseModel {
       },
       reviewReturns: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'review-return.model',
+        modelClass: ReviewReturnModel,
         join: {
           from: 'reviewChargeElements.id',
           through: {
@@ -55,5 +57,3 @@ class ReviewChargeElementModel extends BaseModel {
     }
   }
 }
-
-module.exports = ReviewChargeElementModel

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * @module ReturnCycleHelper
  */
 
-const { selectRandomEntry } = require('../general.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
-const ReturnCycleModel = require('../../../app/models/return-cycle.model.js')
+import ReturnCycleModel from '../../../app/models/return-cycle.model.js'
+import { generateUUID } from '../generators.js'
+import { selectRandomEntry } from '../general.js'
+import { timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new return cycle
@@ -108,7 +106,7 @@ async function selectByDate(date, summer = false) {
   return ReturnCycleModel.query().where('summer', summer).where('startDate', '<=', date).first()
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   select,

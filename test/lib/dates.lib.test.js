@@ -1,10 +1,8 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Thing under test
-const DateLib = require('../../app/lib/dates.lib.js')
+import * as DateLib from '../../app/lib/dates.lib.js'
 
 describe('Dates lib', () => {
   describe('compareDates', () => {
@@ -144,7 +142,7 @@ describe('Dates lib', () => {
 
       it('returns null', () => {
         const result = DateLib.determineEarliestDate(dates)
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
 
@@ -155,7 +153,7 @@ describe('Dates lib', () => {
 
       it('returns null', () => {
         const result = DateLib.determineEarliestDate(dates)
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
   })
@@ -549,17 +547,16 @@ describe('Dates lib', () => {
   })
 
   describe('renewalExpiryDate', () => {
-    let clock
     let expiryDate
 
     beforeAll(() => {
       expiryDate = new Date('2026-04-15')
 
-      clock = Sinon.useFakeTimers(expiryDate)
+      vi.useFakeTimers({ now: expiryDate })
     })
 
     afterAll(() => {
-      clock.restore()
+      vi.useRealTimers()
     })
 
     describe('when called with no argument', () => {

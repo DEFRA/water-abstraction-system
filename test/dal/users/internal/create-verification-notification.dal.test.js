@@ -1,13 +1,15 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const NotificationModel = require('../../../../app/models/notification.model.js')
-const { domains } = require('../../../../config/server.config.js')
-const { generateUserName } = require('../../../support/helpers/user.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import NotificationModel from '../../../../app/models/notification.model.js'
+import ServerConfig from '../../../../config/server.config.js'
+import { generateUUID, generateUserName } from '../../../support/generators.js'
 
 // Thing under test
-const CreateVerificationNotificationDal = require('../../../../app/dal/users/internal/create-verification-notification.dal.js')
+import CreateVerificationNotificationDal from '../../../../app/dal/users/internal/create-verification-notification.dal.js'
+
+const { domains } = ServerConfig
 
 describe('Users - Internal - Create Verification Notification DAL', () => {
   let email
@@ -20,7 +22,7 @@ describe('Users - Internal - Create Verification Notification DAL', () => {
     })
 
     it('creates a notification', async () => {
-      await CreateVerificationNotificationDal.go(email, resetGuid)
+      await CreateVerificationNotificationDal(email, resetGuid)
 
       const notification = await NotificationModel.query().where('recipient', email).limit(1).first()
 

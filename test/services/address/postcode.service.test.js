@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../support/stubs/session.stub.js')
+import SessionModelStub from '../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const PostcodeService = require('../../../app/services/address/postcode.service.js')
+import PostcodeService from '../../../app/services/address/postcode.service.js'
 
 describe('Address - Postcode Service', () => {
   const sessionId = 'dba48385-9fc8-454b-8ec8-3832d3b9e323'
@@ -32,18 +30,18 @@ describe('Address - Postcode Service', () => {
       }
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await PostcodeService.go(sessionId)
+      const result = await PostcodeService(sessionId)
 
       expect(result).toEqual({
         activeNavBar: 'manage',

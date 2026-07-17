@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Checks a two-part tariff bill run can be generated, then determines which generate engine to use
  * @module GenerateTwoPartTariffBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
-const ExpandedError = require('../../errors/expanded.error.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
-const GenerateAnnualBillRun = require('./two-part-tariff/generate-bill-run.service.js')
-const GenerateSupplementaryBillRun = require('./tpt-supplementary/generate-bill-run.service.js')
+import BillRunModel from '../../models/bill-run.model.js'
+import ExpandedError from '../../errors/expanded.error.js'
+import GenerateAnnualBillRun from './two-part-tariff/generate-bill-run.service.js'
+import GenerateSupplementaryBillRun from './tpt-supplementary/generate-bill-run.service.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Checks a two-part tariff bill run can be generated, then determines which generate engine to use
@@ -33,7 +31,7 @@ const GenerateSupplementaryBillRun = require('./tpt-supplementary/generate-bill-
  *
  * @param {string} billRunId - The UUID of the two-part tariff bill run that is ready for generating
  */
-async function go(billRunId) {
+export default async function generateTwoPartTariffBillRunService(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   _validate(billRun)
@@ -52,12 +50,12 @@ async function _fetchBillRun(billRunId) {
 
 async function _generateBillRun(billRun) {
   if (billRun.batchType === 'two_part_supplementary') {
-    GenerateSupplementaryBillRun.go(billRun)
+    GenerateSupplementaryBillRun(billRun)
 
     return
   }
 
-  GenerateAnnualBillRun.go(billRun)
+  GenerateAnnualBillRun(billRun)
 }
 
 async function _markAsProcessing(billRun) {
@@ -88,8 +86,4 @@ function _validate(billRun) {
     billRunId,
     status
   })
-}
-
-module.exports = {
-  go
 }

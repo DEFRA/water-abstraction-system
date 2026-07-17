@@ -1,57 +1,59 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
-const ProcessAddRecipientService = require('../../app/services/notices/setup/process-add-recipient.service.js')
-const ProcessDownloadRecipientsService = require('../../app/services/notices/setup/process-download-recipients.service.js')
-const ProcessPreviewPaperReturnService = require('../../app/services/notices/setup/process-preview-paper-return.service.js')
-const ProcessRemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/process-remove-threshold.service.js')
-const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
-const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
-const SubmitAlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
-const SubmitCancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
-const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
-const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
-const SubmitCheckNoticeTypeService = require('../../app/services/notices/setup/submit-check-notice-type.service.js')
-const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
-const SubmitContactTypeService = require('../../app/services/notices/setup/submit-contact-type.service.js')
-const SubmitLicenceService = require('../../app/services/notices/setup/submit-licence.service.js')
-const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit-notice-type.service.js')
-const SubmitPaperReturnService = require('../../app/services/notices/setup/submit-paper-return.service.js')
-const SubmitRecipientNameService = require('../../app/services/notices/setup/submit-recipient-name.service.js')
-const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnsPeriodService = require('../../app/services/notices/setup/submit-returns-period.service.js')
-const SubmitSelectRecipientsService = require('../../app/services/notices/setup/submit-select-recipients.service.js')
-const ViewAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/view-alert-email-address.service.js')
-const ViewAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/view-alert-thresholds.service.js')
-const ViewAlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/view-alert-type.service.js')
-const ViewCancelService = require('../../app/services/notices/setup/view-cancel.service.js')
-const ViewCancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/view-cancel-alerts.service.js')
-const ViewCheckService = require('../../app/services/notices/setup/view-check.service.js')
-const ViewCheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/view-check-licence-matches.service.js')
-const ViewCheckNoticeTypeService = require('../../app/services/notices/setup/view-check-notice-type.service.js')
-const ViewConfirmationService = require('../../app/services/notices/setup/view-confirmation.service.js')
-const ViewContactTypeService = require('../../app/services/notices/setup/view-contact-type.service.js')
-const ViewLicenceService = require('../../app/services/notices/setup/view-licence.service.js')
-const ViewNoticeTypeService = require('../../app/services/notices/setup/view-notice-type.service.js')
-const ViewPaperReturnService = require('../../app/services/notices/setup/view-paper-return.service.js')
-const ViewPreviewService = require('../../app/services/notices/setup/preview/view-preview.service.js')
-const ViewPreviewCheckAlert = require('../../app/services/notices/setup/preview/view-preview-check-alert.service.js')
-const ViewPreviewCheckPaperReturnService = require('../../app/services/notices/setup/preview/view-preview-check-paper-return.service.js')
-const ViewRecipientNameService = require('../../app/services/notices/setup/view-recipient-name.service.js')
-const ViewRemoveLicencesService = require('../../app/services/notices/setup/view-remove-licences.service.js')
-const ViewReturnsPeriodService = require('../../app/services/notices/setup/view-returns-period.service.js')
-const ViewSelectRecipientsService = require('../../app/services/notices/setup/view-select-recipients.service.js')
+import * as InitiateSessionService from '../../app/services/notices/setup/initiate-session.service.js'
+import * as ProcessAddRecipientService from '../../app/services/notices/setup/process-add-recipient.service.js'
+import * as ProcessDownloadRecipientsService from '../../app/services/notices/setup/process-download-recipients.service.js'
+import * as ProcessPreviewPaperReturnService from '../../app/services/notices/setup/process-preview-paper-return.service.js'
+import * as ProcessRemoveThresholdService from '../../app/services/notices/setup/abstraction-alerts/process-remove-threshold.service.js'
+import * as SubmitAlertEmailAddressService from '../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js'
+import * as SubmitAlertThresholdsService from '../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js'
+import * as SubmitAlertTypeService from '../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js'
+import * as SubmitCancelAlertsService from '../../app/services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js'
+import * as SubmitCancelService from '../../app/services/notices/setup/submit-cancel.service.js'
+import * as SubmitCheckLicenceMatchesService from '../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js'
+import * as SubmitCheckNoticeTypeService from '../../app/services/notices/setup/submit-check-notice-type.service.js'
+import * as SubmitCheckService from '../../app/services/notices/setup/submit-check.service.js'
+import * as SubmitContactTypeService from '../../app/services/notices/setup/submit-contact-type.service.js'
+import * as SubmitLicenceService from '../../app/services/notices/setup/submit-licence.service.js'
+import * as SubmitNoticeTypeService from '../../app/services/notices/setup/submit-notice-type.service.js'
+import * as SubmitPaperReturnService from '../../app/services/notices/setup/submit-paper-return.service.js'
+import * as SubmitRecipientNameService from '../../app/services/notices/setup/submit-recipient-name.service.js'
+import * as SubmitRemoveLicencesService from '../../app/services/notices/setup/submit-remove-licences.service.js'
+import * as SubmitReturnsPeriodService from '../../app/services/notices/setup/submit-returns-period.service.js'
+import * as SubmitSelectRecipientsService from '../../app/services/notices/setup/submit-select-recipients.service.js'
+import * as ViewAlertEmailAddressService from '../../app/services/notices/setup/abstraction-alerts/view-alert-email-address.service.js'
+import * as ViewAlertThresholdsService from '../../app/services/notices/setup/abstraction-alerts/view-alert-thresholds.service.js'
+import * as ViewAlertTypeService from '../../app/services/notices/setup/abstraction-alerts/view-alert-type.service.js'
+import * as ViewCancelAlertsService from '../../app/services/notices/setup/abstraction-alerts/view-cancel-alerts.service.js'
+import * as ViewCancelService from '../../app/services/notices/setup/view-cancel.service.js'
+import * as ViewCheckLicenceMatchesService from '../../app/services/notices/setup/abstraction-alerts/view-check-licence-matches.service.js'
+import * as ViewCheckNoticeTypeService from '../../app/services/notices/setup/view-check-notice-type.service.js'
+import * as ViewCheckService from '../../app/services/notices/setup/view-check.service.js'
+import * as ViewConfirmationService from '../../app/services/notices/setup/view-confirmation.service.js'
+import * as ViewContactTypeService from '../../app/services/notices/setup/view-contact-type.service.js'
+import * as ViewLicenceService from '../../app/services/notices/setup/view-licence.service.js'
+import * as ViewNoticeTypeService from '../../app/services/notices/setup/view-notice-type.service.js'
+import * as ViewPaperReturnService from '../../app/services/notices/setup/view-paper-return.service.js'
+import * as ViewPreviewCheckAlert from '../../app/services/notices/setup/preview/view-preview-check-alert.service.js'
+import * as ViewPreviewCheckPaperReturnService from '../../app/services/notices/setup/preview/view-preview-check-paper-return.service.js'
+import * as ViewPreviewService from '../../app/services/notices/setup/preview/view-preview.service.js'
+import * as ViewRecipientNameService from '../../app/services/notices/setup/view-recipient-name.service.js'
+import * as ViewRemoveLicencesService from '../../app/services/notices/setup/view-remove-licences.service.js'
+import * as ViewReturnsPeriodService from '../../app/services/notices/setup/view-returns-period.service.js'
+import * as ViewSelectRecipientsService from '../../app/services/notices/setup/view-select-recipients.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Notices Setup controller', () => {
   const basePath = '/notices/setup'
@@ -67,16 +69,15 @@ describe('Notices Setup controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -103,7 +104,7 @@ describe('Notices Setup controller', () => {
 
         describe('and a request is valid', () => {
           beforeEach(async () => {
-            Sinon.stub(InitiateSessionService, 'go').resolves(response)
+            vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(response)
           })
 
           it('redirects successfully', async () => {
@@ -133,7 +134,7 @@ describe('Notices Setup controller', () => {
 
         describe('and a request is valid', () => {
           beforeEach(async () => {
-            Sinon.stub(InitiateSessionService, 'go').resolves(response)
+            vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(response)
           })
 
           it('redirects successfully', async () => {
@@ -161,7 +162,7 @@ describe('Notices Setup controller', () => {
 
         describe('and a request is valid', () => {
           beforeEach(async () => {
-            Sinon.stub(InitiateSessionService, 'go').resolves(response)
+            vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(response)
           })
 
           it('redirects successfully', async () => {
@@ -190,8 +191,8 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ViewCancelService, 'go').returns(_viewCancel())
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+          vi.spyOn(ViewCancelService, 'default').mockReturnValue(_viewCancel())
         })
 
         it('returns the page successfully', async () => {
@@ -208,7 +209,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(SubmitCancelService, 'go').returns('/system/notices')
+          vi.spyOn(SubmitCancelService, 'default').mockReturnValue('/system/notices')
           postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {}, ['bulk_return_notifications'])
         })
 
@@ -236,8 +237,8 @@ describe('Notices Setup controller', () => {
       })
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ViewCheckService, 'go').returns(_viewCheck())
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+          vi.spyOn(ViewCheckService, 'default').mockReturnValue(_viewCheck())
         })
 
         it('returns the page successfully', async () => {
@@ -258,7 +259,7 @@ describe('Notices Setup controller', () => {
         beforeEach(async () => {
           eventId = '1233'
 
-          Sinon.stub(SubmitCheckService, 'go').returns(eventId)
+          vi.spyOn(SubmitCheckService, 'default').mockReturnValue(eventId)
           postOptions = postRequestOptions(basePath + `/${session.id}/check`, {}, ['bulk_return_notifications'])
         })
 
@@ -286,8 +287,8 @@ describe('Notices Setup controller', () => {
       })
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ViewCheckNoticeTypeService, 'go').returns({
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+          vi.spyOn(ViewCheckNoticeTypeService, 'default').mockReturnValue({
             pageTitle: 'Check the notice type'
           })
         })
@@ -307,7 +308,7 @@ describe('Notices Setup controller', () => {
           'bulk_return_notifications'
         ])
 
-        Sinon.stub(SubmitCheckNoticeTypeService, 'go').resolves({ redirectUrl: 'check' })
+        vi.spyOn(SubmitCheckNoticeTypeService, 'default').mockResolvedValue({ redirectUrl: 'check' })
       })
 
       it('redirects to the "check" page', async () => {
@@ -337,8 +338,8 @@ describe('Notices Setup controller', () => {
       })
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ViewConfirmationService, 'go').returns(_viewConfirmation())
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+          vi.spyOn(ViewConfirmationService, 'default').mockReturnValue(_viewConfirmation())
         })
 
         it('returns the page successfully', async () => {
@@ -367,8 +368,8 @@ describe('Notices Setup controller', () => {
       })
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ProcessDownloadRecipientsService, 'go').returns({
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+          vi.spyOn(ProcessDownloadRecipientsService, 'default').mockReturnValue({
             data: 'test',
             type: 'type/csv',
             filename: 'test.csv'
@@ -400,7 +401,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(ViewAlertEmailAddressService, 'go').resolves({
+          vi.spyOn(ViewAlertEmailAddressService, 'default').mockResolvedValue({
             pageTitle: 'Email Address page'
           })
         })
@@ -422,7 +423,7 @@ describe('Notices Setup controller', () => {
               'hof_notifications'
             ])
 
-            Sinon.stub(SubmitAlertEmailAddressService, 'go').resolves({})
+            vi.spyOn(SubmitAlertEmailAddressService, 'default').mockResolvedValue({})
           })
 
           it('redirects to the next page', async () => {
@@ -439,7 +440,7 @@ describe('Notices Setup controller', () => {
               'hof_notifications'
             ])
 
-            Sinon.stub(SubmitAlertEmailAddressService, 'go').resolves({
+            vi.spyOn(SubmitAlertEmailAddressService, 'default').mockResolvedValue({
               error: { text: 'Select an option' },
               pageTitle: 'Email Address page'
             })
@@ -468,7 +469,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(ViewAlertThresholdsService, 'go').resolves({
+          vi.spyOn(ViewAlertThresholdsService, 'default').mockResolvedValue({
             pageTitle: 'Threshold page'
           })
         })
@@ -490,7 +491,7 @@ describe('Notices Setup controller', () => {
               'hof_notifications'
             ])
 
-            Sinon.stub(SubmitAlertThresholdsService, 'go').resolves({})
+            vi.spyOn(SubmitAlertThresholdsService, 'default').mockResolvedValue({})
           })
 
           it('redirects to the next page', async () => {
@@ -509,7 +510,7 @@ describe('Notices Setup controller', () => {
               'hof_notifications'
             ])
 
-            Sinon.stub(SubmitAlertTypeService, 'go').resolves({
+            vi.spyOn(SubmitAlertTypeService, 'default').mockResolvedValue({
               error: { text: 'Select an option' },
               pageTitle: 'Threshold page'
             })
@@ -538,7 +539,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(ViewAlertTypeService, 'go').resolves({
+          vi.spyOn(ViewAlertTypeService, 'default').mockResolvedValue({
             pageTitle: 'Alert page'
           })
         })
@@ -560,7 +561,7 @@ describe('Notices Setup controller', () => {
               'hof_notifications'
             ])
 
-            Sinon.stub(SubmitAlertTypeService, 'go').resolves({})
+            vi.spyOn(SubmitAlertTypeService, 'default').mockResolvedValue({})
           })
 
           it('redirects to the next page', async () => {
@@ -579,7 +580,7 @@ describe('Notices Setup controller', () => {
               'hof_notifications'
             ])
 
-            Sinon.stub(SubmitAlertTypeService, 'go').resolves({
+            vi.spyOn(SubmitAlertTypeService, 'default').mockResolvedValue({
               error: { text: 'Select an option' },
               pageTitle: 'Alert page'
             })
@@ -608,7 +609,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(ViewCancelAlertsService, 'go').resolves({
+          vi.spyOn(ViewCancelAlertsService, 'default').mockResolvedValue({
             pageTitle: 'Cancel page'
           })
         })
@@ -632,7 +633,7 @@ describe('Notices Setup controller', () => {
               'hof_notifications'
             ])
 
-            Sinon.stub(SubmitCancelAlertsService, 'go').resolves({ monitoringStationId })
+            vi.spyOn(SubmitCancelAlertsService, 'default').mockResolvedValue({ monitoringStationId })
           })
 
           it('redirects to the next page', async () => {
@@ -657,7 +658,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(ViewCheckLicenceMatchesService, 'go').resolves({
+          vi.spyOn(ViewCheckLicenceMatchesService, 'default').mockResolvedValue({
             pageTitle: 'Check licence page'
           })
         })
@@ -679,7 +680,7 @@ describe('Notices Setup controller', () => {
               'hof_notifications'
             ])
 
-            Sinon.stub(SubmitCheckLicenceMatchesService, 'go').resolves()
+            vi.spyOn(SubmitCheckLicenceMatchesService, 'default').mockResolvedValue()
           })
 
           it('redirects to the next page', async () => {
@@ -708,7 +709,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(ProcessRemoveThresholdService, 'go').resolves({})
+          vi.spyOn(ProcessRemoveThresholdService, 'default').mockResolvedValue({})
         })
 
         describe('when a request is valid', () => {
@@ -737,7 +738,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewLicenceService, 'go').resolves({
+        vi.spyOn(ViewLicenceService, 'default').mockResolvedValue({
           pageTitle: 'Enter a licence number'
         })
       })
@@ -759,7 +760,7 @@ describe('Notices Setup controller', () => {
             'bulk_return_notifications'
           ])
 
-          Sinon.stub(SubmitLicenceService, 'go').resolves({ redirectUrl: 'notice-type' })
+          vi.spyOn(SubmitLicenceService, 'default').mockResolvedValue({ redirectUrl: 'notice-type' })
         })
 
         it('returns the same page', async () => {
@@ -776,7 +777,7 @@ describe('Notices Setup controller', () => {
             'bulk_return_notifications'
           ])
 
-          Sinon.stub(SubmitLicenceService, 'go').resolves({
+          vi.spyOn(SubmitLicenceService, 'default').mockResolvedValue({
             licenceRef: null,
             error: {
               errorList: [
@@ -817,7 +818,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewPreviewService, 'go').resolves({
+        vi.spyOn(ViewPreviewService, 'default').mockResolvedValue({
           pageTitle: 'Preview notice'
         })
       })
@@ -848,7 +849,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewPreviewService, 'go').resolves({
+        vi.spyOn(ViewPreviewService, 'default').mockResolvedValue({
           pageTitle: 'Preview notice'
         })
       })
@@ -878,7 +879,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewPreviewCheckAlert, 'go').resolves({
+        vi.spyOn(ViewPreviewCheckAlert, 'default').mockResolvedValue({
           pageTitle: 'Check the recipient previews'
         })
       })
@@ -908,7 +909,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewPreviewCheckPaperReturnService, 'go').resolves({
+        vi.spyOn(ViewPreviewCheckPaperReturnService, 'default').mockResolvedValue({
           pageTitle: 'Preview notice'
         })
       })
@@ -942,7 +943,7 @@ describe('Notices Setup controller', () => {
 
         buffer = Buffer.from('mock file')
 
-        Sinon.stub(ProcessPreviewPaperReturnService, 'go').resolves(buffer)
+        vi.spyOn(ProcessPreviewPaperReturnService, 'default').mockResolvedValue(buffer)
       })
 
       describe('when a request is valid', () => {
@@ -972,7 +973,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewNoticeTypeService, 'go').resolves({
+        vi.spyOn(ViewNoticeTypeService, 'default').mockResolvedValue({
           pageTitle: 'Select the notice type'
         })
       })
@@ -994,7 +995,7 @@ describe('Notices Setup controller', () => {
             'bulk_return_notifications'
           ])
 
-          Sinon.stub(SubmitNoticeTypeService, 'go').resolves({ redirectUrl: 'check-notice-type' })
+          vi.spyOn(SubmitNoticeTypeService, 'default').mockResolvedValue({ redirectUrl: 'check-notice-type' })
         })
 
         it('returns the same page', async () => {
@@ -1011,7 +1012,7 @@ describe('Notices Setup controller', () => {
             'bulk_return_notifications'
           ])
 
-          Sinon.stub(SubmitNoticeTypeService, 'go').resolves({
+          vi.spyOn(SubmitNoticeTypeService, 'default').mockResolvedValue({
             error: { text: 'Select the notice type' },
             pageTitle: 'Select the notice type'
           })
@@ -1043,7 +1044,7 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewRecipientNameService, 'go').returns({ pageTitle: 'Recipients name' })
+          vi.spyOn(ViewRecipientNameService, 'default').mockReturnValue({ pageTitle: 'Recipients name' })
         })
 
         it('returns the page successfully', async () => {
@@ -1059,7 +1060,7 @@ describe('Notices Setup controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitRecipientNameService, 'go').returns({
+            vi.spyOn(SubmitRecipientNameService, 'default').mockReturnValue({
               error: 'Something went wrong'
             })
 
@@ -1078,7 +1079,7 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitRecipientNameService, 'go').returns({
+            vi.spyOn(SubmitRecipientNameService, 'default').mockReturnValue({
               pageTile: 'Select recipients'
             })
             postOptions = postRequestOptions(basePath + `/${session.id}/recipient-name`, {}, [
@@ -1112,8 +1113,8 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ViewRemoveLicencesService, 'go').returns(_viewRemoveLicence())
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+          vi.spyOn(ViewRemoveLicencesService, 'default').mockReturnValue(_viewRemoveLicence())
         })
 
         it('returns the page successfully', async () => {
@@ -1131,8 +1132,8 @@ describe('Notices Setup controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(InitiateSessionService, 'go').resolves(session)
-            Sinon.stub(SubmitRemoveLicencesService, 'go').returns({
+            vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+            vi.spyOn(SubmitRemoveLicencesService, 'default').mockReturnValue({
               ..._viewRemoveLicence(),
               error: 'Something went wrong'
             })
@@ -1151,7 +1152,7 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitRemoveLicencesService, 'go').returns({ redirect: 'check' })
+            vi.spyOn(SubmitRemoveLicencesService, 'default').mockReturnValue({ redirect: 'check' })
             postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {}, [
               'bulk_return_notifications'
             ])
@@ -1182,8 +1183,8 @@ describe('Notices Setup controller', () => {
       })
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ViewReturnsPeriodService, 'go').returns(_viewReturnsPeriod())
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+          vi.spyOn(ViewReturnsPeriodService, 'default').mockReturnValue(_viewReturnsPeriod())
         })
 
         it('returns the page successfully', async () => {
@@ -1201,8 +1202,8 @@ describe('Notices Setup controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(InitiateSessionService, 'go').resolves(session)
-            Sinon.stub(SubmitReturnsPeriodService, 'go').returns({
+            vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+            vi.spyOn(SubmitReturnsPeriodService, 'default').mockReturnValue({
               ..._viewReturnsPeriod(),
               error: 'Something went wrong'
             })
@@ -1221,7 +1222,7 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitReturnsPeriodService, 'go').returns({ redirect: 'send-notice' })
+            vi.spyOn(SubmitReturnsPeriodService, 'default').mockReturnValue({ redirect: 'send-notice' })
             postOptions = postRequestOptions(basePath + `/${session.id}/returns-period`, {}, [
               'bulk_return_notifications'
             ])
@@ -1253,8 +1254,10 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ViewPaperReturnService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+          vi.spyOn(ViewPaperReturnService, 'default').mockReturnValue({
+            pageTitle: 'Select the returns for the paper forms'
+          })
         })
 
         it('returns the page successfully', async () => {
@@ -1270,8 +1273,8 @@ describe('Notices Setup controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(InitiateSessionService, 'go').resolves(session)
-            Sinon.stub(SubmitPaperReturnService, 'go').returns({
+            vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+            vi.spyOn(SubmitPaperReturnService, 'default').mockReturnValue({
               error: 'Something went wrong'
             })
             postOptions = postRequestOptions(basePath + `/${session.id}/paper-return`, {}, [
@@ -1289,7 +1292,7 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitPaperReturnService, 'go').returns({
+            vi.spyOn(SubmitPaperReturnService, 'default').mockReturnValue({
               pageTile: 'Select the returns for the paper forms'
             })
             postOptions = postRequestOptions(basePath + `/${session.id}/paper-return`, {}, [
@@ -1323,7 +1326,7 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewSelectRecipientsService, 'go').returns({ pageTitle: 'Select recipients' })
+          vi.spyOn(ViewSelectRecipientsService, 'default').mockReturnValue({ pageTitle: 'Select recipients' })
         })
 
         it('returns the page successfully', async () => {
@@ -1339,7 +1342,7 @@ describe('Notices Setup controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitSelectRecipientsService, 'go').returns({
+            vi.spyOn(SubmitSelectRecipientsService, 'default').mockReturnValue({
               error: 'Something went wrong'
             })
             postOptions = postRequestOptions(basePath + `/${session.id}/select-recipients`, {}, [
@@ -1357,7 +1360,7 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitSelectRecipientsService, 'go').returns({
+            vi.spyOn(SubmitSelectRecipientsService, 'default').mockReturnValue({
               pageTile: 'Select recipients'
             })
             postOptions = postRequestOptions(basePath + `/${session.id}/select-recipients`, {}, [
@@ -1391,8 +1394,10 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ViewContactTypeService, 'go').returns({ pageTitle: 'Select how to contact the recipient' })
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+          vi.spyOn(ViewContactTypeService, 'default').mockReturnValue({
+            pageTitle: 'Select how to contact the recipient'
+          })
         })
 
         it('returns the page successfully', async () => {
@@ -1408,8 +1413,8 @@ describe('Notices Setup controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(InitiateSessionService, 'go').resolves(session)
-            Sinon.stub(SubmitContactTypeService, 'go').returns({
+            vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+            vi.spyOn(SubmitContactTypeService, 'default').mockReturnValue({
               error: 'Something went wrong'
             })
             postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {}, [
@@ -1427,7 +1432,7 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds and they chose the post option', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitContactTypeService, 'go').returns({
+            vi.spyOn(SubmitContactTypeService, 'default').mockReturnValue({
               contactType: 'post',
               pageTile: 'Select how to contact the recipient'
             })
@@ -1446,7 +1451,7 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds and they chose the email option', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitContactTypeService, 'go').returns({
+            vi.spyOn(SubmitContactTypeService, 'default').mockReturnValue({
               contactType: 'email',
               pageTile: 'Select how to contact the recipient'
             })
@@ -1481,7 +1486,7 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ProcessAddRecipientService, 'go')
+          vi.spyOn(ProcessAddRecipientService, 'default').mockResolvedValue()
         })
 
         it('redirects to the check recipient page', async () => {

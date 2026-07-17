@@ -1,30 +1,33 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateUUID, today } = require('../../app/lib/general.lib.js')
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+
+import FeatureFlagsConfig from '../../config/feature-flags.config.js'
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { generateUUID } from '../support/generators.js'
+import { postRequestOptions } from '../support/general.js'
+import { today } from '../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchLegacyIdDal = require('../../app/dal/users/fetch-legacy-id.dal.js')
-const IndexUsersService = require('../../app/services/users/index-users.service.js')
-const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
-const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
-const ViewExternalCommunicationsService = require('../../app/services/users/external/view-communications.service.js')
-const ViewExternalDetailsService = require('../../app/services/users/external/view-details.service.js')
-const ViewExternalLicencesService = require('../../app/services/users/external/view-licences.service.js')
-const ViewExternalVerificationsService = require('../../app/services/users/external/view-verifications.service.js')
-const ViewInternalCommunicationsService = require('../../app/services/users/internal/view-communications.service.js')
-const ViewInternalDetailsService = require('../../app/services/users/internal/view-details.service.js')
-const ViewNotificationService = require('../../app/services/users/view-notification.service.js')
-const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
+import * as FetchLegacyIdDal from '../../app/dal/users/fetch-legacy-id.dal.js'
+import * as IndexUsersService from '../../app/services/users/index-users.service.js'
+import * as SubmitIndexUsersService from '../../app/services/users/submit-index-users.service.js'
+import * as SubmitProfileDetailsService from '../../app/services/users/submit-profile-details.service.js'
+import * as ViewExternalCommunicationsService from '../../app/services/users/external/view-communications.service.js'
+import * as ViewExternalDetailsService from '../../app/services/users/external/view-details.service.js'
+import * as ViewExternalLicencesService from '../../app/services/users/external/view-licences.service.js'
+import * as ViewExternalVerificationsService from '../../app/services/users/external/view-verifications.service.js'
+import * as ViewInternalCommunicationsService from '../../app/services/users/internal/view-communications.service.js'
+import * as ViewInternalDetailsService from '../../app/services/users/internal/view-details.service.js'
+import * as ViewNotificationService from '../../app/services/users/view-notification.service.js'
+import * as ViewProfileDetailsService from '../../app/services/users/view-profile-details.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Users controller', () => {
   let id
@@ -40,18 +43,17 @@ describe('Users controller', () => {
   })
 
   beforeEach(async () => {
-    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
-
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
+
+    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersManagement', true)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -87,7 +89,7 @@ describe('Users controller', () => {
 
       describe('with no results', () => {
         beforeEach(async () => {
-          Sinon.stub(IndexUsersService, 'go').resolves(pageData)
+          vi.spyOn(IndexUsersService, 'default').mockResolvedValue(pageData)
         })
 
         it('returns the page successfully', async () => {
@@ -116,7 +118,7 @@ describe('Users controller', () => {
           beforeEach(() => {
             pageData.pagination.showingMessage = 'Showing all 1 users'
 
-            Sinon.stub(IndexUsersService, 'go').returns(pageData)
+            vi.spyOn(IndexUsersService, 'default').mockReturnValue(pageData)
           })
 
           it('returns the page successfully', async () => {
@@ -136,7 +138,7 @@ describe('Users controller', () => {
             pageData.pagination.numberOfPages = 3
             pageData.pagination.showingMessage = 'Showing 25 of 70 users'
 
-            Sinon.stub(IndexUsersService, 'go').returns(pageData)
+            vi.spyOn(IndexUsersService, 'default').mockReturnValue(pageData)
           })
 
           it('returns the page successfully', async () => {
@@ -159,7 +161,7 @@ describe('Users controller', () => {
         beforeEach(() => {
           pageData = {}
 
-          Sinon.stub(SubmitIndexUsersService, 'go').returns(pageData)
+          vi.spyOn(SubmitIndexUsersService, 'default').mockReturnValue(pageData)
         })
 
         it('redirects back to the index page', async () => {
@@ -188,7 +190,7 @@ describe('Users controller', () => {
 
         describe('with no results', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitIndexUsersService, 'go').returns(pageData)
+            vi.spyOn(SubmitIndexUsersService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the index page with no pagination and an error', async () => {
@@ -219,7 +221,7 @@ describe('Users controller', () => {
             beforeEach(() => {
               pageData.pagination.showingMessage = 'Showing all 1 users'
 
-              Sinon.stub(SubmitIndexUsersService, 'go').returns(pageData)
+              vi.spyOn(SubmitIndexUsersService, 'default').mockReturnValue(pageData)
             })
 
             it('re-renders the index page with no pagination and an error', async () => {
@@ -241,7 +243,7 @@ describe('Users controller', () => {
               pageData.pagination.numberOfPages = 3
               pageData.pagination.showingMessage = 'Showing 25 of 70 users'
 
-              Sinon.stub(SubmitIndexUsersService, 'go').returns(pageData)
+              vi.spyOn(SubmitIndexUsersService, 'default').mockReturnValue(pageData)
             })
 
             it('re-renders the index page with pagination and an error', async () => {
@@ -286,7 +288,7 @@ describe('Users controller', () => {
 
       describe('with no results', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewExternalCommunicationsService, 'go').resolves(pageData)
+          vi.spyOn(ViewExternalCommunicationsService, 'default').mockResolvedValue(pageData)
         })
 
         it('returns the external user page successfully', async () => {
@@ -315,7 +317,7 @@ describe('Users controller', () => {
           beforeEach(async () => {
             pageData.pagination.showingMessage = 'Showing all 1 communications'
 
-            Sinon.stub(ViewExternalCommunicationsService, 'go').resolves(pageData)
+            vi.spyOn(ViewExternalCommunicationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -335,7 +337,7 @@ describe('Users controller', () => {
             pageData.pagination.numberOfPages = 3
             pageData.pagination.showingMessage = 'Showing 25 of 70 communications'
 
-            Sinon.stub(ViewExternalCommunicationsService, 'go').resolves(pageData)
+            vi.spyOn(ViewExternalCommunicationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -356,7 +358,7 @@ describe('Users controller', () => {
         id = generateUUID()
         options = _getOptions(`/users/external/${id}/details`, { scope: [], user: { id } })
 
-        Sinon.stub(ViewExternalDetailsService, 'go').resolves({
+        vi.spyOn(ViewExternalDetailsService, 'default').mockResolvedValue({
           activeNavBar: 'users',
           activeSecondaryNav: 'details',
           backLink: {
@@ -411,7 +413,7 @@ describe('Users controller', () => {
 
       describe('with no results', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewExternalLicencesService, 'go').resolves(pageData)
+          vi.spyOn(ViewExternalLicencesService, 'default').mockResolvedValue(pageData)
         })
 
         it('returns the external user page successfully', async () => {
@@ -461,7 +463,7 @@ describe('Users controller', () => {
           beforeEach(async () => {
             pageData.pagination.showingMessage = 'Showing all 1 licences'
 
-            Sinon.stub(ViewExternalLicencesService, 'go').resolves(pageData)
+            vi.spyOn(ViewExternalLicencesService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -481,7 +483,7 @@ describe('Users controller', () => {
             pageData.pagination.numberOfPages = 3
             pageData.pagination.showingMessage = 'Showing 25 of 70 licences'
 
-            Sinon.stub(ViewExternalLicencesService, 'go').resolves(pageData)
+            vi.spyOn(ViewExternalLicencesService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -523,7 +525,7 @@ describe('Users controller', () => {
 
       describe('with no results', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewExternalVerificationsService, 'go').resolves(pageData)
+          vi.spyOn(ViewExternalVerificationsService, 'default').mockResolvedValue(pageData)
         })
 
         it('returns the external user page successfully', async () => {
@@ -575,7 +577,7 @@ describe('Users controller', () => {
           beforeEach(async () => {
             pageData.pagination.showingMessage = 'Showing all 1 verifications'
 
-            Sinon.stub(ViewExternalVerificationsService, 'go').resolves(pageData)
+            vi.spyOn(ViewExternalVerificationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -595,7 +597,7 @@ describe('Users controller', () => {
             pageData.pagination.numberOfPages = 3
             pageData.pagination.showingMessage = 'Showing 25 of 70 verifications'
 
-            Sinon.stub(ViewExternalVerificationsService, 'go').resolves(pageData)
+            vi.spyOn(ViewExternalVerificationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -636,7 +638,7 @@ describe('Users controller', () => {
 
       describe('with no results', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewInternalCommunicationsService, 'go').resolves(pageData)
+          vi.spyOn(ViewInternalCommunicationsService, 'default').mockResolvedValue(pageData)
         })
 
         it('returns the internal user page successfully', async () => {
@@ -665,7 +667,7 @@ describe('Users controller', () => {
           beforeEach(async () => {
             pageData.pagination.showingMessage = 'Showing all 1 communications'
 
-            Sinon.stub(ViewInternalCommunicationsService, 'go').resolves(pageData)
+            vi.spyOn(ViewInternalCommunicationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the internal user page successfully', async () => {
@@ -685,7 +687,7 @@ describe('Users controller', () => {
             pageData.pagination.numberOfPages = 3
             pageData.pagination.showingMessage = 'Showing 25 of 70 communications'
 
-            Sinon.stub(ViewInternalCommunicationsService, 'go').resolves(pageData)
+            vi.spyOn(ViewInternalCommunicationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the internal user page successfully', async () => {
@@ -706,7 +708,7 @@ describe('Users controller', () => {
         id = generateUUID()
         options = _getOptions(`/users/internal/${id}/details`, { scope: ['manage_accounts'], user: { id } })
 
-        Sinon.stub(ViewInternalDetailsService, 'go').resolves({
+        vi.spyOn(ViewInternalDetailsService, 'default').mockResolvedValue({
           activeNavBar: 'users',
           activeSecondaryNav: 'details',
           backLink: {
@@ -740,7 +742,7 @@ describe('Users controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(FetchLegacyIdDal, 'go').returns(456)
+          vi.spyOn(FetchLegacyIdDal, 'default').mockReturnValue(456)
         })
 
         it('redirects to the internal initiate edit session url', async () => {
@@ -763,7 +765,7 @@ describe('Users controller', () => {
           user: { id }
         })
 
-        Sinon.stub(ViewNotificationService, 'go').resolves({
+        vi.spyOn(ViewNotificationService, 'default').mockResolvedValue({
           activeNavBar: 'users',
           backLink: {
             href: `/system/users/internal/${id}/communications`,
@@ -794,7 +796,7 @@ describe('Users controller', () => {
       beforeEach(async () => {
         options = _getOptions('/users/me/profile-details', { scope: ['hof_notifications'], user: { id: 1000 } })
 
-        Sinon.stub(ViewProfileDetailsService, 'go').resolves({
+        vi.spyOn(ViewProfileDetailsService, 'default').mockResolvedValue({
           pageTitle: 'Profile details'
         })
       })
@@ -817,7 +819,7 @@ describe('Users controller', () => {
       describe('when the request succeeds', () => {
         describe('and is valid', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitProfileDetailsService, 'go').resolves({})
+            vi.spyOn(SubmitProfileDetailsService, 'default').mockResolvedValue({})
           })
 
           it('redirects to itself', async () => {
@@ -830,7 +832,7 @@ describe('Users controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitProfileDetailsService, 'go').resolves({ error: { details: [] } })
+            vi.spyOn(SubmitProfileDetailsService, 'default').mockResolvedValue({ error: { details: [] } })
           })
 
           it('returns the page successfully with the error summary banner', async () => {

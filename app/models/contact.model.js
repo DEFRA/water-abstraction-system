@@ -1,13 +1,14 @@
-'use strict'
-
 /**
  * Model for contacts (crm_v2.contacts)
  * @module ContactModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import BillingAccountAddressModel from './billing-account-address.model.js'
+import CompanyContactModel from './company-contact.model.js'
+import LicenceDocumentRoleModel from './licence-document-role.model.js'
 
 /**
  * Objection model that represents a `contact` in the `crm_v2.contacts` table
@@ -36,7 +37,7 @@ const BaseModel = require('./base.model.js')
  * - as of 2023-08-01 there were 6 contacts with `suffix` populated out of 42,827 (1,621 WRLS)
  *
  */
-class ContactModel extends BaseModel {
+export default class ContactModel extends BaseModel {
   static get tableName() {
     return 'contacts'
   }
@@ -45,7 +46,7 @@ class ContactModel extends BaseModel {
     return {
       billingAccountAddresses: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing-account-address.model',
+        modelClass: BillingAccountAddressModel,
         join: {
           from: 'contacts.id',
           to: 'billingAccountAddresses.contactId'
@@ -53,7 +54,7 @@ class ContactModel extends BaseModel {
       },
       companyContacts: {
         relation: Model.HasManyRelation,
-        modelClass: 'company-contact.model',
+        modelClass: CompanyContactModel,
         join: {
           from: 'contacts.id',
           to: 'companyContacts.contactId'
@@ -61,7 +62,7 @@ class ContactModel extends BaseModel {
       },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-document-role.model',
+        modelClass: LicenceDocumentRoleModel,
         join: {
           from: 'contacts.id',
           to: 'licenceDocumentRoles.contactId'
@@ -114,5 +115,3 @@ class ContactModel extends BaseModel {
     return null
   }
 }
-
-module.exports = ContactModel

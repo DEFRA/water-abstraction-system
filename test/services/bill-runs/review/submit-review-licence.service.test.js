@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
-const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-review-licence.service.js')
+import * as FetchReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-review-licence.service.js'
 
 // Thing under test
-const SubmitReviewLicenceService = require('../../../../app/services/bill-runs/review/submit-review-licence.service.js')
+import SubmitReviewLicenceService from '../../../../app/services/bill-runs/review/submit-review-licence.service.js'
 
 describe('Bill Runs Review - Submit Review Licence Service', () => {
   let payload
@@ -23,19 +21,19 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
   beforeEach(async () => {
     reviewLicence = BillRunsReviewFixture.reviewLicence()
 
-    Sinon.stub(FetchReviewLicenceService, 'go').resolves(reviewLicence)
+    vi.spyOn(FetchReviewLicenceService, 'default').mockResolvedValue(reviewLicence)
 
-    patchStub = Sinon.stub().resolves()
-    Sinon.stub(ReviewLicenceModel, 'query').returns({
-      findById: Sinon.stub().withArgs(reviewLicence.id).returnsThis(),
+    patchStub = vi.fn().mockResolvedValue()
+    vi.spyOn(ReviewLicenceModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
       patch: patchStub
     })
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -45,15 +43,15 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
       })
 
       it('sets a flash message and updates the status of the review licence', async () => {
-        await SubmitReviewLicenceService.go(reviewLicence.id, yarStub, payload)
+        await SubmitReviewLicenceService(reviewLicence.id, yarStub, payload)
 
         // Check we save the status change
-        const [patchObject] = patchStub.args[0]
+        const [patchObject] = patchStub.mock.calls[0]
 
         expect(patchObject).toEqual({ status: 'ready' })
 
         // Check we add the flash message
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('banner')
         expect(bannerMessage).toEqual('Licence changed to ready.')
@@ -67,15 +65,15 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
         })
 
         it('sets a flash message and updates the progress of the review licence', async () => {
-          await SubmitReviewLicenceService.go(reviewLicence.id, yarStub, payload)
+          await SubmitReviewLicenceService(reviewLicence.id, yarStub, payload)
 
           // Check we save the status change
-          const [patchObject] = patchStub.args[0]
+          const [patchObject] = patchStub.mock.calls[0]
 
           expect(patchObject).toEqual({ progress: true })
 
           // Check we add the flash message
-          const [flashType, bannerMessage] = yarStub.flash.args[0]
+          const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('banner')
           expect(bannerMessage).toEqual('This licence has been marked.')
@@ -88,15 +86,15 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
         })
 
         it('sets a flash message and updates the progress of the review licence', async () => {
-          await SubmitReviewLicenceService.go(reviewLicence.id, yarStub, payload)
+          await SubmitReviewLicenceService(reviewLicence.id, yarStub, payload)
 
           // Check we save the status change
-          const [patchObject] = patchStub.args[0]
+          const [patchObject] = patchStub.mock.calls[0]
 
           expect(patchObject).toEqual({ progress: false })
 
           // Check we add the flash message
-          const [flashType, bannerMessage] = yarStub.flash.args[0]
+          const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('banner')
           expect(bannerMessage).toEqual('The progress mark for this licence has been removed.')

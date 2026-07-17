@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/agreements-exceptions` page
  * @module AgreementExceptionService
  */
 
-const AgreementsExceptionsPresenter = require('../../../presenters/return-versions/setup/agreements-exceptions.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import AgreementsExceptionsPresenter from '../../../presenters/return-versions/setup/agreements-exceptions.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/agreements-exceptions` page
@@ -19,16 +17,12 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} The view data for the agreements and exceptions page
  */
-async function go(sessionId, requirementIndex) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function agreementsExceptionsService(sessionId, requirementIndex) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = AgreementsExceptionsPresenter.go(session, requirementIndex)
+  const formattedData = AgreementsExceptionsPresenter(session, requirementIndex)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

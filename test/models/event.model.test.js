@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const EventHelper = require('../support/helpers/event.helper.js')
-const NotificationHelper = require('../support/helpers/notification.helper.js')
-const NotificationModel = require('../../app/models/notification.model.js')
+import EventHelper from '../support/helpers/event.helper.js'
+import NotificationHelper from '../support/helpers/notification.helper.js'
+import NotificationModel from '../../app/models/notification.model.js'
 
 // Thing under test
-const EventModel = require('../../app/models/event.model.js')
+import EventModel from '../../app/models/event.model.js'
 
 describe('Event model', () => {
   let testNotifications

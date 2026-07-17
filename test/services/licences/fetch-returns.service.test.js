@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 
 // Thing under test
-const FetchReturnsService = require('../../../app/services/licences/fetch-returns.service.js')
+import FetchReturnsService from '../../../app/services/licences/fetch-returns.service.js'
 
 describe('Licences - Fetch Returns service', () => {
   let licence
@@ -71,7 +72,7 @@ describe('Licences - Fetch Returns service', () => {
 
   describe('when the licence has return logs', () => {
     it('returns results', async () => {
-      const result = await FetchReturnsService.go(licence.id)
+      const result = await FetchReturnsService(licence.id)
 
       expect(result).toEqual({
         //  This should be ordered first by start date, then by return reference, then by end date

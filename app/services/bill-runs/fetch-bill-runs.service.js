@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Fetches a summary of each bill run for the selected page for /bill-runs
  * @module FetchBillRunsService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import BillRunModel from '../../models/bill-run.model.js'
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches a summary of each bill run for the selected page for /bill-runs
@@ -22,11 +19,11 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * on the query (we use `createdAt DESC`).
  *
  * @param {object} filters - An object containing the different filters to apply to the query
- * @param {string} [page=1] - The current page for the pagination service
+ * @param {string} [page='1'] - The current page for the pagination service
  *
  * @returns {Promise<module:BillRunModel[]>} An array of bill runs that match the selected 'page in the data
  */
-async function go(filters, page = '1') {
+export default async function fetchBillRunsService(filters, page = '1') {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)
@@ -77,8 +74,4 @@ function _fetchQuery() {
       'region.displayName AS region'
     ])
     .innerJoinRelated('region')
-}
-
-module.exports = {
-  go
 }

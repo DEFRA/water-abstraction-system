@@ -1,13 +1,20 @@
-'use strict'
+import {
+  cancel,
+  index,
+  send,
+  submitCancel,
+  submitIndex,
+  submitSend,
+  twoPartTariff,
+  view
+} from '../controllers/bill-runs.controller.js'
 
-const BillRunsController = require('../controllers/bill-runs.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/bill-runs',
     options: {
-      handler: BillRunsController.index,
+      handler: index,
       auth: {
         access: {
           scope: ['billing']
@@ -19,7 +26,7 @@ const routes = [
     method: 'POST',
     path: '/bill-runs',
     options: {
-      handler: BillRunsController.submitIndex,
+      handler: submitIndex,
       auth: {
         access: {
           scope: ['billing']
@@ -31,7 +38,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/{id}',
     options: {
-      handler: BillRunsController.view,
+      handler: view,
       auth: {
         access: {
           scope: ['billing']
@@ -43,7 +50,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/{id}/cancel',
     options: {
-      handler: BillRunsController.cancel,
+      handler: cancel,
       auth: {
         access: {
           scope: ['billing']
@@ -55,7 +62,7 @@ const routes = [
     method: 'POST',
     path: '/bill-runs/{id}/cancel',
     options: {
-      handler: BillRunsController.submitCancel,
+      handler: submitCancel,
       auth: {
         access: {
           scope: ['billing']
@@ -67,7 +74,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/{id}/send',
     options: {
-      handler: BillRunsController.send,
+      handler: send,
       auth: {
         access: {
           scope: ['billing']
@@ -79,7 +86,7 @@ const routes = [
     method: 'POST',
     path: '/bill-runs/{id}/send',
     options: {
-      handler: BillRunsController.submitSend,
+      handler: submitSend,
       auth: {
         access: {
           scope: ['billing']
@@ -91,7 +98,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/{id}/two-part-tariff',
     options: {
-      handler: BillRunsController.twoPartTariff,
+      handler: twoPartTariff,
       auth: {
         access: {
           scope: ['billing']
@@ -100,5 +107,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

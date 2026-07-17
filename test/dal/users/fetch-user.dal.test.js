@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+import UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Thing under test
-const FetchUserDal = require('../../../app/dal/users/fetch-user.dal.js')
+import FetchUserDal from '../../../app/dal/users/fetch-user.dal.js'
 
 // NOTE: The users are seeded as part of setting up the test database, along with with their groups and roles. So,
 // unlike other fetch tests we don't create any test records and assert they are in our results as we already have
@@ -20,7 +21,7 @@ describe('Users - Internal - Fetch User DAL', () => {
     })
 
     it('returns the requested user', async () => {
-      const result = await FetchUserDal.go(user.id)
+      const result = await FetchUserDal(user.id)
 
       expect(result).toEqual({ id: user.id, licenceEntityId: null, username: user.username })
     })

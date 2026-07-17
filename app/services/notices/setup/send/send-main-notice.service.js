@@ -1,19 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates sending the first main notice to Notify, recording the results, and checking the status when finished
  * @module SendMainNoticeService
  */
 
-const CheckNotificationStatusService = require('../../../notifications/check-notification-status.service.js')
-const NotificationModel = require('../../../../../app/models/notification.model.js')
-const SendEmailNotificationService = require('./send-email-notification.service.js')
-const SendLetterNotificationService = require('./send-letter-notification.service.js')
-const SendPaperReturnNotificationService = require('./send-paper-return-notification.service.js')
-
-const { pause } = require('../../../../lib/general.lib.js')
-
-const notifyConfig = require('../../../../../config/notify.config.js')
+import CheckNotificationStatusService from '../../../notifications/check-notification-status.service.js'
+import NotificationModel from '../../../../../app/models/notification.model.js'
+import SendEmailNotificationService from './send-email-notification.service.js'
+import SendLetterNotificationService from './send-letter-notification.service.js'
+import SendPaperReturnNotificationService from './send-paper-return-notification.service.js'
+import notifyConfig from '../../../../../config/notify.config.js'
+import { pause } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates sending the first main notice to Notify, recording the results, and checking the status when finished
@@ -21,7 +17,7 @@ const notifyConfig = require('../../../../../config/notify.config.js')
  * @param {object} notice - The notice to be sent
  * @param {object[]} notifications - The notifications linked to the notice to be sent
  */
-async function go(notice, notifications) {
+export default async function sendMainNoticeService(notice, notifications) {
   const { referenceCode } = notice
 
   const sentNotifications = await _sendNotifications(notifications, referenceCode)
@@ -38,7 +34,7 @@ async function _checkNotifications(notifications) {
     if (notification.messageType === 'email') {
       // NOTE: CheckNotificationStatusService will handle ignoring errored notifications. So we just focus on checking
       // the message type here.
-      await CheckNotificationStatusService.go(notification)
+      await CheckNotificationStatusService(notification)
     }
   }
 }
@@ -51,14 +47,14 @@ async function _recordResult(sendResult) {
 
 async function _sendNotification(notification, referenceCode) {
   if (notification.messageType === 'email') {
-    return SendEmailNotificationService.go(notification, referenceCode)
+    return SendEmailNotificationService(notification, referenceCode)
   }
 
   if (notification.messageRef === 'paper return') {
-    return SendPaperReturnNotificationService.go(notification, referenceCode)
+    return SendPaperReturnNotificationService(notification, referenceCode)
   }
 
-  return SendLetterNotificationService.go(notification, referenceCode)
+  return SendLetterNotificationService(notification, referenceCode)
 }
 
 async function _sendNotifications(notifications, referenceCode) {
@@ -80,8 +76,4 @@ async function _sendNotifications(notifications, referenceCode) {
   }
 
   return sentNotifications
-}
-
-module.exports = {
-  go
 }

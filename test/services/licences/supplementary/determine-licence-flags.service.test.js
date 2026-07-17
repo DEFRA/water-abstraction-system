@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const DetermineLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-licence-flags.service.js')
+import DetermineLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-licence-flags.service.js'
 
 describe('Determine Licence Flags Service', () => {
   describe('when passed a licence ID', () => {
@@ -22,14 +23,14 @@ describe('Determine Licence Flags Service', () => {
         })
 
         it('returns the licence details', async () => {
-          const result = await DetermineLicenceFlagsService.go(licence.id, scheme)
+          const result = await DetermineLicenceFlagsService(licence.id, scheme)
 
           expect(result.licenceId).toEqual(licence.id)
           expect(result.regionId).toEqual(licence.regionId)
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineLicenceFlagsService.go(licence.id, scheme)
+          const result = await DetermineLicenceFlagsService(licence.id, scheme)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -39,14 +40,14 @@ describe('Determine Licence Flags Service', () => {
 
       describe("and a charging scheme of 'alcs'", () => {
         it('returns the licence details', async () => {
-          const result = await DetermineLicenceFlagsService.go(licence.id, scheme)
+          const result = await DetermineLicenceFlagsService(licence.id, scheme)
 
           expect(result.licenceId).toEqual(licence.id)
           expect(result.regionId).toEqual(licence.regionId)
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineLicenceFlagsService.go(licence.id, scheme)
+          const result = await DetermineLicenceFlagsService(licence.id, scheme)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -66,14 +67,14 @@ describe('Determine Licence Flags Service', () => {
         })
 
         it('returns the licence details', async () => {
-          const result = await DetermineLicenceFlagsService.go(licence.id, scheme)
+          const result = await DetermineLicenceFlagsService(licence.id, scheme)
 
           expect(result.licenceId).toEqual(licence.id)
           expect(result.regionId).toEqual(licence.regionId)
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineLicenceFlagsService.go(licence.id, scheme)
+          const result = await DetermineLicenceFlagsService(licence.id, scheme)
 
           expect(result.flagForPreSrocSupplementary).toEqual(false)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -87,14 +88,14 @@ describe('Determine Licence Flags Service', () => {
         })
 
         it('returns the licence details', async () => {
-          const result = await DetermineLicenceFlagsService.go(licence.id, scheme)
+          const result = await DetermineLicenceFlagsService(licence.id, scheme)
 
           expect(result.licenceId).toEqual(licence.id)
           expect(result.regionId).toEqual(licence.regionId)
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineLicenceFlagsService.go(licence.id, scheme)
+          const result = await DetermineLicenceFlagsService(licence.id, scheme)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(false)

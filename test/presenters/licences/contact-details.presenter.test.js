@@ -1,11 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test Helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const ContactDetailsPresenter = require('../../../app/presenters/licences/contact-details.presenter.js')
+import ContactDetailsPresenter from '../../../app/presenters/licences/contact-details.presenter.js'
 
 describe('Licences - Contact Details presenter', () => {
   let companyId
@@ -36,7 +36,7 @@ describe('Licences - Contact Details presenter', () => {
 
   describe('when provided with populated contacts data', () => {
     it('correctly presents the data', () => {
-      const result = ContactDetailsPresenter.go(contacts, licence)
+      const result = ContactDetailsPresenter(contacts, licence)
 
       expect(result).toEqual({
         backLink: {
@@ -64,7 +64,7 @@ describe('Licences - Contact Details presenter', () => {
     describe('the "licenceHolderContactsLink" property', () => {
       describe('when the the licence has a "licence Holder" licence contact', () => {
         it('returns the link to licence holder contacts', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
+          const result = ContactDetailsPresenter(contacts, licence)
 
           expect(result.licenceHolderContactsLink).toEqual(`/system/companies/${companyId}/contacts`)
         })
@@ -76,7 +76,7 @@ describe('Licences - Contact Details presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
+          const result = ContactDetailsPresenter(contacts, licence)
 
           expect(result.licenceHolderContactsLink).toBeNull()
         })
@@ -96,7 +96,7 @@ describe('Licences - Contact Details presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
+          const result = ContactDetailsPresenter(contacts, licence)
 
           expect(result.contacts).toEqual([
             {
@@ -120,7 +120,7 @@ describe('Licences - Contact Details presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
+          const result = ContactDetailsPresenter(contacts, licence)
 
           expect(result.contacts).toEqual([
             {
@@ -144,7 +144,7 @@ describe('Licences - Contact Details presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
+          const result = ContactDetailsPresenter(contacts, licence)
 
           expect(result.contacts).toEqual([
             {
@@ -168,7 +168,7 @@ describe('Licences - Contact Details presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
+          const result = ContactDetailsPresenter(contacts, licence)
 
           expect(result.contacts).toEqual([
             {
@@ -192,7 +192,7 @@ describe('Licences - Contact Details presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
+          const result = ContactDetailsPresenter(contacts, licence)
 
           expect(result.contacts).toEqual([
             {
@@ -216,7 +216,7 @@ describe('Licences - Contact Details presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
+          const result = ContactDetailsPresenter(contacts, licence)
 
           expect(result.contacts).toEqual([
             {
@@ -240,7 +240,7 @@ describe('Licences - Contact Details presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
+          const result = ContactDetailsPresenter(contacts, licence)
 
           expect(result.contacts).toEqual([
             {
@@ -264,7 +264,7 @@ describe('Licences - Contact Details presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
+          const result = ContactDetailsPresenter(contacts, licence)
 
           expect(result.contacts).toEqual([
             {

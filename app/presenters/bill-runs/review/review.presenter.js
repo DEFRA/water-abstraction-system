@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/review/{id}` page
  * @module ReviewBillRunPresenter
  */
 
-const { formatFinancialYear, formatLongDate, titleCase } = require('../../base.presenter.js')
-const { formatBillRunType, formatChargeScheme, generateBillRunTitle } = require('../../billing.presenter.js')
+import { formatBillRunType, formatChargeScheme, generateBillRunTitle } from '../../billing.presenter.js'
+import { formatFinancialYear, formatLongDate, titleCase } from '../../base.presenter.js'
 
 /**
  * Formats data for the `/bill-runs/review/{id}` page
@@ -16,7 +14,7 @@ const { formatBillRunType, formatChargeScheme, generateBillRunTitle } = require(
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(billRun, licences) {
+export default function reviewPresenter(billRun, licences) {
   const formattedLicences = _formatLicences(licences)
 
   const {
@@ -82,8 +80,4 @@ function _reviewMessage(numberOfLicencesToReview) {
   }
 
   return `You need to review ${numberOfLicences} with returns data issues. You can then continue and send the bill run.`
-}
-
-module.exports = {
-  go
 }

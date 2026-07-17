@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
-const { yesterday } = require('../../support/general.js')
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import { yesterday } from '../../support/general.js'
 
 // Thing under test
-const UpdateSucceededReturnLogsDal = require('../../../app/dal/return-versions/update-succeeded-return-logs.dal.js')
+import UpdateSucceededReturnLogsDal from '../../../app/dal/return-versions/update-succeeded-return-logs.dal.js'
 
 describe('DAL - Return Versions - Update Succeeded Return Logs dal', () => {
   let licence
@@ -77,7 +78,7 @@ describe('DAL - Return Versions - Update Succeeded Return Logs dal', () => {
       // We need to create a transaction here to test the service, but in reality this would be part of a larger
       // transaction that creates a new return version and its requirements.
       await ReturnLogModel.transaction(async (trx) => {
-        await UpdateSucceededReturnLogsDal.go(licence.licenceRef, trx)
+        await UpdateSucceededReturnLogsDal(licence.licenceRef, trx)
       })
 
       const results = await ReturnLogModel.query()

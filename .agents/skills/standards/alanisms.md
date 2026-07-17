@@ -29,54 +29,54 @@ return {
 }
 ```
 
-This applies everywhere: return values, inline objects, `module.exports`, test assertions.
+This applies everywhere: return values, inline objects, export declarations, test assertions.
 
-## 2 — `require()` imports must be in alphabetical order by variable name
+## 2 — `import` statements must be in alphabetical order by variable name
 
-Within each group (see rule 3), sort imports A–Z by variable name. Destructured imports are an exception: place them after non-destructured imports within the same group, then sort destructured imports alphabetically by file name (not by the variable names being destructured).
+Within each group (see rule 3), sort imports A–Z by the imported identifier. Named (destructured) imports are an exception: place them after non-destructured (default) imports within the same group, then sort named imports alphabetically by file name (not by the variable names being imported).
 
 ```js
 // Bad
-const path = require('path')
-const crypto = require('node:crypto')
+import path from 'path'
+import crypto from 'node:crypto'
 
 // Good
-const crypto = require('node:crypto')
-const path = require('path')
+import crypto from 'node:crypto'
+import path from 'path'
 
-// Bad — destructured imports mixed with non-destructured
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const PermissionsPresenter = require('../../../../presenters/users/internal/setup/permissions.presenter.js')
+// Bad — named imports mixed with default imports
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
+import PermissionsPresenter from '../../../../presenters/users/internal/setup/permissions.presenter.js'
 
-// Good — non-destructured first (sorted by variable name), then destructured (sorted by file name)
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const PermissionsPresenter = require('../../../../presenters/users/internal/setup/permissions.presenter.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
+// Good — default imports first (sorted by variable name), then named imports (sorted by file name)
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import PermissionsPresenter from '../../../../presenters/users/internal/setup/permissions.presenter.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
 ```
 
 ## 3 — External packages, internal dependencies, and config modules must be in separate groups
 
-Group 1 is external packages (from `node_modules`). Group 2 is internal dependencies (relative paths). Group 3 is config modules (from `config/`). Separate the groups with a blank line. Each group is sorted alphabetically (rule 2).
+Group 1 is external packages (from `node_modules`, including `node:` builtins). Group 2 is internal dependencies (relative paths). Group 3 is config modules (from `config/`). Separate the groups with a blank line. Each group is sorted alphabetically (rule 2).
 
 ```js
 // Bad — external packages and config mixed with other internals, and not in alpha order
-const crypto = require('node:crypto')
-const LicenceModel = require('../../../models/licence.model.js')
-const path = require('path')
-const DatabaseConfig = require('../../../../config/database.config.js')
-const ViewNoticeService = require('../../../services/notices/view-notice.service.js')
+import crypto from 'node:crypto'
+import LicenceModel from '../../../models/licence.model.js'
+import path from 'path'
+import DatabaseConfig from '../../../../config/database.config.js'
+import ViewNoticeService from '../../../services/notices/view-notice.service.js'
 
 // Good — three groups, each in alpha order
-const crypto = require('node:crypto')
-const path = require('path')
+import crypto from 'node:crypto'
+import path from 'path'
 
-const LicenceModel = require('../../../models/licence.model.js')
-const ViewNoticeService = require('../../../services/notices/view-notice.service.js')
+import LicenceModel from '../../../models/licence.model.js'
+import ViewNoticeService from '../../../services/notices/view-notice.service.js'
 
-const DatabaseConfig = require('../../../../config/database.config.js')
+import DatabaseConfig from '../../../../config/database.config.js'
 ```
 
 ## 4 — Blank line after variable declarations before the first statement
@@ -112,32 +112,29 @@ let lastLogin = new Date()
 await UserModel.query().insert({ lastLogin, username })
 ```
 
-## 5 — File structure order: `'use strict'`, then `@module` JSDoc, then imports
+## 5 — File structure order: `@module` JSDoc then imports
 
 Every file must follow this top-of-file order:
 
-1. `'use strict'`
-2. The `@module` JSDoc block
-3. `require()` imports (grouped and sorted per rules 2 and 3)
+1. The `@module` JSDoc block
+2. `import` statements (grouped and sorted per rules 2 and 3)
+
+ESM modules are always in strict mode — `'use strict'` is no longer needed and must not be added.
 
 ```js
 // Bad — imports before @module, or @module at the bottom
-'use strict'
-
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
 
 /**
  * @module MyService
  */
 
 // Good
-'use strict'
-
 /**
  * Does the thing.
  *
  * @module MyService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
 ```

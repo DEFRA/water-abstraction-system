@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to create a new bill run
  * @module CreateBillRunRequest
  */
 
-const RegionModel = require('../../models/region.model.js')
-const ChargingModuleRequest = require('../charging-module.request.js')
+import RegionModel from '../../models/region.model.js'
+import { postRequest } from '../charging-module.request.js'
 
 /**
  * Sends a request to the Charging Module to create a new bill run and returns the result.
@@ -19,10 +17,10 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(regionId, ruleset) {
+export default async function createBillRunRequest(regionId, ruleset) {
   const region = await _getChargeRegionId(regionId)
 
-  const result = await ChargingModuleRequest.post('v3/wrls/bill-runs', { region, ruleset })
+  const result = await postRequest('v3/wrls/bill-runs', { region, ruleset })
 
   return result
 }
@@ -36,8 +34,4 @@ async function _getChargeRegionId(regionId) {
   const result = await RegionModel.query().findById(regionId).select('chargeRegionId')
 
   return result.chargeRegionId
-}
-
-module.exports = {
-  send
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * @module ReturnRequirementPurposeHelper
  */
 
-const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
-const PrimaryPurposeHelper = require('./primary-purpose.helper.js')
-const PurposeHelper = require('./purpose.helper.js')
-const ReturnRequirementPurposeModel = require('../../../app/models/return-requirement-purpose.model.js')
-const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
+import PrimaryPurposeHelper from './primary-purpose.helper.js'
+import PurposeHelper from './purpose.helper.js'
+import ReturnRequirementPurposeModel from '../../../app/models/return-requirement-purpose.model.js'
+import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
+import { generateRandomInteger, generateUUID } from '../generators.js'
 
 /**
  * Add a new return requirement purpose
@@ -65,7 +63,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

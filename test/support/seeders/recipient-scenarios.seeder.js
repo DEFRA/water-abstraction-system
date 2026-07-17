@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * @module RecipientScenariosSeeder
  */
 
-const CRMContactsSeeder = require('./crm-contacts.seeder.js')
-const EmptyLicence = require('./empty-licence.seeder.js')
-const RecipientsFormatter = require('./recipients.formatter.js')
-const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
-const { compareStrings } = require('../../../app/lib/general.lib.js')
+import * as CRMContactsSeeder from './crm-contacts.seeder.js'
+import * as EmptyLicence from './empty-licence.seeder.js'
+import * as RecipientsFormatter from './recipients.formatter.js'
+import LicenceVersionHelper from '../helpers/licence-version.helper.js'
+import { compareStrings } from '../../../app/lib/general.lib.js'
 
 /**
  * Seeds an additional contact recipient for an existing licence
@@ -21,7 +19,7 @@ const { compareStrings } = require('../../../app/lib/general.lib.js')
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function additionalContactRecipient(
+export async function additionalContactRecipient(
   abstractionAlerts = true,
   licenceVersionEndDate = null,
   deletedAt = null,
@@ -53,7 +51,7 @@ async function additionalContactRecipient(
  *
  * @param {object[]} scenarios - The scenarios created by a test suite
  */
-async function clean(scenarios) {
+export async function clean(scenarios) {
   for (const recipients of Object.values(scenarios)) {
     for (const recipient of Object.values(recipients)) {
       await RecipientsFormatter.clean(recipient)
@@ -77,7 +75,7 @@ async function clean(scenarios) {
  *
  * @returns {Promise<object>} The recipients generated for the scenario. In this case there is only the licence holder
  */
-async function licenceHolderOnly(returnLogs = [], expiredDate = null) {
+export async function licenceHolderOnly(returnLogs = [], expiredDate = null) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
@@ -109,7 +107,7 @@ async function licenceHolderOnly(returnLogs = [], expiredDate = null) {
  * @returns {Promise<object>} The recipients generated for the scenario. In this case both the licence holder and
  * returns to recipients
  */
-async function licenceHolderWithDifferentReturnsTo(returnLogs) {
+export async function licenceHolderWithDifferentReturnsTo(returnLogs) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0])
@@ -151,7 +149,7 @@ async function licenceHolderWithDifferentReturnsTo(returnLogs) {
  *
  * @returns {Promise<object>} The recipients generated for the scenario. In this case both licence holder recipients
  */
-async function licenceHolderWithMultipleLicences(returnLogs, expiredDate) {
+export async function licenceHolderWithMultipleLicences(returnLogs, expiredDate) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
@@ -201,7 +199,7 @@ async function licenceHolderWithMultipleLicences(returnLogs, expiredDate) {
  * @returns {Promise<object>} The recipients generated for the scenario. In this case both the licence holder and
  * returns to recipients, though the query should only fetch the licence holder
  */
-async function licenceHolderWithSameReturnsTo(returnLogs) {
+export async function licenceHolderWithSameReturnsTo(returnLogs) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0])
@@ -246,7 +244,7 @@ async function licenceHolderWithSameReturnsTo(returnLogs) {
  * @returns {Promise<object>} The recipients generated for the scenario. This includes the licence holder and
  * primary user
  */
-async function primaryUserOnly(returnLogs = [], expiredDate = null) {
+export async function primaryUserOnly(returnLogs = [], expiredDate = null) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
@@ -293,7 +291,7 @@ async function primaryUserOnly(returnLogs = [], expiredDate = null) {
  * @returns {Promise<object>} The recipients generated for the scenario. In this case both the primary user and
  * returns user recipients, plus the licence holder
  */
-async function primaryUserWithDifferentReturnsAgent(returnLogs) {
+export async function primaryUserWithDifferentReturnsAgent(returnLogs) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0])
@@ -346,7 +344,7 @@ async function primaryUserWithDifferentReturnsAgent(returnLogs) {
  * @returns {Promise<object>} The recipients generated for the scenario. In this case both primary user recipients
  * and both licence holders
  */
-async function primaryUserWithMultipleLicences(returnLogs, expiredDate) {
+export async function primaryUserWithMultipleLicences(returnLogs, expiredDate) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
@@ -415,7 +413,7 @@ async function primaryUserWithMultipleLicences(returnLogs, expiredDate) {
  * @returns {Promise<object>} The recipients generated for the scenario. In this case both the primary user and
  * returns user recipients, though the query should only fetch the primary user
  */
-async function primaryUserWithSameReturnsAgent(returnLogs) {
+export async function primaryUserWithSameReturnsAgent(returnLogs) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0])
@@ -453,7 +451,7 @@ async function primaryUserWithSameReturnsAgent(returnLogs) {
  *
  * @returns {object[]} The transformed sending result objects
  */
-function transformToSendingResults(scenarios) {
+export function transformToSendingResults(scenarios) {
   return Object.values(scenarios).map((recipient) => {
     return RecipientsFormatter.transformToSendingResult(recipient)
   })
@@ -469,7 +467,7 @@ function transformToSendingResults(scenarios) {
  *
  * @returns {object[]} The transformed downloading result objects
  */
-function transformToDownloadingResults(scenarios) {
+export function transformToDownloadingResults(scenarios) {
   const downloadResults = []
 
   for (const recipient of Object.values(scenarios)) {
@@ -503,19 +501,4 @@ function _aggregatedData(returnLogs) {
       return compareStrings(referenceString, compareString)
     })
   }
-}
-
-module.exports = {
-  additionalContactRecipient,
-  clean,
-  licenceHolderOnly,
-  licenceHolderWithDifferentReturnsTo,
-  licenceHolderWithMultipleLicences,
-  licenceHolderWithSameReturnsTo,
-  primaryUserOnly,
-  primaryUserWithDifferentReturnsAgent,
-  primaryUserWithMultipleLicences,
-  primaryUserWithSameReturnsAgent,
-  transformToDownloadingResults,
-  transformToSendingResults
 }

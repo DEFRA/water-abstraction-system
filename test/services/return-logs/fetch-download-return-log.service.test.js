@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
 
 // Thing under test
-const FetchDownloadReturnLogService = require('../../../app/services/return-logs/fetch-download-return-log.service.js')
+import FetchDownloadReturnLogService from '../../../app/services/return-logs/fetch-download-return-log.service.js'
 
 describe('Fetch Download Return Log service', () => {
   let returnLog
@@ -39,7 +40,7 @@ describe('Fetch Download Return Log service', () => {
     })
 
     it('returns the return log with its related return submission and return submission lines', async () => {
-      const result = await FetchDownloadReturnLogService.go(returnLog.id, 2)
+      const result = await FetchDownloadReturnLogService(returnLog.id, 2)
 
       expect(result).toEqual({
         id: returnLog.id,
@@ -58,7 +59,7 @@ describe('Fetch Download Return Log service', () => {
     })
 
     it('orders submission lines by start date', async () => {
-      const result = await FetchDownloadReturnLogService.go(returnLog.id, '1')
+      const result = await FetchDownloadReturnLogService(returnLog.id, '1')
       const lines = result.returnSubmissions[0].returnSubmissionLines
 
       expect(lines).toHaveLength(2)
@@ -113,7 +114,7 @@ describe('Fetch Download Return Log service', () => {
     })
 
     it('returns the return log with the submission lines populated with the meter readings', async () => {
-      const result = await FetchDownloadReturnLogService.go(returnLog.id, '1')
+      const result = await FetchDownloadReturnLogService(returnLog.id, '1')
       const lines = result.returnSubmissions[0].returnSubmissionLines
 
       expect(lines).toHaveLength(2)

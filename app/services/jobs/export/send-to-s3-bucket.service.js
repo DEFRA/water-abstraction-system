@@ -1,25 +1,23 @@
-'use strict'
-
 /**
  * Sends a file to our AWS S3 bucket
  * @module SendToS3BucketService
  */
 
-const { PutObjectCommand, S3Client } = require('@aws-sdk/client-s3')
-const fsPromises = require('node:fs').promises
-const { HttpsProxyAgent, HttpProxyAgent } = require('hpagent')
-const { NodeHttpHandler } = require('@smithy/node-http-handler')
-const path = require('node:path')
+import { NodeHttpHandler } from '@smithy/node-http-handler'
+import { promises as fsPromises } from 'node:fs'
+import path from 'node:path'
+import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
-const serverConfig = require('../../../../config/server.config.js')
-const S3Config = require('../../../../config/s3.config.js')
+import S3Config from '../../../../config/s3.config.js'
+import serverConfig from '../../../../config/server.config.js'
 
 /**
  * Sends a file to our AWS S3 Bucket using the filePath that it receives
  *
  * @param {string} filePath - A string containing the path of the file to send to the S3 bucket
  */
-async function go(filePath) {
+export default async function sendToS3BucketService(filePath) {
   const bucketName = S3Config.s3.bucket
   const fileName = path.basename(filePath)
   const fileContent = await fsPromises.readFile(filePath)
@@ -62,8 +60,4 @@ async function _uploadFileToS3Bucket(params) {
   const command = new PutObjectCommand(params)
 
   await s3Client.send(command)
-}
-
-module.exports = {
-  go
 }

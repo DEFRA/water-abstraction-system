@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the licence returns page
  * @module ViewReturnsService
  */
 
-const DetermineLicenceHasReturnVersionsService = require('./determine-licence-has-return-versions.service.js')
-const FetchReturnsService = require('./fetch-returns.service.js')
-const FetchLicenceService = require('../../services/licences/fetch-licence.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const ReturnsPresenter = require('../../presenters/licences/returns.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import DetermineLicenceHasReturnVersionsService from './determine-licence-has-return-versions.service.js'
+import FetchLicenceService from '../../services/licences/fetch-licence.service.js'
+import FetchReturnsService from './fetch-returns.service.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import ReturnsPresenter from '../../presenters/licences/returns.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
@@ -21,16 +19,16 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
-async function go(licenceId, auth, page) {
-  const licence = await FetchLicenceService.go(licenceId)
+export default async function viewReturnsService(licenceId, auth, page) {
+  const licence = await FetchLicenceService(licenceId)
 
-  const hasRequirements = await DetermineLicenceHasReturnVersionsService.go(licenceId)
+  const hasRequirements = await DetermineLicenceHasReturnVersionsService(licenceId)
 
-  const { returns, totalNumber } = await FetchReturnsService.go(licenceId, page)
+  const { returns, totalNumber } = await FetchReturnsService(licenceId, page)
 
-  const pageData = ReturnsPresenter.go(returns, hasRequirements, licence)
+  const pageData = ReturnsPresenter(returns, hasRequirements, licence)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/licences/${licenceId}/returns`,
@@ -44,8 +42,4 @@ async function go(licenceId, auth, page) {
     pagination,
     roles: userRoles(auth)
   }
-}
-
-module.exports = {
-  go
 }

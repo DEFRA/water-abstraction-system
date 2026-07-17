@@ -1,29 +1,31 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const AbstractionPeriodService = require('../../app/services/licence-monitoring-station/setup/abstraction-period.service.js')
-const CheckService = require('../../app/services/licence-monitoring-station/setup/check.service.js')
-const FullConditionService = require('../../app/services/licence-monitoring-station/setup/full-condition.service.js')
-const InitiateSessionService = require('../../app/services/licence-monitoring-station/setup/initiate-session.service.js')
-const LicenceNumberService = require('../../app/services/licence-monitoring-station/setup/licence-number.service.js')
-const StopOrReduceService = require('../../app/services/licence-monitoring-station/setup/stop-or-reduce.service.js')
-const SubmitAbstractionPeriodService = require('../../app/services/licence-monitoring-station/setup/submit-abstraction-period.service.js')
-const SubmitCheckService = require('../../app/services/licence-monitoring-station/setup/submit-check.service.js')
-const SubmitFullConditionService = require('../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js')
-const SubmitLicenceNumberService = require('../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js')
-const SubmitStopOrReduceService = require('../../app/services/licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
-const SubmitThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
-const ThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js')
+import * as AbstractionPeriodService from '../../app/services/licence-monitoring-station/setup/abstraction-period.service.js'
+import * as CheckService from '../../app/services/licence-monitoring-station/setup/check.service.js'
+import * as FullConditionService from '../../app/services/licence-monitoring-station/setup/full-condition.service.js'
+import * as InitiateSessionService from '../../app/services/licence-monitoring-station/setup/initiate-session.service.js'
+import * as LicenceNumberService from '../../app/services/licence-monitoring-station/setup/licence-number.service.js'
+import * as StopOrReduceService from '../../app/services/licence-monitoring-station/setup/stop-or-reduce.service.js'
+import * as SubmitAbstractionPeriodService from '../../app/services/licence-monitoring-station/setup/submit-abstraction-period.service.js'
+import * as SubmitCheckService from '../../app/services/licence-monitoring-station/setup/submit-check.service.js'
+import * as SubmitFullConditionService from '../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js'
+import * as SubmitLicenceNumberService from '../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js'
+import * as SubmitStopOrReduceService from '../../app/services/licence-monitoring-station/setup/submit-stop-or-reduce.service.js'
+import * as SubmitThresholdAndUnitService from '../../app/services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js'
+import * as ThresholdAndUnitService from '../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 const sessionId = 'b0ebf12a-c238-4c48-9526-64513a8df935'
 
@@ -37,16 +39,15 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
   })
 
   beforeEach(() => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -57,7 +58,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(InitiateSessionService, 'go').resolves('b0ebf12a-c238-4c48-9526-64513a8df935')
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue('b0ebf12a-c238-4c48-9526-64513a8df935')
           options = postRequestOptions(
             `/licence-monitoring-station/setup`,
             {
@@ -85,7 +86,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(AbstractionPeriodService, 'go').resolves({
+          vi.spyOn(AbstractionPeriodService, 'default').mockResolvedValue({
             backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
             monitoringStationLabel: 'Station Label',
             pageTitle: 'Enter an abstraction period for licence 01/234'
@@ -104,7 +105,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitAbstractionPeriodService, 'go').resolves({})
+          vi.spyOn(SubmitAbstractionPeriodService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the "check" page', async () => {
@@ -117,7 +118,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
       describe('and the validation fails', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitAbstractionPeriodService, 'go').resolves({
+          vi.spyOn(SubmitAbstractionPeriodService, 'default').mockResolvedValue({
             error: {
               errorList: [
                 {
@@ -167,7 +168,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(CheckService, 'go').resolves({
+          vi.spyOn(CheckService, 'default').mockResolvedValue({
             pageTitle: 'Check the restriction details'
           })
         })
@@ -186,7 +187,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         const monitoringStationId = 'bdd4aab4-0910-4641-b626-9db943d79df6'
 
         beforeEach(() => {
-          Sinon.stub(SubmitCheckService, 'go').resolves(monitoringStationId)
+          vi.spyOn(SubmitCheckService, 'default').mockResolvedValue(monitoringStationId)
         })
 
         it('redirects to the "monitoring stations" page', async () => {
@@ -205,7 +206,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(FullConditionService, 'go').resolves({
+          vi.spyOn(FullConditionService, 'default').mockResolvedValue({
             backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
             monitoringStationLabel: 'Station Label',
             pageTitle: 'Select the full condition for licence 01/234'
@@ -225,7 +226,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the user selects an option requiring abstraction period entry', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitFullConditionService, 'go').resolves({ abstractionPeriod: true })
+            vi.spyOn(SubmitFullConditionService, 'default').mockResolvedValue({ abstractionPeriod: true })
           })
 
           it('redirects to the "abstraction-period" page', async () => {
@@ -240,7 +241,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
         describe('and the user selects an option not requiring abstraction period entry', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitFullConditionService, 'go').resolves({ abstractionPeriod: false })
+            vi.spyOn(SubmitFullConditionService, 'default').mockResolvedValue({ abstractionPeriod: false })
           })
 
           it('redirects to the "check" page', async () => {
@@ -253,7 +254,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(FullConditionService, 'go').resolves({
+            vi.spyOn(FullConditionService, 'default').mockResolvedValue({
               error: { text: 'Select a condition' },
               backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
               monitoringStationLabel: 'Station Label',
@@ -279,7 +280,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(LicenceNumberService, 'go').resolves({
+          vi.spyOn(LicenceNumberService, 'default').mockResolvedValue({
             backLink: `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`,
             monitoringStationLabel: 'Station Label',
             pageTitle: 'Enter the licence number this threshold applies to'
@@ -299,7 +300,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the page has not been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({})
+            vi.spyOn(SubmitLicenceNumberService, 'default').mockResolvedValue({})
           })
 
           it('redirects to the "licence-number" page', async () => {
@@ -314,7 +315,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
         describe('and the page has been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitLicenceNumberService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to the "check" page', async () => {
@@ -327,7 +328,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({
+            vi.spyOn(SubmitLicenceNumberService, 'default').mockResolvedValue({
               error: { text: 'Enter a valid licence number' },
               backLink: `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`,
               monitoringStationLabel: 'Station Label',
@@ -353,7 +354,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(StopOrReduceService, 'go').resolves({
+          vi.spyOn(StopOrReduceService, 'default').mockResolvedValue({
             sessionId,
             backLink: `/system/licence-monitoring-station/setup/${sessionId}/threshold-and-unit`,
             monitoringStationLabel: 'Station Label',
@@ -376,7 +377,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the page has not been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitStopOrReduceService, 'go').resolves({})
+            vi.spyOn(SubmitStopOrReduceService, 'default').mockResolvedValue({})
           })
 
           it('redirects to the "licence-number" page', async () => {
@@ -391,7 +392,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
         describe('and the page has been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitStopOrReduceService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitStopOrReduceService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to the "check" page', async () => {
@@ -404,7 +405,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitStopOrReduceService, 'go').resolves({
+            vi.spyOn(SubmitStopOrReduceService, 'default').mockResolvedValue({
               error: {
                 message: 'Select if the licence holder needs to stop or reduce',
                 reduceAtThresholdRadioElement: null,
@@ -436,7 +437,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ThresholdAndUnitService, 'go').resolves({
+          vi.spyOn(ThresholdAndUnitService, 'default').mockResolvedValue({
             sessionId,
             monitoringStationLabel: 'Station Label',
             pageTitle: 'What is the licence hands-off flow or level threshold?'
@@ -456,7 +457,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the page has not been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitThresholdAndUnitService, 'go').resolves({})
+            vi.spyOn(SubmitThresholdAndUnitService, 'default').mockResolvedValue({})
           })
 
           it('redirects to the "stop-or-reduce" page', async () => {
@@ -471,7 +472,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
         describe('and the page has been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitThresholdAndUnitService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitThresholdAndUnitService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to the "check" page', async () => {
@@ -484,7 +485,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitThresholdAndUnitService, 'go').resolves({
+            vi.spyOn(SubmitThresholdAndUnitService, 'default').mockResolvedValue({
               error: {
                 errorList: [{ href: '#threshold', text: 'Enter a threshold' }],
                 threshold: { message: 'Enter a threshold' }

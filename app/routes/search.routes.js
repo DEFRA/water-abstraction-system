@@ -1,22 +1,18 @@
-'use strict'
+import { submitSearch, viewSearch } from '../controllers/search.controller.js'
 
-const SearchController = require('../controllers/search.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/search',
     options: {
-      handler: SearchController.viewSearch
+      handler: viewSearch
     }
   },
   {
     method: 'POST',
     path: '/search',
     options: {
-      handler: SearchController.submitSearch
+      handler: submitSearch
     }
   }
 ]
-
-module.exports = routes

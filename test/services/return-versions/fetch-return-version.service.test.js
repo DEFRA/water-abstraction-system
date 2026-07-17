@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RequirementsForReturnsSeeder = require('../../support/seeders/requirements-for-returns.seeder.js')
-const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
+import * as RequirementsForReturnsSeeder from '../../support/seeders/requirements-for-returns.seeder.js'
+import ModLogHelper from '../../support/helpers/mod-log.helper.js'
 
 // Thing under test
-const FetchReturnVersionService = require('../../../app/services/return-versions/fetch-return-version.service.js')
+import FetchReturnVersionService from '../../../app/services/return-versions/fetch-return-version.service.js'
 
 describe('Return Versions - Fetch Return Version service', () => {
   let modLog
@@ -31,7 +32,7 @@ describe('Return Versions - Fetch Return Version service', () => {
     })
 
     it('returns the matching return version and the pagination array', async () => {
-      const result = await FetchReturnVersionService.go(seededReturnVersion.id)
+      const result = await FetchReturnVersionService(seededReturnVersion.id)
 
       expect(result).toEqual({
         returnVersion: {

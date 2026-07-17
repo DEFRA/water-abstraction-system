@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/method` page
  * @module SubmitSetupService
  */
 
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const GenerateFromAbstractionDataService = require('./generate-from-abstraction-data.service.js')
-const MethodPresenter = require('../../../../presenters/return-versions/setup/method.presenter.js')
-const MethodValidator = require('../../../../validators/return-versions/setup/method.validator.js')
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import GenerateFromAbstractionDataService from './generate-from-abstraction-data.service.js'
+import MethodPresenter from '../../../../presenters/return-versions/setup/method.presenter.js'
+import MethodValidator from '../../../../validators/return-versions/setup/method.validator.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/method` page
@@ -27,8 +24,8 @@ const MethodValidator = require('../../../../validators/return-versions/setup/me
  * @returns {Promise<object>} If no errors a the url for where the user should be redirected else the page data for the
  * setup page including the validation error details
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitMethodService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -40,7 +37,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const formattedData = MethodPresenter.go(session, payload)
+  const formattedData = MethodPresenter(session, payload)
 
   return {
     error: validationResult,
@@ -67,7 +64,7 @@ async function _save(session, payload) {
   // `GenerateFromAbstractionDataService` to fetch the licence's abstraction data and transform it into return
   // requirements we can persist in the session
   if (payload.method === 'useAbstractionData') {
-    session.requirements = await GenerateFromAbstractionDataService.go(
+    session.requirements = await GenerateFromAbstractionDataService(
       session.licence.id,
       session.licenceVersion.id,
       session.returnVersionStartDate
@@ -78,11 +75,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = MethodValidator.go(payload)
+  const validation = MethodValidator(payload)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

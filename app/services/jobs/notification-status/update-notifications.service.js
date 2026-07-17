@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Update notifications
  * @module UpdateNotificationsService
  */
 
-const NotificationModel = require('../../../models/notification.model.js')
+import NotificationModel from '../../../models/notification.model.js'
 
 /**
  * Update notifications
@@ -17,10 +15,6 @@ const NotificationModel = require('../../../models/notification.model.js')
  * @param {object} notifications
  *
  */
-async function go(notifications) {
+export default async function updateNotificationsService(notifications) {
   await NotificationModel.query().insert(notifications).onConflict('id').merge(['status', 'notifyStatus'])
-}
-
-module.exports = {
-  go
 }

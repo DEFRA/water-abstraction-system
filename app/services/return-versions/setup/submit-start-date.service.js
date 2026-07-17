@@ -1,18 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/start-date` page
  * @module StartDateService
  */
 
-const { isQuarterlyReturnSubmissions, sameDate } = require('../../../lib/dates.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
-const DetermineRelevantLicenceVersionService = require('./determine-relevant-licence-version.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const StartDatePresenter = require('../../../presenters/return-versions/setup/start-date.presenter.js')
-const StartDateValidator = require('../../../validators/return-versions/setup/start-date.validator.js')
+import DetermineRelevantLicenceVersionService from './determine-relevant-licence-version.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import StartDatePresenter from '../../../presenters/return-versions/setup/start-date.presenter.js'
+import StartDateValidator from '../../../validators/return-versions/setup/start-date.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { isQuarterlyReturnSubmissions, sameDate } from '../../../lib/dates.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/start-date` page
@@ -39,8 +36,8 @@ const StartDateValidator = require('../../../validators/return-versions/setup/st
  * @returns {Promise<object>} If no errors 2 flags that determine whether the user is returned to the check page or the
  * next page in the journey else the page data for the start date page including the validation error details
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitStartDateService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const { endDate, startDate } = session.licence
   const validationResult = _validate(payload, startDate, endDate)
@@ -49,7 +46,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Return version updated')
+      flashNotification(yar, 'Updated', 'Return version updated')
     }
 
     return {
@@ -97,7 +94,7 @@ async function _relevantLicenceVersion(session, previousStartDate) {
   }
 
   // Fetch and assign the relevant licence version to the session.
-  const relevantLicenceVersion = await DetermineRelevantLicenceVersionService.go(session)
+  const relevantLicenceVersion = await DetermineRelevantLicenceVersionService(session)
 
   if (!session.licenceVersion) {
     // In this scenario licenceVersion was not set, which means it must be our first visit to the page. In which case
@@ -155,15 +152,11 @@ function _submittedSessionData(session, payload) {
   session.startDateYear = payload.startDateYear ? payload.startDateYear : null
   session.startDateOptions = payload.startDateOptions ? payload.startDateOptions : null
 
-  return StartDatePresenter.go(session, payload)
+  return StartDatePresenter(session)
 }
 
 function _validate(payload, licenceStartDate, licenceEndDate) {
-  const validation = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+  const validation = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

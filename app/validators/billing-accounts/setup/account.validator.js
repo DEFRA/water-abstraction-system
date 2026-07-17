@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/billing-accounts/setup/{sessionId}/account` page
  *
  * @module AccountValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const MAX_LENGTH = 100
 
@@ -18,7 +16,7 @@ const MAX_LENGTH = 100
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function accountValidator(payload) {
   const errorMessage = 'Select who should the bills go to'
   const inpputErrorMessage = 'Enter the name of an organisation or individual.'
 
@@ -45,8 +43,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

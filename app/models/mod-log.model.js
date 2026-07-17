@@ -1,15 +1,17 @@
-'use strict'
-
 /**
  * Model for mod log (water.mod_logs)
  * @module ModLogModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import ChargeVersionModel from './charge-version.model.js'
+import LicenceModel from './licence.model.js'
+import LicenceVersionModel from './licence-version.model.js'
+import ReturnVersionModel from './return-version.model.js'
 
-class ModLogModel extends BaseModel {
+export default class ModLogModel extends BaseModel {
   static get tableName() {
     return 'modLogs'
   }
@@ -18,7 +20,7 @@ class ModLogModel extends BaseModel {
     return {
       chargeVersion: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-version.model',
+        modelClass: ChargeVersionModel,
         join: {
           from: 'modLogs.chargeVersionId',
           to: 'chargeVersions.id'
@@ -26,7 +28,7 @@ class ModLogModel extends BaseModel {
       },
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'modLogs.licenceId',
           to: 'licences.id'
@@ -34,7 +36,7 @@ class ModLogModel extends BaseModel {
       },
       licenceVersion: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-version.model',
+        modelClass: LicenceVersionModel,
         join: {
           from: 'modLogs.licenceVersionId',
           to: 'licenceVersions.id'
@@ -42,7 +44,7 @@ class ModLogModel extends BaseModel {
       },
       returnVersion: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'return-version.model',
+        modelClass: ReturnVersionModel,
         join: {
           from: 'modLogs.returnVersionId',
           to: 'returnVersions.id'
@@ -51,5 +53,3 @@ class ModLogModel extends BaseModel {
     }
   }
 }
-
-module.exports = ModLogModel

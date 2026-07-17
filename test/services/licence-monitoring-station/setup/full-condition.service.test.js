@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub
-const FetchFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const FullConditionService = require('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
+import FullConditionService from '../../../../app/services/licence-monitoring-station/setup/full-condition.service.js'
 
 describe('Licence Monitoring Station Setup - Full Condition Service', () => {
   let condition
@@ -28,7 +26,7 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
       displayTitle: 'DISPLAY_TITLE'
     }
 
-    Sinon.stub(FetchFullConditionService, 'go').resolves([condition])
+    vi.spyOn(FetchFullConditionService, 'default').mockResolvedValue([condition])
 
     sessionData = {
       label: 'Monitoring Station',
@@ -36,18 +34,18 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
       licenceRef: 'LICENCE_REF'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns the expected output', async () => {
-      const result = await FullConditionService.go(session.id)
+      const result = await FullConditionService(session.id)
 
       expect(result).toEqual({
         backLink: `/system/licence-monitoring-station/setup/${session.id}/licence-number`,

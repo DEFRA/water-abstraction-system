@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Provides the display information for the `/manage` page
  *
  * @module ViewManageService
  */
 
-const ManagePresenter = require('../../presenters/manage/manage.presenter.js')
+import ManagePresenter from '../../presenters/manage/manage.presenter.js'
 
 /**
  * Provides the display information for the `/manage` page
@@ -18,15 +16,11 @@ const ManagePresenter = require('../../presenters/manage/manage.presenter.js')
  *
  * @returns {Promise<object>} The view data for the Manage page
  */
-async function go(auth) {
-  const pageData = ManagePresenter.go(auth.credentials.scope)
+export default async function viewManageService(auth) {
+  const pageData = ManagePresenter(auth.credentials.scope)
 
   return {
     activeNavBar: 'manage',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

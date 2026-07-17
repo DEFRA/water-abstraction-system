@@ -1,0 +1,29 @@
+{
+  "opts": {
+    "encoding": "utf8",
+    "destination": "docs/",
+    "pedantic": true,
+    "readme": "README.md",
+    "recurse": true,
+    "verbose": true
+  },
+  "plugins": [
+    "plugins/markdown",
+    "plugins/underscore"
+  ],
+  "recurseDepth": 10,
+  "source": {
+    "include": ["./app"],
+    "includePattern": ".js$",
+    "excludePattern": "(db/|docs/|node_modules/|test/)"
+  },
+  "sourceType": "module",
+  "tags": {
+    "allowUnknownTags": false,
+    "dictionaries": ["jsdoc"]
+  },
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": false
+  }
+}

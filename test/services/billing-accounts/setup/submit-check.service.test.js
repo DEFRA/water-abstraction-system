@@ -1,25 +1,23 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const AddressHelper = require('../../../support/helpers/address.helper.js')
-const BillingAccountAddressHelper = require('../../../support/helpers/billing-account-address.helper.js')
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
-const ContactHelper = require('../../../support/helpers/contact.helper.js')
-const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import AddressHelper from '../../../support/helpers/address.helper.js'
+import BillingAccountAddressHelper from '../../../support/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
+import CompanyHelper from '../../../support/helpers/company.helper.js'
+import ContactHelper from '../../../support/helpers/contact.helper.js'
+import CustomersFixture from '../../../support/fixtures/customers.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub
-const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
-const FetchCompanyService = require('../../../../app/services/billing-accounts/setup/fetch-company.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const SendCustomerChangeService = require('../../../../app/services/billing-accounts/send-customer-change.service.js')
+import * as FetchCompanyContactsService from '../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js'
+import * as FetchCompanyService from '../../../../app/services/billing-accounts/setup/fetch-company.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as SendCustomerChangeService from '../../../../app/services/billing-accounts/send-customer-change.service.js'
 
 // Thing under test
-const SubmitCheckService = require('../../../../app/services/billing-accounts/setup/submit-check.service.js')
+import SubmitCheckService from '../../../../app/services/billing-accounts/setup/submit-check.service.js'
 
 describe('Billing Accounts - Setup - Submit Check Service', () => {
   let address
@@ -67,8 +65,8 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
       contacts: [contact]
     }
 
-    Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
-    Sinon.stub(SendCustomerChangeService, 'go').resolves()
+    vi.spyOn(FetchCompanyContactsService, 'default').mockResolvedValue(companyContacts)
+    vi.spyOn(SendCustomerChangeService, 'default').mockResolvedValue()
   })
 
   afterEach(async () => {
@@ -78,7 +76,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
     await billingAccount.$query().delete()
     await billingAccountAddress.$query().delete()
     await session.$query().delete()
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -98,13 +96,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = 'Contact Name'
             sessionData.contactSelected = 'new'
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.redirectUrl).toEqual(`/system/billing-accounts/${billingAccount.id}`)
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
@@ -125,13 +123,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = null
             sessionData.contactSelected = null
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -149,13 +147,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = null
             sessionData.contactSelected = contact.id
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -182,13 +180,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = 'Contact Name'
             sessionData.contactSelected = 'new'
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -214,13 +212,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = null
             sessionData.contactSelected = null
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -243,13 +241,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.fao = 'yes'
             sessionData.contactSelected = contact.id
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -290,13 +288,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = 'Contact Name'
             sessionData.contactSelected = 'new'
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -317,13 +315,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = null
             sessionData.contactSelected = null
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -341,13 +339,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.fao = 'yes'
             sessionData.contactSelected = contact.id
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -375,13 +373,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = 'Contact Name'
             sessionData.contactSelected = 'new'
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -408,13 +406,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = null
             sessionData.contactSelected = null
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -438,13 +436,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.fao = 'yes'
             sessionData.contactSelected = contact.id
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            Sinon.stub(FetchSessionDal, 'go').resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -479,7 +477,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           sessionData.accountType = 'company'
           sessionData.companiesHouseNumber = '12345678'
 
-          Sinon.stub(FetchCompanyService, 'go').returns(companySearchResult)
+          vi.spyOn(FetchCompanyService, 'default').mockReturnValue(companySearchResult)
         })
 
         describe('and selected an existing address', () => {
@@ -493,13 +491,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = 'Contact Name'
               sessionData.contactSelected = 'new'
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -523,13 +521,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = null
               sessionData.contactSelected = null
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -550,13 +548,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.fao = 'yes'
               sessionData.contactSelected = contact.id
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -587,13 +585,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = 'Contact Name'
               sessionData.contactSelected = 'new'
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -623,13 +621,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = null
               sessionData.contactSelected = null
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -656,13 +654,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.fao = 'yes'
               sessionData.contactSelected = contact.id
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -705,13 +703,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = 'Contact Name'
               sessionData.contactSelected = 'new'
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -735,13 +733,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = null
               sessionData.contactSelected = null
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -762,13 +760,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.fao = 'yes'
               sessionData.contactSelected = contact.id
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -799,13 +797,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = 'Contact Name'
               sessionData.contactSelected = 'new'
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -835,13 +833,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = null
               sessionData.contactSelected = null
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -868,13 +866,13 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.fao = 'yes'
               sessionData.contactSelected = contact.id
 
-              session = SessionModelStub.build(Sinon, sessionData)
+              session = SessionModelStub(sessionData)
 
-              Sinon.stub(FetchSessionDal, 'go').resolves(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)

@@ -1,36 +1,29 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { pause } = require('../../../../app/lib/general.lib.js')
+import { pause } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const SendBillRunService = require('../../../../app/services/bill-runs/send/send-bill-run.service.js')
-const UpdateInvoiceNumbersService = require('../../../../app/services/bill-runs/send/update-invoice-numbers.service.js')
+import * as SendBillRunService from '../../../../app/services/bill-runs/send/send-bill-run.service.js'
+import * as UpdateInvoiceNumbersService from '../../../../app/services/bill-runs/send/update-invoice-numbers.service.js'
 
 // Thing under test
-const SubmitSendBillRunService = require('../../../../app/services/bill-runs/send/submit-send-bill-run.service.js')
+import SubmitSendBillRunService from '../../../../app/services/bill-runs/send/submit-send-bill-run.service.js'
 
 describe('Bill Runs - Submit Cancel Bill Run service', () => {
   const billRunId = '800b8ff7-80e6-4855-a394-c79550115265'
-
-  let sendBillRunStub
   let updateDoneFake
-  let updateInvoiceNumbersStub
-
   beforeEach(async () => {
-    sendBillRunStub = Sinon.stub(SendBillRunService, 'go')
-    updateDoneFake = Sinon.fake()
-    updateInvoiceNumbersStub = Sinon.stub(UpdateInvoiceNumbersService, 'go').callsFake(async () => {
+    updateDoneFake = vi.fn()
+    vi.spyOn(UpdateInvoiceNumbersService, 'default').mockImplementation(async () => {
       await pause(500)
       updateDoneFake()
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -38,23 +31,23 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
       beforeEach(() => {
         const billRun = _billRun()
 
-        sendBillRunStub.resolves(billRun)
+        vi.spyOn(SendBillRunService, 'default').mockResolvedValue(billRun)
       })
 
       it('updates the bill run invoice numbers in the background and does not throw an error', async () => {
-        await SubmitSendBillRunService.go(billRunId)
+        await SubmitSendBillRunService(billRunId)
 
-        expect(sendBillRunStub.called).toBe(true)
-        expect(updateInvoiceNumbersStub.called).toBe(true)
+        expect(SendBillRunService.default).toHaveBeenCalled()
+        expect(UpdateInvoiceNumbersService.default).toHaveBeenCalled()
 
         // NOTE: We have faked the UpdateInvoiceNumbersService taking some time to complete so we can test that
         // SubmitSendBillRunService returns control back to us whilst the update is still in progress. We then pause and
         // allow the delete to complete to confirm that it was running in the background.
-        expect(updateDoneFake.called).toBe(false)
+        expect(updateDoneFake).not.toHaveBeenCalled()
 
         await pause(500)
 
-        expect(updateDoneFake.called).toBe(true)
+        expect(updateDoneFake).toHaveBeenCalled()
       })
     })
 
@@ -63,13 +56,13 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
     // force a rejection it would not represent anything that would ever happen in the app.
     describe('and the CancelBillRunService fails', () => {
       beforeEach(() => {
-        sendBillRunStub.rejects()
+        vi.spyOn(SendBillRunService, 'default').mockRejectedValue()
       })
 
       it('does not update the bill run and throws an error', async () => {
-        await expect(SubmitSendBillRunService.go(billRunId)).rejects.toThrow()
+        await expect(SubmitSendBillRunService(billRunId)).rejects.toThrow()
 
-        expect(updateInvoiceNumbersStub.called).toEqual(false)
+        expect(UpdateInvoiceNumbersService.default).not.toHaveBeenCalled()
       })
     })
   })

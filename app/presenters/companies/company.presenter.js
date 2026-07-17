@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/companies/{id}/{role}' page
  * @module CompanyPresenter
  */
 
-const { formatLongDate } = require('../../presenters/base.presenter.js')
-const { roles } = require('../../lib/static-lookups.lib.js')
+import { formatLongDate } from '../../presenters/base.presenter.js'
+import { roles } from '../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the '/companies/{id}/{role}' page
@@ -16,7 +14,7 @@ const { roles } = require('../../lib/static-lookups.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(companyDetails, role) {
+export default function companyPresenter(companyDetails, role) {
   const { name: companyName, id: companyId, companyAddresses } = companyDetails
 
   return {
@@ -53,8 +51,4 @@ function _companyAddresses(companyAddresses) {
       endDate: companyAddress.endDate ? formatLongDate(companyAddress.endDate) : null
     }
   })
-}
-
-module.exports = {
-  go
 }

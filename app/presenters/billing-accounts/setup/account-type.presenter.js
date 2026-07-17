@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/billing-accounts/setup/{billingAccountId}/account-type` page
  * @module AccountTypePresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the `/billing-accounts/setup/{billingAccountId}/account-type` page
@@ -14,7 +12,7 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function accountTypePresenter(session) {
   const { billingAccount } = session
 
   return {
@@ -27,8 +25,4 @@ function go(session) {
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
     individualName: session.individualName ?? null
   }
-}
-
-module.exports = {
-  go
 }

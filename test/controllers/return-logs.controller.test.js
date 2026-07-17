@@ -1,20 +1,22 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const DownloadReturnLogService = require('../../app/services/return-logs/download-return-log.service.js')
-const SubmitDetailsService = require('../../app/services/return-logs/submit-details.service.js')
-const ViewCommunicationsService = require('../../app/services/return-logs/view-communications.service.js')
-const ViewDetailsService = require('../../app/services/return-logs/view-details.service.js')
+import * as DownloadReturnLogService from '../../app/services/return-logs/download-return-log.service.js'
+import * as SubmitDetailsService from '../../app/services/return-logs/submit-details.service.js'
+import * as ViewCommunicationsService from '../../app/services/return-logs/view-communications.service.js'
+import * as ViewDetailsService from '../../app/services/return-logs/view-details.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Return Logs controller', () => {
   const returnLogId = '168026d8-f29b-4165-8726-734c6b14adec'
@@ -28,16 +30,15 @@ describe('Return Logs controller', () => {
   })
 
   beforeEach(() => {
-    // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
-    Sinon.stub(server.logger, 'error')
-    Sinon.stub(server.logger, 'info')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -56,7 +57,7 @@ describe('Return Logs controller', () => {
           }
         }
 
-        Sinon.stub(ViewCommunicationsService, 'go').resolves({ pageTitle: 'Communications' })
+        vi.spyOn(ViewCommunicationsService, 'default').mockResolvedValue({ pageTitle: 'Communications' })
       })
 
       it('returns the page successfully', async () => {
@@ -80,16 +81,16 @@ describe('Return Logs controller', () => {
           }
         }
 
-        Sinon.stub(ViewDetailsService, 'go').resolves({ pageTitle: 'Return details' })
+        vi.spyOn(ViewDetailsService, 'default').mockResolvedValue({ pageTitle: 'Return details' })
       })
 
       describe('and no version is passed as a query parameter', () => {
         it('passes 0 to the service and returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          const calls = ViewDetailsService.go.firstCall
+          const calls = ViewDetailsService.default.mock.calls[0]
 
-          expect(calls.args).toContain(0)
+          expect(calls).toContain(0)
 
           expect(response.statusCode).toEqual(HTTP_STATUS_OK)
           expect(response.payload).toContain('Return details')
@@ -104,9 +105,9 @@ describe('Return Logs controller', () => {
         it('passes the version to the service and returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          const calls = ViewDetailsService.go.firstCall
+          const calls = ViewDetailsService.default.mock.calls[0]
 
-          expect(calls.args).toContain(1)
+          expect(calls).toContain(1)
 
           expect(response.statusCode).toEqual(HTTP_STATUS_OK)
           expect(response.payload).toContain('Return details')
@@ -119,7 +120,7 @@ describe('Return Logs controller', () => {
         beforeEach(() => {
           postOptions = postRequestOptions(`/return-logs/${returnLogId}/details`, null)
 
-          Sinon.stub(SubmitDetailsService, 'go').resolves()
+          vi.spyOn(SubmitDetailsService, 'default').mockResolvedValue()
         })
 
         it('redirects back to the "return details" page', async () => {
@@ -149,7 +150,11 @@ describe('Return Logs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(DownloadReturnLogService, 'go').returns({ data: 'test', type: 'type/csv', filename: 'test.csv' })
+          vi.spyOn(DownloadReturnLogService, 'default').mockReturnValue({
+            data: 'test',
+            type: 'type/csv',
+            filename: 'test.csv'
+          })
         })
 
         it('returns the file successfully', async () => {

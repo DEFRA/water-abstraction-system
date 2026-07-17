@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const CheckLicenceExistsDal = require('../../../../app/dal/notices/setup/check-licence-exists.dal.js')
+import CheckLicenceExistsDal from '../../../../app/dal/notices/setup/check-licence-exists.dal.js'
 
 describe('Notices - Setup - Check Licence Exists DAL', () => {
   let licence
@@ -19,7 +20,7 @@ describe('Notices - Setup - Check Licence Exists DAL', () => {
 
   describe('when the licence exists', () => {
     it('returns true', async () => {
-      const result = await CheckLicenceExistsDal.go(licence.licenceRef)
+      const result = await CheckLicenceExistsDal(licence.licenceRef)
 
       expect(result).toEqual(true)
     })
@@ -27,7 +28,7 @@ describe('Notices - Setup - Check Licence Exists DAL', () => {
 
   describe('when the licence does not exist', () => {
     it('returns false', async () => {
-      const result = await CheckLicenceExistsDal.go('does-not-exist')
+      const result = await CheckLicenceExistsDal('does-not-exist')
 
       expect(result).toEqual(false)
     })

@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Top level service for creating and processing a new bill run
  * @module StartBillRunProcessService
  */
 
-const AnnualProcessBillRunService = require('./annual/process-bill-run.service.js')
-const DetermineBillingPeriodsService = require('./determine-billing-periods.service.js')
-const InitiateBillRunService = require('./initiate-bill-run.service.js')
-const NoBillingPeriodsError = require('../../errors/no-billing-periods.error.js')
-const SupplementaryProcessBillRunService = require('./supplementary/process-bill-run.service.js')
-const TwoPartTariffProcessBillRunService = require('./two-part-tariff/process-bill-run.service.js')
-const TwoPartTariffSupplementaryProcessBillRunService = require('./tpt-supplementary/process-bill-run.service.js')
+import AnnualProcessBillRunService from './annual/process-bill-run.service.js'
+import DetermineBillingPeriodsService from './determine-billing-periods.service.js'
+import InitiateBillRunService from './initiate-bill-run.service.js'
+import NoBillingPeriodsError from '../../errors/no-billing-periods.error.js'
+import SupplementaryProcessBillRunService from './supplementary/process-bill-run.service.js'
+import TwoPartTariffProcessBillRunService from './two-part-tariff/process-bill-run.service.js'
+import TwoPartTariffSupplementaryProcessBillRunService from './tpt-supplementary/process-bill-run.service.js'
 
 /**
  * Manages the creation of a new bill run
@@ -23,15 +21,15 @@ const TwoPartTariffSupplementaryProcessBillRunService = require('./tpt-supplemen
  *
  * @returns {Promise<object>} Object that will be the JSON response returned to the client
  */
-async function go(regionId, batchType, userEmail, financialYearEnding) {
-  const billingPeriods = DetermineBillingPeriodsService.go(batchType, financialYearEnding)
+export default async function startBillRunProcessService(regionId, batchType, userEmail, financialYearEnding) {
+  const billingPeriods = DetermineBillingPeriodsService(batchType, financialYearEnding)
 
   if (billingPeriods.length === 0) {
     throw new NoBillingPeriodsError(financialYearEnding)
   }
 
   const financialYearEndings = _financialYearEndings(billingPeriods)
-  const billRun = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, userEmail)
+  const billRun = await InitiateBillRunService(financialYearEndings, regionId, batchType, userEmail)
 
   _processBillRun(billRun, billingPeriods)
 }
@@ -48,20 +46,16 @@ function _processBillRun(billRun, billingPeriods) {
   // immediate response
   switch (billRun.batchType) {
     case 'annual':
-      AnnualProcessBillRunService.go(billRun, billingPeriods)
+      AnnualProcessBillRunService(billRun, billingPeriods)
       break
     case 'supplementary':
-      SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+      SupplementaryProcessBillRunService(billRun, billingPeriods)
       break
     case 'two_part_tariff':
-      TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+      TwoPartTariffProcessBillRunService(billRun, billingPeriods)
       break
     case 'two_part_supplementary':
-      TwoPartTariffSupplementaryProcessBillRunService.go(billRun, billingPeriods)
+      TwoPartTariffSupplementaryProcessBillRunService(billRun, billingPeriods)
       break
   }
-}
-
-module.exports = {
-  go
 }

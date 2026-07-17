@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Generates and persists return logs for the given return requirement and cycle
  * @module CreateReturnLogsService
  */
 
-const GenerateReturnLogService = require('./generate-return-log.service.js')
-const { db } = require('../../../db/db.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
-const { determineReturnsPeriods } = require('../../lib/return-periods.lib.js')
+import GenerateReturnLogService from './generate-return-log.service.js'
+import { db } from '../../../db/db.js'
+import { determineReturnsPeriods } from '../../lib/return-periods.lib.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Generates and persists return logs for the given return requirement and cycle
@@ -20,7 +18,7 @@ const { determineReturnsPeriods } = require('../../lib/return-periods.lib.js')
  *
  * @returns {Promise<string[]>} an array of the generated return log ids
  */
-async function go(returnRequirement, returnCycle, licenceEndDate, trx = null) {
+export default async function createReturnLogsService(returnRequirement, returnCycle, licenceEndDate, trx = null) {
   const returnLogs = _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate)
 
   return _persistReturnLogs(returnLogs, trx)
@@ -44,10 +42,10 @@ function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = nu
     })
 
     for (const quarterlyReturnPeriod of periodsToProcess) {
-      returnLogs.push(GenerateReturnLogService.go(returnRequirement, quarterlyReturnPeriod))
+      returnLogs.push(GenerateReturnLogService(returnRequirement, quarterlyReturnPeriod))
     }
   } else {
-    returnLogs.push(GenerateReturnLogService.go(returnRequirement, returnCycle))
+    returnLogs.push(GenerateReturnLogService(returnRequirement, returnCycle))
   }
 
   // It is possible that a licence can be ended _before_ the return cycle starts. On the rare occasions this happens
@@ -76,8 +74,4 @@ async function _persistReturnLogs(returnLogs, trx) {
   }
 
   return createdIds
-}
-
-module.exports = {
-  go
 }

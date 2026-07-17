@@ -1,28 +1,23 @@
-'use strict'
-
 /**
  * Controller for /licences/end-dates endpoints
  * @module LicencesEndDatesController
  */
 
-const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
+import http2 from 'node:http2'
 
-const CheckAllLicenceEndDatesService = require('../services/licences/end-dates/check-all-licence-end-dates.service.js')
-const ProcessLicenceEndDateChangesService = require('../services/licences/end-dates/process-licence-end-date-changes.service.js')
+import CheckAllLicenceEndDatesService from '../services/licences/end-dates/check-all-licence-end-dates.service.js'
+import ProcessLicenceEndDateChangesService from '../services/licences/end-dates/process-licence-end-date-changes.service.js'
 
-async function check(_request, h) {
-  CheckAllLicenceEndDatesService.go()
+const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
-  return h.response().code(HTTP_STATUS_NO_CONTENT)
-}
-
-async function process(_request, h) {
-  ProcessLicenceEndDateChangesService.go()
+export async function check(_request, h) {
+  CheckAllLicenceEndDatesService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-module.exports = {
-  check,
-  process
+export async function process(_request, h) {
+  ProcessLicenceEndDateChangesService()
+
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
 }

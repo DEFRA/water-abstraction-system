@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches all the table names from a given schema
  * @module FetchTableNamesService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Retrieves the table names for a specific schema
@@ -14,7 +12,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<string[]>} Table names for the specified schema
  */
-async function go(schemaName) {
+export default async function fetchTableNamesService(schemaName) {
   const tableData = await _fetchTableNames(schemaName)
 
   // tableData has information we do not need
@@ -42,8 +40,4 @@ function _pluckTableNames(tableData) {
   return tableData.map((obj) => {
     return obj.table_name
   })
-}
-
-module.exports = {
-  go
 }

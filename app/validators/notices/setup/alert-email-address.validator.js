@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
  * @module AlertEmailAddressValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const ERROR_MESSAGES = {
   invalidEmail: 'Enter an email address in the correct format, like name@example.com',
@@ -22,7 +20,7 @@ const VALID_VALUES = ['username', 'other']
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function alertEmailAddressValidator(payload) {
   const schema = Joi.object({
     alertEmailAddressType: Joi.string()
       .required()
@@ -43,8 +41,4 @@ function go(payload) {
   })
 
   return schema.validate(payload)
-}
-
-module.exports = {
-  go
 }

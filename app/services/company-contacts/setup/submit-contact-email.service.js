@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/contact-email' page
  *
  * @module SubmitContactEmailService
  */
 
-const ContactEmailPresenter = require('../../../presenters/company-contacts/setup/contact-email.presenter.js')
-const ContactEmailValidator = require('../../../validators/company-contacts/setup/contact-email.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { checkUrl } = require('../../../lib/check-page.lib.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
-const { formatEmail, formatValidationResult } = require('../../../presenters/base.presenter.js')
+import ContactEmailPresenter from '../../../presenters/company-contacts/setup/contact-email.presenter.js'
+import ContactEmailValidator from '../../../validators/company-contacts/setup/contact-email.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { checkUrl } from '../../../lib/check-page.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatEmail, formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/contact-email' page
@@ -22,8 +20,8 @@ const { formatEmail, formatValidationResult } = require('../../../presenters/bas
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitContactEmailService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -39,7 +37,7 @@ async function go(sessionId, payload, yar) {
 
   session.email = payload.email
 
-  const pageData = ContactEmailPresenter.go(session)
+  const pageData = ContactEmailPresenter(session)
 
   return {
     error: validationResult,
@@ -60,11 +58,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = ContactEmailValidator.go(payload)
+  const validationResult = ContactEmailValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

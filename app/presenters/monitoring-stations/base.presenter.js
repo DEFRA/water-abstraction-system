@@ -1,12 +1,10 @@
-'use strict'
-
-const {
+import {
   formatAbstractionPeriod,
   formatLongDate,
   formatRestrictionType,
   formatValueUnit,
   sentenceCase
-} = require('../base.presenter.js')
+} from '../base.presenter.js'
 
 /**
  * Returns the heading for the "restrictions" column of the monitoring station page
@@ -33,7 +31,7 @@ const {
  *
  * @returns {string} - the restriction heading
  */
-function determineRestrictionHeading(licenceMonitoringStations) {
+export function determineRestrictionHeading(licenceMonitoringStations) {
   const containsFlow = licenceMonitoringStations.some((licenceMonitoringStation) => {
     return licenceMonitoringStation.measureType === 'flow'
   })
@@ -71,7 +69,7 @@ function determineRestrictionHeading(licenceMonitoringStations) {
  *
  * @returns {object[]}
  */
-function formatRestrictions(licenceMonitoringStations) {
+export function formatRestrictions(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
     const {
       abstractionPeriodEndDay,
@@ -121,9 +119,4 @@ function _restrictionCount(licenceId, licenceMonitoringStations) {
   })
 
   return count.length
-}
-
-module.exports = {
-  determineRestrictionHeading,
-  formatRestrictions
 }

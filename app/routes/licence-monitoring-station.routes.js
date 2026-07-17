@@ -1,13 +1,11 @@
-'use strict'
+import { remove, submitRemove } from '../controllers/licence-monitoring-station.controller.js'
 
-const LicenceMonitoringStationController = require('../controllers/licence-monitoring-station.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/licence-monitoring-station/{licenceMonitoringStationId}/remove',
     options: {
-      handler: LicenceMonitoringStationController.remove,
+      handler: remove,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -19,7 +17,7 @@ const routes = [
     method: 'POST',
     path: '/licence-monitoring-station/{licenceMonitoringStationId}/remove',
     options: {
-      handler: LicenceMonitoringStationController.submitRemove,
+      handler: submitRemove,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -28,5 +26,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for return_cycles (returns.return_cycle)
  * @module ReturnCycleModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import ReturnLogModel from './return-log.model.js'
 
-class ReturnCycleModel extends BaseModel {
+export default class ReturnCycleModel extends BaseModel {
   static get tableName() {
     return 'returnCycles'
   }
@@ -18,7 +17,7 @@ class ReturnCycleModel extends BaseModel {
     return {
       returnLogs: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-log.model',
+        modelClass: ReturnLogModel,
         join: {
           from: 'returnCycles.id',
           to: 'returnLogs.returnCycleId'
@@ -27,5 +26,3 @@ class ReturnCycleModel extends BaseModel {
     }
   }
 }
-
-module.exports = ReturnCycleModel

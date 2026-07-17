@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/download` link when the journey is for 'alerts'
  * @module DownloadAbstractionAlertPresenter
  */
 
-const { addressToCSV } = require('../base.presenter.js')
-const { formatAbstractionPeriod, formatValueUnit } = require('../../base.presenter.js')
-const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
+import { addressToCSV } from '../base.presenter.js'
+import { transformArrayToCSVRow } from '../../../lib/transform-to-csv.lib.js'
+import { formatAbstractionPeriod, formatValueUnit } from '../../base.presenter.js'
 
 const HEADERS = [
   'Licence',
@@ -46,7 +44,7 @@ const HEADERS = [
  * @returns {string} - A CSV-formatted string that includes the recipients' data, with the first row as column headers
  * and subsequent rows corresponding to the recipient details.
  */
-function go(recipients, session) {
+export default function downloadAbstractionAlertPresenter(recipients, session) {
   const rows = _transformToCsv(recipients, session)
 
   return [HEADERS + '\n', ...rows].join('')
@@ -126,8 +124,4 @@ function _transformToCsv(recipients, session) {
   }
 
   return rows
-}
-
-module.exports = {
-  go
 }

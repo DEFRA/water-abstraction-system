@@ -1,6 +1,4 @@
-'use strict'
-
-exports.up = async function (knex) {
+export async function up(knex) {
   await knex.schema.withSchema('public').dropTableIfExists('review_returns')
 
   await knex.schema.withSchema('public').dropTableIfExists('review_licences')
@@ -16,7 +14,7 @@ exports.up = async function (knex) {
   return knex.schema.withSchema('public').dropTableIfExists('licence_supplementary_years')
 }
 
-exports.down = async function (knex) {
+export async function down(knex) {
   await knex.schema
     .withSchema('public')
     .createTable('review_returns', (table) => {

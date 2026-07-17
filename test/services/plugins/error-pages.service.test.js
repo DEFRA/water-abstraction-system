@@ -1,4 +1,16 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+import http2 from 'node:http2'
+
+// Test helpers
+import SessionNotFoundError from '../../../app/errors/session-not-found.error.js'
+
+// Things we need to stub
+import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
+
+// Thing under test
+import ErrorPagesService from '../../../app/services/plugins/error-pages.service.js'
 
 const {
   HTTP_STATUS_FORBIDDEN,
@@ -6,19 +18,7 @@ const {
   HTTP_STATUS_NOT_FOUND,
   HTTP_STATUS_OK,
   HTTP_STATUS_GONE
-} = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
-
-// Test helpers
-const SessionNotFoundError = require('../../../app/errors/session-not-found.error.js')
-
-// Things we need to stub
-const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
-
-// Thing under test
-const ErrorPagesService = require('../../../app/services/plugins/error-pages.service.js')
+} = http2.constants
 
 describe('Error pages service', () => {
   const boom403Response = {
@@ -59,12 +59,12 @@ describe('Error pages service', () => {
   let request
 
   beforeEach(() => {
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -78,9 +78,9 @@ describe('Error pages service', () => {
     })
 
     it('logs an error', () => {
-      ErrorPagesService.go(request)
+      ErrorPagesService(request)
 
-      expect(notifierStub.omfg.calledWith(boom500Response.message)).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith(boom500Response.message, {}, boom500Response)
     })
 
     describe('and the route is configured for plain output (do not redirect to error page)', () => {
@@ -89,13 +89,13 @@ describe('Error pages service', () => {
       })
 
       it('tells the plugin not to stop the response from continuing', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.stopResponse).toBe(false)
       })
 
       it('returns the original status code', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.statusCode).toEqual(HTTP_STATUS_INTERNAL_SERVER_ERROR)
       })
@@ -103,13 +103,13 @@ describe('Error pages service', () => {
 
     describe('and the route is not configured for plain output (redirect to error page)', () => {
       it('tells the plugin to stop the response and redirect to an error page', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.stopResponse).toBe(true)
       })
 
       it('returns a "safe" status code', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.statusCode).toEqual(HTTP_STATUS_OK)
       })
@@ -126,15 +126,15 @@ describe('Error pages service', () => {
     })
 
     it('returns the correct status code', () => {
-      const result = ErrorPagesService.go(request)
+      const result = ErrorPagesService(request)
 
       expect(result.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
     })
 
     it('logs a message', () => {
-      ErrorPagesService.go(request)
+      ErrorPagesService(request)
 
-      expect(notifierStub.omg.calledWith('Page not found', { path })).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Page not found', { path })
     })
 
     describe('and the route is configured to return plain output (do not redirect to error page)', () => {
@@ -143,7 +143,7 @@ describe('Error pages service', () => {
       })
 
       it('tells the plugin not to stop the response from continuing', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.stopResponse).toBe(false)
       })
@@ -151,7 +151,7 @@ describe('Error pages service', () => {
 
     describe('and the route is not configured (redirect to error page)', () => {
       it('tells the plugin to stop the response and redirect to an error page', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.stopResponse).toBe(true)
       })
@@ -168,9 +168,9 @@ describe('Error pages service', () => {
     })
 
     it('logs a message', () => {
-      ErrorPagesService.go(request)
+      ErrorPagesService(request)
 
-      expect(notifierStub.omg.calledWith('Not authorised', { path })).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Not authorised', { path })
     })
 
     describe('and the route is configured to return plain output (do not redirect to error page)', () => {
@@ -179,13 +179,13 @@ describe('Error pages service', () => {
       })
 
       it('tells the plugin not to stop the response from continuing', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.stopResponse).toBe(false)
       })
 
       it('returns the original status code', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.statusCode).toEqual(HTTP_STATUS_FORBIDDEN)
       })
@@ -193,13 +193,13 @@ describe('Error pages service', () => {
 
     describe('and the route is not configured (redirect to error page)', () => {
       it('tells the plugin to stop the response and redirect to an error page', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.stopResponse).toBe(true)
       })
 
       it('returns a "safe" status code', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
@@ -216,9 +216,9 @@ describe('Error pages service', () => {
     })
 
     it('logs a message', () => {
-      ErrorPagesService.go(request)
+      ErrorPagesService(request)
 
-      expect(notifierStub.omg.calledWith('Session not found', { path })).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Session not found', { path })
     })
 
     describe('and the route is configured to return plain output (do not redirect to error page)', () => {
@@ -227,13 +227,13 @@ describe('Error pages service', () => {
       })
 
       it('tells the plugin not to stop the response from continuing', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.stopResponse).toBe(false)
       })
 
       it('returns the original status code', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.statusCode).toEqual(HTTP_STATUS_GONE)
       })
@@ -241,13 +241,13 @@ describe('Error pages service', () => {
 
     describe('and the route is not configured (redirect to error page)', () => {
       it('tells the plugin to stop the response and redirect to an error page', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.stopResponse).toBe(true)
       })
 
       it('returns a "safe" status code', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.statusCode).toEqual(HTTP_STATUS_GONE)
       })
@@ -264,16 +264,16 @@ describe('Error pages service', () => {
     })
 
     it('returns the correct status code', () => {
-      const result = ErrorPagesService.go(request)
+      const result = ErrorPagesService(request)
 
       expect(result.statusCode).toEqual(standardResponse.statusCode)
     })
 
     it('does not log anything', () => {
-      ErrorPagesService.go(request)
+      ErrorPagesService(request)
 
-      expect(notifierStub.omg.called).toBe(false)
-      expect(notifierStub.omfg.called).toBe(false)
+      expect(notifierStub.omg).not.toHaveBeenCalled()
+      expect(notifierStub.omfg).not.toHaveBeenCalled()
     })
 
     describe('and the route is configured for plain output (do not redirect to error page)', () => {
@@ -282,7 +282,7 @@ describe('Error pages service', () => {
       })
 
       it('tells the plugin not to stop the response from continuing', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.stopResponse).toBe(false)
       })
@@ -290,7 +290,7 @@ describe('Error pages service', () => {
 
     describe('and the route is not configured for plain output (redirect to error page)', () => {
       it('tells the plugin not to stop the response from continuing', () => {
-        const result = ErrorPagesService.go(request)
+        const result = ErrorPagesService(request)
 
         expect(result.stopResponse).toBe(false)
       })

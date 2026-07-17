@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Handles updating a review licence record when the progress or status buttons are clicked
  * @module SubmitReviewLicenceService
  */
 
-const ReviewLicenceModel = require('../../../models/review-licence.model.js')
+import ReviewLicenceModel from '../../../models/review-licence.model.js'
 
 /**
  * Handles updating a review licence record when the progress or status buttons are clicked
@@ -22,7 +20,7 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {object} payload - The Hapi `request.payload` object passed on by the controller
  */
-async function go(reviewLicenceId, yar, payload) {
+export default async function submitReviewLicenceService(reviewLicenceId, yar, payload) {
   const parsedPayload = _parsePayload(payload)
 
   // NOTE: The YarPlugin decorates the Hapi request object with a yar property. Yar is a session manager
@@ -70,8 +68,4 @@ async function _update(reviewLicenceId, parsedPayload) {
   }
 
   await ReviewLicenceModel.query().findById(reviewLicenceId).patch(patch)
-}
-
-module.exports = {
-  go
 }

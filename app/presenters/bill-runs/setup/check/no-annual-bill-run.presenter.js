@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page when the financial year could not be determined
  * @module NoAnnualBillRunPresenter
  */
 
-const { formatBillRunType, formatChargeScheme } = require('../../../billing.presenter.js')
-const { checkPageBackLink } = require('./base-check.presenter.js')
+import { checkPageBackLink } from './base-check.presenter.js'
+import { formatBillRunType, formatChargeScheme } from '../../../billing.presenter.js'
 
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page when the financial year could not be determined
@@ -34,7 +32,7 @@ const { checkPageBackLink } = require('./base-check.presenter.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function noAnnualBillRunPresenter(session) {
   const { id: sessionId, regionName } = session
 
   return {
@@ -53,8 +51,4 @@ function go(session) {
     warningMessage:
       'You cannot create a supplementary bill run for this region until you have created an annual bill run'
   }
-}
-
-module.exports = {
-  go
 }

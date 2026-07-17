@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import SessionModelStub from '../../support/stubs/session.stub.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitPostcodeService = require('../../../app/services/address/submit-postcode.service.js')
+import SubmitPostcodeService from '../../../app/services/address/submit-postcode.service.js'
 
 describe('Address - Submit Postcode Service', () => {
   let payload
@@ -35,13 +33,13 @@ describe('Address - Submit Postcode Service', () => {
       }
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -51,12 +49,12 @@ describe('Address - Submit Postcode Service', () => {
       })
 
       it('saves the submitted postcode and returns an empty object (tells controller to redirect to next page)', async () => {
-        const result = await SubmitPostcodeService.go(sessionId, payload)
+        const result = await SubmitPostcodeService(sessionId, payload)
 
         expect(result).toEqual({})
 
         expect(session.addressJourney.address.postcode).toEqual('SW1A 1AA')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 
@@ -67,7 +65,7 @@ describe('Address - Submit Postcode Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitPostcodeService.go(sessionId, payload)
+          const result = await SubmitPostcodeService(sessionId, payload)
 
           expect(result).toEqual({
             error: {
@@ -98,7 +96,7 @@ describe('Address - Submit Postcode Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitPostcodeService.go(sessionId, payload)
+          const result = await SubmitPostcodeService(sessionId, payload)
 
           expect(result).toEqual({
             error: {

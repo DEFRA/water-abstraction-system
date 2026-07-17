@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
  * @module SubmitAlertTypeService
  */
 
-const AlertTypePresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-type.presenter.js')
-const AlertTypeValidator = require('../../../../validators/notices/setup/alert-type.validator.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+import AlertTypePresenter from '../../../../presenters/notices/setup/abstraction-alerts/alert-type.presenter.js'
+import AlertTypeValidator from '../../../../validators/notices/setup/alert-type.validator.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
@@ -19,8 +17,8 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitAlertTypeService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload, session.licenceMonitoringStations)
 
@@ -32,7 +30,7 @@ async function go(sessionId, payload) {
 
   session.alertType = payload.alertType
 
-  const pageData = AlertTypePresenter.go(session)
+  const pageData = AlertTypePresenter(session)
 
   return {
     activeNavBar: 'notices',
@@ -53,11 +51,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, licenceMonitoringStations) {
-  const validationResult = AlertTypeValidator.go(payload, licenceMonitoringStations)
+  const validationResult = AlertTypeValidator(payload, licenceMonitoringStations)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

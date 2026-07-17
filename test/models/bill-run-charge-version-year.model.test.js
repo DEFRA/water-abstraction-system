@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunHelper = require('../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../app/models/bill-run.model.js')
-const BillRunChargeVersionYearHelper = require('../support/helpers/bill-run-charge-version-year.helper.js')
-const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
-const ChargeVersionModel = require('../../app/models/charge-version.model.js')
+import BillRunChargeVersionYearHelper from '../support/helpers/bill-run-charge-version-year.helper.js'
+import BillRunHelper from '../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../app/models/bill-run.model.js'
+import ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
+import ChargeVersionModel from '../../app/models/charge-version.model.js'
 
 // Thing under test
-const BillRunChargeVersionYearModel = require('../../app/models/bill-run-charge-version-year.model.js')
+import BillRunChargeVersionYearModel from '../../app/models/bill-run-charge-version-year.model.js'
 
 describe('Bill Run Charge Version Year model', () => {
   let testBillRun

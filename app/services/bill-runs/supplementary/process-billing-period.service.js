@@ -1,22 +1,20 @@
-'use strict'
-
 /**
  * Processes the charge versions for a given billing period
  * @module ProcessBillingPeriodService
  */
 
-const BillRunError = require('../../../errors/bill-run.error.js')
-const BillRunModel = require('../../../models/bill-run.model.js')
-const BillModel = require('../../../models/bill.model.js')
-const BillLicenceModel = require('../../../models/bill-licence.model.js')
-const DetermineChargePeriodService = require('../determine-charge-period.service.js')
-const DetermineMinimumChargeService = require('../determine-minimum-charge.service.js')
-const GenerateTransactionsService = require('../generate-transactions.service.js')
-const FetchPreviousTransactionsService = require('../fetch-previous-transactions.service.js')
-const PreGenerateBillingDataService = require('./pre-generate-billing-data.service.js')
-const ProcessSupplementaryTransactionsService = require('../process-supplementary-transactions.service.js')
-const SendTransactionsService = require('../send-transactions.service.js')
-const TransactionModel = require('../../../models/transaction.model.js')
+import BillLicenceModel from '../../../models/bill-licence.model.js'
+import BillModel from '../../../models/bill.model.js'
+import BillRunError from '../../../errors/bill-run.error.js'
+import BillRunModel from '../../../models/bill-run.model.js'
+import DetermineChargePeriodService from '../determine-charge-period.service.js'
+import DetermineMinimumChargeService from '../determine-minimum-charge.service.js'
+import FetchPreviousTransactionsService from '../fetch-previous-transactions.service.js'
+import GenerateTransactionsService from '../generate-transactions.service.js'
+import PreGenerateBillingDataService from './pre-generate-billing-data.service.js'
+import ProcessSupplementaryTransactionsService from '../process-supplementary-transactions.service.js'
+import SendTransactionsService from '../send-transactions.service.js'
+import TransactionModel from '../../../models/transaction.model.js'
 
 /**
  * Creates the bills and transactions in both WRLS and the Charging Module API
@@ -27,12 +25,12 @@ const TransactionModel = require('../../../models/transaction.model.js')
  *
  * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go(billRun, billingPeriod, chargeVersions) {
+export default async function processBillingPeriodService(billRun, billingPeriod, chargeVersions) {
   if (chargeVersions.length === 0) {
     return false
   }
 
-  const preGeneratedData = await PreGenerateBillingDataService.go(chargeVersions, billRun.id, billingPeriod)
+  const preGeneratedData = await PreGenerateBillingDataService(chargeVersions, billRun.id, billingPeriod)
 
   const billingData = _buildBillingDataWithTransactions(chargeVersions, preGeneratedData, billingPeriod)
   const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billRun.externalId)
@@ -60,7 +58,7 @@ async function _buildDataToPersist(billingData, billingPeriod, billRunExternalId
     const cleansedTransactions = await _cleanseTransactions(currentBillingData, billingPeriod)
 
     if (cleansedTransactions.length !== 0) {
-      const transactions = await SendTransactionsService.go(
+      const transactions = await SendTransactionsService(
         cleansedTransactions,
         billRunExternalId,
         currentBillingData.bill.accountNumber,
@@ -180,13 +178,13 @@ async function _cleanseTransactions(currentBillingData, billingPeriod) {
     return []
   }
 
-  const previousTransactions = await FetchPreviousTransactionsService.go(
+  const previousTransactions = await FetchPreviousTransactionsService(
     currentBillingData.bill.billingAccountId,
     currentBillingData.billLicence.licenceId,
     billingPeriod.endDate.getFullYear(),
     false
   )
-  const cleansedTransactions = await ProcessSupplementaryTransactionsService.go(
+  const cleansedTransactions = await ProcessSupplementaryTransactionsService(
     previousTransactions,
     currentBillingData.calculatedTransactions,
     currentBillingData.billLicence.id
@@ -197,18 +195,18 @@ async function _cleanseTransactions(currentBillingData, billingPeriod) {
 
 function _generateCalculatedTransactions(billLicenceId, billingPeriod, chargeVersion) {
   try {
-    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+    const chargePeriod = DetermineChargePeriodService(chargeVersion, billingPeriod)
 
     if (!chargePeriod.startDate) {
       return []
     }
 
-    const newLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+    const newLicence = DetermineMinimumChargeService(chargeVersion, chargePeriod)
     const waterUndertaker = chargeVersion.licence.waterUndertaker
 
     // We use flatMap as GenerateTransactionsService returns an array of transactions
     const transactions = chargeVersion.chargeReferences.flatMap((chargeReference) => {
-      return GenerateTransactionsService.go(
+      return GenerateTransactionsService(
         billLicenceId,
         chargeReference,
         billingPeriod,
@@ -222,8 +220,4 @@ function _generateCalculatedTransactions(billLicenceId, billingPeriod, chargeVer
   } catch (error) {
     throw new BillRunError(error, BillRunModel.errorCodes.failedToPrepareTransactions)
   }
-}
-
-module.exports = {
-  go
 }

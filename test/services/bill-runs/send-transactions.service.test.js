@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillRunError = require('../../../app/errors/bill-run.error.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import BillRunError from '../../../app/errors/bill-run.error.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import { generateLicenceRef } from '../../support/generators.js'
 
 // Things we need to stub
-const ChargingModuleCreateTransactionRequest = require('../../../app/requests/charging-module/create-transaction.request.js')
+import * as ChargingModuleCreateTransactionRequest from '../../../app/requests/charging-module/create-transaction.request.js'
 
 // Thing under test
-const SendTransactionsService = require('../../../app/services/bill-runs/send-transactions.service.js')
+import SendTransactionsService from '../../../app/services/bill-runs/send-transactions.service.js'
 
 describe('Bill Runs - Send Transactions service', () => {
   const accountNumber = 'ABC123'
@@ -28,7 +26,9 @@ describe('Bill Runs - Send Transactions service', () => {
   let transactions
 
   beforeEach(() => {
-    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
+    chargingModuleCreateTransactionRequestStub = vi
+      .spyOn(ChargingModuleCreateTransactionRequest, 'default')
+      .mockImplementation(() => {})
 
     transactions = [
       _transaction('fca14c7e-c895-4991-9651-9a76f45b971d'),
@@ -37,21 +37,21 @@ describe('Bill Runs - Send Transactions service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when calling the Charging Module API is successful', () => {
     beforeEach(async () => {
-      chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
+      chargingModuleCreateTransactionRequestStub.mockResolvedValueOnce({
         ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
       })
-      chargingModuleCreateTransactionRequestStub.onSecondCall().resolves({
+      chargingModuleCreateTransactionRequestStub.mockResolvedValueOnce({
         ..._chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
       })
     })
 
     it('updates the transactions with the responses from the Charging Module API', async () => {
-      const results = await SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
+      const results = await SendTransactionsService(transactions, billRunExternalId, accountNumber, licence)
 
       expect(results).toHaveLength(2)
       expect(results[0].status).toEqual('charge_created')
@@ -63,19 +63,19 @@ describe('Bill Runs - Send Transactions service', () => {
 
   describe('when calling the Charging Module API is unsuccessful', () => {
     beforeEach(async () => {
-      chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
+      chargingModuleCreateTransactionRequestStub.mockResolvedValueOnce({
         ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
       })
-      chargingModuleCreateTransactionRequestStub.onSecondCall().rejects()
+      chargingModuleCreateTransactionRequestStub.mockRejectedValueOnce()
     })
 
     it('throws a BillRunError with the correct code', async () => {
       await expect(
-        SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
+        SendTransactionsService(transactions, billRunExternalId, accountNumber, licence)
       ).rejects.toBeInstanceOf(BillRunError)
 
       await expect(
-        SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
+        SendTransactionsService(transactions, billRunExternalId, accountNumber, licence)
       ).rejects.toMatchObject({ code: BillRunModel.errorCodes.failedToCreateCharge })
     })
   })

@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-const AccessPresenter = require('../../../../../app/presenters/users/internal/setup/access.presenter.js')
+import AccessPresenter from '../../../../../app/presenters/users/internal/setup/access.presenter.js'
 
 describe('Users - Internal - Setup - Access Presenter', () => {
   let session
@@ -15,7 +16,7 @@ describe('Users - Internal - Setup - Access Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AccessPresenter.go(session)
+      const result = AccessPresenter(session)
 
       expect(result).toEqual({
         access: 'enabled',

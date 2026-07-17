@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Our views plugin which serves views using nunjucks and govuk-frontend.
  *
@@ -10,53 +8,13 @@
  * @module ViewsPlugin
  */
 
-const path = require('node:path')
-const Nunjucks = require('nunjucks')
-const Vision = require('@hapi/vision')
+import Nunjucks from 'nunjucks'
+import Vision from '@hapi/vision'
+import path from 'node:path'
 
-const { markdown } = require('../views/filters/markdown.filter.js')
-
-const ServerConfig = require('../../config/server.config.js')
-
-// This relates to our custom Nunjucks filter `app/views/filters/markdown.filter.js`. It uses the package **marked** to
-// convert the markdown returned by Notify and saved in our notifications to HTML, which we then display in some pages.
-//
-// Admittedly, we can't find any specific reference to the change in **marked's** release notes. But since we brought in
-// v16.4.0 some team members reported seeing the error `Error [ERR_REQUIRE_ESM]: require() of ES Module` when attempting
-// to start the app locally.
-//
-// We tried using a dynamic import in the custom filter itself. But that forces the filter to become async, and both
-// Nunjucks and Vision are synchronous by default. It was pot-luck whether the render completed before the Hapi relayed
-// the response to the browser.
-//
-// So, with credit to ChatGPT, the cleanest solution is to import **marked** dynamically at startup (in this case when
-// the plugin is loaded), and then make it available to the filter by storing it in the global scope. The filter can
-// remain synchronous and we avoid doing some gnarly stuff to Nunjucks and Vision.
-import('marked').then((mod) => {
-  globalThis.GlobalMarked = mod.marked
-})
-
-const { enableBillingAccountChangeAddress } = require('../../config/feature-flags.config.js')
-
-const ViewsPlugin = {
-  plugin: Vision,
-  options: {
-    engines: {
-      // The 'engine' is the file extension this applies to; in this case, .njk
-      njk: {
-        compile,
-        prepare
-      }
-    },
-    context,
-    // the root file path used to resolve and load the templates identified when calling h.view()
-    path: '../views',
-    // a base path used as prefix for `path:`
-    relativeTo: __dirname,
-    // Only enable caching of templates if we are running in production
-    isCached: ServerConfig.environment === 'production'
-  }
-}
+import FeatureFlagsConfig from '../../config/feature-flags.config.js'
+import MarkdownFilter from '../views/filters/markdown.filter.js'
+import ServerConfig from '../../config/server.config.js'
 
 /**
  * The rendering function for the view engine
@@ -125,7 +83,7 @@ function context(request) {
       permission: request.auth.credentials?.permission
     },
     featureToggles: {
-      enableBillingAccountChangeAddress
+      enableBillingAccountChangeAddress: FeatureFlagsConfig.enableBillingAccountChangeAddress
     },
     navigationLinks: _navigationLinks(request.auth)
   }
@@ -158,7 +116,7 @@ function prepare(config, next) {
   const environment = Nunjucks.configure(paths)
 
   // Add custom filter to support rendering Notify notifications as HTML
-  environment.addFilter('markdown', markdown)
+  environment.addFilter('markdown', MarkdownFilter)
 
   config.compileOptions.environment = environment
 
@@ -199,4 +157,22 @@ function _navigationLinks(auth) {
   return links
 }
 
-module.exports = ViewsPlugin
+export default {
+  plugin: Vision,
+  options: {
+    engines: {
+      // The 'engine' is the file extension this applies to; in this case, .njk
+      njk: {
+        compile,
+        prepare
+      }
+    },
+    context,
+    // the root file path used to resolve and load the templates identified when calling h.view()
+    path: '../views',
+    // a base path used as prefix for `path:`
+    relativeTo: import.meta.dirname,
+    // Only enable caching of templates if we are running in production
+    isCached: ServerConfig.environment === 'production'
+  }
+}

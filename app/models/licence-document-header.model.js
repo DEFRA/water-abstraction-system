@@ -1,13 +1,13 @@
-'use strict'
-
 /**
  * Model for licence_document_headers (crm.document_header)
  * @module LicenceDocumentHeaderModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceEntityRoleModel from './licence-entity-role.model.js'
+import LicenceModel from './licence.model.js'
 
 /**
  * Represents an instance of a licence document header record
@@ -31,7 +31,7 @@ const BaseModel = require('./base.model.js')
  *
  * Welcome to dealing with the legacy database schema! ¯\_(ツ)_/¯
  */
-class LicenceDocumentHeaderModel extends BaseModel {
+export default class LicenceDocumentHeaderModel extends BaseModel {
   static get tableName() {
     return 'licenceDocumentHeaders'
   }
@@ -45,7 +45,7 @@ class LicenceDocumentHeaderModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'licenceDocumentHeaders.licenceRef',
           to: 'licences.licenceRef'
@@ -53,7 +53,7 @@ class LicenceDocumentHeaderModel extends BaseModel {
       },
       licenceEntityRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-entity-role.model',
+        modelClass: LicenceEntityRoleModel,
         join: {
           from: 'licenceDocumentHeaders.companyEntityId',
           to: 'licenceEntityRoles.companyEntityId'
@@ -62,5 +62,3 @@ class LicenceDocumentHeaderModel extends BaseModel {
     }
   }
 }
-
-module.exports = LicenceDocumentHeaderModel

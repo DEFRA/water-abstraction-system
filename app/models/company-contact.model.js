@@ -1,15 +1,17 @@
-'use strict'
-
 /**
  * Model for company_contacts (crm_v2.company_contacts)
  * @module CompanyContactModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import CompanyModel from './company.model.js'
+import ContactModel from './contact.model.js'
+import LicenceRoleModel from './licence-role.model.js'
+import UserModel from './user.model.js'
 
-class CompanyContactModel extends BaseModel {
+export default class CompanyContactModel extends BaseModel {
   static get tableName() {
     return 'companyContacts'
   }
@@ -18,7 +20,7 @@ class CompanyContactModel extends BaseModel {
     return {
       company: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'company.model',
+        modelClass: CompanyModel,
         join: {
           from: 'companyContacts.companyId',
           to: 'companies.id'
@@ -26,7 +28,7 @@ class CompanyContactModel extends BaseModel {
       },
       contact: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'contact.model',
+        modelClass: ContactModel,
         join: {
           from: 'companyContacts.contactId',
           to: 'contacts.id'
@@ -34,7 +36,7 @@ class CompanyContactModel extends BaseModel {
       },
       createdByUser: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'companyContacts.createdBy',
           to: 'users.id'
@@ -42,7 +44,7 @@ class CompanyContactModel extends BaseModel {
       },
       licenceRole: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-role.model',
+        modelClass: LicenceRoleModel,
         join: {
           from: 'companyContacts.licenceRoleId',
           to: 'licenceRoles.id'
@@ -50,7 +52,7 @@ class CompanyContactModel extends BaseModel {
       },
       updatedByUser: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'companyContacts.updatedBy',
           to: 'users.id'
@@ -72,5 +74,3 @@ class CompanyContactModel extends BaseModel {
     return this.abstractionAlertLicences ? 'some' : 'yes'
   }
 }
-
-module.exports = CompanyContactModel

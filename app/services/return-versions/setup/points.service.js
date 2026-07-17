@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/points` page
  * @module PointsService
  */
 
-const FetchPointsService = require('./fetch-points.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PointsPresenter = require('../../../presenters/return-versions/setup/points.presenter.js')
+import FetchPointsService from './fetch-points.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PointsPresenter from '../../../presenters/return-versions/setup/points.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/points` page
@@ -20,17 +18,13 @@ const PointsPresenter = require('../../../presenters/return-versions/setup/point
  *
  * @returns {Promise<object>} The view data for the points page
  */
-async function go(sessionId, requirementIndex) {
-  const session = await FetchSessionDal.go(sessionId)
-  const points = await FetchPointsService.go(session.licenceVersion.id)
+export default async function pointsService(sessionId, requirementIndex) {
+  const session = await FetchSessionDal(sessionId)
+  const points = await FetchPointsService(session.licenceVersion.id)
 
-  const formattedData = PointsPresenter.go(session, requirementIndex, points)
+  const formattedData = PointsPresenter(session, requirementIndex, points)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

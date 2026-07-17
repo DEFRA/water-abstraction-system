@@ -1,25 +1,27 @@
-'use strict'
-
 /**
  * Use for making http requests to the Charging Module
  * @module ChargingModuleRequest
  */
 
-const BaseRequest = require('./base.request.js')
-
-const chargingModuleConfig = require('../../config/charging-module.config.js')
+import chargingModuleConfig from '../../config/charging-module.config.js'
+import {
+  deleteRequest as baseDeleteRequest,
+  getRequest as baseGetRequest,
+  patchRequest as basePatchRequest,
+  postRequest as basePostRequest
+} from './base.request.js'
 
 /**
  * Sends a DELETE request to the Charging Module for the provided path
  *
- * > Note: This function has been called `deleteRequest` here rather than `delete` as `delete` is a reserved word.
+ * > Note: This function has been called `deleteRequest` here rather than `deleteRequest` as `deleteRequest` is a reserved word.
  *
  * @param {string} path - The path to send the request to (do not include the starting /)
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function deleteRequest(path) {
-  const result = await _sendRequest(path, BaseRequest.delete)
+export async function deleteRequest(path) {
+  const result = await _sendRequest(path, baseDeleteRequest)
 
   return _parseResult(result)
 }
@@ -31,8 +33,8 @@ async function deleteRequest(path) {
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function get(path) {
-  const result = await _sendRequest(path, BaseRequest.get)
+export async function getRequest(path) {
+  const result = await _sendRequest(path, baseGetRequest)
 
   return _parseResult(result)
 }
@@ -44,8 +46,8 @@ async function get(path) {
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function patch(path) {
-  const result = await _sendRequest(path, BaseRequest.patch)
+export async function patchRequest(path) {
+  const result = await _sendRequest(path, basePatchRequest)
 
   return _parseResult(result)
 }
@@ -58,8 +60,8 @@ async function patch(path) {
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function post(path, body = {}) {
-  const result = await _sendRequest(path, BaseRequest.post, body)
+export async function postRequest(path, body = {}) {
+  const result = await _sendRequest(path, basePostRequest, body)
 
   return _parseResult(result)
 }
@@ -128,11 +130,4 @@ function _parseResult(result) {
   }
 
   return result
-}
-
-module.exports = {
-  delete: deleteRequest,
-  get,
-  patch,
-  post
 }

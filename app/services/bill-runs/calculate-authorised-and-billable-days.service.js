@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Calculates authorised and billable days for a given charge reference
  * @module CalculateAuthorisedAndBillableDaysService
  */
 
-const { determineAbstractionPeriods } = require('../../lib/abstraction-period.lib.js')
-const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.js')
+import ConsolidateDateRangesService from './consolidate-date-ranges.service.js'
+import { determineAbstractionPeriods } from '../../lib/abstraction-period.lib.js'
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
@@ -56,7 +54,7 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  *
  * @returns {object} An object containing an `authorisedDays` and `billableDays` property
  */
-function go(chargePeriod, billingPeriod, chargeReference) {
+export default function calculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference) {
   const { chargeElements } = chargeReference
 
   const authorisedAbstractionPeriods = []
@@ -146,7 +144,7 @@ function _calculateAbstractionOverlapPeriod(referencePeriod, abstractionPeriod) 
 }
 
 function _consolidateAndCalculate(referencePeriod, abstractionsPeriods) {
-  const consolidatedAbstractionPeriods = ConsolidateDateRangesService.go(abstractionsPeriods)
+  const consolidatedAbstractionPeriods = ConsolidateDateRangesService(abstractionsPeriods)
 
   const totalDays = consolidatedAbstractionPeriods.reduce((acc, abstractionPeriod) => {
     const abstractionOverlapPeriod = _calculateAbstractionOverlapPeriod(referencePeriod, abstractionPeriod)
@@ -155,8 +153,4 @@ function _consolidateAndCalculate(referencePeriod, abstractionsPeriods) {
   }, 0)
 
   return totalDays
-}
-
-module.exports = {
-  go
 }

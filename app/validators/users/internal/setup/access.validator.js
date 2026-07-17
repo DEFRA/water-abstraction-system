@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the '/users/internal/setup/{sessionId}/access' page
  *
  * @module AccessValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the '/users/internal/setup/{sessionId}/access' page
@@ -16,7 +14,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function accessValidator(payload) {
   const schema = Joi.object({
     access: Joi.string().required().valid('enabled', 'disabled').messages({
       'any.required': 'Select access for the user',
@@ -25,8 +23,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

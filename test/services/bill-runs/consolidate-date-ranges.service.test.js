@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Thing under test
-const ConsolidateDateRangesService = require('../../../app/services/bill-runs/consolidate-date-ranges.service.js')
+import ConsolidateDateRangesService from '../../../app/services/bill-runs/consolidate-date-ranges.service.js'
 
 describe('ConsolidateDateRanges service', () => {
   describe('when the provided ranges are non-overlapping', () => {
@@ -12,7 +13,7 @@ describe('ConsolidateDateRanges service', () => {
           { startDate: new Date('2023-03-01'), endDate: new Date('2023-04-01') }
         ]
 
-        const result = ConsolidateDateRangesService.go(dateRanges)
+        const result = ConsolidateDateRangesService(dateRanges)
 
         expect(result[0]).toEqual({ startDate: new Date('2023-01-01'), endDate: new Date('2023-02-01') })
         expect(result[1]).toEqual({ startDate: new Date('2023-03-01'), endDate: new Date('2023-04-01') })
@@ -26,7 +27,7 @@ describe('ConsolidateDateRanges service', () => {
           { startDate: new Date('2023-04-01'), endDate: new Date('2023-05-01') }
         ]
 
-        const result = ConsolidateDateRangesService.go(dateRanges)
+        const result = ConsolidateDateRangesService(dateRanges)
 
         expect(result[0]).toEqual({ startDate: new Date('2023-01-01'), endDate: new Date('2023-03-31') })
         expect(result[1]).toEqual({ startDate: new Date('2023-04-01'), endDate: new Date('2023-05-01') })
@@ -41,7 +42,7 @@ describe('ConsolidateDateRanges service', () => {
         { startDate: new Date('2023-02-01'), endDate: new Date('2023-05-01') }
       ]
 
-      const result = ConsolidateDateRangesService.go(dateRanges)
+      const result = ConsolidateDateRangesService(dateRanges)
 
       expect(result[0]).toEqual({ startDate: new Date('2023-01-01'), endDate: new Date('2023-05-01') })
     })
@@ -53,7 +54,7 @@ describe('ConsolidateDateRanges service', () => {
           { startDate: new Date('2023-02-01'), endDate: new Date('2023-03-01') }
         ]
 
-        const result = ConsolidateDateRangesService.go(dateRanges)
+        const result = ConsolidateDateRangesService(dateRanges)
 
         expect(result[0]).toEqual({ startDate: new Date('2023-01-01'), endDate: new Date('2023-05-01') })
       })
@@ -66,7 +67,7 @@ describe('ConsolidateDateRanges service', () => {
           { startDate: new Date('2023-02-01'), endDate: new Date('2023-05-01') }
         ]
 
-        const result = ConsolidateDateRangesService.go(dateRanges)
+        const result = ConsolidateDateRangesService(dateRanges)
 
         expect(result[0]).toEqual({ startDate: new Date('2023-01-01'), endDate: new Date('2023-05-01') })
       })
@@ -81,7 +82,7 @@ describe('ConsolidateDateRanges service', () => {
         { startDate: new Date('2023-06-01'), endDate: new Date('2023-07-01') }
       ]
 
-      const result = ConsolidateDateRangesService.go(dateRanges)
+      const result = ConsolidateDateRangesService(dateRanges)
 
       expect(result[0]).toEqual({ startDate: new Date('2023-01-01'), endDate: new Date('2023-05-01') })
       expect(result[1]).toEqual({ startDate: new Date('2023-06-01'), endDate: new Date('2023-07-01') })

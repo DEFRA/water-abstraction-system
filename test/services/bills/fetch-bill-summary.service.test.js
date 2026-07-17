@@ -1,17 +1,18 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+import BillHelper from '../../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
+import ContactHelper from '../../support/helpers/contact.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
 
 // Thing under test
-const FetchBillSummaryService = require('../../../app/services/bills/fetch-bill-summary.service.js')
+import FetchBillSummaryService from '../../../app/services/bills/fetch-bill-summary.service.js'
 
 describe('Fetch Bill Summary service', () => {
   const billLicences = []
@@ -81,7 +82,7 @@ describe('Fetch Bill Summary service', () => {
 
   describe('when a bill with a matching ID exists', () => {
     it('will fetch the data used in the remove bill page', async () => {
-      const result = await FetchBillSummaryService.go(bill.id)
+      const result = await FetchBillSummaryService(bill.id)
 
       expect(result).toEqual({
         id: bill.id,
@@ -142,7 +143,7 @@ describe('Fetch Bill Summary service', () => {
 
   describe('when a bill licence with a matching ID does not exist', () => {
     it('returns no result', async () => {
-      const result = await FetchBillSummaryService.go('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillSummaryService('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeUndefined()
     })

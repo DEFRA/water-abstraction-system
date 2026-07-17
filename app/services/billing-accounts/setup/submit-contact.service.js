@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the `/billing-accounts/setup/{billingAccountId}/contact` page
  *
  * @module SubmitContactService
  */
 
-const ContactPresenter = require('../../../presenters/billing-accounts/setup/contact.presenter.js')
-const ContactValidator = require('../../../validators/billing-accounts/setup/contact.validator.js')
-const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import ContactPresenter from '../../../presenters/billing-accounts/setup/contact.presenter.js'
+import ContactValidator from '../../../validators/billing-accounts/setup/contact.validator.js'
+import FetchCompanyContactsService from './fetch-company-contacts.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the `/billing-accounts/setup/{billingAccountId}/contact` page
@@ -20,8 +18,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitContactService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -78,17 +76,13 @@ async function _submissionData(session) {
   const newAccount = !!session.existingAccount && session.existingAccount !== 'new'
   const companyId = newAccount ? session.existingAccount : session.billingAccount.company.id
 
-  const companyContacts = await FetchCompanyContactsService.go(companyId)
+  const companyContacts = await FetchCompanyContactsService(companyId)
 
-  return ContactPresenter.go(session, companyContacts)
+  return ContactPresenter(session, companyContacts)
 }
 
 function _validate(payload) {
-  const validationResult = ContactValidator.go(payload)
+  const validationResult = ContactValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

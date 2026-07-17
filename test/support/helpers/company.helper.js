@@ -1,11 +1,8 @@
-'use strict'
-
 /**
  * @module CompanyHelper
  */
 
-const CompanyModel = require('../../../app/models/company.model.js')
-const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
+import CompanyModel from '../../../app/models/company.model.js'
 
 /**
  * Add a new company
@@ -49,32 +46,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Generate a company number
- *
- * @returns {int} - A random company number
- */
-function generateCompanyNumber() {
-  return generateRandomInteger(1000000, 9999999).toString()
-}
-
-/**
- * Generate a company external id
- *
- * This is built from NALD import data using the region code and party id
- *
- * @returns {string} - A random external id
- */
-function generateExternalId() {
-  const regionCode = generateRandomInteger(1, 9)
-  const partyId = generateRandomInteger(100, 9999998)
-
-  return `${regionCode}:${partyId}`
-}
-
-module.exports = {
+export default {
   add,
-  defaults,
-  generateCompanyNumber,
-  generateExternalId
+  defaults
 }

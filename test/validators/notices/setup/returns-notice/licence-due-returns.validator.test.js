@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const LicenceDueReturnsValidator = require('../../../../../app/validators/notices/setup/returns-notice/licence-due-returns.validator.js')
+import LicenceDueReturnsValidator from '../../../../../app/validators/notices/setup/returns-notice/licence-due-returns.validator.js'
 
 describe('Notices - Setup - Returns Notice - licence due returns validator', () => {
   let dueReturnsExist
@@ -15,7 +16,7 @@ describe('Notices - Setup - Returns Notice - licence due returns validator', () 
   })
 
   it('confirms the data is valid', () => {
-    const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
+    const result = LicenceDueReturnsValidator(payload, licenceExists, dueReturnsExist)
 
     expect(result.value).toBeDefined()
     expect(result.error).toBeUndefined()
@@ -29,7 +30,7 @@ describe('Notices - Setup - Returns Notice - licence due returns validator', () 
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
+        const result = LicenceDueReturnsValidator(payload, licenceExists, dueReturnsExist)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -43,7 +44,7 @@ describe('Notices - Setup - Returns Notice - licence due returns validator', () 
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
+        const result = LicenceDueReturnsValidator(payload, licenceExists, dueReturnsExist)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -57,7 +58,7 @@ describe('Notices - Setup - Returns Notice - licence due returns validator', () 
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
+        const result = LicenceDueReturnsValidator(payload, licenceExists, dueReturnsExist)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

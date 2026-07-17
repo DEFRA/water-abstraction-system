@@ -1,15 +1,15 @@
-'use strict'
-
 /**
  * Model for primary_purposes (water.purposes_primary)
  * @module PrimaryPurposeModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
+import ReturnRequirementPurposeModel from './return-requirement-purpose.model.js'
 
-class PrimaryPurposeModel extends BaseModel {
+export default class PrimaryPurposeModel extends BaseModel {
   static get tableName() {
     return 'primaryPurposes'
   }
@@ -18,7 +18,7 @@ class PrimaryPurposeModel extends BaseModel {
     return {
       licenceVersionPurposes: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-version-purpose.model',
+        modelClass: LicenceVersionPurposeModel,
         join: {
           from: 'primaryPurposes.id',
           to: 'licenceVersionPurposes.primaryPurposeId'
@@ -26,7 +26,7 @@ class PrimaryPurposeModel extends BaseModel {
       },
       returnRequirementPurposes: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-requirement-purpose.model',
+        modelClass: ReturnRequirementPurposeModel,
         join: {
           from: 'primaryPurposes.id',
           to: 'returnRequirementPurposes.primaryPurposeId'
@@ -35,5 +35,3 @@ class PrimaryPurposeModel extends BaseModel {
     }
   }
 }
-
-module.exports = PrimaryPurposeModel

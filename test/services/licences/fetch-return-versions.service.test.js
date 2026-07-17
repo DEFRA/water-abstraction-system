@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
+import ModLogHelper from '../../support/helpers/mod-log.helper.js'
+import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
 
 // Thing under test
-const FetchReturnVersionsService = require('../../../app/services/licences/fetch-return-versions.service.js')
+import FetchReturnVersionsService from '../../../app/services/licences/fetch-return-versions.service.js'
 
 describe('Fetch Return Versions service', () => {
   const startDate = new Date('2022-04-01')
@@ -53,7 +54,7 @@ describe('Fetch Return Versions service', () => {
 
   describe('when the licence has return versions data', () => {
     it('returns the matching return versions data', async () => {
-      const result = await FetchReturnVersionsService.go(supersededReturnVersion.licenceId)
+      const result = await FetchReturnVersionsService(supersededReturnVersion.licenceId)
 
       expect(result).toEqual([
         {

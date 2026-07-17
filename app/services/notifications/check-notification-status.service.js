@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Check the status of a pending notification with Notify and records the result if its been sent or failed to send
  * @module CheckNotificationStatusService
  */
 
-const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
-const NotificationModel = require('../../models/notification.model.js')
-const ReturnLogModel = require('../../models/return-log.model.js')
-const ViewMessageDataRequest = require('../../requests/notify/view-message-data.request.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import LicenceMonitoringStationModel from '../../models/licence-monitoring-station.model.js'
+import NotificationModel from '../../models/notification.model.js'
+import ReturnLogModel from '../../models/return-log.model.js'
+import ViewMessageDataRequest from '../../requests/notify/view-message-data.request.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 const NOTIFICATIONS_STATUS = {
   cancelled: 'cancelled',
@@ -73,7 +71,7 @@ const LETTER_STATUS = {
  *
  * @param {object} notification
  */
-async function go(notification) {
+export default async function checkNotificationStatusService(notification) {
   const notifyStatus = await _notifyStatus(notification.notifyId)
 
   const status = _status(notification, notifyStatus)
@@ -86,7 +84,7 @@ async function go(notification) {
 }
 
 async function _notifyStatus(notifyId) {
-  const notifyResult = await ViewMessageDataRequest.send(notifyId)
+  const notifyResult = await ViewMessageDataRequest(notifyId)
 
   const { response, succeeded } = notifyResult
 
@@ -187,8 +185,4 @@ function _status(notification, notifyStatus) {
   }
 
   return LETTER_STATUS[notifyStatus] || NOTIFICATIONS_STATUS.pending
-}
-
-module.exports = {
-  go
 }

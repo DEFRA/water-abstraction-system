@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Removes all data created for acceptance tests from the water schema
  * @module WaterSchemaService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Removes all data created for acceptance tests from the water schema
  *
  * @returns {Promise<object>}
  */
-async function go() {
+export default async function waterSchemaService() {
   return _deleteAllTestData()
 }
 
@@ -532,8 +530,4 @@ async function _deleteAllTestData() {
   ALTER TABLE water.return_versions ENABLE TRIGGER ALL;
   ALTER TABLE water.scheduled_notification ENABLE TRIGGER ALL;
   `)
-}
-
-module.exports = {
-  go
 }

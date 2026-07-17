@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../support/fixtures/billing-accounts.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import BillingAccountsFixture from '../../support/fixtures/billing-accounts.fixture.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-const FetchViewBillingAccountService = require('../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
+import * as FetchViewBillingAccountService from '../../../app/services/billing-accounts/fetch-view-billing-account.service.js'
 
 // Thing under test
-const ViewBillingAccountService = require('../../../app/services/billing-accounts/view-billing-account.service.js')
+import ViewBillingAccountService from '../../../app/services/billing-accounts/view-billing-account.service.js'
 
 describe('Billing Accounts - View Billing Account service', () => {
   let billingAccountData
@@ -26,16 +24,16 @@ describe('Billing Accounts - View Billing Account service', () => {
     companyId = generateUUID()
     licenceId = generateUUID()
 
-    Sinon.stub(FetchViewBillingAccountService, 'go').returns(billingAccountData)
+    vi.spyOn(FetchViewBillingAccountService, 'default').mockReturnValue(billingAccountData)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a billing account with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewBillingAccountService.go(
+      const result = await ViewBillingAccountService(
         billingAccountData.billingAccount.id,
         1,
         licenceId,

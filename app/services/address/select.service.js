@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/select` page
  *
  * @module SelectAddressService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const LookupPostcodeRequest = require('../../requests/address-facade/lookup-postcode.request.js')
-const SelectPresenter = require('../../presenters/address/select.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import LookupPostcodeRequest from '../../requests/address-facade/lookup-postcode.request.js'
+import SelectPresenter from '../../presenters/address/select.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/select` page
@@ -17,10 +15,10 @@ const SelectPresenter = require('../../presenters/address/select.presenter.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function selectService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const result = await LookupPostcodeRequest.send(session.addressJourney.address.postcode)
+  const result = await LookupPostcodeRequest(session.addressJourney.address.postcode)
 
   if (result.succeeded === false || result.matches.length === 0) {
     return {
@@ -28,9 +26,5 @@ async function go(sessionId) {
     }
   }
 
-  return SelectPresenter.go(session, result.matches)
-}
-
-module.exports = {
-  go
+  return SelectPresenter(session, result.matches)
 }

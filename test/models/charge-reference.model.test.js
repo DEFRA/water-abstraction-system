@@ -1,24 +1,25 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunVolumeHelper = require('../support/helpers/bill-run-volume.helper.js')
-const BillRunVolumeModel = require('../../app/models/bill-run-volume.model.js')
-const ChargeCategoryHelper = require('../support/helpers/charge-category.helper.js')
-const ChargeCategoryModel = require('../../app/models/charge-category.model.js')
-const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
-const ChargeElementModel = require('../../app/models/charge-element.model.js')
-const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
-const ChargeVersionModel = require('../../app/models/charge-version.model.js')
-const PurposeHelper = require('../support/helpers/purpose.helper.js')
-const PurposeModel = require('../../app/models/purpose.model.js')
-const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
-const TransactionHelper = require('../support/helpers/transaction.helper.js')
-const TransactionModel = require('../../app/models/transaction.model.js')
+import BillRunVolumeHelper from '../support/helpers/bill-run-volume.helper.js'
+import BillRunVolumeModel from '../../app/models/bill-run-volume.model.js'
+import ChargeCategoryHelper from '../support/helpers/charge-category.helper.js'
+import ChargeCategoryModel from '../../app/models/charge-category.model.js'
+import ChargeElementHelper from '../support/helpers/charge-element.helper.js'
+import ChargeElementModel from '../../app/models/charge-element.model.js'
+import ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
+import ChargeVersionModel from '../../app/models/charge-version.model.js'
+import PurposeHelper from '../support/helpers/purpose.helper.js'
+import PurposeModel from '../../app/models/purpose.model.js'
+import ReviewChargeReferenceHelper from '../support/helpers/review-charge-reference.helper.js'
+import ReviewChargeReferenceModel from '../../app/models/review-charge-reference.model.js'
+import TransactionHelper from '../support/helpers/transaction.helper.js'
+import TransactionModel from '../../app/models/transaction.model.js'
 
 // Thing under test
-const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
+import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
 
 describe('Charge Reference model', () => {
   let testBillRunVolumes

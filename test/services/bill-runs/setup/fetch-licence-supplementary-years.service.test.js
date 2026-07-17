@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
-const LicenceSupplementaryYearModel = require('../../../../app/models/licence-supplementary-year.model.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceSupplementaryYearHelper from '../../../support/helpers/licence-supplementary-year.helper.js'
+import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'
 
 // Thing under test
-const FetchLicenceSupplementaryYearsService = require('../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js')
+import FetchLicenceSupplementaryYearsService from '../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js'
 
 describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => {
   const regionId = 'acbfbba3-d5ac-422e-9e48-8683c1797e86'
@@ -36,7 +37,7 @@ describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => 
     })
 
     it('returns an array of the years selected for supplementary billing', async () => {
-      const result = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariff)
+      const result = await FetchLicenceSupplementaryYearsService(regionId, twoPartTariff)
 
       expect(result).toEqual([{ financialYearEnd: 2024 }, { financialYearEnd: 2023 }, { financialYearEnd: 2022 }])
     })
@@ -54,7 +55,7 @@ describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => 
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariff)
+      const result = await FetchLicenceSupplementaryYearsService(regionId, twoPartTariff)
 
       expect(result).toEqual([])
     })

@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
+import AddressHelper from '../../support/helpers/address.helper.js'
 
 // Thing under test
-const FetchAddressDal = require('../../../app/dal/companies/fetch-address.dal.js')
+import FetchAddressDal from '../../../app/dal/companies/fetch-address.dal.js'
 
 describe('Companies - Fetch Address dal', () => {
   let address
@@ -15,7 +16,7 @@ describe('Companies - Fetch Address dal', () => {
     })
 
     it('returns the matching address', async () => {
-      const result = await FetchAddressDal.go(address.id)
+      const result = await FetchAddressDal(address.id)
 
       expect(result).toEqual({
         id: address.id,

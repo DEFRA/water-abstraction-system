@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches return requirements data needed for the view '/licences/{id}/set-up` page
  * @module FetchReturnVersionsService
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Fetches return requirements data needed for the view '/licences/{id}/set-up` page
@@ -14,7 +12,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
-async function go(licenceId) {
+export default async function fetchReturnVersionsService(licenceId) {
   return _fetch(licenceId)
 }
 
@@ -31,8 +29,4 @@ async function _fetch(licenceId) {
     .modifyGraph('modLogs', (builder) => {
       builder.select(['id', 'reasonDescription']).orderBy('externalId', 'asc')
     })
-}
-
-module.exports = {
-  go
 }

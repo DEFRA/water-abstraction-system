@@ -1,25 +1,22 @@
-'use strict'
-
 /**
  * Orchestrates sending the verification email to the new user, recording the results, and checking the status
  * @module SendVerificationEmailService
  */
 
-const CheckNotificationStatusService = require('../../../notifications/check-notification-status.service.js')
-const CreateEmailRequest = require('../../../../requests/notify/create-email.request.js')
-const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
-const UpdateNotificationDal = require('../../../../dal/users/internal/update-notification.dal.js')
-const { pause } = require('../../../../lib/general.lib.js')
-const { NOTIFY_TEMPLATES } = require('../../../../lib/notify-templates.lib.js')
-
-const notifyConfig = require('../../../../../config/notify.config.js')
+import CheckNotificationStatusService from '../../../notifications/check-notification-status.service.js'
+import CreateEmailRequest from '../../../../requests/notify/create-email.request.js'
+import { NOTIFY_TEMPLATES } from '../../../../lib/notify-templates.lib.js'
+import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
+import UpdateNotificationDal from '../../../../dal/users/internal/update-notification.dal.js'
+import notifyConfig from '../../../../../config/notify.config.js'
+import { pause } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates sending the verification email to the new user, recording the results, and checking the status
  *
  * @param {object} notification - The notification linked to the verification email to be sent
  */
-async function go(notification) {
+export default async function sendVerificationEmailService(notification) {
   try {
     const notificationStatus = await _sendEmail(notification)
 
@@ -28,7 +25,7 @@ async function go(notification) {
       // The default wait is 5 seconds, which we have found is more than enough time.
       await pause(notifyConfig.waitForStatus)
 
-      await CheckNotificationStatusService.go(notification)
+      await CheckNotificationStatusService(notification)
     }
   } catch (error) {
     globalThis.GlobalNotifier.omfg(
@@ -44,19 +41,15 @@ async function _createEmailRequest(notification) {
 
   const templateId = NOTIFY_TEMPLATES.users.verificationEmail
 
-  const notifyResult = await CreateEmailRequest.send(templateId, recipient, { personalisation })
+  const notifyResult = await CreateEmailRequest(templateId, recipient, { personalisation })
 
-  return NotifyUpdatePresenter.go(notifyResult)
+  return NotifyUpdatePresenter(notifyResult)
 }
 
 async function _sendEmail(notification) {
   const sendResult = await _createEmailRequest(notification)
 
-  await UpdateNotificationDal.go(notification, sendResult)
+  await UpdateNotificationDal(notification, sendResult)
 
   return sendResult.status
-}
-
-module.exports = {
-  go
 }

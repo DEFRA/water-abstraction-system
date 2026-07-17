@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Fetches licences linked to a user for display on the `/users/external/{id}/licences` page
  * @module FetchLicencesDal
  */
 
-const LicenceModel = require('../../../models/licence.model.js')
-
-const DatabaseConfig = require('../../../../config/database.config.js')
+import DatabaseConfig from '../../../../config/database.config.js'
+import LicenceModel from '../../../models/licence.model.js'
 
 /**
  * Fetches licences linked to a user for display on the `/users/external/{id}/licences` page
@@ -19,7 +16,7 @@ const DatabaseConfig = require('../../../../config/database.config.js')
  *
  * @returns {Promise<module:LicenceModel[]>} the requested user licences
  */
-async function go(licenceEntityId, page = '1') {
+export default async function fetchLicencesDal(licenceEntityId, page = '1') {
   const { results: licences, total: totalNumber } = await _fetch(licenceEntityId, page)
 
   return { licences, totalNumber }
@@ -63,8 +60,4 @@ async function _fetch(licenceEntityId, page) {
             .orderBy('role', 'asc')
         })
     })
-}
-
-module.exports = {
-  go
 }

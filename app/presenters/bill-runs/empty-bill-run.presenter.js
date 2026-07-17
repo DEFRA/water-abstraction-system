@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the bill run data ready for presenting in the empty bill run page
  * @module EmptyBillRunPresenter
  */
 
-const { formatFinancialYear, formatLongDate, titleCase } = require('../base.presenter.js')
-const { formatBillRunType, formatChargeScheme, generateBillRunTitle } = require('../billing.presenter.js')
+import { formatBillRunType, formatChargeScheme, generateBillRunTitle } from '../billing.presenter.js'
+import { formatFinancialYear, formatLongDate, titleCase } from '../base.presenter.js'
 
 /**
  * Prepares and processes bill run data for presentation
@@ -15,7 +13,7 @@ const { formatBillRunType, formatChargeScheme, generateBillRunTitle } = require(
  *
  * @returns {object} - the prepared bill run data to be passed to the empty bill run page
  */
-function go(billRun) {
+export default function emptyBillRunPresenter(billRun) {
   const { batchType, billRunNumber, createdAt, id, region, scheme, status, summer, toFinancialYearEnding } = billRun
 
   return {
@@ -30,8 +28,4 @@ function go(billRun) {
     pageTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
     region: titleCase(region.displayName)
   }
-}
-
-module.exports = {
-  go
 }

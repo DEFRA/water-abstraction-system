@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/check` page
  * @module CheckPresenter
  */
 
-const Big = require('big.js')
+import Big from 'big.js'
 
-const { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } = require('../../base.presenter.js')
-const { generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+import { generateSummaryTableHeaders } from '../base-return-logs.presenter.js'
+import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
+import { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } from '../../base.presenter.js'
 
 const ABSTRACTION_VOLUMES_METHOD = 'abstractionVolumes'
 
@@ -20,7 +18,7 @@ const ABSTRACTION_VOLUMES_METHOD = 'abstractionVolumes'
  *
  * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/check` page
  */
-function go(session) {
+export default function checkPresenter(session) {
   const alwaysRequiredPageData = _alwaysRequiredPageData(session)
 
   if (session.journey === 'nilReturn') {
@@ -259,8 +257,4 @@ function _totalCubicMetres(lines) {
   }, 0)
 
   return formatNumber(totalCubicMetres)
-}
-
-module.exports = {
-  go
 }

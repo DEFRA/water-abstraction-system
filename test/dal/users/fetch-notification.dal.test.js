@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+import NotificationHelper from '../../support/helpers/notification.helper.js'
+import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Thing under test
-const FetchNotificationDal = require('../../../app/dal/users/fetch-notification.dal.js')
+import FetchNotificationDal from '../../../app/dal/users/fetch-notification.dal.js'
 
 describe('Users - Fetch Notification DAL', () => {
   let notification
@@ -28,7 +29,7 @@ describe('Users - Fetch Notification DAL', () => {
     })
 
     it('returns the matching notification', async () => {
-      const result = await FetchNotificationDal.go(notification.id, user.id)
+      const result = await FetchNotificationDal(notification.id)
 
       expect(result).toEqual({
         createdAt: notification.createdAt,
@@ -47,7 +48,7 @@ describe('Users - Fetch Notification DAL', () => {
 
   describe('when a matching notification does not exist', () => {
     it('returns undefined', async () => {
-      const result = await FetchNotificationDal.go('317aaa08-723d-4cb3-8f3b-5ab6a37b573f', user.id)
+      const result = await FetchNotificationDal('317aaa08-723d-4cb3-8f3b-5ab6a37b573f')
 
       expect(result).toBeUndefined()
     })

@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/notices/setup/{sessionId}/recipient-name' page
  *
  * @module SubmitRecipientNameService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RecipientNamePresenter = require('../../../presenters/notices/setup/recipient-name.presenter.js')
-const RecipientNameValidator = require('../../../validators/notices/setup/recipient-name.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RecipientNamePresenter from '../../../presenters/notices/setup/recipient-name.presenter.js'
+import RecipientNameValidator from '../../../validators/notices/setup/recipient-name.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/notices/setup/{sessionId}/recipient-name' page
@@ -19,8 +17,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitRecipientNameService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -32,7 +30,7 @@ async function go(sessionId, payload) {
 
   session.contactName = payload.name
 
-  const pageData = RecipientNamePresenter.go(session)
+  const pageData = RecipientNamePresenter(session)
 
   return {
     error: validationResult,
@@ -48,11 +46,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = RecipientNameValidator.go(payload)
+  const validationResult = RecipientNameValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

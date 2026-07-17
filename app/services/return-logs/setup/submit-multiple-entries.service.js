@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/multiple-entries` page
  * @module SubmitMultipleEntriesService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const MultipleEntriesPresenter = require('../../../presenters/return-logs/setup/multiple-entries.presenter.js')
-const MultipleEntriesValidator = require('../../../validators/return-logs/setup/multiple-entries.validator.js')
-const SplitMultipleEntriesService = require('../../../services/return-logs/setup/split-multiple-entries.service.js')
-const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import MultipleEntriesPresenter from '../../../presenters/return-logs/setup/multiple-entries.presenter.js'
+import MultipleEntriesValidator from '../../../validators/return-logs/setup/multiple-entries.validator.js'
+import SplitMultipleEntriesService from '../../../services/return-logs/setup/split-multiple-entries.service.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
+import { convertFromCubicMetres, convertToCubicMetres } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/multiple-entries` page
@@ -29,13 +27,13 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the multiple entries page
  * including the validation error details
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitMultipleEntriesService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const measurementType = session.reported === 'abstractionVolumes' ? 'volumes' : 'meter readings'
   const frequency = returnRequirementFrequencies[session.returnsFrequency]
 
-  const _payload = { multipleEntries: SplitMultipleEntriesService.go(payload.multipleEntries) }
+  const _payload = { multipleEntries: SplitMultipleEntriesService(payload.multipleEntries) }
 
   const error = _validate(frequency, measurementType, _payload, session)
 
@@ -74,16 +72,12 @@ async function _save(session, payload) {
 function _submittedSessionData(session, payload) {
   session.multipleEntries = payload.multipleEntries ?? null
 
-  return MultipleEntriesPresenter.go(session)
+  return MultipleEntriesPresenter(session)
 }
 
 function _validate(frequency, measurementType, payload, session) {
   const { lines, startReading } = session
-  const validationResult = MultipleEntriesValidator.go(frequency, lines.length, measurementType, payload, startReading)
+  const validationResult = MultipleEntriesValidator(frequency, lines.length, measurementType, payload, startReading)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

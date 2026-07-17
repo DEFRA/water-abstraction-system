@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the user details needed for user pages
  * @module FetchUserDetailsDal
  */
 
-const UserModel = require('../../../models/user.model.js')
+import UserModel from '../../../models/user.model.js'
 
 /**
  * Fetches the user details needed for user pages
@@ -14,7 +12,7 @@ const UserModel = require('../../../models/user.model.js')
  *
  * @returns {Promise<module:UserModel>} the requested user
  */
-async function go(id) {
+export default async function fetchUserDetailsDal(id) {
   return UserModel.query()
     .select(['id', 'userId', 'username'])
     .modify('status')
@@ -39,8 +37,4 @@ async function go(id) {
         { column: 'description', order: 'asc' }
       ])
     })
-}
-
-module.exports = {
-  go
 }

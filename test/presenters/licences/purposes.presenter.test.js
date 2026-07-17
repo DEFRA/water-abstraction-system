@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
+import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Thing under test
-const PurposesPresenter = require('../../../app/presenters/licences/purposes.presenter.js')
+import PurposesPresenter from '../../../app/presenters/licences/purposes.presenter.js'
 
 describe('Licences - Purposes presenter', () => {
   let licence
@@ -17,7 +18,7 @@ describe('Licences - Purposes presenter', () => {
 
   describe('when provided with populated licence purposes', () => {
     it('returns the expected licence purpose details', () => {
-      const result = PurposesPresenter.go(purposes, licence)
+      const result = PurposesPresenter(purposes, licence)
 
       expect(result).toEqual({
         backLink: {

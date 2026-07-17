@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const SupplementaryYearValidator = require('../../../../app/validators/licences/supplementary/supplementary-year.validator.js')
+import SupplementaryYearValidator from '../../../../app/validators/licences/supplementary/supplementary-year.validator.js'
 
 describe('Supplementary Year validator', () => {
   let payload
@@ -13,7 +14,7 @@ describe('Supplementary Year validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = SupplementaryYearValidator.go(payload)
+        const result = SupplementaryYearValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -26,7 +27,7 @@ describe('Supplementary Year validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = SupplementaryYearValidator.go(payload)
+        const result = SupplementaryYearValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -41,7 +42,7 @@ describe('Supplementary Year validator', () => {
       })
 
       it('fails validation', () => {
-        const result = SupplementaryYearValidator.go(payload)
+        const result = SupplementaryYearValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

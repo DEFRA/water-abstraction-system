@@ -1,20 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitMultipleEntriesService = require('../../../../app/services/return-logs/setup/submit-multiple-entries.service.js')
+import SubmitMultipleEntriesService from '../../../../app/services/return-logs/setup/submit-multiple-entries.service.js'
 
 describe('Return Logs Setup - Submit Multiple Entries service', () => {
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -32,16 +29,16 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
       unitSymbol: 'Ml'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -52,19 +49,19 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
 
       describe('and the user has previously selected "abstractionVolumes" as the reported type', () => {
         it('saves the submitted option', async () => {
-          await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
+          await SubmitMultipleEntriesService(session.id, payload, yarStub)
 
           expect(session.lines[0].quantity).toEqual(100)
           expect(session.lines[0].quantityCubicMetres).toEqual(100000)
           expect(session.lines[1].quantity).toEqual(200)
           expect(session.lines[1].quantityCubicMetres).toEqual(200000)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('sets the notification message title to "Updated" and the text to "2 monthly volumes have been updated" ', async () => {
-          await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
+          await SubmitMultipleEntriesService(session.id, payload, yarStub)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({
@@ -86,23 +83,23 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
             reported: 'meterReadings'
           }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('saves the submitted option', async () => {
-          await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
+          await SubmitMultipleEntriesService(session.id, payload, yarStub)
 
           expect(session.lines[0].reading).toEqual(100)
           expect(session.lines[1].reading).toEqual(200)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('sets the notification message title to "Updated" and the text to "2 monthly meter readings have been updated" ', async () => {
-          await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
+          await SubmitMultipleEntriesService(session.id, payload, yarStub)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({
@@ -119,7 +116,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
+        const result = await SubmitMultipleEntriesService(session.id, payload, yarStub)
 
         expect(result).toMatchObject({
           backLink: {
@@ -139,7 +136,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
 
       describe('because the user has not entered anything', () => {
         it('includes an error for the input form element', async () => {
-          const result = await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
+          const result = await SubmitMultipleEntriesService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [

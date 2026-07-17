@@ -1,46 +1,42 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 
 // Things we need to stub
-const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
+import * as ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
 
 // Thing under test
-const SubmitConfirmedService = require('../../../../app/services/return-logs/setup/submit-confirmed.service.js')
+import SubmitConfirmedService from '../../../../app/services/return-logs/setup/submit-confirmed.service.js'
 
 describe('Return Logs Setup - Submit Confirmed service', () => {
   let licence
   let returnLog
-  let ProcessBillingFlagServiceStub
-
   beforeEach(async () => {
     licence = await LicenceHelper.add()
 
     returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
 
-    ProcessBillingFlagServiceStub = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
+    vi.spyOn(ProcessBillingFlagService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a user submits the confirmed return to be marked for supplementary billing', () => {
     it('returns the licenceId for the redirect', async () => {
-      const result = await SubmitConfirmedService.go(returnLog.id)
+      const result = await SubmitConfirmedService(returnLog.id)
 
       expect(result).toEqual(licence.id)
     })
 
     it('sends the return to be processed by the "processBillingFlagsService"', async () => {
-      await SubmitConfirmedService.go(returnLog.id)
+      await SubmitConfirmedService(returnLog.id)
 
-      expect(ProcessBillingFlagServiceStub.called).toBe(true)
+      expect(ProcessBillingFlagService.default).toHaveBeenCalled()
     })
   })
 })

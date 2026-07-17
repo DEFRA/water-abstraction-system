@@ -1,8 +1,11 @@
-'use strict'
+import Knex from 'knex'
+import pg from 'pg'
+
+import knexfileApp from '../knexfile.application.js'
 
 const environment = process.env.NODE_ENV || 'development'
 
-const dbConfig = require('../knexfile.application.js')[environment]
+export const dbConfig = knexfileApp[environment]
 
 // Where the 'pg' package has concern that parsing a DB value into its JavaScript equivalent will lead to a loss of
 // data it will return the value as a string. For example, a PostgreSQL BigInt has the range -9223372036854775808 to
@@ -17,8 +20,6 @@ const dbConfig = require('../knexfile.application.js')[environment]
 // https://github.com/brianc/node-postgres/pull/353
 // https://github.com/knex/knex/issues/387#issuecomment-51554522
 // https://stackoverflow.com/a/39176670/6117745
-const pg = require('pg')
-
 pg.types.setTypeParser(pg.types.builtins.INT8, (value) => {
   return Number.parseInt(value)
 })
@@ -27,6 +28,4 @@ pg.types.setTypeParser(pg.types.builtins.NUMERIC, (value) => {
   return Number.parseFloat(value)
 })
 
-const db = require('knex')(dbConfig)
-
-module.exports = { db, dbConfig }
+export const db = Knex(dbConfig)

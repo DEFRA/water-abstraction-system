@@ -1,23 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitFAOService = require('../../../../app/services/billing-accounts/setup/submit-fao.service.js')
+import SubmitFAOService from '../../../../app/services/billing-accounts/setup/submit-fao.service.js'
 
 describe('Billing Accounts - Setup - Submit FAO Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   const billingAccountAddress = billingAccount.billingAccountAddresses[0].address
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -28,13 +24,13 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       billingAccount
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a "yes" value', () => {
@@ -45,7 +41,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitFAOService.go(session.id, payload)
+      await SubmitFAOService(session.id, payload)
 
       expect(session).toMatchObject({
         fao: 'yes'
@@ -53,7 +49,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitFAOService.go(session.id, payload)
+      const result = await SubmitFAOService(session.id, payload)
 
       expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
     })
@@ -65,22 +61,22 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           fao: 'yes'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           fao: 'yes'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
       })
@@ -94,23 +90,23 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           fao: 'yes'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           checkPageVisited: true,
           fao: 'yes'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
@@ -124,13 +120,13 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           fao: 'no'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: null,
@@ -139,11 +135,11 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           contactSelected: null,
           fao: 'yes'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
       })
@@ -158,16 +154,16 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitFAOService.go(session.id, payload)
+      await SubmitFAOService(session.id, payload)
 
       expect(session).toMatchObject({
         fao: 'no'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitFAOService.go(session.id, payload)
+      const result = await SubmitFAOService(session.id, payload)
 
       expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
     })
@@ -179,22 +175,22 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           fao: 'no'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           fao: 'no'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
@@ -208,23 +204,23 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           fao: 'no'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           checkPageVisited: true,
           fao: 'no'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
@@ -240,13 +236,13 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           fao: 'yes'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: null,
@@ -255,11 +251,11 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           contactSelected: null,
           fao: 'no'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
@@ -278,23 +274,23 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           billingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: _addressJourney(session),
           fao: 'no'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/address/${session.id}/postcode`)
       })
@@ -303,7 +299,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
 
   describe('when validation fails', () => {
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitFAOService.go(session.id, {})
+      const result = await SubmitFAOService(session.id, {})
 
       expect(result.error).toEqual({
         errorList: [

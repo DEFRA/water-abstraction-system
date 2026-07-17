@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/return-logs/{id}/communications' page
  * @module CommunicationsPresenter
  */
 
-const NotificationsTablePresenter = require('../notifications/notifications-table.presenter.js')
+import NotificationsTablePresenter from '../notifications/notifications-table.presenter.js'
 
 /**
  * Formats data for the '/return-logs/{id}/communications' page
@@ -15,7 +13,7 @@ const NotificationsTablePresenter = require('../notifications/notifications-tabl
  *
  * @returns {object} The data formatted for the view template
  */
-function go(returnLog, notifications) {
+export default function communicationsPresenter(returnLog, notifications) {
   const { id, licence } = returnLog
 
   return {
@@ -23,12 +21,8 @@ function go(returnLog, notifications) {
       href: `/system/licences/${licence.id}/returns`,
       text: 'Go back to returns'
     },
-    notifications: NotificationsTablePresenter.go(notifications, null, id, null),
+    notifications: NotificationsTablePresenter(notifications, null, id, null),
     pageTitle: 'Communications',
     pageTitleCaption: `Licence ${licence.licenceRef}`
   }
-}
-
-module.exports = {
-  go
 }

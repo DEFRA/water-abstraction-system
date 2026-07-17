@@ -1,22 +1,20 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 
 // Things we need to stub
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/generate-paper-return.request.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as GeneratePaperReturnRequest from '../../../../app/requests/gotenberg/generate-paper-return.request.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ProcessPreviewPaperReturnService = require('../../../../app/services/notices/setup/process-preview-paper-return.service.js')
+import ProcessPreviewPaperReturnService from '../../../../app/services/notices/setup/process-preview-paper-return.service.js'
 
 describe('Notices - Setup - Process Preview Paper Return service', () => {
   let contactHashId
@@ -43,19 +41,19 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
       dueReturns: [dueReturnLog]
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     const buffer = new TextEncoder().encode('mock file').buffer
 
-    Sinon.stub(GeneratePaperReturnRequest, 'send').resolves({
+    vi.spyOn(GeneratePaperReturnRequest, 'default').mockResolvedValue({
       response: {
         body: buffer
       }
     })
 
-    Sinon.stub(FetchRecipientsService, 'go').resolves([
+    vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([
       {
         ...recipient
       },
@@ -64,18 +62,18 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
       }
     ])
 
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when called', () => {
     it('returns generated pdf as an array buffer', async () => {
-      const result = await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnLogId)
+      const result = await ProcessPreviewPaperReturnService(session.id, contactHashId, returnLogId)
 
       expect(result).toBeInstanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -83,11 +81,11 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
     })
 
     it('should call "GeneratePaperReturnRequest"', async () => {
-      await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnLogId)
+      await ProcessPreviewPaperReturnService(session.id, contactHashId, returnLogId)
 
-      expect(GeneratePaperReturnRequest.send.calledOnce).toBe(true)
+      expect(GeneratePaperReturnRequest.default).toHaveBeenCalledOnce()
 
-      const actualCallArgs = GeneratePaperReturnRequest.send.getCall(0).args[0]
+      const actualCallArgs = GeneratePaperReturnRequest.default.mock.calls[0][0]
 
       expect(actualCallArgs).toEqual({
         address: {

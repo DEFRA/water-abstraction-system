@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Returns dynamic dates used by the service, for example, current financial year and returns periods
  * @module DatesService
  */
 
-const DetermineBillingPeriodsService = require('../../bill-runs/determine-billing-periods.service.js')
-const { determineCurrentFinancialYear, today } = require('../../../lib/general.lib.js')
-const {
+import DetermineBillingPeriodsService from '../../bill-runs/determine-billing-periods.service.js'
+import { determineCurrentFinancialYear, today } from '../../../lib/general.lib.js'
+import {
   determineCycleDueDate,
   determineCycleEndDate,
   determineCycleStartDate
-} = require('../../../lib/return-cycle-dates.lib.js')
-const { determineReturnsPeriods, determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
+} from '../../../lib/return-cycle-dates.lib.js'
+import { determineReturnsPeriods, determineUpcomingReturnPeriods } from '../../../lib/return-periods.lib.js'
 
 /**
  * Returns dynamic dates used by the service, for example, current financial year and returns periods
@@ -31,7 +29,7 @@ const { determineReturnsPeriods, determineUpcomingReturnPeriods } = require('../
  *
  * @returns {object} an object containing the current billing and return periods, plus the current financial year dates
  */
-function go() {
+export default function datesService() {
   const [firstReturnPeriod, secondReturnPeriod] = determineUpcomingReturnPeriods(today())
   const currentSummerReturnCycle = {
     startDate: determineCycleStartDate(true),
@@ -46,10 +44,10 @@ function go() {
   const quarterlyPeriods = determineReturnsPeriods(currentWinterReturnCycle)
   const currentFinancialYear = determineCurrentFinancialYear()
   const billingPeriods = {
-    annual: DetermineBillingPeriodsService.go('annual', currentFinancialYear.endDate.getFullYear()),
-    supplementary: DetermineBillingPeriodsService.go('supplementary', currentFinancialYear.endDate.getFullYear()),
-    twoPartTariff: DetermineBillingPeriodsService.go('two_part_tariff', currentFinancialYear.endDate.getFullYear() - 1),
-    twoPartSupplementary: DetermineBillingPeriodsService.go(
+    annual: DetermineBillingPeriodsService('annual', currentFinancialYear.endDate.getFullYear()),
+    supplementary: DetermineBillingPeriodsService('supplementary', currentFinancialYear.endDate.getFullYear()),
+    twoPartTariff: DetermineBillingPeriodsService('two_part_tariff', currentFinancialYear.endDate.getFullYear() - 1),
+    twoPartSupplementary: DetermineBillingPeriodsService(
       'two_part_supplementary',
       currentFinancialYear.endDate.getFullYear()
     )
@@ -64,8 +62,4 @@ function go() {
     firstReturnPeriod,
     secondReturnPeriod
   }
-}
-
-module.exports = {
-  go
 }

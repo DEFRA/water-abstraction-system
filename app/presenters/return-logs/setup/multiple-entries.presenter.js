@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Format data for the `/return-log/setup/{sessionId}/multiple-entries` page
  * @module MultipleEntriesPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+import { formatLongDate } from '../../base.presenter.js'
+import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Format data for the `/return-log/setup/{sessionId}/multiple-entries` page
@@ -15,7 +13,7 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function multipleEntriesPresenter(session) {
   const { id: sessionId, lines, multipleEntries, returnReference, returnsFrequency, reported } = session
 
   const measurementType = reported === 'abstractionVolumes' ? 'volumes' : 'readings'
@@ -33,8 +31,4 @@ function go(session) {
     sessionId,
     startDate: formatLongDate(new Date(lines[0].startDate))
   }
-}
-
-module.exports = {
-  go
 }

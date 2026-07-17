@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ViewCompensationChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js')
+import ViewCompensationChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js'
 
 describe('View Compensation Charge Transaction presenter', () => {
   let transaction
@@ -28,7 +29,7 @@ describe('View Compensation Charge Transaction presenter', () => {
       })
 
       it('returns the credit property populated and the debit empty', () => {
-        const result = ViewCompensationChargeTransactionPresenter.go(transaction)
+        const result = ViewCompensationChargeTransactionPresenter(transaction)
 
         expect(result.creditAmount).toEqual('£214.74')
         expect(result.debitAmount).toEqual('')
@@ -41,7 +42,7 @@ describe('View Compensation Charge Transaction presenter', () => {
       })
 
       it('returns the debit property populated and the credit empty', () => {
-        const result = ViewCompensationChargeTransactionPresenter.go(transaction)
+        const result = ViewCompensationChargeTransactionPresenter(transaction)
 
         expect(result.creditAmount).toEqual('')
         expect(result.debitAmount).toEqual('£214.74')
@@ -50,7 +51,7 @@ describe('View Compensation Charge Transaction presenter', () => {
 
     describe('that is for SROC', () => {
       it('correctly presents the data', () => {
-        const result = ViewCompensationChargeTransactionPresenter.go(transaction)
+        const result = ViewCompensationChargeTransactionPresenter(transaction)
 
         expect(result).toEqual({
           billableDays: '153/214',
@@ -76,7 +77,7 @@ describe('View Compensation Charge Transaction presenter', () => {
           })
 
           it('returns "Two-part tariff"', () => {
-            const result = ViewCompensationChargeTransactionPresenter.go(transaction)
+            const result = ViewCompensationChargeTransactionPresenter(transaction)
 
             expect(result.agreement).toEqual('Two-part tariff')
           })
@@ -84,7 +85,7 @@ describe('View Compensation Charge Transaction presenter', () => {
 
         describe('when the transaction is not two-part tariff', () => {
           it('returns null', () => {
-            const result = ViewCompensationChargeTransactionPresenter.go(transaction)
+            const result = ViewCompensationChargeTransactionPresenter(transaction)
 
             expect(result.agreement).toBeNull()
           })
@@ -92,7 +93,7 @@ describe('View Compensation Charge Transaction presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = ViewCompensationChargeTransactionPresenter.go(transaction)
+        const result = ViewCompensationChargeTransactionPresenter(transaction)
 
         expect(result).toEqual({
           agreement: null,

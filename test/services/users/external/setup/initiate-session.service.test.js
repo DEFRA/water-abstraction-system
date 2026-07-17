@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModel = require('../../../../../app/models/session.model.js')
-const UsersFixture = require('../../../../support/fixtures/users.fixture.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import SessionModel from '../../../../../app/models/session.model.js'
+import UsersFixture from '../../../../support/fixtures/users.fixture.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Things to stub
-const FetchLicencesDal = require('../../../../../app/dal/users/external/setup/fetch-licences.dal.js')
-const FetchUsersDal = require('../../../../../app/dal/users/fetch-user.dal.js')
+import * as FetchLicencesDal from '../../../../../app/dal/users/external/setup/fetch-licences.dal.js'
+import * as FetchUsersDal from '../../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
-const InitiateSessionService = require('../../../../../app/services/users/external/setup/initiate-session.service.js')
+import InitiateSessionService from '../../../../../app/services/users/external/setup/initiate-session.service.js'
 
 describe('Users - External - Setup - Initiate Session service', () => {
   let back
@@ -48,17 +46,17 @@ describe('Users - External - Setup - Initiate Session service', () => {
       }
     ]
 
-    Sinon.stub(FetchUsersDal, 'go').resolves(user)
-    Sinon.stub(FetchLicencesDal, 'go').resolves(licences)
+    vi.spyOn(FetchUsersDal, 'default').mockResolvedValue(user)
+    vi.spyOn(FetchLicencesDal, 'default').mockResolvedValue(licences)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns the session Id and an initialised data object', async () => {
-      const result = await InitiateSessionService.go(user.id, back)
+      const result = await InitiateSessionService(user.id, back)
 
       expect(result).toEqual({
         data: { activeNavBar: back, licences, selectedLicences: [], user },
@@ -71,7 +69,7 @@ describe('Users - External - Setup - Initiate Session service', () => {
     })
 
     it('initiates the session for the journey ', async () => {
-      const result = await InitiateSessionService.go(user.id, back)
+      const result = await InitiateSessionService(user.id, back)
 
       const matchingSession = await SessionModel.query().findById(result.id)
 

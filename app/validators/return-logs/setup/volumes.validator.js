@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
  * @module VolumesValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { maxDecimalPlaces } = require('../../helpers/max-decimal-places.validator.js')
+import { maxDecimalPlaces } from '../../helpers/max-decimal-places.validator.js'
 
 const MAX_ALLOWED_VOLUME = 9999999999
 const MAX_DECIMALS = 6
@@ -20,7 +18,7 @@ const MAX_DECIMALS = 6
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function volumesValidator(payload) {
   const schema = Joi.object().pattern(
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, // Regex to match keys like '2024-04-01T00:00:00.000Z'
     Joi.number()
@@ -37,8 +35,4 @@ function go(payload) {
   )
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

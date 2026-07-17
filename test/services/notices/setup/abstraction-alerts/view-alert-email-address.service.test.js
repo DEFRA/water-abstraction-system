@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewAlertEmailAddressService = require('../../../../../app/services/notices/setup/abstraction-alerts/view-alert-email-address.service.js')
+import ViewAlertEmailAddressService from '../../../../../app/services/notices/setup/abstraction-alerts/view-alert-email-address.service.js'
 
 describe('Notices - Setup - Abstraction Alerts - View Alert Email Address service', () => {
   let auth
@@ -28,18 +26,18 @@ describe('Notices - Setup - Abstraction Alerts - View Alert Email Address servic
     }
 
     sessionData = AbstractionAlertSessionData.get()
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewAlertEmailAddressService.go(session.id, auth)
+      const result = await ViewAlertEmailAddressService(session.id, auth)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the bill run page
  * @module ViewBillService
  */
 
-const EmptyBillRunPresenter = require('../../presenters/bill-runs/empty-bill-run.presenter.js')
-const ErroredBillRunPresenter = require('../../presenters/bill-runs/errored-bill-run.presenter.js')
-const ViewBillRunPresenter = require('../../presenters/bill-runs/view-bill-run.presenter.js')
-const ViewBillSummariesPresenter = require('../../presenters/bill-runs/view-bill-summaries.presenter.js')
-const FetchBillRunService = require('./fetch-bill-run.service.js')
+import EmptyBillRunPresenter from '../../presenters/bill-runs/empty-bill-run.presenter.js'
+import ErroredBillRunPresenter from '../../presenters/bill-runs/errored-bill-run.presenter.js'
+import FetchBillRunService from './fetch-bill-run.service.js'
+import ViewBillRunPresenter from '../../presenters/bill-runs/view-bill-run.presenter.js'
+import ViewBillSummariesPresenter from '../../presenters/bill-runs/view-bill-summaries.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the bill run page
@@ -19,8 +17,8 @@ const FetchBillRunService = require('./fetch-bill-run.service.js')
  * @returns {Promise<object>} an object representing the `pageData` needed by the view bill run template. It contains
  * details of the bill run and the bills linked to it plus the page title.
  */
-async function go(id) {
-  const result = await FetchBillRunService.go(id)
+export default async function viewBillRunService(id) {
+  const result = await FetchBillRunService(id)
 
   const formattedData = _pageData(result)
 
@@ -36,27 +34,23 @@ function _pageData(fetchResult) {
   if (billRun.status === 'empty') {
     return {
       view: 'bill-runs/empty.njk',
-      ...EmptyBillRunPresenter.go(billRun)
+      ...EmptyBillRunPresenter(billRun)
     }
   }
 
   if (billRun.status === 'error') {
     return {
       view: 'bill-runs/errored.njk',
-      ...ErroredBillRunPresenter.go(billRun)
+      ...ErroredBillRunPresenter(billRun)
     }
   }
 
-  const billGroups = ViewBillSummariesPresenter.go(billSummaries)
+  const billGroups = ViewBillSummariesPresenter(billSummaries)
 
   return {
     view: 'bill-runs/view.njk',
-    ...ViewBillRunPresenter.go(billRun, billSummaries),
+    ...ViewBillRunPresenter(billRun, billSummaries),
     billGroupsCount: billGroups.length,
     billGroups
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the '/companies/{id}/billing-accounts' page
  * @module BillingAccountsPresenter
@@ -13,7 +11,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, billingAccounts) {
+export default function billingAccountsPresenter(company, billingAccounts) {
   return {
     backLink: {
       href: '/',
@@ -33,8 +31,4 @@ function _billingAccounts(billingAccounts) {
       link: `/system/billing-accounts/${billingAccount.id}?company-id=${billingAccount.company.id}`
     }
   })
-}
-
-module.exports = {
-  go
 }

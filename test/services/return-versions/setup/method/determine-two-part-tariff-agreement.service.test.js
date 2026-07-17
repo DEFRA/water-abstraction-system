@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const FinancialAgreementHelper = require('../../../../support/helpers/financial-agreement.helper.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
-const LicenceAgreementHelper = require('../../../../support/helpers/licence-agreement.helper.js')
+import FinancialAgreementHelper from '../../../../support/helpers/financial-agreement.helper.js'
+import LicenceAgreementHelper from '../../../../support/helpers/licence-agreement.helper.js'
+import { generateLicenceRef } from '../../../../support/generators.js'
 
 // Thing under test
-const DetermineTwoPartTariffAgreementService = require('../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js')
+import DetermineTwoPartTariffAgreementService from '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
 
 describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service', () => {
   const licenceAgreements = {}
@@ -44,7 +45,7 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
     })
 
     it('returns false', async () => {
-      const result = await DetermineTwoPartTariffAgreementService.go(licenceRef, startDate)
+      const result = await DetermineTwoPartTariffAgreementService(licenceRef, startDate)
 
       expect(result).toBe(false)
     })
@@ -56,7 +57,7 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
     })
 
     it('returns true', async () => {
-      const result = await DetermineTwoPartTariffAgreementService.go(licenceRef, startDate)
+      const result = await DetermineTwoPartTariffAgreementService(licenceRef, startDate)
 
       expect(result).toBe(true)
     })
@@ -68,7 +69,7 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
     })
 
     it('returns false', async () => {
-      const result = await DetermineTwoPartTariffAgreementService.go(licenceRef, startDate)
+      const result = await DetermineTwoPartTariffAgreementService(licenceRef, startDate)
 
       expect(result).toBe(false)
     })
@@ -80,7 +81,7 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
     })
 
     it('returns false', async () => {
-      const result = await DetermineTwoPartTariffAgreementService.go(generateLicenceRef(), startDate)
+      const result = await DetermineTwoPartTariffAgreementService(generateLicenceRef(), startDate)
 
       expect(result).toBe(false)
     })

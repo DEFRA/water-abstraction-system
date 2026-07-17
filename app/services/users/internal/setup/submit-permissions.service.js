@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @module SubmitPermissionsService
  */
 
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const FetchUserDetailsDal = require('../../../../dal/users/internal/fetch-user-details.dal.js')
-const PermissionsPresenter = require('../../../../presenters/users/internal/setup/permissions.presenter.js')
-const PermissionsValidator = require('../../../../validators/users/internal/setup/permissions.validator.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import FetchUserDetailsDal from '../../../../dal/users/internal/fetch-user-details.dal.js'
+import PermissionsPresenter from '../../../../presenters/users/internal/setup/permissions.presenter.js'
+import PermissionsValidator from '../../../../validators/users/internal/setup/permissions.validator.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/permissions' page
@@ -24,8 +22,8 @@ const { flashNotification } = require('../../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(auth, sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitPermissionsService(auth, sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -39,7 +37,7 @@ async function go(auth, sessionId, payload, yar) {
     }
   }
 
-  const pageData = PermissionsPresenter.go(session)
+  const pageData = PermissionsPresenter(session)
 
   const showSuperPermission = await _showSuperPermission(auth)
 
@@ -63,17 +61,13 @@ async function _save(session, payload) {
 }
 
 async function _showSuperPermission(auth) {
-  const currentUser = await FetchUserDetailsDal.go(auth.credentials.user.id)
+  const currentUser = await FetchUserDetailsDal(auth.credentials.user.id)
 
   return currentUser.$permissions().key === 'super'
 }
 
 function _validate(payload) {
-  const validationResult = PermissionsValidator.go(payload)
+  const validationResult = PermissionsValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

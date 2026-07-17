@@ -1,29 +1,27 @@
-'use strict'
-
 /**
  * Controller for /bills endpoints
  * @module BillsController
  */
 
-const Boom = require('@hapi/boom')
+import Boom from '@hapi/boom'
 
-const RemoveBillService = require('../services/bills/remove-bill.service.js')
-const SubmitRemoveBillService = require('../services/bills/submit-remove-bill.service.js')
-const ViewBillService = require('../services/bills/view-bill.service.js')
+import RemoveBillService from '../services/bills/remove-bill.service.js'
+import SubmitRemoveBillService from '../services/bills/submit-remove-bill.service.js'
+import ViewBillService from '../services/bills/view-bill.service.js'
 
-async function remove(request, h) {
+export async function remove(request, h) {
   const { id } = request.params
 
-  const pageData = await RemoveBillService.go(id)
+  const pageData = await RemoveBillService(id)
 
   return h.view('bills/remove.njk', pageData)
 }
 
-async function submitRemove(request, h) {
+export async function submitRemove(request, h) {
   const { id } = request.params
 
   try {
-    const redirectPath = await SubmitRemoveBillService.go(id, request.auth.credentials.user)
+    const redirectPath = await SubmitRemoveBillService(id, request.auth.credentials.user)
 
     return h.redirect(redirectPath)
   } catch (error) {
@@ -31,10 +29,10 @@ async function submitRemove(request, h) {
   }
 }
 
-async function view(request, h) {
+export async function view(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewBillService.go(id)
+  const pageData = await ViewBillService(id)
 
   const template = _determineView(pageData)
 
@@ -51,10 +49,4 @@ function _determineView(pageData) {
   }
 
   return 'bills/view-single-licence-presroc.njk'
-}
-
-module.exports = {
-  remove,
-  submitRemove,
-  view
 }

@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const GenerateTwoPartTariffTransactionService = require('../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
+import GenerateTwoPartTariffTransactionService from '../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js'
 
 describe('Bill Runs - Generate Two Part Tariff Transaction service', () => {
   const billLicenceId = '5e2afb53-ca92-4515-ad71-36a7cefbcebb'
@@ -25,7 +26,7 @@ describe('Bill Runs - Generate Two Part Tariff Transaction service', () => {
   describe('when called', () => {
     describe('with a charge reference that has volume to be billed', () => {
       it('returns a two-part tariff transaction ready to be persisted', () => {
-        const result = GenerateTwoPartTariffTransactionService.go(
+        const result = GenerateTwoPartTariffTransactionService(
           billLicenceId,
           chargeReference,
           chargePeriod,
@@ -75,7 +76,7 @@ describe('Bill Runs - Generate Two Part Tariff Transaction service', () => {
         })
 
         it('returns the two-part tariff prefixed description', () => {
-          const result = GenerateTwoPartTariffTransactionService.go(
+          const result = GenerateTwoPartTariffTransactionService(
             billLicenceId,
             chargeReference,
             chargePeriod,
@@ -97,7 +98,7 @@ describe('Bill Runs - Generate Two Part Tariff Transaction service', () => {
       })
 
       it('returns null', () => {
-        const result = GenerateTwoPartTariffTransactionService.go(
+        const result = GenerateTwoPartTariffTransactionService(
           billLicenceId,
           chargeReference,
           chargePeriod,

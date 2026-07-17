@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Uses the session data to generate the data sets required to create the return version requirements for a licence
  * @module GenerateReturnVersionRequirementsService
  */
 
-const FetchOtherPurposeIdsDal = require('../../../../dal/return-versions/fetch-other-purpose-ids.dal.js')
+import FetchOtherPurposeIdsDal from '../../../../dal/return-versions/fetch-other-purpose-ids.dal.js'
 
 /**
  * Uses the session data to generate the data sets required to create the return version requirements for a licence
@@ -18,7 +16,7 @@ const FetchOtherPurposeIdsDal = require('../../../../dal/return-versions/fetch-o
  *
  * @returns {Promise<object>} The new return version requirements data for a licence
  */
-async function go(licenceId, requirements) {
+export default async function generateReturnVersionRequirementsService(licenceId, requirements) {
   const returnRequirements = []
 
   for (const requirement of requirements) {
@@ -58,7 +56,7 @@ async function _generateReturnRequirementPurposes(licenceId, purposes) {
   const returnRequirementPurposes = []
 
   for (const purpose of purposes) {
-    const { primaryPurposeId, secondaryPurposeId } = await FetchOtherPurposeIdsDal.go(licenceId, purpose.id)
+    const { primaryPurposeId, secondaryPurposeId } = await FetchOtherPurposeIdsDal(licenceId, purpose.id)
 
     const returnRequirementPurpose = {
       alias: purpose.alias === '' ? null : purpose.alias,
@@ -71,8 +69,4 @@ async function _generateReturnRequirementPurposes(licenceId, purposes) {
   }
 
   return returnRequirementPurposes
-}
-
-module.exports = {
-  go
 }

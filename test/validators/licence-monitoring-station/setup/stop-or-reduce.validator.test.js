@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const StopOrReduceValidator = require('../../../../app/validators/licence-monitoring-station/setup/stop-or-reduce.validator.js')
+import StopOrReduceValidator from '../../../../app/validators/licence-monitoring-station/setup/stop-or-reduce.validator.js'
 
 describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
   let payload
@@ -15,7 +16,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = StopOrReduceValidator.go(payload)
+        const result = StopOrReduceValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -31,7 +32,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
         })
 
         it('confirms the data is valid', () => {
-          const result = StopOrReduceValidator.go(payload)
+          const result = StopOrReduceValidator(payload)
 
           expect(result.error).toBeUndefined()
         })
@@ -46,7 +47,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
         })
 
         it('confirms the data is valid', () => {
-          const result = StopOrReduceValidator.go(payload)
+          const result = StopOrReduceValidator(payload)
 
           expect(result.error).toBeUndefined()
         })
@@ -61,7 +62,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
       })
 
       it('fails validation', () => {
-        const result = StopOrReduceValidator.go(payload)
+        const result = StopOrReduceValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select if the licence holder needs to stop or reduce')
@@ -76,7 +77,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
       })
 
       it('fails validation', () => {
-        const result = StopOrReduceValidator.go(payload)
+        const result = StopOrReduceValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual(

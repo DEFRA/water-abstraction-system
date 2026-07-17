@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the 'notices/{id}' page
  * @module ViewNoticePresenter
  */
 
-const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
+import { formatLongDate, formatNoticeType } from '../base.presenter.js'
 
 /**
  * Formats data for the 'notices/{id}' page
@@ -15,7 +13,7 @@ const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
  *
  * @returns {object[]} - The data formatted for the view template
  */
-function go(notice, notifications) {
+export default function viewNoticePresenter(notice, notifications) {
   const tableRows = _formatTableData(notifications)
 
   return {
@@ -65,8 +63,4 @@ function _recipient(notification) {
     personalisation['address_line_7'],
     personalisation['postcode']
   ].filter(Boolean)
-}
-
-module.exports = {
-  go
 }

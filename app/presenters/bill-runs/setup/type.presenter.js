@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/type` page
  * @module TypePresenter
@@ -12,15 +10,11 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function typePresenter(session) {
   return {
     backlink: '/system/bill-runs',
     pageTitle: 'Select the bill run type',
     sessionId: session.id,
     selectedType: session.type ? session.type : null
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Thing under test
-const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/review/review-licence.presenter.js')
+import ReviewLicencePresenter from '../../../../app/presenters/bill-runs/review/review-licence.presenter.js'
 
 describe('Bill Runs Review - Review Licence presenter', () => {
   let reviewLicence
@@ -15,7 +16,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
 
   describe('when provided with the result of fetch review licence service', () => {
     it('correctly presents the data', async () => {
-      const result = ReviewLicencePresenter.go(reviewLicence)
+      const result = ReviewLicencePresenter(reviewLicence)
 
       expect(result).toEqual({
         billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
@@ -112,7 +113,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             })
 
             it('returns "Change details"', () => {
-              const result = ReviewLicencePresenter.go(reviewLicence)
+              const result = ReviewLicencePresenter(reviewLicence)
 
               expect(result.chargeVersions[0].chargeReferences[0].chargeReferenceLinkTitle).toEqual('Change details')
             })
@@ -125,7 +126,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             })
 
             it('returns "Change details"', () => {
-              const result = ReviewLicencePresenter.go(reviewLicence)
+              const result = ReviewLicencePresenter(reviewLicence)
 
               expect(result.chargeVersions[0].chargeReferences[0].chargeReferenceLinkTitle).toEqual('Change details')
             })
@@ -138,7 +139,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             })
 
             it('returns "View details"', () => {
-              const result = ReviewLicencePresenter.go(reviewLicence)
+              const result = ReviewLicencePresenter(reviewLicence)
 
               expect(result.chargeVersions[0].chargeReferences[0].chargeReferenceLinkTitle).toEqual('View details')
             })
@@ -148,7 +149,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
         describe('the "billableReturnsWarning" property', () => {
           describe("when the sum allocated to a charge reference's charge elements is less than its authorised volume", () => {
             it('returns false', () => {
-              const result = ReviewLicencePresenter.go(reviewLicence)
+              const result = ReviewLicencePresenter(reviewLicence)
 
               expect(result.chargeVersions[0].chargeReferences[0].billableReturnsWarning).toEqual(false)
             })
@@ -160,7 +161,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             })
 
             it('returns false', () => {
-              const result = ReviewLicencePresenter.go(reviewLicence)
+              const result = ReviewLicencePresenter(reviewLicence)
 
               expect(result.chargeVersions[0].chargeReferences[0].billableReturnsWarning).toEqual(false)
             })
@@ -172,7 +173,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             })
 
             it('returns true', () => {
-              const result = ReviewLicencePresenter.go(reviewLicence)
+              const result = ReviewLicencePresenter(reviewLicence)
 
               expect(result.chargeVersions[0].chargeReferences[0].billableReturnsWarning).toEqual(true)
             })

@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/existing-account` page
  *
  * @module SubmitExistingAccountService
  */
 
-const ExistingAccountPresenter = require('../../../presenters/billing-accounts/setup/existing-account.presenter.js')
-const ExistingAccountValidator = require('../../../validators/billing-accounts/setup/existing-account.validator.js')
-const FetchExistingCompaniesService = require('./fetch-existing-companies.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import ExistingAccountPresenter from '../../../presenters/billing-accounts/setup/existing-account.presenter.js'
+import ExistingAccountValidator from '../../../validators/billing-accounts/setup/existing-account.validator.js'
+import FetchExistingCompaniesService from './fetch-existing-companies.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/existing-account` page
@@ -20,8 +18,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitExistingAccountService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -33,9 +31,9 @@ async function go(sessionId, payload) {
     }
   }
 
-  const companySearchResults = await FetchExistingCompaniesService.go(session.searchInput)
+  const companySearchResults = await FetchExistingCompaniesService(session.searchInput)
 
-  const pageData = ExistingAccountPresenter.go(session, companySearchResults)
+  const pageData = ExistingAccountPresenter(session, companySearchResults)
 
   return {
     error: validationResult,
@@ -78,11 +76,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = ExistingAccountValidator.go(payload)
+  const validationResult = ExistingAccountValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

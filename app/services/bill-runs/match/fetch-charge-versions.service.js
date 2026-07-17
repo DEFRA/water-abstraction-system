@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Fetches SROC charge versions for two-part-tariff billing
  * @module FetchChargeVersionsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ChargeReferenceModel = require('../../../models/charge-reference.model.js')
-const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const LicenceSupplementaryYearModel = require('../../../models/licence-supplementary-year.model.js')
-const Workflow = require('../../../models/workflow.model.js')
+import ChargeReferenceModel from '../../../models/charge-reference.model.js'
+import ChargeVersionModel from '../../../models/charge-version.model.js'
+import LicenceSupplementaryYearModel from '../../../models/licence-supplementary-year.model.js'
+import Workflow from '../../../models/workflow.model.js'
 
 /**
  * Fetches two-part tariff charge versions for the region and billing period being billed
@@ -33,7 +31,7 @@ const Workflow = require('../../../models/workflow.model.js')
  * @returns {Promise<object>} Contains an array of two-part tariff charge versions with linked licences, charge
  * references, charge elements and related purpose
  */
-async function go(billRun, billingPeriod) {
+export default async function fetchChargeVersionsService(billRun, billingPeriod) {
   const { id: billRunId, batchType, regionId } = billRun
 
   const supplementary = batchType === 'two_part_supplementary'
@@ -166,8 +164,4 @@ async function go(billRun, billingPeriod) {
     })
 
   return chargeVersions
-}
-
-module.exports = {
-  go
 }

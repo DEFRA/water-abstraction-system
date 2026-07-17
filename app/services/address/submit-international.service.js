@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `address/{sessionId}/international` page
  *
  * @module SubmitInternationalService
  */
 
-const InternationalPresenter = require('../../presenters/address/international.presenter.js')
-const InternationalValidator = require('../../validators/address/international.validator.js')
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import InternationalPresenter from '../../presenters/address/international.presenter.js'
+import InternationalValidator from '../../validators/address/international.validator.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `address/{sessionId}/international` page
@@ -19,8 +17,8 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitInternationalService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   _applyPayload(session, payload)
 
@@ -34,7 +32,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = InternationalPresenter.go(session)
+  const pageData = InternationalPresenter(session)
 
   return {
     error: validationResult,
@@ -67,11 +65,7 @@ async function _save(session) {
 }
 
 function _validate(payload) {
-  const validationResult = InternationalValidator.go(payload)
+  const validationResult = InternationalValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

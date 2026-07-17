@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/notice-type` page
  *
  * @module ViewNoticeTypeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NoticeTypePresenter from '../../../presenters/notices/setup/notice-type.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/notice-type` page
@@ -17,17 +15,13 @@ const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-ty
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, auth) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewNoticeTypeService(sessionId, auth) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = NoticeTypePresenter.go(session, auth)
+  const pageData = NoticeTypePresenter(session, auth)
 
   return {
     activeNavBar: 'notices',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

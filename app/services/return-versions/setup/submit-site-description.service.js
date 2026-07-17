@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/site-description` page
  * @module SubmitSiteDescriptionService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const SiteDescriptionPresenter = require('../../../presenters/return-versions/setup/site-description.presenter.js')
-const SiteDescriptionValidator = require('../../../validators/return-versions/setup/site-description.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SiteDescriptionPresenter from '../../../presenters/return-versions/setup/site-description.presenter.js'
+import SiteDescriptionValidator from '../../../validators/return-versions/setup/site-description.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/site-description` page
@@ -29,8 +26,8 @@ const SiteDescriptionValidator = require('../../../validators/return-versions/se
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the site description page including the validation error details
  */
-async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitSiteDescriptionService(sessionId, requirementIndex, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -38,7 +35,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
+      flashNotification(yar, 'Updated', 'Requirements for returns updated')
     }
 
     return {
@@ -69,15 +66,11 @@ async function _save(session, requirementIndex, payload) {
 function _submittedSessionData(session, requirementIndex, payload) {
   session.requirements[requirementIndex].siteDescription = payload.siteDescription ? payload.siteDescription : null
 
-  return SiteDescriptionPresenter.go(session, requirementIndex)
+  return SiteDescriptionPresenter(session, requirementIndex)
 }
 
 function _validate(payload) {
-  const validation = SiteDescriptionValidator.go(payload)
+  const validation = SiteDescriptionValidator(payload)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

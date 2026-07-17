@@ -1,13 +1,11 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things to stub
-const FindAllSearchMatchesService = require('../../../app/services/search/find-all-search-matches.service.js')
+import * as FindAllSearchMatchesService from '../../../app/services/search/find-all-search-matches.service.js'
 
 // Thing under test
-const ViewSearchService = require('../../../app/services/search/view-search.service.js')
+import ViewSearchService from '../../../app/services/search/view-search.service.js'
 
 describe('Search - View Search service', () => {
   let page
@@ -33,7 +31,7 @@ describe('Search - View Search service', () => {
   beforeEach(() => {
     page = '1'
 
-    Sinon.stub(FindAllSearchMatchesService, 'go').resolves({
+    vi.spyOn(FindAllSearchMatchesService, 'default').mockResolvedValue({
       results: [
         {
           exact: false,
@@ -61,7 +59,7 @@ describe('Search - View Search service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -71,7 +69,7 @@ describe('Search - View Search service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewSearchService.go(auth, yar, page)
+      const result = await ViewSearchService(auth, yar, page)
 
       expect(result).toEqual({
         filterItems: [
@@ -150,7 +148,7 @@ describe('Search - View Search service', () => {
     })
 
     it('returns page data for the blank search page', async () => {
-      const result = await ViewSearchService.go(auth, yar, page)
+      const result = await ViewSearchService(auth, yar, page)
 
       expect(result).toEqual({
         filterItems: [
@@ -199,7 +197,7 @@ describe('Search - View Search service', () => {
     })
 
     it('returns page data for the blank search page', async () => {
-      const result = await ViewSearchService.go(auth, yar, page)
+      const result = await ViewSearchService(auth, yar, page)
 
       expect(result).toEqual({
         filterItems: [
@@ -249,7 +247,7 @@ describe('Search - View Search service', () => {
     })
 
     it('still returns page data for the view', async () => {
-      const result = await ViewSearchService.go(auth, yar, page)
+      const result = await ViewSearchService(auth, yar, page)
 
       expect(result).toEqual({
         filterItems: [

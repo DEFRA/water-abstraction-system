@@ -1,14 +1,12 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const FetchDownloadNotificationService = require('../../../app/services/notifications/fetch-notification-download.service.js')
+import * as FetchDownloadNotificationService from '../../../app/services/notifications/fetch-notification-download.service.js'
 
 // Thing under test
-const DownloadNotificationService = require('../../../app/services/notifications/download-notification.service.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import DownloadNotificationService from '../../../app/services/notifications/download-notification.service.js'
+import { generateUUID } from '../../support/generators.js'
 
 describe('Notifications - Download Notification service', () => {
   let notificationId
@@ -19,16 +17,16 @@ describe('Notifications - Download Notification service', () => {
 
     pdf = Buffer.from('mock file')
 
-    Sinon.stub(FetchDownloadNotificationService, 'go').resolves({ pdf })
+    vi.spyOn(FetchDownloadNotificationService, 'default').mockResolvedValue({ pdf })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns pdf data', async () => {
-      const result = await DownloadNotificationService.go(notificationId)
+      const result = await DownloadNotificationService(notificationId)
 
       expect(result).toEqual(pdf)
     })

@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const EventHelper = require('../../../support/helpers/event.helper.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import EventHelper from '../../../support/helpers/event.helper.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Thing under test
-const ViewConfirmationService = require('../../../../app/services/notices/setup/view-confirmation.service.js')
+import ViewConfirmationService from '../../../../app/services/notices/setup/view-confirmation.service.js'
 
 describe('Notices - Setup - Confirmation service', () => {
   const referenceCode = generateNoticeReferenceCode('RINV-')
@@ -22,7 +23,7 @@ describe('Notices - Setup - Confirmation service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewConfirmationService.go(event.id)
+      const result = await ViewConfirmationService(event.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

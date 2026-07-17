@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/monitoring-stations/{monitoringStationId}/licence/{licenceId}`
  * @module ViewLicenceService
  */
 
-const FetchLicenceMonitoringStationsDal = require('../../dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js')
-const ViewLicencePresenter = require('../../presenters/monitoring-stations/view-licence.presenter.js')
+import FetchLicenceMonitoringStationsDal from '../../dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
+import ViewLicencePresenter from '../../presenters/monitoring-stations/view-licence.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/monitoring-stations/{monitoringStationId}/licence/{licenceId}`
@@ -17,19 +15,15 @@ const ViewLicencePresenter = require('../../presenters/monitoring-stations/view-
  *
  * @returns {Promise<object>} The view data for the licence tag details page
  */
-async function go(auth, licenceId, monitoringStationId) {
-  const { licence, licenceMonitoringStations, monitoringStation } = await FetchLicenceMonitoringStationsDal.go(
+export default async function viewLicenceService(auth, licenceId, monitoringStationId) {
+  const { licence, licenceMonitoringStations, monitoringStation } = await FetchLicenceMonitoringStationsDal(
     licenceId,
     monitoringStationId
   )
 
-  const formattedData = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+  const formattedData = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

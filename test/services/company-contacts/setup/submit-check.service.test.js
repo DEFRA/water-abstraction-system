@@ -1,30 +1,27 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionModel = require('../../../../app/models/session.model.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import SessionModel from '../../../../app/models/session.model.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Test helpers
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const CreateCompanyContactDal = require('../../../../app/dal/company-contacts/setup/create-company-contact.dal.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const UpdateCompanyContactDal = require('../../../../app/dal/company-contacts/setup/update-company-contact.dal.js')
+import * as CreateCompanyContactDal from '../../../../app/dal/company-contacts/setup/create-company-contact.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as UpdateCompanyContactDal from '../../../../app/dal/company-contacts/setup/update-company-contact.dal.js'
 
 // Thing under test
-const SubmitCheckService = require('../../../../app/services/company-contacts/setup/submit-check.service.js')
+import SubmitCheckService from '../../../../app/services/company-contacts/setup/submit-check.service.js'
 
 describe('Company Contacts - Setup - Check Service', () => {
   let auth
   let company
   let companyContact
-  let fetchSessionStub
   let session
   let sessionData
   let yarStub
@@ -34,27 +31,27 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     company = CustomersFixtures.company()
 
-    Sinon.stub(CreateCompanyContactDal, 'go').resolves()
-    Sinon.stub(UpdateCompanyContactDal, 'go').resolves()
+    vi.spyOn(CreateCompanyContactDal, 'default').mockResolvedValue()
+    vi.spyOn(UpdateCompanyContactDal, 'default').mockResolvedValue()
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when creating a company contact', () => {
     beforeEach(async () => {
       sessionData = _createSessionData(company)
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('clears the session', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      await SubmitCheckService(session.id, yarStub, auth)
 
       const deletedSession = await SessionModel.query().findById(session.id)
 
@@ -62,7 +59,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     })
 
     it('returns the redirect URL', async () => {
-      const result = await SubmitCheckService.go(session.id, yarStub, auth)
+      const result = await SubmitCheckService(session.id, yarStub, auth)
 
       expect(result).toEqual({
         redirectUrl: `/system/companies/${company.id}/contacts`
@@ -70,9 +67,9 @@ describe('Company Contacts - Setup - Check Service', () => {
     })
 
     it('persists the company contact details', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      await SubmitCheckService(session.id, yarStub, auth)
 
-      const actualContact = CreateCompanyContactDal.go.args[0]
+      const actualContact = CreateCompanyContactDal.default.mock.calls[0]
 
       expect(actualContact).toEqual([
         company.id,
@@ -87,9 +84,9 @@ describe('Company Contacts - Setup - Check Service', () => {
     })
 
     it('sets a notification', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      await SubmitCheckService(session.id, yarStub, auth)
 
-      const [flashType, bannerMessage] = yarStub.flash.args[0]
+      const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(bannerMessage).toEqual({ titleText: 'Contact added', text: `Eric was added to this company` })
@@ -98,9 +95,9 @@ describe('Company Contacts - Setup - Check Service', () => {
     describe('the "abstractionAlerts" property', () => {
       describe('is "yes"', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
+          await SubmitCheckService(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactDal.go.args[0][1]
+          const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
 
           expect(actualContact.abstractionAlerts).toBe(true)
         })
@@ -108,15 +105,15 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       describe('is "some"', () => {
         beforeEach(() => {
-          session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'some' })
+          session = SessionModelStub({ ...sessionData, abstractionAlerts: 'some' })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "abstractionAlerts" as "true"', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
+          await SubmitCheckService(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactDal.go.args[0][1]
+          const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
 
           expect(actualContact.abstractionAlerts).toBe(true)
         })
@@ -124,15 +121,15 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       describe('is "no"', () => {
         beforeEach(async () => {
-          session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'no' })
+          session = SessionModelStub({ ...sessionData, abstractionAlerts: 'no' })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "abstractionAlerts" as "false"', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
+          await SubmitCheckService(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactDal.go.args[0][1]
+          const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
 
           expect(actualContact.abstractionAlerts).toBe(false)
         })
@@ -146,19 +143,19 @@ describe('Company Contacts - Setup - Check Service', () => {
         beforeEach(() => {
           abstractionAlertLicences = [generateUUID(), generateUUID()]
 
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             ...sessionData,
             abstractionAlerts: 'some',
             abstractionAlertLicences
           })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists "abstractionAlertLicences" as a JSON string', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
+          await SubmitCheckService(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactDal.go.args[0][1]
+          const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
           const expectedAbstractionAlertLicences = JSON.stringify(abstractionAlertLicences)
 
           expect(actualContact.abstractionAlertLicences).toEqual(expectedAbstractionAlertLicences)
@@ -167,9 +164,9 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       describe('when "abstractionAlerts" is not "some"', () => {
         it('persists "abstractionAlertLicences" as null', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
+          await SubmitCheckService(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactDal.go.args[0][1]
+          const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
 
           expect(actualContact.abstractionAlertLicences).toBeNull()
         })
@@ -178,15 +175,15 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     describe('the "email" property', () => {
       beforeEach(async () => {
-        session = SessionModelStub.build(Sinon, { ...sessionData, email: 'ERICE@TEST.COM' })
+        session = SessionModelStub({ ...sessionData, email: 'ERICE@TEST.COM' })
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('persists the "email" in lowercase', async () => {
-        await SubmitCheckService.go(session.id, yarStub, auth)
+        await SubmitCheckService(session.id, yarStub, auth)
 
-        const actualContact = CreateCompanyContactDal.go.args[0][1]
+        const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
 
         expect(actualContact.email).toEqual('erice@test.com')
       })
@@ -199,13 +196,13 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       sessionData = _updateSessionData(company, companyContact)
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns the redirect URL', async () => {
-      const result = await SubmitCheckService.go(session.id, yarStub, auth)
+      const result = await SubmitCheckService(session.id, yarStub, auth)
 
       expect(result).toEqual({
         redirectUrl: `/system/company-contacts/${companyContact.id}/contact-details`
@@ -213,9 +210,9 @@ describe('Company Contacts - Setup - Check Service', () => {
     })
 
     it('persists the company contact details', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      await SubmitCheckService(session.id, yarStub, auth)
 
-      const [actualContact] = UpdateCompanyContactDal.go.args[0]
+      const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
       expect(actualContact).toEqual({
         id: companyContact.id,
@@ -229,9 +226,9 @@ describe('Company Contacts - Setup - Check Service', () => {
     })
 
     it('sets a notification', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      await SubmitCheckService(session.id, yarStub, auth)
 
-      const [flashType, bannerMessage] = yarStub.flash.args[0]
+      const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(bannerMessage).toEqual({ titleText: 'Updated', text: `Contact details updated.` })
@@ -240,9 +237,9 @@ describe('Company Contacts - Setup - Check Service', () => {
     describe('the "abstractionAlerts" property', () => {
       describe('is "yes"', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
+          await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlerts).toBe(true)
         })
@@ -250,15 +247,15 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       describe('is "some"', () => {
         beforeEach(() => {
-          session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'some' })
+          session = SessionModelStub({ ...sessionData, abstractionAlerts: 'some' })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "abstractionAlerts" as "true"', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
+          await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlerts).toBe(true)
         })
@@ -266,15 +263,15 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       describe('is "no"', () => {
         beforeEach(async () => {
-          session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'no' })
+          session = SessionModelStub({ ...sessionData, abstractionAlerts: 'no' })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "abstractionAlerts" as "false"', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
+          await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlerts).toBe(false)
         })
@@ -288,19 +285,19 @@ describe('Company Contacts - Setup - Check Service', () => {
         beforeEach(() => {
           abstractionAlertLicences = [generateUUID(), generateUUID()]
 
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             ...sessionData,
             abstractionAlerts: 'some',
             abstractionAlertLicences
           })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists "abstractionAlertLicences" as a JSON string', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
+          await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
           const expectedAbstractionAlertLicences = JSON.stringify(abstractionAlertLicences)
 
           expect(actualContact.abstractionAlertLicences).toEqual(expectedAbstractionAlertLicences)
@@ -309,9 +306,9 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       describe('when "abstractionAlerts" is not "some"', () => {
         it('persists "abstractionAlertLicences" as null', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
+          await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlertLicences).toBeNull()
         })
@@ -321,15 +318,15 @@ describe('Company Contacts - Setup - Check Service', () => {
     describe('the "email" property', () => {
       describe('when email is in multi cases', () => {
         beforeEach(async () => {
-          session = SessionModelStub.build(Sinon, { ...sessionData, email: 'ERICE@TEST.COM' })
+          session = SessionModelStub({ ...sessionData, email: 'ERICE@TEST.COM' })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "email" in lowercase', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
+          await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.email).toEqual('erice@test.com')
         })

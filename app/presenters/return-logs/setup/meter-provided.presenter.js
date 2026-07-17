@@ -1,6 +1,4 @@
-'use strict'
-
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Format data for the `/return-log/setup/{sessionId}/meter-provided` page
@@ -14,7 +12,7 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function meterProvidedPresenter(session) {
   const { id: sessionId, returnReference, meterProvided } = session
 
   return {
@@ -31,8 +29,4 @@ function _backLink(session) {
     href: checkUrl(session, `/system/return-logs/setup/${session.id}/units`),
     text: 'Back'
   }
-}
-
-module.exports = {
-  go
 }

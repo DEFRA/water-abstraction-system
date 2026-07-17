@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const StartReadingValidator = require('../../../../app/validators/return-logs/setup/start-reading.validator.js')
+import StartReadingValidator from '../../../../app/validators/return-logs/setup/start-reading.validator.js'
 
 describe('Return Logs Setup - Start Reading validator', () => {
   let payload
@@ -28,7 +29,7 @@ describe('Return Logs Setup - Start Reading validator', () => {
         })
 
         it('confirms the payload is valid', () => {
-          const result = StartReadingValidator.go(payload, lines)
+          const result = StartReadingValidator(payload, lines)
 
           expect(result.error).toBeUndefined()
         })
@@ -40,7 +41,7 @@ describe('Return Logs Setup - Start Reading validator', () => {
         })
 
         it('confirms the payload is valid', () => {
-          const result = StartReadingValidator.go(payload, lines)
+          const result = StartReadingValidator(payload, lines)
 
           expect(result.error).toBeUndefined()
         })
@@ -53,7 +54,7 @@ describe('Return Logs Setup - Start Reading validator', () => {
         })
 
         it('confirms the payload is valid', () => {
-          const result = StartReadingValidator.go(payload, lines)
+          const result = StartReadingValidator(payload, lines)
 
           expect(result.error).toBeUndefined()
         })
@@ -68,7 +69,7 @@ describe('Return Logs Setup - Start Reading validator', () => {
       })
 
       it('fails validation with the message "Enter a start meter reading"', () => {
-        const result = StartReadingValidator.go(payload, lines)
+        const result = StartReadingValidator(payload, lines)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Enter a start meter reading')
@@ -81,7 +82,7 @@ describe('Return Logs Setup - Start Reading validator', () => {
       })
 
       it('fails validation with the message "Start meter reading must 0 or higher"', () => {
-        const result = StartReadingValidator.go(payload, lines)
+        const result = StartReadingValidator(payload, lines)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Start meter reading must 0 or higher')
@@ -94,7 +95,7 @@ describe('Return Logs Setup - Start Reading validator', () => {
       })
 
       it('fails validation with the message "Start meter reading must not be negative"', () => {
-        const result = StartReadingValidator.go(payload, lines)
+        const result = StartReadingValidator(payload, lines)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Start meter reading must not be negative')
@@ -107,7 +108,7 @@ describe('Return Logs Setup - Start Reading validator', () => {
       })
 
       it('fails validation with the message "Start meter reading must be a whole number"', () => {
-        const result = StartReadingValidator.go(payload, lines)
+        const result = StartReadingValidator(payload, lines)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Start meter reading must be a whole number')
@@ -122,7 +123,7 @@ describe('Return Logs Setup - Start Reading validator', () => {
         })
 
         it('fails validation with the message "Please enter a reading which is equal to or lower than the next reading of 10000"', () => {
-          const result = StartReadingValidator.go(payload, lines)
+          const result = StartReadingValidator(payload, lines)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual(
@@ -139,7 +140,7 @@ describe('Return Logs Setup - Start Reading validator', () => {
         })
 
         it('fails validation with the message "Start meter reading exceeds the maximum of 99999999999"', () => {
-          const result = StartReadingValidator.go(payload, lines)
+          const result = StartReadingValidator(payload, lines)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Start meter reading exceeds the maximum of 99999999999')
@@ -154,7 +155,7 @@ describe('Return Logs Setup - Start Reading validator', () => {
         })
 
         it('fails validation with the message "Start meter reading must be between 0 and 99999999999"', () => {
-          const result = StartReadingValidator.go(payload, lines)
+          const result = StartReadingValidator(payload, lines)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Start meter reading must be between 0 and 99999999999')

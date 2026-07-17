@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
  * @module SubmitVolumesService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.presenter.js')
-const VolumesValidator = require('../../../validators/return-logs/setup/volumes.validator.js')
-const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import VolumesPresenter from '../../../presenters/return-logs/setup/volumes.presenter.js'
+import VolumesValidator from '../../../validators/return-logs/setup/volumes.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { convertFromCubicMetres, convertToCubicMetres, flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
@@ -23,8 +20,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the volumes page including
  * the validation error details
  */
-async function go(sessionId, payload, yar, yearMonth) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitVolumesService(sessionId, payload, yar, yearMonth) {
+  const session = await FetchSessionDal(sessionId)
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
 
@@ -33,14 +30,14 @@ async function go(sessionId, payload, yar, yearMonth) {
   if (!error) {
     await _save(payload, session, requestedYear, requestedMonth)
 
-    GeneralLib.flashNotification(yar, 'Updated', 'Volumes have been updated')
+    flashNotification(yar, 'Updated', 'Volumes have been updated')
 
     return {}
   }
 
   _addValidationResultToSession(payload, session, requestedYear, requestedMonth, error)
 
-  const formattedData = VolumesPresenter.go(session, yearMonth)
+  const formattedData = VolumesPresenter(session, yearMonth)
 
   return {
     error,
@@ -109,11 +106,7 @@ function _validate(payload) {
     return null
   }
 
-  const validationResult = VolumesValidator.go(payload)
+  const validationResult = VolumesValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Formats the review charge element data ready for presenting in the review charge element page
  * @module ReviewChargeElementPresenter
  */
 
-const { formatAbstractionPeriod, formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
-const {
+import { formatAbstractionPeriod, formatFinancialYear, formatLongDate } from '../../base.presenter.js'
+import {
   formatChargePeriod,
   formatChargePeriods,
   formatIssues,
   formatReturnStatus,
   formatReturnTotals
-} = require('./base-review.presenter.js')
+} from './base-review.presenter.js'
 
 /**
  * Formats the review charge element data ready for presenting in the review charge element page
@@ -24,7 +22,7 @@ const {
  *
  * @returns {object} page date needed for the review charge element page
  */
-function go(reviewChargeElement, elementIndex) {
+export default function reviewChargeElementPresenter(reviewChargeElement, elementIndex) {
   const {
     amendedAllocated: billableReturns,
     chargeElement,
@@ -72,8 +70,4 @@ function _matchedReturns(reviewReturns) {
       returnTotal: formatReturnTotals(reviewReturn)
     }
   })
-}
-
-module.exports = {
-  go
 }

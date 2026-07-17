@@ -1,18 +1,19 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
-const EmptyLicence = require('../../../../support/seeders/empty-licence.seeder.js')
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
-const RecipientsFormatter = require('../../../../support/seeders/recipients.formatter.js')
-const { compareStrings } = require('../../../../../app/lib/general.lib.js')
-const { db } = require('../../../../../db/db.js')
+import * as CRMContactsSeeder from '../../../../support/seeders/crm-contacts.seeder.js'
+import * as EmptyLicence from '../../../../support/seeders/empty-licence.seeder.js'
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import * as RecipientsFormatter from '../../../../support/seeders/recipients.formatter.js'
+import { compareStrings } from '../../../../../app/lib/general.lib.js'
+import { db } from '../../../../../db/db.js'
 
 // Thing under test
-const abstractionAlertRecipientsQueryDal = require('../../../../../app/dal/notices/setup/abstraction-alerts/abstraction-alert-recipients-query.dal.js')
+import * as AbstractionAlertRecipientsQueryDal from '../../../../../app/dal/notices/setup/abstraction-alerts/abstraction-alert-recipients-query.dal.js'
 
 describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Query DAL', () => {
-  const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
+  const query = AbstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
   let scenarios
 

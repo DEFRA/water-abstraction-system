@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/type` page
  * @module SubmitTypeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const TypePresenter = require('../../../presenters/bill-runs/setup/type.presenter.js')
-const TypeValidator = require('../../../validators/bill-runs/setup/type.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import TypePresenter from '../../../presenters/bill-runs/setup/type.presenter.js'
+import TypeValidator from '../../../validators/bill-runs/setup/type.validator.js'
 
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/type` page
@@ -28,8 +26,8 @@ const TypeValidator = require('../../../validators/bill-runs/setup/type.validato
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the type page including the
  * validation error details
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitTypeService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -39,7 +37,7 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = TypePresenter.go(session)
+  const pageData = TypePresenter(session)
 
   return {
     activeNavBar: 'bill-runs',
@@ -55,7 +53,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = TypeValidator.go(payload)
+  const validation = TypeValidator(payload)
 
   if (!validation.error) {
     return null
@@ -66,8 +64,4 @@ function _validate(payload) {
   return {
     text: message
   }
-}
-
-module.exports = {
-  go
 }

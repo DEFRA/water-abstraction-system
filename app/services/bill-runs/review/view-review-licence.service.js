@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates page data for the '/bill-runs/review/licence/{reviewLicenceId}' page
  * @module ViewReviewLicenceService
  */
 
-const FetchReviewLicenceService = require('./fetch-review-licence.service.js')
-const ReviewLicencePresenter = require('../../../presenters/bill-runs/review/review-licence.presenter.js')
+import FetchReviewLicenceService from './fetch-review-licence.service.js'
+import ReviewLicencePresenter from '../../../presenters/bill-runs/review/review-licence.presenter.js'
 
 /**
  * Orchestrates page data for the '/bill-runs/review/licence/{reviewLicenceId}' page
@@ -16,19 +14,15 @@ const ReviewLicencePresenter = require('../../../presenters/bill-runs/review/rev
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(reviewLicenceId, yar) {
-  const reviewLicence = await FetchReviewLicenceService.go(reviewLicenceId)
+export default async function viewReviewLicenceService(reviewLicenceId, yar) {
+  const reviewLicence = await FetchReviewLicenceService(reviewLicenceId)
 
   const [bannerMessage] = yar.flash('banner')
-  const pageData = ReviewLicencePresenter.go(reviewLicence)
+  const pageData = ReviewLicencePresenter(reviewLicence)
 
   return {
     activeNavBar: 'bill-runs',
     bannerMessage,
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

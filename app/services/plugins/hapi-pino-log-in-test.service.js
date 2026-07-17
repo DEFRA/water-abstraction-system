@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Used by HapiPinoPlugin to determine which requests to log
  * @module HapiPinoLogInTestService
@@ -18,7 +16,7 @@
  *
  * @returns {object} an empty object or one containing Hapi-pino config to tell it not to log events
  */
-function go(logInTest) {
+export default function hapiPinoLogInTestService(logInTest) {
   if (process.env.NODE_ENV !== 'test' || logInTest) {
     return {}
   }
@@ -29,8 +27,4 @@ function go(logInTest) {
     // Don't log anything tagged with DEBUG or info, for example, req.log(['INFO'], 'User is an admin')
     ignoredEventTags: { log: ['DEBUG', 'INFO'], request: ['DEBUG', 'INFO'] }
   }
-}
-
-module.exports = {
-  go
 }

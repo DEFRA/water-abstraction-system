@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Removes all data created for acceptance tests from the idm schema
  * @module IdmSchemaService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Removes all data created for acceptance tests from the idm schema
  *
  * @returns {Promise<object>}
  */
-async function go() {
+export default async function idmSchemaService() {
   return _deleteAllTestData()
 }
 
@@ -30,8 +28,4 @@ async function _deleteAllTestData() {
     OR "user_name" LIKE '%@e'
     OR "user_name" LIKE 'regression.tests%';
   `)
-}
-
-module.exports = {
-  go
 }

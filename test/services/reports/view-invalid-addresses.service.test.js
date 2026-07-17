@@ -1,26 +1,24 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we want to stub
-const FetchInvalidAddressesService = require('../../../app/services/reports/fetch-invalid-addresses.service.js')
+import * as FetchInvalidAddressesService from '../../../app/services/reports/fetch-invalid-addresses.service.js'
 
 // Thing under test
-const ViewInvalidAddressesService = require('../../../app/services/reports/view-invalid-addresses.service.js')
+import ViewInvalidAddressesService from '../../../app/services/reports/view-invalid-addresses.service.js'
 
 describe('Reports - View Invalid Addresses service', () => {
   beforeEach(() => {
-    Sinon.stub(FetchInvalidAddressesService, 'go').returns(_invalidAddresses())
+    vi.spyOn(FetchInvalidAddressesService, 'default').mockReturnValue(_invalidAddresses())
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewInvalidAddressesService.go()
+      const result = await ViewInvalidAddressesService()
 
       expect(result).toEqual({
         activeNavBar: 'manage',

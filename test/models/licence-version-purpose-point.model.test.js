@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
-const LicenceVersionPurposePointHelper = require('../support/helpers/licence-version-purpose-point.helper.js')
-const PointHelper = require('../support/helpers/point.helper.js')
-const PointModel = require('../../app/models/point.model.js')
+import LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposeModel from '../../app/models/licence-version-purpose.model.js'
+import LicenceVersionPurposePointHelper from '../support/helpers/licence-version-purpose-point.helper.js'
+import PointHelper from '../support/helpers/point.helper.js'
+import PointModel from '../../app/models/point.model.js'
 
 // Thing under test
-const LicenceVersionPurposePointModel = require('../../app/models/licence-version-purpose-point.model.js')
+import LicenceVersionPurposePointModel from '../../app/models/licence-version-purpose-point.model.js'
 
 describe('Licence Version Purpose Point model', () => {
   let testLicenceVersionPurpose

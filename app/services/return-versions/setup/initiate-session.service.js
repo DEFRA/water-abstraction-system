@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Initiates the session record used for setting up a new return requirement
  * @module InitiateSessionService
  */
 
-const Boom = require('@hapi/boom')
+import Boom from '@hapi/boom'
 
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
+import CreateSessionDal from '../../../dal/create-session.dal.js'
+import FetchLicenceService from './fetch-licence.service.js'
 
 /**
  * Initiates the session record using for setting up a new return requirement
@@ -25,8 +23,8 @@ const FetchLicenceService = require('./fetch-licence.service.js')
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(licenceId, journey) {
-  const licence = await FetchLicenceService.go(licenceId)
+export default async function initiateSessionService(licenceId, journey) {
+  const licence = await FetchLicenceService(licenceId)
 
   if (!licence) {
     throw Boom.notFound('Licence for new return requirement not found', { id: licenceId })
@@ -34,7 +32,7 @@ async function go(licenceId, journey) {
 
   const data = _data(licence, journey)
 
-  return CreateSessionDal.go(data)
+  return CreateSessionDal(data)
 }
 
 function _data(licence, journey) {
@@ -65,8 +63,4 @@ function _currentVersionStartDate(licenceVersions) {
   const { startDate } = licenceVersions[0]
 
   return startDate
-}
-
-module.exports = {
-  go
 }

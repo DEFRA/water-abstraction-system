@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates flagging a licence for pre sroc and sroc supplementary billing
  * @module SubmitMarkForSupplementaryBillingService
  */
 
-const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
-const LicenceModel = require('../../../models/licence.model.js')
-const MarkForSupplementaryBillingPresenter = require('../../../presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js')
-const PersistSupplementaryBillingFlagsService = require('./persist-supplementary-billing-flags.service.js')
-const SupplementaryYearValidator = require('../../../validators/licences/supplementary/supplementary-year.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import DetermineExistingBillRunYearsService from './determine-existing-bill-run-years.service.js'
+import LicenceModel from '../../../models/licence.model.js'
+import MarkForSupplementaryBillingPresenter from '../../../presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js'
+import PersistSupplementaryBillingFlagsService from './persist-supplementary-billing-flags.service.js'
+import SupplementaryYearValidator from '../../../validators/licences/supplementary/supplementary-year.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Handles the submission to mark a licence for supplementary billing.
@@ -24,7 +22,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} The licence marked for supplementary billing
  */
-async function go(licenceId, payload) {
+export default async function submitMarkForSupplementaryBillingService(licenceId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -79,7 +77,7 @@ async function _determineLicenceFlags(licence, supplementaryYears) {
   if (supplementaryYears.length > 0) {
     const twoPartTariff = true
 
-    twoPartTariffBillingYears = await DetermineExistingBillRunYearsService.go(
+    twoPartTariffBillingYears = await DetermineExistingBillRunYearsService(
       licence.regionId,
       supplementaryYears,
       twoPartTariff
@@ -101,7 +99,7 @@ async function _flagForBilling(supplementaryYears, licenceId) {
   const { twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary } =
     await _determineLicenceFlags(licence, supplementaryYears)
 
-  await PersistSupplementaryBillingFlagsService.go(
+  await PersistSupplementaryBillingFlagsService(
     twoPartTariffBillingYears,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
@@ -112,17 +110,13 @@ async function _flagForBilling(supplementaryYears, licenceId) {
 async function _getPageData(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
-  const pageData = MarkForSupplementaryBillingPresenter.go(licenceData)
+  const pageData = MarkForSupplementaryBillingPresenter(licenceData)
 
   return pageData
 }
 
 function _validate(payload) {
-  const validationResult = SupplementaryYearValidator.go(payload)
+  const validationResult = SupplementaryYearValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Transforms pagination information into the appropriate pagination component elements
  * @module PaginatorPresenter
  */
 
-const DatabaseConfig = require('../../config/database.config.js')
+import DatabaseConfig from '../../config/database.config.js'
 
 const SIMPLE_PAGINATOR = 'simple'
 const COMPLEX_START_PAGINATOR = 'start'
@@ -112,7 +110,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * @returns {object} if no pagination is needed just the `numberOfPages` is returned else a `component:` property is
  * also included that can be directly passed to the `govukPagination()` in the view.
  */
-function go(numberOfRecords, page, path, numberOfShownItems, message, queryArgs = {}) {
+export default function paginatorPresenter(numberOfRecords, page, path, numberOfShownItems, message, queryArgs = {}) {
   const numberOfPages = Math.ceil(numberOfRecords / DatabaseConfig.defaultPageSize)
   const showingMessage = _showingXofY(numberOfRecords, numberOfShownItems, message)
 
@@ -267,8 +265,4 @@ function _showingXofY(paginationTotal, currentAmount, message) {
   }
 
   return `Showing all ${paginationTotal} ${message}`
-}
-
-module.exports = {
-  go
 }

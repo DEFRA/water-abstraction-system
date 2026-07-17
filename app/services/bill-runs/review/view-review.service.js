@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/bill-runs/review/{id}' page
  * @module ViewReviewService
  */
 
-const FetchBillRunLicencesService = require('./fetch-bill-run-licences.service.js')
-const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const ReviewPresenter = require('../../../presenters/bill-runs/review/review.presenter.js')
-const { readFlashNotification } = require('../../../lib/general.lib.js')
-const { processSavedFilters } = require('../../../lib/submit-page.lib.js')
+import FetchBillRunLicencesService from './fetch-bill-run-licences.service.js'
+import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
+import ReviewPresenter from '../../../presenters/bill-runs/review/review.presenter.js'
+import { processSavedFilters } from '../../../lib/submit-page.lib.js'
+import { readFlashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/bill-runs/review/{id}' page
@@ -20,17 +18,17 @@ const { processSavedFilters } = require('../../../lib/submit-page.lib.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(id, yar, page) {
+export default async function viewReviewService(id, yar, page) {
   const filterKey = `review-${id}`
   const filters = _filters(yar, filterKey)
 
-  const { billRun, licences } = await FetchBillRunLicencesService.go(id, filters, page)
+  const { billRun, licences } = await FetchBillRunLicencesService(id, filters, page)
 
   const notification = readFlashNotification(yar)
 
-  const pageData = ReviewPresenter.go(billRun, licences.results)
+  const pageData = ReviewPresenter(billRun, licences.results)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     licences.total,
     page,
     `/system/bill-runs/review/${id}`,
@@ -57,8 +55,4 @@ function _filters(yar, filterKey) {
     progress: [],
     ...savedFilters
   }
-}
-
-module.exports = {
-  go
 }

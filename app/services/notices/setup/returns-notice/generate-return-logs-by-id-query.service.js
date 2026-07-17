@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Generates the query and bindings for selecting the return logs by Id that determine which recipients to fetch
  * @module GenerateReturnLogsByIdQueryService
@@ -12,7 +10,7 @@
  *
  * @returns {object} The query to use as the 'due_return_logs` CTE in the recipients query, and the associated bindings
  */
-function go(returnLogIds) {
+export default function generateReturnLogsByIdQueryService(returnLogIds) {
   const bindings = [returnLogIds]
 
   return {
@@ -36,8 +34,4 @@ function _query() {
     rl.status = 'due'
     AND rl.id = ANY (?)
   `
-}
-
-module.exports = {
-  go
 }

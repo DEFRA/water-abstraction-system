@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/readings/{yearMonth}`
  * page
  * @module ReadingsService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ReadingsPresenter = require('../../../presenters/return-logs/setup/readings.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReadingsPresenter from '../../../presenters/return-logs/setup/readings.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/readings/{yearMonth}`
@@ -18,16 +16,12 @@ const ReadingsPresenter = require('../../../presenters/return-logs/setup/reading
  *
  * @returns {Promise<object>} The view data for the readings page
  */
-async function go(sessionId, yearMonth) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function readingsService(sessionId, yearMonth) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = ReadingsPresenter.go(session, yearMonth)
+  const formattedData = ReadingsPresenter(session, yearMonth)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

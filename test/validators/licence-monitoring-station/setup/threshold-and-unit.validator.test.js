@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ThresholdAndUnitValidator = require('../../../../app/validators/licence-monitoring-station/setup/threshold-and-unit.validator.js')
+import ThresholdAndUnitValidator from '../../../../app/validators/licence-monitoring-station/setup/threshold-and-unit.validator.js'
 
 describe('Licence Monitoring Station Setup - Threshold and Unit validator', () => {
   let payload
@@ -15,7 +16,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
     })
 
     it('confirms the data is valid', () => {
-      const result = ThresholdAndUnitValidator.go(payload)
+      const result = ThresholdAndUnitValidator(payload)
 
       expect(result.error).toBeUndefined()
     })
@@ -31,7 +32,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
       })
 
       it('fails validation', () => {
-        const result = ThresholdAndUnitValidator.go(payload)
+        const result = ThresholdAndUnitValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Enter a threshold of 0 or greater')
@@ -47,7 +48,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
       })
 
       it('fails validation', () => {
-        const result = ThresholdAndUnitValidator.go(payload)
+        const result = ThresholdAndUnitValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Enter a threshold less than or equal to 10000000')
@@ -65,7 +66,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
       })
 
       it('fails validation', () => {
-        const result = ThresholdAndUnitValidator.go(payload)
+        const result = ThresholdAndUnitValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Enter a threshold between 0 and 10000000')
@@ -79,7 +80,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
     })
 
     it('fails validation', () => {
-      const result = ThresholdAndUnitValidator.go(payload)
+      const result = ThresholdAndUnitValidator(payload)
 
       expect(result.error).toBeDefined()
       expect(result.error.details[0].message).toEqual('Select which units to use')
@@ -93,7 +94,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
     })
 
     it('fails validation', () => {
-      const result = ThresholdAndUnitValidator.go(payload)
+      const result = ThresholdAndUnitValidator(payload)
 
       expect(result.error).toBeDefined()
       expect(result.error.details[0].message).toEqual('Enter a threshold')
@@ -110,7 +111,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
     })
 
     it('extracts the correct threshold value', () => {
-      const result = ThresholdAndUnitValidator.go(payload)
+      const result = ThresholdAndUnitValidator(payload)
 
       expect(result.value.threshold).toEqual(1000)
     })

@@ -1,16 +1,18 @@
-'use strict'
-
 /**
  * Model for return_versions (water.return_versions)
  * @module ReturnVersionModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
-const { returnRequirementReasons } = require('../lib/static-lookups.lib.js')
+import BaseModel from './base.model.js'
+import LicenceModel from './licence.model.js'
+import ModLogModel from './mod-log.model.js'
+import ReturnRequirementModel from './return-requirement.model.js'
+import UserModel from './user.model.js'
+import { returnRequirementReasons } from '../lib/static-lookups.lib.js'
 
-class ReturnVersionModel extends BaseModel {
+export default class ReturnVersionModel extends BaseModel {
   static get tableName() {
     return 'returnVersions'
   }
@@ -19,7 +21,7 @@ class ReturnVersionModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'returnVersions.licenceId',
           to: 'licences.id'
@@ -27,7 +29,7 @@ class ReturnVersionModel extends BaseModel {
       },
       modLogs: {
         relation: Model.HasManyRelation,
-        modelClass: 'mod-log.model',
+        modelClass: ModLogModel,
         join: {
           from: 'returnVersions.id',
           to: 'modLogs.returnVersionId'
@@ -35,7 +37,7 @@ class ReturnVersionModel extends BaseModel {
       },
       returnRequirements: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-requirement.model',
+        modelClass: ReturnRequirementModel,
         join: {
           from: 'returnVersions.id',
           to: 'returnRequirements.returnVersionId'
@@ -43,7 +45,7 @@ class ReturnVersionModel extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'returnVersions.createdBy',
           to: 'users.userId'
@@ -239,5 +241,3 @@ class ReturnVersionModel extends BaseModel {
     return null
   }
 }
-
-module.exports = ReturnVersionModel

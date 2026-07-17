@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewSelectRecipientsService = require('../../../../app/services/notices/setup/view-select-recipients.service.js')
+import ViewSelectRecipientsService from '../../../../app/services/notices/setup/view-select-recipients.service.js'
 
 describe('Notices - Setup - View Select Recipients service', () => {
   let session
@@ -31,19 +29,19 @@ describe('Notices - Setup - View Select Recipients service', () => {
       selectedRecipients: [recipients.primaryUser.contact_hash_id]
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser])
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipients.primaryUser])
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewSelectRecipientsService.go(session.id)
+      const result = await ViewSelectRecipientsService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

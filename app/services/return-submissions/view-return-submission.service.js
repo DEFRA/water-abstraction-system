@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view return submission page
  * @module ViewReturnSubmissionService
  */
 
-const FetchReturnSubmissionService = require('./fetch-return-submission.service.js')
-const ViewReturnSubmissionPresenter = require('../../presenters/return-submissions/view-return-submission.presenter.js')
+import FetchReturnSubmissionService from './fetch-return-submission.service.js'
+import ViewReturnSubmissionPresenter from '../../presenters/return-submissions/view-return-submission.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the view return submission page
@@ -16,16 +14,12 @@ const ViewReturnSubmissionPresenter = require('../../presenters/return-submissio
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view return submission template.
  */
-async function go(returnSubmissionId, yearMonth) {
-  const returnSubmission = await FetchReturnSubmissionService.go(returnSubmissionId)
+export default async function viewReturnSubmissionService(returnSubmissionId, yearMonth) {
+  const returnSubmission = await FetchReturnSubmissionService(returnSubmissionId)
 
-  const pageData = ViewReturnSubmissionPresenter.go(returnSubmission, yearMonth)
+  const pageData = ViewReturnSubmissionPresenter(returnSubmission, yearMonth)
 
   return {
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

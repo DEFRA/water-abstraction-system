@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches data for the remove bill licence page which summarises the bill run and billing details for the licence
  * @module FetchBillLicenceService
  */
 
-const BillLicenceModel = require('../../models/bill-licence.model.js')
+import BillLicenceModel from '../../models/bill-licence.model.js'
 
 /**
  * Fetches data for the remove bill licence page which summarises the bill run and billing details for the licence
@@ -21,7 +19,7 @@ const BillLicenceModel = require('../../models/bill-licence.model.js')
  * @returns {Promise<object>} the matching instance of BillLicenceModel plus the linked bill, billing account and bill
  * run. Also all transactions linked to the bill licence so we can work out the total for the licence
  */
-async function go(billLicenceId) {
+export default async function fetchBillLicenceSummaryService(billLicenceId) {
   return _fetchBillLicence(billLicenceId)
 }
 
@@ -88,8 +86,4 @@ async function _fetchBillLicence(billLicenceId) {
     })
 
   return results
-}
-
-module.exports = {
-  go
 }

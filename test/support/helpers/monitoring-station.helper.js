@@ -1,11 +1,10 @@
-'use strict'
-
 /**
  * @module MonitoringStationHelper
  */
 
-const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
-const MonitoringStationModel = require('../../../app/models/monitoring-station.model.js')
+import MonitoringStationModel from '../../../app/models/monitoring-station.model.js'
+import { generateUUID } from '../generators.js'
+import { timestampForPostgres } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new monitoring station
@@ -56,7 +55,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

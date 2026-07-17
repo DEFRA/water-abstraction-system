@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-const PreviewCheckPaperReturnPresenter = require('../../../../../app/presenters/notices/setup/preview/preview-check-paper-return.presenter.js')
+import PreviewCheckPaperReturnPresenter from '../../../../../app/presenters/notices/setup/preview/preview-check-paper-return.presenter.js'
 
 describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
@@ -32,7 +33,7 @@ describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
+      const result = PreviewCheckPaperReturnPresenter(session, contactHashId)
 
       expect(result).toEqual({
         backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
@@ -73,7 +74,7 @@ describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
           })
 
           it('returns page data for the view', () => {
-            const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
+            const result = PreviewCheckPaperReturnPresenter(session, contactHashId)
 
             expect(result.returnLogs).toEqual([
               {
@@ -105,7 +106,7 @@ describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
           })
 
           it('returns page data for the view - with only the selected returns', () => {
-            const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
+            const result = PreviewCheckPaperReturnPresenter(session, contactHashId)
 
             expect(result.returnLogs).toEqual([
               {

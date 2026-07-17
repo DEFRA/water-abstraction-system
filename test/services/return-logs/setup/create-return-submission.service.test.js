@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
-const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionModel = require('../../../../app/models/return-submission.model.js')
+import ReturnLogModel from '../../../../app/models/return-log.model.js'
+import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionModel from '../../../../app/models/return-submission.model.js'
+import { timestampForPostgres } from '../../../../app/lib/general.lib.js'
+import { generateReturnId, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const CreateReturnSubmissionService = require('../../../../app/services/return-logs/setup/create-return-submission.service.js')
+import CreateReturnSubmissionService from '../../../../app/services/return-logs/setup/create-return-submission.service.js'
 
 describe('Return Logs - Setup - Create Return Submission service', () => {
   const metadata = {}
@@ -22,14 +23,14 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       session = {
         journey: 'enterReturn',
         note: { content: 'TEST_NOTE' },
-        returnId: ReturnLogHelper.generateReturnId(),
+        returnId: generateReturnId(),
         returnLogId: generateUUID()
       }
     })
 
     describe('and no previous submission exists for this return log', () => {
       it('creates a new return submission and sets the version to 1', async () => {
-        const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
+        const result = await CreateReturnSubmissionService(metadata, session, timestamp, user)
 
         expect(result).toMatchObject({
           createdAt: timestamp,
@@ -56,7 +57,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       })
 
       it('creates a new return submission and sets the version to 2', async () => {
-        const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
+        const result = await CreateReturnSubmissionService(metadata, session, timestamp, user)
 
         expect(result).toMatchObject({
           createdAt: timestamp,
@@ -75,7 +76,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       })
 
       it('marks the previous version as superseded', async () => {
-        await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
+        await CreateReturnSubmissionService(metadata, session, timestamp, user)
 
         const previousVersion = await ReturnSubmissionModel.query()
           .where('returnLogId', session.returnLogId)
@@ -92,7 +93,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       })
 
       it('sets the nillReturn field to true', async () => {
-        const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
+        const result = await CreateReturnSubmissionService(metadata, session, timestamp, user)
 
         expect(result.nilReturn).toBe(true)
       })
@@ -104,7 +105,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       })
 
       it('leaves the notes field blank', async () => {
-        const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
+        const result = await CreateReturnSubmissionService(metadata, session, timestamp, user)
 
         expect(result.notes).toBeUndefined()
       })
@@ -120,7 +121,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       it('does not persist anything if an error occurs', async () => {
         try {
           await ReturnLogModel.transaction(async (trx) => {
-            await CreateReturnSubmissionService.go(metadata, session, timestamp, user, trx)
+            await CreateReturnSubmissionService(metadata, session, timestamp, user, trx)
             throw new Error()
           })
         } catch (_error) {

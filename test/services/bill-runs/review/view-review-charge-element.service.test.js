@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchReviewChargeElementService = require('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
+import * as FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
 
 // Thing under test
-const ViewReviewChargeElementService = require('../../../../app/services/bill-runs/review/view-review-charge-element.service.js')
+import ViewReviewChargeElementService from '../../../../app/services/bill-runs/review/view-review-charge-element.service.js'
 
 describe('Bill Runs - Review - View Review Charge Element Service', () => {
   const elementIndex = 1
@@ -22,22 +20,22 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
   beforeEach(() => {
     reviewChargeElement = BillRunsReviewFixture.reviewChargeElement()
 
-    Sinon.stub(FetchReviewChargeElementService, 'go').resolves(reviewChargeElement)
+    vi.spyOn(FetchReviewChargeElementService, 'default').mockResolvedValue(reviewChargeElement)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('and there is a flash message to display', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.flash.withArgs('banner').returns(['The billable returns for this licence have been updated'])
+        yarStub = YarStub()
+        yarStub.flash.mockReturnValue(['The billable returns for this licence have been updated'])
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
+        const result = await ViewReviewChargeElementService(reviewChargeElement.id, elementIndex, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -75,12 +73,12 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
 
     describe('and there is no flash message to display', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.flash.withArgs('banner').returns([undefined])
+        yarStub = YarStub()
+        yarStub.flash.mockReturnValue([undefined])
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
+        const result = await ViewReviewChargeElementService(reviewChargeElement.id, elementIndex, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',

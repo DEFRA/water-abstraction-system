@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const DeleteNoteService = require('../../../../app/services/return-logs/setup/delete-note.service.js')
+import DeleteNoteService from '../../../../app/services/return-logs/setup/delete-note.service.js'
 
 describe('Return Logs Setup - Delete Note service', () => {
   let session
@@ -27,28 +25,28 @@ describe('Return Logs Setup - Delete Note service', () => {
       }
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('deletes the note from the session', async () => {
-    await DeleteNoteService.go(session.id, yarStub)
+    await DeleteNoteService(session.id, yarStub)
 
     expect(session.note).toBeUndefined()
-    expect(session.$update.called).toBe(true)
+    expect(session.$update).toHaveBeenCalled()
   })
 
   it('sets the notification message to "Deleted"', async () => {
-    await DeleteNoteService.go(session.id, yarStub)
+    await DeleteNoteService(session.id, yarStub)
 
-    const [flashType, notification] = yarStub.flash.args[0]
+    const [flashType, notification] = yarStub.flash.mock.calls[0]
 
     expect(flashType).toEqual('notification')
     expect(notification).toEqual({ titleText: 'Deleted', text: 'Note deleted' })

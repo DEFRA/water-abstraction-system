@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Persists the supplementary billing flags for a licence
  * @module PersistSupplementaryBillingFlagsService
  */
 
-const CreateLicenceSupplementaryYearService = require('./create-licence-supplementary-year.service.js')
-const LicenceModel = require('../../../models/licence.model.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+import CreateLicenceSupplementaryYearService from './create-licence-supplementary-year.service.js'
+import LicenceModel from '../../../models/licence.model.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Persists the supplementary billing flags for a licence
@@ -25,7 +23,12 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  * sroc billing
  * @param {string} licenceId - The UUID of the licence that needs the flags persisting for
  */
-async function go(twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary, licenceId) {
+export default async function persistSupplementaryBillingFlagsService(
+  twoPartTariffBillingYears,
+  flagForPreSrocSupplementary,
+  flagForSrocSupplementary,
+  licenceId
+) {
   const includeInPresrocBilling = flagForPreSrocSupplementary ? 'yes' : 'no'
 
   await _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplementary, licenceId)
@@ -44,7 +47,7 @@ async function _flagForLicenceSupplementaryYears(twoPartTariffBillingYears, lice
 
   const twoPartTariff = true
 
-  await CreateLicenceSupplementaryYearService.go(licenceId, twoPartTariffBillingYears, twoPartTariff)
+  await CreateLicenceSupplementaryYearService(licenceId, twoPartTariffBillingYears, twoPartTariff)
 }
 
 async function _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplementary, licenceId) {
@@ -55,8 +58,4 @@ async function _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplemen
       updatedAt: timestampForPostgres()
     })
     .where('id', licenceId)
-}
-
-module.exports = {
-  go
 }

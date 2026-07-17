@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the /bill-runs page
  * @module IndexBillRunsService
  */
 
-const CheckBusyBillRunsService = require('./check-busy-bill-runs.service.js')
-const FetchBillRunsService = require('./fetch-bill-runs.service.js')
-const FetchRegionsService = require('./setup/fetch-regions.service.js')
-const IndexBillRunsPresenter = require('../../presenters/bill-runs/index-bill-runs.presenter.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { processSavedFilters } = require('../../lib/submit-page.lib.js')
+import CheckBusyBillRunsService from './check-busy-bill-runs.service.js'
+import FetchBillRunsService from './fetch-bill-runs.service.js'
+import FetchRegionsService from './setup/fetch-regions.service.js'
+import IndexBillRunsPresenter from '../../presenters/bill-runs/index-bill-runs.presenter.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { processSavedFilters } from '../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the /bill-runs page
@@ -20,20 +18,20 @@ const { processSavedFilters } = require('../../lib/submit-page.lib.js')
  *
  * @returns {Promise<object>} The view data for the bill runs page
  */
-async function go(yar, page) {
+export default async function indexBillRunsService(yar, page) {
   const filters = _filters(yar)
 
   // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
   // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
   const [busyResult, { results: billRuns, total: totalNumber }, regions] = await Promise.all([
-    CheckBusyBillRunsService.go(),
-    FetchBillRunsService.go(filters, page),
-    FetchRegionsService.go()
+    CheckBusyBillRunsService(),
+    FetchBillRunsService(filters, page),
+    FetchRegionsService()
   ])
 
-  const pagination = PaginatorPresenter.go(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
+  const pagination = PaginatorPresenter(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
 
-  const pageData = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
+  const pageData = IndexBillRunsPresenter(billRuns, busyResult, filters, regions)
 
   return {
     activeNavBar: 'bill-runs',
@@ -54,8 +52,4 @@ function _filters(yar) {
     yearCreated: null,
     ...savedFilters
   }
-}
-
-module.exports = {
-  go
 }

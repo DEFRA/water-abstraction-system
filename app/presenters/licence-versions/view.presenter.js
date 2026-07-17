@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Formats data for the `/licence-versions/{id}` page
  * @module ViewPresenter
  */
 
-const NotifyAddressPresenter = require('../notices/setup/notify-address.presenter.js')
-const NotifyConfig = require('../../../config/notify.config.js')
-const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
-const { formatLongDate, formatVersionReason } = require('../base.presenter.js')
-const { compareStrings } = require('../../lib/general.lib.js')
-const { formatLicencePoints, formatLicencePurposes, formatConditionTypes } = require('../licence.presenter.js')
+import NotifyAddressPresenter from '../notices/setup/notify-address.presenter.js'
+import NotifyConfig from '../../../config/notify.config.js'
+import PreviousAndNextPresenter from '../previous-and-next.presenter.js'
+import { compareStrings } from '../../lib/general.lib.js'
+import { formatConditionTypes, formatLicencePoints, formatLicencePurposes } from '../licence.presenter.js'
+import { formatLongDate, formatVersionReason } from '../base.presenter.js'
 
 /**
  * Formats data for the `/licence-versions/{id}` page
@@ -21,7 +19,7 @@ const { formatLicencePoints, formatLicencePurposes, formatConditionTypes } = req
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licenceVersionData, auth, conditions) {
+export default function viewPresenter(licenceVersionData, auth, conditions) {
   const { licenceVersion, licenceVersionsForPagination } = licenceVersionData
 
   const { licence } = licenceVersion
@@ -54,7 +52,7 @@ function go(licenceVersionData, auth, conditions) {
  * @private
  */
 function _address(licenceVersion) {
-  const address = NotifyAddressPresenter.go({
+  const address = NotifyAddressPresenter({
     name: licenceVersion.company.name,
     ...licenceVersion.address
   })
@@ -128,7 +126,7 @@ function _notes(licenceVersion, billingAndDataRole) {
  * @private
  */
 function _pagination(licenceVersionsForPagination, licenceVersion) {
-  const { previous, next } = PreviousAndNextPresenter.go(licenceVersionsForPagination, licenceVersion)
+  const { previous, next } = PreviousAndNextPresenter(licenceVersionsForPagination, licenceVersion)
 
   if (!next && !previous) {
     return null
@@ -211,8 +209,4 @@ function _sortPointsByDescription(first, second) {
     sensitivity: 'base',
     ignorePunctuation: true
   })
-}
-
-module.exports = {
-  go
 }

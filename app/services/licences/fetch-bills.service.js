@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/bills` page
  * @module FetchBillsService
  */
 
-const BillModel = require('../../models/bill.model.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import BillModel from '../../models/bill.model.js'
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches all bills for a licence which is needed for the view '/licences/{id}/bills` page
@@ -17,7 +14,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's bills tab
  */
-async function go(licenceId, page = '1') {
+export default async function fetchBillsService(licenceId, page = '1') {
   const { results: bills, total: totalNumber } = await _fetch(licenceId, page)
 
   return { bills, totalNumber }
@@ -47,8 +44,4 @@ async function _fetch(licenceId, page) {
     })
     .orderBy([{ column: 'createdAt', order: 'desc' }])
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
-}
-
-module.exports = {
-  go
 }

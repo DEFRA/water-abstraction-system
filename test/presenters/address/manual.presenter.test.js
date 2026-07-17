@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ManualPresenter = require('../../../app/presenters/address/manual.presenter.js')
+import ManualPresenter from '../../../app/presenters/address/manual.presenter.js'
 
 describe('Address - Manual Presenter', () => {
   let session
@@ -22,7 +23,7 @@ describe('Address - Manual Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ManualPresenter.go(session)
+    const result = ManualPresenter(session)
 
     expect(result).toEqual({
       activeNavBar: 'manage',
@@ -43,9 +44,9 @@ describe('Address - Manual Presenter', () => {
   describe('the "addressLine1" property', () => {
     describe('when the property has not been set', () => {
       it('returns null', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
-        expect(result.addressLine1).toEqual(null)
+        expect(result.addressLine1).toBeNull()
       })
     })
 
@@ -55,7 +56,7 @@ describe('Address - Manual Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
         expect(result.addressLine1).toEqual('Fake Farm')
       })
@@ -65,9 +66,9 @@ describe('Address - Manual Presenter', () => {
   describe('the "addressLine2" property', () => {
     describe('when the property has not been set', () => {
       it('returns null', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
-        expect(result.addressLine2).toEqual(null)
+        expect(result.addressLine2).toBeNull()
       })
     })
 
@@ -77,7 +78,7 @@ describe('Address - Manual Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
         expect(result.addressLine2).toEqual('1 Fake Street')
       })
@@ -87,9 +88,9 @@ describe('Address - Manual Presenter', () => {
   describe('the "addressLine3" property', () => {
     describe('when the property has not been set', () => {
       it('returns null', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
-        expect(result.addressLine3).toEqual(null)
+        expect(result.addressLine3).toBeNull()
       })
     })
 
@@ -99,7 +100,7 @@ describe('Address - Manual Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
         expect(result.addressLine3).toEqual('Fake Village')
       })
@@ -109,9 +110,9 @@ describe('Address - Manual Presenter', () => {
   describe('the "addressLine4" property', () => {
     describe('when the property has not been set', () => {
       it('returns null', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
-        expect(result.addressLine4).toEqual(null)
+        expect(result.addressLine4).toBeNull()
       })
     })
 
@@ -121,7 +122,7 @@ describe('Address - Manual Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
         expect(result.addressLine4).toEqual('Fake City')
       })
@@ -135,7 +136,7 @@ describe('Address - Manual Presenter', () => {
       })
 
       it('returns a link to the "select" address page', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
         expect(result.backLink).toEqual({
           href: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/select',
@@ -146,7 +147,7 @@ describe('Address - Manual Presenter', () => {
 
     describe('when the user has not come from the "select" address page', () => {
       it('returns a link to the "postcode" page', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
         expect(result.backLink).toEqual({
           href: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/postcode',
@@ -159,9 +160,9 @@ describe('Address - Manual Presenter', () => {
   describe('the "pageTitleCaption" property', () => {
     describe('when the property has not been configured', () => {
       it('returns null', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
-        expect(result.pageTitleCaption).toEqual(null)
+        expect(result.pageTitleCaption).toBeNull()
       })
     })
 
@@ -171,7 +172,7 @@ describe('Address - Manual Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
         expect(result.pageTitleCaption).toEqual('Super awesome caption')
       })
@@ -185,15 +186,15 @@ describe('Address - Manual Presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
-        expect(result.postcode).toEqual(null)
+        expect(result.postcode).toBeNull()
       })
     })
 
     describe('when the property has been set', () => {
       it('returns the set value', () => {
-        const result = ManualPresenter.go(session)
+        const result = ManualPresenter(session)
 
         expect(result.postcode).toEqual('SW1A 1AA')
       })

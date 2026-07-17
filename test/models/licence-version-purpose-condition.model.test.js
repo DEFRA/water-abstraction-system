@@ -1,16 +1,17 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
-const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
-const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../support/helpers/licence-version-purpose-condition-type.helper.js')
-const LicenceVersionPurposeConditionTypeModel = require('../../app/models/licence-version-purpose-condition-type.model.js')
-const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
+import LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
+import LicenceMonitoringStationModel from '../../app/models/licence-monitoring-station.model.js'
+import LicenceVersionPurposeConditionHelper from '../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionTypeHelper from '../support/helpers/licence-version-purpose-condition-type.helper.js'
+import LicenceVersionPurposeConditionTypeModel from '../../app/models/licence-version-purpose-condition-type.model.js'
+import LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposeModel from '../../app/models/licence-version-purpose.model.js'
 
 // Thing under test
-const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
+import LicenceVersionPurposeConditionModel from '../../app/models/licence-version-purpose-condition.model.js'
 
 describe('Licence Version Purpose Condition model', () => {
   let testLicenceMonitoringStations

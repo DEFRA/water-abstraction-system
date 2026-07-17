@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
  * @module FetchReturnsService
  */
 
-const ReturnLogModel = require('../../models/return-log.model.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import ReturnLogModel from '../../models/return-log.model.js'
 
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
@@ -17,7 +14,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's returns tab
  */
-async function go(licenceId, page = '1') {
+export default async function fetchReturnsService(licenceId, page = '1') {
   const { results: returns, total: totalNumber } = await _fetch(licenceId, page)
 
   return { returns, totalNumber }
@@ -41,8 +38,4 @@ async function _fetch(licenceId, page) {
     .where('licence.id', licenceId)
     .orderByRaw('return_logs.start_date desc, return_logs.return_reference::integer desc, return_logs.end_date desc')
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
-}
-
-module.exports = {
-  go
 }

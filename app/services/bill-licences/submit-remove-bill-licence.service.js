@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates the removing of a bill licence from a bill run
  * @module SubmitRemoveBillLicenceService
  */
 
-const BillLicenceModel = require('../../models/bill-licence.model.js')
-const LegacyDeleteBillLicenceRequest = require('../../requests/legacy/delete-bill-licence.request.js')
-const ProcessBillingFlagService = require('../licences/supplementary/process-billing-flag.service.js')
-const UnassignLicencesToBillRunService = require('../bill-runs/unassign-licences-to-bill-run.service.js')
+import BillLicenceModel from '../../models/bill-licence.model.js'
+import DeleteBillLicenceRequest from '../../requests/legacy/delete-bill-licence.request.js'
+import ProcessBillingFlagService from '../licences/supplementary/process-billing-flag.service.js'
+import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-bill-run.service.js'
 
 /**
  * Orchestrates the removing of a bill licence from a bill run
@@ -26,14 +24,14 @@ const UnassignLicencesToBillRunService = require('../bill-runs/unassign-licences
  *
  * @returns {Promise<string>} Returns the redirect path the controller needs
  */
-async function go(billLicenceId, user) {
+export default async function submitRemoveBillLicenceService(billLicenceId, user) {
   const billLicence = await _fetchBillLicence(billLicenceId)
 
   const { bill, licenceId } = billLicence
 
-  await UnassignLicencesToBillRunService.go([licenceId], bill.billRunId)
-  await ProcessBillingFlagService.go({ billLicenceId })
-  await LegacyDeleteBillLicenceRequest.send(billLicenceId, user)
+  await UnassignLicencesToBillRunService([licenceId], bill.billRunId)
+  await ProcessBillingFlagService({ billLicenceId })
+  await DeleteBillLicenceRequest(billLicenceId, user)
 
   return `/billing/batch/${bill.billRunId}/processing?invoiceId=${bill.id}`
 }
@@ -46,8 +44,4 @@ async function _fetchBillLicence(billLicenceId) {
     .modifyGraph('bill', (builder) => {
       builder.select(['id', 'billRunId'])
     })
-}
-
-module.exports = {
-  go
 }

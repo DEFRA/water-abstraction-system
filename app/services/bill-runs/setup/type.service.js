@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/type` page
  * @module TypeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const TypePresenter = require('../../../presenters/bill-runs/setup/type.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import TypePresenter from '../../../presenters/bill-runs/setup/type.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/type` page
@@ -18,17 +16,13 @@ const TypePresenter = require('../../../presenters/bill-runs/setup/type.presente
  *
  * @returns {Promise<object>} The view data for the type page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function typeService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = TypePresenter.go(session)
+  const pageData = TypePresenter(session)
 
   return {
     activeNavBar: 'bill-runs',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

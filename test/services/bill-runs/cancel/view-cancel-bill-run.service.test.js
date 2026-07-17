@@ -1,13 +1,11 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
+import BillRunModel from '../../../../app/models/bill-run.model.js'
 
 // Thing under test
-const ViewCancelBillRunService = require('../../../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js')
+import ViewCancelBillRunService from '../../../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js'
 
 describe('Bill Runs - View Cancel Bill Run service', () => {
   const billRunId = 'd351ee81-157e-4621-98eb-db121cb48cbb'
@@ -15,23 +13,23 @@ describe('Bill Runs - View Cancel Bill Run service', () => {
   let billRunQueryStub
 
   beforeEach(async () => {
-    billRunQueryStub = Sinon.stub()
+    billRunQueryStub = vi.fn()
 
-    Sinon.stub(BillRunModel, 'query').returns({
-      findById: Sinon.stub().withArgs(billRunId).returnsThis(),
-      select: Sinon.stub().returnsThis(),
-      withGraphFetched: Sinon.stub().returnsThis(),
+    vi.spyOn(BillRunModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      withGraphFetched: vi.fn().mockReturnThis(),
       modifyGraph: billRunQueryStub
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a bill with a matching ID exists', () => {
     beforeEach(() => {
-      billRunQueryStub.resolves({
+      billRunQueryStub.mockResolvedValue({
         batchType: 'annual',
         billRunNumber: 10101,
         createdAt: new Date('2024-02-28'),
@@ -47,7 +45,7 @@ describe('Bill Runs - View Cancel Bill Run service', () => {
       })
     })
     it('will fetch the data and format it for use in the cancel bill run page', async () => {
-      const result = await ViewCancelBillRunService.go(billRunId)
+      const result = await ViewCancelBillRunService(billRunId)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
@@ -67,7 +65,7 @@ describe('Bill Runs - View Cancel Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(ViewCancelBillRunService.go('testId')).rejects.toThrow()
+      await expect(ViewCancelBillRunService('testId')).rejects.toThrow()
     })
   })
 })

@@ -1,19 +1,20 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
-const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
+import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
+import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import ReviewChargeElementHelper from '../../../support/helpers/review-charge-element.helper.js'
+import ReviewChargeReferenceHelper from '../../../support/helpers/review-charge-reference.helper.js'
+import ReviewChargeVersionHelper from '../../../support/helpers/review-charge-version.helper.js'
+import ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
 
 // Thing under test
-const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
+import FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
 
 describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
   let billRun
@@ -58,7 +59,7 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
 
   describe('when a matching review charge reference exists', () => {
     it('returns the match', async () => {
-      const result = await FetchReviewChargeReferenceService.go(reviewChargeReference.id)
+      const result = await FetchReviewChargeReferenceService(reviewChargeReference.id)
 
       expect(result).toEqual({
         id: reviewChargeReference.id,
@@ -111,7 +112,7 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
 
   describe('when no matching review charge reference exists', () => {
     it('returns nothing', async () => {
-      const result = await FetchReviewChargeReferenceService.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchReviewChargeReferenceService('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result).toBeUndefined()
     })

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates the cancelling of a bill run
  * @module SubmitCancelBillRunService
  */
 
-const CancelBillBunService = require('./cancel-bill-run.service.js')
-const DeleteBillRunService = require('./delete-bill-run.service.js')
-const UnassignBillRunToLicencesService = require('../unassign-bill-run-to-licences.service.js')
+import CancelBillBunService from './cancel-bill-run.service.js'
+import DeleteBillRunService from './delete-bill-run.service.js'
+import UnassignBillRunToLicencesService from '../unassign-bill-run-to-licences.service.js'
 
 /**
  * Orchestrates the cancelling of a bill run
@@ -28,15 +26,11 @@ const UnassignBillRunToLicencesService = require('../unassign-bill-run-to-licenc
  *
  * @param {string} billRunId  - UUID of the bill run to be cancelled
  */
-async function go(billRunId) {
-  const billRun = await CancelBillBunService.go(billRunId)
+export default async function submitCancelBillRunService(billRunId) {
+  const billRun = await CancelBillBunService(billRunId)
 
   if (billRun.status === 'cancel') {
-    await UnassignBillRunToLicencesService.go(billRun.id)
-    DeleteBillRunService.go(billRun)
+    await UnassignBillRunToLicencesService(billRun.id)
+    DeleteBillRunService(billRun)
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,15 +1,15 @@
-'use strict'
+// Test framework
+import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const EventHelper = require('../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import EventHelper from '../../support/helpers/event.helper.js'
+import NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import NotificationHelper from '../../support/helpers/notification.helper.js'
+import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import { generateLicenceRef } from '../../support/generators.js'
 
 // Thing under test
-const FetchNotificationsDal = require('../../../app/dal/return-logs/fetch-notifications.dal.js')
+import FetchNotificationsDal from '../../../app/dal/return-logs/fetch-notifications.dal.js'
 
 describe('Return Logs - Fetch Notifications DAL', () => {
   let notice
@@ -31,7 +31,7 @@ describe('Return Logs - Fetch Notifications DAL', () => {
 
   describe('when the return log has notifications', () => {
     it('returns the matching notifications and the total', async () => {
-      const result = await FetchNotificationsDal.go(notification.returnLogIds[0])
+      const result = await FetchNotificationsDal(notification.returnLogIds[0])
 
       expect(result).toEqual({
         notifications: [
@@ -55,7 +55,7 @@ describe('Return Logs - Fetch Notifications DAL', () => {
 
   describe('when the return log has no notifications', () => {
     it('returns an empty array and zero', async () => {
-      const result = await FetchNotificationsDal.go('513f8813-3782-4c1b-a095-a078adf757f4')
+      const result = await FetchNotificationsDal('513f8813-3782-4c1b-a095-a078adf757f4')
 
       expect(result).toEqual({ notifications: [], totalNumber: 0 })
     })

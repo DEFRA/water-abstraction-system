@@ -1,20 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const ReturnsPeriodPresenter = require('../../../../app/presenters/notices/setup/returns-period.presenter.js')
+import ReturnsPeriodPresenter from '../../../../app/presenters/notices/setup/returns-period.presenter.js'
 
 describe('Notices - Setup - Returns Period presenter', () => {
   const currentYear = 2025
   const previousYear = currentYear - 1
   const nextYear = currentYear + 1
 
-  let clock
   let referenceCode
   let session = {}
   let testDate
@@ -26,17 +23,17 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
   afterEach(() => {
     session = {}
-    clock.restore()
+    vi.useRealTimers()
   })
 
   describe('the data', () => {
     beforeEach(() => {
       testDate = new Date(`${currentYear}-01-15`)
-      clock = Sinon.useFakeTimers(testDate)
+      vi.useFakeTimers({ now: testDate })
     })
 
     it('correctly presents the data', () => {
-      const result = ReturnsPeriodPresenter.go(session)
+      const result = ReturnsPeriodPresenter(session)
 
       expect(result).toMatchObject({
         backLink: {
@@ -55,7 +52,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       })
 
       it('correctly returns the back link', () => {
-        const result = ReturnsPeriodPresenter.go(session)
+        const result = ReturnsPeriodPresenter(session)
 
         expect(result.backLink).toEqual({
           href: `/system/notices/setup/${session.id}/check-notice-type`,
@@ -70,7 +67,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       })
 
       it('correctly returns the back link', () => {
-        const result = ReturnsPeriodPresenter.go(session)
+        const result = ReturnsPeriodPresenter(session)
 
         expect(result.backLink).toEqual({
           href: `/system/notices/setup/${session.id}/notice-type`,
@@ -83,12 +80,12 @@ describe('Notices - Setup - Returns Period presenter', () => {
   describe('the "pageTitle" property', () => {
     beforeEach(() => {
       testDate = new Date(`${currentYear}-01-15`)
-      clock = Sinon.useFakeTimers(testDate)
+      vi.useFakeTimers({ now: testDate })
     })
 
     describe('when the noticeType is "invitations"', () => {
       it('correctly presents the data', () => {
-        const result = ReturnsPeriodPresenter.go(session)
+        const result = ReturnsPeriodPresenter(session)
 
         expect(result.pageTitle).toEqual('Select the returns periods for the invitations')
       })
@@ -100,7 +97,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = ReturnsPeriodPresenter.go(session)
+        const result = ReturnsPeriodPresenter(session)
 
         expect(result.pageTitle).toEqual('Select the returns periods for the reminders')
       })
@@ -113,13 +110,13 @@ describe('Notices - Setup - Returns Period presenter', () => {
         session.returnsPeriod = 'quarterOne'
 
         testDate = new Date(`${currentYear}-04-29`)
-        clock = Sinon.useFakeTimers(testDate)
+        vi.useFakeTimers({ now: testDate })
       })
 
       it('should mark the returns period as checked', () => {
         const {
           returnsPeriod: [currentReturnPeriod]
-        } = ReturnsPeriodPresenter.go(session)
+        } = ReturnsPeriodPresenter(session)
 
         expect(currentReturnPeriod).toEqual({
           checked: true,
@@ -133,13 +130,13 @@ describe('Notices - Setup - Returns Period presenter', () => {
     describe('when the current date is the same date', () => {
       beforeEach(() => {
         testDate = new Date(`${currentYear}-04-28T09:59:59.999Z`)
-        clock = Sinon.useFakeTimers(testDate)
+        vi.useFakeTimers({ now: testDate })
       })
 
       it('returns the current return period as "quarterFour"', () => {
         const {
           returnsPeriod: [currentReturnPeriod]
-        } = ReturnsPeriodPresenter.go(session)
+        } = ReturnsPeriodPresenter(session)
 
         expect(currentReturnPeriod).toEqual({
           checked: false,
@@ -152,7 +149,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       it('returns the next return period as "allYear"', () => {
         const {
           returnsPeriod: [, nextReturnPeriod]
-        } = ReturnsPeriodPresenter.go(session)
+        } = ReturnsPeriodPresenter(session)
 
         expect(nextReturnPeriod).toEqual({
           checked: false,
@@ -167,13 +164,13 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 29 January - 28 April', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-01-29`)
-          clock = Sinon.useFakeTimers(testDate)
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "quarterFour"', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -186,7 +183,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "allYear"', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
@@ -202,13 +199,13 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 29 April - 28 July', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-04-29`)
-          clock = Sinon.useFakeTimers(testDate)
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "quarterOne"', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -221,7 +218,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "quarterTwo"', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
@@ -237,13 +234,13 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 29 July - 28 October', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-07-29`)
-          clock = Sinon.useFakeTimers(testDate)
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "quarterTwo"', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -256,7 +253,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "summer"', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
@@ -272,13 +269,13 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 29 October - 28 November', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-10-29`)
-          clock = Sinon.useFakeTimers(testDate)
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "summer"', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -291,7 +288,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "quarterThree"', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
@@ -307,13 +304,13 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 29 November - 31 December', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-11-29`)
-          clock = Sinon.useFakeTimers(testDate)
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "quarterThree"', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -326,7 +323,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "quarterFour"', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
@@ -340,13 +337,13 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 1 January - 28 January', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-01-01`)
-          clock = Sinon.useFakeTimers(testDate)
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "quarterThree" - with the start and end date in the previous year', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -359,7 +356,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "quarterFour" - with the start and end date in the current year', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,

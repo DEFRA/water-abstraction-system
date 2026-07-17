@@ -1,19 +1,17 @@
-'use strict'
-
 /**
  * Manages converting the session data to return requirement records when check return requirements is confirmed
  * @module SubmitCheckService
  */
 
-const CreateReturnVersionService = require('./create-return-version.service.js')
-const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const GenerateReturnVersionService = require('./generate-return-version.service.js')
-const ProcessExistingReturnVersionsService = require('./process-existing-return-versions.service.js')
-const ProcessLicenceReturnLogsService = require('../../../return-logs/process-licence-return-logs.service.js')
-const ReturnVersionModel = require('../../../../models/return-version.model.js')
-const UpdateSucceededReturnLogsDal = require('../../../../dal/return-versions/update-succeeded-return-logs.dal.js')
-const VoidReturnLogsService = require('../../../return-logs/void-return-logs.service.js')
+import CreateReturnVersionService from './create-return-version.service.js'
+import DeleteSessionDal from '../../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import GenerateReturnVersionService from './generate-return-version.service.js'
+import ProcessExistingReturnVersionsService from './process-existing-return-versions.service.js'
+import ProcessLicenceReturnLogsService from '../../../return-logs/process-licence-return-logs.service.js'
+import ReturnVersionModel from '../../../../models/return-version.model.js'
+import UpdateSucceededReturnLogsDal from '../../../../dal/return-versions/update-succeeded-return-logs.dal.js'
+import VoidReturnLogsService from '../../../return-logs/void-return-logs.service.js'
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
@@ -30,14 +28,14 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  *
  * @returns {Promise<string>} The licence Id
  */
-async function go(sessionId, userId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitCheckService(sessionId, userId) {
+  const session = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   try {
     const { journey, licence } = session
-    const returnVersionData = await GenerateReturnVersionService.go(session, userId)
+    const returnVersionData = await GenerateReturnVersionService(session, userId)
 
     // We wrap all the steps in a transaction to avoid only applying some of the changes
     await ReturnVersionModel.transaction(async (trx) => {
@@ -47,12 +45,12 @@ async function go(sessionId, userId) {
 
       // 2) Next, persist _all_ the return version data. We do this now so the later steps can access the new return
       //    version and requirements data
-      const returnVersion = await CreateReturnVersionService.go(returnVersionData, trx)
+      const returnVersion = await CreateReturnVersionService(returnVersionData, trx)
 
       // 3) If the return version is to declare that no returns are required, we need to void any existing return logs
       //    within the matching period.
       if (journey === 'no-returns-required') {
-        await VoidReturnLogsService.go(licence.licenceRef, returnVersion.startDate, returnVersion.endDate, trx)
+        await VoidReturnLogsService(licence.licenceRef, returnVersion.startDate, returnVersion.endDate, trx)
       }
 
       // 4) Process any existing return logs affected by the change. The change date will be the return version's start
@@ -60,7 +58,7 @@ async function go(sessionId, userId) {
       //    impacted by the change, and look to only reissue or void those that are affected.
       const changeDate = _changeDate(returnVersion.startDate)
 
-      await ProcessLicenceReturnLogsService.go(licence.id, changeDate, returnVersion.endDate, trx)
+      await ProcessLicenceReturnLogsService(licence.id, changeDate, returnVersion.endDate, trx)
 
       // 5) Finally, we have a legacy feature to support. If the reason is because the licence was transferred, we have
       //    to set a flag on those return logs that start prior to the _latest_ 'succession-or-transfer-of-licence'
@@ -68,7 +66,7 @@ async function go(sessionId, userId) {
       //    the return logs. They become hidden to all users because they never built a way to display return logs a
       //    previous licence holder.
       if (returnVersion.reason === 'succession-or-transfer-of-licence') {
-        await UpdateSucceededReturnLogsDal.go(licence.licenceRef, trx)
+        await UpdateSucceededReturnLogsDal(licence.licenceRef, trx)
       }
     })
 
@@ -124,10 +122,6 @@ async function _processEndDate(returnVersion, licenceId, trx) {
   const { startDate, version } = returnVersion
 
   if (version > 1) {
-    returnVersion.endDate = await ProcessExistingReturnVersionsService.go(licenceId, startDate, trx)
+    returnVersion.endDate = await ProcessExistingReturnVersionsService(licenceId, startDate, trx)
   }
-}
-
-module.exports = {
-  go
 }

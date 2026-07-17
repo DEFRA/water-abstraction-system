@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for change_reasons (water.change_reasons)
  * @module ChangeReasonModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import ChargeVersionModel from './charge-version.model.js'
 
-class ChangeReasonModel extends BaseModel {
+export default class ChangeReasonModel extends BaseModel {
   static get tableName() {
     return 'changeReasons'
   }
@@ -18,7 +17,7 @@ class ChangeReasonModel extends BaseModel {
     return {
       chargeVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-version.model',
+        modelClass: ChargeVersionModel,
         join: {
           from: 'changeReasons.id',
           to: 'chargeVersions.changeReasonId'
@@ -27,5 +26,3 @@ class ChangeReasonModel extends BaseModel {
     }
   }
 }
-
-module.exports = ChangeReasonModel

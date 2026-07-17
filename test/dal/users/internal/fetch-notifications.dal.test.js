@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const NotificationHelper = require('../../../support/helpers/notification.helper.js')
-const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
-const { today } = require('../../../../app/lib/general.lib.js')
-const { yesterday } = require('../../../support/general.js')
+import NotificationHelper from '../../../support/helpers/notification.helper.js'
+import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
+import UsersFixture from '../../../support/fixtures/users.fixture.js'
+import { today } from '../../../../app/lib/general.lib.js'
+import { yesterday } from '../../../support/general.js'
 
 // Thing under test
-const FetchNotificationsDal = require('../../../../app/dal/users/internal/fetch-notifications.dal.js')
+import FetchNotificationsDal from '../../../../app/dal/users/internal/fetch-notifications.dal.js'
 
 describe('Users - Internal - Fetch Notifications DAL', () => {
   let notifications
@@ -48,7 +49,7 @@ describe('Users - Internal - Fetch Notifications DAL', () => {
 
   describe('when the user has notifications', () => {
     it('returns the matching notifications and the total', async () => {
-      const result = await FetchNotificationsDal.go(user.username)
+      const result = await FetchNotificationsDal(user.username)
 
       expect(result).toEqual({
         notifications: [
@@ -74,7 +75,7 @@ describe('Users - Internal - Fetch Notifications DAL', () => {
 
   describe('when the user has no notifications', () => {
     it('returns an empty array and zero', async () => {
-      const result = await FetchNotificationsDal.go('mystery.user@wrls.gov.uk')
+      const result = await FetchNotificationsDal('mystery.user@wrls.gov.uk')
 
       expect(result).toEqual({ notifications: [], totalNumber: 0 })
     })

@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const PostcodeValidator = require('../../../app/validators/address/postcode.validator.js')
+import PostcodeValidator from '../../../app/validators/address/postcode.validator.js'
 
 describe('Address - Postcode Validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Address - Postcode Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = PostcodeValidator.go(payload)
+      const result = PostcodeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +26,7 @@ describe('Address - Postcode Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = PostcodeValidator.go(payload)
+      const result = PostcodeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()
@@ -39,7 +40,7 @@ describe('Address - Postcode Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = PostcodeValidator.go(payload)
+      const result = PostcodeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

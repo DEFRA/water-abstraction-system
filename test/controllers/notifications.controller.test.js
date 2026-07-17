@@ -1,23 +1,24 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
-const NoticesFixture = require('../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../support/fixtures/notifications.fixture.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import NoticesFixture from '../support/fixtures/notices.fixture.js'
+import NotificationsFixture from '../support/fixtures/notifications.fixture.js'
+import { generateLicenceRef, generateUUID } from '../support/generators.js'
 
 // Things we need to stub
-const DownloadNotificationService = require('../../app/services/notifications/download-notification.service.js')
-const ProcessReturnedLetterService = require('../../app/services/notifications/process-returned-letter.service.js')
-const ViewNotificationService = require('../../app/services/notifications/view-notification.service.js')
-const notifyConfig = require('../../config/notify.config.js')
+import * as DownloadNotificationService from '../../app/services/notifications/download-notification.service.js'
+import * as ProcessReturnedLetterService from '../../app/services/notifications/process-returned-letter.service.js'
+import * as ViewNotificationService from '../../app/services/notifications/view-notification.service.js'
+import notifyConfig from '../../config/notify.config.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 describe('Notifications controller', () => {
   let licence
@@ -30,16 +31,15 @@ describe('Notifications controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -71,7 +71,7 @@ describe('Notifications controller', () => {
             const notification = NotificationsFixture.returnsInvitationEmail(notice)
             notification.event = notice
 
-            Sinon.stub(ViewNotificationService, 'go').resolves({
+            vi.spyOn(ViewNotificationService, 'default').mockResolvedValue({
               address: [],
               alertDetails: null,
               backLink: { href: `/system/notices/${notice.id}`, text: `Go back to notice ${notice.referenceCode}` },
@@ -125,7 +125,7 @@ describe('Notifications controller', () => {
             const notification = NotificationsFixture.returnsInvitationEmail(notice)
             notification.event = notice
 
-            Sinon.stub(ViewNotificationService, 'go').resolves({
+            vi.spyOn(ViewNotificationService, 'default').mockResolvedValue({
               address: [],
               alertDetails: null,
               backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
@@ -180,7 +180,7 @@ describe('Notifications controller', () => {
             const notification = NotificationsFixture.returnsInvitationEmail(notice)
             notification.event = notice
 
-            Sinon.stub(ViewNotificationService, 'go').resolves({
+            vi.spyOn(ViewNotificationService, 'default').mockResolvedValue({
               address: [],
               alertDetails: null,
               backLink: { href: `/system/return-logs/${returnLogId}/details`, text: 'Go back to return log' },
@@ -229,7 +229,7 @@ describe('Notifications controller', () => {
 
         describe('when a request is valid', () => {
           beforeEach(async () => {
-            Sinon.stub(DownloadNotificationService, 'go').resolves(buffer)
+            vi.spyOn(DownloadNotificationService, 'default').mockResolvedValue(buffer)
           })
 
           it('returns the page successfully', async () => {
@@ -249,9 +249,9 @@ describe('Notifications controller', () => {
     describe('/notifications/callbacks/letters', () => {
       describe('POST', () => {
         beforeEach(() => {
-          Sinon.stub(notifyConfig, 'callbackToken').value('valid')
+          vi.replaceProperty(notifyConfig, 'callbackToken', 'valid')
 
-          Sinon.stub(ProcessReturnedLetterService, 'go').resolves()
+          vi.spyOn(ProcessReturnedLetterService, 'default').mockResolvedValue()
         })
 
         describe('when the request has valid authorization', () => {

@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/licences` page
  * @module ViewLicencesService
  */
 
-const FetchLicencesDal = require('../../../dal/users/external/fetch-licences.dal.js')
-const FetchUserDal = require('../../../dal/users/fetch-user.dal.js')
-const LicencesPresenter = require('../../../presenters/users/external/licences.presenter.js')
-const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const { readFlashNotification } = require('../../../lib/general.lib.js')
+import FetchLicencesDal from '../../../dal/users/external/fetch-licences.dal.js'
+import FetchUserDal from '../../../dal/users/fetch-user.dal.js'
+import LicencesPresenter from '../../../presenters/users/external/licences.presenter.js'
+import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
+import { readFlashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/licences` page
@@ -22,14 +20,14 @@ const { readFlashNotification } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The view data for the external user page
  */
-async function go(id, auth, page, yar, back = 'users') {
-  const user = await FetchUserDal.go(id)
+export default async function viewLicencesService(id, auth, page, yar, back = 'users') {
+  const user = await FetchUserDal(id)
 
-  const { licences, totalNumber } = await FetchLicencesDal.go(user.licenceEntityId, page)
+  const { licences, totalNumber } = await FetchLicencesDal(user.licenceEntityId, page)
 
-  const pageData = LicencesPresenter.go(user, licences, auth.credentials.scope, back)
+  const pageData = LicencesPresenter(user, licences, auth.credentials.scope, back)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/users/external/${id}/licences`,
@@ -46,8 +44,4 @@ async function go(id, auth, page, yar, back = 'users') {
     notification,
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

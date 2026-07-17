@@ -1,10 +1,8 @@
-'use strict'
+import { db } from '../db.js'
+import { data as roles } from './data/roles.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { db } = require('../db.js')
-const { data: roles } = require('./data/roles.js')
-
-async function seed() {
+export default async function seed() {
   for (const role of roles) {
     await _upsert(role)
   }
@@ -30,8 +28,4 @@ async function _upsert(role) {
     .insert(payload)
     .onConflict(['application', 'role'])
     .merge(['description', 'dateUpdated'])
-}
-
-module.exports = {
-  seed
 }

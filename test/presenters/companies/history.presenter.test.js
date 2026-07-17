@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Thing under test
-const HistoryPresenter = require('../../../app/presenters/companies/history.presenter.js')
+import HistoryPresenter from '../../../app/presenters/companies/history.presenter.js'
 
 describe('Companies - History presenter', () => {
   let company
@@ -17,7 +18,7 @@ describe('Companies - History presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = HistoryPresenter.go(company, licences)
+      const result = HistoryPresenter(company, licences)
 
       expect(result).toEqual({
         backLink: {

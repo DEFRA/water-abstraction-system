@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const ExistingAddressPresenter = require('../../../../app/presenters/billing-accounts/setup/existing-address.presenter.js')
+import ExistingAddressPresenter from '../../../../app/presenters/billing-accounts/setup/existing-address.presenter.js'
 
 describe('Billing Accounts - Setup - Existing Address Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -25,7 +26,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ExistingAddressPresenter.go(session, companyAddresses)
+      const result = ExistingAddressPresenter(session, companyAddresses)
 
       expect(result).toEqual({
         backLink: {
@@ -60,7 +61,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       })
 
       it('returns the link for the "account" page', () => {
-        const result = ExistingAddressPresenter.go(session, companyAddresses)
+        const result = ExistingAddressPresenter(session, companyAddresses)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/existing-account`)
       })
@@ -72,7 +73,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       })
 
       it('returns the link for the "account" page', () => {
-        const result = ExistingAddressPresenter.go(session, companyAddresses)
+        const result = ExistingAddressPresenter(session, companyAddresses)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/select-company`)
       })
@@ -84,7 +85,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       })
 
       it('returns the link for the "account-type" page', () => {
-        const result = ExistingAddressPresenter.go(session, companyAddresses)
+        const result = ExistingAddressPresenter(session, companyAddresses)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/account-type`)
       })
@@ -97,7 +98,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       })
 
       it('returns the link for the "account-type" page', () => {
-        const result = ExistingAddressPresenter.go(session, companyAddresses)
+        const result = ExistingAddressPresenter(session, companyAddresses)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/account`)
       })
@@ -109,7 +110,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       })
 
       it('returns the link for the "check" page', () => {
-        const result = ExistingAddressPresenter.go(session, companyAddresses)
+        const result = ExistingAddressPresenter(session, companyAddresses)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
@@ -119,7 +120,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
   describe('the "pageTitle" property', () => {
     describe('when there are addresses in the companyAddresses object', () => {
       it('returns the correct page title', () => {
-        const result = ExistingAddressPresenter.go(session, companyAddresses)
+        const result = ExistingAddressPresenter(session, companyAddresses)
 
         expect(result.pageTitle).toEqual(`Select an existing address for ${companyAddresses.company.name}`)
       })
@@ -131,7 +132,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       })
 
       it('returns the correct page title', () => {
-        const result = ExistingAddressPresenter.go(session, companyAddresses)
+        const result = ExistingAddressPresenter(session, companyAddresses)
 
         expect(result.pageTitle).toEqual(`No addresses found for ${companyAddresses.company.name}`)
       })

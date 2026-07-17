@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  *
  * @module ViewAlertThresholdsService
  */
 
-const AlertThresholdsPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import AlertThresholdsPresenter from '../../../../presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
@@ -16,17 +14,13 @@ const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewAlertThresholdsService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = AlertThresholdsPresenter.go(session)
+  const pageData = AlertThresholdsPresenter(session)
 
   return {
     activeNavBar: 'notices',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

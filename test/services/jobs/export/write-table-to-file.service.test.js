@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { data: chargeCategories } = require('../../../../db/seeds/data/charge-categories.js')
-const { db } = require('../../../../db/db.js')
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
+import { data as chargeCategories } from '../../../../db/seeds/data/charge-categories.js'
+import { db } from '../../../../db/db.js'
 
 // Thing under test
-const WriteTableToFileService = require('../../../../app/services/jobs/export/write-table-to-file.service.js')
+import WriteTableToFileService from '../../../../app/services/jobs/export/write-table-to-file.service.js'
 
 const tableName = 'billing_charge_categories'
 const schemaName = 'water'
@@ -68,7 +66,7 @@ describe('Write table to file service', () => {
     })
 
     afterEach(() => {
-      Sinon.restore()
+      vi.restoreAllMocks()
       // Delete the file
       fs.unlinkSync(filePath)
     })
@@ -86,7 +84,7 @@ describe('Write table to file service', () => {
         rows: inputStreamTest
       }
 
-      await WriteTableToFileService.go(dataTest.headers, dataTest.rows, schemaFolderPath, tableName)
+      await WriteTableToFileService(dataTest.headers, dataTest.rows, schemaFolderPath, tableName)
 
       expect(fs.existsSync(filePath)).toBe(true)
     })
@@ -104,7 +102,7 @@ describe('Write table to file service', () => {
         rows: inputStreamTest
       }
 
-      await WriteTableToFileService.go(dataTest.headers, dataTest.rows, schemaFolderPath, tableName)
+      await WriteTableToFileService(dataTest.headers, dataTest.rows, schemaFolderPath, tableName)
       const file = fs.readFileSync(filePath, 'utf-8')
 
       expect(file).toEqual(csvHeaders + csvValues)

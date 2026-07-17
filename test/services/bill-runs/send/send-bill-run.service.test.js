@@ -1,13 +1,11 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
+import BillRunModel from '../../../../app/models/bill-run.model.js'
 
 // Thing under test
-const SendBillBunService = require('../../../../app/services/bill-runs/send/send-bill-run.service.js')
+import SendBillBunService from '../../../../app/services/bill-runs/send/send-bill-run.service.js'
 
 describe('Bill Runs - Send Bill Run service', () => {
   let billRun
@@ -15,13 +13,13 @@ describe('Bill Runs - Send Bill Run service', () => {
   let billRunPatchStub
 
   beforeEach(() => {
-    billRunPatchStub = Sinon.stub().resolves()
+    billRunPatchStub = vi.fn().mockResolvedValue()
 
-    queryStub = Sinon.stub(BillRunModel, 'query')
+    queryStub = vi.spyOn(BillRunModel, 'query').mockImplementation(() => {})
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the bill run exists', () => {
@@ -29,28 +27,28 @@ describe('Bill Runs - Send Bill Run service', () => {
       beforeEach(() => {
         billRun = _billRun()
 
-        queryStub.onFirstCall().returns({
-          findById: Sinon.stub().withArgs(billRun.id).returnsThis(),
-          select: Sinon.stub().withArgs('id', 'externalId', 'status').resolves(billRun)
+        queryStub.mockReturnValueOnce({
+          findById: vi.fn().mockReturnThis(),
+          select: vi.fn().mockResolvedValue(billRun)
         })
 
-        queryStub.onSecondCall().returns({
-          findById: Sinon.stub().withArgs(billRun.id).returnsThis(),
+        queryStub.mockReturnValueOnce({
+          findById: vi.fn().mockReturnThis(),
           patch: billRunPatchStub
         })
       })
 
       it('sets the status of the bill run to "sending"', async () => {
-        await SendBillBunService.go(billRun.id)
+        await SendBillBunService(billRun.id)
 
         // Check we set the bill run status
-        const [patchObject] = billRunPatchStub.args[0]
+        const [patchObject] = billRunPatchStub.mock.calls[0]
 
         expect(patchObject).toMatchObject({ status: 'sending' })
       })
 
       it('returns an instance of the bill run with its status set to "sending"', async () => {
-        const result = await SendBillBunService.go(billRun.id)
+        const result = await SendBillBunService(billRun.id)
 
         expect(result).toEqual({ ...billRun, status: 'sending' })
       })
@@ -61,21 +59,21 @@ describe('Bill Runs - Send Bill Run service', () => {
         billRun = _billRun()
         billRun.status = 'sent'
 
-        queryStub.onFirstCall().returns({
-          findById: Sinon.stub().withArgs(billRun.id).returnsThis(),
-          select: Sinon.stub().withArgs('id', 'externalId', 'status').resolves(billRun)
+        queryStub.mockReturnValueOnce({
+          findById: vi.fn().mockReturnThis(),
+          select: vi.fn().mockResolvedValue(billRun)
         })
       })
 
       it('does not change the bill run status', async () => {
-        await SendBillBunService.go(billRun.id)
+        await SendBillBunService(billRun.id)
 
         // Check we do not change the bill run status
-        expect(billRunPatchStub.called).toBe(false)
+        expect(billRunPatchStub).not.toHaveBeenCalled()
       })
 
       it('returns an instance of the bill run with its status unchanged', async () => {
-        const result = await SendBillBunService.go(billRun.id)
+        const result = await SendBillBunService(billRun.id)
 
         expect(result).toEqual(billRun)
       })
@@ -84,7 +82,7 @@ describe('Bill Runs - Send Bill Run service', () => {
 
   describe('when the bill run does not exist', () => {
     it('throws as error', async () => {
-      await expect(SendBillBunService.go('47e66de7-f05f-42d2-8fef-640b55150919')).rejects.toThrow()
+      await expect(SendBillBunService('47e66de7-f05f-42d2-8fef-640b55150919')).rejects.toThrow()
     })
   })
 })

@@ -1,13 +1,13 @@
-'use strict'
-
 /**
  * Model for bill_run_charge_version_years (water.billing_batch_charge_version_years)
  * @module BillRunChargeVersionYearModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import BillRunModel from './bill-run.model.js'
+import ChargeVersionModel from './charge-version.model.js'
 
 /**
  * Represents an instance of a bill run charge version year record
@@ -22,7 +22,7 @@ const BaseModel = require('./base.model.js')
  *
  * Welcome to dealing with the legacy database schema! ¯\_(ツ)_/¯
  */
-class BillRunChargeVersionYearModel extends BaseModel {
+export default class BillRunChargeVersionYearModel extends BaseModel {
   static get tableName() {
     return 'billRunChargeVersionYears'
   }
@@ -31,7 +31,7 @@ class BillRunChargeVersionYearModel extends BaseModel {
     return {
       billRun: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'bill-run.model',
+        modelClass: BillRunModel,
         join: {
           from: 'billRunChargeVersionYears.billRunId',
           to: 'billRuns.id'
@@ -39,7 +39,7 @@ class BillRunChargeVersionYearModel extends BaseModel {
       },
       chargeVersion: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-version.model',
+        modelClass: ChargeVersionModel,
         join: {
           from: 'billRunChargeVersionYears.chargeVersionId',
           to: 'chargeVersions.id'
@@ -48,5 +48,3 @@ class BillRunChargeVersionYearModel extends BaseModel {
     }
   }
 }
-
-module.exports = BillRunChargeVersionYearModel

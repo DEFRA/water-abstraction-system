@@ -1,21 +1,19 @@
-'use strict'
-
 /**
  * Removes all data created for acceptance tests from the returns schema
  * @module ReturnsSchemaService
  */
 
-const { db } = require('../../../../db/db.js')
-const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
-const { today } = require('../../../lib/general.lib.js')
-const { determineCycleEndDate } = require('../../../lib/return-cycle-dates.lib.js')
+import { db } from '../../../../db/db.js'
+import { determineCycleEndDate } from '../../../lib/return-cycle-dates.lib.js'
+import { formatDateObjectToISO } from '../../../lib/dates.lib.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Removes all data created for acceptance tests from the returns schema
  *
  * @returns {Promise<object>}
  */
-async function go() {
+export default async function returnsSchemaService() {
   const endDates = _determineCurrentReturnCycleEndDates()
 
   return _deleteAllTestData(endDates)
@@ -115,8 +113,4 @@ function _determineCurrentReturnCycleEndDates() {
     summerEndDate: formatDateObjectToISO(determineCycleEndDate(true, todaysDate)),
     winterEndDate: formatDateObjectToISO(determineCycleEndDate(false, todaysDate))
   }
-}
-
-module.exports = {
-  go
 }

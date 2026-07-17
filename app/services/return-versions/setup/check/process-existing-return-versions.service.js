@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Processes existing return versions to update the their `status` and `endDate` when a new return version is created
  * @module ProcessExistingReturnVersionsService
  */
 
-const FetchCurrentReturnVersionsDal = require('../../../../dal/return-versions/fetch-current-return-versions.dal.js')
-const UpdateReturnVersionEndDateDal = require('../../../../dal/return-versions/update-return-version-end-date.dal.js')
-const UpdateReturnVersionStatusDal = require('../../../../dal/return-versions/update-return-version-status.dal.js')
-const { sameDate } = require('../../../../lib/dates.lib.js')
+import FetchCurrentReturnVersionsDal from '../../../../dal/return-versions/fetch-current-return-versions.dal.js'
+import UpdateReturnVersionEndDateDal from '../../../../dal/return-versions/update-return-version-end-date.dal.js'
+import UpdateReturnVersionStatusDal from '../../../../dal/return-versions/update-return-version-status.dal.js'
+import { sameDate } from '../../../../lib/dates.lib.js'
 
 /**
  * Processes existing return versions to update the their `status` and `endDate` when a new return version is created
@@ -24,8 +22,8 @@ const { sameDate } = require('../../../../lib/dates.lib.js')
  * @returns {Promise<Date>} The calculated `endDate` for the new return version if there is one. Null will be returned
  * if there is no `endDate`
  */
-async function go(licenceId, newVersionStartDate, trx) {
-  const previousVersions = await FetchCurrentReturnVersionsDal.go(licenceId, trx)
+export default async function processExistingReturnVersionsService(licenceId, newVersionStartDate, trx) {
+  const previousVersions = await FetchCurrentReturnVersionsDal(licenceId, trx)
   const previousVersionEndDate = _calculateEndDate(newVersionStartDate)
 
   let result
@@ -92,7 +90,7 @@ async function _endLatestVersion(previousVersions, newVersionStartDate, endDate,
     return null
   }
 
-  await UpdateReturnVersionEndDateDal.go(matchedReturnVersion.id, endDate, trx)
+  await UpdateReturnVersionEndDateDal(matchedReturnVersion.id, endDate, trx)
 
   return endDate
 }
@@ -168,7 +166,7 @@ async function _insertBetweenVersions(previousVersions, newVersionStartDate, end
 
   const newVersionEndDate = matchedReturnVersion.endDate
 
-  await UpdateReturnVersionEndDateDal.go(matchedReturnVersion.id, endDate, trx)
+  await UpdateReturnVersionEndDateDal(matchedReturnVersion.id, endDate, trx)
 
   return newVersionEndDate
 }
@@ -216,7 +214,7 @@ async function _replaceLatestVersion(previousVersions, newVersionStartDate, trx)
     return null
   }
 
-  await UpdateReturnVersionStatusDal.go(matchedReturnVersion.id, 'superseded', trx)
+  await UpdateReturnVersionStatusDal(matchedReturnVersion.id, 'superseded', trx)
 
   return true
 }
@@ -258,11 +256,7 @@ async function _replacePreviousVersion(previousVersions, newVersionStartDate, tr
 
   const newVersionEndDate = matchedReturnVersion.endDate
 
-  await UpdateReturnVersionStatusDal.go(matchedReturnVersion.id, 'superseded', trx)
+  await UpdateReturnVersionStatusDal(matchedReturnVersion.id, 'superseded', trx)
 
   return newVersionEndDate
-}
-
-module.exports = {
-  go
 }

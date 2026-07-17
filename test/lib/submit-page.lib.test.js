@@ -1,13 +1,11 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const YarStub = require('../support/stubs/yar.stub.js')
+import YarStub from '../support/stubs/yar.stub.js'
 
 // Thing under test
-const SubmitPageLib = require('../../app/lib/submit-page.lib.js')
+import * as SubmitPageLib from '../../app/lib/submit-page.lib.js'
 
 describe('SubmitPageLib', () => {
   let payload
@@ -18,11 +16,11 @@ describe('SubmitPageLib', () => {
     let yarStub
 
     beforeEach(() => {
-      yarStub = YarStub.build(Sinon)
+      yarStub = YarStub()
     })
 
     afterEach(() => {
-      Sinon.restore()
+      vi.restoreAllMocks()
     })
 
     describe('when called with the instruction to clear filters', () => {
@@ -33,7 +31,7 @@ describe('SubmitPageLib', () => {
       it('clears the specified filter object from the session and returns TRUE', () => {
         const result = SubmitPageLib.clearFilters(payload, yarStub, filterKey)
 
-        expect(yarStub.clear.calledWith(filterKey)).toBe(true)
+        expect(yarStub.clear).toHaveBeenCalledWith(filterKey)
         expect(result).toBe(true)
       })
     })
@@ -46,7 +44,7 @@ describe('SubmitPageLib', () => {
       it('leaves the specified filter object untouched and returns FALSE', () => {
         const result = SubmitPageLib.clearFilters(payload, yarStub, filterKey)
 
-        expect(yarStub.clear.called).toBe(false)
+        expect(yarStub.clear).not.toHaveBeenCalled()
         expect(result).toBe(false)
       })
     })
@@ -100,13 +98,13 @@ describe('SubmitPageLib', () => {
     let yarStub
 
     afterEach(() => {
-      Sinon.restore()
+      vi.restoreAllMocks()
     })
 
     describe('when no filters have been saved', () => {
       beforeAll(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns(null)
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue(null)
       })
 
       it('returns the expected results, "openFilter" is set to FALSE', () => {
@@ -118,8 +116,8 @@ describe('SubmitPageLib', () => {
 
     describe('when filters have been saved with empty values', () => {
       beforeAll(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns({ regions: [], status: null })
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue({ regions: [], status: null })
       })
 
       it('returns the expected results, "openFilter" is set to FALSE', () => {
@@ -131,8 +129,8 @@ describe('SubmitPageLib', () => {
 
     describe('when a filter with array values been saved', () => {
       beforeAll(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns({ regions: ['south', 'north'] })
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue({ regions: ['south', 'north'] })
       })
 
       it('returns the expected results, "openFilter" is set to TRUE', () => {
@@ -144,8 +142,8 @@ describe('SubmitPageLib', () => {
 
     describe('when a filter with non array values been saved', () => {
       beforeAll(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns({ status: 'review' })
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue({ status: 'review' })
       })
 
       it('returns the expected results, "openFilter" is set to TRUE', () => {

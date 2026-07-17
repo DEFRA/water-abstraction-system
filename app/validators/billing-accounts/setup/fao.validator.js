@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/billing-accounts/setup/{sessionId}/fao` page
  *
  * @module FAOValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['yes', 'no']
 
@@ -18,7 +16,7 @@ const VALID_VALUES = ['yes', 'no']
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function faoValidator(payload) {
   const errorMessage = 'Select yes if you need to add an FAO'
 
   const schema = Joi.object({
@@ -33,8 +31,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

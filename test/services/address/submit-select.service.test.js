@@ -1,20 +1,20 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../support/stubs/session.stub.js')
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import http2 from 'node:http2'
+import SessionModelStub from '../../support/stubs/session.stub.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
-const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
-const LookupUPRNRequest = require('../../../app/requests/address-facade/lookup-uprn.request.js')
+import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
+import * as LookupPostcodeRequest from '../../../app/requests/address-facade/lookup-postcode.request.js'
+import * as LookupUPRNRequest from '../../../app/requests/address-facade/lookup-uprn.request.js'
 
 // Thing under test
-const SubmitSelectService = require('../../../app/services/address/submit-select.service.js')
+import SubmitSelectService from '../../../app/services/address/submit-select.service.js'
+
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address - Submit Select Service', () => {
   const match = {
@@ -53,16 +53,16 @@ describe('Address - Submit Select Service', () => {
       }
     }
 
-    lookupPostcodeRequestStub = Sinon.stub(LookupPostcodeRequest, 'send')
-    lookupUPRNRequestStub = Sinon.stub(LookupUPRNRequest, 'send')
+    lookupPostcodeRequestStub = vi.spyOn(LookupPostcodeRequest, 'default').mockImplementation(() => {})
+    lookupUPRNRequestStub = vi.spyOn(LookupUPRNRequest, 'default').mockImplementation(() => {})
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -71,7 +71,7 @@ describe('Address - Submit Select Service', () => {
         beforeEach(() => {
           payload = { addresses: '340116' }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -84,7 +84,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -97,7 +97,7 @@ describe('Address - Submit Select Service', () => {
             postcode: 'BS1 5AH'
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -112,7 +112,7 @@ describe('Address - Submit Select Service', () => {
             organisation: null
           }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -125,7 +125,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -138,7 +138,7 @@ describe('Address - Submit Select Service', () => {
             postcode: 'BS1 5AH'
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -153,7 +153,7 @@ describe('Address - Submit Select Service', () => {
             premises: null
           }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -166,7 +166,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -179,7 +179,7 @@ describe('Address - Submit Select Service', () => {
             postcode: 'BS1 5AH'
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -194,7 +194,7 @@ describe('Address - Submit Select Service', () => {
             street_address: null
           }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -207,7 +207,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -220,7 +220,7 @@ describe('Address - Submit Select Service', () => {
             postcode: 'BS1 5AH'
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -235,7 +235,7 @@ describe('Address - Submit Select Service', () => {
             locality: null
           }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -248,7 +248,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -261,7 +261,7 @@ describe('Address - Submit Select Service', () => {
             postcode: 'BS1 5AH'
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -269,7 +269,7 @@ describe('Address - Submit Select Service', () => {
         beforeEach(() => {
           payload = { addresses: '340116' }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: false,
             response: {
               statusCode: HTTP_STATUS_NOT_FOUND,
@@ -287,7 +287,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('returns page data that causes a redirect to the manual page', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({
             redirect: `/system/address/${sessionId}/manual`
@@ -297,7 +297,7 @@ describe('Address - Submit Select Service', () => {
 
       describe('but the UPRN lookup _now_ returns no matches', () => {
         beforeEach(() => {
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -310,7 +310,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('returns page data that causes a redirect to the manual page', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({
             redirect: `/system/address/${sessionId}/manual`
@@ -329,7 +329,7 @@ describe('Address - Submit Select Service', () => {
 
         describe('and the postcode lookup succeeds', () => {
           beforeEach(() => {
-            lookupPostcodeRequestStub.resolves({
+            lookupPostcodeRequestStub.mockResolvedValue({
               succeeded: true,
               response: {
                 statusCode: HTTP_STATUS_OK,
@@ -342,7 +342,7 @@ describe('Address - Submit Select Service', () => {
           })
 
           it('returns page data needed to re-render the view including the validation error', async () => {
-            const result = await SubmitSelectService.go(sessionId, payload)
+            const result = await SubmitSelectService(sessionId, payload)
 
             expect(result).toEqual({
               error: {
@@ -380,7 +380,7 @@ describe('Address - Submit Select Service', () => {
 
         describe('but the postcode lookup fails', () => {
           beforeEach(() => {
-            lookupPostcodeRequestStub.resolves({
+            lookupPostcodeRequestStub.mockResolvedValue({
               succeeded: false,
               response: {
                 statusCode: HTTP_STATUS_NOT_FOUND,
@@ -391,7 +391,7 @@ describe('Address - Submit Select Service', () => {
           })
 
           it('returns page data that causes a redirect to the manual page', async () => {
-            const result = await SubmitSelectService.go(sessionId, payload)
+            const result = await SubmitSelectService(sessionId, payload)
 
             expect(result).toEqual({
               redirect: `/system/address/${sessionId}/manual`
@@ -401,7 +401,7 @@ describe('Address - Submit Select Service', () => {
 
         describe('but the postcode lookup _now_ returns no matches', () => {
           beforeEach(() => {
-            lookupPostcodeRequestStub.resolves({
+            lookupPostcodeRequestStub.mockResolvedValue({
               succeeded: true,
               response: {
                 statusCode: HTTP_STATUS_OK,
@@ -414,7 +414,7 @@ describe('Address - Submit Select Service', () => {
           })
 
           it('returns page data that causes a redirect to the manual page', async () => {
-            const result = await SubmitSelectService.go(sessionId, payload)
+            const result = await SubmitSelectService(sessionId, payload)
 
             expect(result).toEqual({
               redirect: `/system/address/${sessionId}/manual`

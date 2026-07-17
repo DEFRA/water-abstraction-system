@@ -1,12 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateReturnId } = require('../../../support/helpers/return-log.helper.js')
-const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
+import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
+import { generateReturnId, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const PersistAllocatedLicenceToResultsService = require('../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js')
+import PersistAllocatedLicenceToResultsService from '../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
 
 describe('Persist Allocated Licence to Results service', () => {
   const billRunId = generateUUID()
@@ -20,7 +20,7 @@ describe('Persist Allocated Licence to Results service', () => {
       })
 
       it('persists the data into the results tables', async () => {
-        await PersistAllocatedLicenceToResultsService.go(billRunId, testLicence)
+        await PersistAllocatedLicenceToResultsService(billRunId, testLicence)
 
         const result = await ReviewLicenceModel.query()
           .where('licenceId', testLicence.id)
@@ -118,7 +118,7 @@ describe('Persist Allocated Licence to Results service', () => {
       })
 
       it('persists the aggregate value on the charge reference', async () => {
-        await PersistAllocatedLicenceToResultsService.go(billRunId, testLicence)
+        await PersistAllocatedLicenceToResultsService(billRunId, testLicence)
 
         const result = await ReviewLicenceModel.query()
           .where('licenceId', testLicence.id)
@@ -140,7 +140,7 @@ describe('Persist Allocated Licence to Results service', () => {
       })
 
       it('persists the charge element with no matched return', async () => {
-        await PersistAllocatedLicenceToResultsService.go(billRunId, testLicence)
+        await PersistAllocatedLicenceToResultsService(billRunId, testLicence)
 
         const result = await ReviewLicenceModel.query()
           .where('licenceId', testLicence.id)
@@ -171,7 +171,7 @@ describe('Persist Allocated Licence to Results service', () => {
       })
 
       it('persists the charge adjustment on the charge reference', async () => {
-        await PersistAllocatedLicenceToResultsService.go(billRunId, testLicence)
+        await PersistAllocatedLicenceToResultsService(billRunId, testLicence)
 
         const result = await ReviewLicenceModel.query()
           .where('licenceId', testLicence.id)
@@ -200,7 +200,7 @@ describe('Persist Allocated Licence to Results service', () => {
       })
 
       it('persists the abatement agreement on the charge reference', async () => {
-        await PersistAllocatedLicenceToResultsService.go(billRunId, testLicence)
+        await PersistAllocatedLicenceToResultsService(billRunId, testLicence)
 
         const result = await ReviewLicenceModel.query()
           .where('licenceId', testLicence.id)

@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for charge_categories (water.billing_charge_categories)
  * @module ChargeCategoryModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import ChargeReferenceModel from './charge-reference.model.js'
 
-class ChargeCategoryModel extends BaseModel {
+export default class ChargeCategoryModel extends BaseModel {
   static get tableName() {
     return 'chargeCategories'
   }
@@ -18,7 +17,7 @@ class ChargeCategoryModel extends BaseModel {
     return {
       chargeReferences: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-reference.model',
+        modelClass: ChargeReferenceModel,
         join: {
           from: 'chargeCategories.id',
           to: 'chargeReferences.chargeCategoryId'
@@ -27,5 +26,3 @@ class ChargeCategoryModel extends BaseModel {
     }
   }
 }
-
-module.exports = ChargeCategoryModel

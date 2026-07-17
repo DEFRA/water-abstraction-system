@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Determines the `status` and `notifyStatus` to apply to a notification after fetching the current status from Notify
  * @module NotifyStatusPresenter
@@ -32,7 +30,7 @@ const NOTIFICATIONS_STATUS = {
  *
  * @returns {object} - returns what 'status' and 'notifyStatus' should be applied to the notification
  */
-function go(notifyStatus, notification) {
+export default function notifyStatusPresenter(notifyStatus, notification) {
   if (notification.messageType === 'email') {
     return _emailStatus(notifyStatus)
   }
@@ -110,8 +108,4 @@ function _letterStatus(notifyStatus) {
     status,
     notifyStatus
   }
-}
-
-module.exports = {
-  go
 }

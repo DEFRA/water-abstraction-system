@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Add an 'additional recipient' to the notice setup session from address data captured by our shared address journey
  * @module ProcessAddRecipientService
  */
 
-const crypto = require('node:crypto')
+import crypto from 'node:crypto'
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Add an 'additional recipient' to the notice setup session from address data captured by our shared address journey
@@ -20,8 +18,8 @@ const { flashNotification } = require('../../../lib/general.lib.js')
  * @param {string} sessionId - The UUID of the current session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go(sessionId, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function processAddRecipientService(sessionId, yar) {
+  const session = await FetchSessionDal(sessionId)
   const { address } = session.addressJourney
 
   const additionalRecipient = {
@@ -99,8 +97,4 @@ async function _resetSession(session) {
   session.addressJourney.address = {}
 
   await session.$update()
-}
-
-module.exports = {
-  go
 }

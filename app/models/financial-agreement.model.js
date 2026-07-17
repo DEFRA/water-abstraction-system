@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for financial_agreements (water.financial_agreement_types)
  * @module FinancialAgreementModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceAgreementModel from './licence-agreement.model.js'
 
-class FinancialAgreementModel extends BaseModel {
+export default class FinancialAgreementModel extends BaseModel {
   static get tableName() {
     return 'financialAgreements'
   }
@@ -18,7 +17,7 @@ class FinancialAgreementModel extends BaseModel {
     return {
       licenceAgreements: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-agreement.model',
+        modelClass: LicenceAgreementModel,
         join: {
           from: 'financialAgreements.id',
           to: 'licenceAgreements.financialAgreementId'
@@ -27,5 +26,3 @@ class FinancialAgreementModel extends BaseModel {
     }
   }
 }
-
-module.exports = FinancialAgreementModel

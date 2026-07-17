@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Creates a verification notification record for the new user
  * @module CreateVerificationNotificationDal
  */
 
-const NotificationModel = require('../../../models/notification.model.js')
-
-const { domains } = require('../../../../config/server.config.js')
+import NotificationModel from '../../../models/notification.model.js'
+import ServerConfig from '../../../../config/server.config.js'
 
 /**
  * Creates a verification notification record for the new user
@@ -17,9 +14,9 @@ const { domains } = require('../../../../config/server.config.js')
  *
  * @returns {Promise<object>} The created notification
  */
-async function go(email, resetGuid) {
+export default async function createVerificationNotificationDal(email, resetGuid) {
   const personalisation = {
-    unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${resetGuid}`
+    unique_create_password_link: `${ServerConfig.domains.internal}/reset_password_change_password?resetGuid=${resetGuid}`
   }
 
   const notificationData = {
@@ -30,8 +27,4 @@ async function go(email, resetGuid) {
   }
 
   return NotificationModel.query().insert(notificationData)
-}
-
-module.exports = {
-  go
 }

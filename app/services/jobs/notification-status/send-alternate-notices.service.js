@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates sending alternate notices when a critical notice has failed notifications to primary users
  * @module SendAlternateNoticesService
  */
 
-const FetchCriticalNoticesDal = require('../../../dal/jobs/notification-status/fetch-critical-notices.dal.js')
-const SendAlternateNoticeService = require('../../notices/setup/send/send-alternate-notice.service.js')
+import FetchCriticalNoticesDal from '../../../dal/jobs/notification-status/fetch-critical-notices.dal.js'
+import SendAlternateNoticeService from '../../notices/setup/send/send-alternate-notice.service.js'
 
 /**
  * Orchestrates sending alternate notices when a critical notice has failed notifications to primary users
@@ -27,16 +25,16 @@ const SendAlternateNoticeService = require('../../notices/setup/send/send-altern
  * @param {module:NotificationModel[]} notifications - The notifications that have been checked for status by the
  * notification-status job
  */
-async function go(notifications) {
+export default async function sendAlternateNoticesService(notifications) {
   const noticeIds = _noticeIds(notifications)
-  const criticalNotices = await FetchCriticalNoticesDal.go(noticeIds)
+  const criticalNotices = await FetchCriticalNoticesDal(noticeIds)
 
   if (criticalNotices.length === 0) {
     return
   }
 
   for (const criticalNotice of criticalNotices) {
-    await SendAlternateNoticeService.go(criticalNotice)
+    await SendAlternateNoticeService(criticalNotice)
   }
 }
 
@@ -46,8 +44,4 @@ function _noticeIds(notifications) {
   })
 
   return [...new Set(allNoticeIds)]
-}
-
-module.exports = {
-  go
 }

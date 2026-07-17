@@ -1,8 +1,6 @@
-'use strict'
-
 const tableName = 'versions'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.withSchema('returns').createTable(tableName, (table) => {
     // Primary Key
     table.string('version_id').primary()
@@ -29,6 +27,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.withSchema('returns').dropTableIfExists(tableName)
 }

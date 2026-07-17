@@ -1,15 +1,13 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 
 // Things we need to stub
-const FetchRelevantLicenceVersionService = require('../../../../app/services/return-versions/setup/fetch-relevant-licence-version.service.js')
+import * as FetchRelevantLicenceVersionService from '../../../../app/services/return-versions/setup/fetch-relevant-licence-version.service.js'
 
 // Thing under test
-const DetermineRelevantLicenceVersionService = require('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
+import DetermineRelevantLicenceVersionService from '../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js'
 
 describe('Return Versions - Setup - Determine Relevant Licence Version service', () => {
   let licenceVersion
@@ -57,7 +55,7 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the user selected a start date', () => {
@@ -66,11 +64,11 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
         licenceVersion.startDate = new Date('2019-05-13')
         licenceVersion.endDate = null
 
-        Sinon.stub(FetchRelevantLicenceVersionService, 'go').resolves(licenceVersion)
+        vi.spyOn(FetchRelevantLicenceVersionService, 'default').mockResolvedValue(licenceVersion)
       })
 
       it('returns the relevant licence with no copyable return versions', async () => {
-        const result = await DetermineRelevantLicenceVersionService.go(session)
+        const result = await DetermineRelevantLicenceVersionService(session)
 
         expect(result).toEqual({ ...licenceVersion, copyableReturnVersions: [] })
       })
@@ -85,11 +83,11 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
         licenceVersion.startDate = new Date('2014-01-27')
         licenceVersion.endDate = new Date('2018-03-26')
 
-        Sinon.stub(FetchRelevantLicenceVersionService, 'go').resolves(licenceVersion)
+        vi.spyOn(FetchRelevantLicenceVersionService, 'default').mockResolvedValue(licenceVersion)
       })
 
       it('returns the relevant licence with latest existing return version as a copyable candidate', async () => {
-        const result = await DetermineRelevantLicenceVersionService.go(session)
+        const result = await DetermineRelevantLicenceVersionService(session)
 
         expect(result).toEqual({ ...licenceVersion, copyableReturnVersions: [session.licence.returnVersions[0]] })
       })
@@ -102,11 +100,11 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
         licenceVersion.startDate = new Date('2007-01-27')
         licenceVersion.endDate = new Date('2018-03-26')
 
-        Sinon.stub(FetchRelevantLicenceVersionService, 'go').resolves(licenceVersion)
+        vi.spyOn(FetchRelevantLicenceVersionService, 'default').mockResolvedValue(licenceVersion)
       })
 
       it('returns the relevant licence with existing return versions that start during the period as a copyable candidates', async () => {
-        const result = await DetermineRelevantLicenceVersionService.go(session)
+        const result = await DetermineRelevantLicenceVersionService(session)
 
         expect(result).toEqual({
           ...licenceVersion,
@@ -122,11 +120,11 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
         licenceVersion.startDate = new Date('1995-05-13')
         licenceVersion.endDate = new Date('1997-12-31')
 
-        Sinon.stub(FetchRelevantLicenceVersionService, 'go').resolves(licenceVersion)
+        vi.spyOn(FetchRelevantLicenceVersionService, 'default').mockResolvedValue(licenceVersion)
       })
 
       it('returns the relevant licence with no copyable return versions', async () => {
-        const result = await DetermineRelevantLicenceVersionService.go(session)
+        const result = await DetermineRelevantLicenceVersionService(session)
 
         expect(result).toEqual({ ...licenceVersion, copyableReturnVersions: [] })
       })

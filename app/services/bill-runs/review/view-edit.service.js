@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}/edit' page
  * @module ViewEditService
  */
 
-const EditPresenter = require('../../../presenters/bill-runs/review/edit.presenter.js')
-const FetchReviewChargeElementService = require('./fetch-review-charge-element.service.js')
+import EditPresenter from '../../../presenters/bill-runs/review/edit.presenter.js'
+import FetchReviewChargeElementService from './fetch-review-charge-element.service.js'
 
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}/edit' page
@@ -17,17 +15,13 @@ const FetchReviewChargeElementService = require('./fetch-review-charge-element.s
  *
  * @returns {Promise<object>} the 'pageData' needed to view the edit billable return volumes page
  */
-async function go(reviewChargeElementId, elementIndex) {
-  const reviewChargeElement = await FetchReviewChargeElementService.go(reviewChargeElementId)
+export default async function viewEditService(reviewChargeElementId, elementIndex) {
+  const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
 
-  const pageData = EditPresenter.go(reviewChargeElement, elementIndex)
+  const pageData = EditPresenter(reviewChargeElement, elementIndex)
 
   return {
     activeNavBar: 'bill-runs',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

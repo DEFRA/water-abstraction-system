@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-const FetchBillingAccountsDal = require('../../../app/dal/companies/fetch-billing-accounts.dal.js')
-const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
+import * as FetchBillingAccountsDal from '../../../app/dal/companies/fetch-billing-accounts.dal.js'
+import * as FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-const ViewBillingAccountsService = require('../../../app/services/companies/view-billing-accounts.service.js')
+import ViewBillingAccountsService from '../../../app/services/companies/view-billing-accounts.service.js'
 
 describe('Companies - View Billing Accounts service', () => {
   let auth
@@ -29,9 +27,9 @@ describe('Companies - View Billing Accounts service', () => {
 
     billingAccount = billingAccounts[0]
 
-    Sinon.stub(FetchCompanyDal, 'go').returns(company)
+    vi.spyOn(FetchCompanyDal, 'default').mockReturnValue(company)
 
-    Sinon.stub(FetchBillingAccountsDal, 'go').returns({
+    vi.spyOn(FetchBillingAccountsDal, 'default').mockReturnValue({
       billingAccounts,
       totalNumber: 1
     })
@@ -40,12 +38,12 @@ describe('Companies - View Billing Accounts service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewBillingAccountsService.go(company.id, auth, page)
+      const result = await ViewBillingAccountsService(company.id, auth, page)
 
       expect(result).toEqual({
         activeSecondaryNav: 'billing-accounts',

@@ -1,13 +1,11 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const LicenceSupplementaryYearModel = require('../../../app/models/licence-supplementary-year.model.js')
+import LicenceSupplementaryYearModel from '../../../app/models/licence-supplementary-year.model.js'
 
 // Thing under test
-const UnassignBillRunToLicencesService = require('../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js')
+import UnassignBillRunToLicencesService from '../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js'
 
 describe('Bill Runs - Unassign Bill Run To Licences service', () => {
   const billRunId = '091c3d3f-0328-4b10-b1a1-3eccf55416a0'
@@ -16,28 +14,28 @@ describe('Bill Runs - Unassign Bill Run To Licences service', () => {
   let licenceSupplementaryYearWhere
 
   beforeEach(() => {
-    licenceSupplementaryYearPatch = Sinon.stub().returnsThis()
-    licenceSupplementaryYearWhere = Sinon.stub()
+    licenceSupplementaryYearPatch = vi.fn().mockReturnThis()
+    licenceSupplementaryYearWhere = vi.fn()
 
-    Sinon.stub(LicenceSupplementaryYearModel, 'query').returns({
+    vi.spyOn(LicenceSupplementaryYearModel, 'query').mockReturnValue({
       patch: licenceSupplementaryYearPatch,
       where: licenceSupplementaryYearWhere
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('updates the matching "LicenceSupplementaryYear" records with a null bill run ID', async () => {
-      await UnassignBillRunToLicencesService.go(billRunId)
+      await UnassignBillRunToLicencesService(billRunId)
 
-      const patchArgs = licenceSupplementaryYearPatch.args[0][0]
+      const patchArgs = licenceSupplementaryYearPatch.mock.calls[0][0]
 
       expect(patchArgs.billRunId).toBeNull()
 
-      const whereArgs = licenceSupplementaryYearWhere.args[0]
+      const whereArgs = licenceSupplementaryYearWhere.mock.calls[0]
 
       expect(whereArgs).toEqual(['billRunId', '091c3d3f-0328-4b10-b1a1-3eccf55416a0'])
     })

@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const GenerateFromExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js')
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as GenerateFromExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js'
 
 // Thing under test
-const SubmitExistingService = require('../../../../../app/services/return-versions/setup/existing/submit-existing.service.js')
+import SubmitExistingService from '../../../../../app/services/return-versions/setup/existing/submit-existing.service.js'
 
 describe('Return Versions - Setup - Submit Existing service', () => {
   let payload
@@ -59,13 +57,13 @@ describe('Return Versions - Setup - Submit Existing service', () => {
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -75,7 +73,7 @@ describe('Return Versions - Setup - Submit Existing service', () => {
           existing: '60b5d10d-1372-4fb2-b222-bfac81da69ab'
         }
 
-        Sinon.stub(GenerateFromExistingRequirementsService, 'go').resolves({
+        vi.spyOn(GenerateFromExistingRequirementsService, 'default').mockResolvedValue({
           multipleUpload: false,
           quarterlyReturns: false,
           requirements: [_transformedReturnRequirement()]
@@ -83,26 +81,26 @@ describe('Return Versions - Setup - Submit Existing service', () => {
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
-        const result = await SubmitExistingService.go(session.id, payload)
+        const result = await SubmitExistingService(session.id, payload)
 
         expect(result).toEqual({})
       })
 
       it('saves the selected existing return requirements', async () => {
-        await SubmitExistingService.go(session.id, payload)
+        await SubmitExistingService(session.id, payload)
 
         expect(session.requirements).toEqual([_transformedReturnRequirement()])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('saves the return versions "multipleUpload" state', async () => {
-        await SubmitExistingService.go(session.id, payload)
+        await SubmitExistingService(session.id, payload)
 
         expect(session.multipleUpload).toEqual(false)
       })
 
       it('saves the return versions "quarterlyReturns" state', async () => {
-        await SubmitExistingService.go(session.id, payload)
+        await SubmitExistingService(session.id, payload)
 
         expect(session.quarterlyReturns).toEqual(false)
       })
@@ -114,7 +112,7 @@ describe('Return Versions - Setup - Submit Existing service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitExistingService.go(session.id, payload)
+        const result = await SubmitExistingService(session.id, payload)
 
         expect(result).toMatchObject({
           pageTitle: 'Use previous requirements for returns',
@@ -130,7 +128,7 @@ describe('Return Versions - Setup - Submit Existing service', () => {
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for the input element', async () => {
-          const result = await SubmitExistingService.go(session.id, payload)
+          const result = await SubmitExistingService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [

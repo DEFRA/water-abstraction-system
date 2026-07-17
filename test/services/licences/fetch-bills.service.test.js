@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import BillHelper from '../../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const FetchBillService = require('../../../app/services/licences/fetch-bills.service.js')
+import FetchBillService from '../../../app/services/licences/fetch-bills.service.js'
 
 describe('Licences - Fetch Bills service', () => {
   const createdDate = new Date('2022-01-01')
@@ -54,7 +55,7 @@ describe('Licences - Fetch Bills service', () => {
       })
 
       it('returns results', async () => {
-        const result = await FetchBillService.go(licence.id)
+        const result = await FetchBillService(licence.id)
 
         expect(result).toEqual({
           bills: [
@@ -101,7 +102,7 @@ describe('Licences - Fetch Bills service', () => {
       })
 
       it('returns no results', async () => {
-        const result = await FetchBillService.go(licence.id)
+        const result = await FetchBillService(licence.id)
 
         expect(result).toEqual({
           bills: [],
@@ -118,7 +119,7 @@ describe('Licences - Fetch Bills service', () => {
     })
 
     it('returns no results', async () => {
-      const result = await FetchBillService.go(licence.id)
+      const result = await FetchBillService(licence.id)
 
       expect(result).toEqual({
         bills: [],

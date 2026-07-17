@@ -1,14 +1,16 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposePointHelper = require('../../../support/helpers/licence-version-purpose-point.helper.js')
-const PointHelper = require('../../../support/helpers/point.helper.js')
-const PointModel = require('../../../../app/models/point.model.js')
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposePointHelper from '../../../support/helpers/licence-version-purpose-point.helper.js'
+import PointHelper from '../../../support/helpers/point.helper.js'
+import PointModel from '../../../../app/models/point.model.js'
+import { generateNationalGridReference } from '../../../support/generators.js'
 
 // Thing under test
-const FetchPointsService = require('../../../../app/services/return-versions/setup/fetch-points.service.js')
+import FetchPointsService from '../../../../app/services/return-versions/setup/fetch-points.service.js'
 
 describe('Return Versions - Setup - Fetch Points service', () => {
   let licenceVersion
@@ -41,7 +43,7 @@ describe('Return Versions - Setup - Fetch Points service', () => {
 
   describe('when the matching licence exists', () => {
     it('returns the licence version purpose points for the licence', async () => {
-      const results = await FetchPointsService.go(licenceVersion.id)
+      const results = await FetchPointsService(licenceVersion.id)
 
       // NOTE: The final list of points the user sees is sorted by their generated description. So, the service does not
       // sort the results in the fetch, which means we cannot guarantee what order they'll be in for the test. So, to
@@ -86,7 +88,7 @@ describe('Return Versions - Setup - Fetch Points service', () => {
 
   describe('when the matching licence version does not exist', () => {
     it('returns an empty array', async () => {
-      const results = await FetchPointsService.go('7f665e1b-a2cf-4241-9dc9-9351edc16533')
+      const results = await FetchPointsService('7f665e1b-a2cf-4241-9dc9-9351edc16533')
 
       expect(results).toHaveLength(0)
     })
@@ -110,7 +112,7 @@ async function _points() {
   // expect to see it only listed once in the results from the service.
   const sharedPoint = await PointHelper.add({
     description: `I am the shared point`,
-    ngr1: `SU${PointHelper.generateNationalGridReference().slice(2)}`
+    ngr1: `SU${generateNationalGridReference().slice(2)}`
   })
 
   points.push(sharedPoint)
@@ -118,7 +120,7 @@ async function _points() {
   // This point will only be assigned to the first of the two purposes we'll add
   const point1 = await PointHelper.add({
     description: 'I am point 1',
-    ngr1: `TQ${PointHelper.generateNationalGridReference().slice(2)}`
+    ngr1: `TQ${generateNationalGridReference().slice(2)}`
   })
 
   points.push(point1)
@@ -126,7 +128,7 @@ async function _points() {
   // This point will only be assigned to the second of the two purposes we'll add
   const point2 = await PointHelper.add({
     description: 'I am point 2',
-    ngr1: `SE${PointHelper.generateNationalGridReference().slice(2)}`
+    ngr1: `SE${generateNationalGridReference().slice(2)}`
   })
 
   points.push(point2)

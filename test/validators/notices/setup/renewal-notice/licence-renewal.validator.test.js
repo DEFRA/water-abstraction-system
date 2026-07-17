@@ -1,24 +1,20 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Helpers
-const LicenceModel = require('../../../../../app/models/licence.model.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+import LicenceModel from '../../../../../app/models/licence.model.js'
+import { generateLicenceRef, generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-const LicenceRenewalValidator = require('../../../../../app/validators/notices/setup/renewal-notice/licence-renewal.validator.js')
+import LicenceRenewalValidator from '../../../../../app/validators/notices/setup/renewal-notice/licence-renewal.validator.js'
 
 describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
-  let clock
   let licenceRenewal
   let payload
   let licenceRef
 
   beforeEach(() => {
-    clock = Sinon.useFakeTimers(new Date('2026-05-21'))
+    vi.useFakeTimers({ now: new Date('2026-05-21') })
 
     licenceRef = generateLicenceRef()
 
@@ -34,12 +30,12 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   })
 
   afterEach(() => {
-    clock.restore()
-    Sinon.restore()
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   it('confirms the data is valid', () => {
-    const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+    const result = LicenceRenewalValidator(payload, licenceRenewal)
 
     expect(result.value).toBeDefined()
     expect(result.error).toBeUndefined()
@@ -53,7 +49,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+        const result = LicenceRenewalValidator(payload, licenceRenewal)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -67,7 +63,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+        const result = LicenceRenewalValidator(payload, licenceRenewal)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -82,7 +78,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         })
 
         it('confirms the data is invalid', () => {
-          const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+          const result = LicenceRenewalValidator(payload, licenceRenewal)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -96,7 +92,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         })
 
         it('confirms the data is invalid', () => {
-          const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+          const result = LicenceRenewalValidator(payload, licenceRenewal)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -110,7 +106,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         })
 
         it('confirms the data is invalid', () => {
-          const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+          const result = LicenceRenewalValidator(payload, licenceRenewal)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -126,7 +122,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+        const result = LicenceRenewalValidator(payload, licenceRenewal)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -140,7 +136,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+        const result = LicenceRenewalValidator(payload, licenceRenewal)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

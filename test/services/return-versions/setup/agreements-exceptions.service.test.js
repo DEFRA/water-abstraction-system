@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const AgreementsExceptionsService = require('../../../../app/services/return-versions/setup/agreements-exceptions.service.js')
+import AgreementsExceptionsService from '../../../../app/services/return-versions/setup/agreements-exceptions.service.js'
 
 describe('Return Versions Setup - Agreements Exceptions service', () => {
   const requirementIndex = 0
@@ -35,24 +33,24 @@ describe('Return Versions Setup - Agreements Exceptions service', () => {
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await AgreementsExceptionsService.go(session.id, requirementIndex)
+      const result = await AgreementsExceptionsService(session.id, requirementIndex)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await AgreementsExceptionsService.go(session.id, requirementIndex)
+      const result = await AgreementsExceptionsService(session.id, requirementIndex)
 
       expect(result).toMatchObject({
         pageTitle: 'Select agreements and exceptions for the requirements for returns',

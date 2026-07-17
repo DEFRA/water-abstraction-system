@@ -1,7 +1,5 @@
-'use strict'
-
-const { convertFromCubicMetres, today } = require('../lib/general.lib.js')
-const { noticeMappings } = require('../lib/static-lookups.lib.js')
+import { noticeMappings } from '../lib/static-lookups.lib.js'
+import { convertFromCubicMetres, today } from '../lib/general.lib.js'
 
 const DUE_PERIOD_DAYS = 27
 
@@ -15,7 +13,7 @@ const DUE_PERIOD_DAYS = 27
  *
  * @returns {number} the value divided by 100
  */
-function convertPenceToPounds(value) {
+export function convertPenceToPounds(value) {
   return value / 100
 }
 
@@ -29,7 +27,7 @@ function convertPenceToPounds(value) {
  *
  * @returns {string|null} The abstraction date formatted as a 'DD MMMM' string or null if either value is not set
  */
-function formatAbstractionDate(abstractionDay, abstractionMonth) {
+export function formatAbstractionDate(abstractionDay, abstractionMonth) {
   if (!abstractionDay || !abstractionMonth) {
     return null
   }
@@ -54,7 +52,7 @@ function formatAbstractionDate(abstractionDay, abstractionMonth) {
  * @returns {string} The abstraction period formatted as a 'DD MMMM to DD MMMM' string, unless the abstraction period
  * cannot be determined, in which case it returns null
  */
-function formatAbstractionPeriod(startDay, startMonth, endDay, endMonth) {
+export function formatAbstractionPeriod(startDay, startMonth, endDay, endMonth) {
   const startDate = formatAbstractionDate(startDay, startMonth)
   const endDate = formatAbstractionDate(endDay, endMonth)
 
@@ -72,7 +70,7 @@ function formatAbstractionPeriod(startDay, startMonth, endDay, endMonth) {
  *
  * @returns {string} The date formatted as a 'DD-MMM-YYYY' string
  */
-function formatChargingModuleDate(date) {
+export function formatChargingModuleDate(date) {
   // The output date format of methods such as toLocaleString() are based on the Unicode CLDR which is subject to
   // change and cannot be relied on to be consistent: https://github.com/nodejs/node/issues/42030. We therefore
   // generate the formatted date ourselves.
@@ -94,7 +92,7 @@ function formatChargingModuleDate(date) {
  *
  * @returns {string} The date formatted as a 'MMMM YYYY' string
  */
-function formatDateMonthYear(date) {
+export function formatDateMonthYear(date) {
   return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' })
 }
 
@@ -121,7 +119,7 @@ function formatDateMonthYear(date) {
  *
  * @returns {string|null} The email formatted to lowercase or null
  */
-function formatEmail(email) {
+export function formatEmail(email) {
   if (email) {
     return email.toLowerCase()
   }
@@ -138,7 +136,7 @@ function formatEmail(email) {
  *
  * @returns {string} The financial year ending formatted for display
  */
-function formatFinancialYear(financialYearEnding) {
+export function formatFinancialYear(financialYearEnding) {
   return `${financialYearEnding - 1} to ${financialYearEnding}`
 }
 
@@ -149,7 +147,7 @@ function formatFinancialYear(financialYearEnding) {
  *
  * @returns {string | null} The date formatted as a 'DD MMMM YYYY' string
  */
-function formatLongDate(date) {
+export function formatLongDate(date) {
   if (!date) {
     return null
   }
@@ -166,7 +164,7 @@ function formatLongDate(date) {
  *
  * @returns {string} The date formatted as a 'DD MMMM YYYY at HH:MM:SS' string
  */
-function formatLongDateTime(date) {
+export function formatLongDateTime(date) {
   return date.toLocaleDateString('en-GB', {
     year: 'numeric',
     month: 'long',
@@ -194,7 +192,7 @@ function formatLongDateTime(date) {
  *
  * @returns {string} The value formatted as a money string with commas and currency symbol plus optional sign
  */
-function formatMoney(valueInPence, signed = false) {
+export function formatMoney(valueInPence, signed = false) {
   // NOTE: The legacy DB stores values signed (which you should never do!) We always abs the valueInPence for 2 reasons
   //
   // - in most cases we display credits as £127,768.05 credit
@@ -225,7 +223,7 @@ function formatMoney(valueInPence, signed = false) {
  *
  * @returns {string} The formatted notice type
  */
-function formatNoticeType(subtype, alertType = null) {
+export function formatNoticeType(subtype, alertType = null) {
   if (alertType) {
     return `${titleCase(alertType)} alert`
   }
@@ -242,7 +240,7 @@ function formatNoticeType(subtype, alertType = null) {
  *
  * @returns {string|null} The formatted number or null if the number is null or undefined
  */
-function formatNumber(number, minimumFractionDigits = 0, maximumFractionDigits = 6) {
+export function formatNumber(number, minimumFractionDigits = 0, maximumFractionDigits = 6) {
   // NOTE: We don't use !number because that would match 0, which for this helper is a valid number and something we
   // want to format
   if (number === null || number === undefined) {
@@ -259,7 +257,7 @@ function formatNumber(number, minimumFractionDigits = 0, maximumFractionDigits =
  *
  * @returns {string} The value converted to pounds and formatted to two decimal places
  */
-function formatPounds(valueInPence) {
+export function formatPounds(valueInPence) {
   const valueInPounds = convertPenceToPounds(valueInPence)
 
   return valueInPounds.toFixed(2)
@@ -286,7 +284,7 @@ function formatPounds(valueInPence) {
  *
  * @returns {string} the purpose descriptions as a string, separated by commas if more than one description exists
  */
-function formatPurposes(purposes) {
+export function formatPurposes(purposes) {
   if (!purposes || purposes.length === 0) {
     return ''
   }
@@ -310,7 +308,7 @@ function formatPurposes(purposes) {
  *
  * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
  */
-function formatQuantityToUnit(quantity, units) {
+export function formatQuantityToUnit(quantity, units) {
   if (quantity === null || quantity === undefined) {
     return null
   }
@@ -333,7 +331,7 @@ function formatQuantityToUnit(quantity, units) {
  *
  * @returns {string}
  */
-function formatRestrictionType(restrictionType) {
+export function formatRestrictionType(restrictionType) {
   if (restrictionType === 'stop_or_reduce') {
     return 'Stop or reduce'
   }
@@ -360,7 +358,7 @@ function formatRestrictionType(restrictionType) {
  *
  * @returns {string} The formatted status for display.
  */
-function formatReturnLogStatus(returnLog) {
+export function formatReturnLogStatus(returnLog) {
   const { dueDate, endDate, status } = returnLog
 
   // If the return is completed we are required to display it as 'complete'. This also takes priority over the other
@@ -513,7 +511,7 @@ function formatReturnLogStatus(returnLog) {
  * @returns {object|null} the formatted validation result or null if the validation result does not have an `error`
  * property
  */
-function formatValidationResult(validationResult) {
+export function formatValidationResult(validationResult) {
   if (!validationResult.error) {
     return null
   }
@@ -549,7 +547,7 @@ function formatValidationResult(validationResult) {
  *
  * @returns {string} The correctly-formatted value and unit
  */
-function formatValueUnit(value, unit) {
+export function formatValueUnit(value, unit) {
   return `${value}${unit}`
 }
 
@@ -584,7 +582,7 @@ function formatValueUnit(value, unit) {
  *
  * @returns {string} The formatted version reason string
  */
-function formatVersionReason(version, billingAndDataRole) {
+export function formatVersionReason(version, billingAndDataRole) {
   const reason = version.$reason()
   const createdBy = version.$createdBy()
   const createdAt = formatLongDate(version.$createdAt())
@@ -616,7 +614,7 @@ function formatVersionReason(version, billingAndDataRole) {
  *
  * @returns {string} The number padded with zeros to the specified length
  */
-function leftPadZeroes(number, length) {
+export function leftPadZeroes(number, length) {
   return number.toString().padStart(length, '0')
 }
 
@@ -629,7 +627,7 @@ function leftPadZeroes(number, length) {
  *
  * @returns {string} The title cased string
  */
-function sentenceCase(value) {
+export function sentenceCase(value) {
   const sentence = value.toLowerCase()
 
   return sentence.charAt(0).toUpperCase() + sentence.slice(1)
@@ -644,7 +642,7 @@ function sentenceCase(value) {
  *
  * @returns {string} The title cased string
  */
-function titleCase(value) {
+export function titleCase(value) {
   return (
     value
       // We convert the entire string to lower case so we can correctly convert all-caps strings like 'TEXT' to 'Text'.
@@ -659,30 +657,4 @@ function titleCase(value) {
         return match.charAt(0).toUpperCase() + match.slice(1)
       })
   )
-}
-
-module.exports = {
-  convertPenceToPounds,
-  formatAbstractionDate,
-  formatAbstractionPeriod,
-  formatChargingModuleDate,
-  formatDateMonthYear,
-  formatEmail,
-  formatFinancialYear,
-  formatLongDate,
-  formatLongDateTime,
-  formatMoney,
-  formatNoticeType,
-  formatNumber,
-  formatPounds,
-  formatPurposes,
-  formatQuantityToUnit,
-  formatRestrictionType,
-  formatReturnLogStatus,
-  formatValidationResult,
-  formatValueUnit,
-  formatVersionReason,
-  leftPadZeroes,
-  sentenceCase,
-  titleCase
 }

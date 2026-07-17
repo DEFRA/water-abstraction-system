@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
 
 // Thing under test
-const CreateBillRunEventPresenter = require('../../../app/presenters/bill-runs/create-bill-run-event.presenter.js')
+import CreateBillRunEventPresenter from '../../../app/presenters/bill-runs/create-bill-run-event.presenter.js'
 
 describe('Create Bill Run Event presenter', () => {
   describe('when a BillRunModel instance is provided', () => {
@@ -20,7 +21,7 @@ describe('Create Bill Run Event presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = CreateBillRunEventPresenter.go(billRun)
+      const result = CreateBillRunEventPresenter(billRun)
 
       expect(result.batch).toBeDefined()
       expect(result.batch.id).toEqual(billRun.id)

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/start-date` page
  * @module StartDateService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const StartDatePresenter = require('../../../presenters/return-versions/setup/start-date.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import StartDatePresenter from '../../../presenters/return-versions/setup/start-date.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/start-date` page
@@ -18,16 +16,12 @@ const StartDatePresenter = require('../../../presenters/return-versions/setup/st
  *
  * @returns {Promise<object>} The view data for the start date page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function startDateService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = StartDatePresenter.go(session)
+  const formattedData = StartDatePresenter(session)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

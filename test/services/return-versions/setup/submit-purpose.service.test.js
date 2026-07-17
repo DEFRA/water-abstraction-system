@@ -1,23 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchPurposesService = require('../../../../app/services/return-versions/setup/fetch-purposes.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchPurposesService from '../../../../app/services/return-versions/setup/fetch-purposes.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitPurposeService = require('../../../../app/services/return-versions/setup/submit-purpose.service.js')
+import SubmitPurposeService from '../../../../app/services/return-versions/setup/submit-purpose.service.js'
 
 describe('Return Versions - Setup - Submit Purpose service', () => {
   const requirementIndex = 0
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -64,20 +60,20 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
 
-    Sinon.stub(FetchPurposesService, 'go').resolves([
+    vi.spyOn(FetchPurposesService, 'default').mockResolvedValue([
       { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
       { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }
     ])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -90,17 +86,17 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+        await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
         expect(session.requirements[0].purposes).toEqual([
           { alias: 'great warm machine', description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' }
         ])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: false
@@ -110,13 +106,13 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
 
       describe('and the page has been visited', () => {
         beforeEach(async () => {
-          session = SessionModelStub.build(Sinon, { ...sessionData, checkPageVisited: true })
+          session = SessionModelStub({ ...sessionData, checkPageVisited: true })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: true
@@ -124,9 +120,9 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
         })
 
         it('sets the notification message title to "Updated" and the text to "Requirements for returns updated" ', async () => {
-          await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+          await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({
@@ -144,7 +140,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
         })
 
         it('returns page data for the view', async () => {
-          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             error: {
@@ -188,7 +184,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
         })
 
         it('returns page data for the view', async () => {
-          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             error: {

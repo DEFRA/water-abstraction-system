@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the '/company-contacts/setup/{sessionId}/licences' page
  *
  * @module LicencesValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const errorMessage = 'Select the licences they should get water abstraction alerts emails for'
 
@@ -18,7 +16,7 @@ const errorMessage = 'Select the licences they should get water abstraction aler
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function licencesValidator(payload) {
   const schema = Joi.object({
     licences: Joi.array().min(1).required().messages({
       'any.required': errorMessage,
@@ -28,8 +26,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

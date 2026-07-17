@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for external users on the `/users/external/{id}/details` page
  * @module DetailsPresenter
  */
 
-const { formatLongDateTime } = require('../../base.presenter.js')
-const { sourceNavigation } = require('../base-users.presenter.js')
+import { formatLongDateTime } from '../../base.presenter.js'
+import { sourceNavigation } from '../base-users.presenter.js'
 
 const EXTERNAL_ROLES = {
   primary_user: {
@@ -30,7 +28,7 @@ const EXTERNAL_ROLES = {
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, viewingUserScope, back) {
+export default function detailsPresenter(user, viewingUserScope, back) {
   const permissions = user.$permissions()
 
   const canManageAccounts = viewingUserScope.includes('manage_accounts')
@@ -76,8 +74,4 @@ function _lastSignedIn(user) {
   }
 
   return formatLongDateTime(lastLogin)
-}
-
-module.exports = {
-  go
 }

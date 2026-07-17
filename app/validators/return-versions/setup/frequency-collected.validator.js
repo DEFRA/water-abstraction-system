@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/frequency-collected` page
  * @module FrequencyCollectedValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/frequency-collected` page
@@ -19,7 +17,7 @@ const Joi = require('joi')
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go(payload) {
+export default function frequencyCollectedValidator(payload) {
   const VALID_VALUES = ['day', 'week', 'month']
 
   const errorMessage = 'Select how often readings or volumes are collected'
@@ -36,8 +34,4 @@ function go(payload) {
   })
 
   return schema.validate(payload)
-}
-
-module.exports = {
-  go
 }

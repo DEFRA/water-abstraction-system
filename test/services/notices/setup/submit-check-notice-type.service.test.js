@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitCheckNoticeTypeService = require('../../../../app/services/notices/setup/submit-check-notice-type.service.js')
+import SubmitCheckNoticeTypeService from '../../../../app/services/notices/setup/submit-check-notice-type.service.js'
 
 describe('Notices - Setup - Submit Check Notice Type service', () => {
   let session
@@ -29,7 +27,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -43,13 +41,13 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
 
         sessionData.id = sessionId
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        Sinon.stub(FetchSessionDal, 'go').resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('adds the "addressJourney" property to the session configured for going back to contact-type', async () => {
-        await SubmitCheckNoticeTypeService.go(sessionId)
+        await SubmitCheckNoticeTypeService(sessionId)
 
         expect(session).toEqual({
           dueReturns: [],
@@ -85,13 +83,13 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
 
         sessionData.id = sessionId
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        Sinon.stub(FetchSessionDal, 'go').resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('adds the "addressJourney" property to the session configured for going back to recipient-name', async () => {
-        await SubmitCheckNoticeTypeService.go(sessionId)
+        await SubmitCheckNoticeTypeService(sessionId)
 
         expect(session).toEqual({
           dueReturns: [],

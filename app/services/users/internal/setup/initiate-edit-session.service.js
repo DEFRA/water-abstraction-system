@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Initiates the session record used for editing an internal user account
  * @module InitiateEditSessionService
  */
 
-const CreateSessionDal = require('../../../../dal/create-session.dal.js')
-const FetchUserDetailsDal = require('../../../../dal/users/internal/fetch-user-details.dal.js')
-const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
+import CreateSessionDal from '../../../../dal/create-session.dal.js'
+import FetchUserDetailsDal from '../../../../dal/users/internal/fetch-user-details.dal.js'
+import { userPermissions } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Initiates the session record used for editing an internal user account
@@ -16,12 +14,12 @@ const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(id) {
-  const user = await FetchUserDetailsDal.go(id)
+export default async function initiateEditSessionService(id) {
+  const user = await FetchUserDetailsDal(id)
 
   const data = _formatDataForJourney(user)
 
-  return CreateSessionDal.go(data)
+  return CreateSessionDal(data)
 }
 
 /**
@@ -64,8 +62,4 @@ function _getUserPermissionKey(group, role) {
   })
 
   return matchingPermission.key
-}
-
-module.exports = {
-  go
 }

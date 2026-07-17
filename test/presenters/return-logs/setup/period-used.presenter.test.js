@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const PeriodUsedPresenter = require('../../../../app/presenters/return-logs/setup/period-used.presenter.js')
+import PeriodUsedPresenter from '../../../../app/presenters/return-logs/setup/period-used.presenter.js'
 
 describe('Return Logs Setup - Period Used presenter', () => {
   let session
@@ -19,7 +20,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = PeriodUsedPresenter.go(session)
+      const result = PeriodUsedPresenter(session)
 
       expect(result).toEqual({
         abstractionPeriod: '1 April to 31 March',
@@ -49,7 +50,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
       })
 
       it('returns the "periodDateUsedOptions" property populated to re-select the option', () => {
-        const result = PeriodUsedPresenter.go(session)
+        const result = PeriodUsedPresenter(session)
 
         expect(result.periodDateUsedOptions).toEqual('default')
       })
@@ -61,7 +62,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
       })
 
       it('returns the "periodDateUsedOptions" property populated to re-select the option', () => {
-        const result = PeriodUsedPresenter.go(session)
+        const result = PeriodUsedPresenter(session)
 
         expect(result.periodDateUsedOptions).toEqual('custom-dates')
       })
@@ -77,7 +78,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
       })
 
       it('returns the "periodUsedFrom" properties populated to re-select the option', () => {
-        const result = PeriodUsedPresenter.go(session)
+        const result = PeriodUsedPresenter(session)
 
         expect(result.periodUsedFromDay).toEqual('1')
         expect(result.periodUsedFromMonth).toEqual('04')
@@ -95,7 +96,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
       })
 
       it('returns the "periodUsedTo" properties populated to re-select the option', () => {
-        const result = PeriodUsedPresenter.go(session)
+        const result = PeriodUsedPresenter(session)
 
         expect(result.periodUsedToDay).toEqual('31')
         expect(result.periodUsedToMonth).toEqual('03')
@@ -115,7 +116,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
     })
 
     it('does not show the default abstraction period', () => {
-      const result = PeriodUsedPresenter.go(session)
+      const result = PeriodUsedPresenter(session)
 
       expect(result.showDefaultAbstractionPeriod).toBe(false)
     })

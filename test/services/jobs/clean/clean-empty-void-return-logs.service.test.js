@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
-const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../../../app/models/return-log.model.js'
+import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const CleanEmptyVoidReturnLogsService = require('../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js')
+import CleanEmptyVoidReturnLogsService from '../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js'
 
 describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
   let returnLog
@@ -22,12 +20,12 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -39,7 +37,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
         })
 
         it('removes the return log and returns the count', async () => {
-          const result = await CleanEmptyVoidReturnLogsService.go()
+          const result = await CleanEmptyVoidReturnLogsService()
 
           const existsResults = await ReturnLogModel.query().whereIn('id', [returnLog.id])
 
@@ -56,7 +54,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
         })
 
         it('does not remove the return log and returns the count', async () => {
-          const result = await CleanEmptyVoidReturnLogsService.go()
+          const result = await CleanEmptyVoidReturnLogsService()
 
           const existsResults = await ReturnLogModel.query().whereIn('id', [returnLog.id])
 
@@ -76,7 +74,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
       })
 
       it('does not remove the return log and returns the count', async () => {
-        const result = await CleanEmptyVoidReturnLogsService.go()
+        const result = await CleanEmptyVoidReturnLogsService()
 
         const existsResults = await ReturnLogModel.query().whereIn('id', [returnLog.id])
 
@@ -91,30 +89,30 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
 
   describe('when the clean errors', () => {
     beforeEach(() => {
-      Sinon.stub(ReturnLogModel, 'query').returns({
-        delete: Sinon.stub().returnsThis(),
-        where: Sinon.stub().returnsThis(),
-        whereNotNull: Sinon.stub().returnsThis(),
-        whereNotExists: Sinon.stub().rejects()
+      vi.spyOn(ReturnLogModel, 'query').mockReturnValue({
+        delete: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        whereNotNull: vi.fn().mockReturnThis(),
+        whereNotExists: vi.fn().mockRejectedValue(new Error())
       })
     })
 
     it('does not throw an error', async () => {
-      await expect(CleanEmptyVoidReturnLogsService.go()).resolves.toBeDefined()
+      await expect(CleanEmptyVoidReturnLogsService()).resolves.toBeDefined()
     })
 
     it('logs the error', async () => {
-      await CleanEmptyVoidReturnLogsService.go()
+      await CleanEmptyVoidReturnLogsService()
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg.calledWith('Clean job failed')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object), expect.any(Error))
       expect(errorLogArgs[1]).toEqual({ job: 'clean-empty-void-return-logs' })
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })
 
     it('still returns a count', async () => {
-      const result = await CleanEmptyVoidReturnLogsService.go()
+      const result = await CleanEmptyVoidReturnLogsService()
 
       // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created
       // by other tests. We just want to check we are always getting a number

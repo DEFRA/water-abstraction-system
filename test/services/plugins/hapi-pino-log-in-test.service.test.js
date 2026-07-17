@@ -1,20 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Thing under test
-const HapiPinoLogInTestService = require('../../../app/services/plugins//hapi-pino-log-in-test.service.js')
+import HapiPinoLogInTestService from '../../../app/services/plugins//hapi-pino-log-in-test.service.js'
 
 describe('Hapi Pino Log In Test service', () => {
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when unit tests are running', () => {
     describe('and we tell it to log events', () => {
       it('returns an empty object - hapi-pino is not silenced', () => {
-        const result = HapiPinoLogInTestService.go(true)
+        const result = HapiPinoLogInTestService(true)
 
         expect(result).toEqual({})
       })
@@ -22,7 +20,7 @@ describe('Hapi Pino Log In Test service', () => {
 
     describe('and we tell it not to log events in test', () => {
       it('returns an object containing config to silence hapi-pino', () => {
-        const result = HapiPinoLogInTestService.go(false)
+        const result = HapiPinoLogInTestService(false)
 
         expect(result).toEqual({
           logEvents: false,
@@ -34,12 +32,12 @@ describe('Hapi Pino Log In Test service', () => {
 
   describe('when unit tests are not running', () => {
     beforeEach(() => {
-      Sinon.stub(process, 'env').value({ ...process.env, NODE_ENV: 'development' })
+      vi.replaceProperty(process, 'env', { ...process.env, NODE_ENV: 'development' })
     })
 
     describe('and we tell it not to log events in test', () => {
       it('returns an empty object - hapi-pino is not silenced', () => {
-        const result = HapiPinoLogInTestService.go(false)
+        const result = HapiPinoLogInTestService(false)
 
         expect(result).toEqual({})
       })
@@ -47,7 +45,7 @@ describe('Hapi Pino Log In Test service', () => {
 
     describe('and we tell it to log events in test', () => {
       it('returns an empty object - hapi-pino is not silenced', () => {
-        const result = HapiPinoLogInTestService.go(true)
+        const result = HapiPinoLogInTestService(true)
 
         expect(result).toEqual({})
       })

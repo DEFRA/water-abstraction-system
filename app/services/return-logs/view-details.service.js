@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/return-logs/{id}/details' page
  *
  * @module ViewDetailsService
  */
 
-const FetchReturnLogDetailsService = require('./fetch-return-log-details.service.js')
-const DetailsPresenter = require('../../presenters/return-logs/details.presenter.js')
+import DetailsPresenter from '../../presenters/return-logs/details.presenter.js'
+import FetchReturnLogDetailsService from './fetch-return-log-details.service.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/return-logs/{id}/details' page
@@ -18,17 +16,13 @@ const DetailsPresenter = require('../../presenters/return-logs/details.presenter
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(returnLogId, auth, version) {
-  const returnLog = await FetchReturnLogDetailsService.go(returnLogId, version)
+export default async function viewDetailsService(returnLogId, auth, version) {
+  const returnLog = await FetchReturnLogDetailsService(returnLogId, version)
 
-  const pageData = DetailsPresenter.go(returnLog, auth)
+  const pageData = DetailsPresenter(returnLog, auth)
 
   return {
     activeSecondaryNav: 'details',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

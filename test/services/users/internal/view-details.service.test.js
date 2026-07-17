@@ -1,34 +1,32 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Things we want to stub
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
-const FetchUserDetailsDal = require('../../../../app/dal/users/internal/fetch-user-details.dal.js')
+import * as FetchUserDetailsDal from '../../../../app/dal/users/internal/fetch-user-details.dal.js'
+import FeatureFlagsConfig from '../../../../config/feature-flags.config.js'
 
 // Thing under test
-const ViewDetailsService = require('../../../../app/services/users/internal/view-details.service.js')
+import ViewDetailsService from '../../../../app/services/users/internal/view-details.service.js'
 
 describe('Users - Internal - View Details service', () => {
   const auth = { credentials: { user: { id: '367e5f4b-07d1-460b-842f-adf8f5dad7ef' } } }
   const user = UsersFixture.basicAccess()
 
   beforeEach(() => {
-    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
-    Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
+    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersView', true)
+    vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the internal user view', async () => {
-      const result = await ViewDetailsService.go(auth, user.id)
+      const result = await ViewDetailsService(auth, user.id)
 
       expect(result).toEqual({
         activeNavBar: 'users',

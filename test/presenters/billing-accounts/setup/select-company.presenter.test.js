@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const SelectCompanyPresenter = require('../../../../app/presenters/billing-accounts/setup/select-company.presenter.js')
+import SelectCompanyPresenter from '../../../../app/presenters/billing-accounts/setup/select-company.presenter.js'
 
 describe('Billing Accounts - Setup - Select Company Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -28,7 +29,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = SelectCompanyPresenter.go(session, companies)
+      const result = SelectCompanyPresenter(session, companies)
 
       expect(result).toEqual({
         backLink: {
@@ -59,7 +60,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       })
 
       it('returns the link for the "check" page', () => {
-        const result = SelectCompanyPresenter.go(session, companies)
+        const result = SelectCompanyPresenter(session, companies)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
@@ -72,7 +73,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       })
 
       it('returns the link for the "account" page', () => {
-        const result = SelectCompanyPresenter.go(session, companies)
+        const result = SelectCompanyPresenter(session, companies)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/company-search`)
       })
@@ -89,7 +90,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       })
 
       it('returns the correct value', () => {
-        const result = SelectCompanyPresenter.go(session, companies)
+        const result = SelectCompanyPresenter(session, companies)
 
         expect(result.companiesHouseNumber).toEqual(session.companiesHouseNumber)
       })
@@ -103,9 +104,9 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       })
 
       it('returns null', () => {
-        const result = SelectCompanyPresenter.go(session, companies)
+        const result = SelectCompanyPresenter(session, companies)
 
-        expect(result.companiesHouseNumber).toEqual(null)
+        expect(result.companiesHouseNumber).toBeNull()
       })
     })
   })
@@ -119,7 +120,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       })
 
       it('returns an array of radio options', () => {
-        const result = SelectCompanyPresenter.go(session, companies)
+        const result = SelectCompanyPresenter(session, companies)
 
         expect(result.companies).toEqual([
           {
@@ -143,7 +144,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       })
 
       it('returns an empty array', () => {
-        const result = SelectCompanyPresenter.go(session, [])
+        const result = SelectCompanyPresenter(session, [])
 
         expect(result.companies).toEqual([])
       })

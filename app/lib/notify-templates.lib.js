@@ -1,6 +1,4 @@
-'use strict'
-
-const NOTIFY_TEMPLATES = Object.freeze({
+export const NOTIFY_TEMPLATES = Object.freeze({
   alerts: {
     email: {
       reduce: 'd94bf110-b173-4f77-8e9a-cf7b4f95dc00',
@@ -112,7 +110,3 @@ const NOTIFY_TEMPLATES = Object.freeze({
     verificationEmail: '45b79d3a-39f2-44cf-b8f9-012c952dbd92'
   }
 })
-
-module.exports = {
-  NOTIFY_TEMPLATES
-}

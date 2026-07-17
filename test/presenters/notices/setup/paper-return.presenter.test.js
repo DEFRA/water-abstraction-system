@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const PaperReturnPresenter = require('../../../../app/presenters/notices/setup/paper-return.presenter.js')
+import PaperReturnPresenter from '../../../../app/presenters/notices/setup/paper-return.presenter.js'
 
 describe('Notices - Setup - Paper Return presenter', () => {
   let dueReturn
@@ -27,7 +28,7 @@ describe('Notices - Setup - Paper Return presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PaperReturnPresenter.go(session)
+      const result = PaperReturnPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -52,7 +53,7 @@ describe('Notices - Setup - Paper Return presenter', () => {
       })
 
       it('returns the "returns" previously selected as checked', () => {
-        const result = PaperReturnPresenter.go(session)
+        const result = PaperReturnPresenter(session)
 
         expect(result.returns).toEqual([
           {
@@ -70,7 +71,7 @@ describe('Notices - Setup - Paper Return presenter', () => {
         })
 
         it('correctly set the back link to the check page', () => {
-          const result = PaperReturnPresenter.go(session)
+          const result = PaperReturnPresenter(session)
 
           expect(result.backLink).toEqual({
             href: `/system/notices/setup/${session.id}/check-notice-type`,

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/purpose` page
  * @module PurposeService
  */
 
-const FetchPurposesService = require('./fetch-purposes.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SelectPurposePresenter = require('../../../presenters/return-versions/setup/purpose.presenter.js')
+import FetchPurposesService from './fetch-purposes.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SelectPurposePresenter from '../../../presenters/return-versions/setup/purpose.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/purpose` page
@@ -20,17 +18,13 @@ const SelectPurposePresenter = require('../../../presenters/return-versions/setu
  *
  * @returns {Promise<object>} The view data for the purpose page
  */
-async function go(sessionId, requirementIndex) {
-  const session = await FetchSessionDal.go(sessionId)
-  const purposesData = await FetchPurposesService.go(session.licenceVersion.id)
+export default async function purposeService(sessionId, requirementIndex) {
+  const session = await FetchSessionDal(sessionId)
+  const purposesData = await FetchPurposesService(session.licenceVersion.id)
 
-  const formattedData = SelectPurposePresenter.go(session, requirementIndex, purposesData)
+  const formattedData = SelectPurposePresenter(session, requirementIndex, purposesData)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

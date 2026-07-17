@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Formats return version data ready for presenting in the view return version page
  * @module ViewPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate, formatVersionReason } = require('../base.presenter.js')
-const { isQuarterlyReturnSubmissions } = require('../../lib/dates.lib.js')
-const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
-const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
+import PreviousAndNextPresenter from '../previous-and-next.presenter.js'
+import { isQuarterlyReturnSubmissions } from '../../lib/dates.lib.js'
+import { returnRequirementFrequencies } from '../../lib/static-lookups.lib.js'
+import { formatAbstractionPeriod, formatLongDate, formatVersionReason } from '../base.presenter.js'
 
 /**
  * Formats return version data ready for presenting in the view return version page
@@ -17,7 +15,7 @@ const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.j
  *
  * @returns {object} page data formatted for the view template
  */
-function go(returnVersionData) {
+export default function viewPresenter(returnVersionData) {
   const { returnVersion, returnVersionsForPagination } = returnVersionData
 
   const { licence, multipleUpload, quarterlyReturns, returnRequirements, startDate, status } = returnVersion
@@ -132,7 +130,7 @@ function _notes(returnVersion) {
  * @private
  */
 function _pagination(returnVersionsForPagination, returnVersion) {
-  const { previous, next } = PreviousAndNextPresenter.go(returnVersionsForPagination, returnVersion)
+  const { previous, next } = PreviousAndNextPresenter(returnVersionsForPagination, returnVersion)
 
   if (!next && !previous) {
     return null
@@ -179,8 +177,4 @@ function _requirements(requirements) {
   return requirements.map((requirement) => {
     return _mapRequirement(requirement)
   })
-}
-
-module.exports = {
-  go
 }

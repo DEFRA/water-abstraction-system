@@ -1,20 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitAlertTypeService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
+import SubmitAlertTypeService from '../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js'
 
 describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () => {
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -23,26 +20,26 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
     payload = { alertType: 'stop' }
     sessionData = AbstractionAlertSessionData.get()
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('when the "alertType" has not been previously set', () => {
       it('saves the submitted value', async () => {
-        await SubmitAlertTypeService.go(session.id, payload)
+        await SubmitAlertTypeService(session.id, payload)
 
         expect(session.alertType).toEqual('stop')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
-        const result = await SubmitAlertTypeService.go(session.id, payload)
+        const result = await SubmitAlertTypeService(session.id, payload)
 
         expect(result).toEqual({})
       })
@@ -53,23 +50,23 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
         sessionData.alertType = 'resume'
         sessionData.removedThresholds = ['123']
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('sets the "alertThresholds" to an empty array', async () => {
-        await SubmitAlertTypeService.go(session.id, payload)
+        await SubmitAlertTypeService(session.id, payload)
 
         expect(session.alertThresholds).toEqual([])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('sets the "removedThresholds" to an empty array', async () => {
-        await SubmitAlertTypeService.go(session.id, payload)
+        await SubmitAlertTypeService(session.id, payload)
 
         expect(session.removedThresholds).toEqual([])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 
@@ -78,16 +75,16 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
         sessionData.alertType = 'stop'
         sessionData.alertThresholds = ['100-flow']
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('does not change the existing "alertThresholds"', async () => {
-        await SubmitAlertTypeService.go(session.id, payload)
+        await SubmitAlertTypeService(session.id, payload)
 
         expect(session.alertThresholds).toEqual(['100-flow'])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
   })
@@ -99,7 +96,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitAlertTypeService.go(session.id, payload)
+        const result = await SubmitAlertTypeService(session.id, payload)
 
         expect(result).toEqual({
           activeNavBar: 'notices',
@@ -166,13 +163,13 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
           }
         ]
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns page data for the view, with errors (and the selected alert type checked)', async () => {
-        const result = await SubmitAlertTypeService.go(session.id, payload)
+        const result = await SubmitAlertTypeService(session.id, payload)
 
         expect(result).toEqual({
           activeNavBar: 'notices',

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/reason` page
  * @module ReasonValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { returnRequirementReasons } = require('../../../lib/static-lookups.lib.js')
+import { returnRequirementReasons } from '../../../lib/static-lookups.lib.js'
 
 const errorMessage = 'Select the reason for the requirements for returns'
 
@@ -19,7 +17,7 @@ const errorMessage = 'Select the reason for the requirements for returns'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function reasonValidator(payload) {
   const validValues = Object.keys(returnRequirementReasons)
 
   const schema = Joi.object({
@@ -34,8 +32,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

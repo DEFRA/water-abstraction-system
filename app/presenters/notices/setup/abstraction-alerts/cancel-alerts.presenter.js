@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
  * @module CancelAlertsPresenter
  */
 
-const { sentenceCase } = require('../../../base.presenter.js')
+import { sentenceCase } from '../../../base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
@@ -14,7 +12,7 @@ const { sentenceCase } = require('../../../base.presenter.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function cancelAlertsPresenter(session) {
   return {
     backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`, text: 'Back' },
     pageTitle: 'You are about to cancel this alert',
@@ -28,8 +26,4 @@ function _summaryList(session) {
     text: 'Alert type',
     value: `${sentenceCase(session.alertType)}`
   }
-}
-
-module.exports = {
-  go
 }

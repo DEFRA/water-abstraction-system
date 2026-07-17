@@ -1,7 +1,5 @@
-'use strict'
-
-const SendRenewalInvitations = require('./send-renewal-invitations.service.js')
-const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
+import SendRenewalInvitations from './send-renewal-invitations.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates the process of fetching, sending, and updating renewal invitations notifications
@@ -13,18 +11,14 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
  *
  * @param {number} days - The number of ahead of today
  */
-async function go(days) {
+export default async function processRenewalInvitationsService(days) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const recipients = await SendRenewalInvitations.go(days)
+    const recipients = await SendRenewalInvitations(days)
 
     calculateAndLogTimeTaken(startTime, 'Renewals invitation status job complete', { count: recipients.length })
   } catch (error) {
     globalThis.GlobalNotifier.omfg('Notification status job failed', null, error)
   }
-}
-
-module.exports = {
-  go
 }

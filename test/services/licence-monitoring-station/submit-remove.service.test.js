@@ -1,14 +1,12 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
-const YarStub = require('../../support/stubs/yar.stub.js')
+import LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Thing under test
-const SubmitRemoveService = require('../../../app/services/licence-monitoring-station/submit-remove.service.js')
+import SubmitRemoveService from '../../../app/services/licence-monitoring-station/submit-remove.service.js'
 
 describe('Licence Monitoring Station - Submit Remove service', () => {
   const licenceRef = '99/999/9999'
@@ -19,12 +17,12 @@ describe('Licence Monitoring Station - Submit Remove service', () => {
   beforeEach(async () => {
     licenceMonitoringStation = await LicenceMonitoringStationHelper.add()
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   describe('when a user submits the licence monitoring station to be removed', () => {
     it('adds the current date to the "deletedAt" field of the licence monitoring station record', async () => {
-      await SubmitRemoveService.go(licenceMonitoringStation.id, licenceRef, yarStub)
+      await SubmitRemoveService(licenceMonitoringStation.id, licenceRef, yarStub)
 
       const refreshedSession = await licenceMonitoringStation.$query()
 
@@ -32,9 +30,9 @@ describe('Licence Monitoring Station - Submit Remove service', () => {
     })
 
     it('sets the notification message title to "Updated" and the text to "Tag removed for 99/999/9999" ', async () => {
-      await SubmitRemoveService.go(licenceMonitoringStation.id, licenceRef, yarStub)
+      await SubmitRemoveService(licenceMonitoringStation.id, licenceRef, yarStub)
 
-      const [flashType, notification] = yarStub.flash.args[0]
+      const [flashType, notification] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(notification).toEqual({ titleText: 'Updated', text: 'Tag removed for 99/999/9999' })

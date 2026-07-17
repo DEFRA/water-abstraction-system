@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ViewManageService = require('../../../app/services/manage/view-manage.service.js')
+import ViewManageService from '../../../app/services/manage/view-manage.service.js'
 
 describe('Manage - View Manage service', () => {
   let userAuth
@@ -12,7 +13,7 @@ describe('Manage - View Manage service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewManageService.go(userAuth)
+      const result = await ViewManageService(userAuth)
 
       expect(result).toEqual({
         activeNavBar: 'manage',

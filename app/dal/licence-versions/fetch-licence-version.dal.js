@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches data needed for the view `/licence-versions/{id}` page
  * @module FetchLicenceVersionDal
  */
 
-const { raw } = require('objection')
+import { raw } from 'objection'
 
-const LicenceVersionModel = require('../../models/licence-version.model.js')
+import LicenceVersionModel from '../../models/licence-version.model.js'
 
 /**
  * Fetches data needed for the view `/licence-versions/{id}` page
@@ -16,7 +14,7 @@ const LicenceVersionModel = require('../../models/licence-version.model.js')
  *
  * @returns {Promise<object>} an object with the licence version and the licence versions for pagination
  */
-async function go(licenceVersionId) {
+export default async function fetchLicenceVersionDal(licenceVersionId) {
   return {
     licenceVersion: await _fetch(licenceVersionId),
     licenceVersionsForPagination: await _fetchPagination(licenceVersionId)
@@ -120,8 +118,4 @@ async function _fetch(licenceVersionId) {
           purposeBuilder.select(['id', 'description'])
         })
     })
-}
-
-module.exports = {
-  go
 }

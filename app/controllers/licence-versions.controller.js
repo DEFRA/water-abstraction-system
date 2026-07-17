@@ -1,23 +1,17 @@
-'use strict'
-
 /**
  * Controller for /licences-versions endpoints
  * @module LicenceVersionsController
  */
 
-const ViewService = require('../services/licence-versions/view.service.js')
+import ViewService from '../services/licence-versions/view.service.js'
 
-async function view(request, h) {
+export async function view(request, h) {
   const {
     auth,
     params: { id }
   } = request
 
-  const pageData = await ViewService.go(id, auth)
+  const pageData = await ViewService(id, auth)
 
   return h.view(`licence-versions/view.njk`, pageData)
-}
-
-module.exports = {
-  view
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/licence` page
  * @module LicencePresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function licencePresenter(session) {
   const { checkPageVisited, id: sessionId, licenceRef } = session
 
   return {
@@ -34,8 +32,4 @@ function _backLink(sessionId, checkPageVisited) {
     href: `/system/notices/setup/${sessionId}/notice-type`,
     text: 'Back'
   }
-}
-
-module.exports = {
-  go
 }

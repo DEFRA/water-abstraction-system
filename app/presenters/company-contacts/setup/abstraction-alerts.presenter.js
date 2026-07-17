@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
  * @module AbstractionAlertsPresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
@@ -14,7 +12,7 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function abstractionAlertsPresenter(session) {
   const { id: sessionId, company, licences } = session
 
   return {
@@ -27,8 +25,4 @@ function go(session) {
     pageTitleCaption: company.name,
     showSomeLicences: licences.length > 0
   }
-}
-
-module.exports = {
-  go
 }

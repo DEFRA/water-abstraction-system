@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/billing-accounts/setup/{sessionId}/select-company' page
  *
  * @module SubmitSelectCompanyService
  */
 
-const FetchCompaniesService = require('./fetch-companies.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SelectCompanyPresenter = require('../../../presenters/billing-accounts/setup/select-company.presenter.js')
-const SelectCompanyValidator = require('../../../validators/billing-accounts/setup/select-company.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchCompaniesService from './fetch-companies.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SelectCompanyPresenter from '../../../presenters/billing-accounts/setup/select-company.presenter.js'
+import SelectCompanyValidator from '../../../validators/billing-accounts/setup/select-company.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/billing-accounts/setup/{sessionId}/select-company' page
@@ -20,8 +18,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitSelectCompanyService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -33,7 +31,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const companies = await FetchCompaniesService.go(session.companySearch)
+  const companies = await FetchCompaniesService(session.companySearch)
   const pageData = _submissionData(session, payload, companies)
 
   return {
@@ -68,15 +66,11 @@ async function _save(session, payload) {
 function _submissionData(session, payload, companies) {
   session.companiesHouseNumber = payload.companiesHouseNumber
 
-  return SelectCompanyPresenter.go(session, companies)
+  return SelectCompanyPresenter(session, companies)
 }
 
 function _validate(payload) {
-  const validationResult = SelectCompanyValidator.go(payload)
+  const validationResult = SelectCompanyValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

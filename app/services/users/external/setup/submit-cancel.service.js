@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates cancelling the data for the '/users/external/setup/{sessionId}/cancel' page
  *
  * @module SubmitCancelService
  */
 
-const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import DeleteSessionDal from '../../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates cancelling the data for the '/users/external/setup/{sessionId}/cancel' page
@@ -16,18 +14,14 @@ const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} An object containing the URL to redirect the user to after cancelling
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitCancelService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   const { user } = session
 
   return {
     redirectUrl: `/system/users/external/${user.id}/licences?back=${session.activeNavBar}`
   }
-}
-
-module.exports = {
-  go
 }

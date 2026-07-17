@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/site-description` page
  * @module SiteDescriptionValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/site-description` page
@@ -20,7 +18,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
  */
-function go(payload) {
+export default function siteDescriptionValidator(payload) {
   const schema = Joi.object({
     siteDescription: Joi.string().required().min(10).max(100).messages({
       'any.required': 'Enter a description of the site',
@@ -30,8 +28,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

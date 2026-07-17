@@ -1,22 +1,20 @@
-'use strict'
-
 /**
  * Checks status and gathers info for each of the services which make up WRLS
  * @module InfoService
  */
 
-const ChildProcess = require('node:child_process')
-const util = require('node:util')
+import ChildProcess from 'node:child_process'
+import util from 'node:util'
 
-const AddressFacadeViewHealthRequest = require('../../requests/address-facade/view-health.request.js')
-const ChargingModuleViewHealthRequest = require('../../requests/charging-module/view-health.request.js')
-const CreateRedisClientService = require('./create-redis-client.service.js')
-const FetchSystemInfoService = require('./fetch-system-info.service.js')
-const GotenbergViewHealthRequest = require('../../requests/gotenberg/view-health.request.js')
-const LegacyViewHealthRequest = require('../../requests/legacy/view-health.request.js')
-const NotifyViewHealthRequest = require('../../requests/notify/view-health.request.js')
-const RespViewHealthRequest = require('../../requests/resp/view-health.request.js')
-const { sentenceCase } = require('../../presenters/base.presenter.js')
+import AddressFacadeViewHealthRequest from '../../requests/address-facade/view-health.request.js'
+import ChargingModuleViewHealthRequest from '../../requests/charging-module/view-health.request.js'
+import CreateRedisClientService from './create-redis-client.service.js'
+import FetchSystemInfoService from './fetch-system-info.service.js'
+import GotenbergViewHealthRequest from '../../requests/gotenberg/view-health.request.js'
+import LegacyViewHealthRequest from '../../requests/legacy/view-health.request.js'
+import NotifyViewHealthRequest from '../../requests/notify/view-health.request.js'
+import RespViewHealthRequest from '../../requests/resp/view-health.request.js'
+import { sentenceCase } from '../../presenters/base.presenter.js'
 
 const SERVICE_RUNNING_MESSAGE = 'Up and running'
 
@@ -31,7 +29,7 @@ const SERVICE_RUNNING_MESSAGE = 'Up and running'
  *
  * @returns {Promise<object>} data about each service formatted for the view
  */
-async function go() {
+export default async function infoService() {
   const addressFacadeData = await _addressFacadeData()
   const chargingModuleData = await _chargingModuleData()
   const gotenbergData = await _gotenbergData()
@@ -57,13 +55,13 @@ async function go() {
 }
 
 async function _addSystemInfoToLegacyAppData(appData) {
-  const systemInfo = await FetchSystemInfoService.go()
+  const systemInfo = await FetchSystemInfoService()
 
   return [...appData, systemInfo]
 }
 
 async function _addressFacadeData() {
-  const result = await AddressFacadeViewHealthRequest.send()
+  const result = await AddressFacadeViewHealthRequest()
 
   if (result.succeeded) {
     return result.response.body
@@ -73,7 +71,7 @@ async function _addressFacadeData() {
 }
 
 async function _chargingModuleData() {
-  const result = await ChargingModuleViewHealthRequest.send()
+  const result = await ChargingModuleViewHealthRequest()
 
   if (result.succeeded) {
     return result.response.info.dockerTag
@@ -83,7 +81,7 @@ async function _chargingModuleData() {
 }
 
 async function _gotenbergData() {
-  const result = await GotenbergViewHealthRequest.send()
+  const result = await GotenbergViewHealthRequest()
 
   if (result.succeeded) {
     const body = result.response.body
@@ -107,7 +105,7 @@ async function _legacyAppData() {
   ]
 
   for (const service of services) {
-    const result = await LegacyViewHealthRequest.send(service.serviceName)
+    const result = await LegacyViewHealthRequest(service.serviceName)
 
     if (result.succeeded) {
       service.version = result.response.body.version
@@ -130,7 +128,7 @@ function _parseFailedRequestResult(result) {
 }
 
 async function _notifyData() {
-  const result = await NotifyViewHealthRequest.send()
+  const result = await NotifyViewHealthRequest()
 
   if (result.succeeded) {
     return SERVICE_RUNNING_MESSAGE
@@ -143,7 +141,7 @@ async function _redisConnectivityData() {
   let redis
 
   try {
-    redis = await CreateRedisClientService.go()
+    redis = await CreateRedisClientService()
 
     await redis.ping()
 
@@ -152,13 +150,13 @@ async function _redisConnectivityData() {
     return `ERROR: ${error.message}`
   } finally {
     if (redis) {
-      await redis.disconnect()
+      redis.disconnect()
     }
   }
 }
 
 async function _respData() {
-  const result = await RespViewHealthRequest.send()
+  const result = await RespViewHealthRequest()
 
   if (result.succeeded) {
     return SERVICE_RUNNING_MESSAGE
@@ -179,8 +177,4 @@ async function _virusScannerData() {
   } catch (error) {
     return `ERROR: ${error.message}`
   }
-}
-
-module.exports = {
-  go
 }

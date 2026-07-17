@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * A combined logging and Airbrake (Errbit) notification manager
  * @module BoomNotifierLib
  */
 
-const Boom = require('@hapi/boom')
+import Boom from '@hapi/boom'
 
-const RequestNotifierLib = require('./request-notifier.lib.js')
+import RequestNotifierLib from './request-notifier.lib.js'
 
 /**
  * A combined logging and Airbrake (Errbit) notification manager which extends RequestNotifierLib to also throw a Boom
@@ -32,4 +30,4 @@ class BoomNotifierLib extends RequestNotifierLib {
   }
 }
 
-module.exports = BoomNotifierLib
+export default BoomNotifierLib

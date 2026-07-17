@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 
 // Thing under test
-const FetchReturnLogService = require('../../../app/services/return-logs/fetch-return-log.service.js')
+import FetchReturnLogService from '../../../app/services/return-logs/fetch-return-log.service.js'
 
 describe('Return Logs - Fetch Return Log service', () => {
   let licence
@@ -23,7 +24,7 @@ describe('Return Logs - Fetch Return Log service', () => {
 
   describe('when called', () => {
     it('fetches the matching return log with the linked licence', async () => {
-      const result = await FetchReturnLogService.go(returnLog.id)
+      const result = await FetchReturnLogService(returnLog.id)
 
       expect(result).toEqual({
         id: returnLog.id,

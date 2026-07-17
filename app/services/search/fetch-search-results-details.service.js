@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Fetches the item details for a set of search results on the /search page
  * @module FetchSearchResultsDetailsService
  */
 
-const BillingAccountModel = require('../../models/billing-account.model.js')
-const CompanyModel = require('../../models/company.model.js')
-const LicenceModel = require('../../models/licence.model.js')
-const MonitoringStationModel = require('../../models/monitoring-station.model.js')
-const ReturnLogModel = require('../../models/return-log.model.js')
-const UserModel = require('../../models/user.model.js')
-const { db } = require('../../../db/db.js')
+import BillingAccountModel from '../../models/billing-account.model.js'
+import CompanyModel from '../../models/company.model.js'
+import LicenceModel from '../../models/licence.model.js'
+import MonitoringStationModel from '../../models/monitoring-station.model.js'
+import ReturnLogModel from '../../models/return-log.model.js'
+import UserModel from '../../models/user.model.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetches the item details for a set of search results on the /search page
@@ -20,7 +18,7 @@ const { db } = require('../../../db/db.js')
  *
  * @returns {Promise<object>} An object containing the set of matching models for each result type
  */
-async function go(idsByType) {
+export default async function fetchSearchResultsDetailsService(idsByType) {
   const finders = {}
 
   for (const [key, ids] of Object.entries(idsByType)) {
@@ -123,8 +121,4 @@ async function _returnLog(ids) {
 
 async function _user(ids) {
   return UserModel.query().select(['id', 'lastLogin', 'username']).modify('permissions').modify('status').findByIds(ids)
-}
-
-module.exports = {
-  go
 }

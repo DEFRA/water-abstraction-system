@@ -1,33 +1,30 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const ViewMarkForSupplementaryBillingService = require('../../../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
+import ViewMarkForSupplementaryBillingService from '../../../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js'
 
 describe('Licences - View Mark For Supplementary Billing Service', () => {
-  let clock
   let licence
   let testDate
 
   beforeEach(async () => {
     testDate = new Date('2024-04-01')
-    clock = Sinon.useFakeTimers(testDate)
+    vi.useFakeTimers({ now: testDate })
 
     licence = await LicenceHelper.add()
   })
 
   afterEach(() => {
-    Sinon.restore()
-    clock.restore()
+    vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   it('returns page data for the view', async () => {
-    const result = await ViewMarkForSupplementaryBillingService.go(licence.id)
+    const result = await ViewMarkForSupplementaryBillingService(licence.id)
 
     expect(result).toEqual({
       backLink: {

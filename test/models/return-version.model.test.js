@@ -1,20 +1,21 @@
-'use strict'
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const ModLogHelper = require('../support/helpers/mod-log.helper.js')
-const ModLogModel = require('../../app/models/mod-log.model.js')
-const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
-const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
-const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
-const UserModel = require('../../app/models/user.model.js')
-const UserHelper = require('../support/helpers/user.helper.js')
-const { generateRandomInteger } = require('../../app/lib/general.lib.js')
-const { randomRegionCode } = require('../support/general.js')
+import LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import ModLogHelper from '../support/helpers/mod-log.helper.js'
+import ModLogModel from '../../app/models/mod-log.model.js'
+import ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
+import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
+import ReturnVersionHelper from '../support/helpers/return-version.helper.js'
+import UserHelper from '../support/helpers/user.helper.js'
+import UserModel from '../../app/models/user.model.js'
+import { generateRandomInteger } from '../support/generators.js'
+import { randomRegionCode } from '../support/general.js'
 
 // Thing under test
-const ReturnVersionModel = require('../../app/models/return-version.model.js')
+import ReturnVersionModel from '../../app/models/return-version.model.js'
 
 describe('Return Version model', () => {
   let testLicence

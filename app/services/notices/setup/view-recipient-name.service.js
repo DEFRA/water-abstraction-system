@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/recipient-name' page
  *
  * @module ViewRecipientNameService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RecipientNamePresenter = require('../../../presenters/notices/setup/recipient-name.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RecipientNamePresenter from '../../../presenters/notices/setup/recipient-name.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/recipient-name' page
@@ -16,17 +14,13 @@ const RecipientNamePresenter = require('../../../presenters/notices/setup/recipi
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewRecipientNameService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = RecipientNamePresenter.go(session)
+  const pageData = RecipientNamePresenter(session)
 
   return {
     activeNavBar: 'notices',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

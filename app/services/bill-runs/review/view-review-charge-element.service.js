@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}' page
  * @module ViewReviewChargeElementService
  */
 
-const FetchReviewChargeElementService = require('./fetch-review-charge-element.service.js')
-const ReviewChargeElementPresenter = require('../../../presenters/bill-runs/review/review-charge-element.presenter.js')
+import FetchReviewChargeElementService from './fetch-review-charge-element.service.js'
+import ReviewChargeElementPresenter from '../../../presenters/bill-runs/review/review-charge-element.presenter.js'
 
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}' page
@@ -18,20 +16,16 @@ const ReviewChargeElementPresenter = require('../../../presenters/bill-runs/revi
  *
  * @returns {Promise<object>} the 'pageData' needed for the review charge element page
  */
-async function go(reviewChargeElementId, elementIndex, yar) {
-  const reviewChargeElement = await FetchReviewChargeElementService.go(reviewChargeElementId)
+export default async function viewReviewChargeElementService(reviewChargeElementId, elementIndex, yar) {
+  const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
 
   const [bannerMessage] = yar.flash('banner')
 
-  const pageData = ReviewChargeElementPresenter.go(reviewChargeElement, elementIndex)
+  const pageData = ReviewChargeElementPresenter(reviewChargeElement, elementIndex)
 
   return {
     activeNavBar: 'bill-runs',
     bannerMessage,
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

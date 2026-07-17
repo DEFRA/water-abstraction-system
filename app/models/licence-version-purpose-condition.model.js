@@ -1,15 +1,16 @@
-'use strict'
-
 /**
  * Model for licence_version_purpose_conditions (water.licence_version_purpose_conditions)
  * @module LicenceVersionPurposeConditionModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceMonitoringStationModel from './licence-monitoring-station.model.js'
+import LicenceVersionPurposeConditionTypeModel from './licence-version-purpose-condition-type.model.js'
+import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
 
-class LicenceVersionPurposeConditionModel extends BaseModel {
+export default class LicenceVersionPurposeConditionModel extends BaseModel {
   static get tableName() {
     return 'licenceVersionPurposeConditions'
   }
@@ -18,7 +19,7 @@ class LicenceVersionPurposeConditionModel extends BaseModel {
     return {
       licenceMonitoringStations: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-monitoring-station.model',
+        modelClass: LicenceMonitoringStationModel,
         join: {
           from: 'licenceVersionPurposeConditions.id',
           to: 'licenceMonitoringStations.licenceVersionPurposeConditionId'
@@ -26,7 +27,7 @@ class LicenceVersionPurposeConditionModel extends BaseModel {
       },
       licenceVersionPurpose: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-version-purpose.model',
+        modelClass: LicenceVersionPurposeModel,
         join: {
           from: 'licenceVersionPurposeConditions.licenceVersionPurposeId',
           to: 'licenceVersionPurposes.id'
@@ -34,7 +35,7 @@ class LicenceVersionPurposeConditionModel extends BaseModel {
       },
       licenceVersionPurposeConditionType: {
         relation: Model.HasOneRelation,
-        modelClass: 'licence-version-purpose-condition-type.model',
+        modelClass: LicenceVersionPurposeConditionTypeModel,
         join: {
           from: 'licenceVersionPurposeConditions.licenceVersionPurposeConditionTypeId',
           to: 'licenceVersionPurposeConditionTypes.id'
@@ -43,5 +44,3 @@ class LicenceVersionPurposeConditionModel extends BaseModel {
     }
   }
 }
-
-module.exports = LicenceVersionPurposeConditionModel

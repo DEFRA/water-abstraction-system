@@ -1,12 +1,12 @@
-'use strict'
-
 /**
  * @module GroupRoleHelper
  */
 
-const GroupRoleModel = require('../../../app/models/group-role.model.js')
-const { selectRandomEntry } = require('../general.js')
-const { data: groupRoles } = require('../../../db/seeds/data/group-roles.js')
+import GroupRoleModel from '../../../app/models/group-role.model.js'
+import { data as groupRoles } from '../../../db/seeds/data/group-roles.js'
+import { selectRandomEntry } from '../general.js'
+
+const data = groupRoles
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -30,7 +30,7 @@ function select(index = -1) {
   return GroupRoleModel.fromJson(selectRandomEntry(groupRoles))
 }
 
-module.exports = {
-  data: groupRoles,
+export default {
+  data,
   select
 }

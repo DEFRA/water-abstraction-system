@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const GlobalNotifierLib = require('../../app/lib/global-notifier.lib.js')
+import GlobalNotifierLib from '../../app/lib/global-notifier.lib.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Global Notifier plugin', () => {
   beforeEach(async () => {

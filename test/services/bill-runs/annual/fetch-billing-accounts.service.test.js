@@ -1,21 +1,22 @@
-'use strict'
+// Test framework
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
-const BillingAccountModel = require('../../../../app/models/billing-account.model.js')
-const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
+import BillingAccountModel from '../../../../app/models/billing-account.model.js'
+import ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
+import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
+import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
 
-const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
+import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchBillingAccountsService = require('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
+import FetchBillingAccountsService from '../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js'
 
 const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
 const REGION_ANGLIAN_INDEX = 0
@@ -53,7 +54,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -73,7 +74,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -96,7 +97,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -119,7 +120,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -138,7 +139,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -157,7 +158,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -174,7 +175,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -213,7 +214,7 @@ describe('Fetch Billing Accounts service', () => {
     })
 
     it('returns the applicable billing account', async () => {
-      const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+      const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
       const billingAccountRecord = results.find((result) => {
         return result.id === billingAccount.id
@@ -225,7 +226,7 @@ describe('Fetch Billing Accounts service', () => {
 
     describe('that have applicable related charge versions', () => {
       it('includes the charge versions in each result', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const billingAccountRecord = results.find((result) => {
           return result.id === billingAccount.id
@@ -242,7 +243,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('includes the licence and region in each result', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const billingAccountRecord = results.find((result) => {
           return result.id === billingAccount.id
@@ -260,7 +261,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('includes the change reason in each result', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const billingAccountRecord = results.find((result) => {
           return result.id === billingAccount.id
@@ -273,7 +274,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('includes the charge references, charge category and charge elements in each result', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const billingAccountRecord = results.find((result) => {
           return result.id === billingAccount.id
@@ -330,7 +331,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('excludes the charge versions in each result', async () => {
-        const results = await FetchBillingAccountsService.go(region.id, billingPeriod)
+        const results = await FetchBillingAccountsService(region.id, billingPeriod)
 
         const billingAccountRecord = results.find((result) => {
           return result.id === billingAccount.id
@@ -338,7 +339,7 @@ describe('Fetch Billing Accounts service', () => {
 
         const { chargeVersions } = billingAccountRecord
 
-        expect(chargeVersions.length).toEqual(1)
+        expect(chargeVersions).toHaveLength(1)
         expect(chargeVersions[0].id).toEqual(chargeVersion.id)
       })
     })

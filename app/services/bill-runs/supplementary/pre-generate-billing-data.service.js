@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Pre-generates empty billing data which will be populated during billing processing
  * @module PreGenerateBillingDataService
  */
 
-const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
-const { generateUUID } = require('../../../lib/general.lib.js')
+import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
+import { generateUUID } from '../../../lib/general.lib.js'
 
 /**
  * Pre-generates empty billing data which will be populated during billing processing. Returns an object which comprises
@@ -20,8 +18,8 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} An object containing arrays of bills and billLicences objects
  */
-async function go(chargeVersions, billRunId, billingPeriod) {
-  const billingAccounts = await FetchBillingAccountsService.go(chargeVersions)
+export default async function preGenerateBillingDataService(chargeVersions, billRunId, billingPeriod) {
+  const billingAccounts = await FetchBillingAccountsService(chargeVersions)
 
   const bills = _preGenerateBills(billingAccounts, billRunId, billingPeriod)
   const billLicences = _preGenerateBillLicences(chargeVersions, bills)
@@ -118,8 +116,4 @@ function _preGenerateBills(billingAccounts, billRunId, billingPeriod) {
   }, {})
 
   return keyedBills
-}
-
-module.exports = {
-  go
 }

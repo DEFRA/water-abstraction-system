@@ -1,15 +1,16 @@
-'use strict'
-
 /**
  * Model for licence_roles (crm_v2.roles)
  * @module LicenceRoleModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import CompanyAddressModel from './company-address.model.js'
+import CompanyContactModel from './company-contact.model.js'
+import LicenceDocumentRoleModel from './licence-document-role.model.js'
 
-class LicenceRoleModel extends BaseModel {
+export default class LicenceRoleModel extends BaseModel {
   static get tableName() {
     return 'licenceRoles'
   }
@@ -18,7 +19,7 @@ class LicenceRoleModel extends BaseModel {
     return {
       companyAddresses: {
         relation: Model.HasManyRelation,
-        modelClass: 'company-address.model',
+        modelClass: CompanyAddressModel,
         join: {
           from: 'licenceRoles.id',
           to: 'companyAddresses.licenceRoleId'
@@ -26,7 +27,7 @@ class LicenceRoleModel extends BaseModel {
       },
       companyContacts: {
         relation: Model.HasManyRelation,
-        modelClass: 'company-contact.model',
+        modelClass: CompanyContactModel,
         join: {
           from: 'licenceRoles.id',
           to: 'companyContacts.licenceRoleId'
@@ -34,7 +35,7 @@ class LicenceRoleModel extends BaseModel {
       },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-document-role.model',
+        modelClass: LicenceDocumentRoleModel,
         join: {
           from: 'licenceRoles.id',
           to: 'licenceDocumentRoles.licenceRoleId'
@@ -43,5 +44,3 @@ class LicenceRoleModel extends BaseModel {
     }
   }
 }
-
-module.exports = LicenceRoleModel

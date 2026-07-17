@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/users/external/setup/{sessionId}/licences` page
  * @module LicencesValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/users/external/setup/{sessionId}/licences` page
@@ -19,7 +17,7 @@ const Joi = require('joi')
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go(payload) {
+export default function licencesValidator(payload) {
   const errorMessage = 'Select licences to unregister'
 
   const schema = Joi.object({
@@ -32,8 +30,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

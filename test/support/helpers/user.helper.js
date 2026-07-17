@@ -1,13 +1,13 @@
-'use strict'
-
 /**
  * @module UserHelper
  */
 
-const { selectRandomEntry } = require('../general.js')
-const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
-const UserModel = require('../../../app/models/user.model.js')
-const { data: users } = require('../../../db/seeds/data/users.js')
+import UserModel from '../../../app/models/user.model.js'
+import { generateUserName } from '../generators.js'
+import { selectRandomEntry } from '../general.js'
+import { data as users } from '../../../db/seeds/data/users.js'
+
+const data = users
 
 /**
  * List of attributes to skip when comparing user records in tests
@@ -71,25 +71,6 @@ function defaults(data = {}) {
 }
 
 /**
- * Generates a random user ID
- *
- * @returns {number} a random integer between 100011 and 199999
- */
-function generateUserId() {
-  // The last ID in the pre-seeded users is 100010
-  return generateRandomInteger(100011, 199999)
-}
-
-/**
- * Generates a random user name
- *
- * @returns {string} a random user name in the format [random UUID]@wrls.gov.uk
- */
-function generateUserName() {
-  return `${generateUUID()}@wrls.gov.uk`
-}
-
-/**
  * Select an entry from the reference data entries seeded at the start of testing
  *
  * Because this helper is linked to a reference record instead of a transaction, we don't expect these to be created
@@ -111,13 +92,11 @@ function select(index = -1) {
   return UserModel.fromJson(selectRandomEntry(users))
 }
 
-module.exports = {
-  add,
-  data: users,
+export default {
+  data,
+  SKIP_COMPARE_LIST,
   DEFAULT_INDEX,
+  add,
   defaults,
-  generateUserId,
-  generateUserName,
-  select,
-  SKIP_COMPARE_LIST
+  select
 }

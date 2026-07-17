@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
 
 // Thing under test
-const VoidReturnLogsService = require('../../../app/services/return-logs/void-return-logs.service.js')
+import VoidReturnLogsService from '../../../app/services/return-logs/void-return-logs.service.js'
 
 describe('Return Logs - Void Return Logs service', () => {
   let licenceRef = 'return-logs'
@@ -29,7 +30,7 @@ describe('Return Logs - Void Return Logs service', () => {
     })
 
     it('voids the return logs that are between the start and end dates', async () => {
-      await VoidReturnLogsService.go(licenceRef, new Date('2022-04-01'), new Date('2023-03-31'))
+      await VoidReturnLogsService(licenceRef, new Date('2022-04-01'), new Date('2023-03-31'))
 
       returnLogBeingChecked = await returnLogMatchingVersion.$query()
       expect(returnLogBeingChecked.status).toEqual('void')
@@ -55,7 +56,7 @@ describe('Return Logs - Void Return Logs service', () => {
     })
 
     it('voids the return logs that are from the start date forward', async () => {
-      await VoidReturnLogsService.go(licenceRef, new Date('2022-04-01'))
+      await VoidReturnLogsService(licenceRef, new Date('2022-04-01'))
 
       returnLogBeingChecked = await returnLogMatchingVersion.$query()
       expect(returnLogBeingChecked.status).toEqual('void')
@@ -67,7 +68,7 @@ describe('Return Logs - Void Return Logs service', () => {
 
   describe('when provided a licence ref with no return logs', () => {
     it('does nothing', async () => {
-      returnLogBeingChecked = await VoidReturnLogsService.go('no-return-logs', new Date('2020-03-31'))
+      returnLogBeingChecked = await VoidReturnLogsService('no-return-logs', new Date('2020-03-31'))
 
       returnLogBeingChecked = await ReturnLogModel.query().where('licenceRef', 'no-return-logs')
       expect(returnLogBeingChecked).toEqual([])

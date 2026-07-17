@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Fetches verifications for an external user on the `/users/external/{id}/verifications` page
  * @module FetchVerificationsDal
  */
 
-const UserVerificationModel = require('../../../models/user-verification.model.js')
-
-const DatabaseConfig = require('../../../../config/database.config.js')
+import DatabaseConfig from '../../../../config/database.config.js'
+import UserVerificationModel from '../../../models/user-verification.model.js'
 
 /**
  * Fetches verifications for an external user on the `/users/external/{id}/verifications` page
@@ -17,7 +14,7 @@ const DatabaseConfig = require('../../../../config/database.config.js')
  *
  * @returns {Promise<object[]>} the requested user verifications
  */
-async function go(licenceEntityId, page = '1') {
+export default async function fetchVerificationsDal(licenceEntityId, page = '1') {
   const { results: verifications, total: totalNumber } = await _fetch(licenceEntityId, page)
 
   return { totalNumber, verifications }
@@ -44,8 +41,4 @@ async function _fetch(licenceEntityId, page) {
           licenceBuilder.select(['id', 'licenceRef']).modify('licenceHolder')
         })
     })
-}
-
-module.exports = {
-  go
 }

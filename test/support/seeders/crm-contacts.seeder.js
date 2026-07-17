@@ -1,18 +1,17 @@
-'use strict'
-
 /**
  * @module CRMContactsSeeder
  */
 
-const AddressHelper = require('../helpers/address.helper.js')
-const CompanyContactHelper = require('../helpers/company-contact.helper.js')
-const CompanyHelper = require('../helpers/company.helper.js')
-const ContactHelper = require('../helpers/contact.helper.js')
-const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
-const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
-const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
-const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
+import AddressHelper from '../helpers/address.helper.js'
+import CompanyContactHelper from '../helpers/company-contact.helper.js'
+import CompanyHelper from '../helpers/company.helper.js'
+import ContactHelper from '../helpers/contact.helper.js'
+import LicenceDocumentRoleHelper from '../helpers/licence-document-role.helper.js'
+import LicenceEntityHelper from '../helpers/licence-entity.helper.js'
+import LicenceEntityRoleHelper from '../helpers/licence-entity-role.helper.js'
+import LicenceRoleHelper from '../helpers/licence-role.helper.js'
+import LicenceVersionHelper from '../helpers/licence-version.helper.js'
+import { generateCompanyExternalId } from '../generators.js'
 
 /**
  * Add an additional contact
@@ -26,7 +25,7 @@ const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
  *
  * @returns {Promise<object>} an object containing all records related to an additional contact
  */
-async function additionalContact(
+export async function additionalContact(
   licenceHolderSeedData,
   additionalContactSeedData = null,
   abstractionAlerts = true,
@@ -75,13 +74,13 @@ async function additionalContact(
  * @param licenceVersionEndDate
  * @returns {Promise<object>} an object containing all records related to a licence holder
  */
-async function licenceHolder(licenceSeedData, name, existingRegionId = null, licenceVersionEndDate = null) {
+export async function licenceHolder(licenceSeedData, name, existingRegionId = null, licenceVersionEndDate = null) {
   const regionId = existingRegionId || licenceSeedData.licence.regionId
 
   const company = await CompanyHelper.add({
     name,
     regionId,
-    externalId: CompanyHelper.generateExternalId()
+    externalId: generateCompanyExternalId()
   })
 
   const address = await AddressHelper.add({
@@ -126,7 +125,7 @@ async function licenceHolder(licenceSeedData, name, existingRegionId = null, lic
  *
  * @returns {Promise<object>} an object containing all records related to a primary user
  */
-async function primaryUser(licenceSeedData, email) {
+export async function primaryUser(licenceSeedData, email) {
   const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
 
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
@@ -164,7 +163,7 @@ async function primaryUser(licenceSeedData, email) {
  *
  * @returns {Promise<object>} an object containing all records related to a 'returnsTo'
  */
-async function returnsTo(licenceSeedData, licenceHolderSeedData, name) {
+export async function returnsTo(licenceSeedData, licenceHolderSeedData, name) {
   let company = licenceHolderSeedData.company
   let address = licenceHolderSeedData.address
 
@@ -219,7 +218,7 @@ async function returnsTo(licenceSeedData, licenceHolderSeedData, name) {
  *
  * @returns {Promise<object>} an object containing all records related to a returns user
  */
-async function returnsUser(licenceSeedData, email) {
+export async function returnsUser(licenceSeedData, email) {
   const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
   const licenceEntityRole = await LicenceEntityRoleHelper.add({
     companyEntityId: licenceSeedData.licenceDocumentHeader.companyEntityId,
@@ -235,12 +234,4 @@ async function returnsUser(licenceSeedData, email) {
       await licenceEntityRole.$query().delete()
     }
   }
-}
-
-module.exports = {
-  additionalContact,
-  licenceHolder,
-  primaryUser,
-  returnsTo,
-  returnsUser
 }

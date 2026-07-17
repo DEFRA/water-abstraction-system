@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from '../../../support/helpers/return-submission-line.helper.js'
+import SessionModel from '../../../../app/models/session.model.js'
 
 // Thing under test
-const InitiateSessionService = require('../../../../app/services/return-logs/setup/initiate-session.service.js')
+import InitiateSessionService from '../../../../app/services/return-logs/setup/initiate-session.service.js'
 
 describe('Return Logs - Setup - Initiate Session service', () => {
   let licence
@@ -59,7 +60,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     it('creates a new session record containing details of the return log', async () => {
-      const result = await InitiateSessionService.go(returnLog.id)
+      const result = await InitiateSessionService(returnLog.id)
 
       const sessionId = _getSessionId(result)
 
@@ -129,7 +130,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('returns the quantity as expected', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -155,7 +156,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('formats the unit as expected', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -178,7 +179,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('defaults the unit to cubicMetres', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -216,7 +217,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('includes the meter details', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -246,7 +247,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('sets the journey as expected', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -256,7 +257,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('populates the lines array with placeholder data', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -289,7 +290,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     it('sets beenReceived to true', async () => {
-      const result = await InitiateSessionService.go(returnLog.id)
+      const result = await InitiateSessionService(returnLog.id)
 
       const sessionId = _getSessionId(result)
 
@@ -299,7 +300,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     it('populates the lines array with placeholder data', async () => {
-      const result = await InitiateSessionService.go(returnLog.id)
+      const result = await InitiateSessionService(returnLog.id)
 
       const sessionId = _getSessionId(result)
 
@@ -331,7 +332,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     it('sets beenReceived to false', async () => {
-      const result = await InitiateSessionService.go(returnLog.id)
+      const result = await InitiateSessionService(returnLog.id)
 
       const sessionId = _getSessionId(result)
 
@@ -341,7 +342,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     it('does not include submission-specific fields', async () => {
-      const result = await InitiateSessionService.go(returnLog.id)
+      const result = await InitiateSessionService(returnLog.id)
 
       const sessionId = _getSessionId(result)
 

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines if a licence has a two-part tariff (Section 127 )licence agreement in place for the start date selected
  * @module DetermineTwoPartTariffAgreementService
  */
 
-const LicenceAgreementModel = require('../../../../models/licence-agreement.model.js')
+import LicenceAgreementModel from '../../../../models/licence-agreement.model.js'
 
 /**
  * Determines if a licence has a two-part tariff (Section 127 )licence agreement in place for the start date selected
@@ -24,7 +22,7 @@ const LicenceAgreementModel = require('../../../../models/licence-agreement.mode
  *
  * @returns {Promise<boolean>} - Whether there is a two-part tariff agreement in place on the start date for the licence
  */
-async function go(licenceRef, startDate) {
+export default async function determineTwoPartTariffAgreementService(licenceRef, startDate) {
   const result = await LicenceAgreementModel.query()
     .select('licenceAgreements.id')
     .innerJoin('financialAgreements', 'financialAgreements.id', 'licenceAgreements.financialAgreementId')
@@ -39,8 +37,4 @@ async function go(licenceRef, startDate) {
     .first()
 
   return !!result
-}
-
-module.exports = {
-  go
 }

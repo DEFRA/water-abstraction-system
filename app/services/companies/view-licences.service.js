@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/licences' page
  *
  * @module ViewLicencesService
  */
 
-const FetchCompanyDal = require('../../dal/companies/fetch-company.dal.js')
-const FetchLicencesDal = require('../../dal/companies/fetch-licences.dal.js')
-const LicencesPresenter = require('../../presenters/companies/licences.presenter.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import FetchCompanyDal from '../../dal/companies/fetch-company.dal.js'
+import FetchLicencesDal from '../../dal/companies/fetch-licences.dal.js'
+import LicencesPresenter from '../../presenters/companies/licences.presenter.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/licences' page
@@ -21,14 +19,14 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(companyId, auth, page) {
-  const company = await FetchCompanyDal.go(companyId)
+export default async function viewLicencesService(companyId, auth, page) {
+  const company = await FetchCompanyDal(companyId)
 
-  const { licences, totalNumber } = await FetchLicencesDal.go(companyId, page)
+  const { licences, totalNumber } = await FetchLicencesDal(companyId, page)
 
-  const pageData = LicencesPresenter.go(company, licences)
+  const pageData = LicencesPresenter(company, licences)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/companies/${companyId}/licences`,
@@ -42,8 +40,4 @@ async function go(companyId, auth, page) {
     pagination,
     roles: userRoles(auth)
   }
-}
-
-module.exports = {
-  go
 }

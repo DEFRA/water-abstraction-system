@@ -1,6 +1,4 @@
-'use strict'
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/assets/all.js',
@@ -35,5 +33,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

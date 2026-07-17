@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Deletes all data relating to a review licence from the review tables
  * @module RemoveReviewLicenceService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Deletes all data relating to a review licence from the review tables
  *
  * @param {string} reviewLicenceId - The UUID of the review licence that is being removed from the bill run
  */
-async function go(reviewLicenceId) {
+export default async function removeReviewLicenceService(reviewLicenceId) {
   await _removeChargeElementReturns(reviewLicenceId)
   await _removeReturns(reviewLicenceId)
   await _removeChargeElements(reviewLicenceId)
@@ -74,8 +72,4 @@ async function _removeReturns(reviewLicenceId) {
     .from('reviewReturns AS rr')
     .innerJoin('reviewLicences AS rl', 'rr.reviewLicenceId', 'rl.id')
     .where('rl.id', reviewLicenceId)
-}
-
-module.exports = {
-  go
 }

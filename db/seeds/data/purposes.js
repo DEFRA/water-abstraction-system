@@ -1,6 +1,4 @@
-'use strict'
-
-const data = [
+export const data = [
   {
     id: '64b8e40e-0d13-401e-90e1-0e498cda9fcb',
     legacyId: '10',
@@ -436,7 +434,3 @@ const data = [
     twoPartTariff: true
   }
 ]
-
-module.exports = {
-  data
-}

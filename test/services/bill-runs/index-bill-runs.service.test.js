@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const YarStub = require('../../support/stubs/yar.stub.js')
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
-const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill-runs.service.js')
-const FetchRegionsService = require('../../../app/services/bill-runs/setup/fetch-regions.service.js')
+import * as CheckBusyBillRunsService from '../../../app/services/bill-runs/check-busy-bill-runs.service.js'
+import * as FetchBillRunsService from '../../../app/services/bill-runs/fetch-bill-runs.service.js'
+import * as FetchRegionsService from '../../../app/services/bill-runs/setup/fetch-regions.service.js'
 
 // Thing under test
-const IndexBillRunsService = require('../../../app/services/bill-runs/index-bill-runs.service.js')
+import IndexBillRunsService from '../../../app/services/bill-runs/index-bill-runs.service.js'
 
 describe('Index Bill Runs service', () => {
   let page
@@ -20,29 +18,29 @@ describe('Index Bill Runs service', () => {
 
   beforeEach(() => {
     // It doesn't matter for these tests what busy state the service returns, only that it returns one.
-    Sinon.stub(CheckBusyBillRunsService, 'go').resolves('none')
-    Sinon.stub(FetchRegionsService, 'go').resolves([
+    vi.spyOn(CheckBusyBillRunsService, 'default').mockResolvedValue('none')
+    vi.spyOn(FetchRegionsService, 'default').mockResolvedValue([
       { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }
     ])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when there is only one page of results', () => {
     beforeEach(() => {
-      Sinon.stub(FetchBillRunsService, 'go').resolves({
+      vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
         results: _fetchedBillRuns(),
         total: 2
       })
 
-      yarStub = YarStub.build(Sinon)
-      yarStub.get.returns(null)
+      yarStub = YarStub()
+      yarStub.get.mockReturnValue(null)
     })
 
     it('returns the page data for the view', async () => {
-      const result = await IndexBillRunsService.go(yarStub, page)
+      const result = await IndexBillRunsService(yarStub, page)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
@@ -162,14 +160,14 @@ describe('Index Bill Runs service', () => {
   describe('when there are multiple pages of results', () => {
     describe('and no page is selected', () => {
       beforeEach(() => {
-        Sinon.stub(FetchBillRunsService, 'go').resolves({
+        vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
           results: _fetchedBillRuns(),
           total: 70
         })
       })
 
       it('returns the page data for the view', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.billRuns).toHaveLength(2)
         expect(result.filters.openFilter).toBe(false)
@@ -184,14 +182,14 @@ describe('Index Bill Runs service', () => {
       beforeEach(() => {
         page = '2'
 
-        Sinon.stub(FetchBillRunsService, 'go').resolves({
+        vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
           results: _fetchedBillRuns(),
           total: 70
         })
       })
 
       it('returns the page data for the view', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.billRuns).toHaveLength(2)
         expect(result.filters.openFilter).toBe(false)
@@ -206,14 +204,14 @@ describe('Index Bill Runs service', () => {
       beforeEach(() => {
         page = '2'
 
-        Sinon.stub(FetchBillRunsService, 'go').resolves({
+        vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
           results: [],
           total: 70
         })
       })
 
       it('returns the page data for the view', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.billRuns).toHaveLength(0)
         expect(result.filters.openFilter).toBe(false)
@@ -228,17 +226,17 @@ describe('Index Bill Runs service', () => {
   describe('when the filters are assessed', () => {
     beforeEach(() => {
       // For the purposes of these tests the results don't matter
-      Sinon.stub(FetchBillRunsService, 'go').resolves({ results: [], total: 0 })
+      vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({ results: [], total: 0 })
     })
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns(null)
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue(null)
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.filters).toEqual({
           number: null,
@@ -253,12 +251,12 @@ describe('Index Bill Runs service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns(_billRunsFilter())
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue(_billRunsFilter())
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.filters).toEqual({
           number: null,
@@ -278,12 +276,12 @@ describe('Index Bill Runs service', () => {
         filters.regions = '1d562e9a-2104-41d9-aa75-c008a7ec9059'
         filters.yearCreated = 2025
 
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns(filters)
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue(filters)
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.filters).toEqual({
           number: null,

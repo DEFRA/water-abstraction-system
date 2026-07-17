@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ContactTypeValidator = require('../../../../app/validators/notices/setup/contact-type.validator.js')
+import ContactTypeValidator from '../../../../app/validators/notices/setup/contact-type.validator.js'
 
 describe('Contact Type Validator', () => {
   let payload
@@ -15,7 +16,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -31,7 +32,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -44,7 +45,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()
@@ -60,7 +61,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()
@@ -77,7 +78,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()
@@ -95,7 +96,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

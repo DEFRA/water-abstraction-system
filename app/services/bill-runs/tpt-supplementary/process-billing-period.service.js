@@ -1,24 +1,21 @@
-'use strict'
-
 /**
  * Process the billing accounts for a given billing period and creates their supplementary two-part tariff bills
  * @module ProcessBillingPeriodService
  */
 
-const BillRunError = require('../../../errors/bill-run.error.js')
-const BillRunModel = require('../../../models/bill-run.model.js')
-const BillModel = require('../../../models/bill.model.js')
-const BillLicenceModel = require('../../../models/bill-licence.model.js')
-const DetermineChargePeriodService = require('../determine-charge-period.service.js')
-const DetermineMinimumChargeService = require('../determine-minimum-charge.service.js')
-const FetchPreviousTransactionsService = require('../fetch-previous-transactions.service.js')
-const { generateUUID } = require('../../../lib/general.lib.js')
-const GenerateTwoPartTariffTransactionService = require('../generate-two-part-tariff-transaction.service.js')
-const ProcessSupplementaryTransactionsService = require('../process-supplementary-transactions.service.js')
-const SendTransactionsService = require('../send-transactions.service.js')
-const TransactionModel = require('../../../models/transaction.model.js')
-
-const BillingConfig = require('../../../../config/billing.config.js')
+import BillLicenceModel from '../../../models/bill-licence.model.js'
+import BillModel from '../../../models/bill.model.js'
+import BillRunError from '../../../errors/bill-run.error.js'
+import BillRunModel from '../../../models/bill-run.model.js'
+import BillingConfig from '../../../../config/billing.config.js'
+import DetermineChargePeriodService from '../determine-charge-period.service.js'
+import DetermineMinimumChargeService from '../determine-minimum-charge.service.js'
+import FetchPreviousTransactionsService from '../fetch-previous-transactions.service.js'
+import GenerateTwoPartTariffTransactionService from '../generate-two-part-tariff-transaction.service.js'
+import ProcessSupplementaryTransactionsService from '../process-supplementary-transactions.service.js'
+import SendTransactionsService from '../send-transactions.service.js'
+import TransactionModel from '../../../models/transaction.model.js'
+import { generateUUID } from '../../../lib/general.lib.js'
 
 /**
  * Process the billing accounts for a given billing period and creates their supplementary two-part tariff bills
@@ -29,7 +26,7 @@ const BillingConfig = require('../../../../config/billing.config.js')
  *
  * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go(billRun, billingPeriod, billingAccounts) {
+export default async function processBillingPeriodService(billRun, billingPeriod, billingAccounts) {
   let billRunIsPopulated = false
 
   if (billingAccounts.length === 0) {
@@ -170,7 +167,7 @@ async function _generateTransactions(billLicenceId, billingPeriod, chargeVersion
       return []
     }
 
-    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+    const chargePeriod = DetermineChargePeriodService(chargeVersion, billingPeriod)
 
     // Guard clause against invalid charge periods, for example, a licence 'ends' before the charge version starts
     if (!chargePeriod.startDate) {
@@ -179,12 +176,12 @@ async function _generateTransactions(billLicenceId, billingPeriod, chargeVersion
 
     // One of the things we need to know is if the charge version is the first charge on a new licence. This information
     // needs to be passed to the Charging Module API as it affects the calculation.
-    const firstChargeOnNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+    const firstChargeOnNewLicence = DetermineMinimumChargeService(chargeVersion, chargePeriod)
 
     const transactions = []
 
     chargeVersion.chargeReferences.forEach((chargeReference) => {
-      const transaction = GenerateTwoPartTariffTransactionService.go(
+      const transaction = GenerateTwoPartTariffTransactionService(
         billLicenceId,
         chargeReference,
         chargePeriod,
@@ -246,7 +243,7 @@ async function _processBillingAccount(billingAccount, billRun, billingPeriod) {
  *
  * We loop through each bill licence and check if any transactions were generated. If not we skip it.
  *
- * If there are transactions we call `ProcessSupplementaryTransactionsService.go()` which will pair up newly generated
+ * If there are transactions we call `ProcessSupplementaryTransactionsService()` which will pair up newly generated
  * transactions with previously billed ones. If there are no differences (i.e. all transactions have been previously
  * billed) we skip it.
  *
@@ -259,14 +256,14 @@ async function _processBillLicences(billLicences, billingAccountId, billingPerio
   const cleansedBillLicences = []
 
   for (const billLicence of billLicences) {
-    const previousTransactions = await FetchPreviousTransactionsService.go(
+    const previousTransactions = await FetchPreviousTransactionsService(
       billingAccountId,
       billLicence.licence.id,
       financialYearEnding,
       true
     )
 
-    const processedTransactions = await ProcessSupplementaryTransactionsService.go(
+    const processedTransactions = await ProcessSupplementaryTransactionsService(
       previousTransactions,
       billLicence.transactions,
       billLicence.id
@@ -290,7 +287,7 @@ async function _persistGeneratedData(bill, processedBillLicences, billRunExterna
 
   for (const processedBillLicence of processedBillLicences) {
     const { billId, id, licence, transactions: processedTransactions } = processedBillLicence
-    const sentTransactions = await SendTransactionsService.go(
+    const sentTransactions = await SendTransactionsService(
       processedTransactions,
       billRunExternalId,
       accountNumber,
@@ -306,8 +303,4 @@ async function _persistGeneratedData(bill, processedBillLicences, billRunExterna
   await TransactionModel.query().insert(transactions)
 
   return true
-}
-
-module.exports = {
-  go
 }

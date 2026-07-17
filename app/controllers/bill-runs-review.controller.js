@@ -1,37 +1,35 @@
-'use strict'
-
 /**
  * Controller for /bill-runs/review endpoints
  * @module BillRunsReviewController
  */
 
-const PreviewService = require('../services/bill-runs/review/preview.service.js')
-const SubmitAuthorisedService = require('../services/bill-runs/review/submit-authorised.service.js')
-const SubmitEditService = require('..//services/bill-runs/review/submit-edit.service.js')
-const SubmitFactorsService = require('../services/bill-runs/review/submit-factors.service.js')
-const SubmitRemoveService = require('../services/bill-runs/review/submit-remove.service.js')
-const SubmitReviewService = require('../services/bill-runs/review/submit-review.service.js')
-const SubmitReviewLicenceService = require('../services/bill-runs/review/submit-review-licence.service.js')
-const ViewAuthorisedService = require('../services/bill-runs/review/view-authorised.service.js')
-const ViewEditService = require('../services/bill-runs/review/view-edit.service.js')
-const ViewFactorsService = require('../services/bill-runs/review/view-factors.service.js')
-const ViewRemoveService = require('../services/bill-runs/review/view-remove.service.js')
-const ViewReviewChargeElementService = require('../services/bill-runs/review/view-review-charge-element.service.js')
-const ViewReviewChargeReferenceService = require('../services/bill-runs/review/view-review-charge-reference.service.js')
-const ViewReviewLicenceService = require('../services/bill-runs/review/view-review-licence.service.js')
-const ViewReviewService = require('../services/bill-runs/review/view-review.service.js')
+import PreviewService from '../services/bill-runs/review/preview.service.js'
+import SubmitAuthorisedService from '../services/bill-runs/review/submit-authorised.service.js'
+import SubmitEditService from '..//services/bill-runs/review/submit-edit.service.js'
+import SubmitFactorsService from '../services/bill-runs/review/submit-factors.service.js'
+import SubmitRemoveService from '../services/bill-runs/review/submit-remove.service.js'
+import SubmitReviewLicenceService from '../services/bill-runs/review/submit-review-licence.service.js'
+import SubmitReviewService from '../services/bill-runs/review/submit-review.service.js'
+import ViewAuthorisedService from '../services/bill-runs/review/view-authorised.service.js'
+import ViewEditService from '../services/bill-runs/review/view-edit.service.js'
+import ViewFactorsService from '../services/bill-runs/review/view-factors.service.js'
+import ViewRemoveService from '../services/bill-runs/review/view-remove.service.js'
+import ViewReviewChargeElementService from '../services/bill-runs/review/view-review-charge-element.service.js'
+import ViewReviewChargeReferenceService from '../services/bill-runs/review/view-review-charge-reference.service.js'
+import ViewReviewLicenceService from '../services/bill-runs/review/view-review-licence.service.js'
+import ViewReviewService from '../services/bill-runs/review/view-review.service.js'
 
-async function preview(request, h) {
+export async function preview(request, h) {
   const { reviewChargeReferenceId } = request.params
 
-  await PreviewService.go(reviewChargeReferenceId, request.yar)
+  await PreviewService(reviewChargeReferenceId, request.yar)
 
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
 }
 
-async function submitAuthorised(request, h) {
+export async function submitAuthorised(request, h) {
   const { reviewChargeReferenceId } = request.params
-  const pageData = await SubmitAuthorisedService.go(reviewChargeReferenceId, request.yar, request.payload)
+  const pageData = await SubmitAuthorisedService(reviewChargeReferenceId, request.yar, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/review/authorised.njk', pageData)
@@ -40,10 +38,10 @@ async function submitAuthorised(request, h) {
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
 }
 
-async function submitEdit(request, h) {
+export async function submitEdit(request, h) {
   const { elementIndex, reviewChargeElementId } = request.params
 
-  const pageData = await SubmitEditService.go(reviewChargeElementId, elementIndex, request.yar, request.payload)
+  const pageData = await SubmitEditService(reviewChargeElementId, elementIndex, request.yar, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/review/edit.njk', pageData)
@@ -52,9 +50,9 @@ async function submitEdit(request, h) {
   return h.redirect(`/system/bill-runs/review/charge-element/${reviewChargeElementId}/${elementIndex}`)
 }
 
-async function submitFactors(request, h) {
+export async function submitFactors(request, h) {
   const { reviewChargeReferenceId } = request.params
-  const pageData = await SubmitFactorsService.go(reviewChargeReferenceId, request.yar, request.payload)
+  const pageData = await SubmitFactorsService(reviewChargeReferenceId, request.yar, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/review/factors.njk', pageData)
@@ -63,10 +61,10 @@ async function submitFactors(request, h) {
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
 }
 
-async function submitRemove(request, h) {
+export async function submitRemove(request, h) {
   const { reviewLicenceId } = request.params
 
-  const result = await SubmitRemoveService.go(reviewLicenceId, request.yar)
+  const result = await SubmitRemoveService(reviewLicenceId, request.yar)
 
   if (result.empty) {
     return h.redirect('/system/bill-runs')
@@ -75,104 +73,86 @@ async function submitRemove(request, h) {
   return h.redirect(`/system/bill-runs/review/${result.billRunId}`)
 }
 
-async function submitReview(request, h) {
+export async function submitReview(request, h) {
   const { billRunId } = request.params
 
-  await SubmitReviewService.go(billRunId, request.payload, request.yar)
+  await SubmitReviewService(billRunId, request.payload, request.yar)
 
   return h.redirect(`/system/bill-runs/review/${billRunId}`)
 }
 
-async function submitReviewLicence(request, h) {
+export async function submitReviewLicence(request, h) {
   const { reviewLicenceId } = request.params
 
-  await SubmitReviewLicenceService.go(reviewLicenceId, request.yar, request.payload)
+  await SubmitReviewLicenceService(reviewLicenceId, request.yar, request.payload)
 
   return h.redirect(`/system/bill-runs/review/licence/${reviewLicenceId}`)
 }
 
-async function viewAuthorised(request, h) {
+export async function viewAuthorised(request, h) {
   const { reviewChargeReferenceId } = request.params
 
-  const pageData = await ViewAuthorisedService.go(reviewChargeReferenceId)
+  const pageData = await ViewAuthorisedService(reviewChargeReferenceId)
 
   return h.view('bill-runs/review/authorised.njk', pageData)
 }
 
-async function viewEdit(request, h) {
+export async function viewEdit(request, h) {
   const { elementIndex, reviewChargeElementId } = request.params
 
-  const pageData = await ViewEditService.go(reviewChargeElementId, elementIndex)
+  const pageData = await ViewEditService(reviewChargeElementId, elementIndex)
 
   return h.view('bill-runs/review/edit.njk', pageData)
 }
 
-async function viewFactors(request, h) {
+export async function viewFactors(request, h) {
   const { reviewChargeReferenceId } = request.params
 
-  const pageData = await ViewFactorsService.go(reviewChargeReferenceId)
+  const pageData = await ViewFactorsService(reviewChargeReferenceId)
 
   return h.view('bill-runs/review/factors.njk', pageData)
 }
 
-async function viewRemove(request, h) {
+export async function viewRemove(request, h) {
   const { reviewLicenceId } = request.params
 
-  const pageData = await ViewRemoveService.go(reviewLicenceId)
+  const pageData = await ViewRemoveService(reviewLicenceId)
 
   return h.view('bill-runs/review/remove.njk', pageData)
 }
 
-async function viewReview(request, h) {
+export async function viewReview(request, h) {
   const {
     params: { billRunId },
     query: { page },
     yar
   } = request
 
-  const pageData = await ViewReviewService.go(billRunId, yar, page)
+  const pageData = await ViewReviewService(billRunId, yar, page)
 
   return h.view('bill-runs/review/review.njk', pageData)
 }
 
-async function viewReviewChargeElement(request, h) {
+export async function viewReviewChargeElement(request, h) {
   const { elementIndex, reviewChargeElementId } = request.params
 
-  const pageData = await ViewReviewChargeElementService.go(reviewChargeElementId, elementIndex, request.yar)
+  const pageData = await ViewReviewChargeElementService(reviewChargeElementId, elementIndex, request.yar)
 
   return h.view('bill-runs/review/review-charge-element.njk', pageData)
 }
 
-async function viewReviewChargeReference(request, h) {
+export async function viewReviewChargeReference(request, h) {
   const { reviewChargeReferenceId } = request.params
 
-  const pageData = await ViewReviewChargeReferenceService.go(reviewChargeReferenceId, request.yar)
+  const pageData = await ViewReviewChargeReferenceService(reviewChargeReferenceId, request.yar)
 
   return h.view('bill-runs/review/review-charge-reference.njk', pageData)
 }
 
-async function viewReviewLicence(request, h) {
+export async function viewReviewLicence(request, h) {
   const { reviewLicenceId } = request.params
 
-  const pageData = await ViewReviewLicenceService.go(reviewLicenceId, request.yar)
+  const pageData = await ViewReviewLicenceService(reviewLicenceId, request.yar)
 
   return h.view('bill-runs/review/review-licence.njk', pageData)
-}
-
-module.exports = {
-  preview,
-  submitAuthorised,
-  submitEdit,
-  submitFactors,
-  submitRemove,
-  submitReview,
-  submitReviewLicence,
-  viewAuthorised,
-  viewEdit,
-  viewFactors,
-  viewRemove,
-  viewReview,
-  viewReviewChargeElement,
-  viewReviewChargeReference,
-  viewReviewLicence
 }

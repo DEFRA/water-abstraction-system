@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches bills to be reissued
  * @module FetchBillsToBeReissuedService
  */
 
-const BillModel = require('../../../models/bill.model.js')
+import BillModel from '../../../models/bill.model.js'
 
 /**
  * Takes a region and fetches sroc bills in that region marked for reissuing, along with their transactions
@@ -14,7 +12,7 @@ const BillModel = require('../../../models/bill.model.js')
  *
  * @returns {Promise<module:BillModel[]>} An array of bills to be reissued
  */
-async function go(regionId) {
+export default async function fetchBillsToBeReissuedService(regionId) {
   try {
     const result = await BillModel.query()
       .select(
@@ -43,8 +41,4 @@ async function go(regionId) {
 
     return []
   }
-}
-
-module.exports = {
-  go
 }

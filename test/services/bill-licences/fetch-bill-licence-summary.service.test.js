@@ -1,19 +1,20 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const TransactionHelper = require('../../support/helpers/transaction.helper.js')
+import BillHelper from '../../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
+import ContactHelper from '../../support/helpers/contact.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
+import TransactionHelper from '../../support/helpers/transaction.helper.js'
+import { generateLicenceRef } from '../../support/generators.js'
 
 // Thing under test
-const FetchBillLicenceSummaryService = require('../../../app/services/bill-licences/fetch-bill-licence-summary.service.js')
+import FetchBillLicenceSummaryService from '../../../app/services/bill-licences/fetch-bill-licence-summary.service.js'
 
 describe('Fetch Bill Licence Summary service', () => {
   let accountNumber
@@ -33,7 +34,7 @@ describe('Fetch Bill Licence Summary service', () => {
     const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
 
     regionId = region.id
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
 
     const company = await CompanyHelper.add()
 
@@ -83,7 +84,7 @@ describe('Fetch Bill Licence Summary service', () => {
 
   describe('when a bill licence with a matching ID exists', () => {
     it('will fetch the data use in the remove bill licence page', async () => {
-      const result = await FetchBillLicenceSummaryService.go(billLicence.id)
+      const result = await FetchBillLicenceSummaryService(billLicence.id)
 
       // NOTE: Transactions would not ordinarily be empty. But the format of the transactions will differ depending on
       // scheme so we get into that in later tests.
@@ -153,7 +154,7 @@ describe('Fetch Bill Licence Summary service', () => {
 
   describe('when a bill licence with a matching ID does not exist', () => {
     it('returns no result', async () => {
-      const result = await FetchBillLicenceSummaryService.go('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillLicenceSummaryService('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeUndefined()
     })

@@ -1,12 +1,9 @@
-'use strict'
-
 /**
  * @module ReviewLicenceHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('./licence.helper.js')
-const ReviewLicenceModel = require('../../../app/models/review-licence.model.js')
+import ReviewLicenceModel from '../../../app/models/review-licence.model.js'
+import { generateLicenceRef, generateUUID } from '../generators.js'
 
 /**
  * Add a new review licence record for 2pt matching
@@ -56,7 +53,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

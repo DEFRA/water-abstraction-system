@@ -1,13 +1,13 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import CustomersFixture from '../../../support/fixtures/customers.fixture.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const CheckPresenter = require('../../../../app/presenters/billing-accounts/setup/check.presenter.js')
+import CheckPresenter from '../../../../app/presenters/billing-accounts/setup/check.presenter.js'
 
 describe('Billing Accounts - Setup - Check Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -35,7 +35,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckPresenter.go(session, companyContacts, [], null)
+      const result = CheckPresenter(session, companyContacts, [], null)
 
       expect(result).toEqual({
         accountSelected: 'Ferns Surfacing Limited',
@@ -72,7 +72,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "accountSelected" property', () => {
     describe('when called with the "accountSelected" set to a UUID', () => {
       it('returns the name from the billing account', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             accountSelected: generateUUID()
@@ -88,7 +88,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when called with the "accountSelected" set to "another"', () => {
       it('returns the name from the billing account', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             accountSelected: 'another'
@@ -106,7 +106,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "searchInput" property', () => {
     describe('when called with the "searchInput" set', () => {
       it('returns the saved search input', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             searchInput: 'Customer name'
@@ -122,7 +122,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when called with the "searchInput" set to null', () => {
       it('returns an empty string', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             searchInput: null
@@ -140,7 +140,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "existingAccount" property', () => {
     describe('when called with the "existingAccount" set to new', () => {
       it('returns "New billing account"', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             existingAccount: 'new'
@@ -156,7 +156,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when called with the "existingAccount" set to null', () => {
       it('returns an empty string', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             existingAccount: null
@@ -172,7 +172,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when called with the "existingAccount" set to an existing comapny id', () => {
       it('returns the name of that company', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             existingAccount: billingAccount.company.id
@@ -190,7 +190,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "accountType" property', () => {
     describe('when called with the "accountType" set to "company"', () => {
       it('returns "company"', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             accountType: 'company'
@@ -206,7 +206,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when called with the "accountType" set to "individual"', () => {
       it('returns "individual"', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             accountType: 'individual'
@@ -224,7 +224,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "individualName" property', () => {
     describe('when called with the "individualName" set', () => {
       it('returns the saved search input', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             individualName: 'Customer name'
@@ -240,7 +240,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when called with the "individualName" set to null', () => {
       it('returns an empty string', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             individualName: null
@@ -258,7 +258,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "addressSelected" property', () => {
     describe('when called with a address selected', () => {
       it('returns an array of address lines', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             addressSelected: generateUUID()
@@ -274,7 +274,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when called with the "addressSelected" set to "new"', () => {
       it('returns an array with the string "New"', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             addressSelected: 'new'
@@ -292,7 +292,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "companySearch" property', () => {
     describe('when a company has been searched for', () => {
       it('returns the term used in the search', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             companySearch: 'Company name'
@@ -308,7 +308,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when a company has not been searched for', () => {
       it('returns an empty string', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             companySearch: null
@@ -326,7 +326,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "companiesHouseName" property', () => {
     describe('when a company has been selected', () => {
       it('returns the name of the company', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session
           },
@@ -341,7 +341,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when a company has not been searched for', () => {
       it('returns an empty string', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session
           },
@@ -358,7 +358,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "fao" property', () => {
     describe('when "yes" was selected', () => {
       it('returns "yes"', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             fao: 'yes'
@@ -374,7 +374,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when "no" was selected', () => {
       it('returns "no"', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             fao: 'no'
@@ -396,7 +396,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when "fao" was "no', () => {
       it('returns string for display', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             fao: 'no'
@@ -406,13 +406,13 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.contactSelected).toEqual(null)
+        expect(result.contactSelected).toBeNull()
       })
     })
 
     describe('when "new" was selected', () => {
       it('returns string for display', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             contactSelected: 'new',
@@ -429,7 +429,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when an existing contact was selected', () => {
       it('returns the contact name', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             contactSelected: contact.id,
@@ -452,7 +452,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when a value is provided', () => {
       it('returns it for display', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             contactSelected: contact.id,
@@ -469,7 +469,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when there was no contact name entered', () => {
       it('returns the contact name', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             contactSelected: contact.id
@@ -487,12 +487,9 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "impactedLicences" property', () => {
     describe('when an array is provided', () => {
       it('returns it for display', () => {
-        const impactedLicences = [
-          { licenceRef: LicenceHelper.generateLicenceRef() },
-          { licenceRef: LicenceHelper.generateLicenceRef() }
-        ]
+        const impactedLicences = [{ licenceRef: generateLicenceRef() }, { licenceRef: generateLicenceRef() }]
 
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session
           },
@@ -508,7 +505,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when there was no impacted licences', () => {
       it('returns undefined', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session
           },
@@ -525,7 +522,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "address" property', () => {
     describe('when there is an address lookup value provided', () => {
       it('returns an array of address lines', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             addressJourney: {
@@ -550,7 +547,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when there is a manual entry provided', () => {
       it('returns an array of address lines', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             addressJourney: {
@@ -574,7 +571,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when there is an international entry provided', () => {
       it('returns an array of address lines', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             addressJourney: {
@@ -599,7 +596,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
     describe('when there is no addressJourney provided', () => {
       it('returns an array of address lines', () => {
-        const result = CheckPresenter.go(
+        const result = CheckPresenter(
           {
             ...session,
             addressJourney: null

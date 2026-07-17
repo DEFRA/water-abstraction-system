@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates sending the first main notice to Notify, then checking if an alternate needs creating and sending
  * @module SendNoticeService
  */
 
-const SendAlternateNoticeService = require('./send-alternate-notice.service.js')
-const SendMainNoticeService = require('./send-main-notice.service.js')
-const UpdateNoticeService = require('../../update-notice.service.js')
-
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../../lib/general.lib.js')
-const { NoticeType, NoticeTypes } = require('../../../../lib/static-lookups.lib.js')
+import SendAlternateNoticeService from './send-alternate-notice.service.js'
+import SendMainNoticeService from './send-main-notice.service.js'
+import UpdateNoticeService from '../../update-notice.service.js'
+import { NoticeType, NoticeTypes } from '../../../../lib/static-lookups.lib.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates sending the first main notice to Notify, then checking if an alternate needs creating and sending
@@ -18,13 +15,13 @@ const { NoticeType, NoticeTypes } = require('../../../../lib/static-lookups.lib.
  * @param {object} notice - The main notice to be sent
  * @param {object[]} notifications - The main notifications linked to the main notice to be sent
  */
-async function go(notice, notifications) {
+export default async function sendNoticeService(notice, notifications) {
   try {
     const startTime = currentTimeInNanoseconds()
 
     const { id: noticeId, subtype } = notice
 
-    await SendMainNoticeService.go(notice, notifications)
+    await SendMainNoticeService(notice, notifications)
 
     const noticesToUpdate = [noticeId]
 
@@ -33,21 +30,17 @@ async function go(notice, notifications) {
       subtype === NoticeTypes[NoticeType.INVITATIONS].subType ||
       subtype === NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType
     ) {
-      const alternateNotice = await SendAlternateNoticeService.go(notice)
+      const alternateNotice = await SendAlternateNoticeService(notice)
 
       if (alternateNotice) {
         noticesToUpdate.push(alternateNotice.id)
       }
     }
 
-    await UpdateNoticeService.go(noticesToUpdate)
+    await UpdateNoticeService(noticesToUpdate)
 
     calculateAndLogTimeTaken(startTime, 'Send notice complete', { count: notifications.length, noticeId })
   } catch (error) {
     globalThis.GlobalNotifier.omfg('Send notice failed', { notice }, error)
   }
-}
-
-module.exports = {
-  go
 }

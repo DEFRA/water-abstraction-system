@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/start-date` page
  * @module StartDatePresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
+import { formatLongDate } from '../../base.presenter.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/start-date` page
@@ -14,7 +12,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function startDatePresenter(session) {
   const { id: sessionId, licence, startDateOptions, startDateDay, startDateMonth, startDateYear } = session
 
   return {
@@ -50,8 +48,4 @@ function _licenceVersionStartDate(licence) {
   const dateObj = new Date(currentVersionStartDate)
 
   return formatLongDate(dateObj)
-}
-
-module.exports = {
-  go
 }

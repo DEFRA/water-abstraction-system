@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats recipients into notifications for a renewal invitation
  * @module RenewalInvitationNotificationsPresenter
  */
 
-const NotifyAddressPresenter = require('./notify-address.presenter.js')
-const { NOTIFY_TEMPLATES } = require('../../../lib/notify-templates.lib.js')
-const { formatLongDate } = require('../../base.presenter.js')
+import { NOTIFY_TEMPLATES } from '../../../lib/notify-templates.lib.js'
+import NotifyAddressPresenter from './notify-address.presenter.js'
+import { formatLongDate } from '../../base.presenter.js'
 
 const MESSAGE_REFS = {
   adhoc: 'renewal invitation ad-hoc',
@@ -23,7 +21,7 @@ const MESSAGE_REFS = {
  *
  * @returns {object[]} the recipients transformed into notifications
  */
-function go(noticeData, recipients, noticeId) {
+export default function renewalInvitationNoticeNotificationsPresenter(noticeData, recipients, noticeId) {
   const notifications = []
 
   for (const recipient of recipients) {
@@ -65,7 +63,7 @@ function _letter(recipient, noticeId, noticeData) {
   const { journey, noticeType } = noticeData
 
   const messageType = 'letter'
-  const address = NotifyAddressPresenter.go(recipient.contact)
+  const address = NotifyAddressPresenter(recipient.contact)
 
   return {
     contactType: recipient.contact_type,
@@ -105,8 +103,4 @@ function _templateType(recipient) {
   }
 
   return 'single licence'
-}
-
-module.exports = {
-  go
 }

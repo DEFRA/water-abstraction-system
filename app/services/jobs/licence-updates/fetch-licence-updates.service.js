@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches licence versions that were created in last 2 months that have no matching workflow record
  * @module FetchLicenceUpdatesService
  */
 
-const { db } = require('../../../../db/db.js')
-const { today } = require('../../../lib/general.lib.js')
+import { db } from '../../../../db/db.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Fetches licence versions that were created in last two months that have no matching workflow record
@@ -23,7 +21,7 @@ const { today } = require('../../../lib/general.lib.js')
  * @returns {Promise<object[]>} The ID for each licence version created in the last 2 months without a workflow record,
  * plus associated licence ID and whether a charge version exists for the licence
  */
-async function go() {
+export default async function fetchLicenceUpdatesService() {
   const twoMonthsAgo = _twoMonthsAgo()
 
   // NOTE: We've resorted to Knex rather than Objection JS due to the complexity of the query. As we are not intending
@@ -66,8 +64,4 @@ function _twoMonthsAgo() {
   todaysDate.setMonth(todaysDate.getMonth() - 2)
 
   return todaysDate
-}
-
-module.exports = {
-  go
 }

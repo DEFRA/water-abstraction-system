@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
-const FetchAbstractionAlertRecipientsDal = require('../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
+import FetchAbstractionAlertRecipientsDal from '../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
 
 describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipients DAL', () => {
   let scenarios
@@ -25,7 +26,7 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
 
   describe('when there are abstraction alert recipients to notify', () => {
     it('fetches the correct recipient data', async () => {
-      const result = await FetchAbstractionAlertRecipientsDal.go(session)
+      const result = await FetchAbstractionAlertRecipientsDal(session)
 
       const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 

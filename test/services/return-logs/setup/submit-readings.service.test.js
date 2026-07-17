@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitReadingsService = require('../../../../app/services/return-logs/setup/submit-readings.service.js')
+import SubmitReadingsService from '../../../../app/services/return-logs/setup/submit-readings.service.js'
 
 describe('Return Logs Setup - Submit Readings service', () => {
   let payload
@@ -42,16 +40,16 @@ describe('Return Logs Setup - Submit Readings service', () => {
       returnReference: '1234'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -63,7 +61,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
         })
 
         it('saves the reading for May as null', async () => {
-          await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
+          await SubmitReadingsService(session.id, payload, yarStub, yearMonth)
 
           expect(session.lines).toEqual([
             {
@@ -82,13 +80,13 @@ describe('Return Logs Setup - Submit Readings service', () => {
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ])
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('sets the notification message title to "Updated" and the text to "Readings have been updated" ', async () => {
-          await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
+          await SubmitReadingsService(session.id, payload, yarStub, yearMonth)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({ titleText: 'Updated', text: 'Readings have been updated' })
@@ -102,7 +100,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
         })
 
         it('saves the reading for June as 200', async () => {
-          await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
+          await SubmitReadingsService(session.id, payload, yarStub, yearMonth)
 
           expect(session.lines).toEqual([
             {
@@ -120,13 +118,13 @@ describe('Return Logs Setup - Submit Readings service', () => {
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ])
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('sets the notification message title to "Updated" and the text to "Readings have been updated" ', async () => {
-          await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
+          await SubmitReadingsService(session.id, payload, yarStub, yearMonth)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({ titleText: 'Updated', text: 'Readings have been updated' })
@@ -141,7 +139,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
+        const result = await SubmitReadingsService(session.id, payload, yarStub, yearMonth)
 
         expect(result).toEqual({
           error: {
@@ -175,7 +173,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
 
       describe('because the user has not entered a number', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
+          const result = await SubmitReadingsService(session.id, payload, yarStub, yearMonth)
 
           expect(result.error).toEqual({
             '2023-04-30T00:00:00.000Z': {

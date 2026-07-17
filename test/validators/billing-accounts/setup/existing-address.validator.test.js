@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const ExistingAddressValidator = require('../../../../app/validators/billing-accounts/setup/existing-address.validator.js')
+import ExistingAddressValidator from '../../../../app/validators/billing-accounts/setup/existing-address.validator.js'
 
 describe('Billing Accounts - Setup - Existing Address Validator', () => {
   let payload
@@ -16,7 +17,7 @@ describe('Billing Accounts - Setup - Existing Address Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = ExistingAddressValidator.go(payload, 'Customer Name')
+        const result = ExistingAddressValidator(payload, 'Customer Name')
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -29,7 +30,7 @@ describe('Billing Accounts - Setup - Existing Address Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = ExistingAddressValidator.go(payload, 'Customer Name')
+        const result = ExistingAddressValidator(payload, 'Customer Name')
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -43,7 +44,7 @@ describe('Billing Accounts - Setup - Existing Address Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ExistingAddressValidator.go(payload, 'Customer Name')
+      const result = ExistingAddressValidator(payload, 'Customer Name')
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

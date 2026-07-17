@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Initiates the session record used for setting up a new return log edit journey
  * @module InitiateSessionService
  */
 
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
-const { convertFromCubicMetres } = require('../../../lib/general.lib.js')
-const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
+import CreateSessionDal from '../../../dal/create-session.dal.js'
+import ReturnLogModel from '../../../models/return-log.model.js'
+import { convertFromCubicMetres } from '../../../lib/general.lib.js'
+import { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } from '../../../lib/dates.lib.js'
+import { returnUnits, unitNames } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Initiates the session record used for setting up a new return log edit journey
@@ -26,7 +24,7 @@ const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
  *
  * @returns {Promise<string>} the url to redirect to
  */
-async function go(returnLogId) {
+export default async function initiateSessionService(returnLogId) {
   const returnLog = await _fetchReturnLog(returnLogId)
 
   const referenceData = _referenceData(returnLog)
@@ -34,7 +32,7 @@ async function go(returnLogId) {
 
   const data = { ...referenceData, ...submissionData }
 
-  const { id: sessionId } = await CreateSessionDal.go(data)
+  const { id: sessionId } = await CreateSessionDal(data)
 
   const redirect = data.submissionType === 'edit' ? 'check' : 'received'
 
@@ -216,8 +214,4 @@ function _submissionLines(returnSubmissionLines) {
       startDate
     }
   })
-}
-
-module.exports = {
-  go
 }

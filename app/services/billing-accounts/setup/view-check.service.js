@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/check` page
  *
  * @module ViewCheckService
  */
 
-const CheckPresenter = require('../../../presenters/billing-accounts/setup/check.presenter.js')
-const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
-const FetchCompanyService = require('./fetch-company.service.js')
-const FetchExistingAddress = require('../../../dal/billing-accounts/fetch-existing-address.dal.js')
-const FetchImpactedLicences = require('../../../dal/billing-accounts/fetch-impacted-licences.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
+import CheckPresenter from '../../../presenters/billing-accounts/setup/check.presenter.js'
+import FetchCompanyContactsService from './fetch-company-contacts.service.js'
+import FetchCompanyService from './fetch-company.service.js'
+import FetchExistingAddress from '../../../dal/billing-accounts/fetch-existing-address.dal.js'
+import FetchImpactedLicences from '../../../dal/billing-accounts/fetch-impacted-licences.dal.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { markCheckPageVisited } from '../../../lib/check-page.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/check` page
@@ -21,17 +19,17 @@ const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewCheckService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
   const companyContacts = await _fetchCompanyContacts(session)
-  const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
+  const companysHouseResult = await FetchCompanyService(session.companiesHouseNumber)
   const existingAddress = await _fetchExistingAddress(session)
-  const impactedLicences = await FetchImpactedLicences.go(session.billingAccount.id)
+  const impactedLicences = await FetchImpactedLicences(session.billingAccount.id)
 
   await markCheckPageVisited(session)
   await _updateAddressJourneyBackLink(session)
 
-  const pageData = CheckPresenter.go(session, companyContacts, existingAddress, companysHouseResult, impactedLicences)
+  const pageData = CheckPresenter(session, companyContacts, existingAddress, companysHouseResult, impactedLicences)
 
   return {
     ...pageData
@@ -42,7 +40,7 @@ async function _fetchCompanyContacts(session) {
   const newAccount = !!session.existingAccount && session.existingAccount !== 'new'
   const companyId = newAccount ? session.existingAccount : session.billingAccount.company.id
 
-  const companyContacts = await FetchCompanyContactsService.go(companyId)
+  const companyContacts = await FetchCompanyContactsService(companyId)
 
   return companyContacts
 }
@@ -54,7 +52,7 @@ async function _fetchExistingAddress(session) {
     return []
   }
 
-  return FetchExistingAddress.go(session.addressSelected)
+  return FetchExistingAddress(session.addressSelected)
 }
 
 async function _updateAddressJourneyBackLink(session) {
@@ -63,8 +61,4 @@ async function _updateAddressJourneyBackLink(session) {
 
     await session.$update()
   }
-}
-
-module.exports = {
-  go
 }

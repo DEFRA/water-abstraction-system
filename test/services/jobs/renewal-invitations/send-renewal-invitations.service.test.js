@@ -1,35 +1,27 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
-const CreateNotificationsService = require('../../../../app/services/notices/setup/create-notifications.service.js')
-const FetchRenewalRecipients = require('../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js')
-const NotifyConfig = require('../../../../config/notify.config.js')
-const SendNoticeService = require('../../../../app/services/notices/setup/send/send-notice.service.js')
+import * as CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
+import * as CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
+import * as FetchRenewalRecipients from '../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js'
+import * as SendNoticeService from '../../../../app/services/notices/setup/send/send-notice.service.js'
+import NotifyConfig from '../../../../config/notify.config.js'
 
 // Thing under test
-const SendRenewalInvitations = require('../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js')
+import SendRenewalInvitations from '../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js'
 
 describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => {
   const days = '300'
   const recipients = [{ licence_refs: generateLicenceRef() }]
 
-  let clock
-  let createNoticeStub
-  let createNotificationStub
   let expectedRenewalDate
   let expiredDate
-  let fetchRenewalRecipientsStub
   let noticeId
   let notifications
-  let sendNoticeStub
   let todayDate
 
   beforeEach(() => {
@@ -43,32 +35,32 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     // 90 days before the expired date
     expectedRenewalDate = new Date('2026-11-11')
 
-    clock = Sinon.useFakeTimers(todayDate)
+    vi.useFakeTimers({ now: todayDate })
 
-    Sinon.stub(NotifyConfig, 'replyTo').value('notify@test.gov.uk')
+    vi.replaceProperty(NotifyConfig, 'replyTo', 'notify@test.gov.uk')
 
-    fetchRenewalRecipientsStub = Sinon.stub(FetchRenewalRecipients, 'go').resolves(recipients)
-    createNoticeStub = Sinon.stub(CreateNoticeService, 'go').resolves({ id: noticeId })
-    createNotificationStub = Sinon.stub(CreateNotificationsService, 'go').resolves(notifications)
-    sendNoticeStub = Sinon.stub(SendNoticeService, 'go').resolves()
+    vi.spyOn(FetchRenewalRecipients, 'default').mockResolvedValue(recipients)
+    vi.spyOn(CreateNoticeService, 'default').mockResolvedValue({ id: noticeId })
+    vi.spyOn(CreateNotificationsService, 'default').mockResolvedValue(notifications)
+    vi.spyOn(SendNoticeService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    clock.restore()
-    Sinon.restore()
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   describe('when there are renewal invitations to send', () => {
     it('returns the recipients', async () => {
-      const result = await SendRenewalInvitations.go(days)
+      const result = await SendRenewalInvitations(days)
 
       expect(result).toEqual(recipients)
     })
 
     it('creates a notice for renewal invitations', async () => {
-      await SendRenewalInvitations.go(days)
+      await SendRenewalInvitations(days)
 
-      const [firstArg, secondArg, thirdArg] = createNoticeStub.firstCall.args
+      const [firstArg, secondArg, thirdArg] = CreateNoticeService.default.mock.calls[0]
 
       // Argument 1: Notice type
       expect(firstArg).toMatchObject({
@@ -89,9 +81,9 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     })
 
     it('creates the notifications', async () => {
-      await SendRenewalInvitations.go(days)
+      await SendRenewalInvitations(days)
 
-      const [firstArg, secondArg, thirdArg] = createNotificationStub.firstCall.args
+      const [firstArg, secondArg, thirdArg] = CreateNotificationsService.default.mock.calls[0]
 
       // Argument 1: Notice type
       expect(firstArg).toMatchObject({
@@ -112,9 +104,9 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     })
 
     it('sends the notice', async () => {
-      await SendRenewalInvitations.go(days)
+      await SendRenewalInvitations(days)
 
-      const [firstArg, secondArg] = sendNoticeStub.firstCall.args
+      const [firstArg, secondArg] = SendNoticeService.default.mock.calls[0]
 
       // Argument 1: The notice
       expect(firstArg).toMatchObject({ id: noticeId })
@@ -126,21 +118,21 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
 
   describe('when there are no renewal invitations to send', () => {
     beforeEach(() => {
-      fetchRenewalRecipientsStub.resolves([])
+      vi.spyOn(FetchRenewalRecipients, 'default').mockResolvedValue([])
     })
 
     it('returns the empty recipients', async () => {
-      const result = await SendRenewalInvitations.go(days)
+      const result = await SendRenewalInvitations(days)
 
       expect(result).toEqual([])
     })
 
     it('does not call the services', async () => {
-      await SendRenewalInvitations.go(days)
+      await SendRenewalInvitations(days)
 
-      expect(createNoticeStub.called).toBe(false)
-      expect(createNotificationStub.called).toBe(false)
-      expect(sendNoticeStub.called).toBe(false)
+      expect(CreateNoticeService.default).not.toHaveBeenCalled()
+      expect(CreateNotificationsService.default).not.toHaveBeenCalled()
+      expect(SendNoticeService.default).not.toHaveBeenCalled()
     })
   })
 })

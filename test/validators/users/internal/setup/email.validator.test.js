@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const EmailValidator = require('../../../../../app/validators/users/internal/setup/email.validator.js')
+import EmailValidator from '../../../../../app/validators/users/internal/setup/email.validator.js'
 
 describe('Users - Internal - Setup - Email Validator', () => {
   let emailExists
@@ -17,7 +18,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = EmailValidator.go(payload, emailExists)
+      const result = EmailValidator(payload, emailExists)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -31,7 +32,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = EmailValidator.go(payload, emailExists)
+        const result = EmailValidator(payload, emailExists)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -45,7 +46,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = EmailValidator.go(payload, emailExists)
+        const result = EmailValidator(payload, emailExists)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -61,7 +62,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = EmailValidator.go(payload, emailExists)
+        const result = EmailValidator(payload, emailExists)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -75,7 +76,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = EmailValidator.go(payload, emailExists)
+        const result = EmailValidator(payload, emailExists)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -92,7 +93,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = EmailValidator.go(payload, emailExists)
+        const result = EmailValidator(payload, emailExists)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

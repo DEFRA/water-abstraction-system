@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const StartReadingService = require('../../../../app/services/return-logs/setup/start-reading.service.js')
+import StartReadingService from '../../../../app/services/return-logs/setup/start-reading.service.js'
 
 describe('Return Logs Setup - Start Reading service', () => {
   let session
@@ -21,24 +19,24 @@ describe('Return Logs Setup - Start Reading service', () => {
       returnReference: '012345'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await StartReadingService.go(session.id)
+      const result = await StartReadingService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await StartReadingService.go(session.id)
+      const result = await StartReadingService(session.id)
 
       expect(result).toMatchObject({
         backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },

@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const LicenceVersionPresenter = require('../../app/presenters/licence-version.presenter.js')
+import * as LicenceVersionPresenter from '../../app/presenters/licence-version.presenter.js'
 
 describe('Licence version presenter', () => {
   describe('#linkToLicenceVersion', () => {

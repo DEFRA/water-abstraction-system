@@ -1,20 +1,21 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const ReturnCycleHelper = require('../support/helpers/return-cycle.helper.js')
-const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
-const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
-const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
-const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
-const ReturnSubmissionHelper = require('../support/helpers/return-submission.helper.js')
-const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
-const ReviewReturnHelper = require('../support/helpers/review-return.helper.js')
-const ReviewReturnModel = require('../../app/models/review-return.model.js')
+import LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import ReturnCycleHelper from '../support/helpers/return-cycle.helper.js'
+import ReturnCycleModel from '../../app/models/return-cycle.model.js'
+import ReturnLogHelper from '../support/helpers/return-log.helper.js'
+import ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
+import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
+import ReturnSubmissionHelper from '../support/helpers/return-submission.helper.js'
+import ReturnSubmissionModel from '../../app/models/return-submission.model.js'
+import ReviewReturnHelper from '../support/helpers/review-return.helper.js'
+import ReviewReturnModel from '../../app/models/review-return.model.js'
 
 // Thing under test
-const ReturnLogModel = require('../../app/models/return-log.model.js')
+import ReturnLogModel from '../../app/models/return-log.model.js'
 
 describe('Return Log model', () => {
   let testLicence

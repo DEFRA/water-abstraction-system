@@ -1,6 +1,4 @@
-'use strict'
-
-const { formatLongDate } = require('./base.presenter.js')
+import { formatLongDate } from './base.presenter.js'
 
 /**
  * Generates a link object for a licence version with hidden text and href
@@ -9,7 +7,7 @@ const { formatLongDate } = require('./base.presenter.js')
  *
  * @returns {object} Link object containing hiddenText and href properties
  */
-function linkToLicenceVersion(licenceVersion) {
+export function linkToLicenceVersion(licenceVersion) {
   const { endDate, id } = licenceVersion
 
   let hiddenText = 'current licence version'
@@ -22,8 +20,4 @@ function linkToLicenceVersion(licenceVersion) {
     hiddenText,
     href: `/system/licence-versions/${id}`
   }
-}
-
-module.exports = {
-  linkToLicenceVersion
 }

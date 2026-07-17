@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines if a licence has requirements
  * @module DetermineLicenceHasReturnVersionsService
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Determines if a licence has requirements
@@ -14,7 +12,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @returns {Promise<boolean>} true if the licence has return versions else false
  */
-async function go(licenceId) {
+export default async function determineLicenceHasReturnVersionsService(licenceId) {
   const requirement = await _fetch(licenceId)
 
   return !!requirement
@@ -22,8 +20,4 @@ async function go(licenceId) {
 
 async function _fetch(licenceId) {
   return ReturnVersionModel.query().select(['id']).where('licenceId', licenceId).limit(1).first()
-}
-
-module.exports = {
-  go
 }

@@ -1,26 +1,26 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Things we need to stub
-const LegacyRequest = require('../../../app/requests/legacy.request.js')
+import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
-const RefreshBillRunRequest = require('../../../app/requests/legacy/refresh-bill-run.request.js')
+import RefreshBillRunRequest from '../../../app/requests/legacy/refresh-bill-run.request.js'
+
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Legacy Refresh Bill Run request', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request can refresh a bill run', () => {
     beforeEach(async () => {
-      Sinon.stub(LegacyRequest, 'post').resolves({
+      vi.spyOn(LegacyRequest, 'postRequest').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -30,13 +30,13 @@ describe('Legacy Refresh Bill Run request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await RefreshBillRunRequest.send(billRunId)
+      const result = await RefreshBillRunRequest(billRunId)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns a 200 - ok', async () => {
-      const result = await RefreshBillRunRequest.send(billRunId)
+      const result = await RefreshBillRunRequest(billRunId)
 
       expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       expect(result.response.body).toBeNull()
@@ -46,7 +46,7 @@ describe('Legacy Refresh Bill Run request', () => {
   describe('when the request cannot refresh a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(LegacyRequest, 'post').resolves({
+        vi.spyOn(LegacyRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: {
             statusCode: HTTP_STATUS_UNAUTHORIZED,
@@ -61,13 +61,13 @@ describe('Legacy Refresh Bill Run request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await RefreshBillRunRequest.send(billRunId)
+        const result = await RefreshBillRunRequest(billRunId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await RefreshBillRunRequest.send(billRunId)
+        const result = await RefreshBillRunRequest(billRunId)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -77,20 +77,20 @@ describe('Legacy Refresh Bill Run request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(LegacyRequest, 'post').resolves({
+        vi.spyOn(LegacyRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })
       })
 
       it('returns a "false" success status', async () => {
-        const result = await RefreshBillRunRequest.send(billRunId)
+        const result = await RefreshBillRunRequest(billRunId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await RefreshBillRunRequest.send(billRunId)
+        const result = await RefreshBillRunRequest(billRunId)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

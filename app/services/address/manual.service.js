@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/manual` page
  *
  * @module ManualService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const ManualAddressPresenter = require('../../presenters/address/manual.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import ManualAddressPresenter from '../../presenters/address/manual.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/manual` page
@@ -16,16 +14,12 @@ const ManualAddressPresenter = require('../../presenters/address/manual.presente
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function manualService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = ManualAddressPresenter.go(session)
+  const pageData = ManualAddressPresenter(session)
 
   return {
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

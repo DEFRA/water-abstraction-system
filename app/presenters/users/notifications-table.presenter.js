@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats notifications data for display in communications tables on view external and internal user pages
  * @module NotificationsTablePresenter
  */
 
-const { formatLongDate, sentenceCase } = require('../base.presenter.js')
-const { userNotificationTypes } = require('../../lib/static-lookups.lib.js')
+import { userNotificationTypes } from '../../lib/static-lookups.lib.js'
+import { formatLongDate, sentenceCase } from '../base.presenter.js'
 
 /**
  * Formats data for display in communications tables on view external and internal user pages
@@ -17,7 +15,7 @@ const { userNotificationTypes } = require('../../lib/static-lookups.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notifications, userId, type) {
+export default function notificationsTablePresenter(notifications, userId, type) {
   return notifications.map((notification) => {
     const { createdAt, messageType, status } = notification
     const sentDate = formatLongDate(createdAt)
@@ -41,8 +39,4 @@ function _link(notification, sentDate, userId, type) {
     href: `/system/users/${type}/${userId}/notifications/${notificationId}`,
     text: userNotificationTypes[messageRef].label
   }
-}
-
-module.exports = {
-  go
 }

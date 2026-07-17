@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the data from Companies House for the provided Companies House Number
  * @module FetchCompanyService
  */
 
-const LookupCompanysHouseNumberRequest = require('../../../requests/companies-house/lookup-companies-house-number.request.js')
+import LookupCompaniesHouseNumberRequest from '../../../requests/companies-house/lookup-companies-house-number.request.js'
 
 /**
  * Fetches the data from Companies House for the provided Companies House Number
@@ -14,12 +12,12 @@ const LookupCompanysHouseNumberRequest = require('../../../requests/companies-ho
  *
  * @returns {Promise<object>} an object containing the matching companies house number and name
  */
-async function go(companiesHouseNumber) {
+export default async function fetchCompanyService(companiesHouseNumber) {
   if (!companiesHouseNumber) {
     return null
   }
 
-  const result = await LookupCompanysHouseNumberRequest.send(companiesHouseNumber)
+  const result = await LookupCompaniesHouseNumberRequest(companiesHouseNumber)
 
   if (!result.succeeded) {
     return null
@@ -31,8 +29,4 @@ async function go(companiesHouseNumber) {
     companiesHouseNumber: body.company_number,
     title: body.company_name
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitAbstractionPeriodService = require('../../../../app/services/licence-monitoring-station/setup/submit-abstraction-period.service.js')
+import SubmitAbstractionPeriodService from '../../../../app/services/licence-monitoring-station/setup/submit-abstraction-period.service.js'
 
 describe('Licence Monitoring Station Setup - Abstraction Period Service', () => {
   let payload
@@ -30,29 +28,29 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       licenceRef: 'LICENCE_REF'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitAbstractionPeriodService.go(session.id, payload)
+      await SubmitAbstractionPeriodService(session.id, payload)
 
       expect(session.abstractionPeriodStartDay).toEqual('1')
       expect(session.abstractionPeriodStartMonth).toEqual('2')
       expect(session.abstractionPeriodEndDay).toEqual('3')
       expect(session.abstractionPeriodEndMonth).toEqual('4')
 
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('returns an empty object in order to continue the journey', async () => {
-      const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+      const result = await SubmitAbstractionPeriodService(session.id, payload)
 
       expect(result).toEqual({})
     })
@@ -64,7 +62,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
     })
 
     it('returns page data for the view', async () => {
-      const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+      const result = await SubmitAbstractionPeriodService(session.id, payload)
 
       expect(result).toMatchObject({
         abstractionPeriodStartDay: null,
@@ -81,7 +79,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
     })
 
     it('returns the validation error', async () => {
-      const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+      const result = await SubmitAbstractionPeriodService(session.id, payload)
 
       expect(result.error).toEqual({
         errorList: [
@@ -105,7 +103,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
 
     describe('because the user has not submitted anything', () => {
       it('includes an error for both input elements', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -139,7 +137,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes an error for the start date input element', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -155,7 +153,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes what was submitted', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result).toMatchObject({
           abstractionPeriodStartDay: null,
@@ -177,7 +175,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes an error for the end date input element', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -193,7 +191,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes what was submitted', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result).toMatchObject({
           abstractionPeriodStartDay: '08',
@@ -215,7 +213,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes an error for both input elements', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -238,7 +236,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes what was submitted', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result).toMatchObject({
           abstractionPeriodStartDay: 'abc',

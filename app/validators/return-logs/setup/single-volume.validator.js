@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/single-volume` page
  * @module SingleVolumeValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { maxDecimalPlaces } = require('../../helpers/max-decimal-places.validator.js')
+import { maxDecimalPlaces } from '../../helpers/max-decimal-places.validator.js'
 
 const MAX_DECIMALS = 6
 const VALID_VALUES = ['yes', 'no']
@@ -20,7 +18,7 @@ const VALID_VALUES = ['yes', 'no']
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function singleVolumeValidator(payload) {
   const singleVolumeError = "Select if it's a single volume"
 
   const schema = Joi.object({
@@ -46,8 +44,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

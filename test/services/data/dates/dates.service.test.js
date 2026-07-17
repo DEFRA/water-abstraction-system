@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Thing under test
-const DatesService = require('../../../../app/services/data/dates/dates.service.js')
+import DatesService from '../../../../app/services/data/dates/dates.service.js'
 
 // NOTE: The service is calling a series of other services that actually determine the dates we return. So, we are not
 // interested in duplicating that testing here. Instead, we focus on confirming the structure is as we expect whilst
 // trying to avoid asserting the values (else it will just keep breaking!)
 describe('Data - Dates service', () => {
   it('returns the current billing periods', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.billingPeriods).toBeDefined()
 
@@ -35,7 +36,7 @@ describe('Data - Dates service', () => {
   })
 
   it('returns the current quarterly periods', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.quarterlyPeriods).toBeDefined()
     expect(result.quarterlyPeriods.length).toBeGreaterThanOrEqual(4)
@@ -44,7 +45,7 @@ describe('Data - Dates service', () => {
   })
 
   it('returns the current financial year', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.currentFinancialYear).toBeDefined()
     expect(result.currentFinancialYear.startDate).toBeInstanceOf(Date)
@@ -52,7 +53,7 @@ describe('Data - Dates service', () => {
   })
 
   it('returns the current summer return cycle', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.currentSummerReturnCycle).toBeDefined()
     expect(result.currentSummerReturnCycle.startDate).toBeInstanceOf(Date)
@@ -60,7 +61,7 @@ describe('Data - Dates service', () => {
   })
 
   it('returns the current winter return cycle', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.currentWinterReturnCycle).toBeDefined()
     expect(result.currentWinterReturnCycle.startDate).toBeInstanceOf(Date)
@@ -68,7 +69,7 @@ describe('Data - Dates service', () => {
   })
 
   it('returns the current returns periods', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.firstReturnPeriod).toBeDefined()
     expect(result.firstReturnPeriod.name).toBeDefined()

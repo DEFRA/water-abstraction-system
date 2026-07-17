@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @module FetchFullConditionService
  */
 
-const LicenceVersionPurposeConditionModel = require('../../../models/licence-version-purpose-condition.model.js')
+import LicenceVersionPurposeConditionModel from '../../../models/licence-version-purpose-condition.model.js'
 
 /**
  * Fetches the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -16,7 +14,7 @@ const LicenceVersionPurposeConditionModel = require('../../../models/licence-ver
  * @returns {Promise<object>} The matching instance of the `LicenceVersionPurposeConditionModel` populated with the
  * data needed for the "Select full condition" page
  */
-async function go(licenceId) {
+export default async function fetchFullConditionService(licenceId) {
   return (
     LicenceVersionPurposeConditionModel.query()
       .distinctOn(
@@ -50,8 +48,4 @@ async function go(licenceId) {
         { column: `licenceVersionPurposeConditions.createdAt`, order: 'desc' }
       ])
   )
-}
-
-module.exports = {
-  go
 }

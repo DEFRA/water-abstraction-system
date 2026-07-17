@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for monitoring_stations (water.gauging_stations)
  * @module MonitoringStationModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceMonitoringStationModel from './licence-monitoring-station.model.js'
 
-class MonitoringStationModel extends BaseModel {
+export default class MonitoringStationModel extends BaseModel {
   static get tableName() {
     return 'monitoringStations'
   }
@@ -23,7 +22,7 @@ class MonitoringStationModel extends BaseModel {
     return {
       licenceMonitoringStations: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-monitoring-station.model',
+        modelClass: LicenceMonitoringStationModel,
         join: {
           from: 'monitoringStations.id',
           to: 'licenceMonitoringStations.monitoringStationId'
@@ -32,5 +31,3 @@ class MonitoringStationModel extends BaseModel {
     }
   }
 }
-
-module.exports = MonitoringStationModel

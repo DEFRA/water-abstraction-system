@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
-const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
+import ChangeReasonHelper from '../../support/helpers/change-reason.helper.js'
+import ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
 
 // Thing under test
-const DetermineMinimumChargeService = require('../../../app/services/bill-runs/determine-minimum-charge.service.js')
+import DetermineMinimumChargeService from '../../../app/services/bill-runs/determine-minimum-charge.service.js'
 
 const CHANGE_REASON_CHARGE_CANCELLED_INDEX = 7
 const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
@@ -37,7 +38,7 @@ describe('Determine Minimum Charge service', () => {
       })
 
       it('returns true', async () => {
-        const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+        const result = DetermineMinimumChargeService(chargeVersion, chargePeriod)
 
         expect(result).toBe(true)
       })
@@ -54,7 +55,7 @@ describe('Determine Minimum Charge service', () => {
       })
 
       it('returns false', async () => {
-        const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+        const result = DetermineMinimumChargeService(chargeVersion, chargePeriod)
 
         expect(result).toBe(false)
       })
@@ -72,7 +73,7 @@ describe('Determine Minimum Charge service', () => {
     })
 
     it('returns false', async () => {
-      const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+      const result = DetermineMinimumChargeService(chargeVersion, chargePeriod)
 
       expect(result).toBe(false)
     })

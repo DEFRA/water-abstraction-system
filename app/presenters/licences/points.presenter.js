@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the licence and related points data for the view licence points page
  * @module PointsPresenter
  */
 
-const { pluralise } = require('./base-licences.presenter.js')
-const { formatLicencePoints } = require('../licence.presenter.js')
+import { formatLicencePoints } from '../licence.presenter.js'
+import { pluralise } from './base-licences.presenter.js'
 
 /**
  * Formats the licence and related points data for the view licence points page
@@ -16,7 +14,7 @@ const { formatLicencePoints } = require('../licence.presenter.js')
  *
  * @returns {object} licence and points data needed by the view template
  */
-function go(points, licence) {
+export default function pointsPresenter(points, licence) {
   const { id: licenceId, licenceRef } = licence
 
   const licencePoints = formatLicencePoints(points)
@@ -31,8 +29,4 @@ function go(points, licence) {
     pageTitleCaption: `Licence ${licenceRef}`,
     showingPoints: `Showing ${licencePoints.length} abstraction ${pluralise('point', licencePoints.length)}`
   }
-}
-
-module.exports = {
-  go
 }

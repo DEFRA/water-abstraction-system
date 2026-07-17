@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const UnitsValidator = require('../../../../app/validators/return-logs/setup/units.validator.js')
+import UnitsValidator from '../../../../app/validators/return-logs/setup/units.validator.js'
 
 describe('Return Logs Setup - Units validator', () => {
   let payload
@@ -13,7 +14,7 @@ describe('Return Logs Setup - Units validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = UnitsValidator.go(payload)
+        const result = UnitsValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -25,7 +26,7 @@ describe('Return Logs Setup - Units validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = UnitsValidator.go(payload)
+        const result = UnitsValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -37,7 +38,7 @@ describe('Return Logs Setup - Units validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = UnitsValidator.go(payload)
+        const result = UnitsValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -49,7 +50,7 @@ describe('Return Logs Setup - Units validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = UnitsValidator.go(payload)
+        const result = UnitsValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -63,7 +64,7 @@ describe('Return Logs Setup - Units validator', () => {
       })
 
       it('fails validation with the message "Select which units were used"', () => {
-        const result = UnitsValidator.go(payload)
+        const result = UnitsValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select which units were used')

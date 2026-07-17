@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/notices` page
  * @module IndexNoticesPresenter
  */
 
-const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
+import { formatLongDate, formatNoticeType } from '../base.presenter.js'
 
 /**
  * Formats data for the `/notices` page
@@ -15,7 +13,7 @@ const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(notices, auth) {
+export default function indexNoticesPresenter(notices, auth) {
   const {
     credentials: { scope }
   } = auth
@@ -79,8 +77,4 @@ function _noticeRowData(notices) {
       type: formatNoticeType(subtype, alertType)
     }
   })
-}
-
-module.exports = {
-  go
 }

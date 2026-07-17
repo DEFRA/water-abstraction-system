@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/return-logs/setup/{sessionId}/note` page
  * @module NotePresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function notePresenter(session) {
   const { id: sessionId, note, returnReference } = session
 
   return {
@@ -22,8 +20,4 @@ function go(session) {
     pageTitleCaption: `Return reference ${returnReference}`,
     sessionId
   }
-}
-
-module.exports = {
-  go
 }

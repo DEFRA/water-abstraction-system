@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
  * @module SubmitReadingsService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const ReadingsPresenter = require('../../../presenters/return-logs/setup/readings.presenter.js')
-const ReadingsValidator = require('../../../validators/return-logs/setup/readings.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReadingsPresenter from '../../../presenters/return-logs/setup/readings.presenter.js'
+import ReadingsValidator from '../../../validators/return-logs/setup/readings.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
@@ -22,8 +20,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the readings page including
  * the validation error details
  */
-async function go(sessionId, payload, yar, yearMonth) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitReadingsService(sessionId, payload, yar, yearMonth) {
+  const session = await FetchSessionDal(sessionId)
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
 
@@ -32,14 +30,14 @@ async function go(sessionId, payload, yar, yearMonth) {
   if (!error) {
     await _save(payload, session, requestedYear, requestedMonth)
 
-    GeneralLib.flashNotification(yar, 'Updated', 'Readings have been updated')
+    flashNotification(yar, 'Updated', 'Readings have been updated')
 
     return {}
   }
 
   _addValidationResultToSession(payload, session, requestedYear, requestedMonth, error)
 
-  const formattedData = ReadingsPresenter.go(session, yearMonth)
+  const formattedData = ReadingsPresenter(session, yearMonth)
 
   return {
     error,
@@ -105,11 +103,7 @@ function _validate(payload, requestedYear, requestedMonth, session) {
     return null
   }
 
-  const validation = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
+  const validation = ReadingsValidator(payload, requestedYear, requestedMonth, session)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const SiteDescriptionValidator = require('../../../../app/validators/return-versions/setup/site-description.validator.js')
+import SiteDescriptionValidator from '../../../../app/validators/return-versions/setup/site-description.validator.js'
 
 describe('Return Versions Setup - Site Description validator', () => {
   let payload
@@ -15,7 +16,7 @@ describe('Return Versions Setup - Site Description validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = SiteDescriptionValidator.go(payload)
+        const result = SiteDescriptionValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -29,7 +30,7 @@ describe('Return Versions Setup - Site Description validator', () => {
       })
 
       it('fails validation with the error "Enter a description of the site"', () => {
-        const result = SiteDescriptionValidator.go(payload)
+        const result = SiteDescriptionValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Enter a description of the site')
@@ -46,7 +47,7 @@ describe('Return Versions Setup - Site Description validator', () => {
       })
 
       it('fails validation with the error "Site description must be 10 characters or more"', () => {
-        const result = SiteDescriptionValidator.go(payload)
+        const result = SiteDescriptionValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Site description must be 10 characters or more')
@@ -64,7 +65,7 @@ describe('Return Versions Setup - Site Description validator', () => {
       })
 
       it('fails validation with the error "Site description must be 100 characters or less"', () => {
-        const result = SiteDescriptionValidator.go(payload)
+        const result = SiteDescriptionValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Site description must be 100 characters or less')

@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const CheckService = require('../../../../app/services/licence-monitoring-station/setup/check.service.js')
+import CheckService from '../../../../app/services/licence-monitoring-station/setup/check.service.js'
 
 describe('Licence Monitoring Station Setup - Check Service', () => {
   let session
@@ -32,18 +30,18 @@ describe('Licence Monitoring Station Setup - Check Service', () => {
       abstractionPeriodStartMonth: '2'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns the expected output', async () => {
-      const result = await CheckService.go(session.id)
+      const result = await CheckService(session.id)
 
       expect(result).toEqual({
         abstractionPeriod: '1 February to 3 April',
@@ -65,10 +63,10 @@ describe('Licence Monitoring Station Setup - Check Service', () => {
     })
 
     it('sets the "checkPageVisited" flag to "true"', async () => {
-      await CheckService.go(session.id)
+      await CheckService(session.id)
 
       expect(session.checkPageVisited).toBe(true)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
   })
 })

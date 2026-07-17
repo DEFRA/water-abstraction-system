@@ -1,50 +1,52 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const AbstractionPeriodService = require('../../app/services/return-versions/setup/abstraction-period.service.js')
-const AdditionalSubmissionOptionsService = require('../../app/services/return-versions/setup/additional-submission-options.service.js')
-const AgreementsExceptionService = require('../../app/services/return-versions/setup/agreements-exceptions.service.js')
-const CancelService = require('../../app/services/return-versions/setup/cancel.service.js')
-const CheckService = require('../../app/services/return-versions/setup/check/check.service.js')
-const DeleteNoteService = require('../../app/services/return-versions/setup/delete-note.service.js')
-const ExistingService = require('../../app/services/return-versions/setup/existing/existing.service.js')
-const FrequencyCollectedService = require('../../app/services/return-versions/setup/frequency-collected.service.js')
-const FrequencyReportedService = require('../../app/services/return-versions/setup/frequency-reported.service.js')
-const MethodService = require('../../app/services/return-versions/setup/method/method.service.js')
-const NoReturnsRequiredService = require('../../app/services/return-versions/setup/no-returns-required.service.js')
-const NoteService = require('../../app/services/return-versions/setup/note.service.js')
-const PointsService = require('../../app/services/return-versions/setup/points.service.js')
-const RemoveService = require('../../app/services/return-versions/setup/remove.service.js')
-const ReturnCycleService = require('../../app/services/return-versions/setup/returns-cycle.service.js')
-const SelectPurposeService = require('../../app/services/return-versions/setup/purpose.service.js')
-const SelectReasonService = require('../../app/services/return-versions/setup/reason.service.js')
-const SiteDescriptionService = require('../../app/services/return-versions/setup/site-description.service.js')
-const StartDateService = require('../../app/services/return-versions/setup/start-date.service.js')
-const SubmitAbstractionPeriod = require('../../app/services/return-versions/setup/submit-abstraction-period.service.js')
-const SubmitAgreementsExceptions = require('../../app/services/return-versions/setup/submit-agreements-exceptions.service.js')
-const SubmitCancelService = require('../../app/services/return-versions/setup/submit-cancel.service.js')
-const SubmitExistingService = require('../../app/services/return-versions/setup/existing/submit-existing.service.js')
-const SubmitFrequencyCollectedService = require('../../app/services/return-versions/setup/submit-frequency-collected.service.js')
-const SubmitFrequencyReportedService = require('../../app/services/return-versions/setup/submit-frequency-reported.service.js')
-const SubmitMethodService = require('../../app/services/return-versions/setup/method/submit-method.service.js')
-const SubmitNoReturnsRequiredService = require('../../app/services/return-versions/setup/submit-no-returns-required.service.js')
-const SubmitNoteService = require('../../app/services/return-versions/setup/submit-note.service.js')
-const SubmitPointsService = require('../../app/services/return-versions/setup/submit-points.service.js')
-const SubmitPurposeService = require('../../app/services/return-versions/setup/submit-purpose.service.js')
-const SubmitReasonService = require('../../app/services/return-versions/setup/submit-reason.service.js')
-const SubmitReturnsCycleService = require('../../app/services/return-versions/setup/submit-returns-cycle.service.js')
-const SubmitSiteDescriptionService = require('../../app/services/return-versions/setup/submit-site-description.service.js')
-const SubmitStartDateService = require('../../app/services/return-versions/setup/submit-start-date.service.js')
+import * as AbstractionPeriodService from '../../app/services/return-versions/setup/abstraction-period.service.js'
+import * as AdditionalSubmissionOptionsService from '../../app/services/return-versions/setup/additional-submission-options.service.js'
+import * as AgreementsExceptionService from '../../app/services/return-versions/setup/agreements-exceptions.service.js'
+import * as CancelService from '../../app/services/return-versions/setup/cancel.service.js'
+import * as CheckService from '../../app/services/return-versions/setup/check/check.service.js'
+import * as DeleteNoteService from '../../app/services/return-versions/setup/delete-note.service.js'
+import * as ExistingService from '../../app/services/return-versions/setup/existing/existing.service.js'
+import * as FrequencyCollectedService from '../../app/services/return-versions/setup/frequency-collected.service.js'
+import * as FrequencyReportedService from '../../app/services/return-versions/setup/frequency-reported.service.js'
+import * as MethodService from '../../app/services/return-versions/setup/method/method.service.js'
+import * as NoReturnsRequiredService from '../../app/services/return-versions/setup/no-returns-required.service.js'
+import * as NoteService from '../../app/services/return-versions/setup/note.service.js'
+import * as PointsService from '../../app/services/return-versions/setup/points.service.js'
+import * as RemoveService from '../../app/services/return-versions/setup/remove.service.js'
+import * as ReturnCycleService from '../../app/services/return-versions/setup/returns-cycle.service.js'
+import * as SelectPurposeService from '../../app/services/return-versions/setup/purpose.service.js'
+import * as SelectReasonService from '../../app/services/return-versions/setup/reason.service.js'
+import * as SiteDescriptionService from '../../app/services/return-versions/setup/site-description.service.js'
+import * as StartDateService from '../../app/services/return-versions/setup/start-date.service.js'
+import * as SubmitAbstractionPeriod from '../../app/services/return-versions/setup/submit-abstraction-period.service.js'
+import * as SubmitAgreementsExceptions from '../../app/services/return-versions/setup/submit-agreements-exceptions.service.js'
+import * as SubmitCancelService from '../../app/services/return-versions/setup/submit-cancel.service.js'
+import * as SubmitExistingService from '../../app/services/return-versions/setup/existing/submit-existing.service.js'
+import * as SubmitFrequencyCollectedService from '../../app/services/return-versions/setup/submit-frequency-collected.service.js'
+import * as SubmitFrequencyReportedService from '../../app/services/return-versions/setup/submit-frequency-reported.service.js'
+import * as SubmitMethodService from '../../app/services/return-versions/setup/method/submit-method.service.js'
+import * as SubmitNoReturnsRequiredService from '../../app/services/return-versions/setup/submit-no-returns-required.service.js'
+import * as SubmitNoteService from '../../app/services/return-versions/setup/submit-note.service.js'
+import * as SubmitPointsService from '../../app/services/return-versions/setup/submit-points.service.js'
+import * as SubmitPurposeService from '../../app/services/return-versions/setup/submit-purpose.service.js'
+import * as SubmitReasonService from '../../app/services/return-versions/setup/submit-reason.service.js'
+import * as SubmitReturnsCycleService from '../../app/services/return-versions/setup/submit-returns-cycle.service.js'
+import * as SubmitSiteDescriptionService from '../../app/services/return-versions/setup/submit-site-description.service.js'
+import * as SubmitStartDateService from '../../app/services/return-versions/setup/submit-start-date.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 const sessionId = '64924759-8142-4a08-9d1e-1e902cd9d316'
 const requirementIndex = 0
@@ -58,16 +60,15 @@ describe('Return Versions controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -79,7 +80,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(AbstractionPeriodService, 'go').resolves({
+        vi.spyOn(AbstractionPeriodService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Enter the abstraction period for the requirements for returns'
         })
@@ -99,7 +100,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitAbstractionPeriod, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitAbstractionPeriod, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -112,7 +113,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has not been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitAbstractionPeriod, 'go').resolves({})
+            vi.spyOn(SubmitAbstractionPeriod, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/returns-cycle/{requirementIndex}', async () => {
@@ -125,7 +126,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitAbstractionPeriod, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitAbstractionPeriod, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
@@ -144,7 +145,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(AdditionalSubmissionOptionsService, 'go').resolves({
+        vi.spyOn(AdditionalSubmissionOptionsService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Select any additional submission options for the return requirements',
           additionalSubmissionOptions: []
@@ -167,7 +168,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(NoteService, 'go').resolves({
+        vi.spyOn(NoteService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Add a note'
         })
@@ -186,7 +187,7 @@ describe('Return Versions controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitNoteService, 'go').resolves({})
+          vi.spyOn(SubmitNoteService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the "check" page', async () => {
@@ -200,7 +201,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitNoteService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitNoteService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -219,7 +220,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(AgreementsExceptionService, 'go').resolves({
+        vi.spyOn(AgreementsExceptionService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Select agreements and exceptions for the return requirement'
         })
@@ -239,7 +240,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitAgreementsExceptions, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitAgreementsExceptions, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -252,7 +253,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has not been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitAgreementsExceptions, 'go').resolves({})
+            vi.spyOn(SubmitAgreementsExceptions, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
@@ -286,7 +287,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(CancelService, 'go').resolves({
+        vi.spyOn(CancelService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'You are about to cancel these requirements for returns'
         })
@@ -307,7 +308,7 @@ describe('Return Versions controller', () => {
         const licenceId = '2c6d79e7-f25c-48ad-9af6-9ab5520a4b73'
 
         beforeEach(() => {
-          Sinon.stub(SubmitCancelService, 'go').resolves()
+          vi.spyOn(SubmitCancelService, 'default').mockResolvedValue()
         })
 
         it('redirects to the "check" page', async () => {
@@ -327,7 +328,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(CheckService, 'go').resolves({
+        vi.spyOn(CheckService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Check the return requirements for Acme Corp.'
         })
@@ -349,7 +350,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(DeleteNoteService, 'go').resolves({
+        vi.spyOn(DeleteNoteService, 'default').mockResolvedValue({
           title: 'Removed',
           text: 'Note removed'
         })
@@ -370,7 +371,7 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(ExistingService, 'go').resolves({
+          vi.spyOn(ExistingService, 'default').mockResolvedValue({
             id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
             pageTitle: 'Use previous requirements for returns'
           })
@@ -389,7 +390,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitExistingService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitExistingService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -402,7 +403,7 @@ describe('Return Versions controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitExistingService, 'go').resolves({})
+            vi.spyOn(SubmitExistingService, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
@@ -421,7 +422,7 @@ describe('Return Versions controller', () => {
 
     describe('GET ', () => {
       beforeEach(async () => {
-        Sinon.stub(FrequencyCollectedService, 'go').resolves({
+        vi.spyOn(FrequencyCollectedService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Select how often readings or volumes are collected'
         })
@@ -441,7 +442,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitFrequencyCollectedService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitFrequencyCollectedService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -454,7 +455,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has not been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitFrequencyCollectedService, 'go').resolves({})
+            vi.spyOn(SubmitFrequencyCollectedService, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/frequency-reported/{requirementIndex}', async () => {
@@ -469,7 +470,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitFrequencyCollectedService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitFrequencyCollectedService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
@@ -488,7 +489,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(FrequencyReportedService, 'go').resolves({
+        vi.spyOn(FrequencyReportedService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Select how often readings or volumes are reported'
         })
@@ -508,7 +509,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitFrequencyReportedService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitFrequencyReportedService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -521,7 +522,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has not been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitFrequencyReportedService, 'go').resolves({})
+            vi.spyOn(SubmitFrequencyReportedService, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/agreements-exceptions/{requirementIndex}', async () => {
@@ -536,7 +537,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitFrequencyReportedService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitFrequencyReportedService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
@@ -555,7 +556,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(MethodService, 'go').resolves({
+        vi.spyOn(MethodService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'How do you want to set up the requirements for returns?'
         })
@@ -575,7 +576,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitMethodService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitMethodService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -588,7 +589,7 @@ describe('Return Versions controller', () => {
 
         describe('and the validation passes', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitMethodService, 'go').resolves({ redirect: 'page-data-redirect' })
+            vi.spyOn(SubmitMethodService, 'default').mockResolvedValue({ redirect: 'page-data-redirect' })
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/{pageData.redirect}', async () => {
@@ -609,7 +610,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(NoReturnsRequiredService, 'go').resolves({
+        vi.spyOn(NoReturnsRequiredService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Why are no returns required?'
         })
@@ -629,7 +630,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation passes', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitNoReturnsRequiredService, 'go').resolves({})
+            vi.spyOn(SubmitNoReturnsRequiredService, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/{sessionId}/check', async () => {
@@ -642,7 +643,7 @@ describe('Return Versions controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitNoReturnsRequiredService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitNoReturnsRequiredService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -661,7 +662,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(PointsService, 'go').resolves({
+        vi.spyOn(PointsService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Select the points for the requirements for returns'
         })
@@ -681,7 +682,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitPointsService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitPointsService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -694,7 +695,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has not been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitPointsService, 'go').resolves({})
+            vi.spyOn(SubmitPointsService, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/abstraction-period/{requirementIndex}', async () => {
@@ -709,7 +710,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitPointsService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitPointsService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
@@ -728,7 +729,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(SelectPurposeService, 'go').resolves({
+        vi.spyOn(SelectPurposeService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Select the purpose for the requirement for returns'
         })
@@ -748,7 +749,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitPurposeService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitPurposeService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -761,7 +762,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has not been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitPurposeService, 'go').resolves({})
+            vi.spyOn(SubmitPurposeService, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/points/{requirementIndex}', async () => {
@@ -774,7 +775,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitPurposeService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitPurposeService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
@@ -793,7 +794,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(SelectReasonService, 'go').resolves({
+        vi.spyOn(SelectReasonService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Select the reason for the requirements for returns'
         })
@@ -813,7 +814,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitReasonService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitReasonService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -826,7 +827,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has not been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitReasonService, 'go').resolves({})
+            vi.spyOn(SubmitReasonService, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/method', async () => {
@@ -839,7 +840,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitReasonService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitReasonService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to /system/return-versions/{sessionId}/check', async () => {
@@ -858,7 +859,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(RemoveService, 'go').resolves({
+        vi.spyOn(RemoveService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'You are about to remove these requirements for returns'
         })
@@ -880,7 +881,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(ReturnCycleService, 'go').resolves({
+        vi.spyOn(ReturnCycleService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Select the returns cycle for the return requirement'
         })
@@ -900,7 +901,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitReturnsCycleService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitReturnsCycleService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -913,7 +914,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has not been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitReturnsCycleService, 'go').resolves({})
+            vi.spyOn(SubmitReturnsCycleService, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/site-description/{requirementIndex}', async () => {
@@ -928,7 +929,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitReturnsCycleService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitReturnsCycleService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
@@ -947,7 +948,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(SiteDescriptionService, 'go').resolves({
+        vi.spyOn(SiteDescriptionService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Enter a site description for the requirements for returns'
         })
@@ -967,7 +968,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitSiteDescriptionService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitSiteDescriptionService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -980,7 +981,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has not been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitSiteDescriptionService, 'go').resolves({})
+            vi.spyOn(SubmitSiteDescriptionService, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/frequency-collected/{requirementIndex}', async () => {
@@ -995,7 +996,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitSiteDescriptionService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitSiteDescriptionService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
@@ -1014,7 +1015,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(StartDateService, 'go').resolves({
+        vi.spyOn(StartDateService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Select the start date for the requirements for returns'
         })
@@ -1034,7 +1035,7 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitStartDateService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitStartDateService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -1047,7 +1048,7 @@ describe('Return Versions controller', () => {
 
         describe('and the journey is returns-required', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitStartDateService, 'go').resolves({ journey: 'returns-required' })
+            vi.spyOn(SubmitStartDateService, 'default').mockResolvedValue({ journey: 'returns-required' })
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/reason', async () => {
@@ -1060,7 +1061,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has not been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitStartDateService, 'go').resolves({})
+            vi.spyOn(SubmitStartDateService, 'default').mockResolvedValue({})
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/no-returns-required', async () => {
@@ -1075,7 +1076,7 @@ describe('Return Versions controller', () => {
 
         describe('and the page has been visited previously ', () => {
           beforeEach(async () => {
-            Sinon.stub(SubmitStartDateService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitStartDateService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {

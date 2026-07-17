@@ -1,17 +1,18 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const BillModel = require('../../../app/models/bill.model.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const RegionModel = require('../../../app/models/region.model.js')
-const TransactionHelper = require('../../support/helpers/transaction.helper.js')
+import BillHelper from '../../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import BillModel from '../../../app/models/bill.model.js'
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
+import RegionModel from '../../../app/models/region.model.js'
+import TransactionHelper from '../../support/helpers/transaction.helper.js'
 
 // Thing under test
-const FetchBillService = require('../../../app/services/bills/fetch-bill-service.js')
+import FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
 
 describe('Fetch Bill service', () => {
   let linkedBillLicences
@@ -45,14 +46,14 @@ describe('Fetch Bill service', () => {
 
   describe('when a bill with a matching ID exists', () => {
     it('returns the matching instance of BillModel', async () => {
-      const { bill: result } = await FetchBillService.go(testBill.id)
+      const { bill: result } = await FetchBillService(testBill.id)
 
       expect(result.id).toEqual(testBill.id)
       expect(result).toBeInstanceOf(BillModel)
     })
 
     it('returns the matching bill including the linked bill run', async () => {
-      const { bill: result } = await FetchBillService.go(testBill.id)
+      const { bill: result } = await FetchBillService(testBill.id)
       const { billRun: returnedBillRun } = result
 
       expect(result.id).toEqual(testBill.id)
@@ -63,7 +64,7 @@ describe('Fetch Bill service', () => {
     })
 
     it('returns the matching bill including the linked bill run and the region it is linked to', async () => {
-      const { bill: result } = await FetchBillService.go(testBill.id)
+      const { bill: result } = await FetchBillService(testBill.id)
       const { region: returnedRegion } = result.billRun
 
       expect(result.id).toEqual(testBill.id)
@@ -74,7 +75,7 @@ describe('Fetch Bill service', () => {
     })
 
     it('returns a transaction summary for each licence linked to the bill', async () => {
-      const { licenceSummaries: result } = await FetchBillService.go(testBill.id)
+      const { licenceSummaries: result } = await FetchBillService(testBill.id)
 
       expect(result).toHaveLength(2)
       expect(result).toContainEqual({
@@ -98,10 +99,10 @@ describe('Fetch Bill service', () => {
 
   describe('when a bill with a matching ID does not exist', () => {
     it('returns a result with no values set', async () => {
-      const result = await FetchBillService.go('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillService('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeDefined()
-      expect(result.bill).toEqual(undefined)
+      expect(result.bill).toBeUndefined()
       expect(result.licenceSummaries).toEqual([])
     })
   })

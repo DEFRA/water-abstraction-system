@@ -1,15 +1,16 @@
-'use strict'
-
 /**
  * Model for charge_elements (water.charge_purposes)
  * @module ChargeElementModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import ChargeReferenceModel from './charge-reference.model.js'
+import PurposeModel from './purpose.model.js'
+import ReviewChargeElementModel from './review-charge-element.model.js'
 
-class ChargeElementModel extends BaseModel {
+export default class ChargeElementModel extends BaseModel {
   static get tableName() {
     return 'chargeElements'
   }
@@ -18,7 +19,7 @@ class ChargeElementModel extends BaseModel {
     return {
       chargeReference: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-reference.model',
+        modelClass: ChargeReferenceModel,
         join: {
           from: 'chargeElements.chargeReferenceId',
           to: 'chargeReferences.id'
@@ -26,7 +27,7 @@ class ChargeElementModel extends BaseModel {
       },
       purpose: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'purpose.model',
+        modelClass: PurposeModel,
         join: {
           from: 'chargeElements.purposeId',
           to: 'purposes.id'
@@ -34,7 +35,7 @@ class ChargeElementModel extends BaseModel {
       },
       reviewChargeElements: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-charge-element.model',
+        modelClass: ReviewChargeElementModel,
         join: {
           from: 'chargeElements.id',
           to: 'reviewChargeElements.chargeElementId'
@@ -43,5 +44,3 @@ class ChargeElementModel extends BaseModel {
     }
   }
 }
-
-module.exports = ChargeElementModel

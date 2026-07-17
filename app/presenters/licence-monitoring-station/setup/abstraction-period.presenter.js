@@ -1,6 +1,4 @@
-'use strict'
-
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/abstraction-period`
@@ -14,7 +12,7 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function abstractionPeriodPresenter(session) {
   const {
     abstractionPeriodStartDay,
     abstractionPeriodEndDay,
@@ -40,8 +38,4 @@ function _backLink(session) {
     href: checkUrl(session, `/system/licence-monitoring-station/setup/${session.id}/full-condition`),
     text: 'Back'
   }
-}
-
-module.exports = {
-  go
 }

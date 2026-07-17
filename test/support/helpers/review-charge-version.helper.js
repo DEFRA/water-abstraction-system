@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module ReviewChargeVersionHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const ReviewChargeVersionModel = require('../../../app/models/review-charge-version.model.js')
+import ReviewChargeVersionModel from '../../../app/models/review-charge-version.model.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new review charge version record for 2pt matching
@@ -55,7 +53,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

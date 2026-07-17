@@ -1,14 +1,12 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const DatabaseConfig = require('../../../config/database.config.js')
-const CRMSeeder = require('../../support/seeders/crm.seeder.js')
+import * as CRMSeeder from '../../support/seeders/crm.seeder.js'
+import DatabaseConfig from '../../../config/database.config.js'
 
 // Thing under test
-const FetchLicenceCRMDataService = require('../../../app/services/licences/fetch-licence-crm-data.service.js')
+import FetchLicenceCRMDataService from '../../../app/services/licences/fetch-licence-crm-data.service.js'
 
 describe('Licences - Fetch Licence CRM data service', () => {
   let crmData
@@ -31,12 +29,12 @@ describe('Licences - Fetch Licence CRM data service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the licence has contact details', () => {
     it('returns the matching licence contacts', async () => {
-      const result = await FetchLicenceCRMDataService.go(licence.id, roles)
+      const result = await FetchLicenceCRMDataService(licence.id, roles)
 
       expect(result).toEqual({
         contacts: [
@@ -95,7 +93,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
 
     describe('and the licence has a "NALD GAP" charge version in its history', () => {
       it('returns the matching licence contacts including the billing contact (even with a NALD GAP charge version)', async () => {
-        const result = await FetchLicenceCRMDataService.go(crmData.otherLicence.record.id, roles)
+        const result = await FetchLicenceCRMDataService(crmData.otherLicence.record.id, roles)
 
         expect(result).toEqual({
           contacts: [
@@ -125,7 +123,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
 
     describe('when paginating', () => {
       beforeEach(() => {
-        Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)
+        vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1)
       })
 
       describe('and the page is not set', () => {
@@ -134,7 +132,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
+          const result = await FetchLicenceCRMDataService(licence.id, roles, page)
 
           expect(result).toEqual({
             contacts: [
@@ -156,7 +154,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
+          const result = await FetchLicenceCRMDataService(licence.id, roles, page)
 
           expect(result).toEqual({
             contacts: [
@@ -178,7 +176,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
         })
 
         it('returns the matching contacts for the page (the second page) with the total number', async () => {
-          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
+          const result = await FetchLicenceCRMDataService(licence.id, roles, page)
 
           expect(result).toEqual({
             contacts: [

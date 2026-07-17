@@ -1,14 +1,16 @@
-'use strict'
+// Test framework
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceVersionModel = require('../../app/models/licence-version.model.js')
-const ReturnVersionModel = require('../../app/models/return-version.model.js')
-const { ValidationError } = require('joi')
-const { generateUUID, today } = require('../../app/lib/general.lib.js')
-const { tomorrow, yesterday } = require('../support/general.js')
+import { ValidationError } from 'joi'
+import LicenceVersionModel from '../../app/models/licence-version.model.js'
+import ReturnVersionModel from '../../app/models/return-version.model.js'
+import { generateUUID } from '../support/generators.js'
+import { today } from '../../app/lib/general.lib.js'
+import { tomorrow, yesterday } from '../support/general.js'
 
 // Thing under test
-const BasePresenter = require('../../app/presenters/base.presenter.js')
+import * as BasePresenter from '../../app/presenters/base.presenter.js'
 
 describe('Base presenter', () => {
   describe('#convertPenceToPounds()', () => {
@@ -328,7 +330,7 @@ describe('Base presenter', () => {
       it('returns null', () => {
         const result = BasePresenter.formatNumber(null)
 
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
 
@@ -336,7 +338,7 @@ describe('Base presenter', () => {
       it('returns null', () => {
         const result = BasePresenter.formatNumber(undefined)
 
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
   })
@@ -442,7 +444,7 @@ describe('Base presenter', () => {
       it('returns null', () => {
         const result = BasePresenter.formatQuantityToUnit(null, 'someUnit')
 
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
   })

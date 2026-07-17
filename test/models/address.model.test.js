@@ -1,18 +1,19 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AddressHelper = require('../support/helpers/address.helper.js')
-const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
-const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
-const CompanyAddressHelper = require('../support/helpers/company-address.helper.js')
-const CompanyAddressModel = require('../../app/models/company-address.model.js')
-const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
-const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
-const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
-const LicenceVersionModel = require('../../app/models/licence-version.model.js')
+import AddressHelper from '../support/helpers/address.helper.js'
+import BillingAccountAddressHelper from '../support/helpers/billing-account-address.helper.js'
+import BillingAccountAddressModel from '../../app/models/billing-account-address.model.js'
+import CompanyAddressHelper from '../support/helpers/company-address.helper.js'
+import CompanyAddressModel from '../../app/models/company-address.model.js'
+import LicenceDocumentRoleHelper from '../support/helpers/licence-document-role.helper.js'
+import LicenceDocumentRoleModel from '../../app/models/licence-document-role.model.js'
+import LicenceVersionHelper from '../support/helpers/licence-version.helper.js'
+import LicenceVersionModel from '../../app/models/licence-version.model.js'
 
 // Thing under test
-const AddressModel = require('../../app/models/address.model.js')
+import AddressModel from '../../app/models/address.model.js'
 
 describe('Address model', () => {
   let billingAccountAddresses

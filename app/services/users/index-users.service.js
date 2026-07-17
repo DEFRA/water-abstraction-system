@@ -1,17 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates presenting the data for `/users` page
  * @module IndexUsersService
  */
 
-const FetchUsersDal = require('../../dal/users/fetch-users.dal.js')
-const IndexUsersPresenter = require('../../presenters/users/index-users.presenter.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { readFlashNotification } = require('../../lib/general.lib.js')
-const { processSavedFilters } = require('../../lib/submit-page.lib.js')
-
-const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+import FetchUsersDal from '../../dal/users/fetch-users.dal.js'
+import IndexUsersPresenter from '../../presenters/users/index-users.presenter.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import featureFlagsConfig from '../../../config/feature-flags.config.js'
+import { processSavedFilters } from '../../lib/submit-page.lib.js'
+import { readFlashNotification } from '../../lib/general.lib.js'
 
 /**
  * Orchestrates presenting the data for `/users` page
@@ -22,14 +19,14 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
  *
  * @returns {Promise<object>} The view data for the users page
  */
-async function go(yar, auth, page) {
+export default async function indexUsersService(yar, auth, page) {
   const filters = _filters(yar)
 
-  const { results: users, total: totalNumber } = await FetchUsersDal.go(filters, page)
+  const { results: users, total: totalNumber } = await FetchUsersDal(filters, page)
 
-  const pagination = PaginatorPresenter.go(totalNumber, page, `/system/users`, users.length, 'users')
+  const pagination = PaginatorPresenter(totalNumber, page, `/system/users`, users.length, 'users')
 
-  const pageData = IndexUsersPresenter.go(users, auth)
+  const pageData = IndexUsersPresenter(users, auth)
 
   const notification = readFlashNotification(yar)
 
@@ -52,8 +49,4 @@ function _filters(yar) {
     type: null,
     ...savedFilters
   }
-}
-
-module.exports = {
-  go
 }

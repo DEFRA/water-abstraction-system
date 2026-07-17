@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchCompanyAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewExistingAddressService = require('../../../../app/services/billing-accounts/setup/view-existing-address.service.js')
+import ViewExistingAddressService from '../../../../app/services/billing-accounts/setup/view-existing-address.service.js'
 
 describe('Billing Accounts - Setup - View Existing Address Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -20,8 +18,6 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
     company: billingAccount.company,
     addresses: [billingAccount.billingAccountAddresses[0].address]
   }
-
-  let fetchSessionStub
   let session
   let sessionData
 
@@ -30,15 +26,15 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
       billingAccount
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    Sinon.stub(FetchCompanyAddressesService, 'go').returns(companyAddresses)
+    vi.spyOn(FetchCompanyAddressesService, 'default').mockReturnValue(companyAddresses)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -49,13 +45,13 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewExistingAddressService.go(session.id)
+        const result = await ViewExistingAddressService(session.id)
 
         expect(result).toEqual({
           backLink: {
@@ -91,13 +87,13 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
           existingAccount: billingAccount.company.id
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewExistingAddressService.go(session.id)
+        const result = await ViewExistingAddressService(session.id)
 
         expect(result).toEqual({
           backLink: {
@@ -134,13 +130,13 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
           existingAccount: 'new'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewExistingAddressService.go(session.id)
+        const result = await ViewExistingAddressService(session.id)
 
         expect(result).toEqual({
           backLink: {

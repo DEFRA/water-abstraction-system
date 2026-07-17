@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Orchestrates merging the fetched recipients with additional ones added, then filtering the results by those selected
  * @module MergeRecipientsService
@@ -13,7 +11,7 @@
  *
  * @returns {object[]} all recipients from both groups, filtered by those selected
  */
-function go(session, fetchedRecipients) {
+export default function mergeRecipientsService(session, fetchedRecipients) {
   const { selectedRecipients } = session
   const allRecipients = _additionalRecipients(session, fetchedRecipients)
 
@@ -67,8 +65,4 @@ function _selectedRecipients(selectedRecipients, allRecipients) {
   return allRecipients.filter((recipient) => {
     return selectedRecipients.includes(recipient.contact_hash_id)
   })
-}
-
-module.exports = {
-  go
 }

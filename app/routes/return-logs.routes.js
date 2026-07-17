@@ -1,36 +1,32 @@
-'use strict'
+import { download, submitDetails, viewCommunications, viewDetails } from '../controllers/return-logs.controller.js'
 
-const ReturnLogsController = require('../controllers/return-logs.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/return-logs/{id}/communications',
     options: {
-      handler: ReturnLogsController.viewCommunications
+      handler: viewCommunications
     }
   },
   {
     method: 'GET',
     path: '/return-logs/{id}/details',
     options: {
-      handler: ReturnLogsController.viewDetails
+      handler: viewDetails
     }
   },
   {
     method: 'POST',
     path: '/return-logs/{id}/details',
     options: {
-      handler: ReturnLogsController.submitDetails
+      handler: submitDetails
     }
   },
   {
     method: 'GET',
     path: '/return-logs/{id}/download',
     options: {
-      handler: ReturnLogsController.download
+      handler: download
     }
   }
 ]
-
-module.exports = routes

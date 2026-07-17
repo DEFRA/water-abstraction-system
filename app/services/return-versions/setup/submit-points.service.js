@@ -1,18 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/points` page
  * @module SubmitPointsService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
-const FetchPointsService = require('./fetch-points.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const PointsPresenter = require('../../../presenters/return-versions/setup/points.presenter.js')
-const PointsValidator = require('../../../validators/return-versions/setup/points.validator.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import FetchPointsService from './fetch-points.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PointsPresenter from '../../../presenters/return-versions/setup/points.presenter.js'
+import PointsValidator from '../../../validators/return-versions/setup/points.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/points` page
@@ -31,8 +28,8 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the points page including the validation error details
  */
-async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitPointsService(sessionId, requirementIndex, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'points')
 
@@ -42,7 +39,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
+      flashNotification(yar, 'Updated', 'Requirements for returns updated')
     }
 
     return {
@@ -50,8 +47,8 @@ async function go(sessionId, requirementIndex, payload, yar) {
     }
   }
 
-  const pointsData = await FetchPointsService.go(session.licenceVersion.id)
-  const formattedData = PointsPresenter.go(session, requirementIndex, pointsData)
+  const pointsData = await FetchPointsService(session.licenceVersion.id)
+  const formattedData = PointsPresenter(session, requirementIndex, pointsData)
 
   return {
     error,
@@ -66,11 +63,7 @@ async function _save(session, requirementIndex, payload) {
 }
 
 function _validate(payload) {
-  const validation = PointsValidator.go(payload)
+  const validation = PointsValidator(payload)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Thing under test
-const FetchTableService = require('../../../../app/services/jobs/export/fetch-table.service.js')
+import FetchTableService from '../../../../app/services/jobs/export/fetch-table.service.js'
 
 const regionsColumnInfo = [
   'regionId',
@@ -20,13 +21,13 @@ describe('Fetch table service', () => {
     const schemaName = 'water'
 
     it('returns the table column names', async () => {
-      const result = await FetchTableService.go(tableName, schemaName)
+      const result = await FetchTableService(tableName, schemaName)
 
       expect(result.headers).toEqual(regionsColumnInfo)
     })
 
     it('returns the query to fetch the regions table', async () => {
-      const result = await FetchTableService.go(tableName, schemaName)
+      const result = await FetchTableService(tableName, schemaName)
 
       expect(result.rows).toBeInstanceOf(Promise)
     })

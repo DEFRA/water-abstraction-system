@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module CompanyAddressHelper
  */
 
-const CompanyAddressModel = require('../../../app/models/company-address.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import CompanyAddressModel from '../../../app/models/company-address.model.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new company address
@@ -53,7 +51,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

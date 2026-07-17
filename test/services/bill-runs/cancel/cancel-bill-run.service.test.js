@@ -1,58 +1,51 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
+import BillRunModel from '../../../../app/models/bill-run.model.js'
 
 // Thing under test
-const CancelBillBunService = require('../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
+import CancelBillBunService from '../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js'
 
 describe('Bill Runs - Cancel Bill Run service', () => {
   const billRunId = '20f530db-aa69-42d1-8a27-0ab838ca1916'
   const externalId = 'c5d64590-a0c9-45ee-b381-ab1ddb569751'
 
-  let queryStub
   let billRunPatchStub
 
   beforeEach(() => {
-    billRunPatchStub = Sinon.stub().resolves()
+    billRunPatchStub = vi.fn().mockResolvedValue()
 
-    queryStub = Sinon.stub(BillRunModel, 'query')
-
-    queryStub.onSecondCall().returns({
-      findById: Sinon.stub().withArgs(billRunId).returnsThis(),
+    vi.spyOn(BillRunModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
       patch: billRunPatchStub
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the bill run exists', () => {
     describe('and can be deleted', () => {
       beforeEach(() => {
-        queryStub.onFirstCall().returns({
-          findById: Sinon.stub().withArgs(billRunId).returnsThis(),
-          select: Sinon.stub()
-            .withArgs('id', 'externalId', 'status')
-            .resolves({ id: billRunId, externalId, status: 'ready' })
+        vi.spyOn(BillRunModel, 'query').mockReturnValueOnce({
+          findById: vi.fn().mockReturnThis(),
+          select: vi.fn().mockResolvedValue({ id: billRunId, externalId, status: 'ready' })
         })
       })
 
       it('sets the status of the bill run to "cancel"', async () => {
-        await CancelBillBunService.go(billRunId)
+        await CancelBillBunService(billRunId)
 
         // Check we set the bill run status
-        const [patchObject] = billRunPatchStub.args[0]
+        const [patchObject] = billRunPatchStub.mock.calls[0]
 
         expect(patchObject).toMatchObject({ status: 'cancel' })
       })
 
       it('returns an instance of the bill run including its external ID and status set to "cancel"', async () => {
-        const result = await CancelBillBunService.go(billRunId)
+        const result = await CancelBillBunService(billRunId)
 
         expect(result).toEqual({ id: billRunId, externalId, status: 'cancel' })
       })
@@ -60,23 +53,21 @@ describe('Bill Runs - Cancel Bill Run service', () => {
 
     describe('but cannot be deleted because of its status', () => {
       beforeEach(async () => {
-        queryStub.onFirstCall().returns({
-          findById: Sinon.stub().withArgs(billRunId).returnsThis(),
-          select: Sinon.stub()
-            .withArgs('id', 'externalId', 'status')
-            .resolves({ id: billRunId, externalId, status: 'sent' })
+        vi.spyOn(BillRunModel, 'query').mockReturnValueOnce({
+          findById: vi.fn().mockReturnThis(),
+          select: vi.fn().mockResolvedValue({ id: billRunId, externalId, status: 'sent' })
         })
       })
 
       it('does not change the bill run status', async () => {
-        await CancelBillBunService.go(billRunId)
+        await CancelBillBunService(billRunId)
 
         // Check we do not change the bill run status
-        expect(billRunPatchStub.called).toBe(false)
+        expect(billRunPatchStub).not.toHaveBeenCalled()
       })
 
       it('returns an instance of the bill run including its external ID and status unchanged', async () => {
-        const result = await CancelBillBunService.go(billRunId)
+        const result = await CancelBillBunService(billRunId)
 
         expect(result).toEqual({ id: billRunId, externalId, status: 'sent' })
       })
@@ -85,7 +76,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
 
   describe('when the bill run does not exist', () => {
     it('throws as error', async () => {
-      await expect(CancelBillBunService.go('47e66de7-f05f-42d2-8fef-640b55150919')).rejects.toThrow()
+      await expect(CancelBillBunService('47e66de7-f05f-42d2-8fef-640b55150919')).rejects.toThrow()
     })
   })
 })

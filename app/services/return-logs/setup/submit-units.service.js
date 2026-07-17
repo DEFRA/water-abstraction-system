@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/units` page
  * @module SubmitUnitsService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const UnitsPresenter = require('../../../presenters/return-logs/setup/units.presenter.js')
-const UnitsValidator = require('../../../validators/return-logs/setup/units.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { returnUnits } = require('../../../lib/static-lookups.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import UnitsPresenter from '../../../presenters/return-logs/setup/units.presenter.js'
+import UnitsValidator from '../../../validators/return-logs/setup/units.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { returnUnits } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/units` page
@@ -27,8 +25,8 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
  *
  * @returns {Promise<object>} If no errors the page data for the units page else the validation error details
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitUnitsService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload)
 
@@ -36,7 +34,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Reporting details changed')
+      flashNotification(yar, 'Updated', 'Reporting details changed')
     }
 
     return {
@@ -44,7 +42,7 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const pageData = UnitsPresenter.go(session)
+  const pageData = UnitsPresenter(session)
 
   return {
     error,
@@ -66,11 +64,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = UnitsValidator.go(payload)
+  const validationResult = UnitsValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

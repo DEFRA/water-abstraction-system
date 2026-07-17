@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/remove-licences` page
  * @module RemoveLicencesPresenter
@@ -13,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(removeLicences, session) {
+export default function removeLicencesPresenter(removeLicences, session) {
   const { referenceCode, id: sessionId } = session
 
   return {
@@ -23,8 +21,4 @@ function go(removeLicences, session) {
     pageTitleCaption: `Notice ${referenceCode}`,
     removeLicences
   }
-}
-
-module.exports = {
-  go
 }

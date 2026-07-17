@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module BillRunHelper
  */
 
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const RegionHelper = require('./region.helper.js')
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import RegionHelper from './region.helper.js'
 
 /**
  * Add a new bill run
@@ -61,7 +59,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-const PermissionsPresenter = require('../../../../../app/presenters/users/internal/setup/permissions.presenter.js')
+import PermissionsPresenter from '../../../../../app/presenters/users/internal/setup/permissions.presenter.js'
 
 describe('Users - Internal - Setup - Permissions Presenter', () => {
   let session
@@ -15,7 +16,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PermissionsPresenter.go(session)
+      const result = PermissionsPresenter(session)
 
       expect(result).toEqual({
         activeNavBar: 'users',
@@ -32,7 +33,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
     describe('"backLink" property', () => {
       describe('when check page has not been visited', () => {
         it('returns the correct back link', () => {
-          const result = PermissionsPresenter.go(session)
+          const result = PermissionsPresenter(session)
 
           expect(result.backLink.href).toEqual(`/system/users/internal/setup/${session.id}/email`)
         })
@@ -44,7 +45,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
         })
 
         it('returns the correct back link', () => {
-          const result = PermissionsPresenter.go(session)
+          const result = PermissionsPresenter(session)
 
           expect(result.backLink.href).toEqual(`/system/users/internal/setup/${session.id}/check`)
         })

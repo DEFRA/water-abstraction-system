@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Deletes incomplete company contacts which were abandoned during the creation journey
  * @module CleanIncompleteCompanyContactsService
  */
 
-const CompanyContactModel = require('../../../models/company-contact.model.js')
+import CompanyContactModel from '../../../models/company-contact.model.js'
 
 /**
  * Deletes incomplete company contacts which were abandoned during the creation journey
  *
  * @returns {Promise<number>} The number of rows deleted
  */
-async function go() {
+export default async function cleanIncompleteCompanyContactsService() {
   let deletedCount = 0
 
   try {
@@ -27,8 +25,4 @@ async function go() {
   }
 
   return deletedCount
-}
-
-module.exports = {
-  go
 }

@@ -1,34 +1,36 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = require('node:http2').constants
-const { generateUUID } = require('../../app/lib/general.lib.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { generateUUID } from '../support/generators.js'
 
 // Things we need to stub
-const InitiateEditSessionService = require('../../app/services/company-contacts/setup/initiate-edit-session.service.js')
-const InitiateSessionService = require('../../app/services/company-contacts/setup/initiate-session.service.js')
-const SubmitAbstractionAlertsService = require('../../app/services/company-contacts/setup/submit-abstraction-alerts.service.js')
-const SubmitCancelService = require('../../app/services/company-contacts/setup/submit-cancel.service.js')
-const SubmitCheckService = require('../../app/services/company-contacts/setup/submit-check.service.js')
-const SubmitContactEmailService = require('../../app/services/company-contacts/setup/submit-contact-email.service.js')
-const SubmitContactNameService = require('../../app/services/company-contacts/setup/submit-contact-name.service.js')
-const SubmitLicencesService = require('../../app/services/company-contacts/setup/submit-licences.service.js')
-const SubmitRestoreService = require('../../app/services/company-contacts/setup/submit-restore.service.js')
-const ViewAbstractionAlertsService = require('../../app/services/company-contacts/setup/view-abstraction-alerts.service.js')
-const ViewCancelService = require('../../app/services/company-contacts/setup/view-cancel.service.js')
-const ViewCheckService = require('../../app/services/company-contacts/setup/view-check.service.js')
-const ViewContactEmailService = require('../../app/services/company-contacts/setup/view-contact-email.service.js')
-const ViewContactNameService = require('../../app/services/company-contacts/setup/view-contact-name.service.js')
-const ViewLicencesService = require('../../app/services/company-contacts/setup/view-licences.service.js')
-const ViewRestoreService = require('../../app/services/company-contacts/setup/view-restore.service.js')
+import * as InitiateEditSessionService from '../../app/services/company-contacts/setup/initiate-edit-session.service.js'
+import * as InitiateSessionService from '../../app/services/company-contacts/setup/initiate-session.service.js'
+import * as SubmitAbstractionAlertsService from '../../app/services/company-contacts/setup/submit-abstraction-alerts.service.js'
+import * as SubmitCancelService from '../../app/services/company-contacts/setup/submit-cancel.service.js'
+import * as SubmitCheckService from '../../app/services/company-contacts/setup/submit-check.service.js'
+import * as SubmitContactEmailService from '../../app/services/company-contacts/setup/submit-contact-email.service.js'
+import * as SubmitContactNameService from '../../app/services/company-contacts/setup/submit-contact-name.service.js'
+import * as SubmitLicencesService from '../../app/services/company-contacts/setup/submit-licences.service.js'
+import * as SubmitRestoreService from '../../app/services/company-contacts/setup/submit-restore.service.js'
+import * as ViewAbstractionAlertsService from '../../app/services/company-contacts/setup/view-abstraction-alerts.service.js'
+import * as ViewCancelService from '../../app/services/company-contacts/setup/view-cancel.service.js'
+import * as ViewCheckService from '../../app/services/company-contacts/setup/view-check.service.js'
+import * as ViewContactEmailService from '../../app/services/company-contacts/setup/view-contact-email.service.js'
+import * as ViewContactNameService from '../../app/services/company-contacts/setup/view-contact-name.service.js'
+import * as ViewLicencesService from '../../app/services/company-contacts/setup/view-licences.service.js'
+import * as ViewRestoreService from '../../app/services/company-contacts/setup/view-restore.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
-const { postRequestOptions } = require('../support/general.js')
+import { postRequestOptions } from '../support/general.js'
+
+const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 
 describe('Company Contacts Setup controller', () => {
   let options
@@ -42,16 +44,15 @@ describe('Company Contacts Setup controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -74,7 +75,7 @@ describe('Company Contacts Setup controller', () => {
 
         id = generateUUID()
 
-        Sinon.stub(InitiateSessionService, 'go').returns({ id })
+        vi.spyOn(InitiateSessionService, 'default').mockReturnValue({ id })
       })
 
       it('returns the page successfully', async () => {
@@ -102,7 +103,7 @@ describe('Company Contacts Setup controller', () => {
 
         id = generateUUID()
 
-        Sinon.stub(InitiateEditSessionService, 'go').returns({ id })
+        vi.spyOn(InitiateEditSessionService, 'default').mockReturnValue({ id })
       })
 
       it('returns the page successfully', async () => {
@@ -126,7 +127,7 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewAbstractionAlertsService, 'go').returns({ pageTitle: 'Abstraction alerts' })
+        vi.spyOn(ViewAbstractionAlertsService, 'default').mockReturnValue({ pageTitle: 'Abstraction alerts' })
       })
 
       it('returns the page successfully', async () => {
@@ -145,7 +146,7 @@ describe('Company Contacts Setup controller', () => {
           'hof_notifications'
         ])
 
-        Sinon.stub(SubmitAbstractionAlertsService, 'go').returns({
+        vi.spyOn(SubmitAbstractionAlertsService, 'default').mockReturnValue({
           redirectUrl: `/system/company-contacts/setup/${sessionId}/check`
         })
       })
@@ -171,7 +172,7 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewCancelService, 'go').returns({ pageTitle: 'Cancel' })
+        vi.spyOn(ViewCancelService, 'default').mockReturnValue({ pageTitle: 'Cancel' })
       })
 
       it('returns the page successfully', async () => {
@@ -192,7 +193,9 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/cancel`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitCancelService, 'go').returns({ redirectUrl: `/system/companies/${companyId}/contacts` })
+        vi.spyOn(SubmitCancelService, 'default').mockReturnValue({
+          redirectUrl: `/system/companies/${companyId}/contacts`
+        })
       })
 
       it('redirects to companies contacts setup contact email page', async () => {
@@ -216,7 +219,7 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewCheckService, 'go').returns({ pageTitle: 'Check' })
+        vi.spyOn(ViewCheckService, 'default').mockReturnValue({ pageTitle: 'Check' })
       })
 
       it('returns the page successfully', async () => {
@@ -237,7 +240,9 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/check`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitCheckService, 'go').returns({ redirectUrl: `/system/companies/${companyId}/contacts` })
+        vi.spyOn(SubmitCheckService, 'default').mockReturnValue({
+          redirectUrl: `/system/companies/${companyId}/contacts`
+        })
       })
 
       it('redirects to companies contacts setup contact email page', async () => {
@@ -261,7 +266,7 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewContactNameService, 'go').returns({ pageTitle: 'Contact name' })
+        vi.spyOn(ViewContactNameService, 'default').mockReturnValue({ pageTitle: 'Contact name' })
       })
 
       it('returns the page successfully', async () => {
@@ -278,7 +283,7 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/contact-name`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitContactNameService, 'go').returns({
+        vi.spyOn(SubmitContactNameService, 'default').mockReturnValue({
           redirectUrl: `/system/company-contacts/setup/${sessionId}/contact-email`
         })
       })
@@ -304,7 +309,7 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewContactEmailService, 'go').returns({ pageTitle: 'Contact email' })
+        vi.spyOn(ViewContactEmailService, 'default').mockReturnValue({ pageTitle: 'Contact email' })
       })
 
       it('returns the page successfully', async () => {
@@ -323,7 +328,7 @@ describe('Company Contacts Setup controller', () => {
           'hof_notifications'
         ])
 
-        Sinon.stub(SubmitContactEmailService, 'go').returns({
+        vi.spyOn(SubmitContactEmailService, 'default').mockReturnValue({
           redirectUrl: `/system/company-contacts/setup/${sessionId}/abstraction-alerts`
         })
       })
@@ -349,7 +354,7 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewLicencesService, 'go').returns({ pageTitle: 'Licences' })
+        vi.spyOn(ViewLicencesService, 'default').mockReturnValue({ pageTitle: 'Licences' })
       })
 
       it('returns the page successfully', async () => {
@@ -366,7 +371,7 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/licences`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitLicencesService, 'go').returns({
+        vi.spyOn(SubmitLicencesService, 'default').mockReturnValue({
           redirectUrl: `/system/company-contacts/setup/${sessionId}/check`
         })
       })
@@ -392,7 +397,7 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewRestoreService, 'go').returns({ pageTitle: 'Restore' })
+        vi.spyOn(ViewRestoreService, 'default').mockReturnValue({ pageTitle: 'Restore' })
       })
 
       it('returns the page successfully', async () => {
@@ -412,7 +417,7 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/restore`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitRestoreService, 'go').returns({
+        vi.spyOn(SubmitRestoreService, 'default').mockReturnValue({
           redirectUrl: `/system/companies/${companyId}/contacts`
         })
       })

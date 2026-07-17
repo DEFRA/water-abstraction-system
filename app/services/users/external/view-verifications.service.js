@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/verifications` page
  * @module ViewVerificationsService
  */
 
-const FetchVerificationsDal = require('../../../dal/users/external/fetch-verifications.dal.js')
-const FetchUserDal = require('../../../dal/users/fetch-user.dal.js')
-const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const VerificationsPresenter = require('../../../presenters/users/external/verifications.presenter.js')
+import FetchUserDal from '../../../dal/users/fetch-user.dal.js'
+import FetchVerificationsDal from '../../../dal/users/external/fetch-verifications.dal.js'
+import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
+import VerificationsPresenter from '../../../presenters/users/external/verifications.presenter.js'
 
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/verifications` page
@@ -20,14 +18,14 @@ const VerificationsPresenter = require('../../../presenters/users/external/verif
  *
  * @returns {Promise<object>} The view data for the external user page
  */
-async function go(id, auth, page, back = 'users') {
-  const user = await FetchUserDal.go(id)
+export default async function viewVerificationsService(id, auth, page, back = 'users') {
+  const user = await FetchUserDal(id)
 
-  const { verifications, totalNumber } = await FetchVerificationsDal.go(user.licenceEntityId, page)
+  const { verifications, totalNumber } = await FetchVerificationsDal(user.licenceEntityId, page)
 
-  const pageData = VerificationsPresenter.go(user, verifications, auth.credentials.scope, back)
+  const pageData = VerificationsPresenter(user, verifications, auth.credentials.scope, back)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/users/external/${id}/verifications`,
@@ -41,8 +39,4 @@ async function go(id, auth, page, back = 'users') {
     pagination,
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

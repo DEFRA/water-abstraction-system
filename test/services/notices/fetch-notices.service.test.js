@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 // Test helpers
-const EventModel = require('../../../app/models/event.model.js')
-const EventHelper = require('../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
+import EventHelper from '../../support/helpers/event.helper.js'
+import EventModel from '../../../app/models/event.model.js'
+import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Thing under test
-const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
+import FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'
 
 describe('Notices - Fetch Notices service', () => {
   let abstractionAlertNotice
@@ -73,18 +71,18 @@ describe('Notices - Fetch Notices service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when no filter is applied', () => {
     beforeEach(() => {
       // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
       // part of the full suite, and the risk our test record is returned in the second page of results.
-      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
+      vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1000)
     })
 
     it('returns all notices ordered by the date they were created (newest to oldest)', async () => {
-      const result = await FetchNoticesService.go(filters, pageNumber)
+      const result = await FetchNoticesService(filters, pageNumber)
 
       // Assert first record was created later than last record
       expect(result.results[0].createdAt.getTime()).toBeGreaterThan(
@@ -104,7 +102,7 @@ describe('Notices - Fetch Notices service', () => {
 
   describe('when a filter is applied', () => {
     beforeEach(() => {
-      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
+      vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1000)
     })
 
     describe('and "From Date" has been set', () => {
@@ -113,13 +111,13 @@ describe('Notices - Fetch Notices service', () => {
       })
 
       it('returns the matching notices', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
+        const result = await FetchNoticesService(filters, pageNumber)
 
         expect(result.results).toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
       })
 
       it('excludes those that do not match', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
+        const result = await FetchNoticesService(filters, pageNumber)
 
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
@@ -132,7 +130,7 @@ describe('Notices - Fetch Notices service', () => {
         })
 
         it('returns the matching notice', async () => {
-          const result = await FetchNoticesService.go(filters, pageNumber)
+          const result = await FetchNoticesService(filters, pageNumber)
 
           expect(result.results).toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
@@ -149,14 +147,14 @@ describe('Notices - Fetch Notices service', () => {
           })
 
           it('returns the matching notices', async () => {
-            const result = await FetchNoticesService.go(filters, pageNumber)
+            const result = await FetchNoticesService(filters, pageNumber)
 
             expect(result.results).toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
             expect(result.results).toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
           })
 
           it('excludes those that do not match', async () => {
-            const result = await FetchNoticesService.go(filters, pageNumber)
+            const result = await FetchNoticesService(filters, pageNumber)
 
             expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
@@ -169,13 +167,13 @@ describe('Notices - Fetch Notices service', () => {
           })
 
           it('returns the matching notices', async () => {
-            const result = await FetchNoticesService.go(filters, pageNumber)
+            const result = await FetchNoticesService(filters, pageNumber)
 
             expect(result.results).toContainEqual(_transformNoticeToResult(legacyNotice))
           })
 
           it('excludes those that do not match', async () => {
-            const result = await FetchNoticesService.go(filters, pageNumber)
+            const result = await FetchNoticesService(filters, pageNumber)
 
             expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
@@ -190,13 +188,13 @@ describe('Notices - Fetch Notices service', () => {
         })
 
         it('returns the matching notices', async () => {
-          const result = await FetchNoticesService.go(filters, pageNumber)
+          const result = await FetchNoticesService(filters, pageNumber)
 
           expect(result.results).toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
         })
 
         it('excludes those that do not match', async () => {
-          const result = await FetchNoticesService.go(filters, pageNumber)
+          const result = await FetchNoticesService(filters, pageNumber)
 
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
@@ -211,7 +209,7 @@ describe('Notices - Fetch Notices service', () => {
         })
 
         it('returns the matching notices', async () => {
-          const result = await FetchNoticesService.go(filters, pageNumber)
+          const result = await FetchNoticesService(filters, pageNumber)
 
           expect(result.results).toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
@@ -219,7 +217,7 @@ describe('Notices - Fetch Notices service', () => {
         })
 
         it('excludes those that do not match', async () => {
-          const result = await FetchNoticesService.go(filters, pageNumber)
+          const result = await FetchNoticesService(filters, pageNumber)
 
           expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
         })
@@ -233,13 +231,13 @@ describe('Notices - Fetch Notices service', () => {
       })
 
       it('returns the matching notices', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
+        const result = await FetchNoticesService(filters, pageNumber)
 
         expect(result.results).toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
       })
 
       it('excludes those that do not match', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
+        const result = await FetchNoticesService(filters, pageNumber)
 
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
@@ -254,13 +252,13 @@ describe('Notices - Fetch Notices service', () => {
       })
 
       it('returns the matching notices', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
+        const result = await FetchNoticesService(filters, pageNumber)
 
         expect(result.results).toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
       })
 
       it('excludes those that do not match', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
+        const result = await FetchNoticesService(filters, pageNumber)
 
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
@@ -275,13 +273,13 @@ describe('Notices - Fetch Notices service', () => {
         })
 
         it('returns the matching notices', async () => {
-          const result = await FetchNoticesService.go(filters, pageNumber)
+          const result = await FetchNoticesService(filters, pageNumber)
 
           expect(result.results).toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
         })
 
         it('excludes those that do not match', async () => {
-          const result = await FetchNoticesService.go(filters, pageNumber)
+          const result = await FetchNoticesService(filters, pageNumber)
 
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
@@ -295,14 +293,14 @@ describe('Notices - Fetch Notices service', () => {
         })
 
         it('returns the matching notices', async () => {
-          const result = await FetchNoticesService.go(filters, pageNumber)
+          const result = await FetchNoticesService(filters, pageNumber)
 
           expect(result.results).toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(legacyNotice))
         })
 
         it('excludes those that do not match', async () => {
-          const result = await FetchNoticesService.go(filters, pageNumber)
+          const result = await FetchNoticesService(filters, pageNumber)
 
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
@@ -316,13 +314,13 @@ describe('Notices - Fetch Notices service', () => {
       })
 
       it('returns the matching notices', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
+        const result = await FetchNoticesService(filters, pageNumber)
 
         expect(result.results).toContainEqual(_transformNoticeToResult(legacyNotice))
       })
 
       it('excludes those that do not match', async () => {
-        const result = await FetchNoticesService.go(filters, pageNumber)
+        const result = await FetchNoticesService(filters, pageNumber)
 
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
@@ -335,7 +333,7 @@ describe('Notices - Fetch Notices service', () => {
         })
 
         it('returns the matching notice', async () => {
-          const result = await FetchNoticesService.go(filters, pageNumber)
+          const result = await FetchNoticesService(filters, pageNumber)
 
           expect(result.results).toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
@@ -350,11 +348,11 @@ describe('Notices - Fetch Notices service', () => {
       pageNumber = '2'
 
       // NOTE: We know we create 3 records so we set the value to 2 to ensure the results are paginated
-      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(2)
+      vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 2)
     })
 
     it('can return the selected page', async () => {
-      const result = await FetchNoticesService.go(filters, pageNumber)
+      const result = await FetchNoticesService(filters, pageNumber)
 
       expect(result.results).not.toHaveLength(0)
     })

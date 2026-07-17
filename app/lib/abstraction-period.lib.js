@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Helper methods to deal with abstraction periods
  * @module AbstractionPeriodLib
@@ -49,7 +47,7 @@
  *
  * @returns {object[]} An array of abstraction periods each containing a start and end date
  */
-function determineAbstractionPeriods(referencePeriod, startDay, startMonth, endDay, endMonth) {
+export function determineAbstractionPeriods(referencePeriod, startDay, startMonth, endDay, endMonth) {
   const abstractionPeriodsWithYears = _determineYears(referencePeriod, startDay, startMonth, endDay, endMonth)
 
   return abstractionPeriodsWithYears.map((abstractionPeriod) => {
@@ -110,8 +108,4 @@ function _isPeriodValid(referencePeriod, abstractionPeriod) {
 
 function _subtractOneYear(date) {
   return new Date(date.getFullYear() - 1, date.getMonth(), date.getDate())
-}
-
-module.exports = {
-  determineAbstractionPeriods
 }

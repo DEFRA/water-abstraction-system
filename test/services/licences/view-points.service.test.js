@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
+import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-const FetchPointsService = require('../../../app/services/licences/fetch-points.service.js')
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchPointsService from '../../../app/services/licences/fetch-points.service.js'
 
 // Thing under test
-const ViewPointsService = require('../../../app/services/licences/view-points.service.js')
+import ViewPointsService from '../../../app/services/licences/view-points.service.js'
 
 describe('Licences - View Points service', () => {
   let auth
@@ -30,9 +28,9 @@ describe('Licences - View Points service', () => {
 
     licence = ViewLicencesFixture.licence()
 
-    Sinon.stub(FetchLicenceService, 'go').returns(licence)
+    vi.spyOn(FetchLicenceService, 'default').mockReturnValue(licence)
 
-    Sinon.stub(FetchPointsService, 'go').returns([
+    vi.spyOn(FetchPointsService, 'default').mockReturnValue([
       {
         ...ViewLicencesFixture.point(),
         sourceDescription: 'SURFACE WATER SOURCE OF SUPPLY',
@@ -42,12 +40,12 @@ describe('Licences - View Points service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewPointsService.go(licence.id, auth)
+      const result = await ViewPointsService(licence.id, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'summary',

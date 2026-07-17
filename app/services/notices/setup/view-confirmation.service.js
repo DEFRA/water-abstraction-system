@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates presenting the data for `/notices/setup/{eventId}/confirmation` page
  * @module ViewConfirmationService
  */
 
-const ConfirmationPresenter = require('../../../presenters/notices/setup/confirmation.presenter.js')
-const EventModel = require('../../../models/event.model.js')
+import ConfirmationPresenter from '../../../presenters/notices/setup/confirmation.presenter.js'
+import EventModel from '../../../models/event.model.js'
 
 /**
  * Orchestrates presenting the data for `/notices/setup/{eventId}/confirmation` page
@@ -15,17 +13,13 @@ const EventModel = require('../../../models/event.model.js')
  *
  * @returns {Promise<object>} The view data for the confirmation page
  */
-async function go(eventId) {
+export default async function viewConfirmationService(eventId) {
   const event = await EventModel.query().findById(eventId)
 
-  const formattedData = ConfirmationPresenter.go(event)
+  const formattedData = ConfirmationPresenter(event)
 
   return {
     activeNavBar: 'notices',
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

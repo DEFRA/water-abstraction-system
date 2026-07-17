@@ -1,21 +1,23 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateNoticeReferenceCode } = require('../../app/lib/general.lib.js')
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { generateNoticeReferenceCode } from '../support/generators.js'
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const IndexNoticesService = require('../../app/services/notices/index-notices.service.js')
-const SubmitIndexNoticesService = require('../../app/services/notices/submit-index-notices.service.js')
-const SubmitViewNoticeService = require('../../app/services/notices/submit-view-notice.service.js')
-const ViewNoticeService = require('../../app/services/notices/view-notice.service.js')
+import * as IndexNoticesService from '../../app/services/notices/index-notices.service.js'
+import * as SubmitIndexNoticesService from '../../app/services/notices/submit-index-notices.service.js'
+import * as SubmitViewNoticeService from '../../app/services/notices/submit-view-notice.service.js'
+import * as ViewNoticeService from '../../app/services/notices/view-notice.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Notices controller', () => {
   let options
@@ -28,16 +30,15 @@ describe('Notices controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -59,7 +60,7 @@ describe('Notices controller', () => {
 
           const pageData = _noticesPageData()
 
-          Sinon.stub(IndexNoticesService, 'go').returns(pageData)
+          vi.spyOn(IndexNoticesService, 'default').mockReturnValue(pageData)
         })
 
         it('returns the page successfully', async () => {
@@ -87,7 +88,7 @@ describe('Notices controller', () => {
           pageData.pageTitle = 'Notices (page 2 of 3)'
           pageData.pagination.showingMessage = 'Showing 25 of 70 notices'
 
-          Sinon.stub(IndexNoticesService, 'go').returns(pageData)
+          vi.spyOn(IndexNoticesService, 'default').mockReturnValue(pageData)
         })
 
         it('returns the page successfully', async () => {
@@ -107,7 +108,7 @@ describe('Notices controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitIndexNoticesService, 'go').returns({})
+          vi.spyOn(SubmitIndexNoticesService, 'default').mockReturnValue({})
         })
 
         it('redirects back to the index page', async () => {
@@ -123,7 +124,7 @@ describe('Notices controller', () => {
           beforeEach(() => {
             const pageData = _noticesPageData(true)
 
-            Sinon.stub(SubmitIndexNoticesService, 'go').returns(pageData)
+            vi.spyOn(SubmitIndexNoticesService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the index page with no pagination and an error', async () => {
@@ -144,7 +145,7 @@ describe('Notices controller', () => {
             pageData.pageTitle = 'Notices (page 2 of 3)'
             pageData.pagination.showingMessage = 'Showing 25 of 70 notices'
 
-            Sinon.stub(SubmitIndexNoticesService, 'go').returns(pageData)
+            vi.spyOn(SubmitIndexNoticesService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the index page with pagination and an error', async () => {
@@ -176,7 +177,7 @@ describe('Notices controller', () => {
 
           const pageData = _noticePageData()
 
-          Sinon.stub(ViewNoticeService, 'go').returns(pageData)
+          vi.spyOn(ViewNoticeService, 'default').mockReturnValue(pageData)
         })
 
         it('returns the page successfully', async () => {
@@ -204,7 +205,7 @@ describe('Notices controller', () => {
           pageData.pageTitle = 'Warning alert (page 2 of 3)'
           pageData.pagination.showingMessage = 'Showing 25 of 70 notifications'
 
-          Sinon.stub(ViewNoticeService, 'go').returns(pageData)
+          vi.spyOn(ViewNoticeService, 'default').mockReturnValue(pageData)
         })
 
         it('returns the page successfully', async () => {
@@ -224,7 +225,7 @@ describe('Notices controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitViewNoticeService, 'go').returns({})
+          vi.spyOn(SubmitViewNoticeService, 'default').mockReturnValue({})
         })
 
         it('redirects back to the view page', async () => {
@@ -240,7 +241,7 @@ describe('Notices controller', () => {
           beforeEach(() => {
             const pageData = _noticePageData(true)
 
-            Sinon.stub(SubmitViewNoticeService, 'go').returns(pageData)
+            vi.spyOn(SubmitViewNoticeService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the index page with no pagination and an error', async () => {
@@ -261,7 +262,7 @@ describe('Notices controller', () => {
             pageData.pageTitle = 'Warning alert (page 2 of 3)'
             pageData.pagination.showingMessage = 'Showing 25 of 70 notifications'
 
-            Sinon.stub(SubmitViewNoticeService, 'go').returns(pageData)
+            vi.spyOn(SubmitViewNoticeService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the index page with pagination and an error', async () => {

@@ -1,19 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitLicencesService = require('../../../../app/services/company-contacts/setup/submit-licences.service.js')
+import SubmitLicencesService from '../../../../app/services/company-contacts/setup/submit-licences.service.js'
 
 describe('Company Contacts - Setup - Licences Service', () => {
   let company
@@ -34,25 +31,25 @@ describe('Company Contacts - Setup - Licences Service', () => {
 
     sessionData = { company, licences: [licence] }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitLicencesService.go(session.id, payload)
+      await SubmitLicencesService(session.id, payload)
 
       expect(session.abstractionAlertLicences).toEqual([licence.id])
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitLicencesService.go(session.id, payload)
+      const result = await SubmitLicencesService(session.id, payload)
 
       expect(result).toEqual({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
     })
@@ -64,7 +61,7 @@ describe('Company Contacts - Setup - Licences Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitLicencesService.go(session.id, payload)
+      const result = await SubmitLicencesService(session.id, payload)
 
       expect(result).toEqual({
         backLink: {

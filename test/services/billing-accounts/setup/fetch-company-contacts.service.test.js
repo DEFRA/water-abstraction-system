@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
-const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
-const ContactHelper = require('../../../support/helpers/contact.helper.js')
+import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
+import CompanyHelper from '../../../support/helpers/company.helper.js'
+import ContactHelper from '../../../support/helpers/contact.helper.js'
 
 // Thing under test
-const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
+import FetchCompanyContactsService from '../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js'
 
 describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
   let company
@@ -40,7 +41,7 @@ describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
 
   describe('when a matching company exists and has an contact', () => {
     it('returns the company name and matching contact', async () => {
-      const result = await FetchCompanyContactsService.go(company.id)
+      const result = await FetchCompanyContactsService(company.id)
 
       expect(result).toEqual({
         company: {
@@ -66,7 +67,7 @@ describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
 
   describe('when a matching company exists and has no contact', () => {
     it('returns the company name and an empty contacts array', async () => {
-      const result = await FetchCompanyContactsService.go(companyWithNoContact.id)
+      const result = await FetchCompanyContactsService(companyWithNoContact.id)
 
       expect(result).toEqual({
         company: {

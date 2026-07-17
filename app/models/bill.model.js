@@ -1,15 +1,16 @@
-'use strict'
-
 /**
  * Model for bills (water.billing_invoices)
  * @module BillModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import BillLicenceModel from './bill-licence.model.js'
+import BillRunModel from './bill-run.model.js'
+import BillingAccountModel from './billing-account.model.js'
 
-class BillModel extends BaseModel {
+export default class BillModel extends BaseModel {
   static get tableName() {
     return 'bills'
   }
@@ -18,7 +19,7 @@ class BillModel extends BaseModel {
     return {
       billingAccount: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'billing-account.model',
+        modelClass: BillingAccountModel,
         join: {
           from: 'bills.billingAccountId',
           to: 'billingAccounts.id'
@@ -26,7 +27,7 @@ class BillModel extends BaseModel {
       },
       billRun: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'bill-run.model',
+        modelClass: BillRunModel,
         join: {
           from: 'bills.billRunId',
           to: 'billRuns.id'
@@ -34,7 +35,7 @@ class BillModel extends BaseModel {
       },
       billLicences: {
         relation: Model.HasManyRelation,
-        modelClass: 'bill-licence.model',
+        modelClass: BillLicenceModel,
         join: {
           from: 'bills.id',
           to: 'billLicences.billId'
@@ -43,5 +44,3 @@ class BillModel extends BaseModel {
     }
   }
 }
-
-module.exports = BillModel

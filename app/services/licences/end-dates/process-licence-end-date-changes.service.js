@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Process all licence end date changes previously recorded
  * @module ProcessLicenceEndDateChangesService
  */
 
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const LicenceEndDateChangeModel = require('../../../models/licence-end-date-change.model.js')
-const ProcessBillingFlagService = require('../../licences/supplementary/process-billing-flag.service.js')
-const ProcessLicenceReturnLogsService = require('../../return-logs/process-licence-return-logs.service.js')
+import LicenceEndDateChangeModel from '../../../models/licence-end-date-change.model.js'
+import ProcessBillingFlagService from '../../licences/supplementary/process-billing-flag.service.js'
+import ProcessLicenceReturnLogsService from '../../return-logs/process-licence-return-logs.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Process all licence end date changes previously recorded
@@ -20,7 +18,7 @@ const ProcessLicenceReturnLogsService = require('../../return-logs/process-licen
  * These downstream services depend on knowing when a licence's end dates have changed so they can determine what
  * billing flags need to be set, or what return logs need reissuing.
  */
-async function go() {
+export default async function processLicenceEndDateChangesService() {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -51,7 +49,7 @@ async function _billingFlag(licenceEndDateChange) {
   const { changeDate, dateType, licenceId, naldDate, wrlsDate } = licenceEndDateChange
   const payload = { licenceId, changedDateDetails: { changeDate, dateType, naldDate, wrlsDate } }
 
-  await ProcessBillingFlagService.go(payload)
+  await ProcessBillingFlagService(payload)
 }
 
 async function _processLicenceEndDateChanges(licenceEndDateChange) {
@@ -71,9 +69,5 @@ async function _processLicenceEndDateChanges(licenceEndDateChange) {
 async function _returnLogs(licenceEndDateChange) {
   const { licenceId, changeDate } = licenceEndDateChange
 
-  await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
-}
-
-module.exports = {
-  go
+  await ProcessLicenceReturnLogsService(licenceId, changeDate)
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the matching return version and associated licence, return requirements, points and purposes data
  * @module FetchReturnVersionService
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Fetches the matching return version and associated licence, return requirements, points and purposes data
@@ -15,7 +13,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * @returns {Promise<ReturnVersionModel>} The return version plus linked licence, return requirements (requirement,
  * points, purposes)
  */
-async function go(returnVersionId) {
+export default async function fetchReturnVersionService(returnVersionId) {
   return {
     returnVersion: await _fetch(returnVersionId),
     returnVersionsForPagination: await _fetchPagination(returnVersionId)
@@ -82,8 +80,4 @@ async function _fetchPagination(returnVersionId) {
       { column: 'startDate', order: 'asc' },
       { column: 'endDate', order: 'asc' }
     ])
-}
-
-module.exports = {
-  go
 }

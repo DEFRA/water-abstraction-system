@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Used by the `DatabaseController` to determine if connection to the database is healthy
  * @module DatabaseHealthCheckService
  */
 
-const { db } = require('../../../db/db.js')
+import { db } from '../../../db/db.js'
 
 /**
  * Generates an array of stats for each table in the database
@@ -18,12 +16,8 @@ const { db } = require('../../../db/db.js')
  *
  * @returns an array of stats for each table found in the db
  */
-async function go() {
+export default async function databaseHealthCheckService() {
   const stats = db.select().table('pg_stat_user_tables')
 
   return stats
-}
-
-module.exports = {
-  go
 }

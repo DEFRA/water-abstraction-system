@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view billing account page
  * @module ViewBillingAccountService
  */
 
-const FetchViewBillingAccountService = require('../billing-accounts/fetch-view-billing-account.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const ViewBillingAccountPresenter = require('../../presenters/billing-accounts/view-billing-account.presenter.js')
+import FetchViewBillingAccountService from '../billing-accounts/fetch-view-billing-account.service.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import ViewBillingAccountPresenter from '../../presenters/billing-accounts/view-billing-account.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the view billing account page
@@ -23,14 +21,14 @@ const ViewBillingAccountPresenter = require('../../presenters/billing-accounts/v
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view billing account template.
  */
-async function go(id, page, licenceId, chargeVersionId, companyId) {
-  const { totalNumber, ...billingAccountData } = await FetchViewBillingAccountService.go(id, page)
+export default async function viewBillingAccountService(id, page, licenceId, chargeVersionId, companyId) {
+  const { totalNumber, ...billingAccountData } = await FetchViewBillingAccountService(id, page)
 
-  const pageData = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+  const pageData = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
   const queryArgs = _queryArgs(chargeVersionId, licenceId)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/billing-accounts/${id}`,
@@ -57,8 +55,4 @@ function _queryArgs(chargeVersionId, licenceId) {
   }
 
   return queryArgs
-}
-
-module.exports = {
-  go
 }

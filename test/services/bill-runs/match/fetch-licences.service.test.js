@@ -1,13 +1,11 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const FetchChargeVersionsService = require('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
+import * as FetchChargeVersionsService from '../../../../app/services/bill-runs/match/fetch-charge-versions.service.js'
 
 // Thing under test
-const FetchLicencesService = require('../../../../app/services/bill-runs/match/fetch-licences.service.js')
+import FetchLicencesService from '../../../../app/services/bill-runs/match/fetch-licences.service.js'
 
 describe('Bill Runs - Match - Fetch Licences service', () => {
   const billRun = {
@@ -20,11 +18,11 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
   }
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when at least one 2PT licence exists for the region and billing period', () => {
-    const licenceHolderStub = Sinon.stub().returns('Mock Licence Holder')
+    const licenceHolderStub = vi.fn().mockReturnValue('Mock Licence Holder')
 
     const licenceOne = {
       id: '301d4ef9-41b9-4ec9-927b-0c78d9ece5ba',
@@ -38,7 +36,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
 
     describe('and there is a single licence linked to a single charge version', () => {
       beforeEach(() => {
-        Sinon.stub(FetchChargeVersionsService, 'go').resolves([
+        vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue([
           {
             id: '9407b74d-816c-44a2-9926-73a89a9da985',
             startDate: '2022-04-01T00:00:00.000Z',
@@ -50,7 +48,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
       })
 
       it('will fetch the data, format it and group the charge version by the licence', async () => {
-        const result = await FetchLicencesService.go(billRun, billingPeriod)
+        const result = await FetchLicencesService(billRun, billingPeriod)
 
         expect(result).toHaveLength(1)
         expect(result[0].id).toEqual(licenceOne.id)
@@ -64,7 +62,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
         expect(result[0].chargeVersions).toHaveLength(1)
         expect(result[0].chargeVersions[0].id).toEqual('9407b74d-816c-44a2-9926-73a89a9da985')
         expect(result[0].chargeVersions[0].startDate).toEqual('2022-04-01T00:00:00.000Z')
-        expect(result[0].chargeVersions[0].endDate).toEqual(null)
+        expect(result[0].chargeVersions[0].endDate).toBeNull()
         expect(result[0].chargeVersions[0].status).toEqual('current')
         expect(result[0].chargeVersions[0].licence).toEqual(licenceOne)
       })
@@ -82,7 +80,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
       }
 
       beforeEach(() => {
-        Sinon.stub(FetchChargeVersionsService, 'go').resolves([
+        vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue([
           {
             id: '9407b74d-816c-44a2-9926-73a89a9da985',
             startDate: '2022-10-01T00:00:00.000Z',
@@ -108,7 +106,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
       })
 
       it('will fetch the data, format it and group the charge versions by the licences', async () => {
-        const result = await FetchLicencesService.go(billRun, billingPeriod)
+        const result = await FetchLicencesService(billRun, billingPeriod)
 
         expect(result).toHaveLength(2)
         expect(result[0].id).toEqual(licenceOne.id)
@@ -125,11 +123,11 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
 
   describe('when no 2PT licences exist for the region and billing period', () => {
     beforeEach(() => {
-      Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
+      vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue([])
     })
 
     it('will return an empty array', async () => {
-      const result = await FetchLicencesService.go(billRun, billingPeriod)
+      const result = await FetchLicencesService(billRun, billingPeriod)
 
       expect(result).toHaveLength(0)
     })

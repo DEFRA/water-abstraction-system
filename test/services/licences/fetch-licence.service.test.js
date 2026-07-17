@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const LicenceSupplementaryYearModel = require('../../support/helpers/licence-supplementary-year.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceModel from '../../../app/models/licence.model.js'
+import LicenceSupplementaryYearModel from '../../support/helpers/licence-supplementary-year.helper.js'
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 describe('Licences - Fetch Licence service', () => {
   let licence
@@ -51,7 +52,7 @@ describe('Licences - Fetch Licence service', () => {
 
   describe('when there is a matching licence', () => {
     it('returns the matching licence', async () => {
-      const result = await FetchLicenceService.go(licence.id)
+      const result = await FetchLicenceService(licence.id)
 
       expect(result).toBeInstanceOf(LicenceModel)
       expect(result).toEqual({
@@ -78,7 +79,7 @@ describe('Licences - Fetch Licence service', () => {
 
   describe('when there is not a matching licence', () => {
     it('returns undefined', async () => {
-      const result = await FetchLicenceService.go(generateUUID())
+      const result = await FetchLicenceService(generateUUID())
 
       expect(result).toBeUndefined()
     })

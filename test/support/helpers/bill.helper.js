@@ -1,12 +1,9 @@
-'use strict'
-
 /**
  * @module BillingHelper
  */
 
-const BillModel = require('../../../app/models/bill.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateAccountNumber } = require('./billing-account.helper.js')
+import BillModel from '../../../app/models/bill.model.js'
+import { generateAccountNumber, generateUUID } from '../generators.js'
 
 /**
  * Add a new bill
@@ -56,7 +53,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

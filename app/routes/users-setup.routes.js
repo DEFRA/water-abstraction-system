@@ -1,13 +1,31 @@
-'use strict'
+import {
+  setupExternal,
+  setupInternal,
+  setupInternalEdit,
+  submitExternalCancel,
+  submitExternalCheck,
+  submitExternalLicences,
+  submitInternalAccess,
+  submitInternalCancel,
+  submitInternalCheck,
+  submitInternalEmail,
+  submitInternalPermissions,
+  viewExternalCancel,
+  viewExternalCheck,
+  viewExternalLicences,
+  viewInternalAccess,
+  viewInternalCancel,
+  viewInternalCheck,
+  viewInternalEmail,
+  viewInternalPermissions
+} from '../controllers/users-setup.controller.js'
 
-const UsersSetupController = require('../controllers/users-setup.controller.js')
-
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/users/external/{id}/setup',
     options: {
-      handler: UsersSetupController.setupExternal,
+      handler: setupExternal,
       auth: {
         access: {
           scope: ['unlink_licences']
@@ -19,7 +37,7 @@ const routes = [
     method: 'GET',
     path: '/users/external/setup/{sessionId}/cancel',
     options: {
-      handler: UsersSetupController.viewExternalCancel,
+      handler: viewExternalCancel,
       auth: {
         access: {
           scope: ['unlink_licences']
@@ -31,7 +49,7 @@ const routes = [
     method: 'POST',
     path: '/users/external/setup/{sessionId}/cancel',
     options: {
-      handler: UsersSetupController.submitExternalCancel,
+      handler: submitExternalCancel,
       auth: {
         access: {
           scope: ['unlink_licences']
@@ -43,7 +61,7 @@ const routes = [
     method: 'GET',
     path: '/users/external/setup/{sessionId}/check',
     options: {
-      handler: UsersSetupController.viewExternalCheck,
+      handler: viewExternalCheck,
       auth: {
         access: {
           scope: ['unlink_licences']
@@ -55,7 +73,7 @@ const routes = [
     method: 'POST',
     path: '/users/external/setup/{sessionId}/check',
     options: {
-      handler: UsersSetupController.submitExternalCheck,
+      handler: submitExternalCheck,
       auth: {
         access: {
           scope: ['unlink_licences']
@@ -67,7 +85,7 @@ const routes = [
     method: 'GET',
     path: '/users/external/setup/{sessionId}/licences',
     options: {
-      handler: UsersSetupController.viewExternalLicences,
+      handler: viewExternalLicences,
       auth: {
         access: {
           scope: ['unlink_licences']
@@ -79,7 +97,7 @@ const routes = [
     method: 'POST',
     path: '/users/external/setup/{sessionId}/licences',
     options: {
-      handler: UsersSetupController.submitExternalLicences,
+      handler: submitExternalLicences,
       auth: {
         access: {
           scope: ['unlink_licences']
@@ -91,7 +109,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/setup',
     options: {
-      handler: UsersSetupController.setupInternal,
+      handler: setupInternal,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -103,7 +121,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/setup/{id}/edit',
     options: {
-      handler: UsersSetupController.setupInternalEdit,
+      handler: setupInternalEdit,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -115,7 +133,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/setup/{sessionId}/access',
     options: {
-      handler: UsersSetupController.viewInternalAccess,
+      handler: viewInternalAccess,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -127,7 +145,7 @@ const routes = [
     method: 'POST',
     path: '/users/internal/setup/{sessionId}/access',
     options: {
-      handler: UsersSetupController.submitInternalAccess,
+      handler: submitInternalAccess,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -139,7 +157,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/setup/{sessionId}/cancel',
     options: {
-      handler: UsersSetupController.viewInternalCancel,
+      handler: viewInternalCancel,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -151,7 +169,7 @@ const routes = [
     method: 'POST',
     path: '/users/internal/setup/{sessionId}/cancel',
     options: {
-      handler: UsersSetupController.submitInternalCancel,
+      handler: submitInternalCancel,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -163,7 +181,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/setup/{sessionId}/check',
     options: {
-      handler: UsersSetupController.viewInternalCheck,
+      handler: viewInternalCheck,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -175,7 +193,7 @@ const routes = [
     method: 'POST',
     path: '/users/internal/setup/{sessionId}/check',
     options: {
-      handler: UsersSetupController.submitInternalCheck,
+      handler: submitInternalCheck,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -187,7 +205,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/setup/{sessionId}/email',
     options: {
-      handler: UsersSetupController.viewInternalEmail,
+      handler: viewInternalEmail,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -199,7 +217,7 @@ const routes = [
     method: 'POST',
     path: '/users/internal/setup/{sessionId}/email',
     options: {
-      handler: UsersSetupController.submitInternalEmail,
+      handler: submitInternalEmail,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -211,7 +229,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/setup/{sessionId}/permissions',
     options: {
-      handler: UsersSetupController.viewInternalPermissions,
+      handler: viewInternalPermissions,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -223,7 +241,7 @@ const routes = [
     method: 'POST',
     path: '/users/internal/setup/{sessionId}/permissions',
     options: {
-      handler: UsersSetupController.submitInternalPermissions,
+      handler: submitInternalPermissions,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -232,5 +250,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

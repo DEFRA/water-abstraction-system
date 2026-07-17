@@ -1,13 +1,14 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/period-used` page
  * @module PeriodUsedValidator
  */
 
-const Joi = require('joi').extend(require('@joi/date'))
+import base from 'joi'
+import joiDate from '@joi/date'
 
-const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
+import { leftPadZeroes } from '../../../presenters/base.presenter.js'
+
+const Joi = base.extend(joiDate)
 
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/period-used` page
@@ -19,7 +20,7 @@ const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, startDate, endDate) {
+export default function periodUsedValidator(payload, startDate, endDate) {
   const {
     periodUsedFromDay,
     periodUsedFromMonth,
@@ -74,8 +75,4 @@ function _validateDate(payload, startDate, endDate) {
   })
 
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
-}
-
-module.exports = {
-  go
 }

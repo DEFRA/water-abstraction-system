@@ -1,15 +1,17 @@
-'use strict'
-
 /**
  * Model for review_licences
  * @module ReviewLicenceModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import BillRunModel from './bill-run.model.js'
+import LicenceModel from './licence.model.js'
+import ReviewChargeVersionModel from './review-charge-version.model.js'
+import ReviewReturnModel from './review-return.model.js'
 
-class ReviewLicenceModel extends BaseModel {
+export default class ReviewLicenceModel extends BaseModel {
   static get tableName() {
     return 'reviewLicences'
   }
@@ -18,7 +20,7 @@ class ReviewLicenceModel extends BaseModel {
     return {
       billRun: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'bill-run.model',
+        modelClass: BillRunModel,
         join: {
           from: 'reviewLicences.billRunId',
           to: 'billRuns.id'
@@ -26,7 +28,7 @@ class ReviewLicenceModel extends BaseModel {
       },
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'reviewLicences.licenceId',
           to: 'licences.id'
@@ -34,7 +36,7 @@ class ReviewLicenceModel extends BaseModel {
       },
       reviewChargeVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-charge-version.model',
+        modelClass: ReviewChargeVersionModel,
         join: {
           from: 'reviewLicences.id',
           to: 'reviewChargeVersions.reviewLicenceId'
@@ -42,7 +44,7 @@ class ReviewLicenceModel extends BaseModel {
       },
       reviewReturns: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-return.model',
+        modelClass: ReviewReturnModel,
         join: {
           from: 'reviewLicences.id',
           to: 'reviewReturns.reviewLicenceId'
@@ -51,5 +53,3 @@ class ReviewLicenceModel extends BaseModel {
     }
   }
 }
-
-module.exports = ReviewLicenceModel

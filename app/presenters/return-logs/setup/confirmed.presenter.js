@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats return log data for the `/return-log/setup/confirmed` page
  * @module ConfirmedPresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} page data needed by the view template
  */
-function go(returnLog) {
+export default function confirmedPresenter(returnLog) {
   const {
     id: returnLogId,
     licenceId,
@@ -67,8 +65,4 @@ function _purposeDetails(purposes) {
     label: 'Purposes',
     value: formattedPurposes.join(', ')
   }
-}
-
-module.exports = {
-  go
 }

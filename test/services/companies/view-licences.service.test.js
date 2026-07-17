@@ -1,20 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import LicenceModel from '../../../app/models/licence.model.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-const FetchCompanyService = require('../../../app/dal/companies/fetch-company.dal.js')
-const FetchLicencesService = require('../../../app/dal/companies/fetch-licences.dal.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchLicencesService from '../../../app/dal/companies/fetch-licences.dal.js'
 
 // Thing under test
-const ViewLicencesService = require('../../../app/services/companies/view-licences.service.js')
+import ViewLicencesService from '../../../app/services/companies/view-licences.service.js'
 
 describe('Companies - View Licences service', () => {
   let auth
@@ -27,7 +24,7 @@ describe('Companies - View Licences service', () => {
 
     company = CustomersFixtures.company()
 
-    Sinon.stub(FetchCompanyService, 'go').returns(company)
+    vi.spyOn(FetchCompanyService, 'default').mockReturnValue(company)
 
     licences = licences = [
       LicenceModel.fromJson({
@@ -42,18 +39,18 @@ describe('Companies - View Licences service', () => {
       })
     ]
 
-    Sinon.stub(FetchLicencesService, 'go').returns({ licences, totalNumber: 1 })
+    vi.spyOn(FetchLicencesService, 'default').mockReturnValue({ licences, totalNumber: 1 })
 
     page = '1'
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicencesService.go(company.id, auth, page)
+      const result = await ViewLicencesService(company.id, auth, page)
 
       expect(result).toEqual({
         activeSecondaryNav: 'licences',

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches a session by its unique identifier.
  * @module FetchSessionDal
  */
 
-const SessionModel = require('../models/session.model.js')
-const SessionNotFoundError = require('../errors/session-not-found.error.js')
+import SessionModel from '../models/session.model.js'
+import SessionNotFoundError from '../errors/session-not-found.error.js'
 
 /**
  * Fetches a session by its unique identifier.
@@ -19,15 +17,11 @@ const SessionNotFoundError = require('../errors/session-not-found.error.js')
  * @returns {Promise<object>} The session record found in the database.
  * @throws {SessionNotFoundError} If no session is found with the provided sessionId.
  */
-async function go(sessionId) {
+export default async function fetchSessionDal(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   if (!session) {
     throw new SessionNotFoundError()
   }
   return session
-}
-
-module.exports = {
-  go
 }

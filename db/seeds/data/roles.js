@@ -1,6 +1,4 @@
-'use strict'
-
-const data = [
+export const data = [
   {
     id: '0d1afc01-b2f0-4e6a-9e49-30955e139c7a',
     role: 'returns',
@@ -82,7 +80,3 @@ const data = [
     description: 'View charge information'
   }
 ]
-
-module.exports = {
-  data
-}

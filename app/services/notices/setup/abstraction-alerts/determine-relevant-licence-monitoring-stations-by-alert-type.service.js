@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Determines the relevant licence monitoring stations for a given alert type in the `abstraction-alerts` journey.
  *
@@ -28,7 +26,10 @@
  *
  * @returns {object[]} - The filtered list of licence monitoring stations
  */
-function go(licenceMonitoringStations, alertType) {
+export default function determineRelevantLicenceMonitoringStationsByAlertTypeService(
+  licenceMonitoringStations,
+  alertType
+) {
   if (alertType === 'stop') {
     return _stop(licenceMonitoringStations, alertType)
   }
@@ -53,8 +54,4 @@ function _stop(licenceMonitoringStations, alertType) {
   return licenceMonitoringStations.filter((licenceMonitoringStation) => {
     return licenceMonitoringStation.restrictionType === alertType
   })
-}
-
-module.exports = {
-  go
 }

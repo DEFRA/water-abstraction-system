@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for external users on the `/users/external/setup/{id}/licences` page
  * @module LicencesPresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function licencesPresenter(session) {
   const { activeNavBar, allLicences, licences, selectedLicences, user } = session
 
   const checkBoxItems = _checkBoxItems(licences, selectedLicences, allLicences)
@@ -55,8 +53,4 @@ function _checkBoxItems(licences, selectedLicences, allLicences) {
   })
 
   return items
-}
-
-module.exports = {
-  go
 }

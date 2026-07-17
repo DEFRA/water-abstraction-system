@@ -1,6 +1,6 @@
-'use strict'
+import http2 from 'node:http2'
 
-const SessionNotFoundError = require('../../errors/session-not-found.error.js')
+import SessionNotFoundError from '../../errors/session-not-found.error.js'
 
 /**
  * Used by the `ErrorPagesPlugin` to process unhandled exceptions in the service
@@ -8,7 +8,7 @@ const SessionNotFoundError = require('../../errors/session-not-found.error.js')
  */
 
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_GONE, HTTP_STATUS_OK } =
-  require('node:http2').constants
+  http2.constants
 
 /**
  * Determines if a response is an error and and whether an error page should be returned
@@ -25,7 +25,7 @@ const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, H
  * @returns {object} Contains the properties `stopResponse:` and `statusCode:` which are used by the plugin to
  * decide how to direct the response
  */
-function go(request) {
+export default function errorPagesService(request) {
   const stopResponse = _stopResponse(request)
 
   let statusCode = _extractStatusCode(request)
@@ -149,8 +149,4 @@ function _determineSafeStatusCode(statusCode) {
   // Firewall (WAF) will block the response and serve its own error page. We don't want this so we have to return a
   // 'safe' 200.
   return HTTP_STATUS_OK
-}
-
-module.exports = {
-  go
 }

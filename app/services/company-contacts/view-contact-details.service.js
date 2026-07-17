@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/contact-details' page
  *
  * @module ViewContactDetailsService
  */
 
-const ContactDetailsPresenter = require('../../presenters/company-contacts/contact-details.presenter.js')
-const FetchAbstractionAlertLicencesDal = require('../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
-const FetchCompanyContactDetailsService = require('./fetch-company-contact-details.service.js')
-const FetchCompanyService = require('../../dal/companies/fetch-company.dal.js')
-const { readFlashNotification } = require('../../lib/general.lib.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import ContactDetailsPresenter from '../../presenters/company-contacts/contact-details.presenter.js'
+import FetchAbstractionAlertLicencesDal from '../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
+import FetchCompanyContactDetailsService from './fetch-company-contact-details.service.js'
+import FetchCompanyService from '../../dal/companies/fetch-company.dal.js'
+import { readFlashNotification } from '../../lib/general.lib.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/contact-details' page
@@ -22,14 +20,14 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(id, auth, yar) {
-  const companyContact = await FetchCompanyContactDetailsService.go(id)
+export default async function viewContactDetailsService(id, auth, yar) {
+  const companyContact = await FetchCompanyContactDetailsService(id)
 
-  const company = await FetchCompanyService.go(companyContact.companyId)
+  const company = await FetchCompanyService(companyContact.companyId)
 
-  const licences = await FetchAbstractionAlertLicencesDal.go(companyContact.abstractionAlertLicences)
+  const licences = await FetchAbstractionAlertLicencesDal(companyContact.abstractionAlertLicences)
 
-  const pageData = ContactDetailsPresenter.go(company, companyContact, licences)
+  const pageData = ContactDetailsPresenter(company, companyContact, licences)
 
   const notification = readFlashNotification(yar)
 
@@ -39,8 +37,4 @@ async function go(id, auth, yar) {
     roles: userRoles(auth),
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

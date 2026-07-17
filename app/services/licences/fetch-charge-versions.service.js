@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches charge version data needed for the view '/licences/{id}/set-up` page
  * @module FetchChargeVersionsService
  */
 
-const ChargeVersionModel = require('../../models/charge-version.model.js')
+import ChargeVersionModel from '../../models/charge-version.model.js'
 
 /**
  * Fetches charge version data needed for the view '/licences/{id}/set-up` page
@@ -14,7 +12,7 @@ const ChargeVersionModel = require('../../models/charge-version.model.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
-async function go(licenceId) {
+export default async function fetchChargeVersionsService(licenceId) {
   return _fetch(licenceId)
 }
 
@@ -30,8 +28,4 @@ async function _fetch(licenceId) {
       { column: 'startDate', order: 'desc' },
       { column: 'versionNumber', order: 'desc' }
     ])
-}
-
-module.exports = {
-  go
 }

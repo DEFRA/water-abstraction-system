@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ReadingsPresenter = require('../../../../app/presenters/return-logs/setup/readings.presenter.js')
+import ReadingsPresenter from '../../../../app/presenters/return-logs/setup/readings.presenter.js'
 
 describe('Return Logs Setup - Readings presenter', () => {
   let session
@@ -14,7 +15,7 @@ describe('Return Logs Setup - Readings presenter', () => {
 
   describe('when provided with a populated session', () => {
     it('correctly presents the data', () => {
-      const result = ReadingsPresenter.go(session, yearMonth)
+      const result = ReadingsPresenter(session, yearMonth)
 
       expect(result).toEqual({
         backLink: {
@@ -42,7 +43,7 @@ describe('Return Logs Setup - Readings presenter', () => {
       })
 
       it('returns the line data for April 2023', () => {
-        const result = ReadingsPresenter.go(session, yearMonth)
+        const result = ReadingsPresenter(session, yearMonth)
 
         expect(result.inputLines).toEqual([
           {
@@ -60,7 +61,7 @@ describe('Return Logs Setup - Readings presenter', () => {
         })
 
         it('correctly formats the line label', () => {
-          const result = ReadingsPresenter.go(session, yearMonth)
+          const result = ReadingsPresenter(session, yearMonth)
 
           expect(result.inputLines[0].label).toEqual('30 April 2023')
         })
@@ -72,7 +73,7 @@ describe('Return Logs Setup - Readings presenter', () => {
         })
 
         it('correctly formats the line label', () => {
-          const result = ReadingsPresenter.go(session, yearMonth)
+          const result = ReadingsPresenter(session, yearMonth)
 
           expect(result.inputLines[0].label).toEqual('Week ending 30 April 2023')
         })
@@ -84,7 +85,7 @@ describe('Return Logs Setup - Readings presenter', () => {
         })
 
         it('correctly formats the line label', () => {
-          const result = ReadingsPresenter.go(session, yearMonth)
+          const result = ReadingsPresenter(session, yearMonth)
 
           expect(result.inputLines[0].label).toEqual('April 2023')
         })
@@ -96,7 +97,7 @@ describe('Return Logs Setup - Readings presenter', () => {
         })
 
         it('includes the error message in the line data', () => {
-          const result = ReadingsPresenter.go(session, yearMonth)
+          const result = ReadingsPresenter(session, yearMonth)
 
           expect(result.inputLines).toEqual([
             {
@@ -119,7 +120,7 @@ describe('Return Logs Setup - Readings presenter', () => {
       })
 
       it('returns the page title for June', () => {
-        const result = ReadingsPresenter.go(session, yearMonth)
+        const result = ReadingsPresenter(session, yearMonth)
 
         expect(result.pageTitle).toEqual('Water abstracted June 2023')
       })

@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceMonitoringStationHelper = require('../../../support/helpers/licence-monitoring-station.helper.js')
+import LicenceMonitoringStationHelper from '../../../support/helpers/licence-monitoring-station.helper.js'
 
 // Thing under test
-const UpdateAbstractionAlertsService = require('../../../../app/services/jobs/notification-status/update-abstraction-alerts.service.js')
+import UpdateAbstractionAlertsService from '../../../../app/services/jobs/notification-status/update-abstraction-alerts.service.js'
 
 describe('Job - Notification Status - Update Abstraction Alerts service', () => {
   let licenceMonitoringStation
@@ -36,7 +37,7 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
 
   describe('when a notice has been successful', () => {
     it('updates the "status" and "statusUpdatedAt" of the matching licence monitoring station', async () => {
-      await UpdateAbstractionAlertsService.go([notification])
+      await UpdateAbstractionAlertsService([notification])
 
       const updatedResult = await licenceMonitoringStation.$query()
 
@@ -45,7 +46,7 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
     })
 
     it('does not update other licence monitoring stations', async () => {
-      await UpdateAbstractionAlertsService.go([notification])
+      await UpdateAbstractionAlertsService([notification])
 
       const updatedResult = await licenceMonitoringStationUnTouched.$query()
 
@@ -68,7 +69,7 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
     })
 
     it('does not update the "status" and "statusUpdatedAt"', async () => {
-      await UpdateAbstractionAlertsService.go([notification])
+      await UpdateAbstractionAlertsService([notification])
 
       const updatedResult = await licenceMonitoringStation.$query()
 

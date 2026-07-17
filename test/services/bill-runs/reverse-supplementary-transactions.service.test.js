@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Thing under test
-const ReverseSupplementaryTransactionsService = require('../../../app/services/bill-runs/reverse-supplementary-transactions.service.js')
+import ReverseSupplementaryTransactionsService from '../../../app/services/bill-runs/reverse-supplementary-transactions.service.js'
 
 describe('Bill Runs - Reverse Supplementary Transactions service', () => {
   const transactions = [
@@ -25,7 +26,7 @@ describe('Bill Runs - Reverse Supplementary Transactions service', () => {
 
   describe('when the service is called', () => {
     it('returns reversing transactions', () => {
-      const result = ReverseSupplementaryTransactionsService.go(transactions, billLicenceId)
+      const result = ReverseSupplementaryTransactionsService(transactions, billLicenceId)
 
       expect(result).toHaveLength(transactions.length)
 

@@ -1,7 +1,4 @@
-'use strict'
-
-const { generateNoticeReferenceCode, generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
+import { generateLicenceRef, generateNoticeReferenceCode, generateRandomInteger, generateUUID } from '../generators.js'
 
 /**
  * Represents a notice of type 'alert reduce'
@@ -295,7 +292,7 @@ function _defaults() {
   }
 }
 
-module.exports = {
+export default {
   alertReduce,
   alertResume,
   alertStop,

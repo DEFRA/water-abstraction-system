@@ -1,14 +1,9 @@
-'use strict'
-
 /**
  * @module ReviewReturnHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('./licence.helper.js')
-const { generateReturnId } = require('./return-log.helper.js')
-const { generateReference } = require('./return-requirement.helper.js')
-const ReviewReturnModel = require('../../../app/models/review-return.model.js')
+import ReviewReturnModel from '../../../app/models/review-return.model.js'
+import { generateLicenceRef, generateReference, generateReturnId, generateUUID } from '../generators.js'
 
 /**
  * Add a new review return for 2pt matching
@@ -77,7 +72,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

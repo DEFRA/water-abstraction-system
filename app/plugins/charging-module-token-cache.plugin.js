@@ -1,6 +1,4 @@
-'use strict'
-
-const ChargingModuleTokenRequest = require('../requests/charging-module/token.request.js')
+import tokenRequest from '../requests/charging-module/token.request.js'
 
 /**
  * Adds a server method which returns a Cognito token for the Charging Module.
@@ -13,7 +11,7 @@ const ChargingModuleTokenRequest = require('../requests/charging-module/token.re
 const ONE_HOUR_IN_MS = 60 * 60 * 1000
 const ONE_MINUTE_IN_MS = 60 * 1000
 
-const ChargingModuleTokenCachePlugin = {
+export default {
   name: 'ChargingModuleTokenCache',
   register: (server, _options) => {
     // `flags` is passed to our server method automatically by hapi. Overwriting `flags.ttl` in our method lets us
@@ -21,7 +19,7 @@ const ChargingModuleTokenCachePlugin = {
     server.method(
       'getChargingModuleToken',
       async (flags) => {
-        const token = await ChargingModuleTokenRequest.send()
+        const token = await tokenRequest()
 
         // If the token request was successful it returns an expiry time, so use this to set the cache expiry
         // Otherwise, set the expiry time to 0 to avoid caching the unsuccessful attempt
@@ -48,5 +46,3 @@ function _setExpiryTime(expiresIn) {
   // request can be made
   return (expiresIn - 60) * 1000
 }
-
-module.exports = ChargingModuleTokenCachePlugin

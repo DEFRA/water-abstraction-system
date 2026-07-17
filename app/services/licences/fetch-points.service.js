@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the points data needed for the points page
  * @module FetchPointsService
  */
 
-const { db } = require('../../../db/db.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import { db } from '../../../db/db.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Fetches the points data needed for the points page
@@ -15,7 +13,7 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  *
  * @returns {Promise<object[]>} An object containing the points data needed for the points page
  */
-async function go(licenceId) {
+export default async function fetchPointsService(licenceId) {
   return _fetchPoints(licenceId)
 }
 
@@ -56,8 +54,4 @@ async function _fetchPoints(licenceId) {
         .andWhere('lv.startDate', '<=', timestampForPostgres())
     })
     .orderBy('p.description')
-}
-
-module.exports = {
-  go
 }

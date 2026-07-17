@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates the user confirming the notice type on the `/notices/setup/{sessionId}/check-notice-type` page
  *
  * @module SubmitCheckNoticeTypeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { NoticeType } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates the user confirming the notice type on the `/notices/setup/{sessionId}/check-notice-type` page
@@ -19,8 +17,8 @@ const { NoticeType } = require('../../../lib/static-lookups.lib.js')
  *
  * @param {string} sessionId - The UUID of the current session
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitCheckNoticeTypeService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
   session.addressJourney = {
     activeNavBar: 'notices',
@@ -57,8 +55,4 @@ function _backLink(session) {
   }
 
   return { href: `/system/notices/setup/${session.id}/contact-type`, text: 'Back' }
-}
-
-module.exports = {
-  go
 }

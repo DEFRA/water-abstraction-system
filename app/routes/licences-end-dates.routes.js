@@ -1,13 +1,11 @@
-'use strict'
+import { check, process } from '../controllers/licences-end-dates.controller.js'
 
-const LicencesEndDatesController = require('../controllers/licences-end-dates.controller.js')
-
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/licences/end-dates/check',
     options: {
-      handler: LicencesEndDatesController.check,
+      handler: check,
       app: {
         plainOutput: true
       },
@@ -21,7 +19,7 @@ const routes = [
     method: 'POST',
     path: '/licences/end-dates/process',
     options: {
-      handler: LicencesEndDatesController.process,
+      handler: process,
       app: {
         plainOutput: true
       },
@@ -32,5 +30,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

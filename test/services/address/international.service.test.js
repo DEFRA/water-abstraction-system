@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
-const SessionModelStub = require('../../support/stubs/session.stub.js')
+import SessionModelStub from '../../support/stubs/session.stub.js'
+import { countryLookup } from '../../../app/presenters/address/base-address.presenter.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const InternationalService = require('../../../app/services/address/international.service.js')
+import InternationalService from '../../../app/services/address/international.service.js'
 
 describe('Address - International Service', () => {
   const sessionId = 'dba48385-9fc8-454b-8ec8-3832d3b9e323'
@@ -33,18 +31,18 @@ describe('Address - International Service', () => {
       }
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await InternationalService.go(sessionId)
+      const result = await InternationalService(sessionId)
 
       expect(result).toEqual({
         activeNavBar: 'manage',

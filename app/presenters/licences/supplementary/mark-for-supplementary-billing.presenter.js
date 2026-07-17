@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the last 6 financial years ready for presenting in the mark for supplementary billing page
  * @module MarkForSupplementaryBillingPresenter
  */
 
-const { formatFinancialYear } = require('../../base.presenter.js')
-const { determineFinancialYearEnd } = require('../../../lib/dates.lib.js')
+import { determineFinancialYearEnd } from '../../../lib/dates.lib.js'
+import { formatFinancialYear } from '../../base.presenter.js'
 
 const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
 const PREVIOUS_SIX_YEARS = 6
@@ -18,7 +16,7 @@ const PREVIOUS_SIX_YEARS = 6
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(licence) {
+export default function markForSupplementaryBillingPresenter(licence) {
   const { id, licenceRef } = licence
 
   return {
@@ -66,8 +64,4 @@ function _yearsToDisplay() {
   }
 
   return lastSixFinancialYears
-}
-
-module.exports = {
-  go
 }

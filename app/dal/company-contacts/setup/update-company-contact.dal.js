@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Update the company contact data for the '/company-contacts/{id}/check' page
  * @module UpdateCompanyContactDal
  */
 
-const CompanyContactModel = require('../../../models/company-contact.model.js')
-const { today } = require('../../../lib/general.lib.js')
+import CompanyContactModel from '../../../models/company-contact.model.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Update the company contact data for the '/company-contacts/{id}/check' page
@@ -15,7 +13,7 @@ const { today } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<string>} the updated company contact
  */
-async function go(companyContact) {
+export default async function updateCompanyContactDal(companyContact) {
   const result = await _update(companyContact)
 
   return result.id
@@ -47,8 +45,4 @@ async function _update(companyContact) {
     },
     { noDelete: true }
   )
-}
-
-module.exports = {
-  go
 }

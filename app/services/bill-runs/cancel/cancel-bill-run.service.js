@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Checks if a bill run can be cancelled, and if so, updates the status of the bill run to 'cancel'
  * @module CancelBillRunService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Checks if a bill run can be cancelled, and if so, updates the status of the bill run to 'cancel'
@@ -23,7 +21,7 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<module:BillRunModel>} the bill run including its `externalId` and status
  */
-async function go(billRunId) {
+export default async function cancelBillRunService(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   const canBeDeleted = _canBeDeleted(billRun.status)
@@ -71,8 +69,4 @@ async function _fetchBillRun(id) {
 
 async function _updateStatus(billRunId) {
   return BillRunModel.query().findById(billRunId).patch({ status: 'cancel', updatedAt: timestampForPostgres() })
-}
-
-module.exports = {
-  go
 }

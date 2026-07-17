@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to send a bill run
  * @module ChargingModuleSendBillRunRequest
  */
 
-const ChargingModuleRequest = require('../charging-module.request.js')
-const ExpandedError = require('../../errors/expanded.error.js')
-const WaitForStatusRequest = require('./wait-for-status.request.js')
+import ExpandedError from '../../errors/expanded.error.js'
+import { patchRequest } from '../charging-module.request.js'
+import waitForStatusRequest from './wait-for-status.request.js'
 
 /**
  * Approve then send a bill run in the Charging Module API
@@ -24,7 +22,7 @@ const WaitForStatusRequest = require('./wait-for-status.request.js')
  *
  * For small bill runs the process is near instantaneous. Larger bill runs however it can take a number of seconds.
  * Because of this when the request is first made the CHA switches the bill run's status to `pending`. Only when the
- * process is complete does the status get set to `billed` or `billing_not_required`.
+ * process is complete does the status getRequest set to `billed` or `billing_not_required`.
  *
  * See {@link https://defra.github.io/sroc-charging-module-api-docs/#/bill-run/SendBillRun | CHA API docs} for more
  * details
@@ -33,7 +31,7 @@ const WaitForStatusRequest = require('./wait-for-status.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(billRunId) {
+export default async function sendBillRunRequest(billRunId) {
   await _approve(billRunId)
   await _send(billRunId)
 
@@ -42,7 +40,7 @@ async function send(billRunId) {
 
 async function _approve(billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}/approve`
-  const result = await ChargingModuleRequest.patch(path)
+  const result = await patchRequest(path)
 
   if (!result.succeeded) {
     const error = new ExpandedError('Charging Module approve request failed', {
@@ -56,7 +54,7 @@ async function _approve(billRunId) {
 
 async function _send(billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}/send`
-  const result = await ChargingModuleRequest.patch(path)
+  const result = await patchRequest(path)
 
   if (!result.succeeded) {
     const error = new ExpandedError('Charging Module send request failed', {
@@ -69,7 +67,7 @@ async function _send(billRunId) {
 }
 
 async function _waitForSent(billRunId) {
-  const result = await WaitForStatusRequest.send(billRunId, ['billed', 'billing_not_required'])
+  const result = await waitForStatusRequest(billRunId, ['billed', 'billing_not_required'])
 
   if (!result.succeeded) {
     const error = new ExpandedError('Charging Module wait request failed', {
@@ -82,8 +80,4 @@ async function _waitForSent(billRunId) {
   }
 
   return result
-}
-
-module.exports = {
-  send
 }

@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { addressToCSV } = require('../../../../app/presenters/notices/base.presenter.js')
-const { transformArrayToCSVRow } = require('../../../../app/lib/transform-to-csv.lib.js')
+import NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.js'
+import { generateLicenceRef } from '../../../support/generators.js'
+import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
 
 // Thing under test
-const DownloadRenewalInvitationPresenter = require('../../../../app/presenters/notices/setup/download-renewal-invitation.presenter.js')
+import DownloadRenewalInvitationPresenter from '../../../../app/presenters/notices/setup/download-renewal-invitation.presenter.js'
 
 describe('Notices - Setup - Download Renewal Invitation presenter', () => {
   let recipient
@@ -24,7 +25,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
     })
 
     it('correctly formats the data to a csv string', () => {
-      const result = DownloadRenewalInvitationPresenter.go([recipient], session)
+      const result = DownloadRenewalInvitationPresenter([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
       const expected =
@@ -42,7 +43,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
     })
 
     it('correctly formats the data to a csv string', () => {
-      const result = DownloadRenewalInvitationPresenter.go([recipient], session)
+      const result = DownloadRenewalInvitationPresenter([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
       const expected =
@@ -61,7 +62,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
     })
 
     it('joins the licence refs with a comma', () => {
-      const result = DownloadRenewalInvitationPresenter.go([recipient], session)
+      const result = DownloadRenewalInvitationPresenter([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
       const expected =

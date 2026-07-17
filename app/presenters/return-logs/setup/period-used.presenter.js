@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Format data for the `/return-log/setup/{sessionId}/period-used` page
  * @module PeriodUsedPresenter
  */
 
-const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
-const { formatAbstractionPeriod } = require('../../base.presenter.js')
+import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
+import { formatAbstractionPeriod } from '../../base.presenter.js'
 
 /**
  * Format data for the `/return-log/setup/{sessionId}/period-used` page
@@ -15,7 +13,7 @@ const { formatAbstractionPeriod } = require('../../base.presenter.js')
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function periodUsedPresenter(session) {
   const {
     id: sessionId,
     periodStartDay,
@@ -58,8 +56,4 @@ function go(session) {
     sessionId,
     showDefaultAbstractionPeriod: abstractionPeriods.length > 0
   }
-}
-
-module.exports = {
-  go
 }

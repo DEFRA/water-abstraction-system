@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the PDF data for a notification
  * @module FetchDownloadNotificationService
  */
 
-const NotificationModel = require('../../models/notification.model.js')
+import NotificationModel from '../../models/notification.model.js'
 
 /**
  * Fetches the PDF data for a notification
@@ -14,10 +12,6 @@ const NotificationModel = require('../../models/notification.model.js')
  *
  * @returns {Promise<module:NotificationModel>} the PDF for the notification
  */
-async function go(notificationId) {
+export default async function fetchNotificationDownloadService(notificationId) {
   return NotificationModel.query().findById(notificationId).select(['pdf'])
-}
-
-module.exports = {
-  go
 }

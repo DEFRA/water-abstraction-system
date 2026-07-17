@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const TypePresenter = require('../../../../app/presenters/bill-runs/setup/type.presenter.js')
+import TypePresenter from '../../../../app/presenters/bill-runs/setup/type.presenter.js'
 
 describe('Bill Runs - Setup - Type presenter', () => {
   let session
@@ -16,7 +17,7 @@ describe('Bill Runs - Setup - Type presenter', () => {
 
     describe('where the user has not previously selected a bill run type', () => {
       it('correctly presents the data', () => {
-        const result = TypePresenter.go(session)
+        const result = TypePresenter(session)
 
         expect(result).toEqual({
           backlink: '/system/bill-runs',
@@ -33,7 +34,7 @@ describe('Bill Runs - Setup - Type presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = TypePresenter.go(session)
+        const result = TypePresenter(session)
 
         expect(result).toEqual({
           backlink: '/system/bill-runs',

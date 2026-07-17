@@ -1,13 +1,25 @@
-'use strict'
+import {
+  abstractionPeriod,
+  check,
+  fullCondition,
+  licenceNumber,
+  stopOrReduce,
+  submitAbstractionPeriod,
+  submitCheck,
+  submitFullCondition,
+  submitLicenceNumber,
+  submitSetup,
+  submitStopOrReduce,
+  submitThresholdAndUnit,
+  thresholdAndUnit
+} from '../controllers/licence-monitoring-station-setup.controller.js'
 
-const LicenceMonitoringStationSetupController = require('../controllers/licence-monitoring-station-setup.controller.js')
-
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/licence-monitoring-station/setup',
     options: {
-      handler: LicenceMonitoringStationSetupController.submitSetup,
+      handler: submitSetup,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -19,7 +31,7 @@ const routes = [
     method: 'GET',
     path: '/licence-monitoring-station/setup/{sessionId}/threshold-and-unit',
     options: {
-      handler: LicenceMonitoringStationSetupController.thresholdAndUnit,
+      handler: thresholdAndUnit,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -31,7 +43,7 @@ const routes = [
     method: 'POST',
     path: '/licence-monitoring-station/setup/{sessionId}/threshold-and-unit',
     options: {
-      handler: LicenceMonitoringStationSetupController.submitThresholdAndUnit,
+      handler: submitThresholdAndUnit,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -43,7 +55,7 @@ const routes = [
     method: 'GET',
     path: '/licence-monitoring-station/setup/{sessionId}/stop-or-reduce',
     options: {
-      handler: LicenceMonitoringStationSetupController.stopOrReduce,
+      handler: stopOrReduce,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -55,7 +67,7 @@ const routes = [
     method: 'POST',
     path: '/licence-monitoring-station/setup/{sessionId}/stop-or-reduce',
     options: {
-      handler: LicenceMonitoringStationSetupController.submitStopOrReduce,
+      handler: submitStopOrReduce,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -67,7 +79,7 @@ const routes = [
     method: 'GET',
     path: '/licence-monitoring-station/setup/{sessionId}/licence-number',
     options: {
-      handler: LicenceMonitoringStationSetupController.licenceNumber,
+      handler: licenceNumber,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -79,7 +91,7 @@ const routes = [
     method: 'POST',
     path: '/licence-monitoring-station/setup/{sessionId}/licence-number',
     options: {
-      handler: LicenceMonitoringStationSetupController.submitLicenceNumber,
+      handler: submitLicenceNumber,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -91,7 +103,7 @@ const routes = [
     method: 'GET',
     path: '/licence-monitoring-station/setup/{sessionId}/full-condition',
     options: {
-      handler: LicenceMonitoringStationSetupController.fullCondition,
+      handler: fullCondition,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -103,7 +115,7 @@ const routes = [
     method: 'POST',
     path: '/licence-monitoring-station/setup/{sessionId}/full-condition',
     options: {
-      handler: LicenceMonitoringStationSetupController.submitFullCondition,
+      handler: submitFullCondition,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -115,7 +127,7 @@ const routes = [
     method: 'GET',
     path: '/licence-monitoring-station/setup/{sessionId}/abstraction-period',
     options: {
-      handler: LicenceMonitoringStationSetupController.abstractionPeriod,
+      handler: abstractionPeriod,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -127,7 +139,7 @@ const routes = [
     method: 'POST',
     path: '/licence-monitoring-station/setup/{sessionId}/abstraction-period',
     options: {
-      handler: LicenceMonitoringStationSetupController.submitAbstractionPeriod,
+      handler: submitAbstractionPeriod,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -139,7 +151,7 @@ const routes = [
     method: 'GET',
     path: '/licence-monitoring-station/setup/{sessionId}/check',
     options: {
-      handler: LicenceMonitoringStationSetupController.check,
+      handler: check,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -151,7 +163,7 @@ const routes = [
     method: 'POST',
     path: '/licence-monitoring-station/setup/{sessionId}/check',
     options: {
-      handler: LicenceMonitoringStationSetupController.submitCheck,
+      handler: submitCheck,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
@@ -160,5 +172,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

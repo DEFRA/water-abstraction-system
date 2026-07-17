@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
-const LicenceSupplementaryYearModel = require('../../../../app/models/licence-supplementary-year.model.js')
+import LicenceSupplementaryYearHelper from '../../../support/helpers/licence-supplementary-year.helper.js'
+import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const CreateLicenceSupplementaryYearService = require('../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js')
+import CreateLicenceSupplementaryYearService from '../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js'
 
 describe('Create Licence Supplementary Years Service', () => {
   let licenceId
@@ -22,7 +23,7 @@ describe('Create Licence Supplementary Years Service', () => {
 
     describe('that does not already exist', () => {
       it('persists the data', async () => {
-        await CreateLicenceSupplementaryYearService.go(licenceId, financialYearEnds, twoPartTariff)
+        await CreateLicenceSupplementaryYearService(licenceId, financialYearEnds, twoPartTariff)
 
         const result = await _fetchLicenceSupplementaryYears(licenceId)
 
@@ -43,7 +44,7 @@ describe('Create Licence Supplementary Years Service', () => {
 
       describe('without the billRunId', () => {
         it('does not persist the data', async () => {
-          await CreateLicenceSupplementaryYearService.go(licenceId, financialYearEnds, twoPartTariff)
+          await CreateLicenceSupplementaryYearService(licenceId, financialYearEnds, twoPartTariff)
 
           const result = await _fetchLicenceSupplementaryYears(licenceId)
 
@@ -65,13 +66,13 @@ describe('Create Licence Supplementary Years Service', () => {
         })
 
         it('persist the data', async () => {
-          await CreateLicenceSupplementaryYearService.go(licenceId, financialYearEnds, twoPartTariff)
+          await CreateLicenceSupplementaryYearService(licenceId, financialYearEnds, twoPartTariff)
 
           const result = await _fetchLicenceSupplementaryYears(licenceId)
 
           expect(result).toHaveLength(2)
           expect(result[0].billRunId).toEqual(billRunId)
-          expect(result[1].billRunId).toEqual(null)
+          expect(result[1].billRunId).toBeNull()
         })
       })
     })

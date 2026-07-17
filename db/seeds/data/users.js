@@ -1,6 +1,4 @@
-'use strict'
-
-const data = [
+export const data = [
   {
     id: 'c669eebc-5c54-4756-87d0-97883fe2e10e',
     userId: 100000,
@@ -184,7 +182,3 @@ const data = [
     enabled: true
   }
 ]
-
-module.exports = {
-  data
-}

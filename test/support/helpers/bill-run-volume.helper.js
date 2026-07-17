@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module BillRunVolumeHelper
  */
 
-const BillRunVolumeModel = require('../../../app/models/bill-run-volume.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import BillRunVolumeModel from '../../../app/models/bill-run-volume.model.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new bill run volume
@@ -53,7 +51,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

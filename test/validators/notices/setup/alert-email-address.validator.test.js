@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const AlertEmailAddressValidator = require('../../../../app/validators/notices/setup/alert-email-address.validator.js')
+import AlertEmailAddressValidator from '../../../../app/validators/notices/setup/alert-email-address.validator.js'
 
 describe('Notices - Setup - Alert Email Address validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Notices - Setup - Alert Email Address validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = AlertEmailAddressValidator.go(payload)
+      const result = AlertEmailAddressValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +26,7 @@ describe('Notices - Setup - Alert Email Address validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertEmailAddressValidator.go(payload)
+          const result = AlertEmailAddressValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -41,7 +42,7 @@ describe('Notices - Setup - Alert Email Address validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertEmailAddressValidator.go(payload)
+          const result = AlertEmailAddressValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -55,7 +56,7 @@ describe('Notices - Setup - Alert Email Address validator', () => {
         })
 
         it('returns with no errors', () => {
-          const result = AlertEmailAddressValidator.go(payload)
+          const result = AlertEmailAddressValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeUndefined()
@@ -68,7 +69,7 @@ describe('Notices - Setup - Alert Email Address validator', () => {
         })
 
         it('returns with no errors', () => {
-          const result = AlertEmailAddressValidator.go(payload)
+          const result = AlertEmailAddressValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeUndefined()
@@ -83,7 +84,7 @@ describe('Notices - Setup - Alert Email Address validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = AlertEmailAddressValidator.go(payload)
+      const result = AlertEmailAddressValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

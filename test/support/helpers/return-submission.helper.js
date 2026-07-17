@@ -1,12 +1,9 @@
-'use strict'
-
 /**
  * @module ReturnSubmissionHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateReturnId } = require('./return-log.helper.js')
-const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
+import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
+import { generateReturnId, generateUUID } from '../generators.js'
 
 /**
  * Add a new return submission
@@ -73,7 +70,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

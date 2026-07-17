@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Unregisters licences, making them available to be re-registered
  * @module UnregisterLicencesDal
  */
 
-const LicenceDocumentHeaderModel = require('../../../../models/licence-document-header.model.js')
-const LicenceUnregistrationModel = require('../../../../models/licence-unregistration.model.js')
-const { timestampForPostgres } = require('../../../../lib/general.lib.js')
+import LicenceDocumentHeaderModel from '../../../../models/licence-document-header.model.js'
+import LicenceUnregistrationModel from '../../../../models/licence-unregistration.model.js'
+import { timestampForPostgres } from '../../../../lib/general.lib.js'
 
 /**
  * Unregisters licences, making them available to be re-registered
@@ -40,7 +38,7 @@ const { timestampForPostgres } = require('../../../../lib/general.lib.js')
  * @param {module:SessionModel} session - The session instance
  * @param {module:UserModel} user - The user that is deregistering the licences
  */
-async function go(session, user) {
+export default async function unregisterLicencesDal(session, user) {
   const { id: userId } = user
 
   const timestamp = timestampForPostgres()
@@ -80,8 +78,4 @@ async function _unregisterLicence(licenceDocumentHeaderId, timestamp, trx) {
   await LicenceDocumentHeaderModel.query(trx)
     .findById(licenceDocumentHeaderId)
     .patch({ companyEntityId: null, updatedAt: timestamp })
-}
-
-module.exports = {
-  go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/download` link when the journey is for renewal invitations
  * @module DownloadRenewalInvitationPresenter
  */
 
-const { addressToCSV } = require('../base.presenter.js')
-const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
+import { addressToCSV } from '../base.presenter.js'
+import { transformArrayToCSVRow } from '../../../lib/transform-to-csv.lib.js'
 
 const HEADERS = [
   'Licence',
@@ -37,7 +35,7 @@ const HEADERS = [
  * @returns {string} - A CSV-formatted string that includes the recipients' data, with the first row as column headers
  * and subsequent rows corresponding to the recipient details.
  */
-function go(recipients, session) {
+export default function downloadRenewalInvitationPresenter(recipients, session) {
   const rows = _transformToCsv(recipients, session)
 
   return [HEADERS + '\n', ...rows].join('')
@@ -69,8 +67,4 @@ function _transformToCsv(recipients, session) {
 
     return transformArrayToCSVRow(row)
   })
-}
-
-module.exports = {
-  go
 }

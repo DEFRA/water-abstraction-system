@@ -1,14 +1,11 @@
-'use strict'
-
 /**
  * Formats notification data ready for presenting in the preview notification page
  * @module PreviewPresenter
  */
 
-const GeneratePreviewRequest = require('../../../../requests/notify/generate-preview.request.js')
-
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
-const { sentenceCase } = require('../../../base.presenter.js')
+import { NoticeType } from '../../../../lib/static-lookups.lib.js'
+import generatePreviewRequest from '../../../../requests/notify/generate-preview.request.js'
+import { sentenceCase } from '../../../base.presenter.js'
 
 /**
  * Formats notification data ready for presenting in the preview notification page
@@ -23,7 +20,14 @@ const { sentenceCase } = require('../../../base.presenter.js')
  *
  * @returns {Promise<object>} The data formatted for the preview page
  */
-async function go(contactHashId, noticeType, notification, sessionId, licenceMonitoringStationId, referenceCode) {
+export default async function previewPresenter(
+  contactHashId,
+  noticeType,
+  notification,
+  sessionId,
+  licenceMonitoringStationId,
+  referenceCode
+) {
   const { messageRef, messageType, personalisation, recipient, templateId } = notification
 
   return {
@@ -58,7 +62,7 @@ function _backLink(contactHashId, noticeType, sessionId) {
 }
 
 async function _notifyPreview(personalisation, templateId) {
-  const previewResult = await GeneratePreviewRequest.send(templateId, personalisation)
+  const previewResult = await generatePreviewRequest(templateId, personalisation)
 
   if (previewResult.succeeded) {
     return previewResult.response.body.body
@@ -75,8 +79,4 @@ function _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId,
   }
 
   return baseRefreshPageLink
-}
-
-module.exports = {
-  go
 }

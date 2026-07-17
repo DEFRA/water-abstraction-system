@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/licence-number` page
  *
  * @module SubmitLicenceNumberService
  */
 
-const FetchLicenceDal = require('../../../dal/licence-monitoring-station/fetch-licence.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const LicenceNumberPresenter = require('../../../presenters/licence-monitoring-station/setup/licence-number.presenter.js')
-const LicenceNumberValidator = require('../../../validators/licence-monitoring-station/setup/licence-number.validator.js')
+import FetchLicenceDal from '../../../dal/licence-monitoring-station/fetch-licence.dal.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import LicenceNumberPresenter from '../../../presenters/licence-monitoring-station/setup/licence-number.presenter.js'
+import LicenceNumberValidator from '../../../validators/licence-monitoring-station/setup/licence-number.validator.js'
 
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/licence-number` page
@@ -19,10 +17,10 @@ const LicenceNumberValidator = require('../../../validators/licence-monitoring-s
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitLicenceNumberService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
-  const licence = payload.licenceRef ? await FetchLicenceDal.go(payload.licenceRef) : null
+  const licence = payload.licenceRef ? await FetchLicenceDal(payload.licenceRef) : null
 
   const validationResult = await _validate(payload, licence)
 
@@ -58,11 +56,11 @@ async function _save(session, payload, licence) {
 function _submittedSessionData(session, payload) {
   session.licenceRef = payload['licenceRef'] ?? null
 
-  return LicenceNumberPresenter.go(session)
+  return LicenceNumberPresenter(session)
 }
 
 async function _validate(payload, licence) {
-  const validation = LicenceNumberValidator.go(payload, licence)
+  const validation = LicenceNumberValidator(payload, licence)
 
   if (!validation.error) {
     return null
@@ -73,8 +71,4 @@ async function _validate(payload, licence) {
   return {
     text: message
   }
-}
-
-module.exports = {
-  go
 }

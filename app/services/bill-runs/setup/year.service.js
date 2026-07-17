@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/year` page
  * @module YearService
  */
 
-const FetchLicenceSupplementaryYearsService = require('./fetch-licence-supplementary-years.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const YearPresenter = require('../../../presenters/bill-runs/setup/year.presenter.js')
+import FetchLicenceSupplementaryYearsService from './fetch-licence-supplementary-years.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import YearPresenter from '../../../presenters/bill-runs/setup/year.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/year` page
@@ -19,21 +17,17 @@ const YearPresenter = require('../../../presenters/bill-runs/setup/year.presente
  *
  * @returns {Promise<object>} The view data for the year page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function yearService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
   const regionId = session.region
   const twoPartTariffSupplementary = session.type === 'two_part_supplementary'
-  const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariffSupplementary)
+  const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService(regionId, twoPartTariffSupplementary)
 
-  const formattedData = YearPresenter.go(licenceSupplementaryYears, session)
+  const formattedData = YearPresenter(licenceSupplementaryYears, session)
 
   return {
     activeNavBar: 'bill-runs',
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

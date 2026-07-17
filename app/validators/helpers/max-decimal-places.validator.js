@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Custom JOI validator to check a value does not have more than the specified number of decimal places
  *
@@ -13,7 +11,7 @@
  * @returns {number|object} if valid the original value else a Joi 'custom.maxDecimals' error. Knowing we return this
  * means you can assign what error message to use when a number has too many decimals.
  */
-function maxDecimalPlaces(maxDecimals) {
+export function maxDecimalPlaces(maxDecimals) {
   return function (value, helpers) {
     if (!value) {
       return value
@@ -27,7 +25,4 @@ function maxDecimalPlaces(maxDecimals) {
 
     return helpers.error('custom.maxDecimals')
   }
-}
-module.exports = {
-  maxDecimalPlaces
 }

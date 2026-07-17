@@ -1,20 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const YarStub = require('../../support/stubs/yar.stub.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const DeleteCompanyContactService = require('../../../app/services/company-contacts/delete-company-contact.service.js')
-const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
-const FetchNotificationService = require('../../../app/services/company-contacts/fetch-notification.service.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as DeleteCompanyContactService from '../../../app/services/company-contacts/delete-company-contact.service.js'
+import * as FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
+import * as FetchNotificationService from '../../../app/services/company-contacts/fetch-notification.service.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const SubmitRemoveCompanyContactService = require('../../../app/services/company-contacts/submit-remove-company-contact.service.js')
+import SubmitRemoveCompanyContactService from '../../../app/services/company-contacts/submit-remove-company-contact.service.js'
 
 describe('Company Contacts - Submit Remove Company Contact Service', () => {
   let companyContact
@@ -24,25 +22,25 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
   beforeEach(() => {
     companyContact = CustomersFixtures.companyContact()
 
-    Sinon.stub(DeleteCompanyContactService, 'go').resolves()
-    Sinon.stub(FetchCompanyContactDal, 'go').resolves(companyContact)
+    vi.spyOn(DeleteCompanyContactService, 'default').mockResolvedValue()
+    vi.spyOn(FetchCompanyContactDal, 'default').mockResolvedValue(companyContact)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('and there are notifications', () => {
       beforeEach(() => {
         notification = { id: generateUUID() }
-        Sinon.stub(FetchNotificationService, 'go').resolves(notification)
+        vi.spyOn(FetchNotificationService, 'default').mockResolvedValue(notification)
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        const result = await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         expect(result).toEqual({
           companyId: companyContact.companyId
@@ -50,10 +48,10 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       })
 
       it('sets a flash message', async () => {
-        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         // Check we add the flash message
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({
@@ -63,20 +61,20 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       })
 
       it('calls the delete company contact service with the id and true', async () => {
-        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
-        expect(DeleteCompanyContactService.go.calledWithExactly(companyContact.id, true)).toBe(true)
+        expect(DeleteCompanyContactService.default).toHaveBeenCalledWith(companyContact.id, true)
       })
     })
 
     describe('and there are no notifications', () => {
       beforeEach(() => {
         notification = undefined
-        Sinon.stub(FetchNotificationService, 'go').resolves(notification)
+        vi.spyOn(FetchNotificationService, 'default').mockResolvedValue(notification)
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        const result = await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         expect(result).toEqual({
           companyId: companyContact.companyId
@@ -84,10 +82,10 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       })
 
       it('sets a flash message', async () => {
-        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         // Check we add the flash message
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({
@@ -97,9 +95,9 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       })
 
       it('calls the delete company contact service with the id and false', async () => {
-        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
-        expect(DeleteCompanyContactService.go.calledWithExactly(companyContact.id, false)).toBe(true)
+        expect(DeleteCompanyContactService.default).toHaveBeenCalledWith(companyContact.id, false)
       })
     })
   })

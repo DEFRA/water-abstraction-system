@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Formats bill run data ready for presenting in the view bill run page
  * @module ViewBillRunPresenter
  */
 
-const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
-const {
+import {
+  displayCreditDebitTotals,
   formatBillRunType,
   formatChargeScheme,
-  displayCreditDebitTotals,
   generateBillRunTitle
-} = require('../billing.presenter.js')
+} from '../billing.presenter.js'
+import { formatFinancialYear, formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
 
 /**
  * Formats bill run data ready for presenting in the view bill run page
@@ -21,7 +19,7 @@ const {
  *
  * @returns {object} - the prepared bill run data to be passed to the view bill run page
  */
-function go(billRun, billSummaries) {
+export default function viewBillRunPresenter(billRun, billSummaries) {
   const {
     batchType,
     billRunNumber,
@@ -120,8 +118,4 @@ function _debitsCount(count) {
   }
 
   return `${count} invoices`
-}
-
-module.exports = {
-  go
 }

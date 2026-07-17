@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the matching notification needed for the view
  * @module FetchNotificationDal
  */
 
-const NotificationModel = require('../../models/notification.model.js')
+import NotificationModel from '../../models/notification.model.js'
 
 /**
  * Fetches the matching notification needed for the view
@@ -14,7 +12,7 @@ const NotificationModel = require('../../models/notification.model.js')
  *
  * @returns {Promise<module:NotificationModel>} the matching `NotificationModel` instance
  */
-async function go(notificationId) {
+export default async function fetchNotificationDal(notificationId) {
   return NotificationModel.query()
     .findById(notificationId)
     .select([
@@ -29,8 +27,4 @@ async function go(notificationId) {
       'recipient',
       'status'
     ])
-}
-
-module.exports = {
-  go
 }

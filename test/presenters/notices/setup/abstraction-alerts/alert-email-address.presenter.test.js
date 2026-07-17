@@ -1,15 +1,15 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const AlertEmailAddressPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js')
+import AlertEmailAddressPresenter from '../../../../../app/presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js'
 
 describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter', () => {
   let auth
   let session
-  let validationResult
 
   beforeEach(() => {
     auth = {
@@ -20,13 +20,12 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
       }
     }
 
-    validationResult = null
     session = AbstractionAlertSessionData.get()
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
+      const result = AlertEmailAddressPresenter(session, auth)
 
       expect(result).toEqual({
         alertEmailAddressOptions: {
@@ -52,7 +51,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns true', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.otherUserChecked).toBe(true)
           })
@@ -64,7 +63,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns false', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.otherUserChecked).toBe(false)
           })
@@ -79,7 +78,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns the session.alertEmailAddress', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.otherUserEmailAddressInput).toEqual('test@defra.gov.uk')
           })
@@ -91,7 +90,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns an empty string', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.otherUserEmailAddressInput).toEqual('')
           })
@@ -105,7 +104,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns true', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.usernameChecked).toBe(true)
           })
@@ -117,7 +116,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns false', () => {
-            const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.usernameChecked).toBe(false)
           })

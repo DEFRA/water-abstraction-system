@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @module SubmitFullConditionService
  */
 
-const FetchFullConditionService = require('../../../services/licence-monitoring-station/setup/fetch-full-condition.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const FullConditionService = require('../../../services/licence-monitoring-station/setup/full-condition.service.js')
-const FullConditionValidator = require('../../../validators/licence-monitoring-station/setup/full-condition.validator.js')
+import FetchFullConditionService from '../../../services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import FullConditionService from '../../../services/licence-monitoring-station/setup/full-condition.service.js'
+import FullConditionValidator from '../../../validators/licence-monitoring-station/setup/full-condition.validator.js'
 
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -19,11 +17,11 @@ const FullConditionValidator = require('../../../validators/licence-monitoring-s
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
+export default async function submitFullConditionService(sessionId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    const session = await FetchSessionDal.go(sessionId)
+    const session = await FetchSessionDal(sessionId)
 
     // On the check page we want to display the exact text of the chosen condition (including the condition number) plus
     // its abstraction period. To do this we need to re-fetch the condition. We can then save the info in the session.
@@ -45,7 +43,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = await FullConditionService.go(sessionId)
+  const pageData = await FullConditionService(sessionId)
 
   return {
     error: validationResult,
@@ -86,7 +84,7 @@ async function _fetchCondition(licenceId, conditionId) {
     return { condition: null, conditionIndex: null }
   }
 
-  const conditions = await FetchFullConditionService.go(licenceId)
+  const conditions = await FetchFullConditionService(licenceId)
 
   const conditionIndex = conditions.findIndex((condition) => {
     return condition.id === conditionId
@@ -110,7 +108,7 @@ async function _save(session, abstractionPeriod, conditionDisplayText, payload) 
 }
 
 function _validate(payload) {
-  const validation = FullConditionValidator.go(payload)
+  const validation = FullConditionValidator(payload)
 
   if (!validation.error) {
     return null
@@ -121,8 +119,4 @@ function _validate(payload) {
   return {
     text: message
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,6 +1,4 @@
-'use strict'
-
-exports.up = async function (knex) {
+export async function up(knex) {
   await knex.schema.alterTable('review_charge_elements', (table) => {
     table.text('issues').alter()
   })
@@ -14,7 +12,7 @@ exports.up = async function (knex) {
   })
 }
 
-exports.down = async function (knex) {
+export async function down(knex) {
   await knex.schema.alterTable('review_charge_elements', (table) => {
     table.string('issues').alter()
   })

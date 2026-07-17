@@ -1,16 +1,17 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Test helpers
-const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const { tomorrow } = require('../../support/general.js')
+import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
+import { tomorrow } from '../../support/general.js'
 
 // Thing under test
-const ViewInvalidAddressesPresenter = require('../../../app/presenters/reports/view-invalid-addresses.presenter.js')
+import ViewInvalidAddressesPresenter from '../../../app/presenters/reports/view-invalid-addresses.presenter.js'
 
 describe('Reports - View invalid addresses presenter', () => {
   describe('when there are no addresses to display', () => {
     it('returns the basic page data', async () => {
-      const result = await ViewInvalidAddressesPresenter.go([])
+      const result = await ViewInvalidAddressesPresenter([])
 
       expect(result).toEqual({
         backLink: { href: '/system/manage', text: 'Go back to manage' },
@@ -23,7 +24,7 @@ describe('Reports - View invalid addresses presenter', () => {
 
   describe('when there are addresses to display', () => {
     it('returns the formatted page data', async () => {
-      const result = await ViewInvalidAddressesPresenter.go(_invalidAddresses())
+      const result = await ViewInvalidAddressesPresenter(_invalidAddresses())
 
       expect(result).toEqual({
         backLink: { href: '/system/manage', text: 'Go back to manage' },

@@ -1,20 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 
 // Test helpers
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewCheckNoticeTypeService = require('../../../../app/services/notices/setup/view-check-notice-type.service.js')
+import ViewCheckNoticeTypeService from '../../../../app/services/notices/setup/view-check-notice-type.service.js'
 
 describe('Notices - Setup - View Check Notice Type service', () => {
   let licenceRef
@@ -26,21 +24,21 @@ describe('Notices - Setup - View Check Notice Type service', () => {
     licenceRef = generateLicenceRef()
     sessionData = { licenceRef, noticeType: 'invitations' }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.resolves()
+    yarStub = YarStub()
+    yarStub.flash.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCheckNoticeTypeService.go(session.id, yarStub)
+      const result = await ViewCheckNoticeTypeService(session.id, yarStub)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -59,20 +57,20 @@ describe('Notices - Setup - View Check Notice Type service', () => {
     })
 
     it('should set the "checkPageVisited" flag', async () => {
-      await ViewCheckNoticeTypeService.go(session.id, yarStub)
+      await ViewCheckNoticeTypeService(session.id, yarStub)
 
       expect(session.checkPageVisited).toBe(true)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     describe('when there is a notification', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.flash.returns(['Test notification'])
+        yarStub = YarStub()
+        yarStub.flash.mockReturnValue(['Test notification'])
       })
 
       it('should set the notification', async () => {
-        const result = await ViewCheckNoticeTypeService.go(session.id, yarStub)
+        const result = await ViewCheckNoticeTypeService(session.id, yarStub)
 
         expect(result.notification).toEqual('Test notification')
       })

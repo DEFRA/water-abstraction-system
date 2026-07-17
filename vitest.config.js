@@ -1,8 +1,6 @@
-'use strict'
-
 const ci = String(process.env.CI) === 'true' || false
 
-const vitestConfig = {
+export default {
   test: {
     cache: !ci,
     coverage: {
@@ -42,8 +40,8 @@ const vitestConfig = {
         test: {
           // Run tests in a plain Node.js environment with no browser globals
           environment: 'node',
-          // Inject Vitest globals (describe, it, expect, etc.) without requiring explicit imports in test files
-          globals: true,
+          // Vitest globals (describe, it, expect, etc.) must be imported explicitly in each test file
+          globals: false,
           // Maximum time in milliseconds allowed for a before/after hook to complete
           hookTimeout: 10000,
           // Glob patterns that select which test files belong to this project
@@ -70,6 +68,8 @@ const vitestConfig = {
           ],
           // Share a single worker context across test files rather than isolating each file in its own module scope
           isolate: false,
+          // Module(s) to run once per test file before importing it. Used to add polyfills and test-level setup
+          setupFiles: ['test/setup.js'],
           // Human-readable label for this project shown in the Vitest output
           name: 'parallel',
           // In CI use 2 workers (GitHub actions have 2 cores) to avoid resource contention; locally use 50%
@@ -97,8 +97,8 @@ const vitestConfig = {
         test: {
           // Run tests in a plain Node.js environment with no browser globals
           environment: 'node',
-          // Inject Vitest globals (describe, it, expect, etc.) without requiring explicit imports in test files
-          globals: true,
+          // Vitest globals (describe, it, expect, etc.) must be imported explicitly in each test file
+          globals: false,
           // Maximum time in milliseconds allowed for a before/after hook to complete
           hookTimeout: 10000,
           // Glob patterns that select which test files belong to this project
@@ -122,6 +122,8 @@ const vitestConfig = {
           ],
           // Share a single worker context across test files rather than isolating each file in its own module scope
           isolate: false,
+          // Module(s) to run once per test file before importing it. Used to add polyfills and test-level setup
+          setupFiles: ['test/setup.js'],
           // Human-readable label for this project shown in the Vitest output
           name: 'series',
           // Force a single worker so tests run one at a time and cannot interfere with each other via the database
@@ -144,8 +146,4 @@ const vitestConfig = {
       }
     ]
   }
-}
-
-module.exports = {
-  ...vitestConfig
 }

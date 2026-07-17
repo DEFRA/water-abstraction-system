@@ -1,14 +1,14 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices` page
  * @module IndexValidator
  */
 
-const Joi = require('joi').extend(require('@joi/date'))
+import base from 'joi'
+import joiDate from '@joi/date'
 
-const { leftPadZeroes } = require('../../presenters/base.presenter.js')
+import { leftPadZeroes } from '../../presenters/base.presenter.js'
 
+const Joi = base.extend(joiDate)
 const NOTICE_TYPES = [
   'legacyNotifications',
   'paperReturnForms',
@@ -34,7 +34,7 @@ const MAX_SENT_BY_LENGTH = 255
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function indexValidator(payload) {
   payload.fromDate = _fullDate('sentFromDay', 'sentFromMonth', 'sentFromYear', payload)
   payload.toDate = _fullDate('sentToDay', 'sentToMonth', 'sentToYear', payload)
 
@@ -126,8 +126,4 @@ function _validate(payload) {
     .messages({ 'any.custom': 'The from date must be before the to date' })
 
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
-}
-
-module.exports = {
-  go
 }

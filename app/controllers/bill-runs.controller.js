@@ -1,66 +1,64 @@
-'use strict'
-
 /**
  * Controller for /bill-runs endpoints
  * @module BillRunsController
  */
 
-const Boom = require('@hapi/boom')
+import Boom from '@hapi/boom'
 
-const GenerateTwoPartTariffBillRunService = require('../services/bill-runs/generate-two-part-tariff-bill-run.service.js')
-const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
-const SubmitCancelBillRunService = require('../services/bill-runs/cancel/submit-cancel-bill-run.service.js')
-const SubmitIndexBillRunsService = require('../services/bill-runs/submit-index-bill-runs.service.js')
-const SubmitSendBillRunService = require('../services/bill-runs/send/submit-send-bill-run.service.js')
-const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
-const ViewCancelBillRunService = require('../services/bill-runs/cancel/view-cancel-bill-run.service.js')
-const ViewSendBillRunService = require('../services/bill-runs/send/view-send-bill-run.service.js')
+import GenerateTwoPartTariffBillRunService from '../services/bill-runs/generate-two-part-tariff-bill-run.service.js'
+import IndexBillRunsService from '../services/bill-runs/index-bill-runs.service.js'
+import SubmitCancelBillRunService from '../services/bill-runs/cancel/submit-cancel-bill-run.service.js'
+import SubmitIndexBillRunsService from '../services/bill-runs/submit-index-bill-runs.service.js'
+import SubmitSendBillRunService from '../services/bill-runs/send/submit-send-bill-run.service.js'
+import ViewBillRunService from '../services/bill-runs/view-bill-run.service.js'
+import ViewCancelBillRunService from '../services/bill-runs/cancel/view-cancel-bill-run.service.js'
+import ViewSendBillRunService from '../services/bill-runs/send/view-send-bill-run.service.js'
 
-async function cancel(request, h) {
+export async function cancel(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewCancelBillRunService.go(id)
+  const pageData = await ViewCancelBillRunService(id)
 
   return h.view('bill-runs/cancel.njk', pageData)
 }
 
-async function index(request, h) {
+export async function index(request, h) {
   const {
     query: { page },
     yar
   } = request
 
-  const pageData = await IndexBillRunsService.go(yar, page)
+  const pageData = await IndexBillRunsService(yar, page)
 
   return h.view('bill-runs/index.njk', pageData)
 }
 
-async function send(request, h) {
+export async function send(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewSendBillRunService.go(id)
+  const pageData = await ViewSendBillRunService(id)
 
   return h.view('bill-runs/send.njk', pageData)
 }
 
-async function submitCancel(request, h) {
+export async function submitCancel(request, h) {
   const { id } = request.params
 
   // NOTE: What we are awaiting here is for the SubmitCancelBillRunService to update the status of the bill run to
   // `cancel'. Deleting the bill run will carry on in the background after that
-  await SubmitCancelBillRunService.go(id)
+  await SubmitCancelBillRunService(id)
 
   return h.redirect('/system/bill-runs')
 }
 
-async function submitIndex(request, h) {
+export async function submitIndex(request, h) {
   const {
     payload,
     query: { page },
     yar
   } = request
 
-  const pageData = await SubmitIndexBillRunsService.go(payload, yar, page)
+  const pageData = await SubmitIndexBillRunsService(payload, yar, page)
 
   if (pageData.error) {
     return h.view('bill-runs/index.njk', pageData)
@@ -69,24 +67,24 @@ async function submitIndex(request, h) {
   return h.redirect('/system/bill-runs')
 }
 
-async function submitSend(request, h) {
+export async function submitSend(request, h) {
   const { id } = request.params
 
   // NOTE: What we are awaiting here is for the SubmitSendBillRunService to update the status of the bill run to
   // `sending'.
-  await SubmitSendBillRunService.go(id)
+  await SubmitSendBillRunService(id)
 
   // Redirect to the legacy processing page
   return h.redirect(`/billing/batch/${id}/processing`)
 }
 
-async function twoPartTariff(request, h) {
+export async function twoPartTariff(request, h) {
   const { id } = request.params
 
   try {
     // NOTE: What we are awaiting here is for the GenerateBillRunService to update the status of the bill run to
     // `processing'.
-    await GenerateTwoPartTariffBillRunService.go(id)
+    await GenerateTwoPartTariffBillRunService(id)
 
     // Redirect to the bill runs page
     return h.redirect('/system/bill-runs')
@@ -95,21 +93,10 @@ async function twoPartTariff(request, h) {
   }
 }
 
-async function view(request, h) {
+export async function view(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewBillRunService.go(id)
+  const pageData = await ViewBillRunService(id)
 
   return h.view(pageData.view, pageData)
-}
-
-module.exports = {
-  cancel,
-  index,
-  send,
-  submitCancel,
-  submitIndex,
-  submitSend,
-  twoPartTariff,
-  view
 }

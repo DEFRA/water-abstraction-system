@@ -1,17 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED } = require('node:http2').constants
-const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
+import http2 from 'node:http2'
+import { generateNoticeReferenceCode } from '../../support/generators.js'
 
 // Things we need to stub
-const NotifyRequest = require('../../../app/requests/notify.request.js')
+import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
-const CreatePrecompiledFileRequest = require('../../../app/requests/notify/create-precompiled-file.request.js')
+import CreatePrecompiledFileRequest from '../../../app/requests/notify/create-precompiled-file.request.js'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED } = http2.constants
 
 describe('Notify - Create precompiled file request', () => {
   let response
@@ -19,7 +19,7 @@ describe('Notify - Create precompiled file request', () => {
   let content
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -36,30 +36,30 @@ describe('Notify - Create precompiled file request', () => {
         }
       }
 
-      Sinon.stub(NotifyRequest, 'post').resolves({
+      vi.spyOn(NotifyRequest, 'postRequest').mockResolvedValue({
         succeeded: true,
         response
       })
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
+      const result = await CreatePrecompiledFileRequest(content, referenceCode)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from Notify in the "response"', async () => {
-      const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
+      const result = await CreatePrecompiledFileRequest(content, referenceCode)
 
       expect(result.response.body).toEqual(response.body)
     })
 
-    it('calls NotifyRequest.post with the correct arguments', async () => {
-      await CreatePrecompiledFileRequest.send(content, referenceCode)
+    it('calls NotifyRequest.postRequest with the correct arguments', async () => {
+      await CreatePrecompiledFileRequest(content, referenceCode)
 
-      expect(NotifyRequest.post.calledOnce).toBe(true)
-      expect(NotifyRequest.post.firstCall.args[0]).toEqual('v2/notifications/letter')
-      expect(NotifyRequest.post.firstCall.args[1]).toEqual({ content: 'VGVzdCBkYXRh', reference: referenceCode })
+      expect(NotifyRequest.postRequest).toHaveBeenCalledOnce()
+      expect(NotifyRequest.postRequest.mock.calls[0][0]).toEqual('v2/notifications/letter')
+      expect(NotifyRequest.postRequest.mock.calls[0][1]).toEqual({ content: 'VGVzdCBkYXRh', reference: referenceCode })
     })
   })
 
@@ -79,20 +79,20 @@ describe('Notify - Create precompiled file request', () => {
           }
         }
 
-        Sinon.stub(NotifyRequest, 'post').resolves({
+        vi.spyOn(NotifyRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response
         })
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
+        const result = await CreatePrecompiledFileRequest(content, referenceCode)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
+        const result = await CreatePrecompiledFileRequest(content, referenceCode)
 
         expect(result.response.body).toEqual(response.body)
       })

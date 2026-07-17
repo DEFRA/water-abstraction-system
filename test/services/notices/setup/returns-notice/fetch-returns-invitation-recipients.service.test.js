@@ -1,14 +1,16 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { compareStrings, generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { futureDueDate } = require('../../../../../app/presenters/notices/base.presenter.js')
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import { compareStrings } from '../../../../../app/lib/general.lib.js'
+import { futureDueDate } from '../../../../../app/presenters/notices/base.presenter.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-const FetchReturnsInvitationRecipients = require('../../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js')
+import FetchReturnsInvitationRecipients from '../../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients service', () => {
   let download
@@ -68,7 +70,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
       })
 
       it('fetches the correct recipient data for sending the notice', async () => {
-        const results = await FetchReturnsInvitationRecipients.go(session, download)
+        const results = await FetchReturnsInvitationRecipients(session, download)
 
         // NOTE: We know GenerateReturnLogsByLicenceQueryService when called for a returns invitation will generate a
         // query that will fetch any due return logs
@@ -93,7 +95,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
       })
 
       it('fetches the correct recipient data for the download', async () => {
-        const results = await FetchReturnsInvitationRecipients.go(session, download)
+        const results = await FetchReturnsInvitationRecipients(session, download)
 
         const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.licenceHolder)
 
@@ -120,7 +122,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
       })
 
       it('fetches the correct recipient data for sending the notice', async () => {
-        const results = await FetchReturnsInvitationRecipients.go(session, download)
+        const results = await FetchReturnsInvitationRecipients(session, download)
 
         // NOTE: We know GenerateReturnLogsByPeriodQueryService when called for a returns invitation will generate a
         // query that will only fetch return logs without due dates. So, we know only the return log with a null due
@@ -148,7 +150,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
       })
 
       it('fetches the correct recipient data for the download', async () => {
-        const results = await FetchReturnsInvitationRecipients.go(session, download)
+        const results = await FetchReturnsInvitationRecipients(session, download)
 
         // NOTE: Standard invitations only fetch return logs with null due dates, so only nullDueDateReturnLog features
         const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults({

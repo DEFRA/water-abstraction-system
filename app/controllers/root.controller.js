@@ -1,14 +1,8 @@
-'use strict'
-
 /**
  * Controller for / endpoints
  * @module RootController
  */
 
-function index(_request, _h) {
+export function index(_request, _h) {
   return { status: 'alive' }
-}
-
-module.exports = {
-  index
 }

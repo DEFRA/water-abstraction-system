@@ -1,19 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates fetching, sending, and updating renewal invitations notifications
  * @module SendRenewalInvitations
  */
 
-const CreateNoticeService = require('../../notices/setup/create-notice.service.js')
-const CreateNotificationsService = require('../../notices/setup/create-notifications.service.js')
-const FetchRenewalRecipients = require('./fetch-renewal-recipients.service.js')
-const SendNoticeService = require('../../notices/setup/send/send-notice.service.js')
-const { renewalExpiryDate, renewalNoticeDate } = require('../../../lib/dates.lib.js')
-const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
-const { NoticeTypes, NoticeType } = require('../../../lib/static-lookups.lib.js')
-
-const NotifyConfig = require('../../../../config/notify.config.js')
+import CreateNoticeService from '../../notices/setup/create-notice.service.js'
+import CreateNotificationsService from '../../notices/setup/create-notifications.service.js'
+import FetchRenewalRecipients from './fetch-renewal-recipients.service.js'
+import NotifyConfig from '../../../../config/notify.config.js'
+import SendNoticeService from '../../notices/setup/send/send-notice.service.js'
+import { generateNoticeReferenceCode } from '../../../lib/general.lib.js'
+import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
+import { renewalExpiryDate, renewalNoticeDate } from '../../../lib/dates.lib.js'
 
 /**
  * Orchestrates fetching, sending, and updating renewal invitations notifications
@@ -22,11 +19,11 @@ const NotifyConfig = require('../../../../config/notify.config.js')
  *
  * @returns {Promise<object[]>} An array of renewal invitation recipients
  */
-async function go(days) {
+export default async function sendRenewalInvitationsService(days) {
   const expiryDate = renewalExpiryDate(days)
   const renewalDate = renewalNoticeDate(expiryDate)
 
-  const recipients = await FetchRenewalRecipients.go(expiryDate)
+  const recipients = await FetchRenewalRecipients(expiryDate)
 
   if (recipients.length > 0) {
     const noticeData = _noticeData(expiryDate, renewalDate)
@@ -35,7 +32,7 @@ async function go(days) {
 
     const notifications = await _notifications(noticeData, recipients, notice.id)
 
-    SendNoticeService.go(notice, notifications)
+    SendNoticeService(notice, notifications)
   }
 
   return recipients
@@ -56,13 +53,9 @@ function _noticeData(expiryDate, renewalDate) {
 }
 
 async function _notice(noticeData, recipients) {
-  return CreateNoticeService.go(noticeData, recipients, NotifyConfig.replyTo)
+  return CreateNoticeService(noticeData, recipients, NotifyConfig.replyTo)
 }
 
 async function _notifications(noticeData, recipients, noticeId) {
-  return CreateNotificationsService.go(noticeData, recipients, noticeId)
-}
-
-module.exports = {
-  go
+  return CreateNotificationsService(noticeData, recipients, noticeId)
 }

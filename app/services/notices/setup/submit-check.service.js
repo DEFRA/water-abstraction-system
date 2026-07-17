@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates creating the notice and sending the notifications when `/notices/setup/{sessionId}/check` page submitted
  * @module SubmitCheckService
  */
 
-const CreateNoticeService = require('./create-notice.service.js')
-const CreateNotificationsService = require('./create-notifications.service.js')
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SendNoticeService = require('./send/send-notice.service.js')
+import CreateNoticeService from './create-notice.service.js'
+import CreateNotificationsService from './create-notifications.service.js'
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
+import FetchRecipientsService from './fetch-recipients.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SendNoticeService from './send/send-notice.service.js'
 
 /**
  * Orchestrates creating the notice and sending the notifications when `/notices/setup/{sessionId}/check` page submitted
@@ -22,12 +20,12 @@ const SendNoticeService = require('./send/send-notice.service.js')
  *
  * @returns {Promise<string>} - the created notice Id
  */
-async function go(sessionId, auth) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitCheckService(sessionId, auth) {
+  const session = await FetchSessionDal(sessionId)
 
-  const recipients = await FetchRecipientsService.go(session)
+  const recipients = await FetchRecipientsService(session)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   const notice = await _notice(session, recipients, auth)
 
@@ -39,19 +37,15 @@ async function go(sessionId, auth) {
   // confirmation page, and from there the view notice page.
   //
   // But if we were to await the result they would see a timeout. So, we kick it off and then return to the controller.
-  SendNoticeService.go(notice, notifications)
+  SendNoticeService(notice, notifications)
 
   return notice.id
 }
 
 async function _notifications(session, recipients, noticeId) {
-  return CreateNotificationsService.go(session, recipients, noticeId)
+  return CreateNotificationsService(session, recipients, noticeId)
 }
 
 async function _notice(session, recipients, auth) {
-  return CreateNoticeService.go(session, recipients, auth.credentials.user.username)
-}
-
-module.exports = {
-  go
+  return CreateNoticeService(session, recipients, auth.credentials.user.username)
 }

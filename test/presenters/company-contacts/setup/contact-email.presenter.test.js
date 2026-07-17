@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const ContactEmailPresenter = require('../../../../app/presenters/company-contacts/setup/contact-email.presenter.js')
+import ContactEmailPresenter from '../../../../app/presenters/company-contacts/setup/contact-email.presenter.js'
 
 describe('Company Contacts - Setup - Contact Email Presenter', () => {
   let company
@@ -19,7 +20,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactEmailPresenter.go(session)
+      const result = ContactEmailPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -39,7 +40,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
         })
 
         it('returns the email from the session', () => {
-          const result = ContactEmailPresenter.go(session)
+          const result = ContactEmailPresenter(session)
 
           expect(result.email).toEqual('eric@test.com')
         })
@@ -47,7 +48,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
 
       describe('when the email has not previously been saved', () => {
         it('returns an empty string', () => {
-          const result = ContactEmailPresenter.go(session)
+          const result = ContactEmailPresenter(session)
 
           expect(result.email).toBeNull()
         })

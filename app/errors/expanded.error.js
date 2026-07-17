@@ -1,6 +1,4 @@
-'use strict'
-
-class ExpandedError extends Error {
+export default class ExpandedError extends Error {
   // eslint-disable-next-line jsdoc/lines-before-block
   /**
    * Custom error that allows additional data properties to be assigned to the error instance
@@ -16,5 +14,3 @@ class ExpandedError extends Error {
     }
   }
 }
-
-module.exports = ExpandedError

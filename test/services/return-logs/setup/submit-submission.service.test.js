@@ -1,23 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateReference, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitSubmissionService = require('../../../../app/services/return-logs/setup/submit-submission.service.js')
+import SubmitSubmissionService from '../../../../app/services/return-logs/setup/submit-submission.service.js'
 
 describe('Return Logs - Setup - Submit Submission service', () => {
-  let fetchSessionStub
   let payload
   let returnLog
   let returnLogId
@@ -32,17 +28,17 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       receivedDateOptions: 'today',
       receivedDate: new Date('2025-02-14'),
       returnLogId,
-      returnReference: ReturnRequirementHelper.generateReference()
+      returnReference: generateReference()
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -53,11 +49,11 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         })
 
         it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
-          const result = await SubmitSubmissionService.go(session.id, payload)
+          const result = await SubmitSubmissionService(session.id, payload)
 
           expect(session.journey).toEqual('enterReturn')
           expect(result.redirect).toEqual('reported')
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -67,11 +63,11 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         })
 
         it('saves the submitted option to the session and returns the redirect as "check"', async () => {
-          const result = await SubmitSubmissionService.go(session.id, payload)
+          const result = await SubmitSubmissionService(session.id, payload)
 
           expect(session.journey).toEqual('nilReturn')
           expect(result.redirect).toEqual('check')
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -79,11 +75,11 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         beforeEach(async () => {
           payload = { journey: 'recordReceipt' }
 
-          returnLog = await ReturnLogHelper.add({ id: returnLogId })
+          returnLog = await ReturnLogHelper.add({ id: returnLogId, updatedAt: new Date('2025-02-14') })
         })
 
         it('returns the redirect as "confirm-received", updates the return log as "received", deletes the session, and returns the redirect as "confirm-received"', async () => {
-          const result = await SubmitSubmissionService.go(session.id, payload)
+          const result = await SubmitSubmissionService(session.id, payload)
 
           const refreshedReturnLog = await returnLog.$query()
 
@@ -97,7 +93,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
           expect(refreshedReturnLog.updatedAt.getTime()).toBeGreaterThan(returnLog.updatedAt.getTime())
 
           // Check the session got deleted
-          expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+          expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
 
           // Check the redirect takes will tell the controller to redirect to the return received confirmation page
           expect(result.redirect).toEqual('confirm-received')
@@ -110,16 +106,16 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
           sessionData = { beenReceived: false, checkPageVisited: true, returnLogId, returnReference: '1234' }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('updates "checkPageVisited" to false in the session data', async () => {
-          await SubmitSubmissionService.go(session.id, payload)
+          await SubmitSubmissionService(session.id, payload)
 
           expect(session.checkPageVisited).toBe(false)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
     })
@@ -130,7 +126,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       })
 
       it('includes an error for the radio form element', async () => {
-        const result = await SubmitSubmissionService.go(session.id, payload)
+        const result = await SubmitSubmissionService(session.id, payload)
 
         expect(result.error.errorList).toEqual([
           { href: '#journey', text: 'Select what you want to do with this return' }
@@ -138,7 +134,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitSubmissionService.go(session.id, payload)
+        const result = await SubmitSubmissionService(session.id, payload)
 
         expect(result).toEqual({
           backLink: { href: `/system/return-logs/setup/${session.id}/received`, text: 'Back' },

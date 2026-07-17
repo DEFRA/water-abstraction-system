@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates fetching and determining recipients when checking, downloading or sending notices
  * @module FetchRecipientsService
  */
 
-const FetchAbstractionAlertRecipientsDal = require('../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
-const FetchPaperReturnsRecipientsService = require('./returns-notice/fetch-paper-returns-recipients.service.js')
-const FetchRenewalInvitationRecipientsService = require('./renewal-notice/fetch-renewal-invitation-recipients.service.js')
-const FetchReturnsInvitationRecipientsService = require('./returns-notice/fetch-returns-invitation-recipients.service.js')
-const FetchReturnsReminderRecipientsService = require('./returns-notice/fetch-returns-reminder-recipients.service.js')
-const MergeRecipientsService = require('./merge-recipients.service.js')
-const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+import FetchAbstractionAlertRecipientsDal from '../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
+import FetchPaperReturnsRecipientsService from './returns-notice/fetch-paper-returns-recipients.service.js'
+import FetchRenewalInvitationRecipientsService from './renewal-notice/fetch-renewal-invitation-recipients.service.js'
+import FetchReturnsInvitationRecipientsService from './returns-notice/fetch-returns-invitation-recipients.service.js'
+import FetchReturnsReminderRecipientsService from './returns-notice/fetch-returns-reminder-recipients.service.js'
+import MergeRecipientsService from './merge-recipients.service.js'
+import { NoticeType } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates fetching and determining recipients when checking, downloading or sending notices
@@ -24,32 +22,28 @@ const { NoticeType } = require('../../../lib/static-lookups.lib.js')
  *
  * @returns {Promise<object[]>} The recipient data for the notice or download
  */
-async function go(session, download) {
+export default async function fetchRecipientsService(session, download) {
   const recipientsData = await _recipientsData(session, download)
 
-  return MergeRecipientsService.go(session, recipientsData)
+  return MergeRecipientsService(session, recipientsData)
 }
 
 async function _recipientsData(session, download) {
   if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
-    return FetchAbstractionAlertRecipientsDal.go(session)
+    return FetchAbstractionAlertRecipientsDal(session)
   }
 
   if (session.noticeType === NoticeType.PAPER_RETURN) {
-    return FetchPaperReturnsRecipientsService.go(session, download)
+    return FetchPaperReturnsRecipientsService(session, download)
   }
 
   if (session.noticeType === NoticeType.INVITATIONS) {
-    return FetchReturnsInvitationRecipientsService.go(session, download)
+    return FetchReturnsInvitationRecipientsService(session, download)
   }
 
   if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    return FetchRenewalInvitationRecipientsService.go(session)
+    return FetchRenewalInvitationRecipientsService(session)
   }
 
-  return FetchReturnsReminderRecipientsService.go(session, download)
-}
-
-module.exports = {
-  go
+  return FetchReturnsReminderRecipientsService(session, download)
 }

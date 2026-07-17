@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Prepares the charge version for matching
  * @module PrepareChargeVersionService
  */
 
-const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
-const DetermineChargePeriodService = require('../determine-charge-period.service.js')
+import DetermineChargePeriodService from '../determine-charge-period.service.js'
+import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
 
 /**
  * Prepares the charge version for matching with its returns
@@ -26,11 +24,11 @@ const DetermineChargePeriodService = require('../determine-charge-period.service
  * @param {module:ChargeVersionModel} chargeVersion - The charge version to prepare
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  */
-function go(chargeVersion, billingPeriod) {
+export default function prepareChargeVersionService(chargeVersion, billingPeriod) {
   const { chargeReferences } = chargeVersion
 
   _sortChargeReferencesBySubsistenceCharge(chargeReferences)
-  chargeVersion.chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+  chargeVersion.chargePeriod = DetermineChargePeriodService(chargeVersion, billingPeriod)
 
   chargeReferences.forEach((chargeReference) => {
     const { chargeElements } = chargeReference
@@ -77,8 +75,4 @@ function _sortChargeReferencesBySubsistenceCharge(chargeReferences) {
 
     return 0
   })
-}
-
-module.exports = {
-  go
 }

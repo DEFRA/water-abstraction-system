@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const CompanyAddressHelper = require('../../support/helpers/company-address.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
-const { tomorrow, yesterday } = require('../../support/general.js')
+import AddressHelper from '../../support/helpers/address.helper.js'
+import CompanyAddressHelper from '../../support/helpers/company-address.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
+import LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
+import { tomorrow, yesterday } from '../../support/general.js'
 
 // Thing under test
-const FetchCompanyDetailsDal = require('../../../app/dal/companies/fetch-company-details.dal.js')
+import FetchCompanyDetailsDal from '../../../app/dal/companies/fetch-company-details.dal.js'
 
 describe('Companies - Fetch Company details dal', () => {
   let addressDifferentRole
@@ -79,7 +80,7 @@ describe('Companies - Fetch Company details dal', () => {
 
   describe('when there is a company', () => {
     it("returns the matching company's details and _all_ addresses for the specified role", async () => {
-      const result = await FetchCompanyDetailsDal.go(company.id, 'licenceHolder')
+      const result = await FetchCompanyDetailsDal(company.id, 'licenceHolder')
 
       expect(result).toEqual({
         id: company.id,
@@ -139,7 +140,7 @@ describe('Companies - Fetch Company details dal', () => {
 
     describe('and the company does not have any addresses for the specified role', () => {
       it("returns the matching company's details and no addresses", async () => {
-        const result = await FetchCompanyDetailsDal.go(company.id, 'billing')
+        const result = await FetchCompanyDetailsDal(company.id, 'billing')
 
         expect(result).toEqual({
           id: company.id,

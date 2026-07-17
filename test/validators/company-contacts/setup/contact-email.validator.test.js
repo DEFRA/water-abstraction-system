@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ContactEmailValidator = require('../../../../app/validators/company-contacts/setup/contact-email.validator.js')
+import ContactEmailValidator from '../../../../app/validators/company-contacts/setup/contact-email.validator.js'
 
 describe('Company Contacts - Setup - Contact Email Validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Company Contacts - Setup - Contact Email Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = ContactEmailValidator.go(payload)
+      const result = ContactEmailValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +27,7 @@ describe('Company Contacts - Setup - Contact Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = ContactEmailValidator.go(payload)
+        const result = ContactEmailValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -40,7 +41,7 @@ describe('Company Contacts - Setup - Contact Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = ContactEmailValidator.go(payload)
+        const result = ContactEmailValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -56,7 +57,7 @@ describe('Company Contacts - Setup - Contact Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = ContactEmailValidator.go(payload)
+        const result = ContactEmailValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

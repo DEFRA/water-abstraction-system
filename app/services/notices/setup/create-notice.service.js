@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Create a notice from the notice setup data
  * @module CreateNoticeService
  */
 
-const CreateNoticePresenter = require('../../../presenters/notices/setup/create-notice.presenter.js')
-const EventModel = require('../../../../app/models/event.model.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+import CreateNoticePresenter from '../../../presenters/notices/setup/create-notice.presenter.js'
+import EventModel from '../../../../app/models/event.model.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Create a notice from the notice setup data
@@ -21,13 +19,9 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<module:EventModel>} the new `EventModel` (Notice) instance
  */
-async function go(noticeData, recipients, issuer) {
-  const notice = CreateNoticePresenter.go(noticeData, recipients, issuer)
+export default async function createNoticeService(noticeData, recipients, issuer) {
+  const notice = CreateNoticePresenter(noticeData, recipients, issuer)
   const timestamp = timestampForPostgres()
 
   return EventModel.query().insert({ ...notice, createdAt: timestamp, updatedAt: timestamp })
-}
-
-module.exports = {
-  go
 }

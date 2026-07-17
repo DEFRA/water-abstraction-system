@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches data needed for the bill run page which includes a summary for each bill linked to the bill run
  * @module FetchBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
-const { db } = require('../../../db/db.js')
+import BillRunModel from '../../models/bill-run.model.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetch the matching Bill Run plus a summary for each bill linked to it
@@ -18,7 +16,7 @@ const { db } = require('../../../db/db.js')
  * @returns {Promise<object>} the matching instance of BillRunModel plus a summary (Billing account number and contact,
  * licence, numbers, financial year and total net amount) for each bill linked to the bill run
  */
-async function go(id) {
+export default async function fetchBillRunService(id) {
   const billRun = await _fetchBillRun(id)
   const billSummaries = await _fetchBillSummaries(id)
 
@@ -116,8 +114,4 @@ async function _fetchBillSummaries(id) {
     .orderBy([{ column: 'bi.account_number' }, { column: 'bi.financial_year_ending', order: 'desc' }])
 
   return results
-}
-
-module.exports = {
-  go
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats a notification which has errored
  * @module NotifyErrorPresenter
@@ -16,7 +14,7 @@
  *
  * @returns {object} the notification error data
  */
-function go(statusCode, message, errors) {
+export default function notifyErrorPresenter(statusCode, message, errors) {
   return {
     notifyError: JSON.stringify({
       status: statusCode,
@@ -25,8 +23,4 @@ function go(statusCode, message, errors) {
     }),
     status: 'error'
   }
-}
-
-module.exports = {
-  go
 }

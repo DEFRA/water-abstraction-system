@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Plugin to add Hapi server methods to the global object
  *
@@ -10,11 +8,9 @@
  * @module GlobalHapiServerMethods
  */
 
-const GlobalHapiServerMethods = {
+export default {
   name: 'global-hapi-server-methods',
   register: (server, _options) => {
     globalThis.HapiServerMethods = server.methods
   }
 }
-
-module.exports = GlobalHapiServerMethods

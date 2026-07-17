@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates sending a paper return notification to Notify
  * @module SendPaperReturnNotificationService
  */
 
-const CreatePrecompiledFileRequest = require('../../../../requests/notify/create-precompiled-file.request.js')
-const NotifyErrorPresenter = require('../../../../presenters/notifications/notify-error.presenter.js')
-const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
-const PreparePaperReturnService = require('../prepare-paper-return.service.js')
+import CreatePrecompiledFileRequest from '../../../../requests/notify/create-precompiled-file.request.js'
+import NotifyErrorPresenter from '../../../../presenters/notifications/notify-error.presenter.js'
+import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
+import PreparePaperReturnService from '../prepare-paper-return.service.js'
 
 /**
  * Orchestrates sending a paper return notification to Notify
@@ -18,16 +16,16 @@ const PreparePaperReturnService = require('../prepare-paper-return.service.js')
  *
  * @returns {Promise<object>} a notification with the Notify response
  */
-async function go(notification, referenceCode) {
-  const returnFormRequest = await PreparePaperReturnService.go(notification)
+export default async function sendPaperReturnNotificationService(notification, referenceCode) {
+  const returnFormRequest = await PreparePaperReturnService(notification)
 
   if (returnFormRequest.succeeded) {
     const pdf = returnFormRequest.response.body
 
-    const notifyResult = await CreatePrecompiledFileRequest.send(pdf, referenceCode)
+    const notifyResult = await CreatePrecompiledFileRequest(pdf, referenceCode)
 
     return {
-      ...NotifyUpdatePresenter.go(notifyResult),
+      ...NotifyUpdatePresenter(notifyResult),
       id: notification.id,
       pdf
     }
@@ -40,11 +38,7 @@ function _returnFromError(notification, returnFormRequest) {
   const errors = [returnFormRequest.response.message]
 
   return {
-    ...NotifyErrorPresenter.go(returnFormRequest.response.code, `Failed to generate the paper return PDF`, errors),
+    ...NotifyErrorPresenter(returnFormRequest.response.code, `Failed to generate the paper return PDF`, errors),
     id: notification.id
   }
-}
-
-module.exports = {
-  go
 }

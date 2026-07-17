@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Thing under test
-const SplitMultipleEntriesService = require('../../../../app/services/return-logs/setup/split-multiple-entries.service.js')
+import SplitMultipleEntriesService from '../../../../app/services/return-logs/setup/split-multiple-entries.service.js'
 
 describe('Return Logs - Split Multiple Entries Service', () => {
   let multipleEntries
@@ -13,7 +14,7 @@ describe('Return Logs - Split Multiple Entries Service', () => {
       })
 
       it('correctly splits the entries up into an array', () => {
-        const result = SplitMultipleEntriesService.go(multipleEntries)
+        const result = SplitMultipleEntriesService(multipleEntries)
 
         expect(result).toEqual([1.1, 200000, 3, 4, 200.4, 300, 50000, 6.6])
       })
@@ -24,7 +25,7 @@ describe('Return Logs - Split Multiple Entries Service', () => {
         })
 
         it('correctly converts the "x" values into null', () => {
-          const result = SplitMultipleEntriesService.go(multipleEntries)
+          const result = SplitMultipleEntriesService(multipleEntries)
 
           expect(result).toEqual([null, null, null, null])
         })
@@ -39,7 +40,7 @@ describe('Return Logs - Split Multiple Entries Service', () => {
       })
 
       it('correctly splits the entries up into an array', () => {
-        const result = SplitMultipleEntriesService.go(multipleEntries)
+        const result = SplitMultipleEntriesService(multipleEntries)
 
         expect(result).toEqual([1.1, 2.2, 200, 400.4, 3000, 400, 7.6])
       })
@@ -50,7 +51,7 @@ describe('Return Logs - Split Multiple Entries Service', () => {
         })
 
         it('correctly converts the "x" values into null', () => {
-          const result = SplitMultipleEntriesService.go(multipleEntries)
+          const result = SplitMultipleEntriesService(multipleEntries)
 
           expect(result).toEqual([null, null, null, null])
         })
@@ -64,7 +65,7 @@ describe('Return Logs - Split Multiple Entries Service', () => {
     })
 
     it('returns NaN', () => {
-      const result = SplitMultipleEntriesService.go(multipleEntries)
+      const result = SplitMultipleEntriesService(multipleEntries)
 
       expect(result).toEqual([NaN])
     })

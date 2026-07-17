@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Base class for notification managers
  * @module BaseNotifierLib
  */
 
-const { Notifier } = require('@airbrake/node')
-const Pino = require('pino')
+import { Notifier } from '@airbrake/node'
+import Pino from 'pino'
 
-const AirbrakeConfig = require('../../config/airbrake.config.js')
-const CreateEmailRequest = require('../requests/notify/create-email.request.js')
-const NotifyConfig = require('../../config/notify.config.js')
-const { NOTIFY_TEMPLATES } = require('./notify-templates.lib.js')
+import AirbrakeConfig from '../../config/airbrake.config.js'
+import { NOTIFY_TEMPLATES } from './notify-templates.lib.js'
+import NotifyConfig from '../../config/notify.config.js'
+import createEmailRequest from '../requests/notify/create-email.request.js'
 
 /**
  * Based class for combined logging and Airbrake (Errbit) notification managers
@@ -135,7 +133,7 @@ class BaseNotifierLib {
     const emails = NotifyConfig.alertEmailAddresses.split(',')
 
     for (const email of emails) {
-      CreateEmailRequest.send(NOTIFY_TEMPLATES.system.statusAlert, email, options).catch((err) => {
+      createEmailRequest(NOTIFY_TEMPLATES.system.statusAlert, email, options).catch((err) => {
         this._logger.error(err, `${this.constructor.name} - CreateEmailRequest errored`)
       })
     }
@@ -253,4 +251,4 @@ class BaseNotifierLib {
   }
 }
 
-module.exports = BaseNotifierLib
+export default BaseNotifierLib

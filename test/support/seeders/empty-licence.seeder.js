@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * @module EmptyLicenceSeeder
  */
 
-const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
-const LicenceDocumentHelper = require('../helpers/licence-document.helper.js')
-const LicenceHelper = require('../helpers/licence.helper.js')
-const RegionHelper = require('../helpers/region.helper.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
+import LicenceDocumentHeaderHelper from '../helpers/licence-document-header.helper.js'
+import LicenceDocumentHelper from '../helpers/licence-document.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
+import { generateLicenceRef } from '../generators.js'
 
 /**
  * Adds a licence
@@ -21,7 +19,7 @@ const { generateLicenceRef } = require('../helpers/licence.helper.js')
  *
  * @returns {Promise<object>} an object containing all records related to a licence
  */
-async function seed(existingLicenceRef = null, existingRegionId = null, expiredDate = null) {
+export async function seed(existingLicenceRef = null, existingRegionId = null, expiredDate = null) {
   // Set the defaults
   const regionId = existingRegionId ?? RegionHelper.select().id
   const licenceRef = existingLicenceRef ?? generateLicenceRef()
@@ -50,8 +48,4 @@ async function seed(existingLicenceRef = null, existingRegionId = null, expiredD
       await licenceDocumentHeader.$query().delete()
     }
   }
-}
-
-module.exports = {
-  seed
 }

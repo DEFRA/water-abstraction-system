@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
  * @module SubmitAlertEmailAddressService
  */
 
-const AlertEmailAddressPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js')
-const AlertEmailAddressValidator = require('../../../../validators/notices/setup/alert-email-address.validator.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+import AlertEmailAddressPresenter from '../../../../presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js'
+import AlertEmailAddressValidator from '../../../../validators/notices/setup/alert-email-address.validator.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
@@ -20,8 +18,8 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload, auth) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitAlertEmailAddressService(sessionId, payload, auth) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -75,7 +73,7 @@ function _submittedSessionData(session, auth, validationResult, payload) {
 
   session.alertEmailAddressType = alertEmailAddressType
 
-  return AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
+  return AlertEmailAddressPresenter(session, auth, validationResult, payload)
 }
 
 /**
@@ -95,11 +93,7 @@ function _submittedSessionData(session, auth, validationResult, payload) {
  * need to be displayed
  */
 function _validate(payload) {
-  const validationResult = AlertEmailAddressValidator.go(payload)
+  const validationResult = AlertEmailAddressValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

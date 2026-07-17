@@ -1,15 +1,16 @@
-'use strict'
-
 /**
  * Model for points (water.points)
  * @module PointModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
+import ReturnRequirementModel from './return-requirement.model.js'
+import SourceModel from './source.model.js'
 
-class PointModel extends BaseModel {
+export default class PointModel extends BaseModel {
   static get tableName() {
     return 'points'
   }
@@ -18,7 +19,7 @@ class PointModel extends BaseModel {
     return {
       licenceVersionPurposes: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'licence-version-purpose.model',
+        modelClass: LicenceVersionPurposeModel,
         join: {
           from: 'points.id',
           through: {
@@ -30,7 +31,7 @@ class PointModel extends BaseModel {
       },
       returnRequirements: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'return-requirement.model',
+        modelClass: ReturnRequirementModel,
         join: {
           from: 'points.id',
           through: {
@@ -42,7 +43,7 @@ class PointModel extends BaseModel {
       },
       source: {
         relation: Model.HasOneRelation,
-        modelClass: 'source.model',
+        modelClass: SourceModel,
         join: {
           from: 'points.sourceId',
           to: 'sources.id'
@@ -85,5 +86,3 @@ class PointModel extends BaseModel {
     return abstractionPoint
   }
 }
-
-module.exports = PointModel

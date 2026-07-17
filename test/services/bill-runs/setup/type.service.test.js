@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const TypeService = require('../../../../app/services/bill-runs/setup/type.service.js')
+import TypeService from '../../../../app/services/bill-runs/setup/type.service.js'
 
 describe('Bill Runs - Setup - Type service', () => {
   let session
@@ -18,18 +16,18 @@ describe('Bill Runs - Setup - Type service', () => {
 
   beforeEach(() => {
     sessionData = { type: 'annual' }
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await TypeService.go(session.id)
+      const result = await TypeService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',

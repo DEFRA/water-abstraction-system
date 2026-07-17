@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats a licence document header metadata contact record into a valid Notify address
  * @module NotifyAddressPresenter
  */
 
-const { postcodeValidator } = require('postcode-validator')
+import { postcodeValidator } from 'postcode-validator'
 
-const { invalidStartCharacters } = require('../../../validators/helpers/notify-address-line.validator.js')
+import { invalidStartCharacters } from '../../../validators/helpers/notify-address-line.validator.js'
 
 const MAX_ADDRESS_LINES = 6 // The Notify max is actually 7 but we reserve address line 1 for the contact name
 const UK_COUNTRIES = new Set(['england', 'northern ireland', 'scotland', 'wales', 'united kingdom'])
@@ -78,7 +76,7 @@ const CROWN_DEPENDENCIES = new Set(['guernsey', 'isle of man', 'jersey'])
  *
  * @returns {object} a Notify compatible address object
  */
-function go(contact) {
+export default function notifyAddressPresenter(contact) {
   // Contact name will always be address_line_1 in any result we return
   const name = contact.name
 
@@ -280,7 +278,7 @@ function _invalidAddressParts(contact) {
   const hasSpecialChars = _specialCharacters(contact)
 
   // If address has either a valid postcode or country _and_ no special characters return an empty array. This tells
-  // `go()` above to continue processing the address for sending to Notify. Else the address is invalid and `go()` will
+  // the above to continue processing the address for sending to Notify. Else the address is invalid and it will
   // simply return it.
   if ((!noCountry || !noPostcode) && !hasSpecialChars) {
     return []
@@ -355,8 +353,4 @@ function _ukAddressParts(contact, defaultAddressParts) {
   }
 
   return addressParts
-}
-
-module.exports = {
-  go
 }

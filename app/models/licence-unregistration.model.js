@@ -1,15 +1,15 @@
-'use strict'
-
 /**
  * Model for licence_unregistrations (water.licence_unregistrations)
  * @module LicenceUnregistrationModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceModel from './licence.model.js'
+import UserModel from './user.model.js'
 
-class LicenceUnregistrationModel extends BaseModel {
+export default class LicenceUnregistrationModel extends BaseModel {
   static get tableName() {
     return 'licenceUnregistrations'
   }
@@ -18,7 +18,7 @@ class LicenceUnregistrationModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'licenceUnregistrations.licenceId',
           to: 'licences.id'
@@ -26,7 +26,7 @@ class LicenceUnregistrationModel extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'licenceUnregistrations.createdBy',
           to: 'users.id'
@@ -35,5 +35,3 @@ class LicenceUnregistrationModel extends BaseModel {
     }
   }
 }
-
-module.exports = LicenceUnregistrationModel

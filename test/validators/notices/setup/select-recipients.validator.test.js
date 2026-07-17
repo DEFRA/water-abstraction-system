@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const SelectRecipientsValidator = require('../../../../app/validators/notices/setup/select-recipients.validator.js')
+import SelectRecipientsValidator from '../../../../app/validators/notices/setup/select-recipients.validator.js'
 
 describe('Select Recipients Validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Select Recipients Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = SelectRecipientsValidator.go(payload)
+      const result = SelectRecipientsValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +27,7 @@ describe('Select Recipients Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = SelectRecipientsValidator.go(payload)
+        const result = SelectRecipientsValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -40,7 +41,7 @@ describe('Select Recipients Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = SelectRecipientsValidator.go(payload)
+        const result = SelectRecipientsValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

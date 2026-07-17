@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const ReturnsNoticeNotificationsPresenter = require('../../../../app/presenters/notices/setup/returns-notice-notifications.presenter.js')
+import ReturnsNoticeNotificationsPresenter from '../../../../app/presenters/notices/setup/returns-notice-notifications.presenter.js'
 
 describe('Notices - Setup - Returns Notice Notifications presenter', () => {
   let noticeId
@@ -49,7 +50,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+    const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
     expect(result).toEqual([
       {
@@ -186,7 +187,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
       describe('and the notification is an email', () => {
         describe('and the recipient is the "primary user"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[0].messageRef).toEqual('returns invitation')
           })
@@ -194,7 +195,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
         describe('and the recipient is a "returns user"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[1].messageRef).toEqual('returns invitation')
           })
@@ -202,7 +203,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
         describe('and the recipient is a "single use"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[4].messageRef).toEqual('returns invitation')
           })
@@ -212,7 +213,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
       describe('when the notifications is a letter', () => {
         describe('and the recipient is the "licence holder"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[2].messageRef).toEqual('returns invitation')
           })
@@ -220,7 +221,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
         describe('and the recipient is a "returns to"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[3].messageRef).toEqual('returns invitation')
           })
@@ -228,7 +229,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
         describe('and the recipient is a "single use"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[5].messageRef).toEqual('returns invitation')
           })
@@ -244,7 +245,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
       describe('and the notification is an email', () => {
         describe('and the recipient is the "primary user"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[0].messageRef).toEqual('returns reminder')
           })
@@ -252,7 +253,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
         describe('and the recipient is a "returns user"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[1].messageRef).toEqual('returns reminder')
           })
@@ -260,7 +261,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
         describe('and the recipient is a "single use"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[4].messageRef).toEqual('returns reminder')
           })
@@ -270,7 +271,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
       describe('when the notifications is a letter', () => {
         describe('and the recipient is the "licence holder"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[2].messageRef).toEqual('returns reminder')
           })
@@ -278,7 +279,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
         describe('and the recipient is a "returns To"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[3].messageRef).toEqual('returns reminder')
           })
@@ -286,7 +287,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
         describe('and the recipient is a "single use"', () => {
           it('returns the correct "messageRef"', () => {
-            const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+            const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
             expect(result[5].messageRef).toEqual('returns reminder')
           })
@@ -298,7 +299,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
   describe('the "personalisation" property', () => {
     describe('when the notification is an email', () => {
       it('returns the expected "personalisation"', () => {
-        const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+        const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
         expect(result[0].personalisation).toEqual({
           licenceNumber: recipients[0].licence_refs[0],
@@ -311,7 +312,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
     describe('when the notification is a letter', () => {
       it('returns the expected "personalisation"', () => {
-        const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+        const result = ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 
         expect(result[2].personalisation).toEqual({
           address_line_1: 'Returnsholder',

@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { licence } = require('../support/fixtures/licence.fixture.js')
+import LicenceFixture from '../support/fixtures/licence.fixture.js'
+import { generateUUID } from '../support/generators.js'
 
 // Thing under test
-const CRMPresenter = require('../../app/presenters/crm.presenter.js')
+import * as CRMPresenter from '../../app/presenters/crm.presenter.js'
 
 describe('CRM presenter', () => {
   describe('#abstractionAlertsLabel()', () => {
@@ -263,7 +264,7 @@ describe('CRM presenter', () => {
 
     describe('when there are "liveLicences"', () => {
       beforeEach(() => {
-        liveLicences = [licence()]
+        liveLicences = [LicenceFixture.licence()]
       })
 
       describe('and the user is set to receive "some" notices', () => {

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Determines what the charge period is for a charge version in a given billing period
  * @module DetermineChargePeriodService
@@ -59,7 +57,7 @@
  *
  * @returns {object} The start and end date of the calculated charge period
  */
-function go(chargeVersion, billingPeriod) {
+export default function determineChargePeriodService(chargeVersion, billingPeriod) {
   const latestStartDateTimestamp = Math.max(
     billingPeriod.startDate,
     chargeVersion.startDate,
@@ -98,8 +96,4 @@ function _periodIsIncompatible(chargePeriod, billingPeriod) {
   const startsAfterItEnds = chargePeriod.startDate > chargePeriod.endDate
 
   return startsAfterBillingPeriod || endsBeforeBillingPeriod || startsAfterItEnds
-}
-
-module.exports = {
-  go
 }

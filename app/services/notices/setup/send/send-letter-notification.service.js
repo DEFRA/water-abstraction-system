@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates sending a letter notification to Notify
  * @module SendLetterNotificationService
  */
 
-const CreateLetterRequest = require('../../../../requests/notify/create-letter.request.js')
-const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
+import CreateLetterRequest from '../../../../requests/notify/create-letter.request.js'
+import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
 
 /**
  * Orchestrates sending a letter notification to Notify
@@ -16,18 +14,14 @@ const NotifyUpdatePresenter = require('../../../../presenters/notifications/noti
  *
  * @returns {Promise<object>} a notification with the Notify response
  */
-async function go(notification, referenceCode) {
-  const notifyResult = await CreateLetterRequest.send(notification.templateId, {
+export default async function sendLetterNotificationService(notification, referenceCode) {
+  const notifyResult = await CreateLetterRequest(notification.templateId, {
     personalisation: notification.personalisation,
     reference: referenceCode
   })
 
   return {
-    ...NotifyUpdatePresenter.go(notifyResult),
+    ...NotifyUpdatePresenter(notifyResult),
     id: notification.id
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the review charge element data ready for presenting in the review charge element edit page
  * @module EditPresenter
  */
 
-const { formatFinancialYear } = require('../../base.presenter.js')
-const { formatChargePeriod, formatChargePeriods } = require('./base-review.presenter.js')
+import { formatFinancialYear } from '../../base.presenter.js'
+import { formatChargePeriod, formatChargePeriods } from './base-review.presenter.js'
 
 /**
  * Prepares and processes bill run and review charge element data for presenting
@@ -18,7 +16,7 @@ const { formatChargePeriod, formatChargePeriods } = require('./base-review.prese
  *
  * @returns {object} the prepared bill run and charge element data to be passed to the edit billable returns page
  */
-function go(reviewChargeElement, elementIndex) {
+export default function editPresenter(reviewChargeElement, elementIndex) {
   const {
     amendedAllocated: billableReturns,
     chargeElement,
@@ -52,8 +50,4 @@ function _authorisedQuantity(reviewChargeElement) {
   const { chargeElement, reviewChargeReference } = reviewChargeElement
 
   return Math.min(chargeElement.authorisedAnnualQuantity, reviewChargeReference.amendedAuthorisedVolume)
-}
-
-module.exports = {
-  go
 }

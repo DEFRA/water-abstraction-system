@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Handles the reissuing of a single bill
  * @module ReissueBillService
  */
 
-const ChargingModuleReissueBillRequest = require('../../../requests/charging-module/reissue-bill.request.js')
-const ChargingModuleViewBillRequest = require('../../../requests/charging-module/view-bill.request.js')
-const ChargingModuleViewBillRunStatusRequest = require('../../../requests/charging-module/view-bill-run-status.request.js')
-const ExpandedError = require('../../../errors/expanded.error.js')
-const { generateUUID, pause } = require('../../../lib/general.lib.js')
+import ExpandedError from '../../../errors/expanded.error.js'
+import ReissueBillRequest from '../../../requests/charging-module/reissue-bill.request.js'
+import ViewBillRequest from '../../../requests/charging-module/view-bill.request.js'
+import ViewBillRunStatusRequest from '../../../requests/charging-module/view-bill-run-status.request.js'
+import { generateUUID, pause } from '../../../lib/general.lib.js'
 
 /**
  * Handles the reissuing of a single bill
@@ -37,7 +35,7 @@ const { generateUUID, pause } = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} an object that has been generated while reissuing the bill containing the following
  * properties: `bills`, `billLicences` and `transactions`.
  */
-async function go(sourceBill, reissueBillRun) {
+export default async function reissueBillService(sourceBill, reissueBillRun) {
   const dataToReturn = {
     bills: [],
     billLicences: [],
@@ -137,7 +135,7 @@ async function _pauseUntilNotPending(billRunExternalId) {
       await pause(1000)
     }
 
-    const result = await ChargingModuleViewBillRunStatusRequest.send(billRunExternalId)
+    const result = await ViewBillRunStatusRequest(billRunExternalId)
 
     if (!result.succeeded) {
       const error = new ExpandedError('Charging Module reissue request failed', {
@@ -292,7 +290,7 @@ function _retrieveOrGenerateBillLicence(dataToReturn, sourceBill, billingId, sou
 }
 
 async function _sendReissueRequest(billRunExternalId, billExternalId) {
-  const result = await ChargingModuleReissueBillRequest.send(billRunExternalId, billExternalId)
+  const result = await ReissueBillRequest(billRunExternalId, billExternalId)
 
   if (!result.succeeded) {
     const error = new ExpandedError('Charging Module reissue request failed', {
@@ -311,7 +309,7 @@ async function _sendReissueRequest(billRunExternalId, billExternalId) {
 }
 
 async function _sendViewBillRequest(billRun, reissueBillId) {
-  const result = await ChargingModuleViewBillRequest.send(billRun.externalId, reissueBillId)
+  const result = await ViewBillRequest(billRun.externalId, reissueBillId)
 
   if (!result.succeeded) {
     const error = new ExpandedError('Charging Module view bill request failed', {
@@ -324,8 +322,4 @@ async function _sendViewBillRequest(billRun, reissueBillId) {
   }
 
   return result.response.body.invoice
-}
-
-module.exports = {
-  go
 }

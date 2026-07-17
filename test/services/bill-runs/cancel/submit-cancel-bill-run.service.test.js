@@ -1,40 +1,32 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { pause } = require('../../../../app/lib/general.lib.js')
+import { pause } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const CancelBillRunService = require('../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
-const DeleteBillRunService = require('../../../../app/services/bill-runs/cancel/delete-bill-run.service.js')
-const UnassignBillRunToLicencesService = require('../../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js')
+import * as CancelBillRunService from '../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js'
+import * as DeleteBillRunService from '../../../../app/services/bill-runs/cancel/delete-bill-run.service.js'
+import * as UnassignBillRunToLicencesService from '../../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js'
 
 // Thing under test
-const SubmitCancelBillBunService = require('../../../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
+import SubmitCancelBillBunService from '../../../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js'
 
 describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
   const billRunId = '800b8ff7-80e6-4855-a394-c79550115265'
-
-  let cancelBillRunStub
-  let deleteBillRunStub
   let deleteDoneFake
-  let unassignBillRunStub
-
   beforeEach(async () => {
-    cancelBillRunStub = Sinon.stub(CancelBillRunService, 'go')
-    deleteDoneFake = Sinon.fake()
-    deleteBillRunStub = Sinon.stub(DeleteBillRunService, 'go').callsFake(async () => {
+    deleteDoneFake = vi.fn()
+    vi.spyOn(DeleteBillRunService, 'default').mockImplementation(async () => {
       await pause(500)
       deleteDoneFake()
     })
 
-    unassignBillRunStub = Sinon.stub(UnassignBillRunToLicencesService, 'go').resolves()
+    vi.spyOn(UnassignBillRunToLicencesService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -42,29 +34,29 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
       beforeEach(() => {
         const billRun = { id: billRunId, externalId: '917aaad6-1e7b-4848-8713-1fe1d9fc1e30', status: 'cancel' }
 
-        cancelBillRunStub.resolves(billRun)
+        vi.spyOn(CancelBillRunService, 'default').mockResolvedValue(billRun)
       })
 
       it('unassigns the bill run from those licences with supplementary year records', async () => {
-        await SubmitCancelBillBunService.go(billRunId)
+        await SubmitCancelBillBunService(billRunId)
 
-        expect(unassignBillRunStub.called).toBe(true)
+        expect(UnassignBillRunToLicencesService.default).toHaveBeenCalled()
       })
 
       it('deletes the bill run in the background and does not throw an error', async () => {
-        await SubmitCancelBillBunService.go(billRunId)
+        await SubmitCancelBillBunService(billRunId)
 
-        expect(cancelBillRunStub.called).toBe(true)
-        expect(deleteBillRunStub.called).toBe(true)
+        expect(CancelBillRunService.default).toHaveBeenCalled()
+        expect(DeleteBillRunService.default).toHaveBeenCalled()
 
         // NOTE: We have faked the DeleteBillRunService taking some time to complete so we can test that
         // SubmitCancelBillBunService returns control back to us whilst the delete is still in progress. We then pause
         // and allow the delete to complete to confirm that it was running in the background.
-        expect(deleteDoneFake.called).toBe(false)
+        expect(deleteDoneFake).not.toHaveBeenCalled()
 
         await pause(500)
 
-        expect(deleteDoneFake.called).toBe(true)
+        expect(deleteDoneFake).toHaveBeenCalled()
       })
     })
 
@@ -73,19 +65,19 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
     // a rejection it would not represent anything that would ever happen in the app.
     describe('and the CancelBillRunService fails', () => {
       beforeEach(() => {
-        cancelBillRunStub.rejects()
+        vi.spyOn(CancelBillRunService, 'default').mockRejectedValue()
       })
 
       it('does not unassign the bill run from those licences with supplementary year records', async () => {
-        await expect(SubmitCancelBillBunService.go(billRunId)).rejects.toThrow()
+        await expect(SubmitCancelBillBunService(billRunId)).rejects.toThrow()
 
-        expect(unassignBillRunStub.called).toEqual(false)
+        expect(UnassignBillRunToLicencesService.default).not.toHaveBeenCalled()
       })
 
       it('does not delete the bill run and throws an error', async () => {
-        await expect(SubmitCancelBillBunService.go(billRunId)).rejects.toThrow()
+        await expect(SubmitCancelBillBunService(billRunId)).rejects.toThrow()
 
-        expect(deleteBillRunStub.called).toEqual(false)
+        expect(DeleteBillRunService.default).not.toHaveBeenCalled()
       })
     })
   })

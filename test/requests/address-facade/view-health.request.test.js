@@ -1,26 +1,26 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Things we need to stub
-const addressFacadeConfig = require('../../../config/address-facade.config.js')
-const BaseRequest = require('../../../app/requests/base.request.js')
+import * as BaseRequest from '../../../app/requests/base.request.js'
+import addressFacadeConfig from '../../../config/address-facade.config.js'
 
 // Thing under test
-const ViewHealthRequest = require('../../../app/requests/address-facade/view-health.request.js')
+import ViewHealthRequest from '../../../app/requests/address-facade/view-health.request.js'
+
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address Facade - View Health request', () => {
   let response
 
   beforeEach(() => {
-    Sinon.stub(addressFacadeConfig, 'url').value('http://localhost:8009')
+    vi.replaceProperty(addressFacadeConfig, 'url', 'http://localhost:8009')
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -30,22 +30,17 @@ describe('Address Facade - View Health request', () => {
         body: 'hola'
       }
 
-      Sinon.stub(BaseRequest, 'get')
-        .withArgs('http://localhost:8009/address-service/hola', { responseType: 'text' })
-        .resolves({
-          succeeded: true,
-          response
-        })
+      vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({ succeeded: true, response })
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewHealthRequest.send()
+      const result = await ViewHealthRequest()
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from the Address Facade in the "response"', async () => {
-      const result = await ViewHealthRequest.send()
+      const result = await ViewHealthRequest()
 
       expect(result.response.body).toEqual(response.body)
     })
@@ -66,22 +61,20 @@ describe('Address Facade - View Health request', () => {
           }
         }
 
-        Sinon.stub(BaseRequest, 'get')
-          .withArgs('http://localhost:8009/address-service/hola', { responseType: 'text' })
-          .resolves({
-            succeeded: false,
-            response
-          })
+        vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
+          succeeded: false,
+          response
+        })
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewHealthRequest.send()
+        const result = await ViewHealthRequest()
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewHealthRequest.send()
+        const result = await ViewHealthRequest()
 
         expect(result.response.body).toEqual(response.body)
       })

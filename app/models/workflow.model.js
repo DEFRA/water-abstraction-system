@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for workflows (water.charge_version_workflows)
  * @module WorkflowModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceModel from './licence.model.js'
 
-class WorkflowModel extends BaseModel {
+export default class WorkflowModel extends BaseModel {
   static get tableName() {
     return 'workflows'
   }
@@ -18,7 +17,7 @@ class WorkflowModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'workflows.licenceId',
           to: 'licences.id'
@@ -27,5 +26,3 @@ class WorkflowModel extends BaseModel {
     }
   }
 }
-
-module.exports = WorkflowModel

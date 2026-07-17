@@ -1,16 +1,17 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillHelper = require('../support/helpers/bill.helper.js')
-const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
-const BillingAccountModel = require('../../app/models/billing-account.model.js')
-const BillRunModel = require('../../app/models/bill-run.model.js')
-const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
-const BillLicenceModel = require('../../app/models/bill-licence.model.js')
-const BillRunHelper = require('../support/helpers/bill-run.helper.js')
+import BillHelper from '../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../support/helpers/bill-licence.helper.js'
+import BillLicenceModel from '../../app/models/bill-licence.model.js'
+import BillRunHelper from '../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../app/models/bill-run.model.js'
+import BillingAccountHelper from '../support/helpers/billing-account.helper.js'
+import BillingAccountModel from '../../app/models/billing-account.model.js'
 
 // Thing under test
-const BillModel = require('../../app/models/bill.model.js')
+import BillModel from '../../app/models/bill.model.js'
 
 describe('Bill model', () => {
   let testBillingAccount

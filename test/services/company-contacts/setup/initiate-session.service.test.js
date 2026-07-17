@@ -1,20 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionModel = require('../../../../app/models/session.model.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import SessionModel from '../../../../app/models/session.model.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchCompanyLicencesDal = require('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
-const FetchCompanyService = require('../../../../app/dal/companies/fetch-company.dal.js')
+import * as FetchCompanyLicencesDal from '../../../../app/dal/company-contacts/fetch-company-licences.dal.js'
+import * as FetchCompanyService from '../../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-const InitiateSessionService = require('../../../../app/services/company-contacts/setup/initiate-session.service.js')
+import InitiateSessionService from '../../../../app/services/company-contacts/setup/initiate-session.service.js'
 
 describe('Company Contacts - Setup - Initiate Session service', () => {
   let company
@@ -24,17 +21,17 @@ describe('Company Contacts - Setup - Initiate Session service', () => {
     company = CustomersFixtures.company()
     licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
 
-    Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchCompanyLicencesDal, 'go').returns(licences)
+    vi.spyOn(FetchCompanyService, 'default').mockReturnValue(company)
+    vi.spyOn(FetchCompanyLicencesDal, 'default').mockReturnValue(licences)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('creates a new session record with the "company" saved', async () => {
-      const result = await InitiateSessionService.go(company.id)
+      const result = await InitiateSessionService(company.id)
 
       const matchingSession = await SessionModel.query().findById(result.id)
 

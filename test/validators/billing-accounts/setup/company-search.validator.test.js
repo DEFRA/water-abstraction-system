@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const CompanySearchValidator = require('../../../../app/validators/billing-accounts/setup/company-search.validator.js')
+import CompanySearchValidator from '../../../../app/validators/billing-accounts/setup/company-search.validator.js'
 
 describe('Billing Accounts - Setup - Company Search Validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Billing Accounts - Setup - Company Search Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = CompanySearchValidator.go(payload)
+      const result = CompanySearchValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +27,7 @@ describe('Billing Accounts - Setup - Company Search Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = CompanySearchValidator.go(payload)
+        const result = CompanySearchValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -40,7 +41,7 @@ describe('Billing Accounts - Setup - Company Search Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = CompanySearchValidator.go(payload)
+        const result = CompanySearchValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

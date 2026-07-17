@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the matching return log data and associated submission needed for the csv download
  * @module FetchDownloadReturnLogService
  */
 
-const ReturnLogModel = require('../../models/return-log.model.js')
+import ReturnLogModel from '../../models/return-log.model.js'
 
 /**
  * Fetches the matching return log data and associated submission needed for the csv download
@@ -15,7 +13,7 @@ const ReturnLogModel = require('../../models/return-log.model.js')
  *
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
  */
-async function go(returnLogId, version) {
+export default async function fetchDownloadReturnLogService(returnLogId, version) {
   const returnLog = await _fetch(returnLogId, version)
 
   returnLog.returnSubmissions[0].$applyReadings()
@@ -38,8 +36,4 @@ async function _fetch(returnLogId, version) {
           returnSubmissionLinesBuilder.select(['id', 'startDate', 'endDate', 'quantity']).orderBy('endDate', 'asc')
         })
     })
-}
-
-module.exports = {
-  go
 }

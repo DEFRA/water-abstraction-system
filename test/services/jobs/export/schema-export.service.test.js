@@ -1,55 +1,47 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const CompressSchemaFolderService = require('../../../../app/services/jobs/export/compress-schema-folder.service.js')
-const DeleteFilesService = require('../../../../app/services/jobs/export/delete-files.service.js')
-const ExportTableService = require('../../../../app/services/jobs/export/export-table.service.js')
-const FetchTableNamesService = require('../../../../app/services/jobs/export/fetch-table-names.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const SendToS3BucketService = require('../../../../app/services/jobs/export/send-to-s3-bucket.service.js')
+import * as CompressSchemaFolderService from '../../../../app/services/jobs/export/compress-schema-folder.service.js'
+import * as DeleteFilesService from '../../../../app/services/jobs/export/delete-files.service.js'
+import * as ExportTableService from '../../../../app/services/jobs/export/export-table.service.js'
+import * as FetchTableNamesService from '../../../../app/services/jobs/export/fetch-table-names.service.js'
+import * as SendToS3BucketService from '../../../../app/services/jobs/export/send-to-s3-bucket.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const SchemaExportService = require('../../../../app/services/jobs/export/schema-export.service.js')
+import SchemaExportService from '../../../../app/services/jobs/export/schema-export.service.js'
 
 describe('Schema export service', () => {
-  let FetchTableNamesServiceStub
-  let CompressSchemaFolderServiceStub
-  let SendToS3BucketServiceStub
-  let DeleteFilesServiceStub
-  let ExportTableServiceStub
-
   describe('when successful', () => {
     beforeEach(() => {
-      FetchTableNamesServiceStub = Sinon.stub(FetchTableNamesService, 'go').resolves([])
-      CompressSchemaFolderServiceStub = Sinon.stub(CompressSchemaFolderService, 'go').resolves('/tmp/water')
-      SendToS3BucketServiceStub = Sinon.stub(SendToS3BucketService, 'go').resolves()
-      DeleteFilesServiceStub = Sinon.stub(DeleteFilesService, 'go').resolves()
-      ExportTableServiceStub = Sinon.stub(ExportTableService, 'go').resolves()
+      vi.spyOn(FetchTableNamesService, 'default').mockResolvedValue([])
+      vi.spyOn(CompressSchemaFolderService, 'default').mockResolvedValue('/tmp/water')
+      vi.spyOn(SendToS3BucketService, 'default').mockResolvedValue()
+      vi.spyOn(DeleteFilesService, 'default').mockResolvedValue()
+      vi.spyOn(ExportTableService, 'default').mockResolvedValue()
     })
 
     afterEach(() => {
-      Sinon.restore()
+      vi.restoreAllMocks()
     })
 
     it('calls the different services that export a schema', async () => {
-      await SchemaExportService.go('water')
+      await SchemaExportService('water')
 
-      expect(FetchTableNamesServiceStub.called).toBe(true)
-      expect(CompressSchemaFolderServiceStub.called).toBe(true)
-      expect(SendToS3BucketServiceStub.called).toBe(true)
-      expect(DeleteFilesServiceStub.called).toBe(true)
+      expect(FetchTableNamesService.default).toHaveBeenCalled()
+      expect(CompressSchemaFolderService.default).toHaveBeenCalled()
+      expect(SendToS3BucketService.default).toHaveBeenCalled()
+      expect(DeleteFilesService.default).toHaveBeenCalled()
     })
 
     it('calls the ExportTableService with the different table names as arguments', async () => {
       const tableNames = []
 
-      await SchemaExportService.go('water')
+      await SchemaExportService('water')
 
-      const allArgs = ExportTableServiceStub.getCalls().flatMap((call) => {
-        return call.args
+      const allArgs = ExportTableService.default.mock.calls.flatMap((args) => {
+        return args
       })
 
       expect(allArgs).toEqual(tableNames)
@@ -59,10 +51,10 @@ describe('Schema export service', () => {
       const schemaName = 'water'
       const expectedFolderPath = ['/tmp/water']
 
-      await SchemaExportService.go(schemaName)
+      await SchemaExportService(schemaName)
 
-      const args = SendToS3BucketServiceStub.getCalls().flatMap((call) => {
-        return call.args
+      const args = SendToS3BucketService.default.mock.calls.flatMap((args) => {
+        return args
       })
 
       expect(args).toEqual(expectedFolderPath)
@@ -73,34 +65,33 @@ describe('Schema export service', () => {
     let notifierStub
 
     beforeEach(() => {
-      FetchTableNamesServiceStub = Sinon.stub(FetchTableNamesService, 'go')
-      SendToS3BucketServiceStub = Sinon.stub(SendToS3BucketService, 'go')
-      CompressSchemaFolderServiceStub = Sinon.stub(CompressSchemaFolderService, 'go')
-      DeleteFilesServiceStub = Sinon.stub(DeleteFilesService, 'go').resolves()
+      vi.spyOn(DeleteFilesService, 'default').mockResolvedValue()
+      vi.spyOn(SendToS3BucketService, 'default').mockResolvedValue()
+      vi.spyOn(CompressSchemaFolderService, 'default').mockResolvedValue('/tmp/water')
 
-      notifierStub = GlobalNotifierStub.build(Sinon)
+      notifierStub = GlobalNotifierStub()
       globalThis.GlobalNotifier = notifierStub
     })
 
     afterEach(() => {
-      Sinon.restore()
+      vi.restoreAllMocks()
       delete globalThis.GlobalNotifier
     })
 
     it('catches the error', async () => {
-      FetchTableNamesServiceStub.rejects(new Error())
+      vi.spyOn(FetchTableNamesService, 'default').mockRejectedValue(new Error())
 
-      await SchemaExportService.go('water')
+      await SchemaExportService('water')
 
-      expect(notifierStub.omfg.calledWith('Error: Failed to export schema water')).toBe(true)
-      expect(SendToS3BucketServiceStub.called).toBe(false)
-      expect(CompressSchemaFolderServiceStub.called).toBe(false)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Error: Failed to export schema water', null, expect.any(Error))
+      expect(SendToS3BucketService.default).not.toHaveBeenCalled()
+      expect(CompressSchemaFolderService.default).not.toHaveBeenCalled()
     })
 
     it('cleans up the files', async () => {
-      await SchemaExportService.go('water')
+      await SchemaExportService('water')
 
-      expect(DeleteFilesServiceStub.called).toBe(true)
+      expect(DeleteFilesService.default).toHaveBeenCalled()
     })
   })
 })

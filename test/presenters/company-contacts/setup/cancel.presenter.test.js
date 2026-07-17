@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { licence } = require('../../../support/fixtures/licence.fixture.js')
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const CancelPresenter = require('../../../../app/presenters/company-contacts/setup/cancel.presenter.js')
+import CancelPresenter from '../../../../app/presenters/company-contacts/setup/cancel.presenter.js'
 
 describe('Company Contacts - Setup - Cancel Presenter', () => {
   let company
@@ -16,7 +17,7 @@ describe('Company Contacts - Setup - Cancel Presenter', () => {
   beforeEach(() => {
     company = CustomersFixtures.company()
 
-    licences = [licence()]
+    licences = [LicenceFixture.licence()]
 
     session = {
       abstractionAlertLicences: null,
@@ -31,7 +32,7 @@ describe('Company Contacts - Setup - Cancel Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CancelPresenter.go(session)
+      const result = CancelPresenter(session)
 
       expect(result).toEqual({
         abstractionAlertsLabel: 'Yes, for all licences',
@@ -53,7 +54,7 @@ describe('Company Contacts - Setup - Cancel Presenter', () => {
       })
 
       it('returns page data for the view', () => {
-        const result = CancelPresenter.go(session)
+        const result = CancelPresenter(session)
 
         expect(result.pageTitle).toEqual('You are about to cancel editing this contact')
       })

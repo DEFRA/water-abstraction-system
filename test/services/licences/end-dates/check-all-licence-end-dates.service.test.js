@@ -1,77 +1,74 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const FetchLicencesService = require('../../../../app/services/licences/end-dates/fetch-licences.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const LicencesConfig = require('../../../../config/licences.config.js')
-const CheckLicenceEndDatesService = require('../../../../app/services/licences/end-dates/check-licence-end-dates.service.js')
-const { generateUUID, pause } = require('../../../../app/lib/general.lib.js')
+import * as CheckLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-licence-end-dates.service.js'
+import * as FetchLicencesService from '../../../../app/services/licences/end-dates/fetch-licences.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import LicencesConfig from '../../../../config/licences.config.js'
+import { generateUUID } from '../../../support/generators.js'
+import { pause } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const CheckAllLicenceEndDatesService = require('../../../../app/services/licences/end-dates/check-all-licence-end-dates.service.js')
+import CheckAllLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-all-licence-end-dates.service.js'
 
 describe('Licences - End Dates - Check All Licence End Dates service', () => {
   const batchSize = 10
 
   let licences
   let notifierStub
-  let processLicenceStub
-
   beforeEach(() => {
     licences = _licences()
 
     // NOTE: We set our batch size to ensure consistency within the tests. Depending on who or where the tests are being
     // run, might mean this value is different.
-    Sinon.stub(LicencesConfig, 'endDates').value({ batchSize })
+    vi.replaceProperty(LicencesConfig, 'endDates', { batchSize })
 
-    Sinon.stub(FetchLicencesService, 'go').resolves(licences)
+    vi.spyOn(FetchLicencesService, 'default').mockResolvedValue(licences)
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when processing the licences', () => {
     beforeEach(() => {
-      processLicenceStub = Sinon.stub(CheckLicenceEndDatesService, 'go').resolves()
+      vi.spyOn(CheckLicenceEndDatesService, 'default').mockResolvedValue()
     })
 
     it('processes all licences with a current licence version in NALD and a matching record in WRLS', async () => {
-      await CheckAllLicenceEndDatesService.go()
+      await CheckAllLicenceEndDatesService()
 
       const firstLicence = licences[0]
       const lastLicence = licences[licences.length - 1]
 
-      expect(processLicenceStub.callCount).toEqual(licences.length)
-      expect(processLicenceStub.getCall(0).firstArg).toEqual(firstLicence)
-      expect(processLicenceStub.getCall(licences.length - 1).firstArg).toEqual(lastLicence)
+      expect(CheckLicenceEndDatesService.default).toHaveBeenCalledTimes(licences.length)
+      expect(CheckLicenceEndDatesService.default.mock.calls[0][0]).toEqual(firstLicence)
+      expect(CheckLicenceEndDatesService.default.mock.calls[licences.length - 1][0]).toEqual(lastLicence)
     })
 
     it('processes them in batches', async () => {
-      await CheckAllLicenceEndDatesService.go()
+      await CheckAllLicenceEndDatesService()
 
       // Check the expected number of batches (100 items / 10 per batch = 10 batches)
       const expectedBatches = Math.ceil(licences.length / batchSize)
 
-      expect(processLicenceStub.getCalls().length / batchSize).toEqual(expectedBatches)
+      expect(CheckLicenceEndDatesService.default.mock.calls.length / batchSize).toEqual(expectedBatches)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
-      await CheckAllLicenceEndDatesService.go()
+      await CheckAllLicenceEndDatesService()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Check all licence end dates complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Check all licence end dates complete', expect.any(Object))
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.count).toBeDefined()
@@ -92,15 +89,15 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     beforeEach(() => {
       const delayInMilliseconds = 250 // 0.25 seconds
 
-      processLicenceStub = Sinon.stub(CheckLicenceEndDatesService, 'go').callsFake(() => {
+      vi.spyOn(CheckLicenceEndDatesService, 'default').mockImplementation(() => {
         return pause(delayInMilliseconds)
       })
     })
 
     it('takes less time to complete the job than doing them one at a time', { timeout: 4000 }, async () => {
-      await CheckAllLicenceEndDatesService.go()
+      await CheckAllLicenceEndDatesService()
 
-      const args = notifierStub.omg.firstCall.args
+      const args = notifierStub.omg.mock.calls[0]
 
       expect(args[1].timeTakenSs).toBeLessThan(3n)
     })
@@ -108,13 +105,13 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      Sinon.stub(CheckLicenceEndDatesService, 'go').rejects()
+      vi.spyOn(CheckLicenceEndDatesService, 'default').mockRejectedValue(new Error())
     })
 
     it('handles the error', async () => {
-      await CheckAllLicenceEndDatesService.go()
+      await CheckAllLicenceEndDatesService()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = notifierStub.omfg.mock.calls[0]
 
       expect(args[0]).toEqual('Check all licence end dates failed')
       expect(args[1]).toBeNull()

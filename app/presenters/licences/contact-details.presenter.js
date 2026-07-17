@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
  * @module ContactDetailsPresenter
  */
 
-const { formatContact } = require('../crm.presenter.js')
+import { formatContact } from '../crm.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
@@ -15,7 +13,7 @@ const { formatContact } = require('../crm.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(contacts, licence) {
+export default function contactDetailsPresenter(contacts, licence) {
   const { id: licenceId, licenceRef } = licence
 
   return {
@@ -58,8 +56,4 @@ function _licenceHolderContactsLink(contacts) {
   }
 
   return `/system/companies/${companyId}/contacts`
-}
-
-module.exports = {
-  go
 }

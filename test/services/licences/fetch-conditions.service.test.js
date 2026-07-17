@@ -1,18 +1,19 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
-const PointHelper = require('../../support/helpers/point.helper.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
+import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
+import PointHelper from '../../support/helpers/point.helper.js'
+import PurposeHelper from '../../support/helpers/purpose.helper.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
+import FetchConditionsService from '../../../app/services/licences/fetch-conditions.service.js'
 
 describe('Licences - Fetch Conditions service', () => {
   let licence
@@ -79,7 +80,7 @@ describe('Licences - Fetch Conditions service', () => {
     })
 
     it('return the matching conditions', async () => {
-      const result = await FetchConditionsService.go(licenceVersion.id)
+      const result = await FetchConditionsService(licenceVersion.id)
 
       expect(result).toEqual([
         {
@@ -131,7 +132,7 @@ describe('Licences - Fetch Conditions service', () => {
     })
 
     it('returns no conditions', async () => {
-      const result = await FetchConditionsService.go(licenceVersion.id)
+      const result = await FetchConditionsService(licenceVersion.id)
 
       expect(result).toEqual([])
     })

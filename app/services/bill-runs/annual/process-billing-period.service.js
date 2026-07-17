@@ -1,22 +1,19 @@
-'use strict'
-
 /**
  * Process the billing accounts for a given billing period and creates their annual bills
  * @module ProcessBillingPeriodService
  */
 
-const BillRunError = require('../../../errors/bill-run.error.js')
-const BillRunModel = require('../../../models/bill-run.model.js')
-const BillModel = require('../../../models/bill.model.js')
-const BillLicenceModel = require('../../../models/bill-licence.model.js')
-const DetermineChargePeriodService = require('../determine-charge-period.service.js')
-const DetermineMinimumChargeService = require('../determine-minimum-charge.service.js')
-const { generateUUID } = require('../../../lib/general.lib.js')
-const GenerateTransactionsService = require('../generate-transactions.service.js')
-const SendTransactionsService = require('../send-transactions.service.js')
-const TransactionModel = require('../../../models/transaction.model.js')
-
-const BillingConfig = require('../../../../config/billing.config.js')
+import BillLicenceModel from '../../../models/bill-licence.model.js'
+import BillModel from '../../../models/bill.model.js'
+import BillRunError from '../../../errors/bill-run.error.js'
+import BillRunModel from '../../../models/bill-run.model.js'
+import BillingConfig from '../../../../config/billing.config.js'
+import DetermineChargePeriodService from '../determine-charge-period.service.js'
+import DetermineMinimumChargeService from '../determine-minimum-charge.service.js'
+import GenerateTransactionsService from '../generate-transactions.service.js'
+import SendTransactionsService from '../send-transactions.service.js'
+import TransactionModel from '../../../models/transaction.model.js'
+import { generateUUID } from '../../../lib/general.lib.js'
 
 /**
  * Process the billing accounts for a given billing period and creates their annual bills
@@ -27,7 +24,7 @@ const BillingConfig = require('../../../../config/billing.config.js')
  *
  * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go(billRun, billingPeriod, billingAccounts) {
+export default async function processBillingPeriodService(billRun, billingPeriod, billingAccounts) {
   let billRunIsPopulated = false
 
   if (billingAccounts.length === 0) {
@@ -121,7 +118,7 @@ async function _createBillLicencesAndTransactions(billId, billingAccount, billRu
  * @private
  */
 async function _createTransactions(billLicenceId, billingPeriod, chargeVersion, billRunExternalId, accountNumber) {
-  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+  const chargePeriod = DetermineChargePeriodService(chargeVersion, billingPeriod)
 
   if (!chargePeriod.startDate) {
     return []
@@ -129,7 +126,7 @@ async function _createTransactions(billLicenceId, billingPeriod, chargeVersion, 
 
   const generatedTransactions = _generateTransactionData(billLicenceId, billingPeriod, chargePeriod, chargeVersion)
 
-  return SendTransactionsService.go(generatedTransactions, billRunExternalId, accountNumber, chargeVersion.licence)
+  return SendTransactionsService(generatedTransactions, billRunExternalId, accountNumber, chargeVersion.licence)
 }
 
 /**
@@ -221,12 +218,12 @@ function _findOrCreateBillLicence(billLicences, licence, billId) {
  */
 function _generateTransactionData(billLicenceId, billingPeriod, chargePeriod, chargeVersion) {
   try {
-    const firstChargeOnNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+    const firstChargeOnNewLicence = DetermineMinimumChargeService(chargeVersion, chargePeriod)
 
     // We use flatMap as GenerateTransactionsService returns an array of transactions (depending on if a compensation
     // transaction is also created) and we
     const transactions = chargeVersion.chargeReferences.flatMap((chargeReference) => {
-      return GenerateTransactionsService.go(
+      return GenerateTransactionsService(
         billLicenceId,
         chargeReference,
         billingPeriod,
@@ -285,8 +282,4 @@ async function _persistBillData(bill, billLicences, transactions) {
   await TransactionModel.query().insert(transactions)
 
   return true
-}
-
-module.exports = {
-  go
 }

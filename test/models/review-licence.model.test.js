@@ -1,18 +1,19 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunHelper = require('../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../app/models/bill-run.model.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const ReviewChargeVersionHelper = require('../support/helpers/review-charge-version.helper.js')
-const ReviewChargeVersionModel = require('../../app/models/review-charge-version.model.js')
-const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
-const ReviewReturnHelper = require('../support/helpers/review-return.helper.js')
-const ReviewReturnModel = require('../../app/models/review-return.model.js')
+import BillRunHelper from '../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../app/models/bill-run.model.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import ReviewChargeVersionHelper from '../support/helpers/review-charge-version.helper.js'
+import ReviewChargeVersionModel from '../../app/models/review-charge-version.model.js'
+import ReviewLicenceHelper from '../support/helpers/review-licence.helper.js'
+import ReviewReturnHelper from '../support/helpers/review-return.helper.js'
+import ReviewReturnModel from '../../app/models/review-return.model.js'
 
 // Thing under test
-const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
+import ReviewLicenceModel from '../../app/models/review-licence.model.js'
 
 describe('Review Licence model', () => {
   let testBillRun

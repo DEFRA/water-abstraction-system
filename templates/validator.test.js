@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const __MODULE_NAME__ = require('__REQUIRE_PATH__')
+import __MODULE_NAME__ from '__REQUIRE_PATH__'
 
 describe('__DESCRIBE_LABEL__', () => {
   let payload
@@ -12,7 +13,7 @@ describe('__DESCRIBE_LABEL__', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = __MODULE_NAME__.go(payload)
+      const result = __MODULE_NAME__(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +26,7 @@ describe('__DESCRIBE_LABEL__', () => {
     })
 
     it('returns with errors', () => {
-      const result = __MODULE_NAME__.go(payload)
+      const result = __MODULE_NAME__(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

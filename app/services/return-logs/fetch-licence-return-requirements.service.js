@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches return requirements for a given licence with an end date after the provided date
  * @module FetchLicenceReturnRequirementsService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
-const ReturnRequirementModel = require('../../models/return-requirement.model.js')
-const ReturnRequirementPointModel = require('../../models/return-requirement-point.model.js')
-const ReturnRequirementPurposeModel = require('../../models/return-requirement-purpose.model.js')
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import LicenceModel from '../../models/licence.model.js'
+import ReturnRequirementModel from '../../models/return-requirement.model.js'
+import ReturnRequirementPointModel from '../../models/return-requirement-point.model.js'
+import ReturnRequirementPurposeModel from '../../models/return-requirement-purpose.model.js'
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Fetches return requirements for a given licence with an end date after the provided date
@@ -30,7 +28,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  *
  * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the licence and change date
  */
-async function go(licenceId, changeDate, trx = null) {
+export default async function fetchLicenceReturnRequirementsService(licenceId, changeDate, trx = null) {
   const returnVersions = await _returnVersions(licenceId, changeDate, trx)
 
   if (returnVersions.length === 0) {
@@ -250,8 +248,4 @@ async function _licence(licenceId, trx) {
     ])
     .innerJoinRelated('region')
     .findById(licenceId)
-}
-
-module.exports = {
-  go
 }

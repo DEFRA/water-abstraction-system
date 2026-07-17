@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
+import WorkflowHelper from '../../support/helpers/workflow.helper.js'
 
 // Thing under test
-const FetchWorkflowsService = require('../../../app/services/licences/fetch-workflows.service.js')
+import FetchWorkflowsService from '../../../app/services/licences/fetch-workflows.service.js'
 
 describe('Licences - Fetch Workflows service', () => {
   let workflow
@@ -26,7 +27,7 @@ describe('Licences - Fetch Workflows service', () => {
 
   describe('when the licence has workflow data', () => {
     it('returns the matching workflow data', async () => {
-      const result = await FetchWorkflowsService.go(workflow.licenceId)
+      const result = await FetchWorkflowsService(workflow.licenceId)
 
       expect(result).toEqual([
         {

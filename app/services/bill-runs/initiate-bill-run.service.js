@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Handles initiating a new bill run
  * @module InitiateBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
-const ChargingModuleCreateBillRunRequest = require('../../requests/charging-module/create-bill-run.request.js')
-const CreateBillRunService = require('./create-bill-run.service.js')
-const CreateBillRunEventService = require('./create-bill-run-event.service.js')
+import BillRunModel from '../../models/bill-run.model.js'
+import CreateBillRunEventService from './create-bill-run-event.service.js'
+import CreateBillRunRequest from '../../requests/charging-module/create-bill-run.request.js'
+import CreateBillRunService from './create-bill-run.service.js'
 
 /**
  * Initiate a new bill run
@@ -23,13 +21,13 @@ const CreateBillRunEventService = require('./create-bill-run-event.service.js')
  *
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance
  */
-async function go(financialYearEndings, regionId, batchType, userEmail) {
-  const chargingModuleResult = await ChargingModuleCreateBillRunRequest.send(regionId, 'sroc')
+export default async function initiateBillRunService(financialYearEndings, regionId, batchType, userEmail) {
+  const chargingModuleResult = await CreateBillRunRequest(regionId, 'sroc')
 
   const billRunOptions = _billRunOptions(chargingModuleResult, batchType)
-  const billRun = await CreateBillRunService.go(regionId, financialYearEndings, billRunOptions)
+  const billRun = await CreateBillRunService(regionId, financialYearEndings, billRunOptions)
 
-  await CreateBillRunEventService.go(billRun, userEmail)
+  await CreateBillRunEventService(billRun, userEmail)
 
   return billRun
 }
@@ -51,8 +49,4 @@ function _billRunOptions(chargingModuleResult, batchType) {
   options.errorCode = BillRunModel.errorCodes.failedToCreateBillRun
 
   return options
-}
-
-module.exports = {
-  go
 }

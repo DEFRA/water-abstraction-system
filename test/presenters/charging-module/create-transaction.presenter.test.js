@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const { ref } = require('objection')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const TransactionHelper = require('../../support/helpers/transaction.helper.js')
+import { ref } from 'objection'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceModel from '../../../app/models/licence.model.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
+import TransactionHelper from '../../support/helpers/transaction.helper.js'
 
 // Thing under test
-const CreateTransactionPresenter = require('../../../app/presenters/charging-module/create-transaction.presenter.js')
+import CreateTransactionPresenter from '../../../app/presenters/charging-module/create-transaction.presenter.js'
 
 describe('Charging Module Create Transaction presenter', () => {
   const accountNumber = 'A51542397A'
@@ -55,7 +56,7 @@ describe('Charging Module Create Transaction presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = CreateTransactionPresenter.go(transaction, accountNumber, licence)
+      const result = CreateTransactionPresenter(transaction, accountNumber, licence)
 
       expect(result.clientId).toEqual(transaction.id)
       expect(result.ruleset).toEqual('sroc')
@@ -85,7 +86,7 @@ describe('Charging Module Create Transaction presenter', () => {
       expect(result.section127Agreement).toEqual(false)
       expect(result.section130Agreement).toEqual(false)
       expect(result.supportedSource).toEqual(false)
-      expect(result.supportedSourceName).toEqual(null)
+      expect(result.supportedSourceName).toBeNull()
       expect(result.twoPartTariff).toEqual(false)
       expect(result.waterCompanyCharge).toEqual(false)
       expect(result.waterUndertaker).toEqual(false)

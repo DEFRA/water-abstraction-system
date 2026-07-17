@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Thing under test
-const EditPresenter = require('../../../../app/presenters/bill-runs/review/edit.presenter.js')
+import EditPresenter from '../../../../app/presenters/bill-runs/review/edit.presenter.js'
 
 describe('Bill Runs Review - Edit presenter', () => {
   const elementIndex = 1
@@ -17,7 +18,7 @@ describe('Bill Runs Review - Edit presenter', () => {
 
   describe('when provided with the result of fetch review charge element service', () => {
     it('correctly presents the data', () => {
-      const result = EditPresenter.go(reviewChargeElement, elementIndex)
+      const result = EditPresenter(reviewChargeElement, elementIndex)
 
       expect(result).toEqual({
         authorisedQuantity: 9.092,
@@ -40,7 +41,7 @@ describe('Bill Runs Review - Edit presenter', () => {
       })
 
       it("returns the charge reference's lower authorised volume", () => {
-        const result = EditPresenter.go(reviewChargeElement)
+        const result = EditPresenter(reviewChargeElement)
 
         expect(result.authorisedQuantity).toEqual(5)
       })
@@ -52,7 +53,7 @@ describe('Bill Runs Review - Edit presenter', () => {
       })
 
       it("returns the charge element's lower authorised volume", () => {
-        const result = EditPresenter.go(reviewChargeElement)
+        const result = EditPresenter(reviewChargeElement)
 
         expect(result.authorisedQuantity).toEqual(9.092)
       })

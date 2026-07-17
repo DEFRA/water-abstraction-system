@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirmed` page
  * @module ConfirmedService
  */
 
-const ConfirmedPresenter = require('../../../presenters/return-logs/setup/confirmed.presenter.js')
-const FetchReturnLogService = require('../../../services/return-logs/setup/fetch-return-log.service.js')
+import ConfirmedPresenter from '../../../presenters/return-logs/setup/confirmed.presenter.js'
+import FetchReturnLogService from '../../../services/return-logs/setup/fetch-return-log.service.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirmed` page
@@ -15,16 +13,12 @@ const FetchReturnLogService = require('../../../services/return-logs/setup/fetch
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go(returnLogId) {
-  const returnLog = await FetchReturnLogService.go(returnLogId)
+export default async function confirmedService(returnLogId) {
+  const returnLog = await FetchReturnLogService(returnLogId)
 
-  const formattedData = ConfirmedPresenter.go(returnLog)
+  const formattedData = ConfirmedPresenter(returnLog)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

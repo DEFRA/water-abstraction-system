@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats a transaction as a Charging Module API transaction request
  * @module CreateTransactionPresenter
  */
 
-const { formatChargingModuleDate } = require('../base.presenter.js')
+import { formatChargingModuleDate } from '../base.presenter.js'
 
 /**
  * Formats a transaction as a Charging Module API transaction request
@@ -17,7 +15,7 @@ const { formatChargingModuleDate } = require('../base.presenter.js')
  *
  * @returns {object} an object to be used as the body in a Charging Module POST transaction request
  */
-function go(transaction, accountNumber, licence) {
+export default function createTransactionPresenter(transaction, accountNumber, licence) {
   const periodStart = formatChargingModuleDate(transaction.startDate)
   const periodEnd = formatChargingModuleDate(transaction.endDate)
 
@@ -54,8 +52,4 @@ function go(transaction, accountNumber, licence) {
     waterUndertaker: transaction.waterUndertaker,
     winterOnly: transaction.winterOnly
   }
-}
-
-module.exports = {
-  go
 }

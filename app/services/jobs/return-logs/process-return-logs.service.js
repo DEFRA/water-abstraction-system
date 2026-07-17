@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Determines what return logs need to be generated for a given cycle and creates them
  * @module ProcessReturnLogsService
  */
 
-const { determineEarliestDate } = require('../../../lib/dates.lib.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const CreateReturnLogsService = require('../../return-logs/create-return-logs.service.js')
-const CheckReturnCycleService = require('./check-return-cycle.service.js')
-const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
+import CheckReturnCycleService from './check-return-cycle.service.js'
+import CreateReturnLogsService from '../../return-logs/create-return-logs.service.js'
+import FetchReturnRequirementsService from './fetch-return-requirements.service.js'
+import { determineEarliestDate } from '../../../lib/dates.lib.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Determines what return logs need to be generated for a given cycle and creates them
@@ -31,19 +29,19 @@ const FetchReturnRequirementsService = require('./fetch-return-requirements.serv
  *
  * @param {string} cycle - the return cycle to create logs for (summer or all-year)
  */
-async function go(cycle) {
+export default async function processReturnLogsService(cycle) {
   try {
     const startTime = currentTimeInNanoseconds()
 
     const summer = cycle === 'summer'
-    const returnCycle = await CheckReturnCycleService.go(summer)
-    const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
+    const returnCycle = await CheckReturnCycleService(summer)
+    const returnRequirements = await FetchReturnRequirementsService(returnCycle)
 
     for (const returnRequirement of returnRequirements) {
       const licenceEndDate = _endDate(returnRequirement.returnVersion)
 
       try {
-        await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
+        await CreateReturnLogsService(returnRequirement, returnCycle, licenceEndDate)
       } catch (error) {
         globalThis.GlobalNotifier.omfg('Return logs creation errored', { returnRequirement, returnCycle }, error)
       }
@@ -62,8 +60,4 @@ function _endDate(returnVersion) {
   const { licence } = returnVersion
 
   return determineEarliestDate([licence.expiredDate, licence.lapsedDate, licence.revokedDate])
-}
-
-module.exports = {
-  go
 }

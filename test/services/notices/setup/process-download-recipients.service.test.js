@@ -1,28 +1,26 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { formatAbstractionPeriod, formatValueUnit } = require('../../../../app/presenters/base.presenter.js')
-const { addressToCSV } = require('../../../../app/presenters/notices/base.presenter.js')
-const { transformArrayToCSVRow } = require('../../../../app/lib/transform-to-csv.lib.js')
+import NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.js'
+import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
+import { formatAbstractionPeriod, formatValueUnit } from '../../../../app/presenters/base.presenter.js'
 
 // Things to stub
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ProcessDownloadRecipientsService = require('../../../../app/services/notices/setup/process-download-recipients.service.js')
+import ProcessDownloadRecipientsService from '../../../../app/services/notices/setup/process-download-recipients.service.js'
 
 describe('Notices - Setup - Process Download Recipients service', () => {
   let session
   let recipient
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the notice type is an "abstraction alert"', () => {
@@ -30,13 +28,13 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.alertNoticePrimaryUser()
       session = NoticeSessionFixture.abstractionAlertStop(recipient.licence_refs[0])
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
-      const result = await ProcessDownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService(session.id)
 
       const recipientRow = _transformAbstractionAlertRecipientToRow(recipient, session)
 
@@ -56,13 +54,13 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.paperReturn(recipient.licence_refs[0])
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
-      const result = await ProcessDownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService(session.id)
 
       const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -82,13 +80,13 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.standardReminder(recipient.licence_refs[0])
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
-      const result = await ProcessDownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService(session.id)
 
       const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -108,13 +106,13 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.standardInvitation(recipient.licence_refs[0])
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
-      const result = await ProcessDownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService(session.id)
 
       const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -134,13 +132,13 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.renewalInvitationLicenceHolder()
       session = NoticeSessionFixture.adHocRenewalInvitation(recipient.licence_refs[0])
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
-      const result = await ProcessDownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService(session.id)
 
       const recipientRow = _transformRenewalRecipientToRow(recipient, session)
 

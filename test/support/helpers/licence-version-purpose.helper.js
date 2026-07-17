@@ -1,14 +1,13 @@
-'use strict'
-
 /**
  * @module LicenceVersionPurposesHelper
  */
 
-const { generateRandomInteger, generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
-const LicenceVersionPurposeModel = require('../../../app/models/licence-version-purpose.model.js')
-const PrimaryPurposeHelper = require('./primary-purpose.helper.js')
-const PurposeHelper = require('./purpose.helper.js')
-const SecondaryPurposeHelper = require('./secondary-purpose.helper.js')
+import LicenceVersionPurposeModel from '../../../app/models/licence-version-purpose.model.js'
+import PrimaryPurposeHelper from './primary-purpose.helper.js'
+import PurposeHelper from './purpose.helper.js'
+import SecondaryPurposeHelper from './secondary-purpose.helper.js'
+import { timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { generateLicenceVersionPurposeExternalId, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence version purpose
@@ -76,17 +75,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Returns a randomly generated licence version purpose external id
- *
- * @returns {string} - A randomly generated external id
- */
-function generateLicenceVersionPurposeExternalId() {
-  return `${generateRandomInteger(0, 9)}:${generateRandomInteger(10000, 99999)}`
-}
-
-module.exports = {
+export default {
   add,
-  defaults,
-  generateLicenceVersionPurposeExternalId
+  defaults
 }

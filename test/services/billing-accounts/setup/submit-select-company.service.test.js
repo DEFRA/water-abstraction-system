@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import * as FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitSelectCompanyService = require('../../../../app/services/billing-accounts/setup/submit-select-company.service.js')
+import SubmitSelectCompanyService from '../../../../app/services/billing-accounts/setup/submit-select-company.service.js'
 
 describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -24,8 +22,6 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       title: 'ENVIRONMENT AGENCY'
     }
   ]
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -35,13 +31,13 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       billingAccount
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterEach(async () => {
@@ -56,14 +52,14 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitSelectCompanyService.go(session.id, payload)
+      await SubmitSelectCompanyService(session.id, payload)
 
       expect(session.companiesHouseNumber).toEqual(payload.companiesHouseNumber)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitSelectCompanyService.go(session.id, payload)
+      const result = await SubmitSelectCompanyService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -77,22 +73,22 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
           billingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSelectCompanyService.go(session.id, payload)
+        await SubmitSelectCompanyService(session.id, payload)
 
         expect(session).toMatchObject({
           companiesHouseNumber: payload.companiesHouseNumber
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitSelectCompanyService.go(session.id, payload)
+        const result = await SubmitSelectCompanyService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -108,13 +104,13 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
           checkPageVisited: true
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSelectCompanyService.go(session.id, payload)
+        await SubmitSelectCompanyService(session.id, payload)
 
         expect(session).toMatchObject({
           companiesHouseNumber: payload.companiesHouseNumber,
@@ -123,7 +119,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitSelectCompanyService.go(session.id, payload)
+        const result = await SubmitSelectCompanyService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -141,13 +137,13 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
           fao: 'yes'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSelectCompanyService.go(session.id, payload)
+        await SubmitSelectCompanyService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: null,
@@ -158,11 +154,11 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
           contactSelected: null,
           fao: null
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitSelectCompanyService.go(session.id, payload)
+        const result = await SubmitSelectCompanyService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -174,11 +170,11 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   describe('when validation fails', () => {
     beforeEach(() => {
       payload = {}
-      Sinon.stub(FetchCompaniesService, 'go').returns(companies)
+      vi.spyOn(FetchCompaniesService, 'default').mockReturnValue(companies)
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitSelectCompanyService.go(session.id, payload)
+      const result = await SubmitSelectCompanyService(session.id, payload)
 
       expect(result.error).toEqual({
         errorList: [

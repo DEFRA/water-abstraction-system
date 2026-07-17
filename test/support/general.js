@@ -1,11 +1,10 @@
-'use strict'
-
 /**
  * General helper functions available to all helpers
  * @module GeneralHelper
  */
 
-const { generateRandomInteger, today } = require('../../app/lib/general.lib.js')
+import { generateRandomInteger } from './generators.js'
+import { today } from '../../app/lib/general.lib.js'
 
 /**
  * Generate the POST request options needed for `server.inject()`
@@ -41,7 +40,7 @@ const { generateRandomInteger, today } = require('../../app/lib/general.lib.js')
  *
  * @returns {object} the options to be used in the call to `server.inject()`
  */
-function postRequestOptions(
+export function postRequestOptions(
   path,
   payload = {},
   scope = ['billing', 'returns'],
@@ -84,7 +83,7 @@ function postRequestOptions(
  *
  * @returns a random number
  */
-function randomRegionCode() {
+export function randomRegionCode() {
   return generateRandomInteger(1, 999999)
 }
 
@@ -98,7 +97,7 @@ function randomRegionCode() {
  *
  * @returns {Date} a date relative to today
  */
-function relativeToToday(numberOfDays) {
+export function relativeToToday(numberOfDays) {
   const relative = today()
 
   // We lean into Math to make this work. Adding two positive numbers, results in a positive value, for example,
@@ -123,7 +122,7 @@ function relativeToToday(numberOfDays) {
  *
  * @returns a random entry from the data provided
  */
-function selectRandomEntry(data) {
+export function selectRandomEntry(data) {
   const randomIndex = generateRandomInteger(0, data.length - 1)
 
   return data[randomIndex]
@@ -134,7 +133,7 @@ function selectRandomEntry(data) {
  *
  * @returns {Date} tomorrow's date
  */
-function tomorrow() {
+export function tomorrow() {
   const tomorrow = today()
 
   tomorrow.setDate(tomorrow.getDate() + 1)
@@ -147,19 +146,10 @@ function tomorrow() {
  *
  * @returns {Date} yesterday's date
  */
-function yesterday() {
+export function yesterday() {
   const yesterday = today()
 
   yesterday.setDate(yesterday.getDate() - 1)
 
   return yesterday
-}
-
-module.exports = {
-  postRequestOptions,
-  randomRegionCode,
-  relativeToToday,
-  selectRandomEntry,
-  tomorrow,
-  yesterday
 }

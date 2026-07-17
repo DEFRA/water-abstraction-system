@@ -1,15 +1,16 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import PrimaryPurposeHelper from '../../support/helpers/primary-purpose.helper.js'
+import PurposeHelper from '../../support/helpers/purpose.helper.js'
+import SecondaryPurposeHelper from '../../support/helpers/secondary-purpose.helper.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const FetchOtherPurposeIdsDal = require('../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js')
+import FetchOtherPurposeIdsDal from '../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'
 
 describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
   let currentPurposeDetails
@@ -129,7 +130,7 @@ describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
   describe('when called', () => {
     describe("and the purpose matches to one linked to the licences's 'current' licence version", () => {
       it('returns the matching primary and secondary purpose IDs', async () => {
-        const result = await FetchOtherPurposeIdsDal.go(licenceId, currentPurposeDetails.purposeId)
+        const result = await FetchOtherPurposeIdsDal(licenceId, currentPurposeDetails.purposeId)
 
         expect(result).toEqual({
           primaryPurposeId: currentPurposeDetails.primaryPurposeId,
@@ -140,7 +141,7 @@ describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
 
     describe("and the purpose matches to one linked to a licences's historic licence versions", () => {
       it('still returns the matching primary and secondary purpose IDs', async () => {
-        const result = await FetchOtherPurposeIdsDal.go(licenceId, historicPurposeDetails.purposeId)
+        const result = await FetchOtherPurposeIdsDal(licenceId, historicPurposeDetails.purposeId)
 
         expect(result).toEqual({
           primaryPurposeId: historicPurposeDetails.primaryPurposeId,

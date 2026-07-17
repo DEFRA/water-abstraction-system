@@ -1,21 +1,15 @@
-'use strict'
-
 /**
  * Deletes a session by its unique identifier.
  * @module DeleteSessionDal
  */
 
-const SessionModel = require('../models/session.model.js')
+import SessionModel from '../models/session.model.js'
 
 /**
  * Deletes a session by its unique identifier.
  *
  * @param {string} sessionId - The UUID of the session to delete.
  */
-async function go(sessionId) {
+export default async function deleteSessionDal(sessionId) {
   await SessionModel.query().delete().where('id', sessionId)
-}
-
-module.exports = {
-  go
 }

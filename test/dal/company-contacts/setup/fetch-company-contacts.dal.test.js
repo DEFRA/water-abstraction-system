@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
-const ContactHelper = require('../../../support/helpers/contact.helper.js')
+import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
+import ContactHelper from '../../../support/helpers/contact.helper.js'
 
 // Thing under test
-const FetchCompanyContactsDal = require('../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js')
+import FetchCompanyContactsDal from '../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js'
 
 describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
   let additionalCompanyContact
@@ -34,7 +35,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
 
   describe('when there are company contacts', () => {
     it('returns the matching company contacts', async () => {
-      const result = await FetchCompanyContactsDal.go(companyContact.companyId, undefined)
+      const result = await FetchCompanyContactsDal(companyContact.companyId, undefined)
 
       expect(result).toEqual([
         {
@@ -65,7 +66,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
       })
 
       it('returns the matching company contacts', async () => {
-        const result = await FetchCompanyContactsDal.go(companyContact.companyId, companyContactToIgnore)
+        const result = await FetchCompanyContactsDal(companyContact.companyId, companyContactToIgnore)
 
         expect(result).toEqual([
           {

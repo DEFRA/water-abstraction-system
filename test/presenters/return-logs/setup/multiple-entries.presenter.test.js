@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const MultipleEntriesPresenter = require('../../../../app/presenters/return-logs/setup/multiple-entries.presenter.js')
+import MultipleEntriesPresenter from '../../../../app/presenters/return-logs/setup/multiple-entries.presenter.js'
 
 describe('Return Logs Setup - Multiple Entries presenter', () => {
   let session
@@ -21,7 +22,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = MultipleEntriesPresenter.go(session)
+      const result = MultipleEntriesPresenter(session)
 
       expect(result).toEqual({
         backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check', text: 'Back' },
@@ -45,7 +46,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       })
 
       it('returns "measurementType" back as "volumes"', () => {
-        const result = MultipleEntriesPresenter.go(session)
+        const result = MultipleEntriesPresenter(session)
 
         expect(result.measurementType).toEqual('volumes')
       })
@@ -57,7 +58,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       })
 
       it('returns "measurementType" back as "readings"', () => {
-        const result = MultipleEntriesPresenter.go(session)
+        const result = MultipleEntriesPresenter(session)
 
         expect(result.measurementType).toEqual('readings')
       })
@@ -71,7 +72,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       })
 
       it('returns "frequency" back as "daily"', () => {
-        const result = MultipleEntriesPresenter.go(session)
+        const result = MultipleEntriesPresenter(session)
 
         expect(result.frequency).toEqual('daily')
       })
@@ -83,7 +84,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       })
 
       it('returns "frequency" back as "weekly"', () => {
-        const result = MultipleEntriesPresenter.go(session)
+        const result = MultipleEntriesPresenter(session)
 
         expect(result.frequency).toEqual('weekly')
       })
@@ -95,7 +96,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       })
 
       it('returns "frequency" back as "monthly"', () => {
-        const result = MultipleEntriesPresenter.go(session)
+        const result = MultipleEntriesPresenter(session)
 
         expect(result.frequency).toEqual('monthly')
       })
@@ -109,7 +110,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       })
 
       it('returns the "multipleEntries" property populated', () => {
-        const result = MultipleEntriesPresenter.go(session)
+        const result = MultipleEntriesPresenter(session)
 
         expect(result.multipleEntries).toEqual('1,2,3,4,5,6,7,8,9,10,11,12')
       })

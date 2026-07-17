@@ -1,6 +1,4 @@
-'use strict'
-
-const { formatNumber } = require('../base.presenter.js')
+import { formatNumber } from '../base.presenter.js'
 
 /**
  * Formats the abstraction quantities from a `licenceVersionPurpose` as strings of two decimal places and their measure
@@ -9,7 +7,7 @@ const { formatNumber } = require('../base.presenter.js')
  *
  * @returns {string[]} An array of formatted strings representing the abstraction amounts per time period
  */
-function formatAbstractionAmounts(licenceVersionPurpose) {
+export function formatAbstractionAmounts(licenceVersionPurpose) {
   const details = []
 
   const { annualQuantity, dailyQuantity, hourlyQuantity, instantQuantity } = licenceVersionPurpose
@@ -41,7 +39,7 @@ function formatAbstractionAmounts(licenceVersionPurpose) {
  * @returns {object | null} an object containing the notification text and title text if the licence is marked for a
  * supplementary bill run, else null
  */
-function supplementaryBillingNotification(licence) {
+export function supplementaryBillingNotification(licence) {
   const { includeInPresrocBilling, includeInSrocBilling, includeInTwoPartTariffBilling } = licence
   const baseMessage = 'This licence has been marked for the next '
 
@@ -85,7 +83,7 @@ function supplementaryBillingNotification(licence) {
  *
  * @returns {string} The pluralised version of the word if count is greater than 1, else word.
  */
-function pluralise(word, count) {
+export function pluralise(word, count) {
   return count > 1 ? `${word}s` : word
 }
 
@@ -96,7 +94,7 @@ function pluralise(word, count) {
  *
  * @returns {string[]} An array of roles
  */
-function userRoles(auth) {
+export function userRoles(auth) {
   return auth.credentials.roles.map((role) => {
     return role.role
   })
@@ -120,11 +118,4 @@ function _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBil
   }
 
   return baseMessage + 'two-part tariff supplementary bill run.'
-}
-
-module.exports = {
-  formatAbstractionAmounts,
-  supplementaryBillingNotification,
-  pluralise,
-  userRoles
 }

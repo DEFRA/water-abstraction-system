@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Creates the event for when a new bill run is initialised
  * @module CreateBillRunEventService
  */
 
-const CreateBillRunEventPresenter = require('../../presenters/bill-runs/create-bill-run-event.presenter.js')
-const EventModel = require('../../models/event.model.js')
-const GeneralLib = require('../../lib/general.lib.js')
+import CreateBillRunEventPresenter from '../../presenters/bill-runs/create-bill-run-event.presenter.js'
+import EventModel from '../../models/event.model.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Create an event for when a new bill run is initialised
@@ -17,10 +15,10 @@ const GeneralLib = require('../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The newly created event record
  */
-async function go(billRun, issuer) {
+export default async function createBillRunEventService(billRun, issuer) {
   // The legacy `water.events` table does not have a default set for its timestamp fields. So, we have to manually set
   // them when creating the record
-  const timestamp = GeneralLib.timestampForPostgres()
+  const timestamp = timestampForPostgres()
 
   const event = await EventModel.query()
     .insert({
@@ -39,9 +37,5 @@ async function go(billRun, issuer) {
 }
 
 function _metadata(billRun) {
-  return CreateBillRunEventPresenter.go(billRun)
-}
-
-module.exports = {
-  go
+  return CreateBillRunEventPresenter(billRun)
 }

@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ReasonService = require('../../../../app/services/return-versions/setup/reason.service.js')
+import ReasonService from '../../../../app/services/return-versions/setup/reason.service.js'
 
 describe('Return Versions Setup - Reason service', () => {
   let session
@@ -39,24 +37,24 @@ describe('Return Versions Setup - Reason service', () => {
       startDateOptions: 'licenceStartDate'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await ReasonService.go(session.id)
+      const result = await ReasonService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await ReasonService.go(session.id)
+      const result = await ReasonService(session.id)
 
       expect(result).toMatchObject({
         pageTitle: 'Select the reason for the requirements for returns',

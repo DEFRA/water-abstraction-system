@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-const EmailPresenter = require('../../../../../app/presenters/users/internal/setup/email.presenter.js')
+import EmailPresenter from '../../../../../app/presenters/users/internal/setup/email.presenter.js'
 
 describe('Users - Internal - Setup - Email Presenter', () => {
   let session
@@ -14,7 +15,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = EmailPresenter.go(session)
+    const result = EmailPresenter(session)
 
     expect(result).toEqual({
       activeNavBar: 'users',
@@ -35,7 +36,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
       })
 
       it('returns the correct href', () => {
-        const result = EmailPresenter.go(session)
+        const result = EmailPresenter(session)
 
         expect(result.backLink.href).toEqual(`/system/users/internal/setup/${session.id}/check`)
       })
@@ -43,7 +44,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
 
     describe('when the check page has not previously been visited', () => {
       it('returns the correct href', () => {
-        const result = EmailPresenter.go(session)
+        const result = EmailPresenter(session)
 
         expect(result.backLink.href).toEqual('/system/users')
       })
@@ -57,7 +58,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
       })
 
       it('returns the email from the session in lowercase', () => {
-        const result = EmailPresenter.go(session)
+        const result = EmailPresenter(session)
 
         expect(result.email).toEqual('bob@test.com')
       })
@@ -65,7 +66,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
 
     describe('when the email has not previously been saved', () => {
       it('returns an empty string', () => {
-        const result = EmailPresenter.go(session)
+        const result = EmailPresenter(session)
 
         expect(result.email).toBeNull()
       })

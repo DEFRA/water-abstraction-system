@@ -1,13 +1,15 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
-const { generateUUID, today } = require('../../../../app/lib/general.lib.js')
-const { licenceEnds } = require('../../../support/fixtures/licence.fixture.js')
-const { tomorrow } = require('../../../support/general.js')
+import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
+import UsersFixture from '../../../support/fixtures/users.fixture.js'
+import { generateUUID } from '../../../support/generators.js'
+import { today } from '../../../../app/lib/general.lib.js'
+import { tomorrow } from '../../../support/general.js'
 
 // Thing under test
-const LicencesPresenter = require('../../../../app/presenters/users/external/licences.presenter.js')
+import LicencesPresenter from '../../../../app/presenters/users/external/licences.presenter.js'
 
 describe('Users - External - Licences Presenter', () => {
   let back
@@ -27,7 +29,7 @@ describe('Users - External - Licences Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+    const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
     expect(result).toEqual({
       activeNavBar: 'users',
@@ -72,7 +74,7 @@ describe('Users - External - Licences Presenter', () => {
   describe('the "displayLicenceEndedMessage" property', () => {
     describe('when at least one licence has a status of "expired", "revoked" or "lapsed"', () => {
       it('returns "true"', () => {
-        const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+        const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
         expect(result.displayLicenceEndedMessage).toBe(true)
       })
@@ -86,7 +88,7 @@ describe('Users - External - Licences Presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+        const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
         expect(result.displayLicenceEndedMessage).toBe(false)
       })
@@ -97,7 +99,7 @@ describe('Users - External - Licences Presenter', () => {
     describe('when the viewing user has "unlink_licences" in their scope', () => {
       describe('and the external user is the "primary user" on at least one licence', () => {
         it('returns the link to the unlink licences journey', () => {
-          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+          const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
           expect(result.unregisterActionLink).toEqual(`/system/users/external/${user.id}/setup?back=${back}`)
         })
@@ -109,7 +111,7 @@ describe('Users - External - Licences Presenter', () => {
         })
 
         it('returns "null"', () => {
-          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+          const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
           expect(result.unregisterActionLink).toBeNull()
         })
@@ -121,7 +123,7 @@ describe('Users - External - Licences Presenter', () => {
         })
 
         it('returns "null"', () => {
-          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+          const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
           expect(result.unregisterActionLink).toBeNull()
         })
@@ -134,7 +136,7 @@ describe('Users - External - Licences Presenter', () => {
       })
 
       it('returns "null"', () => {
-        const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+        const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
         expect(result.unregisterActionLink).toBeNull()
       })
@@ -146,7 +148,7 @@ function _licence(licenceRef, expiredDate, role) {
   const licenceVersionId = generateUUID()
   const licenceDocumentHeaderId = generateUUID()
 
-  const licence = licenceEnds(expiredDate)
+  const licence = LicenceFixture.licenceEnds(expiredDate)
 
   licence.licenceVersions = [
     {

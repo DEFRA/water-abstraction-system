@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Allocates where applicable the abstracted volumes on the return log with the appropriate charge element
  * @module AllocateReturnsToChargeElementService
  */
 
-const Big = require('big.js')
+import Big from 'big.js'
 
-const { periodsOverlap } = require('../../../lib/general.lib.js')
+import { periodsOverlap } from '../../../lib/general.lib.js'
 
 /**
  * For a chargeElement with matching returns any abstracted volume recorded on the return log will be allocated to the
@@ -21,7 +19,12 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  * @param {module:ChargeVersionModel} chargePeriod - The charge period taken from the charge version
  * @param {module:ChargeReferenceModel} chargeReference - The charge reference the element belongs to
  */
-function go(chargeElement, matchingReturns, chargePeriod, chargeReference) {
+export default function allocateReturnsToChargeElementService(
+  chargeElement,
+  matchingReturns,
+  chargePeriod,
+  chargeReference
+) {
   _processCompletedReturns(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
   const hasDueReturns = matchingReturns.some((matchedReturn) => {
@@ -214,8 +217,4 @@ function _processDueReturns(chargeElement, matchingReturns, chargeReference) {
 
     _allocateDueReturns(chargeElement, matchedReturn, chargeReference, i)
   })
-}
-
-module.exports = {
-  go
 }

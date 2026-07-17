@@ -1,23 +1,21 @@
-'use strict'
-
 /**
  * Formats data for the '/return-logs/{id}/details' page
  * @module DetailsPresenter
  */
 
-const {
+import {
   formatAbstractionPeriod,
   formatLongDate,
   formatNumber,
   formatPurposes,
   formatReturnLogStatus
-} = require('../base.presenter.js')
-const {
+} from '../base.presenter.js'
+import {
   formatMeterDetails,
   generateSummaryTableHeaders,
   generateSummaryTableRows
-} = require('./base-return-logs.presenter.js')
-const { returnRequirementFrequencies, unitNames } = require('../../lib/static-lookups.lib.js')
+} from './base-return-logs.presenter.js'
+import { returnRequirementFrequencies, unitNames } from '../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the '/return-logs/{id}/details' page
@@ -27,7 +25,7 @@ const { returnRequirementFrequencies, unitNames } = require('../../lib/static-lo
  *
  * @returns {object} The data formatted for the view template
  */
-function go(returnLog, auth) {
+export default function detailsPresenter(returnLog, auth) {
   const {
     current,
     endDate,
@@ -285,8 +283,4 @@ function _warning(status, latest) {
   }
 
   return null
-}
-
-module.exports = {
-  go
 }

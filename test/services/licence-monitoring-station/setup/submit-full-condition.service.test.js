@@ -1,20 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceVersionPurposeConditionHelper = require('../../../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import LicenceVersionPurposeConditionHelper from '../../../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub
-const FetchFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const FullConditionService = require('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
+import * as FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FullConditionService from '../../../../app/services/licence-monitoring-station/setup/full-condition.service.js'
 
 // Thing under test
-const SubmitFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js')
+import SubmitFullConditionService from '../../../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js'
 
 describe('Licence Monitoring Station Setup - Submit Full Condition Service', () => {
   let payload
@@ -28,9 +26,9 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
   beforeEach(async () => {
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     const licenceVersionPurpose = await LicenceVersionPurposeHelper.add()
     const licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
@@ -44,7 +42,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
       condition: licenceVersionPurposeCondition.id
     }
 
-    Sinon.stub(FetchFullConditionService, 'go').resolves([
+    vi.spyOn(FetchFullConditionService, 'default').mockResolvedValue([
       {
         ...licenceVersionPurposeCondition,
         abstractionPeriodStartDay: licenceVersionPurpose.abstractionPeriodStartDay,
@@ -54,23 +52,23 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
         displayTitle: 'LICENCE_VERSION_CONDITION_TYPE_DISPLAY_TITLE'
       }
     ])
-    Sinon.stub(FullConditionService, 'go').resolves(pageData)
+    vi.spyOn(FullConditionService, 'default').mockResolvedValue(pageData)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitFullConditionService.go(session.id, payload)
+      await SubmitFullConditionService(session.id, payload)
 
       expect(session.conditionId).toEqual(payload.condition)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('saves the abstraction period', async () => {
-      await SubmitFullConditionService.go(session.id, payload)
+      await SubmitFullConditionService(session.id, payload)
 
       expect(session.abstractionPeriodEndDay).toEqual(31)
       expect(session.abstractionPeriodEndMonth).toEqual(3)
@@ -79,7 +77,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
     })
 
     it('saves the condition display text', async () => {
-      await SubmitFullConditionService.go(session.id, payload)
+      await SubmitFullConditionService(session.id, payload)
 
       expect(session.conditionDisplayText).toEqual(
         'LICENCE_VERSION_CONDITION_TYPE_DISPLAY_TITLE 1: NOTES (Additional information 1: PARAM_1) (Additional information 2: PARAM_2)'
@@ -92,7 +90,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
       })
 
       it('returns true for abstractionPeriod', async () => {
-        const result = await SubmitFullConditionService.go(session.id, payload)
+        const result = await SubmitFullConditionService(session.id, payload)
 
         expect(result).toEqual({ abstractionPeriod: true })
       })
@@ -100,7 +98,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
 
     describe('and a UUID was passed in the payload', () => {
       it('returns false for abstractionPeriod', async () => {
-        const result = await SubmitFullConditionService.go(session.id, payload)
+        const result = await SubmitFullConditionService(session.id, payload)
 
         expect(result).toEqual({ abstractionPeriod: false })
       })
@@ -113,7 +111,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitFullConditionService.go(session.id, payload)
+      const result = await SubmitFullConditionService(session.id, payload)
 
       expect(result).toEqual({
         error: { text: 'Select a condition' },

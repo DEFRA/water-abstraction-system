@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
-const FetchRenewalInvitationRecipientsService = require('../../../../../app/services/notices/setup/renewal-notice/fetch-renewal-invitation-recipients.service.js')
+import FetchRenewalInvitationRecipientsService from '../../../../../app/services/notices/setup/renewal-notice/fetch-renewal-invitation-recipients.service.js'
 
 describe('Notices - Setup - Renewal Notice - Fetch Renewal Invitation Recipients service', () => {
   let scenarios
@@ -24,7 +25,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Renewal Invitation Recipients
     it('returns the licence holder as the recipient', async () => {
       const licenceRef = scenarios.licenceHolder.licenceHolderRecipient.licenceRefs[0]
 
-      const results = await FetchRenewalInvitationRecipientsService.go({ licenceRef })
+      const results = await FetchRenewalInvitationRecipientsService({ licenceRef })
 
       const expectedResult = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 
@@ -36,7 +37,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Renewal Invitation Recipients
     it('returns the primary user as the recipient (not the licence holder)', async () => {
       const licenceRef = scenarios.primaryUser.primaryUserRecipient.licenceRefs[0]
 
-      const results = await FetchRenewalInvitationRecipientsService.go({ licenceRef })
+      const results = await FetchRenewalInvitationRecipientsService({ licenceRef })
 
       const expectedResult = RecipientScenariosSeeder.transformToSendingResults({
         primaryUserRecipient: scenarios.primaryUser.primaryUserRecipient

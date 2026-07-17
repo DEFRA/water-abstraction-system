@@ -1,19 +1,13 @@
-'use strict'
-
 /**
  * Controller for /return-versions endpoints
  * @module ReturnVersionsController
  */
 
-const ViewService = require('../services/return-versions/view.service.js')
+import ViewService from '../services/return-versions/view.service.js'
 
-async function view(request, h) {
+export async function view(request, h) {
   const { id } = request.params
-  const pageData = await ViewService.go(id)
+  const pageData = await ViewService(id)
 
   return h.view('return-versions/view.njk', pageData)
-}
-
-module.exports = {
-  view
 }

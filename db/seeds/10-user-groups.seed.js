@@ -1,14 +1,11 @@
-'use strict'
+import ServerConfig from '../../config/server.config.js'
+import UserGroupModel from '../../app/models/user-group.model.js'
+import { db } from '../db.js'
+import { data as groups } from './data/groups.js'
+import { data as userGroups } from './data/user-groups.js'
+import { data as users } from './data/users.js'
 
-const { db } = require('../db.js')
-const { data: groups } = require('./data/groups.js')
-const UserGroupModel = require('../../app/models/user-group.model.js')
-const { data: userGroups } = require('./data/user-groups.js')
-const { data: users } = require('./data/users.js')
-
-const ServerConfig = require('../../config/server.config.js')
-
-async function seed() {
+export default async function seed() {
   // These user groups relate to users that are only for use in our non-production environments
   if (ServerConfig.environment === 'production') {
     return
@@ -61,8 +58,4 @@ function _names(userGroup) {
   })
 
   return { group, username }
-}
-
-module.exports = {
-  seed
 }

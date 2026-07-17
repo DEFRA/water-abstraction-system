@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for licence_end_date_changes (water.licence_end_date_changes)
  * @module LicenceEndDateChangeModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceModel from './licence.model.js'
 
-class LicenceEndDateChangeModel extends BaseModel {
+export default class LicenceEndDateChangeModel extends BaseModel {
   static get tableName() {
     return 'licenceEndDateChanges'
   }
@@ -18,7 +17,7 @@ class LicenceEndDateChangeModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'licenceEndDateChanges.licenceId',
           to: 'licences.id'
@@ -27,5 +26,3 @@ class LicenceEndDateChangeModel extends BaseModel {
     }
   }
 }
-
-module.exports = LicenceEndDateChangeModel

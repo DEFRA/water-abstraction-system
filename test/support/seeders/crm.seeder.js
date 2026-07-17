@@ -1,25 +1,23 @@
-'use strict'
-
 /**
  * @module CRMSeeder
  */
 
-const BillingAccountHelper = require('../helpers/billing-account.helper.js')
-const ChangeReasonHelper = require('../helpers/change-reason.helper.js')
-const ChargeVersionHelper = require('../helpers/charge-version.helper.js')
-const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
-const CompanyHelper = require('../helpers/company.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
-const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
-const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
-const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
-const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
-const LicenceHelper = require('../helpers/licence.helper.js')
-const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
-const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
-const UserModel = require('../helpers/user.helper.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
+import BillingAccountHelper from '../helpers/billing-account.helper.js'
+import ChangeReasonHelper from '../helpers/change-reason.helper.js'
+import ChargeVersionHelper from '../helpers/charge-version.helper.js'
+import CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
+import CompanyHelper from '../helpers/company.helper.js'
+import ContactHelper from '../../support/helpers/contact.helper.js'
+import LicenceDocumentHeaderHelper from '../helpers/licence-document-header.helper.js'
+import LicenceDocumentHelper from '../../support/helpers/licence-document.helper.js'
+import LicenceDocumentRoleHelper from '../helpers/licence-document-role.helper.js'
+import LicenceEntityHelper from '../helpers/licence-entity.helper.js'
+import LicenceEntityRoleHelper from '../helpers/licence-entity-role.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
+import LicenceVersionHelper from '../helpers/licence-version.helper.js'
+import UserModel from '../helpers/user.helper.js'
+import { generateLicenceRef } from '../generators.js'
 
 /**
  * Seed CRM data
@@ -54,7 +52,7 @@ const { generateLicenceRef } = require('../helpers/licence.helper.js')
  *
  * @returns {object} - all the contacts
  */
-async function seed() {
+export async function seed() {
   // Setup company - The company will be the licence holder
   const company = await _company('Hogwarts')
   const companyId = company.record.id
@@ -474,8 +472,4 @@ async function _returnsUser(companyEntityId, name) {
       await user.$query().delete()
     }
   }
-}
-
-module.exports = {
-  seed
 }

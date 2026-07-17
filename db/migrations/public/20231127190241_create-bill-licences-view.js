@@ -1,8 +1,6 @@
-'use strict'
-
 const viewName = 'bill_licences'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.createView(viewName, (view) => {
     view.as(
       knex('billing_invoice_licences')
@@ -19,6 +17,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.dropViewIfExists(viewName)
 }

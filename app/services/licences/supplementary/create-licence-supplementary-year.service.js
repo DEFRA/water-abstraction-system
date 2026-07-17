@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Creates a licenceSupplementaryYears record based on the provided licence data
  * @module CreateLicenceSupplementaryYearService
  */
 
-const LicenceSupplementaryYearModel = require('../../../models/licence-supplementary-year.model.js')
+import LicenceSupplementaryYearModel from '../../../models/licence-supplementary-year.model.js'
 
 /**
  * Creates a licenceSupplementaryYears record based on the provided licence data
@@ -14,7 +12,7 @@ const LicenceSupplementaryYearModel = require('../../../models/licence-supplemen
  * @param {object[]} financialYearEnds - An array of the financial year ends to be persisted as individual records
  * @param {boolean} twoPartTariff - If there are any two-part tariff indicators on the licence
  */
-async function go(licenceId, financialYearEnds, twoPartTariff) {
+export default async function createLicenceSupplementaryYearService(licenceId, financialYearEnds, twoPartTariff) {
   for (const financialYearEnd of financialYearEnds) {
     const match = await _fetchExistingLicenceSupplementaryYears(licenceId, financialYearEnd, twoPartTariff)
 
@@ -44,8 +42,4 @@ async function _persistSupplementaryBillingYearsData(licenceId, financialYearEnd
     financialYearEnd,
     twoPartTariff
   })
-}
-
-module.exports = {
-  go
 }

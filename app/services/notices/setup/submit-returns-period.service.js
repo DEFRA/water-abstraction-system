@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/notices/setup/returns-period` page
  * @module SubmitReturnsPeriodService
  */
 
-const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ReturnsPeriodPresenter = require('../../../presenters/notices/setup/returns-period.presenter.js')
-const ReturnsPeriodValidator = require('../../../validators/notices/setup/returns-periods.validator.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import DetermineReturnsPeriodService from './determine-returns-period.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReturnsPeriodPresenter from '../../../presenters/notices/setup/returns-period.presenter.js'
+import ReturnsPeriodValidator from '../../../validators/notices/setup/returns-periods.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/returns-period` page
@@ -22,8 +20,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @returns {Promise<object>} An object containing where to redirect to if there are no errors else the page data for the view
  * including the validation error details
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitReturnsPeriodService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload, session.noticeType)
 
@@ -41,7 +39,7 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const formattedData = ReturnsPeriodPresenter.go(session)
+  const formattedData = ReturnsPeriodPresenter(session)
 
   return {
     activeNavBar: 'notices',
@@ -53,7 +51,7 @@ async function go(sessionId, payload, yar) {
 async function _save(session, payload) {
   session.returnsPeriod = payload.returnsPeriod
 
-  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService(session.returnsPeriod)
 
   session.determinedReturnsPeriod = {
     ...returnsPeriod,
@@ -64,11 +62,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, noticeType) {
-  const validationResult = ReturnsPeriodValidator.go(payload, noticeType)
+  const validationResult = ReturnsPeriodValidator(payload, noticeType)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Formats data for a bill licence including its transactions into what is needed for the bill-licence page
  * @module ViewBillLicencePresenter
  */
 
-const { formatMoney } = require('../base.presenter.js')
-const { displayCreditDebitTotals } = require('../billing.presenter.js')
-const ViewCompensationChargeTransactionPresenter = require('./view-compensation-charge-transaction.presenter.js')
-const ViewMinimumChargeTransactionPresenter = require('./view-minimum-charge-transaction.presenter.js')
-const ViewStandardChargeTransactionPresenter = require('./view-standard-charge-transaction.presenter.js')
+import ViewCompensationChargeTransactionPresenter from './view-compensation-charge-transaction.presenter.js'
+import ViewMinimumChargeTransactionPresenter from './view-minimum-charge-transaction.presenter.js'
+import ViewStandardChargeTransactionPresenter from './view-standard-charge-transaction.presenter.js'
+import { displayCreditDebitTotals } from '../billing.presenter.js'
+import { formatMoney } from '../base.presenter.js'
 
 /**
  * Formats data for a bill licence including its transactions into what is needed for the bill-licence page
@@ -20,7 +18,7 @@ const ViewStandardChargeTransactionPresenter = require('./view-standard-charge-t
  * @returns {object} a formatted representation of the bill licence and its transactions specifically for the
  * view bill-licence page
  */
-function go(billLicence) {
+export default function viewBillLicencePresenter(billLicence) {
   const { id: billLicenceId, bill, licenceId, licenceRef, transactions } = billLicence
 
   const { creditTotal, debitTotal, total } = _totals(transactions)
@@ -90,17 +88,13 @@ function _transactions(transactions) {
     const { chargeType } = transaction
 
     if (chargeType === 'minimum_charge') {
-      return ViewMinimumChargeTransactionPresenter.go(transaction)
+      return ViewMinimumChargeTransactionPresenter(transaction)
     }
 
     if (chargeType === 'compensation') {
-      return ViewCompensationChargeTransactionPresenter.go(transaction)
+      return ViewCompensationChargeTransactionPresenter(transaction)
     }
 
-    return ViewStandardChargeTransactionPresenter.go(transaction)
+    return ViewStandardChargeTransactionPresenter(transaction)
   })
-}
-
-module.exports = {
-  go
 }

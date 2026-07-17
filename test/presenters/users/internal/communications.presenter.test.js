@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
+import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Thing under test
-const CommunicationsPresenter = require('../../../../app/presenters/users/internal/communications.presenter.js')
+import CommunicationsPresenter from '../../../../app/presenters/users/internal/communications.presenter.js'
 
 describe('Users - Internal - Communications presenter', () => {
   let notifications
@@ -18,7 +19,7 @@ describe('Users - Internal - Communications presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = CommunicationsPresenter.go(user, notifications)
+    const result = CommunicationsPresenter(user, notifications)
 
     expect(result).toEqual({
       backLink: {

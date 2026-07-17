@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Fetches SROC charge versions linked to licences flagged for inclusion in next SROC supplementary billing
  * @module FetchChargeVersionsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const Workflow = require('../../../models/workflow.model.js')
+import ChargeVersionModel from '../../../models/charge-version.model.js'
+import Workflow from '../../../models/workflow.model.js'
 
 /**
  * Fetch all SROC charge versions to be processed as part of supplementary billing
@@ -30,7 +28,7 @@ const Workflow = require('../../../models/workflow.model.js')
  *
  * @returns {Promise<object>} Contains an array of unique licence IDs and array of charge versions to be processed
  */
-async function go(regionId, billingPeriod) {
+export default async function fetchChargeVersionsService(regionId, billingPeriod) {
   const allChargeVersions = await _fetch(regionId, billingPeriod)
 
   return _extractLicenceIdsThenRemoveNonChargeableChargeVersions(allChargeVersions)
@@ -131,8 +129,4 @@ function _extractLicenceIdsThenRemoveNonChargeableChargeVersions(allChargeVersio
   licenceIdsForPeriod = [...new Set(licenceIdsForPeriod)]
 
   return { chargeVersions, licenceIdsForPeriod }
-}
-
-module.exports = {
-  go
 }

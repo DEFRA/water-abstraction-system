@@ -1,36 +1,34 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewContactTypeService = require('../../../../app/services/notices/setup/view-contact-type.service.js')
+import ViewContactTypeService from '../../../../app/services/notices/setup/view-contact-type.service.js'
 
 describe('Notices - Setup - View Contact Type service', () => {
   let session
   let sessionData
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with no saved data', () => {
     beforeEach(() => {
       sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewContactTypeService.go(session.id)
+      const result = await ViewContactTypeService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -55,13 +53,13 @@ describe('Notices - Setup - View Contact Type service', () => {
         referenceCode: 'RINV-CPFRQ4'
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewContactTypeService.go(session.id)
+      const result = await ViewContactTypeService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -86,13 +84,13 @@ describe('Notices - Setup - View Contact Type service', () => {
         referenceCode: 'RINV-CPFRQ4'
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewContactTypeService.go(session.id)
+      const result = await ViewContactTypeService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

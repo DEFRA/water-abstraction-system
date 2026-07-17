@@ -1,13 +1,13 @@
-'use strict'
-
 /**
  * Model for licence_documents (crm_v2.documents)
  * @module LicenceDocumentModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceDocumentRoleModel from './licence-document-role.model.js'
+import LicenceModel from './licence.model.js'
 
 /**
  * Represents an instance of a licence document record
@@ -25,7 +25,7 @@ const BaseModel = require('./base.model.js')
  * So, `licence_documents` is a less detailed copy of `licences` but with a different ID. We can't have two tables
  * called `licences`, nor can we think of a better name. So, LicenceDocument it is! ¯\_(ツ)_/¯
  */
-class LicenceDocumentModel extends BaseModel {
+export default class LicenceDocumentModel extends BaseModel {
   static get tableName() {
     return 'licenceDocuments'
   }
@@ -34,7 +34,7 @@ class LicenceDocumentModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'licenceDocuments.licenceRef',
           to: 'licences.licenceRef'
@@ -42,7 +42,7 @@ class LicenceDocumentModel extends BaseModel {
       },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-document-role.model',
+        modelClass: LicenceDocumentRoleModel,
         join: {
           from: 'licenceDocuments.id',
           to: 'licenceDocumentRoles.licenceDocumentId'
@@ -51,5 +51,3 @@ class LicenceDocumentModel extends BaseModel {
     }
   }
 }
-
-module.exports = LicenceDocumentModel

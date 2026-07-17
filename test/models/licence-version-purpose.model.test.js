@@ -1,24 +1,25 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
-const LicenceVersionModel = require('../../app/models/licence-version.model.js')
-const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
-const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposePointHelper = require('../support/helpers/licence-version-purpose-point.helper.js')
-const LicenceVersionPurposePointModel = require('../../app/models/licence-version-purpose-point.model.js')
-const PointHelper = require('../support/helpers/point.helper.js')
-const PointModel = require('../../app/models/point.model.js')
-const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
-const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
-const PurposeHelper = require('../support/helpers/purpose.helper.js')
-const PurposeModel = require('../../app/models/purpose.model.js')
-const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
-const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
+import LicenceVersionHelper from '../support/helpers/licence-version.helper.js'
+import LicenceVersionModel from '../../app/models/licence-version.model.js'
+import LicenceVersionPurposeConditionHelper from '../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionModel from '../../app/models/licence-version-purpose-condition.model.js'
+import LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposePointHelper from '../support/helpers/licence-version-purpose-point.helper.js'
+import LicenceVersionPurposePointModel from '../../app/models/licence-version-purpose-point.model.js'
+import PointHelper from '../support/helpers/point.helper.js'
+import PointModel from '../../app/models/point.model.js'
+import PrimaryPurposeHelper from '../support/helpers/primary-purpose.helper.js'
+import PrimaryPurposeModel from '../../app/models/primary-purpose.model.js'
+import PurposeHelper from '../support/helpers/purpose.helper.js'
+import PurposeModel from '../../app/models/purpose.model.js'
+import SecondaryPurposeHelper from '../support/helpers/secondary-purpose.helper.js'
+import SecondaryPurposeModel from '../../app/models/secondary-purpose.model.js'
 
 // Thing under test
-const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
+import LicenceVersionPurposeModel from '../../app/models/licence-version-purpose.model.js'
 
 describe('Licence Version Purpose model', () => {
   let primaryPurposeId

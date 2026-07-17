@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/fao` page
  *
  * @module SubmitFAOService
  */
 
-const FAOPresenter = require('../../../presenters/billing-accounts/setup/fao.presenter.js')
-const FAOValidator = require('../../../validators/billing-accounts/setup/fao.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FAOPresenter from '../../../presenters/billing-accounts/setup/fao.presenter.js'
+import FAOValidator from '../../../validators/billing-accounts/setup/fao.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/fao` page
@@ -19,8 +17,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitFaoService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -32,7 +30,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = FAOPresenter.go(session)
+  const pageData = FAOPresenter(session)
 
   return {
     error: validationResult,
@@ -75,11 +73,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = FAOValidator.go(payload)
+  const validationResult = FAOValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

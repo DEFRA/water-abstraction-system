@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/factors' page
  * @module ViewFactorsService
  */
 
-const FactorsPresenter = require('../../../presenters/bill-runs/review/factors.presenter.js')
-const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
+import FactorsPresenter from '../../../presenters/bill-runs/review/factors.presenter.js'
+import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
 
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/factors' page
@@ -15,17 +13,13 @@ const FetchReviewChargeReferenceService = require('./fetch-review-charge-referen
  *
  * @returns {Promise<object>} the 'pageData' needed for the review charge reference factors page
  */
-async function go(reviewChargeReferenceId) {
-  const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
+export default async function viewFactorsService(reviewChargeReferenceId) {
+  const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
 
-  const pageData = FactorsPresenter.go(reviewChargeReference)
+  const pageData = FactorsPresenter(reviewChargeReference)
 
   return {
     activeNavBar: 'bill-runs',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

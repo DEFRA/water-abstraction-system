@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Determines if an existing bill run matches the one a user is trying to setup
  * @module SubmitCheckService
  */
 
-const AllowedBillRunPresenter = require('../../../presenters/bill-runs/setup/check/allowed-bill-run.presenter.js')
-const BlockedBillRunPresenter = require('../../../../app/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js')
-const CreateService = require('./create.service.js')
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const DetermineBlockingBillRunService = require('./determine-blocking-bill-run.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NoAnnualBillRunPresenter = require('../../../presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js')
-const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
+import AllowedBillRunPresenter from '../../../presenters/bill-runs/setup/check/allowed-bill-run.presenter.js'
+import BlockedBillRunPresenter from '../../../../app/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js'
+import CreateService from './create.service.js'
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
+import DetermineBlockingBillRunService from './determine-blocking-bill-run.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NoAnnualBillRunPresenter from '../../../presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js'
+import { engineTriggers } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Determines if an existing bill run matches the one a user is trying to setup
@@ -40,18 +38,18 @@ const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
  * If the bill run is supplementary and 2 matches are found it returns the most recent match formatted for use in the
  * '/exists' page.
  */
-async function go(sessionId, auth) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitCheckService(sessionId, auth) {
+  const session = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(session.id)
+  await DeleteSessionDal(session.id)
 
-  const blockingResults = await DetermineBlockingBillRunService.go(session)
+  const blockingResults = await DetermineBlockingBillRunService(session)
 
   // NOTE: As there is nothing a user can change on the /check page we _should_ never get a POST request from it if a
   // blocking bill run was found. This is just protection against malicious use, or more likely, someone has left the
   // page idle and another user has triggered a bill run that now blocks it.
   if (blockingResults.trigger !== engineTriggers.neither) {
-    await CreateService.go(session, blockingResults, auth.credentials.user)
+    await CreateService(session, blockingResults, auth.credentials.user)
 
     return {}
   }
@@ -67,16 +65,12 @@ async function go(sessionId, auth) {
 
 function _formattedData(session, blockingResults) {
   if (blockingResults.toFinancialYearEnding === 0) {
-    return NoAnnualBillRunPresenter.go(session)
+    return NoAnnualBillRunPresenter(session)
   }
 
   if (blockingResults.trigger === engineTriggers.neither) {
-    return BlockedBillRunPresenter.go(session, blockingResults)
+    return BlockedBillRunPresenter(session, blockingResults)
   }
 
-  return AllowedBillRunPresenter.go(session, blockingResults)
-}
-
-module.exports = {
-  go
+  return AllowedBillRunPresenter(session, blockingResults)
 }

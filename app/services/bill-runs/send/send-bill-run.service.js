@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Checks if a bill run can be sent, and if so, updates the status of the bill run to 'sending'
  * @module SendBillRunService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Checks if a bill run can be sent, and if so, updates the status of the bill run to 'sending'
@@ -23,7 +21,7 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<module:BillRunModel>} the bill run including its `externalId` and status
  */
-async function go(billRunId) {
+export default async function sendBillRunService(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   if (billRun.status === 'ready') {
@@ -56,8 +54,4 @@ async function _fetchBillRun(id) {
 
 async function _updateStatus(billRunId) {
   return BillRunModel.query().findById(billRunId).patch({ status: 'sending', updatedAt: timestampForPostgres() })
-}
-
-module.exports = {
-  go
 }

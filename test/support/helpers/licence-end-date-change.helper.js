@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module LicenceEndDateChangeHelper
  */
 
-const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceEndDateChangeModel = require('../../../app/models/licence-end-date-change.model.js')
+import LicenceEndDateChangeModel from '../../../app/models/licence-end-date-change.model.js'
+import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new licence end date change
@@ -54,7 +52,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

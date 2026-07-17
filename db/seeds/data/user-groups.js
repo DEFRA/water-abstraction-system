@@ -1,9 +1,7 @@
-'use strict'
+import { data as groups } from './groups.js'
+import { data as users } from './users.js'
 
-const { data: groups } = require('./groups.js')
-const { data: users } = require('./users.js')
-
-const data = [
+export const data = [
   {
     id: '950706f1-31f7-4af6-aba0-40bfd00a06e0',
     groupId: groups.find((group) => {
@@ -86,7 +84,3 @@ const data = [
     }).userId
   }
 ]
-
-module.exports = {
-  data
-}

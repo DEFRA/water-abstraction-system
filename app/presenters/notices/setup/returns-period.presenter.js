@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/returns-period` page
  * @module ReturnsPeriodPresenter
  */
 
-const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
-const { formatLongDate } = require('../../base.presenter.js')
-const { returnsPeriodText } = require('../base.presenter.js')
-const { today } = require('../../../lib/general.lib.js')
+import { determineUpcomingReturnPeriods } from '../../../lib/return-periods.lib.js'
+import { formatLongDate } from '../../base.presenter.js'
+import { returnsPeriodText } from '../base.presenter.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Formats data for the `/notices/setup/returns-period` page
@@ -18,7 +16,7 @@ const { today } = require('../../../lib/general.lib.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function returnsPeriodPresenter(session) {
   const { checkPageVisited, noticeType, id: sessionId } = session
 
   const savedReturnsPeriod = session.returnsPeriod ?? null
@@ -62,8 +60,4 @@ function _formatReturnPeriod(returnsPeriod, savedReturnsPeriod) {
     },
     checked: returnsPeriod.name === savedReturnsPeriod
   }
-}
-
-module.exports = {
-  go
 }

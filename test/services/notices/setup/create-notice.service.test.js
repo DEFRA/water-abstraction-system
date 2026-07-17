@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const EventModel = require('../../../../app/models/event.model.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import EventModel from '../../../../app/models/event.model.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Thing under test
-const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
+import CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
 
 describe('Notices - Setup - Create Notice service', () => {
   const issuer = 'hello@world.com'
@@ -37,7 +38,7 @@ describe('Notices - Setup - Create Notice service', () => {
   })
 
   it('creates the notice', async () => {
-    const result = await CreateNoticeService.go(noticeData, recipients, issuer)
+    const result = await CreateNoticeService(noticeData, recipients, issuer)
 
     expect(result).toBeInstanceOf(EventModel)
     expect(result).toMatchObject({

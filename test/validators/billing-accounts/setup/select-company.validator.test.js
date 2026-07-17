@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const SelectCompanyValidator = require('../../../../app/validators/billing-accounts/setup/select-company.validator.js')
+import SelectCompanyValidator from '../../../../app/validators/billing-accounts/setup/select-company.validator.js'
 
 describe('Billing Accounts - Setup - Select Company Validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Billing Accounts - Setup - Select Company Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = SelectCompanyValidator.go(payload)
+      const result = SelectCompanyValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +26,7 @@ describe('Billing Accounts - Setup - Select Company Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = SelectCompanyValidator.go(payload)
+      const result = SelectCompanyValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

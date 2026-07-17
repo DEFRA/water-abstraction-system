@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const EmptyBillRunPresenter = require('../../../app/presenters/bill-runs/empty-bill-run.presenter.js')
+import EmptyBillRunPresenter from '../../../app/presenters/bill-runs/empty-bill-run.presenter.js'
 
 describe('Empty Bill Run presenter', () => {
   let billRun
@@ -12,7 +13,7 @@ describe('Empty Bill Run presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = EmptyBillRunPresenter.go(billRun)
+      const result = EmptyBillRunPresenter(billRun)
 
       expect(result).toEqual({
         backLink: '/system/bill-runs',

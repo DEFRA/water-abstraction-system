@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/period-used` page
  * @module SubmitPeriodUsedService
  */
 
-const AllocateSingleVolumeToLinesService = require('./allocate-single-volume-to-lines.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/period-used.presenter.js')
-const PeriodUsedValidator = require('../../../validators/return-logs/setup/period-used.validator.js')
-const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import AllocateSingleVolumeToLinesService from './allocate-single-volume-to-lines.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PeriodUsedPresenter from '../../../presenters/return-logs/setup/period-used.presenter.js'
+import PeriodUsedValidator from '../../../validators/return-logs/setup/period-used.validator.js'
+import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/period-used` page
@@ -27,8 +25,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} If no errors the page data for the period-used page else the validation error details
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitPeriodUsedService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload, session)
 
@@ -95,7 +93,7 @@ async function _save(session, payload) {
 
   _determineAbstractionPeriodDates(session, payload)
 
-  AllocateSingleVolumeToLinesService.go(session)
+  AllocateSingleVolumeToLinesService(session)
 
   return session.$update()
 }
@@ -109,15 +107,11 @@ function _submittedSessionData(session, payload) {
   session.periodUsedToMonth = payload.periodUsedToMonth ?? null
   session.periodUsedToYear = payload.periodUsedToYear ?? null
 
-  return PeriodUsedPresenter.go(session)
+  return PeriodUsedPresenter(session)
 }
 
 function _validate(payload, session) {
-  const validationResult = PeriodUsedValidator.go(payload, session.startDate, session.endDate)
+  const validationResult = PeriodUsedValidator(payload, session.startDate, session.endDate)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

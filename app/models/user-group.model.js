@@ -1,15 +1,15 @@
-'use strict'
-
 /**
  * Model for user_groups (idm.user_groups)
  * @module UserGroupModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import GroupModel from './group.model.js'
+import UserModel from './user.model.js'
 
-class UserGroupModel extends BaseModel {
+export default class UserGroupModel extends BaseModel {
   static get tableName() {
     return 'userGroups'
   }
@@ -18,7 +18,7 @@ class UserGroupModel extends BaseModel {
     return {
       group: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'group.model',
+        modelClass: GroupModel,
         join: {
           from: 'userGroups.groupId',
           to: 'groups.id'
@@ -26,7 +26,7 @@ class UserGroupModel extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'userGroups.userId',
           to: 'users.userId'
@@ -35,5 +35,3 @@ class UserGroupModel extends BaseModel {
     }
   }
 }
-
-module.exports = UserGroupModel

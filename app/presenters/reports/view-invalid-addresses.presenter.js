@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats return invalid addresses data ready for presenting in the view invalid addresses page
  * @module ViewInvalidAddressesPresenter
  */
 
-const { formatDateObjectToISO } = require('../../lib/dates.lib.js')
+import { formatDateObjectToISO } from '../../lib/dates.lib.js'
 
 /**
  * Formats return invalid addresses data ready for presenting in the view invalid addresses page
@@ -14,7 +12,7 @@ const { formatDateObjectToISO } = require('../../lib/dates.lib.js')
  *
  * @returns {object} page data needed by the view template
  */
-function go(invalidAddresses) {
+export default function viewInvalidAddressesPresenter(invalidAddresses) {
   return {
     backLink: { href: '/system/manage', text: 'Go back to manage' },
     invalidAddresses: _formatTableData(invalidAddresses),
@@ -53,8 +51,4 @@ function _formatTableData(invalidAddresses) {
 
 function _line(addressLine) {
   return addressLine ?? ''
-}
-
-module.exports = {
-  go
 }

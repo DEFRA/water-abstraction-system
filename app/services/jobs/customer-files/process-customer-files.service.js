@@ -1,18 +1,12 @@
-'use strict'
-
 /**
  * Updates the last customer file reference and created_at fields for billing accounts whose addresses have been updated
  * @module ProcessCustomerFilesService
  */
 
-const BillingAccount = require('../../../models/billing-account.model.js')
-const ExpandedError = require('../../../errors/expanded.error.js')
-const ViewCustomerFilesRequest = require('../../../requests/charging-module/view-customer-files.request.js')
-const {
-  calculateAndLogTimeTaken,
-  currentTimeInNanoseconds,
-  timestampForPostgres
-} = require('../../../lib/general.lib.js')
+import BillingAccount from '../../../models/billing-account.model.js'
+import ExpandedError from '../../../errors/expanded.error.js'
+import ViewCustomerFilesRequest from '../../../requests/charging-module/view-customer-files.request.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Updates the last customer file reference and created_at fields for billing accounts whose addresses have been updated
@@ -39,7 +33,7 @@ const {
  *
  * @param {number} days - The number of days to look back for customer files
  */
-async function go(days) {
+export default async function processCustomerFilesService(days) {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -104,7 +98,7 @@ function _billingAccounts(customerFiles) {
 }
 
 async function _fetchCustomerFiles(days) {
-  const result = await ViewCustomerFilesRequest.send(days)
+  const result = await ViewCustomerFilesRequest(days)
 
   if (!result.succeeded) {
     throw new ExpandedError('Charging Module view customer files request failed', { days })
@@ -125,8 +119,4 @@ async function _updateBillingAccount(billingAccount) {
     .where((builder) => {
       builder.where('last_transaction_file', '<>', lastTransactionFile).orWhereNull('last_transaction_file')
     })
-}
-
-module.exports = {
-  go
 }

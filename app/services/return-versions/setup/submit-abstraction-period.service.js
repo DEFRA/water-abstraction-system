@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/abstraction-period` page
  * @module SubmitAbstractionPeriodService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
-const AbstractionPeriodPresenter = require('../../../presenters/return-versions/setup/abstraction-period.presenter.js')
-const AbstractionPeriodValidator = require('../../../validators/abstraction-period.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
+import AbstractionPeriodPresenter from '../../../presenters/return-versions/setup/abstraction-period.presenter.js'
+import AbstractionPeriodValidator from '../../../validators/abstraction-period.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/abstraction-period` page
@@ -29,8 +26,8 @@ const GeneralLib = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the abstraction period page including the validation error details
  */
-async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitAbstractionPeriodService(sessionId, requirementIndex, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -38,7 +35,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
+      flashNotification(yar, 'Updated', 'Requirements for returns updated')
     }
 
     return {
@@ -69,15 +66,11 @@ async function _save(session, requirementIndex, payload) {
 function _submittedSessionData(session, requirementIndex, payload) {
   session.requirements[requirementIndex].abstractionPeriod = Object.keys(payload).length > 0 ? payload : null
 
-  return AbstractionPeriodPresenter.go(session, requirementIndex)
+  return AbstractionPeriodPresenter(session, requirementIndex)
 }
 
 function _validate(payload) {
-  const validation = AbstractionPeriodValidator.go(payload)
+  const validation = AbstractionPeriodValidator(payload)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{eventId}/confirmation` page
  * @module ConfirmationPresenter
  */
 
-const { NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/notices/setup/{eventId}/confirmation` page
@@ -14,7 +12,7 @@ const { NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(event) {
+export default function confirmationPresenter(event) {
   const { referenceCode, subtype, id: eventId, metadata } = event
 
   return {
@@ -58,8 +56,4 @@ function _pageTitle(subType) {
   }
 
   return `Returns ${subTypes[subType]} sent`
-}
-
-module.exports = {
-  go
 }

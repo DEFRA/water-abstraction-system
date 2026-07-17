@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const DetermineRelevantLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
+import DetermineRelevantLicenceMonitoringStationsService from '../../../../../app/services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js'
 
 describe('Notices Setup - Abstraction Alerts - Determine relevant licence monitoring stations service', () => {
   let alertType
@@ -36,7 +37,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
   })
 
   it('returns the licence monitoring stations', () => {
-    const result = DetermineRelevantLicenceMonitoringStationsService.go(
+    const result = DetermineRelevantLicenceMonitoringStationsService(
       licenceMonitoringStations,
       selectedLicenceMonitoringStations,
       removedLicenceMonitoringStations,
@@ -51,7 +52,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
       selectedLicenceMonitoringStations = [licenceMonitoringStationOne.thresholdGroup]
     })
     it('returns only the lLicence monitoring stations previously selected', () => {
-      const result = DetermineRelevantLicenceMonitoringStationsService.go(
+      const result = DetermineRelevantLicenceMonitoringStationsService(
         licenceMonitoringStations,
         selectedLicenceMonitoringStations,
         removedLicenceMonitoringStations,
@@ -68,14 +69,14 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
     })
 
     it('returns only the licence monitoring stations previously selected and not removed', () => {
-      const result = DetermineRelevantLicenceMonitoringStationsService.go(
+      const result = DetermineRelevantLicenceMonitoringStationsService(
         licenceMonitoringStations,
         selectedLicenceMonitoringStations,
         removedLicenceMonitoringStations,
         alertType
       )
 
-      expect(result.length).toEqual(2)
+      expect(result).toHaveLength(2)
 
       expect(result).toEqual([licenceMonitoringStationTwo, licenceMonitoringStationThree])
     })
@@ -89,7 +90,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
     })
 
     it('returns the licence monitoring stations (with the reduce type removed)', () => {
-      const result = DetermineRelevantLicenceMonitoringStationsService.go(
+      const result = DetermineRelevantLicenceMonitoringStationsService(
         licenceMonitoringStations,
         selectedLicenceMonitoringStations,
         removedLicenceMonitoringStations,
@@ -110,7 +111,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
       })
 
       it('returns the licence monitoring stations, without the "stop_or_reduce" licence monitoring station', () => {
-        const result = DetermineRelevantLicenceMonitoringStationsService.go(
+        const result = DetermineRelevantLicenceMonitoringStationsService(
           licenceMonitoringStations,
           selectedLicenceMonitoringStations,
           removedLicenceMonitoringStations,
@@ -130,7 +131,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
     })
 
     it('returns the licence monitoring stations (with the reduce type removed)', () => {
-      const result = DetermineRelevantLicenceMonitoringStationsService.go(
+      const result = DetermineRelevantLicenceMonitoringStationsService(
         licenceMonitoringStations,
         selectedLicenceMonitoringStations,
         removedLicenceMonitoringStations,
@@ -151,7 +152,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
       })
 
       it('returns the licence monitoring stations, with "stop_or_reduce" but without the stop type)', () => {
-        const result = DetermineRelevantLicenceMonitoringStationsService.go(
+        const result = DetermineRelevantLicenceMonitoringStationsService(
           licenceMonitoringStations,
           selectedLicenceMonitoringStations,
           removedLicenceMonitoringStations,

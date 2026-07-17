@@ -1,13 +1,11 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
+import * as FetchReturnLogsForLicenceService from '../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
 
 // Thing under test
-const PrepareReturnLogService = require('../../../../app/services/bill-runs/match/prepare-return-logs.service.js')
+import PrepareReturnLogService from '../../../../app/services/bill-runs/match/prepare-return-logs.service.js'
 
 describe('Prepare Return Logs Service', () => {
   const billingPeriod = {
@@ -16,7 +14,7 @@ describe('Prepare Return Logs Service', () => {
   }
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('for a licence', () => {
@@ -31,11 +29,11 @@ describe('Prepare Return Logs Service', () => {
         beforeEach(async () => {
           const returnLog = _testReturnLog()
 
-          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
+          vi.spyOn(FetchReturnLogsForLicenceService, 'default').mockResolvedValue([returnLog])
         })
 
         it('preps the returns correctly', async () => {
-          await PrepareReturnLogService.go(licence, billingPeriod)
+          await PrepareReturnLogService(licence, billingPeriod)
 
           expect(licence.returnLogs[0]).toEqual({
             id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
@@ -94,11 +92,11 @@ describe('Prepare Return Logs Service', () => {
 
           returnLog.returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2023-04-05')
 
-          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
+          vi.spyOn(FetchReturnLogsForLicenceService, 'default').mockResolvedValue([returnLog])
         })
 
         it('flags the return as outside the abstraction period', async () => {
-          await PrepareReturnLogService.go(licence, billingPeriod)
+          await PrepareReturnLogService(licence, billingPeriod)
 
           expect(licence.returnLogs[0].abstractionOutsidePeriod).toBe(true)
         })
@@ -110,11 +108,11 @@ describe('Prepare Return Logs Service', () => {
 
           returnLog.returnSubmissions[0].nilReturn = true
 
-          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
+          vi.spyOn(FetchReturnLogsForLicenceService, 'default').mockResolvedValue([returnLog])
         })
 
         it('flags the return as a nil return', async () => {
-          await PrepareReturnLogService.go(licence, billingPeriod)
+          await PrepareReturnLogService(licence, billingPeriod)
 
           expect(licence.returnLogs[0].nilReturn).toBe(true)
         })
@@ -123,11 +121,11 @@ describe('Prepare Return Logs Service', () => {
 
     describe('when no matching returns exist', () => {
       beforeEach(async () => {
-        Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([])
+        vi.spyOn(FetchReturnLogsForLicenceService, 'default').mockResolvedValue([])
       })
 
       it('assigns no return logs to the licence', async () => {
-        await PrepareReturnLogService.go(licence, billingPeriod)
+        await PrepareReturnLogService(licence, billingPeriod)
 
         expect(licence.returnLogs).toHaveLength(0)
       })

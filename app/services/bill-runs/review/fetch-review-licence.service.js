@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches the selected review licence instance and related data for the two-part tariff review licence page
  * @module FetchReviewLicenceService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ReviewLicenceModel = require('../../../models/review-licence.model.js')
+import ReviewLicenceModel from '../../../models/review-licence.model.js'
 
 /**
  * Fetches the selected review licence instance and associated data for the two-part tariff review licence page
@@ -17,7 +15,7 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * @returns {module:ReviewLicenceModel} the matching `ReviewLicenceModel` instance and related data needed for the
  * two-part tariff review licence page
  */
-async function go(reviewLicenceId) {
+export default async function fetchReviewLicenceService(reviewLicenceId) {
   return _fetch(reviewLicenceId)
 }
 
@@ -136,8 +134,4 @@ async function _fetch(reviewLicenceId) {
             })
         })
     })
-}
-
-module.exports = {
-  go
 }

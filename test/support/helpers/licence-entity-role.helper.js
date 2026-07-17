@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module LicenceEntityRoleHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
+import LicenceEntityRoleModel from '../../../app/models/licence-entity-role.model.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new licence entity role
@@ -55,7 +53,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

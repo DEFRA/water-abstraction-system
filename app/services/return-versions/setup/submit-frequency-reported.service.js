@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/frequency-reported` page
  * @module SubmitFrequencyReportedService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const FrequencyReportedPresenter = require('../../../presenters/return-versions/setup/frequency-reported.presenter.js')
-const FrequencyReportedValidator = require('../../../validators/return-versions/setup/frequency-reported.validator.js')
-const GeneralLib = require('../../../lib/general.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import FrequencyReportedPresenter from '../../../presenters/return-versions/setup/frequency-reported.presenter.js'
+import FrequencyReportedValidator from '../../../validators/return-versions/setup/frequency-reported.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/frequency-reported` page
@@ -29,8 +26,8 @@ const GeneralLib = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the frequency reported page including the validation error details
  */
-async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitFrequencyReportedService(sessionId, requirementIndex, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -38,7 +35,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
+      flashNotification(yar, 'Updated', 'Requirements for returns updated')
     }
 
     return {
@@ -46,7 +43,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     }
   }
 
-  const formattedData = FrequencyReportedPresenter.go(session, requirementIndex)
+  const formattedData = FrequencyReportedPresenter(session, requirementIndex)
 
   return {
     error: validationResult,
@@ -61,11 +58,7 @@ async function _save(session, requirementIndex, payload) {
 }
 
 function _validate(payload) {
-  const validation = FrequencyReportedValidator.go(payload)
+  const validation = FrequencyReportedValidator(payload)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

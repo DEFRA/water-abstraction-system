@@ -1,6 +1,4 @@
-'use strict'
-
-const { countries } = require('../../lib/static-lookups.lib.js')
+import { countries } from '../../lib/static-lookups.lib.js'
 
 /**
  * Generate a list of countries in a format suitable for a select box, with the specified country selected
@@ -12,7 +10,7 @@ const { countries } = require('../../lib/static-lookups.lib.js')
  *
  * @returns {object[]} List of countries in the format { value, selected, text }.
  */
-function countryLookup(selectedCountry = 'select') {
+export function countryLookup(selectedCountry = 'select') {
   const displayCountries = [
     {
       selected: selectedCountry === 'select',
@@ -30,8 +28,4 @@ function countryLookup(selectedCountry = 'select') {
   }
 
   return displayCountries
-}
-
-module.exports = {
-  countryLookup
 }

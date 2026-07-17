@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * General helper methods
  * @module GeneralLib
  */
 
-const Big = require('big.js')
-const { randomInt, randomUUID } = require('node:crypto')
-const { setTimeout } = require('node:timers/promises')
+import Big from 'big.js'
+import { setTimeout } from 'node:timers/promises'
+import { randomInt, randomUUID } from 'node:crypto'
 
-const { returnUnits } = require('./static-lookups.lib.js')
+import { returnUnits } from './static-lookups.lib.js'
 
 const MAX_DECIMAL = 6
 
@@ -35,7 +33,7 @@ const MAX_DECIMAL = 6
  * @param {string} message - the message to log
  * @param {object} [data] - additional data to include with the log output
  */
-function calculateAndLogTimeTaken(startTime, message, data = {}) {
+export function calculateAndLogTimeTaken(startTime, message, data = {}) {
   const endTime = currentTimeInNanoseconds()
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
@@ -73,7 +71,7 @@ function calculateAndLogTimeTaken(startTime, message, data = {}) {
  *
  * @returns {number} The result of the comparison: -1, 0, or 1
  */
-function compareStrings(referenceStr, compareString, options = {}) {
+export function compareStrings(referenceStr, compareString, options = {}) {
   return referenceStr.localeCompare(compareString, 'en', options)
 }
 
@@ -91,7 +89,7 @@ function compareStrings(referenceStr, compareString, options = {}) {
  *
  * @returns {number|null} The converted quantity or null if the quantity is null or undefined
  */
-function convertFromCubicMetres(quantity, units) {
+export function convertFromCubicMetres(quantity, units) {
   if (quantity === null || quantity === undefined) {
     return null
   }
@@ -113,7 +111,7 @@ function convertFromCubicMetres(quantity, units) {
  *
  * @returns {number|null} The converted quantity or null if the quantity is null or undefined
  */
-function convertToCubicMetres(quantity, units) {
+export function convertToCubicMetres(quantity, units) {
   if (quantity === null || quantity === undefined) {
     return null
   }
@@ -141,7 +139,7 @@ function convertToCubicMetres(quantity, units) {
  *
  * @returns {bigint} the current time in nanoseconds
  */
-function currentTimeInNanoseconds() {
+export function currentTimeInNanoseconds() {
   return process.hrtime.bigint()
 }
 
@@ -153,7 +151,7 @@ function currentTimeInNanoseconds() {
  *
  * @returns {object} An object containing a `startDate` and `endDate`
  */
-function determineCurrentFinancialYear() {
+export function determineCurrentFinancialYear() {
   const currentDate = new Date()
   const currentYear = currentDate.getFullYear()
 
@@ -197,7 +195,7 @@ function determineCurrentFinancialYear() {
  * @param {string} [text='Changes made'] - text for the notification
  *
  */
-function flashNotification(yar, titleText = 'Updated', text = 'Changes made') {
+export function flashNotification(yar, titleText = 'Updated', text = 'Changes made') {
   yar.flash('notification', {
     text,
     titleText
@@ -228,7 +226,7 @@ function flashNotification(yar, titleText = 'Updated', text = 'Changes made') {
  *
  * @returns {object} the recently set notification object from the 'flashNotification' function
  */
-function readFlashNotification(yar) {
+export function readFlashNotification(yar) {
   return yar.flash('notification')[0]
 }
 
@@ -250,7 +248,7 @@ function readFlashNotification(yar) {
  *
  * @returns {string} A reference code with a prefix and random string, for example, `RINV-A14GB8`
  */
-function generateNoticeReferenceCode(prefix) {
+export function generateNoticeReferenceCode(prefix) {
   const possible = 'ABCDEFGHJKLMNPQRTUVWXYZ0123456789'
   const length = 6
 
@@ -271,7 +269,7 @@ function generateNoticeReferenceCode(prefix) {
  *
  * @returns a number between min and max (inclusive)
  */
-function generateRandomInteger(min, max) {
+export function generateRandomInteger(min, max) {
   return randomInt(min, max)
 }
 
@@ -291,7 +289,7 @@ function generateRandomInteger(min, max) {
  *
  * @returns {string} a randomly generated UUID
  */
-function generateUUID() {
+export function generateUUID() {
   return randomUUID({ disableEntropyCache: true })
 }
 
@@ -307,7 +305,7 @@ function generateUUID() {
  *
  * @param {number} pauseInMilliseconds - Milliseconds to wait
  */
-async function pause(pauseInMilliseconds) {
+export async function pause(pauseInMilliseconds) {
   await setTimeout(pauseInMilliseconds)
 }
 
@@ -340,7 +338,7 @@ async function pause(pauseInMilliseconds) {
  *
  * @returns {boolean} Returns true if there _any_ check period overlaps with a reference period, else false
  */
-function periodsOverlap(referencePeriods, checkPeriods) {
+export function periodsOverlap(referencePeriods, checkPeriods) {
   for (const referencePeriod of referencePeriods) {
     const overLappingPeriods = checkPeriods.filter((checkPeriod) => {
       return !(checkPeriod.startDate > referencePeriod.endDate || referencePeriod.startDate > checkPeriod.endDate)
@@ -375,7 +373,7 @@ function periodsOverlap(referencePeriods, checkPeriods) {
  *
  * @returns {object[]} - An array of sub-arrays, each containing up to `groupSize` elements.
  */
-function splitArrayIntoGroups(arrayToBeSplit, maxGroupSize) {
+export function splitArrayIntoGroups(arrayToBeSplit, maxGroupSize) {
   const result = []
 
   if (maxGroupSize <= 0) {
@@ -400,7 +398,7 @@ function splitArrayIntoGroups(arrayToBeSplit, maxGroupSize) {
  *
  * @returns {string} The date now as an ISO string, for example `'2023-01-13T18:29:51.682Z'`
  */
-function timestampForPostgres() {
+export function timestampForPostgres() {
   return new Date().toISOString()
 }
 
@@ -417,7 +415,7 @@ function timestampForPostgres() {
  *
  * @returns {Date}
  */
-function today() {
+export function today() {
   const todaysDate = new Date()
 
   todaysDate.setHours(0, 0, 0, 0)
@@ -457,7 +455,8 @@ function today() {
  *
  * @returns {boolean} true if a match else false
  */
-function transactionsMatch(left, right) {
+export function transactionsMatch(left, right) {
+  // NOSONAR: S1541 - a flat chain of equality checks, not nested branching logic
   // When we put together this matching logic our instincts were to try and do something 'better' than this long,
   // chained `&&` statement. But whatever we came up with was
   //
@@ -509,7 +508,7 @@ function transactionsMatch(left, right) {
  * @returns {string[]} - An array of licence numbers as strings.
  *
  */
-function transformStringOfLicencesToArray(licences) {
+export function transformStringOfLicencesToArray(licences) {
   if (!licences) {
     return ['']
   }
@@ -523,25 +522,4 @@ function transformStringOfLicencesToArray(licences) {
     .filter((item) => {
       return item !== ''
     }) // Remove empty strings if any
-}
-
-module.exports = {
-  calculateAndLogTimeTaken,
-  compareStrings,
-  convertFromCubicMetres,
-  convertToCubicMetres,
-  currentTimeInNanoseconds,
-  determineCurrentFinancialYear,
-  flashNotification,
-  readFlashNotification,
-  generateNoticeReferenceCode,
-  generateRandomInteger,
-  generateUUID,
-  pause,
-  periodsOverlap,
-  splitArrayIntoGroups,
-  timestampForPostgres,
-  today,
-  transactionsMatch,
-  transformStringOfLicencesToArray
 }

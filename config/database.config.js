@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Config values used to connect to PostgreSQL
  * @module DatabaseConfig
  */
 
-// We require dotenv directly in each config file to support unit tests that depend on this this subset of config.
-// Requiring dotenv in multiple places has no effect on the app when running for real.
-require('dotenv').config()
+// We import dotenv directly in each config file to support unit tests that depend on this subset of config.
+// Importing dotenv in multiple places has no effect on the app when running for real.
+import 'dotenv/config'
 
-const config = {
+export default {
   host: process.env.POSTGRES_HOST,
   user: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
@@ -21,5 +19,3 @@ const config = {
   // Only used when seeding our dev/test user records
   defaultUserPassword: process.env.DEFAULT_USER_PASSWORD
 }
-
-module.exports = config

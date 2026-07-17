@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 
 // Thing under test
-const FetchPaperReturnsRecipientsService = require('../../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js')
+import FetchPaperReturnsRecipientsService from '../../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients service', () => {
   let download
@@ -41,7 +42,7 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
     })
 
     it('fetches the correct recipient data for sending the notice', async () => {
-      const results = await FetchPaperReturnsRecipientsService.go(session, download)
+      const results = await FetchPaperReturnsRecipientsService(session, download)
 
       // NOTE: Unlike returns invitations and reminders, the notification due date is not determined for a paper return
       // until we generate the notification itself. This is because we send a notification per recipient and return log
@@ -64,7 +65,7 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
     })
 
     it('fetches the correct recipient data for the download', async () => {
-      const results = await FetchPaperReturnsRecipientsService.go(session, download)
+      const results = await FetchPaperReturnsRecipientsService(session, download)
 
       // NOTE: When fetching data for the download, the service _can_ determine the notification due date because each
       // row is distinct to a recipient and return log combination.

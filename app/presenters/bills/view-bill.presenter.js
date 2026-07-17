@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats bill and billing account data ready for presenting in the single licence bill and multi licence bill pages
  * @module ViewBillPresenter
  */
 
-const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
-const { formatBillRunType, formatChargeScheme, displayCreditDebitTotals } = require('../billing.presenter.js')
+import { displayCreditDebitTotals, formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
+import { formatFinancialYear, formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
 
 /**
  * Formats bill and billing account data ready for presenting in the single licence bill and multi licence bill pages
@@ -16,7 +14,7 @@ const { formatBillRunType, formatChargeScheme, displayCreditDebitTotals } = requ
  *
  * @returns {object} page data formatted for the view template
  */
-function go(bill, billingAccount) {
+export default function viewBillPresenter(bill, billingAccount) {
   const { billRun } = bill
   const accountName = billingAccount.$accountName()
 
@@ -89,8 +87,4 @@ function _billTotal(valueInPence, credit) {
   }
 
   return valueAsMoney
-}
-
-module.exports = {
-  go
 }

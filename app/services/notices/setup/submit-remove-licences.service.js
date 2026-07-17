@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the notice setup remove licences page
  * @module SubmitRemoveLicencesService
  */
 
-const FetchLicenceRefsWithDueReturnsService = require('./fetch-licence-refs-with-due-returns.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remove-licences.presenter.js')
-const RemoveLicencesValidator = require('../../../validators/notices/setup/remove-licences.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchLicenceRefsWithDueReturnsService from './fetch-licence-refs-with-due-returns.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RemoveLicencesPresenter from '../../../presenters/notices/setup/remove-licences.presenter.js'
+import RemoveLicencesValidator from '../../../validators/notices/setup/remove-licences.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the notice setup remove licences page
@@ -20,15 +18,15 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @returns {Promise<object>} An object containing where to redirect to if there are no errors else the page data for the view
  * including the validation error details
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitRemoveLicencesService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const licenceRefsWithDueReturns = await _fetchLicenceRefsWithDueReturns(session)
 
   const validationResult = _validate(payload, licenceRefsWithDueReturns)
 
   if (validationResult) {
-    const formattedData = RemoveLicencesPresenter.go(payload.removeLicences, session)
+    const formattedData = RemoveLicencesPresenter(payload.removeLicences, session)
 
     return {
       activeNavBar: 'notices',
@@ -47,7 +45,7 @@ async function go(sessionId, payload) {
 async function _fetchLicenceRefsWithDueReturns(session) {
   const { determinedReturnsPeriod, noticeType } = session
 
-  return FetchLicenceRefsWithDueReturnsService.go(determinedReturnsPeriod, noticeType)
+  return FetchLicenceRefsWithDueReturnsService(determinedReturnsPeriod, noticeType)
 }
 
 async function _save(session, payload) {
@@ -57,11 +55,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, validLicences) {
-  const validationResult = RemoveLicencesValidator.go(payload, validLicences)
+  const validationResult = RemoveLicencesValidator(payload, validLicences)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

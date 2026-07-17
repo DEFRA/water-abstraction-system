@@ -1,22 +1,24 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_OK, HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
-const { generateUUID } = require('../../app/lib/general.lib.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { generateUUID } from '../support/generators.js'
 
 // Things we need to stub
-const ViewBillingAccountsService = require('../../app/services/companies/view-billing-accounts.service.js')
-const ViewCompanyService = require('../../app/services/companies/view-company.service.js')
-const ViewCompanyWithAddressService = require('../../app/services/companies/view-company-with-address.service.js')
-const ViewContactsService = require('../../app/services/companies/view-contacts.service.js')
-const ViewHistoryService = require('../../app/services/companies/view-history.service.js')
-const ViewLicencesService = require('../../app/services/companies/view-licences.service.js')
+import * as ViewBillingAccountsService from '../../app/services/companies/view-billing-accounts.service.js'
+import * as ViewCompanyService from '../../app/services/companies/view-company.service.js'
+import * as ViewCompanyWithAddressService from '../../app/services/companies/view-company-with-address.service.js'
+import * as ViewContactsService from '../../app/services/companies/view-contacts.service.js'
+import * as ViewHistoryService from '../../app/services/companies/view-history.service.js'
+import * as ViewLicencesService from '../../app/services/companies/view-licences.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_OK, HTTP_STATUS_NOT_FOUND } = http2.constants
 
 describe('Companies controller', () => {
   let options
@@ -28,16 +30,15 @@ describe('Companies controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -58,7 +59,7 @@ describe('Companies controller', () => {
           }
         }
 
-        Sinon.stub(ViewCompanyService, 'go').returns({ pageTitle: 'Licence holder' })
+        vi.spyOn(ViewCompanyService, 'default').mockReturnValue({ pageTitle: 'Licence holder' })
       })
 
       it('returns the page successfully', async () => {
@@ -84,7 +85,7 @@ describe('Companies controller', () => {
           }
         }
 
-        Sinon.stub(ViewCompanyWithAddressService, 'go').returns({ pageTitle: 'Licence holder' })
+        vi.spyOn(ViewCompanyWithAddressService, 'default').mockReturnValue({ pageTitle: 'Licence holder' })
       })
 
       it('returns the page successfully', async () => {
@@ -109,7 +110,10 @@ describe('Companies controller', () => {
             }
           }
 
-          Sinon.stub(ViewBillingAccountsService, 'go').returns({ pageTitle: 'Billing accounts', roles: ['billing'] })
+          vi.spyOn(ViewBillingAccountsService, 'default').mockReturnValue({
+            pageTitle: 'Billing accounts',
+            roles: ['billing']
+          })
         })
 
         it('returns the page successfully', async () => {
@@ -131,7 +135,7 @@ describe('Companies controller', () => {
             }
           }
 
-          Sinon.stub(ViewBillingAccountsService, 'go').returns({ pageTitle: 'Billing accounts', roles: [] })
+          vi.spyOn(ViewBillingAccountsService, 'default').mockReturnValue({ pageTitle: 'Billing accounts', roles: [] })
         })
 
         it('returns "page not found"', async () => {
@@ -156,7 +160,7 @@ describe('Companies controller', () => {
           }
         }
 
-        Sinon.stub(ViewContactsService, 'go').returns({ pageTitle: 'Contacts', roles: [] })
+        vi.spyOn(ViewContactsService, 'default').mockReturnValue({ pageTitle: 'Contacts', roles: [] })
       })
 
       it('returns the page successfully', async () => {
@@ -180,7 +184,7 @@ describe('Companies controller', () => {
           }
         }
 
-        Sinon.stub(ViewHistoryService, 'go').returns({ pageTitle: 'History', roles: [] })
+        vi.spyOn(ViewHistoryService, 'default').mockReturnValue({ pageTitle: 'History', roles: [] })
       })
 
       it('returns the page successfully', async () => {
@@ -204,7 +208,7 @@ describe('Companies controller', () => {
           }
         }
 
-        Sinon.stub(ViewLicencesService, 'go').returns({ pageTitle: 'Licences', roles: [] })
+        vi.spyOn(ViewLicencesService, 'default').mockReturnValue({ pageTitle: 'Licences', roles: [] })
       })
 
       it('returns the page successfully', async () => {

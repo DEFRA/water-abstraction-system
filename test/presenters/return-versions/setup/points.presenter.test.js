@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const PointModel = require('../../../../app/models/point.model.js')
+import PointModel from '../../../../app/models/point.model.js'
 
 // Thing under test
-const PointsPresenter = require('../../../../app/presenters/return-versions/setup/points.presenter.js')
+import PointsPresenter from '../../../../app/presenters/return-versions/setup/points.presenter.js'
 
 describe('Return Versions Setup - Points presenter', () => {
   const requirementIndex = 0
@@ -35,7 +36,7 @@ describe('Return Versions Setup - Points presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = PointsPresenter.go(session, requirementIndex, points)
+      const result = PointsPresenter(session, requirementIndex, points)
 
       expect(result).toEqual({
         backLink: {
@@ -75,7 +76,7 @@ describe('Return Versions Setup - Points presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = PointsPresenter.go(session, requirementIndex, points)
+        const result = PointsPresenter(session, requirementIndex, points)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -86,7 +87,7 @@ describe('Return Versions Setup - Points presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "purpose" page', () => {
-        const result = PointsPresenter.go(session, requirementIndex, points)
+        const result = PointsPresenter(session, requirementIndex, points)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
@@ -103,7 +104,7 @@ describe('Return Versions Setup - Points presenter', () => {
       })
 
       it('returns a At "National Grid Reference ..." point', () => {
-        const result = PointsPresenter.go(session, requirementIndex, points)
+        const result = PointsPresenter(session, requirementIndex, points)
 
         expect(result.licencePoints).toEqual([
           {
@@ -120,7 +121,7 @@ describe('Return Versions Setup - Points presenter', () => {
       })
 
       it('returns a "Between National Grid References ..." point', () => {
-        const result = PointsPresenter.go(session, requirementIndex, points)
+        const result = PointsPresenter(session, requirementIndex, points)
 
         expect(result.licencePoints).toEqual([
           {
@@ -138,7 +139,7 @@ describe('Return Versions Setup - Points presenter', () => {
       })
 
       it('returns a "Within the area formed by the straight lines running between National Grid References ..." point', () => {
-        const result = PointsPresenter.go(session, requirementIndex, points)
+        const result = PointsPresenter(session, requirementIndex, points)
 
         expect(result.licencePoints).toEqual([
           {
@@ -161,7 +162,7 @@ describe('Return Versions Setup - Points presenter', () => {
       })
 
       it('returns a string containing the selected points concatenated', () => {
-        const result = PointsPresenter.go(session, requirementIndex, points)
+        const result = PointsPresenter(session, requirementIndex, points)
 
         expect(result.selectedPointIds).toEqual(
           'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6,1c925e6c-a788-4a56-9c1e-ebb46c83ef73'
@@ -171,7 +172,7 @@ describe('Return Versions Setup - Points presenter', () => {
 
     describe('when the user has not previously submitted a point', () => {
       it('returns an empty string', () => {
-        const result = PointsPresenter.go(session, requirementIndex, points)
+        const result = PointsPresenter(session, requirementIndex, points)
 
         expect(result.selectedPointIds).toEqual('')
       })

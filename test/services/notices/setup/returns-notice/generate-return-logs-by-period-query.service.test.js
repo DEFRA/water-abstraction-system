@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { db } = require('../../../../../db/db.js')
-const { NoticeType } = require('../../../../../app/lib/static-lookups.lib.js')
+import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import { db } from '../../../../../db/db.js'
 
 // Thing under test
-const GenerateReturnLogsByPeriodQueryService = require('../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-period-query.service.js')
+import GenerateReturnLogsByPeriodQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-period-query.service.js'
 
 describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Query Service', () => {
   let licencesToExclude
@@ -64,7 +65,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
       })
 
       it('returns the expected query and bindings', () => {
-        const result = GenerateReturnLogsByPeriodQueryService.go(noticeType, licencesToExclude, returnsPeriod)
+        const result = GenerateReturnLogsByPeriodQueryService(noticeType, licencesToExclude, returnsPeriod)
 
         expect(result).toEqual({
           bindings: [
@@ -105,7 +106,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
       })
 
       it('returns the expected query and bindings', () => {
-        const result = GenerateReturnLogsByPeriodQueryService.go(noticeType, licencesToExclude, returnsPeriod)
+        const result = GenerateReturnLogsByPeriodQueryService(noticeType, licencesToExclude, returnsPeriod)
 
         expect(result).toEqual({
           bindings: [
@@ -152,7 +153,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
         })
 
         it('returns the expected return logs', async () => {
-          const { bindings, query } = GenerateReturnLogsByPeriodQueryService.go(
+          const { bindings, query } = GenerateReturnLogsByPeriodQueryService(
             noticeType,
             licencesToExclude,
             returnsPeriod
@@ -180,7 +181,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
         })
 
         it('returns the expected return logs', async () => {
-          const { bindings, query } = GenerateReturnLogsByPeriodQueryService.go(
+          const { bindings, query } = GenerateReturnLogsByPeriodQueryService(
             noticeType,
             licencesToExclude,
             returnsPeriod
@@ -212,7 +213,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
         })
 
         it('returns the expected return logs', async () => {
-          const { bindings, query } = GenerateReturnLogsByPeriodQueryService.go(
+          const { bindings, query } = GenerateReturnLogsByPeriodQueryService(
             noticeType,
             licencesToExclude,
             returnsPeriod
@@ -240,7 +241,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
         })
 
         it('returns the expected return logs', async () => {
-          const { bindings, query } = GenerateReturnLogsByPeriodQueryService.go(
+          const { bindings, query } = GenerateReturnLogsByPeriodQueryService(
             noticeType,
             licencesToExclude,
             returnsPeriod

@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Things we need to stub
-const FetchRemoveReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js')
+import * as FetchRemoveReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js'
 
 // Thing under test
-const ViewRemoveService = require('../../../../app/services/bill-runs/review/view-remove.service.js')
+import ViewRemoveService from '../../../../app/services/bill-runs/review/view-remove.service.js'
 
 describe('Bill Runs - Review - View Remove service', () => {
   let removeReviewLicence
@@ -18,16 +16,16 @@ describe('Bill Runs - Review - View Remove service', () => {
   beforeEach(() => {
     removeReviewLicence = BillRunsReviewFixture.removeReviewLicence()
 
-    Sinon.stub(FetchRemoveReviewLicenceService, 'go').resolves(removeReviewLicence)
+    vi.spyOn(FetchRemoveReviewLicenceService, 'default').mockResolvedValue(removeReviewLicence)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewRemoveService.go(removeReviewLicence.id)
+      const result = await ViewRemoveService(removeReviewLicence.id)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',

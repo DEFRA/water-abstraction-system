@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const DetermineNextVersionNumberDal = require('../../../app/dal/return-versions/determine-next-version-number.dal.js')
+import DetermineNextVersionNumberDal from '../../../app/dal/return-versions/determine-next-version-number.dal.js'
 
 describe('DAL - Return Versions - Determine Next Version Number dal', () => {
   let licenceId
@@ -25,7 +26,7 @@ describe('DAL - Return Versions - Determine Next Version Number dal', () => {
 
   describe('when no return versions exist for the licence', () => {
     it('returns "1" as the next version number', async () => {
-      const result = await DetermineNextVersionNumberDal.go(licenceId)
+      const result = await DetermineNextVersionNumberDal(licenceId)
 
       expect(result).toEqual(1)
     })
@@ -40,7 +41,7 @@ describe('DAL - Return Versions - Determine Next Version Number dal', () => {
     })
 
     it('returns the next version number', async () => {
-      const result = await DetermineNextVersionNumberDal.go(licenceId)
+      const result = await DetermineNextVersionNumberDal(licenceId)
 
       expect(result).toEqual(3)
     })

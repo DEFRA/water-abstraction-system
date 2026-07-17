@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the licence and related conditions data for the licence conditions page
  * @module ConditionsPresenter
  */
 
-const { formatConditionTypes } = require('../licence.presenter.js')
-const { pluralise } = require('./base-licences.presenter.js')
+import { formatConditionTypes } from '../licence.presenter.js'
+import { pluralise } from './base-licences.presenter.js'
 
 /**
  * Formats the licence and related conditions data for the licence conditions page
@@ -16,7 +14,7 @@ const { pluralise } = require('./base-licences.presenter.js')
  *
  * @returns {object} licence and conditions data needed by the view template
  */
-function go(conditions, licence) {
+export default function conditionsPresenter(conditions, licence) {
   const { id: licenceId, licenceRef } = licence
   const conditionTypes = formatConditionTypes(conditions)
 
@@ -34,8 +32,4 @@ function go(conditions, licence) {
       iconFallbackText: 'Warning'
     }
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,12 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const LicencesPresenter = require('../../../../app/presenters/company-contacts/setup/licences.presenter.js')
+import LicencesPresenter from '../../../../app/presenters/company-contacts/setup/licences.presenter.js'
 
 describe('Company Contacts - Setup - Licences Presenter', () => {
   let company
@@ -26,7 +26,7 @@ describe('Company Contacts - Setup - Licences Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = LicencesPresenter.go(session)
+      const result = LicencesPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -52,7 +52,7 @@ describe('Company Contacts - Setup - Licences Presenter', () => {
         })
 
         it('returns the matching licence as checked', () => {
-          const result = LicencesPresenter.go(session)
+          const result = LicencesPresenter(session)
 
           expect(result.licences).toEqual([
             {

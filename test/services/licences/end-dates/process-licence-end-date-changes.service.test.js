@@ -1,64 +1,59 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceEndDateChangeHelper = require('../../../support/helpers/licence-end-date-change.helper.js')
+import LicenceEndDateChangeHelper from '../../../support/helpers/licence-end-date-change.helper.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const LicenceEndDateChangeModel = require('../../../../app/models/licence-end-date-change.model.js')
-const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
-const ProcessLicenceReturnLogsService = require('../../../../app/services/return-logs/process-licence-return-logs.service.js')
+import * as ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
+import * as ProcessLicenceReturnLogsService from '../../../../app/services/return-logs/process-licence-return-logs.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import LicenceEndDateChangeModel from '../../../../app/models/licence-end-date-change.model.js'
 
 // Thing under test
-const ProcessLicenceEndDateChangesService = require('../../../../app/services/licences/end-dates/process-licence-end-date-changes.service.js')
+import ProcessLicenceEndDateChangesService from '../../../../app/services/licences/end-dates/process-licence-end-date-changes.service.js'
 
 describe('Licences - End Dates - Process Licence End Date Changes service', () => {
   let licenceEndDateChange
   let notifierStub
-  let processBillingFlagsStub
-  let processReturnLogsStub
-
   beforeEach(async () => {
     licenceEndDateChange = await LicenceEndDateChangeHelper.add()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when processing the licence end date changes', () => {
     beforeEach(() => {
-      processBillingFlagsStub = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
-      processReturnLogsStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
+      vi.spyOn(ProcessBillingFlagService, 'default').mockResolvedValue()
+      vi.spyOn(ProcessLicenceReturnLogsService, 'default').mockResolvedValue()
     })
 
     it('processes the changed licence for supplementary billing flags', async () => {
-      await ProcessLicenceEndDateChangesService.go()
+      await ProcessLicenceEndDateChangesService()
 
-      expect(processBillingFlagsStub.called).toBe(true)
+      expect(ProcessBillingFlagService.default).toHaveBeenCalled()
     })
 
     describe('and the app is managing "requirements for returns"', () => {
       it('processes the changed licence for reissuing return logs', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
-        expect(processReturnLogsStub.called).toBe(true)
+        expect(ProcessLicenceReturnLogsService.default).toHaveBeenCalled()
       })
     })
 
     describe('and when the processing is complete', () => {
       it('deletes the licence end date change record', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
         const result = await LicenceEndDateChangeModel.query().findById(licenceEndDateChange.id)
 
@@ -66,11 +61,11 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       })
 
       it('logs the completed licence change', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
-        const logDataArg = notifierStub.omg.firstCall.args[1]
+        const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg.calledWith('Process licence end date change complete')).toBe(true)
+        expect(notifierStub.omg).toHaveBeenCalledWith('Process licence end date change complete', expect.any(Object))
         expect(logDataArg).toEqual({
           id: licenceEndDateChange.id,
           licenceId: licenceEndDateChange.licenceId,
@@ -82,11 +77,11 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
-        const logDataArg = notifierStub.omg.secondCall.args[1]
+        const logDataArg = notifierStub.omg.mock.calls[1][1]
 
-        expect(notifierStub.omg.calledWith('Process licence end date changes complete')).toBe(true)
+        expect(notifierStub.omg).toHaveBeenCalledWith('Process licence end date changes complete', expect.any(Object))
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.count).toBeDefined()
@@ -97,15 +92,19 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
   describe('when there is an error', () => {
     describe('during the processing of a licence', () => {
       beforeEach(() => {
-        processBillingFlagsStub = Sinon.stub(ProcessBillingFlagService, 'go').rejects()
+        vi.spyOn(ProcessBillingFlagService, 'default').mockRejectedValue(new Error())
       })
 
       it('handles the error', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
-        const errorLogArgs = notifierStub.omfg.firstCall.args
+        const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-        expect(notifierStub.omfg.calledWith('Process licence end date change failed')).toBe(true)
+        expect(notifierStub.omfg).toHaveBeenCalledWith(
+          'Process licence end date change failed',
+          expect.any(Object),
+          expect.any(Error)
+        )
         expect(errorLogArgs[1]).toEqual({
           id: licenceEndDateChange.id,
           licenceId: licenceEndDateChange.licenceId,
@@ -120,17 +119,21 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
     describe('trying to fetch the licence end date changes', () => {
       beforeEach(() => {
-        Sinon.stub(LicenceEndDateChangeModel, 'query').returns({
-          select: Sinon.stub().rejects()
+        vi.spyOn(LicenceEndDateChangeModel, 'query').mockReturnValue({
+          select: vi.fn().mockRejectedValue(new Error())
         })
       })
 
       it('handles the error', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
-        const errorLogArgs = notifierStub.omfg.firstCall.args
+        const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-        expect(notifierStub.omfg.calledWith('Process licence end date changes failed')).toBe(true)
+        expect(notifierStub.omfg).toHaveBeenCalledWith(
+          'Process licence end date changes failed',
+          expect.any(Object),
+          expect.any(Error)
+        )
         expect(errorLogArgs[1]).toBeNull()
         expect(errorLogArgs[2]).toBeInstanceOf(Error)
       })

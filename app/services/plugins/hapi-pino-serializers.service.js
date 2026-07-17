@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Used by HapiPinoPlugin to customise the log output for the `req` and `res` objects returned by pino
  * @module HapiPinoSerializersService
@@ -81,7 +79,7 @@
  *
  * @returns {object} an object containing functions to serialize the `req` and `res` objects returned by pino
  */
-function go() {
+export default function hapiPinoSerializersService() {
   return {
     req: _req,
     res: _res
@@ -126,8 +124,4 @@ function _res(res) {
   return {
     statusCode: res.statusCode
   }
-}
-
-module.exports = {
-  go
 }

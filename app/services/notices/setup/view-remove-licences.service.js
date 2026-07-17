@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the licences to remove for the notices setup remove licences page
  * @module ViewRemoveLicencesService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remove-licences.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RemoveLicencesPresenter from '../../../presenters/notices/setup/remove-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the licences to remove for the notices setup remove licences page
@@ -15,19 +13,15 @@ const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remov
  *
  * @returns {Promise<object>} The view data for the remove licences page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewRemoveLicencesService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
   const { removeLicences = [] } = session
 
-  const formattedData = RemoveLicencesPresenter.go(removeLicences, session)
+  const formattedData = RemoveLicencesPresenter(removeLicences, session)
 
   return {
     activeNavBar: 'notices',
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

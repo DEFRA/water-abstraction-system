@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module ReviewChargeReferenceHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const ReviewChargeReferenceModel = require('../../../app/models/review-charge-reference.model.js')
+import ReviewChargeReferenceModel from '../../../app/models/review-charge-reference.model.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new review charge reference record for 2pt matching
@@ -49,7 +47,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

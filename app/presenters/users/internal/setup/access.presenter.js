@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/access' page
  * @module AccessPresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function accessPresenter(session) {
   const { access, id: sessionId } = session
 
   return {
@@ -25,8 +23,4 @@ function go(session) {
     pageTitle: 'Select access for the user',
     pageTitleCaption: 'Internal'
   }
-}
-
-module.exports = {
-  go
 }

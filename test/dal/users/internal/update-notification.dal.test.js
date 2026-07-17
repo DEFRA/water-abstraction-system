@@ -1,12 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const NotificationHelper = require('../../../support/helpers/notification.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateUserName } = require('../../../support/helpers/user.helper.js')
+import NotificationHelper from '../../../support/helpers/notification.helper.js'
+import { generateUUID, generateUserName } from '../../../support/generators.js'
 
 // Thing under test
-const UpdateNotificationDal = require('../../../../app/dal/users/internal/update-notification.dal.js')
+import UpdateNotificationDal from '../../../../app/dal/users/internal/update-notification.dal.js'
 
 describe('Users - Internal - Update Notification DAL', () => {
   let notification
@@ -38,7 +38,7 @@ describe('Users - Internal - Update Notification DAL', () => {
     })
 
     it('updates the notification with the send result details', async () => {
-      await UpdateNotificationDal.go(notification, sendResult)
+      await UpdateNotificationDal(notification, sendResult)
 
       const result = await notification.$query()
 
@@ -80,7 +80,7 @@ describe('Users - Internal - Update Notification DAL', () => {
     })
 
     it('updates the notification with the error details and failed status', async () => {
-      await UpdateNotificationDal.go(notification, sendResult)
+      await UpdateNotificationDal(notification, sendResult)
 
       const result = await notification.$query()
 

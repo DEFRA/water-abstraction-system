@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
+import { generateNoticeReferenceCode } from '../../support/generators.js'
 
 // Thing under test
-const ViewNoticePresenter = require('../../../app/presenters/notices/view-notice.presenter.js')
+import ViewNoticePresenter from '../../../app/presenters/notices/view-notice.presenter.js'
 
 describe('Notices - View Notice presenter', () => {
   let notice
@@ -74,7 +75,7 @@ describe('Notices - View Notice presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ViewNoticePresenter.go(notice, notifications)
+    const result = ViewNoticePresenter(notice, notifications)
 
     expect(result).toEqual({
       backLink: { href: '/system/notices', text: 'Go back to notices' },
@@ -127,7 +128,7 @@ describe('Notices - View Notice presenter', () => {
           })
 
           it('returns only the populated address lines as an array', () => {
-            const result = ViewNoticePresenter.go(notice, notifications)
+            const result = ViewNoticePresenter(notice, notifications)
 
             expect(result.notifications[0].recipient).toEqual([
               'Clean Water Limited',
@@ -151,7 +152,7 @@ describe('Notices - View Notice presenter', () => {
           })
 
           it('returns only the populated address lines as an array', () => {
-            const result = ViewNoticePresenter.go(notice, notifications)
+            const result = ViewNoticePresenter(notice, notifications)
 
             expect(result.notifications[0].recipient).toEqual([
               'Clean Water Limited',
@@ -168,7 +169,7 @@ describe('Notices - View Notice presenter', () => {
 
       describe('when the "messageType" is "letter"', () => {
         it('returns the recipient email in an array', () => {
-          const result = ViewNoticePresenter.go(notice, notifications)
+          const result = ViewNoticePresenter(notice, notifications)
 
           expect(result.notifications[1].recipient).toEqual(['shaw.carol@atari.com'])
         })

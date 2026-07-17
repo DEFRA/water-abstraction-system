@@ -1,16 +1,17 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillHelper = require('../support/helpers/bill.helper.js')
-const BillModel = require('../../app/models/bill.model.js')
-const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const TransactionHelper = require('../support/helpers/transaction.helper.js')
-const TransactionModel = require('../../app/models/transaction.model.js')
+import BillHelper from '../support/helpers/bill.helper.js'
+import BillLicenceHelper from '../support/helpers/bill-licence.helper.js'
+import BillModel from '../../app/models/bill.model.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import TransactionHelper from '../support/helpers/transaction.helper.js'
+import TransactionModel from '../../app/models/transaction.model.js'
 
 // Thing under test
-const BillLicenceModel = require('../../app/models/bill-licence.model.js')
+import BillLicenceModel from '../../app/models/bill-licence.model.js'
 
 describe('Bill Licence model', () => {
   let testBill

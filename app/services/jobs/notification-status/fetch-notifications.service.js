@@ -1,14 +1,11 @@
-'use strict'
-
 /**
  * Fetches pending notifications awaiting a status update from Notify
  * @module FetchNotificationsService
  */
 
-const NotificationModel = require('../../../models/notification.model.js')
-const { today } = require('../../../lib/general.lib.js')
-
-const notifyConfig = require('../../../../config/notify.config.js')
+import NotificationModel from '../../../models/notification.model.js'
+import notifyConfig from '../../../../config/notify.config.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Fetches pending notifications awaiting a status update from Notify
@@ -21,7 +18,7 @@ const notifyConfig = require('../../../../config/notify.config.js')
  *
  * @returns {Promise<object[]>} the 'pending' notifications that need their status checking with Notify
  */
-async function go() {
+export default async function fetchNotificationsService() {
   const todaysDate = today()
   const retentionStartDate = today()
 
@@ -48,8 +45,4 @@ async function go() {
     .andWhere('createdAt', '>=', retentionStartDate)
 
   return query
-}
-
-module.exports = {
-  go
 }

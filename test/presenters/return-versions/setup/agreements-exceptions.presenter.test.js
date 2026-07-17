@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const AgreementsExceptionsPresenter = require('../../../../app/presenters/return-versions/setup/agreements-exceptions.presenter.js')
+import AgreementsExceptionsPresenter from '../../../../app/presenters/return-versions/setup/agreements-exceptions.presenter.js'
 
 describe('Return Versions Setup - Agreements Exceptions presenter', () => {
   const requirementIndex = 0
@@ -29,7 +30,7 @@ describe('Return Versions Setup - Agreements Exceptions presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
+      const result = AgreementsExceptionsPresenter(session, requirementIndex)
 
       expect(result).toEqual({
         agreementsExceptions: null,
@@ -53,7 +54,7 @@ describe('Return Versions Setup - Agreements Exceptions presenter', () => {
       })
 
       it('returns a populated agreements-exceptions', () => {
-        const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
+        const result = AgreementsExceptionsPresenter(session, requirementIndex)
 
         expect(result.agreementsExceptions).toEqual('gravity-fill')
       })
@@ -61,7 +62,7 @@ describe('Return Versions Setup - Agreements Exceptions presenter', () => {
 
     describe('when the user has not previously submitted an agreement or exception', () => {
       it('returns an empty agreements-exceptions', () => {
-        const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
+        const result = AgreementsExceptionsPresenter(session, requirementIndex)
 
         expect(result.agreementsExceptions).toBeNull()
       })
@@ -75,7 +76,7 @@ describe('Return Versions Setup - Agreements Exceptions presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
+        const result = AgreementsExceptionsPresenter(session, requirementIndex)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -86,7 +87,7 @@ describe('Return Versions Setup - Agreements Exceptions presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "frequency-reported" page', () => {
-        const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
+        const result = AgreementsExceptionsPresenter(session, requirementIndex)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/frequency-reported/0',

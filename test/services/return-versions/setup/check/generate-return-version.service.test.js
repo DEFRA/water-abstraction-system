@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const DetermineNextVersionNumberDal = require('../../../../../app/dal/return-versions/determine-next-version-number.dal.js')
-const FetchOtherPurposeIdsDal = require('../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js')
+import * as DetermineNextVersionNumberDal from '../../../../../app/dal/return-versions/determine-next-version-number.dal.js'
+import * as FetchOtherPurposeIdsDal from '../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'
 
 // Thing under test
-const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
+import GenerateReturnVersionService from '../../../../../app/services/return-versions/setup/check/generate-return-version.service.js'
 
 describe('Return Versions - Setup - Generate Return Version service', () => {
   let licenceId
@@ -23,11 +21,11 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
     licenceId = '7cf4a46b-1375-42c8-bfe7-24c1bfff765c'
     userId = 12345
 
-    Sinon.stub(DetermineNextVersionNumberDal, 'go').resolves(1)
+    vi.spyOn(DetermineNextVersionNumberDal, 'default').mockResolvedValue(1)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called to generate a "standard" return version', () => {
@@ -85,16 +83,16 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
         startDateOptions: 'licenceStartDate'
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchOtherPurposeIdsDal, 'go').resolves({
+      vi.spyOn(FetchOtherPurposeIdsDal, 'default').mockResolvedValue({
         primaryPurposeId: 'c6fd4b2a-82b5-42b0-a98a-087ba52f9a4f',
         secondaryPurposeId: '0a80d135-9bd4-40ec-90ff-f4a365ccac3f'
       })
     })
 
     it('generates a "standard" return version for persisting from the session data', async () => {
-      const result = await GenerateReturnVersionService.go(session, userId)
+      const result = await GenerateReturnVersionService(session, userId)
 
       expect(result).toEqual({
         returnRequirements: [
@@ -146,11 +144,11 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
       describe('and the user has selected quarterly returns in the session', () => {
         beforeEach(() => {
           sessionData.quarterlyReturns = true
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
         })
 
         it('generates a return version with quarterly returns set to true', async () => {
-          const result = await GenerateReturnVersionService.go(session, userId)
+          const result = await GenerateReturnVersionService(session, userId)
 
           expect(result.returnVersion.quarterlyReturns).toBe(true)
         })
@@ -159,11 +157,11 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
       describe('and the user has not selected quarterly returns in the session', () => {
         beforeEach(() => {
           sessionData.quarterlyReturns = false
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
         })
 
         it('generates a return version with quarterly returns set to false', async () => {
-          const result = await GenerateReturnVersionService.go(session, userId)
+          const result = await GenerateReturnVersionService(session, userId)
 
           expect(result.returnVersion.quarterlyReturns).toBe(false)
         })
@@ -192,11 +190,11 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
         startDateOptions: 'licenceStartDate'
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
     })
 
     it('generates a "no-returns-required" return version for persisting from the session data', async () => {
-      const result = await GenerateReturnVersionService.go(session, userId)
+      const result = await GenerateReturnVersionService(session, userId)
 
       expect(result).toEqual({
         returnRequirements: [],

@@ -1,24 +1,22 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+import AbstractionAlertSessionData from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import SessionModel from '../../../../app/models/session.model.js'
 
 // Things we need to stub
-const DetermineLicenceMonitoringStationsService = require('../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js')
+import * as DetermineLicenceMonitoringStationsService from '../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
 
 // Thing under test
-const InitiateSessionService = require('../../../../app/services/notices/setup/initiate-session.service.js')
+import InitiateSessionService from '../../../../app/services/notices/setup/initiate-session.service.js'
 
 describe('Notices - Setup - Initiate Session service', () => {
   let journey
   let monitoringStationId
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -29,7 +27,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       it('returns the session Id and redirect path', async () => {
-        const result = await InitiateSessionService.go(journey, monitoringStationId)
+        const result = await InitiateSessionService(journey, monitoringStationId)
 
         expect(result).toEqual({
           sessionId: result.sessionId,
@@ -38,7 +36,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       it('initiates the session for the standard journey ', async () => {
-        const result = await InitiateSessionService.go(journey, monitoringStationId)
+        const result = await InitiateSessionService(journey, monitoringStationId)
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
@@ -55,7 +53,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       it('initiates the session for the ad-hoc notice setup journey and returns the session ID and redirect path', async () => {
-        const result = await InitiateSessionService.go(journey, monitoringStationId)
+        const result = await InitiateSessionService(journey, monitoringStationId)
 
         expect(result).toEqual({
           sessionId: result.sessionId,
@@ -79,11 +77,11 @@ describe('Notices - Setup - Initiate Session service', () => {
         journey = 'alerts'
         monitoringStationId = monitoringStationData.monitoringStationId
 
-        Sinon.stub(DetermineLicenceMonitoringStationsService, 'go').resolves(monitoringStationData)
+        vi.spyOn(DetermineLicenceMonitoringStationsService, 'default').mockResolvedValue(monitoringStationData)
       })
 
       it('initiates the session for the abstraction alerts setup journey and returns the session ID and redirect path', async () => {
-        const result = await InitiateSessionService.go(journey, monitoringStationId)
+        const result = await InitiateSessionService(journey, monitoringStationId)
 
         expect(result).toEqual({
           sessionId: result.sessionId,

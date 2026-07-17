@@ -1,8 +1,6 @@
-'use strict'
-
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: licenceVersionPurposeConditionTypes } = require('./data/licence-version-purpose-condition-types.js')
-const LicenceVersionPurposeConditionTypeModel = require('../../app/models/licence-version-purpose-condition-type.model.js')
+import LicenceVersionPurposeConditionTypeModel from '../../app/models/licence-version-purpose-condition-type.model.js'
+import { data as licenceVersionPurposeConditionTypes } from './data/licence-version-purpose-condition-types.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
 /**
  * Seeds the licence version purpose condition types reference data using an upsert
@@ -14,7 +12,7 @@ const LicenceVersionPurposeConditionTypeModel = require('../../app/models/licenc
  * Public table name - public.licence_version_purpose_condition_types
  *
  */
-async function seed() {
+export default async function seed() {
   for (const licenceVersionPurposeConditionType of licenceVersionPurposeConditionTypes) {
     await _upsert(licenceVersionPurposeConditionType)
   }
@@ -25,8 +23,4 @@ async function _upsert(licenceVersionPurposeConditionType) {
     .insert({ ...licenceVersionPurposeConditionType, updatedAt: timestampForPostgres() })
     .onConflict(['code', 'subcode'])
     .merge(['description', 'displayTitle', 'subcodeDescription', 'updatedAt'])
-}
-
-module.exports = {
-  seed
 }

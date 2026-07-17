@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `address/{sessionId}/international` page
  * @module InternationalPresenter
  */
 
-const { countryLookup } = require('./base-address.presenter.js')
+import { countryLookup } from './base-address.presenter.js'
 
 /**
  * Formats data for the `address/{sessionId}/international` page
@@ -14,7 +12,7 @@ const { countryLookup } = require('./base-address.presenter.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function internationalPresenter(session) {
   const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {
@@ -29,8 +27,4 @@ function go(session) {
     pageTitleCaption: pageTitleCaption ?? null,
     postcode: address.postcode ?? null
   }
-}
-
-module.exports = {
-  go
 }

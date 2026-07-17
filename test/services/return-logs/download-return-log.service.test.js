@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const ReturnLogsFixture = require('../../support/fixtures/return-logs.fixture.js')
+import ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
+import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 
 // Things we need to stub
-const FetchDownloadReturnLogService = require('../../../app/services/return-logs/fetch-download-return-log.service.js')
+import * as FetchDownloadReturnLogService from '../../../app/services/return-logs/fetch-download-return-log.service.js'
 
 // Thing under test
-const DownloadReturnLogService = require('../../../app/services/return-logs/download-return-log.service.js')
+import DownloadReturnLogService from '../../../app/services/return-logs/download-return-log.service.js'
 
 describe('Return Logs - Download Return Log Service', () => {
   let returnLog
@@ -20,15 +18,15 @@ describe('Return Logs - Download Return Log Service', () => {
     returnLog = ReturnLogsFixture.returnLog('month')
     returnLog.returnSubmissions = [ReturnLogsFixture.returnSubmission(returnLog, 'estimated')]
 
-    Sinon.stub(FetchDownloadReturnLogService, 'go').resolves(returnLog)
+    vi.spyOn(FetchDownloadReturnLogService, 'default').mockResolvedValue(returnLog)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly returns the csv string, filename and type', async () => {
-    const result = await DownloadReturnLogService.go(returnLog.id)
+    const result = await DownloadReturnLogService(returnLog.id)
 
     const { endDate, returnReference, returnSubmissions, startDate } = returnLog
 

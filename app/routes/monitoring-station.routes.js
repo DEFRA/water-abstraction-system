@@ -1,22 +1,18 @@
-'use strict'
+import { licence, view } from '../controllers/monitoring-stations.controller.js'
 
-const MonitoringStationsController = require('../controllers/monitoring-stations.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/monitoring-stations/{monitoringStationId}',
     options: {
-      handler: MonitoringStationsController.view
+      handler: view
     }
   },
   {
     method: 'GET',
     path: '/monitoring-stations/{monitoringStationId}/licence/{licenceId}',
     options: {
-      handler: MonitoringStationsController.licence
+      handler: licence
     }
   }
 ]
-
-module.exports = routes

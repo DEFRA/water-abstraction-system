@@ -1,21 +1,23 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = require('node:http2').constants
-const { generateUUID } = require('../../app/lib/general.lib.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { generateUUID } from '../support/generators.js'
 
 // Things we need to stub
-const SubmitRemoveCompanyContactService = require('../../app/services/company-contacts/submit-remove-company-contact.service.js')
-const ViewCommunicationsService = require('../../app/services/company-contacts/view-communications.service.js')
-const ViewContactDetailsService = require('../../app/services/company-contacts/view-contact-details.service.js')
-const ViewRemoveCompanyContactService = require('../../app/services/company-contacts/view-remove-company-contact.service.js')
+import * as SubmitRemoveCompanyContactService from '../../app/services/company-contacts/submit-remove-company-contact.service.js'
+import * as ViewCommunicationsService from '../../app/services/company-contacts/view-communications.service.js'
+import * as ViewContactDetailsService from '../../app/services/company-contacts/view-contact-details.service.js'
+import * as ViewRemoveCompanyContactService from '../../app/services/company-contacts/view-remove-company-contact.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
-const { postRequestOptions } = require('../support/general.js')
+import { init } from '../../app/server.js'
+import { postRequestOptions } from '../support/general.js'
+
+const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 
 describe('Company Contacts controller', () => {
   let options
@@ -28,16 +30,15 @@ describe('Company Contacts controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -56,7 +57,9 @@ describe('Company Contacts controller', () => {
           }
         }
 
-        Sinon.stub(ViewCommunicationsService, 'go').returns({ pageTitle: 'Communications for Rachael Tyrell' })
+        vi.spyOn(ViewCommunicationsService, 'default').mockReturnValue({
+          pageTitle: 'Communications for Rachael Tyrell'
+        })
       })
 
       it('returns the page successfully', async () => {
@@ -80,7 +83,7 @@ describe('Company Contacts controller', () => {
           }
         }
 
-        Sinon.stub(ViewContactDetailsService, 'go').returns({
+        vi.spyOn(ViewContactDetailsService, 'default').mockReturnValue({
           pageTitle: 'Contact details for Rachael Tyrell',
           roles: []
         })
@@ -107,7 +110,7 @@ describe('Company Contacts controller', () => {
           }
         }
 
-        Sinon.stub(ViewRemoveCompanyContactService, 'go').returns({ pageTitle: 'Remove page' })
+        vi.spyOn(ViewRemoveCompanyContactService, 'default').mockReturnValue({ pageTitle: 'Remove page' })
       })
 
       it('returns the page successfully', async () => {
@@ -126,7 +129,7 @@ describe('Company Contacts controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/${generateUUID()}/remove`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitRemoveCompanyContactService, 'go').returns({ companyId })
+        vi.spyOn(SubmitRemoveCompanyContactService, 'default').mockReturnValue({ companyId })
       })
 
       it('redirects to companies contacts page', async () => {

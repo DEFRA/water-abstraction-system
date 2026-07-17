@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/additional-submission-options` page
  * @module AdditionalSubmissionOptionsService
  */
 
-const AdditionalSubmissionOptionsPresenter = require('../../../presenters/return-versions/setup/additional-submission-options.presenter.js')
-const AdditionalSubmissionOptionsValidator = require('../../../validators/return-versions/setup/additional-submission-options.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import AdditionalSubmissionOptionsPresenter from '../../../presenters/return-versions/setup/additional-submission-options.presenter.js'
+import AdditionalSubmissionOptionsValidator from '../../../validators/return-versions/setup/additional-submission-options.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/additional-submission-options` page
@@ -27,8 +25,8 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the note page including the
  * validation error details
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitAdditionalSubmissionOptionsService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'additionalSubmissionOptions')
 
@@ -80,15 +78,11 @@ async function _save(session, payload) {
 function _submittedSessionData(session, payload) {
   session.additionalSubmissionOptions = payload.additionalSubmissionOptions ?? []
 
-  return AdditionalSubmissionOptionsPresenter.go(session)
+  return AdditionalSubmissionOptionsPresenter(session)
 }
 
 function _validate(payload, session) {
-  const validation = AdditionalSubmissionOptionsValidator.go(payload, session)
+  const validation = AdditionalSubmissionOptionsValidator(payload, session)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

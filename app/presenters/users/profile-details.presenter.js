@@ -1,6 +1,4 @@
-'use strict'
-
-const { formatEmail } = require('../base.presenter.js')
+import { formatEmail } from '../base.presenter.js'
 
 /**
  * Formats data for the `/users/me/profile-details` page
@@ -20,7 +18,7 @@ const NAVIGATION_LINKS = [
  *
  * @returns {object} The data formatted for the view template
  */
-function go(profileDetails) {
+export default function profileDetailsPresenter(profileDetails) {
   return {
     address: profileDetails.address || '',
     backLink: {
@@ -34,8 +32,4 @@ function go(profileDetails) {
     pageTitle: 'Profile details',
     tel: profileDetails.tel || ''
   }
-}
-
-module.exports = {
-  go
 }

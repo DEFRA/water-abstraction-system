@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const PermissionsValidator = require('../../../../../app/validators/users/internal/setup/permissions.validator.js')
+import PermissionsValidator from '../../../../../app/validators/users/internal/setup/permissions.validator.js'
 
 describe('Users - Internal - Setup - Permissions Validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Users - Internal - Setup - Permissions Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = PermissionsValidator.go(payload)
+      const result = PermissionsValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +27,7 @@ describe('Users - Internal - Setup - Permissions Validator', () => {
       })
 
       it('fails validation', () => {
-        const result = PermissionsValidator.go(payload)
+        const result = PermissionsValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -40,7 +41,7 @@ describe('Users - Internal - Setup - Permissions Validator', () => {
       })
 
       it('fails validation', () => {
-        const result = PermissionsValidator.go(payload)
+        const result = PermissionsValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

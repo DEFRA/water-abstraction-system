@@ -1,23 +1,21 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const EmptyLicenceSeeder = require('../../support/seeders/empty-licence.seeder.js')
-const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const UserHelper = require('../../support/helpers/user.helper.js')
+import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
+import * as EmptyLicenceSeeder from '../../support/seeders/empty-licence.seeder.js'
+import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
+import MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import UserHelper from '../../support/helpers/user.helper.js'
 
 // Things we need to stub
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 // Thing under test
-const FetchSearchResultsService = require('../../../app/services/search/fetch-search-results.service.js')
+import FetchSearchResultsService from '../../../app/services/search/fetch-search-results.service.js'
 
 describe('Search - Fetch Search Results service', () => {
   const billingAccounts = []
@@ -188,7 +186,7 @@ describe('Search - Fetch Search Results service', () => {
     })
 
     it('returns the correctly ordered matching results', async () => {
-      const result = await FetchSearchResultsService.go(query, resultTypes, page)
+      const result = await FetchSearchResultsService(query, resultTypes, page)
 
       expect(result).toEqual({
         results: [
@@ -290,7 +288,7 @@ describe('Search - Fetch Search Results service', () => {
     })
 
     it('returns the correctly ordered matching results', async () => {
-      const result = await FetchSearchResultsService.go(query, resultTypes, page)
+      const result = await FetchSearchResultsService(query, resultTypes, page)
 
       expect(result).toEqual({ results: [], total: 0 })
     })
@@ -299,18 +297,18 @@ describe('Search - Fetch Search Results service', () => {
   describe('when multiple pages of results exist', () => {
     beforeEach(() => {
       // Set the page size to 1 to force multiple pages of results
-      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)
+      vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1)
 
       query = 'TESTSEARCH'
       page = '2'
     })
 
     afterEach(() => {
-      Sinon.restore()
+      vi.restoreAllMocks()
     })
 
     it('correctly returns the requested page of results', async () => {
-      const result = await FetchSearchResultsService.go(query, resultTypes, page)
+      const result = await FetchSearchResultsService(query, resultTypes, page)
 
       expect(result).toEqual({
         results: [
@@ -336,7 +334,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correctly ordered matching billing accounts', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -367,7 +365,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correct billing account', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -388,7 +386,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('still returns the correct billing accounts', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -419,7 +417,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns empty query results', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [],
@@ -434,7 +432,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correct billing account', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -461,7 +459,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correctly ordered matching licence holders', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -492,7 +490,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correct licence holder', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -513,7 +511,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('still returns the correct licence holders', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -544,7 +542,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns empty query results', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [],
@@ -559,7 +557,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correct licence holder', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -586,7 +584,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correctly ordered matching licences', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -612,7 +610,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correct licence', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -633,7 +631,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('still returns the correct licences', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -659,7 +657,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns empty query results', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [],
@@ -674,7 +672,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correct licence', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -701,7 +699,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correctly ordered matching monitoring stations', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -732,7 +730,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correct monitoring station', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -753,7 +751,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('still returns the correct monitoring stations', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -784,7 +782,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns empty query results', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [],
@@ -805,7 +803,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correctly ordered matching return logs', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -841,7 +839,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correct return log', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -862,7 +860,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns empty query results', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [],
@@ -878,7 +876,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correct return log', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -905,7 +903,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correctly ordered matching users', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -931,7 +929,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correct user', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -952,7 +950,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('still returns the correct users', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [
@@ -978,7 +976,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns empty query results', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [],
@@ -993,7 +991,7 @@ describe('Search - Fetch Search Results service', () => {
       })
 
       it('returns the correct user', async () => {
-        const result = await FetchSearchResultsService.go(query, resultTypes, page)
+        const result = await FetchSearchResultsService(query, resultTypes, page)
 
         expect(result).toEqual({
           results: [

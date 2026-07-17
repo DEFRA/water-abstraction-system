@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Updates the status counts and determines the overall status for the provided notices
  * @module UpdateNoticeService
  */
 
-const { db } = require('../../../db/db.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import { db } from '../../../db/db.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Updates the status counts and determines the overall status for the provided notices
@@ -47,7 +45,7 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  *
  * @param {string[]} noticeIds - the UUIDs of the notices to update
  */
-async function go(noticeIds) {
+export default async function updateNoticeService(noticeIds) {
   const query = _query()
   const updatedAt = timestampForPostgres()
 
@@ -92,8 +90,4 @@ function _query() {
   AND e.id = os.event_id
   AND e.id = ANY(?);
   `
-}
-
-module.exports = {
-  go
 }

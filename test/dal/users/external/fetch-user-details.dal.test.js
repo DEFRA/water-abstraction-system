@@ -1,15 +1,16 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceDocumentHeaderHelper = require('../../../support/helpers/licence-document-header.helper.js')
-const LicenceEntityHelper = require('../../../support/helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../../../support/helpers/licence-entity-role.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const UserHelper = require('../../../support/helpers/user.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import LicenceDocumentHeaderHelper from '../../../support/helpers/licence-document-header.helper.js'
+import LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
+import LicenceEntityRoleHelper from '../../../support/helpers/licence-entity-role.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import UserHelper from '../../../support/helpers/user.helper.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const FetchUserDetailsDal = require('../../../../app/dal/users/external/fetch-user-details.dal.js')
+import FetchUserDetailsDal from '../../../../app/dal/users/external/fetch-user-details.dal.js'
 
 describe('Users - External - Fetch User Details DAL', () => {
   let licence
@@ -44,7 +45,7 @@ describe('Users - External - Fetch User Details DAL', () => {
 
   describe('when called', () => {
     it('returns the requested user', async () => {
-      const result = await FetchUserDetailsDal.go(user.id)
+      const result = await FetchUserDetailsDal(user.id)
 
       expect(result).toEqual({
         application: user.application,

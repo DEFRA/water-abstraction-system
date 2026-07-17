@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `address/{sessionId}/manual` page
  * @module ManualAddressPresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function manualPresenter(session) {
   const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {
@@ -34,8 +32,4 @@ function _backLink(address, sessionId) {
   }
 
   return { href: `/system/address/${sessionId}/postcode`, text: 'Back' }
-}
-
-module.exports = {
-  go
 }

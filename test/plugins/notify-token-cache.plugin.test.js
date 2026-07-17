@@ -1,41 +1,40 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const jwt = require('jsonwebtoken')
-const notifyConfig = require('../../config/notify.config.js')
+import jwt from 'jsonwebtoken'
+import notifyConfig from '../../config/notify.config.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 const TWENTY_SECONDS_IN_MILLISECONDS = 20000
 const THIRTY_SECONDS_IN_MILLISECONDS = 30000
 
 describe('Notify Token Cache plugin', () => {
-  let clock
   let jwtSignSpy
   let server
   let testDate
 
   beforeEach(async () => {
-    jwtSignSpy = Sinon.spy(jwt, 'sign')
+    jwtSignSpy = vi.spyOn(jwt, 'sign')
 
     testDate = new Date('2025-08-19T11:03:00.000Z')
-    clock = Sinon.useFakeTimers(testDate)
+    vi.useFakeTimers({ now: testDate })
 
     // Create server before each test
     server = await init()
 
-    Sinon.stub(notifyConfig, 'apiKey').value(
+    vi.replaceProperty(
+      notifyConfig,
+      'apiKey',
       'my_test_key-26785a09-ab16-4eb0-8407-a37497a57506-3d844edf-8d35-48ac-975b-e847b4f122b0'
     )
   })
 
   afterEach(() => {
-    clock.restore()
-    Sinon.restore()
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   describe('When called', () => {
@@ -44,7 +43,7 @@ describe('Notify Token Cache plugin', () => {
 
       expect(result).not.toBeNull()
 
-      const jwtSignFirstCall = jwtSignSpy.firstCall.args
+      const jwtSignFirstCall = jwtSignSpy.mock.calls[0]
 
       expect(jwtSignFirstCall).toEqual([
         {
@@ -66,13 +65,13 @@ describe('Notify Token Cache plugin', () => {
       expect(firstCall).not.toBeNull()
 
       // Jump forwards in time 20 seconds
-      clock.jump(TWENTY_SECONDS_IN_MILLISECONDS)
+      vi.advanceTimersByTime(TWENTY_SECONDS_IN_MILLISECONDS)
 
       const secondCall = await server.methods.getNotifyToken()
 
       expect(firstCall).toEqual(secondCall)
 
-      expect(jwtSignSpy.calledOnce).toBe(true)
+      expect(jwtSignSpy).toHaveBeenCalledOnce()
     })
   })
 
@@ -83,13 +82,13 @@ describe('Notify Token Cache plugin', () => {
       expect(firstCall).not.toBeNull()
 
       // Jump forwards in time 30 seconds
-      clock.jump(THIRTY_SECONDS_IN_MILLISECONDS)
+      vi.advanceTimersByTime(THIRTY_SECONDS_IN_MILLISECONDS)
 
       const secondCall = await server.methods.getNotifyToken()
 
       expect(firstCall).not.toEqual(secondCall)
 
-      expect(jwtSignSpy.calledTwice).toBe(true)
+      expect(jwtSignSpy).toHaveBeenCalledTimes(2)
     })
   })
 })

@@ -1,17 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
-const { NOTIFY_TEMPLATES } = require('../../../app/lib/notify-templates.lib.js')
+import http2 from 'node:http2'
+import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 
 // Things we need to stub
-const NotifyRequest = require('../../../app/requests/notify.request.js')
+import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
-const CreateLetterRequest = require('../../../app/requests/notify/create-letter.request.js')
+import CreateLetterRequest from '../../../app/requests/notify/create-letter.request.js'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 
 describe('Notify - Create Letter request', () => {
   let options
@@ -38,7 +38,7 @@ describe('Notify - Create Letter request', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -62,20 +62,20 @@ describe('Notify - Create Letter request', () => {
         }
       }
 
-      Sinon.stub(NotifyRequest, 'post').resolves({
+      vi.spyOn(NotifyRequest, 'postRequest').mockResolvedValue({
         succeeded: true,
         response
       })
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CreateLetterRequest.send(templateId, options)
+      const result = await CreateLetterRequest(templateId, options)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from Notify in the "response"', async () => {
-      const result = await CreateLetterRequest.send(templateId, options)
+      const result = await CreateLetterRequest(templateId, options)
 
       expect(result.response.body).toEqual(response.body)
     })
@@ -97,20 +97,20 @@ describe('Notify - Create Letter request', () => {
           }
         }
 
-        Sinon.stub(NotifyRequest, 'post').resolves({
+        vi.spyOn(NotifyRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response
         })
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateLetterRequest.send(templateId, options)
+        const result = await CreateLetterRequest(templateId, options)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateLetterRequest.send(templateId, options)
+        const result = await CreateLetterRequest(templateId, options)
 
         expect(result.response.body).toEqual(response.body)
       })

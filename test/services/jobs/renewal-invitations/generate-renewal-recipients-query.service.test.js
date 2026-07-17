@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RecipientScenariosSeeder = require('../../../support/seeders/recipient-scenarios.seeder.js')
-const { db } = require('../../../../db/db.js')
+import * as RecipientScenariosSeeder from '../../../support/seeders/recipient-scenarios.seeder.js'
+import { db } from '../../../../db/db.js'
 
 // Thing under test
-const GenerateRenewalRecipientsQueryService = require('../../../../app/services/jobs/renewal-invitations/generate-renewal-recipients-query.service.js')
+import GenerateRenewalRecipientsQueryService from '../../../../app/services/jobs/renewal-invitations/generate-renewal-recipients-query.service.js'
 
 describe('Jobs - Renewal Invitations - Generate Renewal Recipients Query Service', () => {
   const expiringLicencesQuery = `SELECT
@@ -55,7 +56,7 @@ WHERE
   // NOTE: Because the query is very large we don't assert the full `query` string here
   describe('when called', () => {
     it('returns the expected query', () => {
-      const query = GenerateRenewalRecipientsQueryService.go(expiringLicencesQuery)
+      const query = GenerateRenewalRecipientsQueryService(expiringLicencesQuery)
 
       expect(
         query.startsWith(`
@@ -69,7 +70,7 @@ WHERE
   describe('when executed', () => {
     describe('and only the licence holder is present for a single licence (Scenario 1)', () => {
       it('returns the expected recipients', async () => {
-        const query = GenerateRenewalRecipientsQueryService.go(expiringLicencesQuery)
+        const query = GenerateRenewalRecipientsQueryService(expiringLicencesQuery)
 
         const { rows } = await db.raw(query, [new Date('2027-02-09')])
 
@@ -81,7 +82,7 @@ WHERE
 
     describe('and only the licence holder is present for multiple licences (Scenario 2)', () => {
       it('returns the expected recipients', async () => {
-        const query = GenerateRenewalRecipientsQueryService.go(expiringLicencesQuery)
+        const query = GenerateRenewalRecipientsQueryService(expiringLicencesQuery)
 
         const { rows } = await db.raw(query, [new Date('2027-02-10')])
 
@@ -98,7 +99,7 @@ WHERE
 
     describe('and a primary user is present for a single licence (Scenario 3)', () => {
       it('returns the expected recipients', async () => {
-        const query = GenerateRenewalRecipientsQueryService.go(expiringLicencesQuery)
+        const query = GenerateRenewalRecipientsQueryService(expiringLicencesQuery)
 
         const { rows } = await db.raw(query, [new Date('2027-02-11')])
 
@@ -113,7 +114,7 @@ WHERE
 
     describe('and a primary user is present for multiple licences (Scenario 4)', () => {
       it('returns the expected recipients', async () => {
-        const query = GenerateRenewalRecipientsQueryService.go(expiringLicencesQuery)
+        const query = GenerateRenewalRecipientsQueryService(expiringLicencesQuery)
 
         const { rows } = await db.raw(query, [new Date('2027-02-12')])
 

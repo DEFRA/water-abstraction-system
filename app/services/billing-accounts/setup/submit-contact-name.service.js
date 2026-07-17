@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the `/billing-accounts/setup/{billingAccountId}/contact-name` page
  *
  * @module SubmitContactNameService
  */
 
-const ContactNamePresenter = require('../../../presenters/billing-accounts/setup/contact-name.presenter.js')
-const ContactNameValidator = require('../../../validators/billing-accounts/setup/contact-name.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import ContactNamePresenter from '../../../presenters/billing-accounts/setup/contact-name.presenter.js'
+import ContactNameValidator from '../../../validators/billing-accounts/setup/contact-name.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the `/billing-accounts/setup/{billingAccountId}/contact-name` page
@@ -19,8 +17,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitContactNameService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -71,15 +69,11 @@ async function _save(session, payload) {
 function _submissionData(session, payload) {
   session.contactName = payload.contactName ?? null
 
-  return ContactNamePresenter.go(session)
+  return ContactNamePresenter(session)
 }
 
 function _validate(payload) {
-  const validationResult = ContactNameValidator.go(payload)
+  const validationResult = ContactNameValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

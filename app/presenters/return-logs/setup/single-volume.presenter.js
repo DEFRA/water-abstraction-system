@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Format data for the `/return-log/setup/{sessionId}/single-volume` page
  * @module SingleVolumePresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function singleVolumePresenter(session) {
   const { id: sessionId, returnReference, singleVolume, singleVolumeQuantity, units } = session
 
   return {
@@ -34,8 +32,4 @@ function _backLinkHref(session) {
   }
 
   return `/system/return-logs/setup/${id}/meter-provided`
-}
-
-module.exports = {
-  go
 }

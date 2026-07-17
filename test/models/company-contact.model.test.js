@@ -1,19 +1,20 @@
-'use strict'
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
-const CompanyHelper = require('../support/helpers/company.helper.js')
-const CompanyModel = require('../../app/models/company.model.js')
-const ContactHelper = require('../support/helpers/contact.helper.js')
-const ContactModel = require('../../app/models/contact.model.js')
-const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
-const LicenceRoleModel = require('../../app/models/licence-role.model.js')
-const UserHelper = require('../support/helpers/user.helper.js')
-const UserModel = require('../../app/models/user.model.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
+import CompanyContactHelper from '../support/helpers/company-contact.helper.js'
+import CompanyHelper from '../support/helpers/company.helper.js'
+import CompanyModel from '../../app/models/company.model.js'
+import ContactHelper from '../support/helpers/contact.helper.js'
+import ContactModel from '../../app/models/contact.model.js'
+import LicenceRoleHelper from '../support/helpers/licence-role.helper.js'
+import LicenceRoleModel from '../../app/models/licence-role.model.js'
+import UserHelper from '../support/helpers/user.helper.js'
+import UserModel from '../../app/models/user.model.js'
+import { generateUUID } from '../support/generators.js'
 
 // Thing under test
-const CompanyContactModel = require('../../app/models/company-contact.model.js')
+import CompanyContactModel from '../../app/models/company-contact.model.js'
 
 describe('Company Contacts model', () => {
   let testCompany

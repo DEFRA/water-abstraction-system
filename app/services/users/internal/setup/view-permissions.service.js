@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @module ViewPermissionsService
  */
 
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const FetchUserDetailsDal = require('../../../../dal/users/internal/fetch-user-details.dal.js')
-const PermissionsPresenter = require('../../../../presenters/users/internal/setup/permissions.presenter.js')
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import FetchUserDetailsDal from '../../../../dal/users/internal/fetch-user-details.dal.js'
+import PermissionsPresenter from '../../../../presenters/users/internal/setup/permissions.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/permissions' page
@@ -19,10 +17,10 @@ const PermissionsPresenter = require('../../../../presenters/users/internal/setu
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(auth, sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewPermissionsService(auth, sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = PermissionsPresenter.go(session)
+  const pageData = PermissionsPresenter(session)
 
   const showSuperPermission = await _showSuperPermission(auth)
 
@@ -33,11 +31,7 @@ async function go(auth, sessionId) {
 }
 
 async function _showSuperPermission(auth) {
-  const currentUser = await FetchUserDetailsDal.go(auth.credentials.user.id)
+  const currentUser = await FetchUserDetailsDal(auth.credentials.user.id)
 
   return currentUser.$permissions().key === 'super'
-}
-
-module.exports = {
-  go
 }

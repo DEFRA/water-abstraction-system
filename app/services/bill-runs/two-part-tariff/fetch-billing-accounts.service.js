@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Fetches all billing accounts linked to a bill run to be processed as part of annual two-part tariff billing
  * @module FetchBillingAccountsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const BillingAccountModel = require('../../../models/billing-account.model.js')
-const ChargeVersionModel = require('../../../models/charge-version.model.js')
+import BillingAccountModel from '../../../models/billing-account.model.js'
+import ChargeVersionModel from '../../../models/charge-version.model.js'
 
 /**
  * Fetches all billing accounts linked to a bill run to be processed as part of annual two-part tariff billing
@@ -31,7 +29,7 @@ const ChargeVersionModel = require('../../../models/charge-version.model.js')
  * licence, charge version, charge element etc records, plus the two-part tariff review details needed to generate the
  * bill run
  */
-async function go(billRunId) {
+export default async function fetchBillingAccountsService(billRunId) {
   return BillingAccountModel.query()
     .select(['billingAccounts.id', 'billingAccounts.accountNumber'])
     .whereExists(_whereBillingAccountExistsClause(billRunId))
@@ -152,8 +150,4 @@ function _whereBillingAccountExistsClause(billRunId) {
     .where('reviewLicences.billRunId', billRunId)
 
   return query
-}
-
-module.exports = {
-  go
 }

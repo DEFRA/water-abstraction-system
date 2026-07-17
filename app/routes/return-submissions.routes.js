@@ -1,15 +1,11 @@
-'use strict'
+import { view } from '../controllers/return-submissions.controller.js'
 
-const ReturnSubmissionsController = require('../controllers/return-submissions.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/return-submissions/{returnSubmissionId}/{yearMonth}',
     options: {
-      handler: ReturnSubmissionsController.view
+      handler: view
     }
   }
 ]
-
-module.exports = routes

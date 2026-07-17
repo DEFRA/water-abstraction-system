@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/returns-cycle` page
  * @module ReturnsCycleValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/returns-cycle` page
@@ -19,7 +17,7 @@ const Joi = require('joi')
  * @returns {object} The result from calling Joi's schema.validate(). The result from calling Joi's schema.validate().
  * If any errors are found the `error:` property will also exist detailing what the issue is.
  */
-function go(payload, session) {
+export default function returnsCycleValidator(payload, session) {
   const VALID_VALUES = ['summer', 'winterAndAllYear']
   const errorMessage = 'Select the returns cycle for the requirements for returns'
 
@@ -50,8 +48,4 @@ function _noSummerCycleWithQuarterlyReturns(value, helpers, session) {
   }
 
   return value
-}
-
-module.exports = {
-  go
 }

@@ -1,30 +1,24 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 
 // Test helpers
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const ProcessRenewalsNoticeLicenceSubmission = require('../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js')
-const ProcessReturnsNoticeLicenceSubmission = require('../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as ProcessRenewalsNoticeLicenceSubmission from '../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js'
+import * as ProcessReturnsNoticeLicenceSubmission from '../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js'
 
 // Thing under test
-const SubmitLicenceService = require('../../../../app/services/notices/setup/submit-licence.service.js')
+import SubmitLicenceService from '../../../../app/services/notices/setup/submit-licence.service.js'
 
 describe('Notices - Setup - Submit Licence service', () => {
-  let clock
-  let fetchSessionStub
   let licenceRef
   let payload
-  let processRenewalsNoticeLicenceSubmissionStub
-  let processReturnsNoticeLicenceSubmissionStub
   let session
   let sessionData
   let yarStub
@@ -32,30 +26,30 @@ describe('Notices - Setup - Submit Licence service', () => {
   beforeEach(() => {
     licenceRef = generateLicenceRef()
 
-    clock = Sinon.useFakeTimers(new Date('2020-06-06'))
+    vi.useFakeTimers({ now: new Date('2020-06-06') })
 
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    processReturnsNoticeLicenceSubmissionStub = Sinon.stub(ProcessReturnsNoticeLicenceSubmission, 'go').resolves({
+    vi.spyOn(ProcessReturnsNoticeLicenceSubmission, 'default').mockResolvedValue({
       additionalSessionData: { dueReturns: [] },
       validationResult: null
     })
 
-    processRenewalsNoticeLicenceSubmissionStub = Sinon.stub(ProcessRenewalsNoticeLicenceSubmission, 'go').resolves({
+    vi.spyOn(ProcessRenewalsNoticeLicenceSubmission, 'default').mockResolvedValue({
       additionalSessionData: {},
       validationResult: null
     })
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    clock.restore()
-    Sinon.restore()
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -65,14 +59,14 @@ describe('Notices - Setup - Submit Licence service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitLicenceService.go(session.id, payload, yarStub)
+        await SubmitLicenceService(session.id, payload, yarStub)
 
         expect(session.licenceRef).toEqual(licenceRef)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns the redirect url', async () => {
-        const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+        const result = await SubmitLicenceService(session.id, payload, yarStub)
 
         expect(result).toEqual({ redirectUrl: 'check-notice-type' })
       })
@@ -82,13 +76,13 @@ describe('Notices - Setup - Submit Licence service', () => {
           beforeEach(() => {
             sessionData = { noticeType: 'paperReturn', checkPageVisited: false }
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            fetchSessionStub.resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a redirect to the "paper-return" page', async () => {
-            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+            const result = await SubmitLicenceService(session.id, payload, yarStub)
 
             expect(result).toEqual({ redirectUrl: 'paper-return' })
           })
@@ -98,13 +92,13 @@ describe('Notices - Setup - Submit Licence service', () => {
           beforeEach(() => {
             sessionData = { noticeType: 'paperReturn', licenceRef, checkPageVisited: true }
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            fetchSessionStub.resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a redirect to the "check-notice-type" page', async () => {
-            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+            const result = await SubmitLicenceService(session.id, payload, yarStub)
 
             expect(result).toEqual({ redirectUrl: 'check-notice-type' })
           })
@@ -115,20 +109,20 @@ describe('Notices - Setup - Submit Licence service', () => {
         beforeEach(() => {
           sessionData = { checkPageVisited: false, noticeType: 'renewalInvitations' }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
-        it('calls the "processRenewalsNoticeLicenceSubmissionStub"', async () => {
-          await SubmitLicenceService.go(session.id, payload, yarStub)
+        it('calls the "ProcessRenewalsNoticeLicenceSubmission"', async () => {
+          await SubmitLicenceService(session.id, payload, yarStub)
 
-          expect(processRenewalsNoticeLicenceSubmissionStub.calledOnceWithExactly(payload)).toBe(true)
+          expect(ProcessRenewalsNoticeLicenceSubmission.default).toHaveBeenCalledExactlyOnceWith(payload)
         })
 
         describe('and the check page has not been visited', () => {
           it('returns a redirect to the "check-notice-type" page', async () => {
-            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+            const result = await SubmitLicenceService(session.id, payload, yarStub)
 
             expect(result).toEqual({ redirectUrl: 'check-notice-type' })
           })
@@ -138,13 +132,13 @@ describe('Notices - Setup - Submit Licence service', () => {
           beforeEach(() => {
             sessionData = { checkPageVisited: true, licenceRef, noticeType: 'renewalInvitations' }
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            fetchSessionStub.resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a redirect to the "check-notice-type" page', async () => {
-            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+            const result = await SubmitLicenceService(session.id, payload, yarStub)
 
             expect(result).toEqual({ redirectUrl: 'check-notice-type' })
           })
@@ -156,13 +150,13 @@ describe('Notices - Setup - Submit Licence service', () => {
           beforeEach(() => {
             sessionData = { journey: 'standard', licenceRef, checkPageVisited: true }
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            fetchSessionStub.resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a redirect to the "check-notice-type" page', async () => {
-            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+            const result = await SubmitLicenceService(session.id, payload, yarStub)
 
             expect(result).toEqual({ redirectUrl: 'check-notice-type' })
           })
@@ -172,13 +166,13 @@ describe('Notices - Setup - Submit Licence service', () => {
           beforeEach(() => {
             sessionData = { journey: 'standard', checkPageVisited: false }
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            fetchSessionStub.resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a redirect to the "returns-period" page', async () => {
-            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+            const result = await SubmitLicenceService(session.id, payload, yarStub)
 
             expect(result).toEqual({ redirectUrl: 'returns-period' })
           })
@@ -190,27 +184,27 @@ describe('Notices - Setup - Submit Licence service', () => {
           beforeEach(() => {
             sessionData = { licenceRef: '01/11', checkPageVisited: true }
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            fetchSessionStub.resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('redirects to the check notice type page', async () => {
-            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+            const result = await SubmitLicenceService(session.id, payload, yarStub)
 
             expect(result.redirectUrl).toEqual('check-notice-type')
           })
 
           it('updates the sessions "checkPageVisited" flag', async () => {
-            await SubmitLicenceService.go(session.id, payload, yarStub)
+            await SubmitLicenceService(session.id, payload, yarStub)
 
             expect(session.checkPageVisited).toBe(false)
           })
 
           it('sets a flash message', async () => {
-            await SubmitLicenceService.go(session.id, payload, yarStub)
+            await SubmitLicenceService(session.id, payload, yarStub)
 
-            const [flashType, bannerMessage] = yarStub.flash.args[0]
+            const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
             expect(flashType).toEqual('notification')
             expect(bannerMessage).toEqual({
@@ -224,21 +218,21 @@ describe('Notices - Setup - Submit Licence service', () => {
           beforeEach(() => {
             sessionData = { licenceRef, checkPageVisited: true }
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            fetchSessionStub.resolves(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('redirects to the check notice type page', async () => {
-            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+            const result = await SubmitLicenceService(session.id, payload, yarStub)
 
             expect(result.redirectUrl).toEqual('check-notice-type')
           })
 
           it('does not set a flash message', async () => {
-            await SubmitLicenceService.go(session.id, payload, yarStub)
+            await SubmitLicenceService(session.id, payload, yarStub)
 
-            expect(yarStub.flash.args[0]).toBeUndefined()
+            expect(yarStub.flash.mock.calls[0]).toBeUndefined()
           })
         })
       })
@@ -248,7 +242,7 @@ describe('Notices - Setup - Submit Licence service', () => {
       beforeEach(() => {
         payload = {}
 
-        processReturnsNoticeLicenceSubmissionStub.resolves({
+        vi.spyOn(ProcessReturnsNoticeLicenceSubmission, 'default').mockResolvedValue({
           additionalSessionData: { dueReturns: [] },
           validationResult: {
             errorList: [{ href: '#licenceRef', text: 'Enter a licence number' }],
@@ -258,7 +252,7 @@ describe('Notices - Setup - Submit Licence service', () => {
       })
 
       it('returns page data needed to re-render the view including the validation error', async () => {
-        const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+        const result = await SubmitLicenceService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'notices',

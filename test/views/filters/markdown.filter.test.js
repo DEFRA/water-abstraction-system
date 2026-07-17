@@ -1,40 +1,22 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Thing under test
-const MarkdownFilter = require('../../../app/views/filters/markdown.filter.js')
+import MarkdownFilter from '../../../app/views/filters/markdown.filter.js'
 
 describe('Markdown filter', () => {
-  afterEach(() => {
-    Sinon.restore()
-  })
-
   describe('when provided with a valid markdown string', () => {
-    describe('when "Marked" has been set on globalThis via the plugin', () => {
-      beforeEach(() => {
-        globalThis.GlobalMarked = {
-          parse: Sinon.stub().returns('<h1>How to renew your licence</h1>\n<p>This is pretend test.</p>')
-        }
-      })
+    it('correctly converts the markdown to HTML', async () => {
+      const result = await MarkdownFilter('# Test\n\nThis is pretend test.')
 
-      afterEach(() => {
-        delete globalThis.GlobalMarked
-      })
-
-      it('correctly converts the markdown to HTML', async () => {
-        const result = await MarkdownFilter.markdown('# Test\n\nThis is pretend test.')
-
-        expect(result).to.equal('<h1>How to renew your licence</h1>\n<p>This is pretend test.</p>')
-      })
+      expect(result).toEqual('<h1>Test</h1>\n<p>This is pretend test.</p>\n')
     })
 
-    describe('when "Marked" has not been set on globalThis via the plugin', () => {
-      it('returns the input', async () => {
-        const result = await MarkdownFilter.markdown('# Test\n\nThis is pretend test.')
+    describe('and it contains carets used to denote a blockquote', () => {
+      it('converts them to standard markdown blockquotes before parsing', async () => {
+        const result = await MarkdownFilter('^ This is a blockquote')
 
-        expect(result).to.equal('# Test\n\nThis is pretend test.')
+        expect(result).toEqual('<blockquote>\n<p>This is a blockquote</p>\n</blockquote>\n')
       })
     })
   })

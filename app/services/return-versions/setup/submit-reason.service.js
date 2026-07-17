@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/reason` page
  * @module SubmitReasonService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const ReasonPresenter = require('../../../presenters/return-versions/setup/reason.presenter.js')
-const ReasonValidator = require('../../../validators/return-versions/setup/reason.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReasonPresenter from '../../../presenters/return-versions/setup/reason.presenter.js'
+import ReasonValidator from '../../../validators/return-versions/setup/reason.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/reason` page
@@ -28,8 +25,8 @@ const ReasonValidator = require('../../../validators/return-versions/setup/reaso
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the reason page including the validation error details
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitReasonService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -37,7 +34,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Return version updated')
+      flashNotification(yar, 'Updated', 'Return version updated')
     }
 
     return {
@@ -45,7 +42,7 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const formattedData = ReasonPresenter.go(session, payload)
+  const formattedData = ReasonPresenter(session)
 
   return {
     error: validationResult,
@@ -60,11 +57,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = ReasonValidator.go(payload)
+  const validation = ReasonValidator(payload)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

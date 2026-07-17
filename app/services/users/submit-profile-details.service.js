@@ -1,17 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating and storing the data for `/users/me/profile-details` page
  * @module SubmitProfileDetailsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ProfileDetailsPresenter = require('../../presenters/users/profile-details.presenter.js')
-const ProfileDetailsValidator = require('../../validators/users/profile-details.validator.js')
-const UserModel = require('../../models/user.model.js')
-
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+import ProfileDetailsPresenter from '../../presenters/users/profile-details.presenter.js'
+import ProfileDetailsValidator from '../../validators/users/profile-details.validator.js'
+import UserModel from '../../models/user.model.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating and storing the data for `/users/me/profile-details` page
@@ -24,7 +21,7 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  *
  * @returns {Promise<object>} The page data for the profile details page including any validation error details
  */
-async function go(userId, payload, yar) {
+export default async function submitProfileDetailsService(userId, payload, yar) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -36,7 +33,7 @@ async function go(userId, payload, yar) {
     })
   }
 
-  const pageData = ProfileDetailsPresenter.go(payload)
+  const pageData = ProfileDetailsPresenter(payload)
 
   return {
     error: validationResult,
@@ -66,11 +63,7 @@ async function _save(userId, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = ProfileDetailsValidator.go(payload)
+  const validationResult = ProfileDetailsValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

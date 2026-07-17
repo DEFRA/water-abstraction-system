@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the latest 'live' bill run for the supplied region and financial year
  * @module FetchLiveBillRunService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
+import BillRunModel from '../../../models/bill-run.model.js'
 
 /**
  * Fetches the latest 'live' bill run for the supplied region and financial year
@@ -18,7 +16,7 @@ const BillRunModel = require('../../../models/bill-run.model.js')
  *
  * @returns {Promise<module:BillRunModel>} The latest 'live' bill run
  */
-async function go(regionId, toFinancialYearEnding) {
+export default async function fetchLiveBillRunService(regionId, toFinancialYearEnding) {
   return BillRunModel.query()
     .select(['id', 'batchType', 'billRunNumber', 'createdAt', 'scheme', 'status', 'summer', 'toFinancialYearEnding'])
     .where('regionId', regionId)
@@ -31,8 +29,4 @@ async function go(regionId, toFinancialYearEnding) {
     })
     .limit(1)
     .first()
-}
-
-module.exports = {
-  go
 }

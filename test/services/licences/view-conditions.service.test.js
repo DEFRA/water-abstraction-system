@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
+import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+import * as FetchConditionsService from '../../../app/services/licences/fetch-conditions.service.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
-const ViewConditionsService = require('../../../app/services/licences/view-conditions.service.js')
+import ViewConditionsService from '../../../app/services/licences/view-conditions.service.js'
 
 describe('Licences - View Conditions service', () => {
   let auth
@@ -31,7 +29,7 @@ describe('Licences - View Conditions service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with data to display', () => {
@@ -39,13 +37,13 @@ describe('Licences - View Conditions service', () => {
       licence = ViewLicencesFixture.licence()
       conditions = [ViewLicencesFixture.condition()]
 
-      Sinon.stub(FetchLicenceService, 'go').returns(licence)
+      vi.spyOn(FetchLicenceService, 'default').mockReturnValue(licence)
 
-      Sinon.stub(FetchConditionsService, 'go').returns(conditions)
+      vi.spyOn(FetchConditionsService, 'default').mockReturnValue(conditions)
     })
 
     it('correctly presents the data', async () => {
-      const result = await ViewConditionsService.go(licence.id, auth)
+      const result = await ViewConditionsService(licence.id, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'summary',
@@ -98,11 +96,11 @@ describe('Licences - View Conditions service', () => {
       licence = ViewLicencesFixture.licence()
       licence.licenceVersions = []
 
-      Sinon.stub(FetchLicenceService, 'go').returns(licence)
+      vi.spyOn(FetchLicenceService, 'default').mockReturnValue(licence)
     })
 
     it('correctly presents the data', async () => {
-      const result = await ViewConditionsService.go(licence.id, auth)
+      const result = await ViewConditionsService(licence.id, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'summary',

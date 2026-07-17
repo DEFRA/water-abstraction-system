@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Fetches the contacts data needed for the view '/companies/{id}/contacts'
  * @module FetchCompanyCRMDataDal
  */
 
-const { db } = require('../../../db/db.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetches the contacts data needed for the view '/companies/{id}/contacts'
@@ -18,7 +15,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the contacts for the company
  */
-async function go(companyId, roles, page = '1') {
+export default async function fetchCompanyCrmDataDal(companyId, roles, page = '1') {
   const authorisedForBilling = roles.includes('billing')
 
   const [{ rows: contacts }, { rows: totalNumber }] = await Promise.all([
@@ -261,8 +258,4 @@ function _query(paginationAndOrderBy = '') {
     results r
   ${paginationAndOrderBy}
   ;`
-}
-
-module.exports = {
-  go
 }

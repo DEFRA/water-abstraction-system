@@ -1,13 +1,11 @@
-'use strict'
+import { view } from '../controllers/manage.controller.js'
 
-const ManageController = require('../controllers/manage.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/manage',
     options: {
-      handler: ManageController.view,
+      handler: view,
       auth: {
         access: {
           scope: [
@@ -26,5 +24,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

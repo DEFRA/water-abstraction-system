@@ -1,17 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
 
 // Things we need to stub
-const CheckAllLicenceEndDatesService = require('../../app/services/licences/end-dates/check-all-licence-end-dates.service.js')
-const ProcessLicenceEndDateChangesService = require('../../app/services/licences/end-dates/process-licence-end-date-changes.service.js')
+import * as CheckAllLicenceEndDatesService from '../../app/services/licences/end-dates/check-all-licence-end-dates.service.js'
+import * as ProcessLicenceEndDateChangesService from '../../app/services/licences/end-dates/process-licence-end-date-changes.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 describe('Licences End Dates controller', () => {
   let options
@@ -23,16 +25,15 @@ describe('Licences End Dates controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
-    Sinon.stub(server.logger, 'error')
-    Sinon.stub(server.logger, 'info')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -47,7 +48,7 @@ describe('Licences End Dates controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(CheckAllLicenceEndDatesService, 'go').resolves()
+          vi.spyOn(CheckAllLicenceEndDatesService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -67,7 +68,7 @@ describe('Licences End Dates controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(ProcessLicenceEndDateChangesService, 'go').resolves()
+          vi.spyOn(ProcessLicenceEndDateChangesService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {

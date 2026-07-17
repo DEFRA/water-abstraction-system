@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const BaseReviewPresenter = require('../../../../app/presenters/bill-runs/review/base-review.presenter.js')
+import * as BaseReviewPresenter from '../../../../app/presenters/bill-runs/review/base-review.presenter.js'
 
 describe('Bill Runs Review - Base Review presenter', () => {
   describe('#calculateTotalBillableReturns()', () => {

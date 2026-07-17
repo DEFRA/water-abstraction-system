@@ -1,25 +1,22 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Thing under test
-const DetermineBillingYearsService = require('../../../../app/services/licences/supplementary/determine-billing-years.service.js')
+import DetermineBillingYearsService from '../../../../app/services/licences/supplementary/determine-billing-years.service.js'
 
 describe('Determine Billing Years Service', () => {
-  let clock
   let endDate
   let startDate
   let testDate
 
   beforeEach(() => {
     testDate = new Date('2024-03-31')
-    clock = Sinon.useFakeTimers(testDate)
+    vi.useFakeTimers({ now: testDate })
   })
 
   afterEach(() => {
-    Sinon.restore()
-    clock.restore()
+    vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   describe('when given a start date beginning before April', () => {
@@ -33,7 +30,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('takes todays date for the end date and returns the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023, 2024])
       })
@@ -45,7 +42,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('returns the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023, 2024])
       })
@@ -57,7 +54,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('returns the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023, 2024, 2025])
       })
@@ -75,7 +72,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('takes todays date for the end date and returns the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023, 2024])
       })
@@ -87,7 +84,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('returns  the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023])
       })
@@ -99,7 +96,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('returns  the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023, 2024])
       })

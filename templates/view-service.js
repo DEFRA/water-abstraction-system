@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '' page
  *
  * @module __MODULE_NAME__
  */
 
-const __PRESENTER_NAME__ = require('__PRESENTER_PATH__')
-const FetchSessionDal = require('__FETCH_SESSION_DAL_PATH__')
+import FetchSessionDal from '__FETCH_SESSION_DAL_PATH__'
+import __PRESENTER_NAME__ from '__PRESENTER_PATH__'
 
 /**
  * Orchestrates fetching and presenting the data for the '' page
@@ -16,16 +14,12 @@ const FetchSessionDal = require('__FETCH_SESSION_DAL_PATH__')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function __FUNCTION_NAME__(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = __PRESENTER_NAME__.go(session)
+  const pageData = __PRESENTER_NAME__(session)
 
   return {
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

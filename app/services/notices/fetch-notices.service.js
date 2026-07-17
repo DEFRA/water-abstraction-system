@@ -1,15 +1,12 @@
-'use strict'
-
 /**
  * Fetches the notices for the `/notices` page
  * @module FetchNoticesService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const EventModel = require('../../models/event.model.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import EventModel from '../../models/event.model.js'
 
 /**
  * Fetches the notices for the `/notices` page
@@ -19,7 +16,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} an object containing the matching notices and the total count of notices
  */
-async function go(filters, page = '1') {
+export default async function fetchNoticesService(filters, page = '1') {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)
@@ -144,8 +141,4 @@ function _standardNoticeTypes(noticeTypes) {
   }
 
   return standardTypes
-}
-
-module.exports = {
-  go
 }

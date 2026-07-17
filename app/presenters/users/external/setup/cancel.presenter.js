@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for external users on the `/users/external/setup/{id}/cancel` page
  * @module CancelPresenter
  */
 
-const { formatLicencesToUnlink } = require('../../base-users.presenter.js')
+import { formatLicencesToUnlink } from '../../base-users.presenter.js'
 
 /**
  * Formats data for external users on the `/users/external/setup/{id}/cancel` page
@@ -14,7 +12,7 @@ const { formatLicencesToUnlink } = require('../../base-users.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function cancelPresenter(session) {
   const licences = formatLicencesToUnlink(session)
 
   return {
@@ -27,8 +25,4 @@ function go(session) {
     pageTitle: 'You are about to cancel unregistering these licences',
     pageTitleCaption: session.user.username
   }
-}
-
-module.exports = {
-  go
 }

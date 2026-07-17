@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/check' page
  *
  * @module ViewCheckService
  */
 
-const CheckPresenter = require('../../../../presenters/users/internal/setup/check.presenter.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { markCheckPageVisited } = require('../../../../lib/check-page.lib.js')
-const { readFlashNotification } = require('../../../../lib/general.lib.js')
+import CheckPresenter from '../../../../presenters/users/internal/setup/check.presenter.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { markCheckPageVisited } from '../../../../lib/check-page.lib.js'
+import { readFlashNotification } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/check' page
@@ -19,12 +17,12 @@ const { readFlashNotification } = require('../../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewCheckService(sessionId, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   await markCheckPageVisited(session)
 
-  const pageData = CheckPresenter.go(session)
+  const pageData = CheckPresenter(session)
 
   const notification = readFlashNotification(yar)
 
@@ -32,8 +30,4 @@ async function go(sessionId, yar) {
     notification,
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

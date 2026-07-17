@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Validates the licence ref submitted for the `/notices/setup/{sessionId}/licence` page for renewal notice types
  * @module LicenceRenewalValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { renewalNoticeDate } = require('../../../../lib/dates.lib.js')
-const { licenceRefSchema } = require('../../../schemas/licence-ref.schema.js')
-const { today } = require('../../../../lib/general.lib.js')
+import { licenceRefSchema } from '../../../schemas/licence-ref.schema.js'
+import { renewalNoticeDate } from '../../../../lib/dates.lib.js'
+import { today } from '../../../../lib/general.lib.js'
 
 /**
  * Validates the licence ref submitted for the `/notices/setup/{sessionId}/licence` page for renewal notice types
@@ -20,7 +18,7 @@ const { today } = require('../../../../lib/general.lib.js')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found, the `error:` property will also exist detailing what the issues were
  */
-function go(payload, licenceRenewal) {
+export default function licenceRenewalValidator(payload, licenceRenewal) {
   const schema = Joi.object({
     licenceRef: licenceRefSchema(!!licenceRenewal)
       .custom((value, helpers) => {
@@ -83,8 +81,4 @@ function _licenceExpiryDateInRange(value, helpers, licenceRenewal) {
   }
 
   return helpers.error('expiry-date-too-soon', { licenceRef: value })
-}
-
-module.exports = {
-  go
 }

@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-const CheckPresenter = require('../../../../../app/presenters/users/internal/setup/check.presenter.js')
+import CheckPresenter from '../../../../../app/presenters/users/internal/setup/check.presenter.js'
 
 describe('Users - Internal - Setup - Check Presenter', () => {
   let session
@@ -15,7 +16,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckPresenter.go(session)
+      const result = CheckPresenter(session)
 
       expect(result).toEqual({
         access: null,
@@ -38,7 +39,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
   describe('the "access" property', () => {
     describe('when creating a new user', () => {
       it('returns null', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.access).toBeNull()
       })
@@ -50,7 +51,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
       })
 
       it('returns the users access status', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.access).toEqual('Enabled')
       })
@@ -60,7 +61,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
   describe('the "showEmailChangeLink" property', () => {
     describe('when creating a new user', () => {
       it('returns true', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.showEmailChangeLink).toBe(true)
       })
@@ -72,7 +73,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
       })
 
       it('returns true', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.showEmailChangeLink).toBe(true)
       })
@@ -84,7 +85,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
       })
 
       it('returns false', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.showEmailChangeLink).toBe(false)
       })

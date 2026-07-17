@@ -1,10 +1,8 @@
-'use strict'
+import { db } from '../db.js'
+import { data as groups } from './data/groups.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { db } = require('../db.js')
-const { data: groups } = require('./data/groups.js')
-
-async function seed() {
+export default async function seed() {
   for (const group of groups) {
     await _upsert(group)
   }
@@ -30,8 +28,4 @@ async function _upsert(group) {
     .insert(payload)
     .onConflict(['application', 'group'])
     .merge(['description', 'dateUpdated'])
-}
-
-module.exports = {
-  seed
 }

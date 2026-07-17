@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import UsersFixture from '../../../support/fixtures/users.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we want to stub
-const FetchLicencesDal = require('../../../../app/dal/users/external/fetch-licences.dal.js')
-const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
+import * as FetchLicencesDal from '../../../../app/dal/users/external/fetch-licences.dal.js'
+import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
-const ViewLicencesService = require('../../../../app/services/users/external/view-licences.service.js')
+import ViewLicencesService from '../../../../app/services/users/external/view-licences.service.js'
 
 describe('Users - External - View Licences service', () => {
   const auth = {
@@ -29,23 +27,23 @@ describe('Users - External - View Licences service', () => {
 
     user = { id, licenceEntityId: 'b2c55396-9bbb-448d-85e7-2be1dbefc02b', username }
 
-    Sinon.stub(FetchUserDal, 'go').resolves(user)
-    Sinon.stub(FetchLicencesDal, 'go').resolves({
+    vi.spyOn(FetchUserDal, 'default').mockResolvedValue(user)
+    vi.spyOn(FetchLicencesDal, 'default').mockResolvedValue({
       licences: [],
       totalNumber: 0
     })
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicencesService.go(user.id, auth, page, yarStub, back)
+      const result = await ViewLicencesService(user.id, auth, page, yarStub, back)
 
       expect(result).toEqual({
         activeNavBar: 'users',

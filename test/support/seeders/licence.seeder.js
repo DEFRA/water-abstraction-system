@@ -1,20 +1,18 @@
-'use strict'
-
 /**
  * @module LicenceSeeder
  */
 
-const CompanyHelper = require('../helpers/company.helper.js')
-const LicenceHelper = require('../helpers/licence.helper.js')
-const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import CompanyHelper from '../helpers/company.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import LicenceVersionHelper from '../helpers/licence-version.helper.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Seeds a licence holder that is the current licence version holder for two licences
  *
  * @returns {Promise<object>} an object containing the company, both licences and their versions, and a clean function
  */
-async function licenceHolderWithMultipleLicences() {
+export async function licenceHolderWithMultipleLicences() {
   const { company, licence, licenceVersion } = await licenceHolderWithSingleLicence()
 
   const licenceTwo = await LicenceHelper.add()
@@ -48,7 +46,7 @@ async function licenceHolderWithMultipleLicences() {
  *
  * @returns {Promise<object>} an object containing the company, the licence, both licence versions, and a clean function
  */
-async function exLicenceHolderWithSingleLicences() {
+export async function exLicenceHolderWithSingleLicences() {
   const { clean, ...licenceHolder } = await licenceHolderWithSingleLicence()
 
   const newerLicenceVersion = await LicenceVersionHelper.add({
@@ -74,7 +72,7 @@ async function exLicenceHolderWithSingleLicences() {
  *
  * @returns {Promise<object>} an object containing the company, licence, licence version, and a clean function
  */
-async function licenceHolderWithSingleLicence(data = {}) {
+export async function licenceHolderWithSingleLicence(data = {}) {
   const company = await CompanyHelper.add()
 
   const licence = await LicenceHelper.add(data)
@@ -90,10 +88,4 @@ async function licenceHolderWithSingleLicence(data = {}) {
       await company.$query().delete()
     }
   }
-}
-
-module.exports = {
-  exLicenceHolderWithSingleLicences,
-  licenceHolderWithMultipleLicences,
-  licenceHolderWithSingleLicence
 }

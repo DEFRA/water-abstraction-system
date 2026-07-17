@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const YarStub = require('../../support/stubs/yar.stub.js')
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we want to stub
-const UserModel = require('../../../app/models/user.model.js')
+import UserModel from '../../../app/models/user.model.js'
 
 // Thing under test
-const ViewProfileDetailsService = require('../../../app/services/users/view-profile-details.service.js')
+import ViewProfileDetailsService from '../../../app/services/users/view-profile-details.service.js'
 
 describe('Users - View profile details service', () => {
   const profileDetails = {
@@ -24,31 +22,32 @@ describe('Users - View profile details service', () => {
   const userId = 123
 
   let selectStub
-  let userModelQueryStub
   let whereStub
   let yarStub
 
   beforeEach(() => {
     // NOTE: We stub the UserModel `findById().select()` query to avoid hitting the DB as part of the test. It is
     // sufficiently simple running it would just be testing Objection.js and not our logic.
-    selectStub = Sinon.stub().resolves(profileDetails)
-    whereStub = Sinon.stub().returns({
+    selectStub = vi.fn().mockResolvedValue(profileDetails)
+    whereStub = vi.fn().mockReturnValue({
       select: selectStub,
-      first: Sinon.stub().returnsThis(),
-      limit: Sinon.stub().returnsThis()
+      first: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis()
     })
-    userModelQueryStub = Sinon.stub(UserModel, 'query').returns({ where: whereStub })
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.withArgs('notification').returns([])
+
+    vi.spyOn(UserModel, 'query').mockReturnValue({ where: whereStub })
+
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewProfileDetailsService.go(userId, yarStub)
+      const result = await ViewProfileDetailsService(userId, yarStub)
 
       expect(result).toEqual({
         backLink: {
@@ -68,14 +67,14 @@ describe('Users - View profile details service', () => {
 
     describe('and there is a notification to be displayed', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.flash.withArgs('notification').returns([testNotification])
+        yarStub = YarStub()
+        yarStub.flash.mockReturnValue([testNotification])
       })
 
       it('returns the notification', async () => {
-        const result = await ViewProfileDetailsService.go(userId, yarStub)
+        const result = await ViewProfileDetailsService(userId, yarStub)
 
-        expect(yarStub.flash.calledWith('notification')).toBe(true)
+        expect(yarStub.flash).toHaveBeenCalledWith('notification')
         expect(result.notification).toEqual(testNotification)
       })
     })
@@ -83,12 +82,13 @@ describe('Users - View profile details service', () => {
 
   describe('when the service errors', () => {
     beforeEach(() => {
-      userModelQueryStub.restore()
-      Sinon.stub(UserModel, 'query').throws(new Error('Model query error'))
+      vi.spyOn(UserModel, 'query').mockImplementation(() => {
+        throw new Error('Model query error')
+      })
     })
 
     it('throws the error', async () => {
-      const error = await ViewProfileDetailsService.go(userId, yarStub).catch((e) => {
+      const error = await ViewProfileDetailsService(userId, yarStub).catch((e) => {
         return e
       })
 

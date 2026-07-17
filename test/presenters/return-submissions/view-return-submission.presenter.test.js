@@ -1,20 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Thing under test
-const ViewReturnSubmissionPresenter = require('../../../app/presenters/return-submissions/view-return-submission.presenter.js')
+import ViewReturnSubmissionPresenter from '../../../app/presenters/return-submissions/view-return-submission.presenter.js'
 
 // Test helpers
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
-const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
-const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
+import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
+import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
+import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 
-const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
+import { unitNames } from '../../../app/lib/static-lookups.lib.js'
 
 describe('View Return Submissions presenter', () => {
   let testReturnSubmission
@@ -24,13 +22,13 @@ describe('View Return Submissions presenter', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('the "backLink" property', () => {
     describe('when the return submission is the current version', () => {
       it('returns the expected result', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         expect(result.backLink).toEqual(`/system/return-logs/${testReturnSubmission.returnLogId}/details`)
       })
@@ -42,7 +40,7 @@ describe('View Return Submissions presenter', () => {
       })
 
       it('returns the expected result', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         expect(result.backLink).toEqual(
           `/system/return-logs/${testReturnSubmission.returnLogId}/details?version=${testReturnSubmission.version}`
@@ -54,7 +52,7 @@ describe('View Return Submissions presenter', () => {
   describe('the "backLinkText" property', () => {
     describe('when the return submission is the current version', () => {
       it('returns the expected result', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         expect(result.backLinkText).toEqual(`Go back to return ${testReturnSubmission.returnLog.returnReference}`)
       })
@@ -66,7 +64,7 @@ describe('View Return Submissions presenter', () => {
       })
 
       it('returns the expected result', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         expect(result.backLinkText).toEqual(
           `Go back to return ${testReturnSubmission.returnLog.returnReference} version ${testReturnSubmission.version}`
@@ -78,11 +76,11 @@ describe('View Return Submissions presenter', () => {
   describe('the "displayReadings" property', () => {
     describe('when the return submission method is abstractionVolumes', () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('abstractionVolumes')
       })
 
       it('returns false', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         expect(result.displayReadings).toEqual(false)
       })
@@ -90,11 +88,11 @@ describe('View Return Submissions presenter', () => {
 
     describe("when the return submission method isn't abstractionVolumes", () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$method').returns('NOT_ABSTRACTION_VOLUMES')
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('NOT_ABSTRACTION_VOLUMES')
       })
 
       it('returns true', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         expect(result.displayReadings).toEqual(true)
       })
@@ -104,11 +102,11 @@ describe('View Return Submissions presenter', () => {
   describe('the "displayUnits" property', () => {
     describe('when the unit is not cubic metres', () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.GALLONS)
+        vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.GALLONS)
       })
 
       it('returns true', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         expect(result.displayUnits).toEqual(true)
       })
@@ -116,11 +114,11 @@ describe('View Return Submissions presenter', () => {
 
     describe('when the unit is cubic metres', () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
+        vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.CUBIC_METRES)
       })
 
       it('returns false', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         expect(result.displayUnits).toEqual(false)
       })
@@ -129,7 +127,7 @@ describe('View Return Submissions presenter', () => {
 
   describe('the "pageTitle" property', () => {
     it('returns the expected result', () => {
-      const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+      const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
       expect(result.pageTitle).toEqual('Water abstracted February 2025')
     })
@@ -137,7 +135,7 @@ describe('View Return Submissions presenter', () => {
 
   describe('the "returnReference" property', () => {
     it('returns the expected result', () => {
-      const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+      const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
       expect(result.returnReference).toEqual(testReturnSubmission.returnLog.returnReference)
     })
@@ -146,16 +144,16 @@ describe('View Return Submissions presenter', () => {
   describe('the "tableData" property', () => {
     describe('when the return submission contains volumes', () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('abstractionVolumes')
       })
 
       describe('and the volumes are cubic metres', () => {
         beforeEach(() => {
-          Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
+          vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.CUBIC_METRES)
         })
 
         it('includes the expected headers', () => {
-          const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+          const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
           const headers = result.tableData.headers.map((header) => {
             return header.text
@@ -165,9 +163,9 @@ describe('View Return Submissions presenter', () => {
         })
 
         it('includes the expected rows', () => {
-          const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+          const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
-          expect(result.tableData.rows.length).toEqual(28)
+          expect(result.tableData.rows).toHaveLength(28)
           // We use include() as a row can also include a reading key which we don't care about for volumes
           expect(result.tableData.rows[0]).toMatchObject({
             cubicMetresQuantity: '1,000',
@@ -177,7 +175,7 @@ describe('View Return Submissions presenter', () => {
         })
 
         it('includes the expected totals', () => {
-          const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+          const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
           expect(result.tableData.cubicMetresTotal).toEqual('28,000')
           expect(result.tableData.unitTotal).toEqual('28,000')
@@ -187,11 +185,11 @@ describe('View Return Submissions presenter', () => {
       describe('and the volumes are not cubic metres', () => {
         beforeEach(() => {
           testReturnSubmission = _createSubmission({ userUnit: unitNames.GALLONS })
-          Sinon.stub(testReturnSubmission, '$units').returns(unitNames.GALLONS)
+          vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.GALLONS)
         })
 
         it('includes the expected headers', () => {
-          const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+          const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
           const headers = result.tableData.headers.map((header) => {
             return header.text
@@ -201,9 +199,9 @@ describe('View Return Submissions presenter', () => {
         })
 
         it('includes the expected rows', () => {
-          const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+          const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
-          expect(result.tableData.rows.length).toEqual(28)
+          expect(result.tableData.rows).toHaveLength(28)
           // We use include() as a row can also include a reading key which we don't care about for volumes
           expect(result.tableData.rows[0]).toMatchObject({
             cubicMetresQuantity: '1,000',
@@ -213,7 +211,7 @@ describe('View Return Submissions presenter', () => {
         })
 
         it('includes the expected totals', () => {
-          const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+          const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
           expect(result.tableData.cubicMetresTotal).toEqual('28,000')
           expect(result.tableData.unitTotal).toEqual('6,159,138.952372')
@@ -224,11 +222,11 @@ describe('View Return Submissions presenter', () => {
     describe('when the return submission contains readings', () => {
       beforeEach(() => {
         testReturnSubmission = _createSubmission({ readings: true })
-        Sinon.stub(testReturnSubmission, '$method').returns('NOT_ABSTRACTION_VOLUMES')
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('NOT_ABSTRACTION_VOLUMES')
       })
 
       it('includes the expected headers', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         const headers = result.tableData.headers.map((header) => {
           return header.text
@@ -238,9 +236,9 @@ describe('View Return Submissions presenter', () => {
       })
 
       it('includes the expected rows', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
-        expect(result.tableData.rows.length).toEqual(28)
+        expect(result.tableData.rows).toHaveLength(28)
         // We use include() as a row can also include a reading key which we don't care about for volumes
         expect(result.tableData.rows[0]).toMatchObject({
           reading: 1001,
@@ -249,7 +247,7 @@ describe('View Return Submissions presenter', () => {
       })
 
       it('includes the expected totals', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         expect(result.tableData.cubicMetresTotal).toEqual('28,000')
       })
@@ -258,12 +256,12 @@ describe('View Return Submissions presenter', () => {
     describe('when the return submission contains non-cubic metre volumes and readings', () => {
       beforeEach(() => {
         testReturnSubmission = _createSubmission({ readings: true })
-        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.GALLONS)
-        Sinon.stub(testReturnSubmission, '$method').returns('NOT_ABSTRACTION_VOLUMES')
+        vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.GALLONS)
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('NOT_ABSTRACTION_VOLUMES')
       })
 
       it('includes the expected headers', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         const headers = result.tableData.headers.map((header) => {
           return header.text
@@ -275,12 +273,12 @@ describe('View Return Submissions presenter', () => {
 
     describe('when the return submission frequency is daily', () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
-        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('abstractionVolumes')
+        vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.CUBIC_METRES)
       })
 
       it('includes the expected headers', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
         const headers = result.tableData.headers.map((header) => {
           return header.text
@@ -290,9 +288,9 @@ describe('View Return Submissions presenter', () => {
       })
 
       it('includes the expected rows', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-1')
 
-        expect(result.tableData.rows.length).toEqual(28)
+        expect(result.tableData.rows).toHaveLength(28)
         expect(result.tableData.rows[0]).toMatchObject({ date: '1 February 2025' })
         expect(result.tableData.rows[27]).toMatchObject({ date: '28 February 2025' })
       })
@@ -301,12 +299,12 @@ describe('View Return Submissions presenter', () => {
     describe('when the return submission frequency is weekly', () => {
       beforeEach(() => {
         testReturnSubmission = _createSubmission({ returnsFrequency: 'week' })
-        Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
-        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('abstractionVolumes')
+        vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.CUBIC_METRES)
       })
 
       it('includes the expected headers', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-3')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-3')
 
         const headers = result.tableData.headers.map((header) => {
           return header.text
@@ -316,9 +314,9 @@ describe('View Return Submissions presenter', () => {
       })
 
       it('includes the expected rows that end within the month', () => {
-        const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-3')
+        const result = ViewReturnSubmissionPresenter(testReturnSubmission, '2025-3')
 
-        expect(result.tableData.rows.length).toEqual(4)
+        expect(result.tableData.rows).toHaveLength(4)
         expect(result.tableData.rows[0]).toMatchObject({ date: '5 April 2025' })
         expect(result.tableData.rows).not.toContainEqual({ date: '3 May 2025' })
       })

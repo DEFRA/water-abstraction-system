@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to generate a bill run
  * @module GenerateBillRunRequest
  */
 
-const ChargingModuleRequest = require('../charging-module.request.js')
+import { patchRequest } from '../charging-module.request.js'
 
 /**
  * Generate a bill run in the Charging Module API
@@ -17,12 +15,8 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(billRunId) {
+export default async function generateBillRunRequest(billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}/generate`
 
-  return ChargingModuleRequest.patch(path)
-}
-
-module.exports = {
-  send
+  return patchRequest(path)
 }

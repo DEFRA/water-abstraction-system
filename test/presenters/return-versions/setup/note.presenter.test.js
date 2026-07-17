@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const NotePresenter = require('../../../../app/presenters/return-versions/setup/note.presenter.js')
+import NotePresenter from '../../../../app/presenters/return-versions/setup/note.presenter.js'
 
 describe('Return Versions Setup - Note presenter', () => {
   let session
@@ -27,7 +28,7 @@ describe('Return Versions Setup - Note presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data without a note', () => {
-      const result = NotePresenter.go(session)
+      const result = NotePresenter(session)
 
       expect(result).to.be.toEqual({
         backLink: {
@@ -45,7 +46,7 @@ describe('Return Versions Setup - Note presenter', () => {
 
   describe('the "backLink" property', () => {
     it('returns a link back to the "check" page', () => {
-      const result = NotePresenter.go(session)
+      const result = NotePresenter(session)
 
       expect(result.backLink).toEqual({
         href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -64,7 +65,7 @@ describe('Return Versions Setup - Note presenter', () => {
       })
 
       it('returns the contents of the note', () => {
-        const result = NotePresenter.go(session)
+        const result = NotePresenter(session)
 
         expect(result.note).toEqual('Note attached to return requirement')
       })
@@ -72,7 +73,7 @@ describe('Return Versions Setup - Note presenter', () => {
 
     describe('when the user has not previously submitted a note', () => {
       it('returns an empty note', () => {
-        const result = NotePresenter.go(session)
+        const result = NotePresenter(session)
 
         expect(result.note).toBeNull()
       })

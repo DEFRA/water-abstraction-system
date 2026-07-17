@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import CustomersFixture from '../../../support/fixtures/customers.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchCompanyContactsService from '../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitContactService = require('../../../../app/services/billing-accounts/setup/submit-contact.service.js')
+import SubmitContactService from '../../../../app/services/billing-accounts/setup/submit-contact.service.js'
 
 describe('Billing Accounts - Setup - Contact Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -24,18 +22,16 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     company: billingAccount.company,
     contacts: [contact]
   }
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
 
   beforeEach(() => {
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves()
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the user picks to set up a "new" contact with an existing address', () => {
@@ -49,23 +45,23 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         billingAccount
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      fetchSessionStub.resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('saves the submitted value', async () => {
-      await SubmitContactService.go(session.id, payload)
+      await SubmitContactService(session.id, payload)
 
       expect(session).toMatchObject({
         addressSelected: billingAccountAddress.id,
         contactSelected: payload.contactSelected
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitContactService.go(session.id, payload)
+      const result = await SubmitContactService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/contact-name`
@@ -80,13 +76,13 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: 'new'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactService.go(session.id, payload)
+        await SubmitContactService(session.id, payload)
 
         expect(session).toMatchObject({
           addressSelected: billingAccountAddress.id,
@@ -95,7 +91,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
+        const result = await SubmitContactService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/contact-name`
@@ -112,13 +108,13 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: 'new'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactService.go(session.id, payload)
+        await SubmitContactService(session.id, payload)
 
         expect(session).toMatchObject({
           addressSelected: billingAccountAddress.id,
@@ -128,7 +124,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('returns to the check page', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
+        const result = await SubmitContactService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -148,24 +144,24 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         billingAccount
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      fetchSessionStub.resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('saves the submitted value', async () => {
-      await SubmitContactService.go(session.id, payload)
+      await SubmitContactService(session.id, payload)
 
       expect(session).toMatchObject({
         addressJourney: _addressJourney(session),
         addressSelected: 'new',
         contactSelected: payload.contactSelected
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitContactService.go(session.id, payload)
+      const result = await SubmitContactService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/address/${session.id}/postcode`
@@ -185,13 +181,13 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: contact.id
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactService.go(session.id, payload)
+        await SubmitContactService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: sessionData.addressJourney,
@@ -201,7 +197,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
+        const result = await SubmitContactService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/address/${session.id}/postcode`
@@ -223,13 +219,13 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: contact.id
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactService.go(session.id, payload)
+        await SubmitContactService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: sessionData.addressJourney,
@@ -240,7 +236,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
+        const result = await SubmitContactService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/address/${session.id}/postcode`
@@ -262,13 +258,13 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactName: 'Contact Name'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactService.go(session.id, payload)
+        await SubmitContactService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: _addressJourney(session),
@@ -280,7 +276,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
+        const result = await SubmitContactService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/address/${session.id}/postcode`
@@ -302,15 +298,15 @@ describe('Billing Accounts - Setup - Contact Service', () => {
             contactName: 'Contact Name'
           }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-          Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
+          vi.spyOn(FetchCompanyContactsService, 'default').mockResolvedValue(companyContacts)
         })
 
         it('returns page data for the view, with errors', async () => {
-          const result = await SubmitContactService.go(session.id, payload)
+          const result = await SubmitContactService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [
@@ -338,15 +334,15 @@ describe('Billing Accounts - Setup - Contact Service', () => {
             existingAccount: billingAccount.company.id
           }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-          Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
+          vi.spyOn(FetchCompanyContactsService, 'default').mockResolvedValue(companyContacts)
         })
 
         it('returns page data for the view, with errors', async () => {
-          const result = await SubmitContactService.go(session.id, payload)
+          const result = await SubmitContactService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [

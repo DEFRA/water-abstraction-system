@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for licence_version_purpose_condition_types (water.licence_version_purpose_condition_types)
  * @module LicenceVersionPurposeConditionTypeModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceVersionPurposeConditionModel from './licence-version-purpose-condition.model.js'
 
-class LicenceVersionPurposeConditionTypeModel extends BaseModel {
+export default class LicenceVersionPurposeConditionTypeModel extends BaseModel {
   static get tableName() {
     return 'licenceVersionPurposeConditionTypes'
   }
@@ -18,7 +17,7 @@ class LicenceVersionPurposeConditionTypeModel extends BaseModel {
     return {
       licenceVersionPurposeConditions: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-version-purpose-condition.model',
+        modelClass: LicenceVersionPurposeConditionModel,
         join: {
           from: 'licenceVersionPurposeConditionTypes.id',
           to: 'licenceVersionPurposeConditions.licenceVersionPurposeConditionTypeId'
@@ -27,5 +26,3 @@ class LicenceVersionPurposeConditionTypeModel extends BaseModel {
     }
   }
 }
-
-module.exports = LicenceVersionPurposeConditionTypeModel

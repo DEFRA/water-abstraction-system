@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitSingleVolumeService = require('../../../../app/services/return-logs/setup/submit-single-volume.service.js')
+import SubmitSingleVolumeService from '../../../../app/services/return-logs/setup/submit-single-volume.service.js'
 
 describe('Return Logs Setup - Submit Single Volume service', () => {
   let payload
@@ -23,13 +21,13 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
       units: 'litres'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -39,17 +37,17 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitSingleVolumeService.go(session.id, payload)
+        await SubmitSingleVolumeService(session.id, payload)
 
         expect(session.singleVolume).toEqual('yes')
         expect(session.singleVolumeQuantity).toEqual(1000)
 
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the user has previously selected "yes" to a single volume being provided', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitSingleVolumeService.go(session.id, payload)
+          const result = await SubmitSingleVolumeService(session.id, payload)
 
           expect(result).toEqual({ singleVolume: 'yes' })
         })
@@ -61,7 +59,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitSingleVolumeService.go(session.id, payload)
+          const result = await SubmitSingleVolumeService(session.id, payload)
 
           expect(result).toEqual({ singleVolume: 'no' })
         })
@@ -74,7 +72,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitSingleVolumeService.go(session.id, payload)
+        const result = await SubmitSingleVolumeService(session.id, payload)
 
         expect(result).toMatchObject({
           backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
@@ -88,7 +86,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitSingleVolumeService.go(session.id, payload)
+          const result = await SubmitSingleVolumeService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [{ href: '#singleVolume', text: "Select if it's a single volume" }],
@@ -104,7 +102,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
         })
 
         it('includes an error for the input form element', async () => {
-          const result = await SubmitSingleVolumeService.go(session.id, payload)
+          const result = await SubmitSingleVolumeService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [{ href: '#singleVolumeQuantity', text: 'Enter a total amount greater than zero' }],

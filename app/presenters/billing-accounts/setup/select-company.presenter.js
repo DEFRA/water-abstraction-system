@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/billing-accounts/setup/{sessionId}/select-company' page
  * @module SelectCompanyPresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the '/billing-accounts/setup/{sessionId}/select-company' page
@@ -15,7 +13,7 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session, companies) {
+export default function selectCompanyPresenter(session, companies) {
   const { billingAccount } = session
 
   return {
@@ -46,8 +44,4 @@ function _radioOptions(companies, companiesHouseNumber) {
   }
 
   return items
-}
-
-module.exports = {
-  go
 }

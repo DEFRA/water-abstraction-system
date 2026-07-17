@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const { generateRandomInteger, generateUUID } = require('../../../../app/lib/general.lib.js')
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import { generateRandomInteger, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const ReviewPresenter = require('../../../../app/presenters/bill-runs/review/review.presenter.js')
+import ReviewPresenter from '../../../../app/presenters/bill-runs/review/review.presenter.js'
 
 describe('Bill Runs - Review - Review presenter', () => {
   let billRun
@@ -69,7 +70,7 @@ describe('Bill Runs - Review - Review presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ReviewPresenter.go(billRun, licences)
+    const result = ReviewPresenter(billRun, licences)
 
     expect(result).toEqual({
       backLink: { href: '/system/bill-runs', text: 'Go back to bill runs' },
@@ -117,19 +118,19 @@ describe('Bill Runs - Review - Review presenter', () => {
   describe('the "licences" property', () => {
     describe('the "issues" property', () => {
       it('returns "Multiple Issues" when there are multiple issues', () => {
-        const result = ReviewPresenter.go(billRun, licences)
+        const result = ReviewPresenter(billRun, licences)
 
         expect(result.licences[0].issue).toEqual('Multiple Issues')
       })
 
       it('returns the issue when there is a single issue', () => {
-        const result = ReviewPresenter.go(billRun, licences)
+        const result = ReviewPresenter(billRun, licences)
 
         expect(result.licences[2].issue).toEqual('Abstraction outside period')
       })
 
       it('returns an empty string when there are no issues', () => {
-        const result = ReviewPresenter.go(billRun, licences)
+        const result = ReviewPresenter(billRun, licences)
 
         expect(result.licences[1].issue).toEqual('')
       })
@@ -139,7 +140,7 @@ describe('Bill Runs - Review - Review presenter', () => {
   describe('the "reviewMessage" property', () => {
     describe('when there is 1 licence to review', () => {
       it('returns the correct message with the number of licences to review', () => {
-        const result = ReviewPresenter.go(billRun, licences)
+        const result = ReviewPresenter(billRun, licences)
 
         expect(result.reviewMessage).toEqual(
           'You need to review 1 licence with returns data issues. You can then continue and send the bill run.'
@@ -153,7 +154,7 @@ describe('Bill Runs - Review - Review presenter', () => {
       })
 
       it('returns the correct message with the number of licences to review', () => {
-        const result = ReviewPresenter.go(billRun, licences)
+        const result = ReviewPresenter(billRun, licences)
 
         expect(result.reviewMessage).toEqual(
           'You need to review 3 licences with returns data issues. You can then continue and send the bill run.'
@@ -167,7 +168,7 @@ describe('Bill Runs - Review - Review presenter', () => {
       })
 
       it('returns the correct message', () => {
-        const result = ReviewPresenter.go(billRun, licences)
+        const result = ReviewPresenter(billRun, licences)
 
         expect(result.reviewMessage).toEqual('You have resolved all returns data issues. Continue to generate bills.')
       })

@@ -1,16 +1,15 @@
-'use strict'
-
 /**
  * Use for making http requests to the GOV.UK Notify service https://www.notifications.service.gov.uk/
  * @module NotifyRequest
  */
 
-const { HTTP_STATUS_TOO_MANY_REQUESTS } = require('node:http2').constants
+import http2 from 'node:http2'
 
-const BaseRequest = require('./base.request.js')
-const { pause } = require('../lib/general.lib.js')
+import notifyConfig from '../../config/notify.config.js'
+import { pause } from '../lib/general.lib.js'
+import { getRequest as baseGetRequest, postRequest as basePostRequest } from './base.request.js'
 
-const notifyConfig = require('../../config/notify.config.js')
+const { HTTP_STATUS_TOO_MANY_REQUESTS } = http2.constants
 
 /**
  * Sends a GET request to Notify
@@ -19,8 +18,8 @@ const notifyConfig = require('../../config/notify.config.js')
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function get(path) {
-  const result = await _sendRequest(path, BaseRequest.get)
+export async function getRequest(path) {
+  const result = await _sendRequest(path, baseGetRequest)
 
   return _parseResult(result)
 }
@@ -33,15 +32,15 @@ async function get(path) {
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function post(path, body = {}) {
-  let result = await _sendRequest(path, BaseRequest.post, body)
+export async function postRequest(path, body = {}) {
+  let result = await _sendRequest(path, basePostRequest, body)
 
   // Only Notify POST requests are rated limited (assuming you are not DDoS them!) to 3,000 messages per minute,
   // calculated on a rolling basis. We should not hit this due to the other precautions we take, but if we do, we wait
   // by default 90 seconds to allow the limit to reset before retrying.
   if (result.response.statusCode === HTTP_STATUS_TOO_MANY_REQUESTS) {
     await pause(notifyConfig.rateLimitPause)
-    result = await _sendRequest(path, BaseRequest.post, body)
+    result = await _sendRequest(path, basePostRequest, body)
   } else {
     // Assuming the default delay of 30 ms is used, we can theoretically send 2,000 requests a minute, leaving a cushion
     // of 1,000.
@@ -109,9 +108,4 @@ function _requestOptions(accessToken, body) {
     },
     json: body
   }
-}
-
-module.exports = {
-  get,
-  post
 }

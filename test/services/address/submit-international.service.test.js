@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../support/stubs/session.stub.js')
-const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import SessionModelStub from '../../support/stubs/session.stub.js'
+import { countryLookup } from '../../../app/presenters/address/base-address.presenter.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitInternationalService = require('../../../app/services/address/submit-international.service.js')
+import SubmitInternationalService from '../../../app/services/address/submit-international.service.js'
 
 describe('Address - Submit International Service', () => {
   let payload
@@ -36,13 +34,13 @@ describe('Address - Submit International Service', () => {
       }
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -59,7 +57,7 @@ describe('Address - Submit International Service', () => {
       })
 
       it('saves the submitted address and returns the specified redirect URL', async () => {
-        const result = await SubmitInternationalService.go(sessionId, payload)
+        const result = await SubmitInternationalService(sessionId, payload)
 
         expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -72,7 +70,7 @@ describe('Address - Submit International Service', () => {
           postcode: '80802'
         })
         expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/international`)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 
@@ -83,7 +81,7 @@ describe('Address - Submit International Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitInternationalService.go(sessionId, payload)
+          const result = await SubmitInternationalService(sessionId, payload)
 
           expect(result).toEqual({
             error: {
@@ -123,7 +121,7 @@ describe('Address - Submit International Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitInternationalService.go(sessionId, payload)
+          const result = await SubmitInternationalService(sessionId, payload)
 
           expect(result).toEqual({
             error: {

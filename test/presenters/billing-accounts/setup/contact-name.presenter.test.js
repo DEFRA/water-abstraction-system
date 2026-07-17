@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Thing under test
-const ContactNamePresenter = require('../../../../app/presenters/billing-accounts/setup/contact-name.presenter.js')
+import ContactNamePresenter from '../../../../app/presenters/billing-accounts/setup/contact-name.presenter.js'
 
 describe('Billing Accounts - Setup - Contact Name Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -19,7 +20,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactNamePresenter.go(session)
+      const result = ContactNamePresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -36,9 +37,9 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
   describe('the "contactName" property', () => {
     describe('when no contact has been selected', () => {
       it('returns null', () => {
-        const result = ContactNamePresenter.go(session)
+        const result = ContactNamePresenter(session)
 
-        expect(result.contactName).toEqual(null)
+        expect(result.contactName).toBeNull()
       })
     })
 
@@ -48,7 +49,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       })
 
       it('returns the selected contact name', () => {
-        const result = ContactNamePresenter.go(session)
+        const result = ContactNamePresenter(session)
 
         expect(result.contactName).toEqual(session.contactName)
       })
@@ -65,7 +66,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       })
 
       it('returns the correct back link', () => {
-        const result = ContactNamePresenter.go(session)
+        const result = ContactNamePresenter(session)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
       })
@@ -81,7 +82,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       })
 
       it('returns the correct back link', () => {
-        const result = ContactNamePresenter.go(session)
+        const result = ContactNamePresenter(session)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/returns` view licence returns page
  * @module ReturnsPresenter
  */
 
-const { formatLongDate, formatPurposes, formatReturnLogStatus } = require('../base.presenter.js')
+import { formatLongDate, formatPurposes, formatReturnLogStatus } from '../base.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/returns` view licence returns page
@@ -16,7 +14,7 @@ const { formatLongDate, formatPurposes, formatReturnLogStatus } = require('../ba
  *
  * @returns {object} The data formatted for the view template
  */
-function go(returnLogs, hasRequirements, licence) {
+export default function returnsPresenter(returnLogs, hasRequirements, licence) {
   const returns = _returns(returnLogs)
 
   const { licenceRef } = licence
@@ -61,8 +59,4 @@ function _returns(returns) {
       status: formatReturnLogStatus(returnLog)
     }
   })
-}
-
-module.exports = {
-  go
 }

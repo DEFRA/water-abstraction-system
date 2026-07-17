@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-provided` page
  * @module SubmitMeterProvidedService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const MeterProvidedPresenter = require('../../../presenters/return-logs/setup/meter-provided.presenter.js')
-const MeterProvidedValidator = require('../../../validators/return-logs/setup/meter-provided.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import MeterProvidedPresenter from '../../../presenters/return-logs/setup/meter-provided.presenter.js'
+import MeterProvidedValidator from '../../../validators/return-logs/setup/meter-provided.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-provided` page
@@ -26,8 +24,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} If no errors the page data for the meter-provided page else the validation error details
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitMeterProvidedService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload)
 
@@ -35,7 +33,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited && payload.meterProvided === 'no') {
-      GeneralLib.flashNotification(yar, 'Updated', 'Reporting details changed')
+      flashNotification(yar, 'Updated', 'Reporting details changed')
     }
 
     return {
@@ -45,7 +43,7 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const pageData = MeterProvidedPresenter.go(session)
+  const pageData = MeterProvidedPresenter(session)
 
   return {
     error,
@@ -66,11 +64,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = MeterProvidedValidator.go(payload)
+  const validationResult = MeterProvidedValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

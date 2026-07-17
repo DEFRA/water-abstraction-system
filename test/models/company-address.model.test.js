@@ -1,16 +1,17 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AddressHelper = require('../support/helpers/address.helper.js')
-const AddressModel = require('../../app/models/address.model.js')
-const CompanyAddressHelper = require('../support/helpers/company-address.helper.js')
-const CompanyHelper = require('../support/helpers/company.helper.js')
-const CompanyModel = require('../../app/models/company.model.js')
-const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
-const LicenceRoleModel = require('../../app/models/licence-role.model.js')
+import AddressHelper from '../support/helpers/address.helper.js'
+import AddressModel from '../../app/models/address.model.js'
+import CompanyAddressHelper from '../support/helpers/company-address.helper.js'
+import CompanyHelper from '../support/helpers/company.helper.js'
+import CompanyModel from '../../app/models/company.model.js'
+import LicenceRoleHelper from '../support/helpers/licence-role.helper.js'
+import LicenceRoleModel from '../../app/models/licence-role.model.js'
 
 // Thing under test
-const CompanyAddressModel = require('../../app/models/company-address.model.js')
+import CompanyAddressModel from '../../app/models/company-address.model.js'
 
 describe('Company Address model', () => {
   let testAddress

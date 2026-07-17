@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * @module ChargeElementHelper
  */
 
-const ChargeElementModel = require('../../../app/models/charge-element.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const PrimaryPurposeHelper = require('./primary-purpose.helper.js')
-const PurposeHelper = require('./purpose.helper.js')
-const SecondaryPurposeHelper = require('./secondary-purpose.helper.js')
+import ChargeElementModel from '../../../app/models/charge-element.model.js'
+import PrimaryPurposeHelper from './primary-purpose.helper.js'
+import PurposeHelper from './purpose.helper.js'
+import SecondaryPurposeHelper from './secondary-purpose.helper.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new charge element
@@ -84,7 +82,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

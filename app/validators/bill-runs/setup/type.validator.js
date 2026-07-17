@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/bill-runs/setup/{sessionId}/type` page
  * @module TypeValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['annual', 'supplementary', 'two_part_supplementary', 'two_part_tariff']
 
@@ -17,7 +15,7 @@ const VALID_VALUES = ['annual', 'supplementary', 'two_part_supplementary', 'two_
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function typeValidator(payload) {
   const schema = Joi.object({
     type: Joi.string()
       .required()
@@ -30,8 +28,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

@@ -1,27 +1,27 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Things we need to stub
-const LegacyRequest = require('../../../app/requests/legacy.request.js')
+import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
-const DeleteBillLicenceRequest = require('../../../app/requests/legacy/delete-bill-licence.request.js')
+import DeleteBillLicenceRequest from '../../../app/requests/legacy/delete-bill-licence.request.js'
+
+const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Legacy Delete Bill Licence request', () => {
   const billLicenceId = '8feaf2c1-f7cd-47f1-93b9-0d2218d20d56'
   const user = { id: '1c4ce580-9053-4531-ba23-d0cf0caf0562', username: 'carol.shaw@atari.com' }
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request can delete a bill licence', () => {
     beforeEach(async () => {
-      Sinon.stub(LegacyRequest, 'delete').resolves({
+      vi.spyOn(LegacyRequest, 'deleteRequest').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_NO_CONTENT,
@@ -31,13 +31,13 @@ describe('Legacy Delete Bill Licence request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await DeleteBillLicenceRequest.send(billLicenceId, user)
+      const result = await DeleteBillLicenceRequest(billLicenceId, user)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns a 204 - ok', async () => {
-      const result = await DeleteBillLicenceRequest.send(billLicenceId, user)
+      const result = await DeleteBillLicenceRequest(billLicenceId, user)
 
       expect(result.response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
       expect(result.response.body).toBeNull()
@@ -47,7 +47,7 @@ describe('Legacy Delete Bill Licence request', () => {
   describe('when the request cannot delete a bill licence', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(LegacyRequest, 'delete').resolves({
+        vi.spyOn(LegacyRequest, 'deleteRequest').mockResolvedValue({
           succeeded: false,
           response: {
             statusCode: HTTP_STATUS_UNAUTHORIZED,
@@ -62,13 +62,13 @@ describe('Legacy Delete Bill Licence request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await DeleteBillLicenceRequest.send(billLicenceId, user)
+        const result = await DeleteBillLicenceRequest(billLicenceId, user)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await DeleteBillLicenceRequest.send(billLicenceId, user)
+        const result = await DeleteBillLicenceRequest(billLicenceId, user)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -78,20 +78,20 @@ describe('Legacy Delete Bill Licence request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(LegacyRequest, 'delete').resolves({
+        vi.spyOn(LegacyRequest, 'deleteRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })
       })
 
       it('returns a "false" success status', async () => {
-        const result = await DeleteBillLicenceRequest.send(billLicenceId, user)
+        const result = await DeleteBillLicenceRequest(billLicenceId, user)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await DeleteBillLicenceRequest.send(billLicenceId, user)
+        const result = await DeleteBillLicenceRequest(billLicenceId, user)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

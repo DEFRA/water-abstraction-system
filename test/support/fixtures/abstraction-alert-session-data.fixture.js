@@ -1,7 +1,4 @@
-'use strict'
-
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import { generateLicenceRef, generateUUID } from '../generators.js'
 
 /**
  * Create licence monitoring station test data
@@ -289,9 +286,9 @@ function relevantLicenceMonitoringStations(licenceRefs, _licenceMonitoringStatio
   return lmsArray
 }
 
-module.exports = {
-  get,
+export default {
   licenceMonitoringStations,
-  relevantLicenceMonitoringStations,
-  unsortedLicenceMonitoringStations
+  unsortedLicenceMonitoringStations,
+  get,
+  relevantLicenceMonitoringStations
 }

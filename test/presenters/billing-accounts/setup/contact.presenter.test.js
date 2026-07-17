@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import CustomersFixture from '../../../support/fixtures/customers.fixture.js'
 
 // Thing under test
-const ContactPresenter = require('../../../../app/presenters/billing-accounts/setup/contact.presenter.js')
+import ContactPresenter from '../../../../app/presenters/billing-accounts/setup/contact.presenter.js'
 
 describe('Billing Accounts - Setup - Contact Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -27,7 +28,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactPresenter.go(session, companyContacts)
+      const result = ContactPresenter(session, companyContacts)
 
       expect(result).toEqual({
         backLink: {
@@ -61,9 +62,9 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
   describe('the "contactSelected" property', () => {
     describe('when no contact has been selected', () => {
       it('returns null', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
-        expect(result.contactSelected).toEqual(null)
+        expect(result.contactSelected).toBeNull()
       })
     })
 
@@ -73,7 +74,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       })
 
       it('returns the selected contact ID', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
         expect(result.contactSelected).toEqual(session.contactSelected)
       })
@@ -83,7 +84,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
   describe('"pageTitle" property', () => {
     describe('when there are contacts returned', () => {
       it('returns the correct page title', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
         expect(result.pageTitle).toEqual(`Set up a contact for ${company.name}`)
       })
@@ -95,7 +96,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       })
 
       it('returns the correct page title', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
         expect(result.pageTitle).toEqual(`No company contacts found for "${company.name}"`)
       })
@@ -112,7 +113,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       })
 
       it('returns the correct back link', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/fao`)
       })
@@ -128,7 +129,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       })
 
       it('returns the correct back link', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })

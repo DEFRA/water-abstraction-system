@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Splits and formats entries from the `/return-logs/{sessionId}/multiple-entries` page
  * @module SplitMultipleEntriesService
@@ -20,7 +18,7 @@
  *
  * @returns {number[] | null} The formatted array of numbers and null values.
  */
-function go(multipleEntries) {
+export default function splitMultipleEntriesService(multipleEntries) {
   if (!multipleEntries) {
     return null
   }
@@ -42,8 +40,4 @@ function go(multipleEntries) {
   }
 
   return entries
-}
-
-module.exports = {
-  go
 }

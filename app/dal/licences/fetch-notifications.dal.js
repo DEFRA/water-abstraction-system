@@ -1,15 +1,12 @@
-'use strict'
-
 /**
  * Fetches data needed for the view '/licences/{id}/communications` page
  * @module FetchNotificationsDal
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const NotificationModel = require('../../models/notification.model.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import NotificationModel from '../../models/notification.model.js'
 
 /**
  * Fetches data needed for the view '/licences/{id}/communications` page
@@ -19,7 +16,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's communications tab
  */
-async function go(licenceRef, page = '1') {
+export default async function fetchNotificationsDal(licenceRef, page = '1') {
   const { results: notifications, total: totalNumber } = await _fetch(licenceRef, page)
 
   return { notifications, totalNumber }
@@ -45,8 +42,4 @@ async function _fetch(licenceRef, page) {
       ])
     })
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
-}
-
-module.exports = {
-  go
 }

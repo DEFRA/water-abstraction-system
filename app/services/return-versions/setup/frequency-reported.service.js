@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/frequency-reported` page
  * @module FrequencyReportedService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const FrequencyReportedPresenter = require('../../../presenters/return-versions/setup/frequency-reported.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import FrequencyReportedPresenter from '../../../presenters/return-versions/setup/frequency-reported.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/frequency-reported` page
@@ -19,16 +17,12 @@ const FrequencyReportedPresenter = require('../../../presenters/return-versions/
  *
  * @returns {Promise<object>} The view data for the frequency reported page
  */
-async function go(sessionId, requirementIndex) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function frequencyReportedService(sessionId, requirementIndex) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = FrequencyReportedPresenter.go(session, requirementIndex)
+  const formattedData = FrequencyReportedPresenter(session, requirementIndex)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

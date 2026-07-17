@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import SessionModel from '../../../../app/models/session.model.js'
 
 // Thing under test
-const ViewCheckService = require('../../../../app/services/notices/setup/view-check.service.js')
+import ViewCheckService from '../../../../app/services/notices/setup/view-check.service.js'
 
 describe('Notices - Setup - View Check service', () => {
   let session
@@ -25,25 +23,25 @@ describe('Notices - Setup - View Check service', () => {
     recipient = RecipientsFixture.returnsNoticePrimaryUser()
 
     session = NoticeSessionFixture.standardInvitation(recipient.licence_refs[0])
-    sessionUpdateStub = Sinon.stub().resolves()
+    sessionUpdateStub = vi.fn().mockResolvedValue()
     session.$update = sessionUpdateStub
 
-    Sinon.stub(SessionModel, 'query').returns({
-      findById: Sinon.stub().resolves(session)
+    vi.spyOn(SessionModel, 'query').mockReturnValue({
+      findById: vi.fn().mockResolvedValue(session)
     })
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([{ title: 'Test', text: 'Notification' }])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([{ title: 'Test', text: 'Notification' }])
 
-    Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+    vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly presents the data', async () => {
-    const result = await ViewCheckService.go(session.id, yarStub)
+    const result = await ViewCheckService(session.id, yarStub)
 
     expect(result).toEqual({
       activeNavBar: 'notices',
@@ -81,9 +79,9 @@ describe('Notices - Setup - View Check service', () => {
 
   describe('when this is the first time visiting the check page', () => {
     it('initialises the "selectedRecipients" property in the session', async () => {
-      await ViewCheckService.go(session.id, yarStub)
+      await ViewCheckService(session.id, yarStub)
 
-      expect(sessionUpdateStub.called).toBe(true)
+      expect(sessionUpdateStub).toHaveBeenCalled()
     })
   })
 
@@ -93,9 +91,9 @@ describe('Notices - Setup - View Check service', () => {
     })
 
     it('leaves the "selectedRecipients" property alone', async () => {
-      await ViewCheckService.go(session.id, yarStub)
+      await ViewCheckService(session.id, yarStub)
 
-      expect(sessionUpdateStub.called).toBe(false)
+      expect(sessionUpdateStub).not.toHaveBeenCalled()
     })
   })
 })

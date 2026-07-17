@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const CancelAlertsPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/cancel-alerts.presenter.js')
+import CancelAlertsPresenter from '../../../../../app/presenters/notices/setup/abstraction-alerts/cancel-alerts.presenter.js'
 
 describe('Notices - Setup - Abstraction Alerts - Cancel Alerts presenter', () => {
   let session
@@ -18,7 +19,7 @@ describe('Notices - Setup - Abstraction Alerts - Cancel Alerts presenter', () =>
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CancelAlertsPresenter.go(session)
+      const result = CancelAlertsPresenter(session)
 
       expect(result).toEqual({
         backLink: {

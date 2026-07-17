@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ProfileDetailsPresenter = require('../../../app/presenters/users/profile-details.presenter.js')
+import ProfileDetailsPresenter from '../../../app/presenters/users/profile-details.presenter.js'
 
 describe('Users - Profile Details Presenter', () => {
   let profileDetails
@@ -12,7 +13,7 @@ describe('Users - Profile Details Presenter', () => {
     })
 
     it('returns the basic page data for the view', () => {
-      const result = ProfileDetailsPresenter.go(profileDetails)
+      const result = ProfileDetailsPresenter(profileDetails)
 
       expect(result).toEqual({
         address: '',
@@ -50,7 +51,7 @@ describe('Users - Profile Details Presenter', () => {
     })
 
     it('returns the basic page data for the view', () => {
-      const result = ProfileDetailsPresenter.go(profileDetails)
+      const result = ProfileDetailsPresenter(profileDetails)
 
       expect(result).toEqual({
         address: profileDetails.address,

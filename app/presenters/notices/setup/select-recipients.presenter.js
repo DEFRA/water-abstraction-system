@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/notices/setup/{sessionId}/select-recipients' page
  * @module SelectRecipientsPresenter
  */
 
-const ContactPresenter = require('./contact.presenter.js')
-const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+import ContactPresenter from './contact.presenter.js'
+import { NoticeType } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the '/notices/setup/{sessionId}/select-recipients' page
@@ -17,7 +15,7 @@ const { NoticeType } = require('../../../lib/static-lookups.lib.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, recipients, selectedRecipients) {
+export default function selectRecipientsPresenter(session, recipients, selectedRecipients) {
   const { id: sessionId, noticeType, referenceCode } = session
 
   return {
@@ -58,7 +56,7 @@ function _checked(selectedRecipients, recipient) {
 
 function _recipients(recipients, selectedRecipients) {
   return recipients.map((recipient) => {
-    const contact = ContactPresenter.go(recipient)
+    const contact = ContactPresenter(recipient)
 
     return {
       checked: _checked(selectedRecipients, recipient),
@@ -66,8 +64,4 @@ function _recipients(recipients, selectedRecipients) {
       contact_hash_id: recipient.contact_hash_id
     }
   })
-}
-
-module.exports = {
-  go
 }

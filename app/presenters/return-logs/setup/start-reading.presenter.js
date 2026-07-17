@@ -1,6 +1,4 @@
-'use strict'
-
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/start-reading` page
@@ -14,7 +12,7 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  *
  * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/start-reading` page
  */
-function go(session) {
+export default function startReadingPresenter(session) {
   const { id: sessionId, returnReference, startReading } = session
 
   return {
@@ -39,8 +37,4 @@ function _savedValue(startReading) {
   }
 
   return startReading ?? null
-}
-
-module.exports = {
-  go
 }

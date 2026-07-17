@@ -1,20 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test Helpers
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
-const FetchNotificationsDal = require('../../../app/dal/licences/fetch-notifications.dal.js')
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchNotificationsDal from '../../../app/dal/licences/fetch-notifications.dal.js'
 
 // Thing under test
-const ViewCommunicationsService = require('../../../app/services/licences/view-communications.service.js')
+import ViewCommunicationsService from '../../../app/services/licences/view-communications.service.js'
 
 describe('Licences - View Communications service', () => {
   const page = '1'
@@ -54,24 +51,24 @@ describe('Licences - View Communications service', () => {
       }
     }
 
-    Sinon.stub(FetchLicenceService, 'go').resolves({
+    vi.spyOn(FetchLicenceService, 'default').mockResolvedValue({
       id: licenceId,
       licenceRef
     })
 
-    Sinon.stub(FetchNotificationsDal, 'go').resolves({
+    vi.spyOn(FetchNotificationsDal, 'default').mockResolvedValue({
       notifications: [notification],
       totalNumber: 1
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCommunicationsService.go(licenceId, auth, page)
+      const result = await ViewCommunicationsService(licenceId, auth, page)
 
       expect(result).toEqual({
         activeSecondaryNav: 'communications',

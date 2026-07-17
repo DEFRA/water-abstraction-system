@@ -1,20 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const PointModel = require('../../../../app/models/point.model.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import PointModel from '../../../../app/models/point.model.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Things we need to stub
-const FetchPointsService = require('../../../../app/services/return-versions/setup/fetch-points.service.js')
+import * as FetchPointsService from '../../../../app/services/return-versions/setup/fetch-points.service.js'
 
 // Thing under test
-const SelectPointsService = require('../../../../app/services/return-versions/setup/points.service.js')
+import SelectPointsService from '../../../../app/services/return-versions/setup/points.service.js'
 
 describe('Return Versions - Setup - Points service', () => {
   const requirementIndex = 0
@@ -63,9 +61,9 @@ describe('Return Versions - Setup - Points service', () => {
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     const point = PointModel.fromJson({
       description: 'RIVER MEDWAY AT YALDING INTAKE',
@@ -76,22 +74,22 @@ describe('Return Versions - Setup - Points service', () => {
       ngr4: null
     })
 
-    Sinon.stub(FetchPointsService, 'go').resolves([point])
+    vi.spyOn(FetchPointsService, 'default').mockResolvedValue([point])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await SelectPointsService.go(session.id, requirementIndex)
+      const result = await SelectPointsService(session.id, requirementIndex)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await SelectPointsService.go(session.id, requirementIndex)
+      const result = await SelectPointsService(session.id, requirementIndex)
 
       expect(result).toMatchObject({
         pageTitle: 'Select the points for the requirements for returns',

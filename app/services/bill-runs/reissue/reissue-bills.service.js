@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Handles the reissuing of bills
  * @module ReissueBillsService
  */
 
-const BillModel = require('../../../models/bill.model.js')
-const BillLicenceModel = require('../../../models/bill-licence.model.js')
-const FetchBillsToBeReissuedService = require('./fetch-bills-to-be-reissued.service.js')
-const ReissueBillService = require('./reissue-bill.service.js')
-const TransactionModel = require('../../../models/transaction.model.js')
+import BillLicenceModel from '../../../models/bill-licence.model.js'
+import BillModel from '../../../models/bill.model.js'
+import FetchBillsToBeReissuedService from './fetch-bills-to-be-reissued.service.js'
+import ReissueBillService from './reissue-bill.service.js'
+import TransactionModel from '../../../models/transaction.model.js'
 
 /**
  * Handles the reissuing of bills
@@ -24,8 +22,8 @@ const TransactionModel = require('../../../models/transaction.model.js')
  *
  * @returns {Promise<boolean>} `true` if any bills were reissued; `false` if not
  */
-async function go(reissueBillRun) {
-  const sourceBills = await FetchBillsToBeReissuedService.go(reissueBillRun.regionId)
+export default async function reissueBillsService(reissueBillRun) {
+  const sourceBills = await FetchBillsToBeReissuedService(reissueBillRun.regionId)
 
   if (sourceBills.length === 0) {
     return false
@@ -38,7 +36,7 @@ async function go(reissueBillRun) {
   }
 
   for (const sourceBill of sourceBills) {
-    const newData = await ReissueBillService.go(sourceBill, reissueBillRun)
+    const newData = await ReissueBillService(sourceBill, reissueBillRun)
 
     _addNewDataToDataToPersist(dataToPersist, newData)
   }
@@ -59,8 +57,4 @@ async function _persistData(dataToPersist) {
   await BillModel.query().insert(dataToPersist.bills)
   await BillLicenceModel.query().insert(dataToPersist.billLicences)
   await TransactionModel.query().insert(dataToPersist.transactions)
-}
-
-module.exports = {
-  go
 }

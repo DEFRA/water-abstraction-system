@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches two-part tariff licences for the bill run and billing period to be matched & allocated against
  * @module FetchLicencesService
  */
 
-const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+import FetchChargeVersionsService from './fetch-charge-versions.service.js'
 
 /**
  * Fetches two-part tariff licences for the bill run and billing period to be matched & allocated against
@@ -16,8 +14,8 @@ const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
  * @returns {Promise<object[]>} the licences to be matched, each containing an array of charge versions applicable for
  * two-part tariff
  */
-async function go(billRun, billingPeriod) {
-  const chargeVersions = await FetchChargeVersionsService.go(billRun, billingPeriod)
+export default async function fetchLicencesService(billRun, billingPeriod) {
+  const chargeVersions = await FetchChargeVersionsService(billRun, billingPeriod)
 
   const uniqueLicenceIds = _extractUniqueLicenceIds(chargeVersions)
 
@@ -62,8 +60,4 @@ function _groupByLicence(chargeVersions, uniqueLicenceIds) {
   }
 
   return licences
-}
-
-module.exports = {
-  go
 }

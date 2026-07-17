@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const ReturnLogsFixture = require('../../support/fixtures/return-logs.fixture.js')
+import ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
+import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 
 // Thing under test
-const DownloadReturnLogPresenter = require('../../../app/presenters/return-logs/download-return-log.presenter.js')
+import DownloadReturnLogPresenter from '../../../app/presenters/return-logs/download-return-log.presenter.js'
 
 describe('Return Logs - Download Return Log presenter', () => {
   let returnLog
@@ -18,7 +19,7 @@ describe('Return Logs - Download Return Log presenter', () => {
       })
 
       it('correctly formats the data into a CSV string where the "reading" column is empty', () => {
-        const result = DownloadReturnLogPresenter.go(returnLog)
+        const result = DownloadReturnLogPresenter(returnLog)
 
         const rows = result.data.split('\n')
 
@@ -44,7 +45,7 @@ describe('Return Logs - Download Return Log presenter', () => {
       })
 
       it('correctly formats the data into a CSV string where the "reading" column is empty', () => {
-        const result = DownloadReturnLogPresenter.go(returnLog)
+        const result = DownloadReturnLogPresenter(returnLog)
 
         const rows = result.data.split('\n')
 
@@ -71,7 +72,7 @@ describe('Return Logs - Download Return Log presenter', () => {
     })
 
     it('returns the name in the format: returnReference_startDate_endDate_version', () => {
-      const result = DownloadReturnLogPresenter.go(returnLog)
+      const result = DownloadReturnLogPresenter(returnLog)
 
       const { endDate, returnReference, returnSubmissions, startDate } = returnLog
       const { version } = returnSubmissions[0]

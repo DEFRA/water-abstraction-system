@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const EventHelper = require('../../support/helpers/event.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
+import EventHelper from '../../support/helpers/event.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import NotificationHelper from '../../support/helpers/notification.helper.js'
+import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 
 // Thing under test
-const FetchNotificationsDal = require('../../../app/dal/licences/fetch-notifications.dal.js')
+import FetchNotificationsDal from '../../../app/dal/licences/fetch-notifications.dal.js'
 
 describe('Licences - Fetch Notifications DAL', () => {
   let licence
@@ -34,7 +35,7 @@ describe('Licences - Fetch Notifications DAL', () => {
 
   describe('when the licence has notifications', () => {
     it('returns the matching notifications', async () => {
-      const result = await FetchNotificationsDal.go(licence.licenceRef)
+      const result = await FetchNotificationsDal(licence.licenceRef)
 
       expect(result).toEqual({
         notifications: [
@@ -62,7 +63,7 @@ describe('Licences - Fetch Notifications DAL', () => {
     })
 
     it('returns no notifications', async () => {
-      const result = await FetchNotificationsDal.go(licence.licenceRef)
+      const result = await FetchNotificationsDal(licence.licenceRef)
 
       expect(result).toEqual({
         notifications: [],

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/manage` page
  * @module ManagePresenter
  */
 
-const featureFlags = require('../../../config/feature-flags.config.js')
+import featureFlags from '../../../config/feature-flags.config.js'
 
 /**
  * Formats data for the `/manage` page
@@ -17,7 +15,7 @@ const featureFlags = require('../../../config/feature-flags.config.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(userScopes) {
+export default function managePresenter(userScopes) {
   return {
     manageUsers: _manageUsers(userScopes),
     pageTitle: 'Manage',
@@ -77,8 +75,4 @@ function _viewWorkflow(userScopes) {
   }
 
   return { show: links.checkLicences, links }
-}
-
-module.exports = {
-  go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit` page
  * @module SubmitThresholdAndUnitService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ThresholdAndUnitPresenter = require('../../../presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js')
-const ThresholdAndUnitValidator = require('../../../validators/licence-monitoring-station/setup/threshold-and-unit.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ThresholdAndUnitPresenter from '../../../presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js'
+import ThresholdAndUnitValidator from '../../../validators/licence-monitoring-station/setup/threshold-and-unit.validator.js'
 
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit` page
@@ -24,8 +22,8 @@ const ThresholdAndUnitValidator = require('../../../validators/licence-monitorin
  * @returns {Promise<object>} If no errors the page data for the threshold and unit page else the validation error
  * details
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitThresholdAndUnitService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -62,11 +60,11 @@ function _submittedSessionData(session, payload) {
   session.threshold = payload.threshold ?? null
   session.unit = payload.unit ?? null
 
-  return ThresholdAndUnitPresenter.go(session)
+  return ThresholdAndUnitPresenter(session)
 }
 
 function _validate(payload) {
-  const validation = ThresholdAndUnitValidator.go(payload)
+  const validation = ThresholdAndUnitValidator(payload)
 
   if (!validation.error) {
     return { formattedError: null, value: validation.value }
@@ -93,8 +91,4 @@ function _validate(payload) {
   })
 
   return { formattedError, value: null }
-}
-
-module.exports = {
-  go
 }

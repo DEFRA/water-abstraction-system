@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Handles fetching the region name for `/bill-runs/setup/{sessionId}/no-licences` page
  * @module NoLicencesService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RegionModel = require('../../../models/region.model.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RegionModel from '../../../models/region.model.js'
 
 /**
  * Handles fetching the region name for `/bill-runs/setup/{sessionId}/no-licences` page
@@ -18,8 +16,8 @@ const RegionModel = require('../../../models/region.model.js')
  *
  * @returns {Promise<string>} The display name of the region
  */
-async function go(sessionId) {
-  const { region: regionId } = await FetchSessionDal.go(sessionId)
+export default async function noLicencesService(sessionId) {
+  const { region: regionId } = await FetchSessionDal(sessionId)
   const { displayName: regionName } = await RegionModel.query().findById(regionId).select('displayName')
 
   return {
@@ -28,8 +26,4 @@ async function go(sessionId) {
     pageTitle: `There are no licences marked for two-part tariff supplementary billing in the ${regionName} region`,
     sessionId
   }
-}
-
-module.exports = {
-  go
 }

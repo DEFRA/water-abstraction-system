@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/notice-type` page
  *
  * @module SubmitNoticeTypeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
-const NoticeTypeValidator = require('../../../validators/notices/setup/notice-type.validator.js')
-const { NoticeJourney, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
-const { flashNotification, generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NoticeTypePresenter from '../../../presenters/notices/setup/notice-type.presenter.js'
+import NoticeTypeValidator from '../../../validators/notices/setup/notice-type.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { NoticeJourney, NoticeTypes } from '../../../lib/static-lookups.lib.js'
+import { flashNotification, generateNoticeReferenceCode } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/notice-type` page
@@ -23,8 +21,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload, yar, auth) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitNoticeTypeService(sessionId, payload, yar, auth) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -43,7 +41,7 @@ async function go(sessionId, payload, yar, auth) {
     return _redirect(session.journey, hasBeenVisited, noticeTypeChanged)
   }
 
-  const pageData = NoticeTypePresenter.go(session, auth)
+  const pageData = NoticeTypePresenter(session, auth)
 
   return {
     activeNavBar: 'notices',
@@ -91,11 +89,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = NoticeTypeValidator.go(payload)
+  const validationResult = NoticeTypeValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

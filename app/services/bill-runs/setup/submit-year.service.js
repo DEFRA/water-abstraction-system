@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/year` page
  * @module SubmitYearService
  */
 
-const FetchLicenceSupplementaryYearsService = require('./fetch-licence-supplementary-years.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const YearPresenter = require('../../../presenters/bill-runs/setup/year.presenter.js')
-const YearValidator = require('../../../validators/bill-runs/setup/year.validator.js')
+import FetchLicenceSupplementaryYearsService from './fetch-licence-supplementary-years.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import YearPresenter from '../../../presenters/bill-runs/setup/year.presenter.js'
+import YearValidator from '../../../validators/bill-runs/setup/year.validator.js'
 
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/year` page
@@ -30,8 +28,8 @@ const YearValidator = require('../../../validators/bill-runs/setup/year.validato
  * @returns {Promise<object>} An object with a `setupComplete:` property if there are no errors else the page data for
  * the year page including the validation error details
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitYearService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -43,9 +41,9 @@ async function go(sessionId, payload) {
 
   const regionId = session.region
   const twoPartTariffSupplementary = session.type === 'two_part_supplementary'
-  const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariffSupplementary)
+  const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService(regionId, twoPartTariffSupplementary)
 
-  const pageData = YearPresenter.go(licenceSupplementaryYears, session)
+  const pageData = YearPresenter(licenceSupplementaryYears, session)
 
   return {
     activeNavBar: 'bill-runs',
@@ -61,7 +59,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, regions) {
-  const validation = YearValidator.go(payload, regions)
+  const validation = YearValidator(payload, regions)
 
   if (!validation.error) {
     return null
@@ -72,8 +70,4 @@ function _validate(payload, regions) {
   return {
     text: message
   }
-}
-
-module.exports = {
-  go
 }

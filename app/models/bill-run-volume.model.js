@@ -1,15 +1,15 @@
-'use strict'
-
 /**
  * Model for bill_run_volumes (water.billing_volumes)
  * @module BillRunVolumeModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import BillRunModel from './bill-run.model.js'
+import ChargeReferenceModel from './charge-reference.model.js'
 
-class BillRunVolumeModel extends BaseModel {
+export default class BillRunVolumeModel extends BaseModel {
   static get tableName() {
     return 'billRunVolumes'
   }
@@ -18,7 +18,7 @@ class BillRunVolumeModel extends BaseModel {
     return {
       billRun: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'bill-run.model',
+        modelClass: BillRunModel,
         join: {
           from: 'billRunVolumes.billRunId',
           to: 'billRuns.id'
@@ -26,7 +26,7 @@ class BillRunVolumeModel extends BaseModel {
       },
       chargeReference: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-reference.model',
+        modelClass: ChargeReferenceModel,
         join: {
           from: 'billRunVolumes.chargeReferenceId',
           to: 'chargeReferences.id'
@@ -61,5 +61,3 @@ class BillRunVolumeModel extends BaseModel {
     return null
   }
 }
-
-module.exports = BillRunVolumeModel

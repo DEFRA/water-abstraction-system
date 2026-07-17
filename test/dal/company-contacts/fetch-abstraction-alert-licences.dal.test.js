@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const FetchAbstractionAlertLicencesDal = require('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
+import FetchAbstractionAlertLicencesDal from '../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
 
 describe('Company Contacts - Fetch Abstraction Alert Licences Dal', () => {
   let licence
@@ -26,7 +27,7 @@ describe('Company Contacts - Fetch Abstraction Alert Licences Dal', () => {
 
   describe('when there are matching licences', () => {
     it('returns the licences', async () => {
-      const result = await FetchAbstractionAlertLicencesDal.go([licence.id])
+      const result = await FetchAbstractionAlertLicencesDal([licence.id])
 
       expect(result).toEqual([
         {
@@ -42,7 +43,7 @@ describe('Company Contacts - Fetch Abstraction Alert Licences Dal', () => {
 
   describe('when there are multiple matching licences', () => {
     it('returns the licences ordered by licenceRef', async () => {
-      const result = await FetchAbstractionAlertLicencesDal.go([licenceB.id, licenceA.id])
+      const result = await FetchAbstractionAlertLicencesDal([licenceB.id, licenceA.id])
 
       expect(result).toEqual([
         {
@@ -65,7 +66,7 @@ describe('Company Contacts - Fetch Abstraction Alert Licences Dal', () => {
 
   describe('when abstractionAlertLicences is null', () => {
     it('returns an empty array', async () => {
-      const result = await FetchAbstractionAlertLicencesDal.go(null)
+      const result = await FetchAbstractionAlertLicencesDal(null)
 
       expect(result).toEqual([])
     })
@@ -73,7 +74,7 @@ describe('Company Contacts - Fetch Abstraction Alert Licences Dal', () => {
 
   describe('when none of the IDs match any licences', () => {
     it('returns an empty array', async () => {
-      const result = await FetchAbstractionAlertLicencesDal.go([generateUUID()])
+      const result = await FetchAbstractionAlertLicencesDal([generateUUID()])
 
       expect(result).toEqual([])
     })

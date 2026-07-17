@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/return-logs/setup/{sessionId}/cancel` page
  * @module CancelPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate } = require('../../base.presenter.js')
+import { formatAbstractionPeriod, formatLongDate } from '../../base.presenter.js'
 
 /**
  * Formats data for the `/return-logs/setup/{sessionId}/cancel` page
@@ -14,7 +12,7 @@ const { formatAbstractionPeriod, formatLongDate } = require('../../base.presente
  *
  * @returns {object} The page data needed by the view template
  */
-function go(session) {
+export default function cancelPresenter(session) {
   const {
     endDate,
     id: sessionId,
@@ -43,8 +41,4 @@ function go(session) {
     siteDescription,
     tariff: twoPartTariff ? 'Two-part' : 'Standard'
   }
-}
-
-module.exports = {
-  go
 }

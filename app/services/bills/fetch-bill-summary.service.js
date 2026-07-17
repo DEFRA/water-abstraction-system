@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches data for the remove bill page which summarises the bill run and billing details for the bill
  * @module FetchBillSummaryService
  */
 
-const BillModel = require('../../models/bill.model.js')
+import BillModel from '../../models/bill.model.js'
 
 /**
  * Fetches data for the remove bill page which summarises the bill run and billing details for the bill
@@ -21,7 +19,7 @@ const BillModel = require('../../models/bill.model.js')
  * @returns {Promise<object>} the matching instance of BillModel plus the linked billing account and bill
  * run. Also all bill licences linked to the bill so we can display which licences are in the bill
  */
-async function go(billId) {
+export default async function fetchBillSummaryService(billId) {
   return _fetch(billId)
 }
 
@@ -54,8 +52,4 @@ async function _fetch(billId) {
     .modifyGraph('billRun.region', (builder) => {
       builder.select(['id', 'displayName'])
     })
-}
-
-module.exports = {
-  go
 }

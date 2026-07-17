@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Deletes contacts which have become orphaned
  * @module CleanOrphanedContactsService
  */
 
-const ContactModel = require('../../../models/contact.model.js')
+import ContactModel from '../../../models/contact.model.js'
 
 /**
  * Deletes contacts which have become orphaned
  *
  * @returns {Promise<number>} The number of rows deleted
  */
-async function go() {
+export default async function cleanOrphanedContactsService() {
   let deletedCount = 0
 
   try {
@@ -46,8 +44,4 @@ AND NOT EXISTS (
   }
 
   return deletedCount
-}
-
-module.exports = {
-  go
 }

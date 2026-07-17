@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const RemoveLicencesValidator = require('../../../../app/validators/notices/setup/remove-licences.validator.js')
+import RemoveLicencesValidator from '../../../../app/validators/notices/setup/remove-licences.validator.js'
 
 describe('Notices - Setup - Remove Licences validator', () => {
   let licenceRefsWithDueReturns
@@ -17,7 +18,7 @@ describe('Notices - Setup - Remove Licences validator', () => {
     })
 
     it('confirms the data is valid', () => {
-      const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
+      const result = RemoveLicencesValidator(payload, licenceRefsWithDueReturns)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -31,7 +32,7 @@ describe('Notices - Setup - Remove Licences validator', () => {
       })
 
       it('fails validation', () => {
-        const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
+        const result = RemoveLicencesValidator(payload, licenceRefsWithDueReturns)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -45,7 +46,7 @@ describe('Notices - Setup - Remove Licences validator', () => {
       })
 
       it('fails validation', () => {
-        const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
+        const result = RemoveLicencesValidator(payload, licenceRefsWithDueReturns)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

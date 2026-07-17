@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/contact-type` page
  * @module ContactTypePresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function contactTypePresenter(session) {
   const contactEmail = session?.contactEmail ?? null
   const contactName = session?.contactName ?? null
   const contactType = session?.contactType ?? null
@@ -28,8 +26,4 @@ function go(session) {
     pageTitle: 'Select how to contact the recipient',
     pageTitleCaption: `Notice ${session.referenceCode}`
   }
-}
-
-module.exports = {
-  go
 }

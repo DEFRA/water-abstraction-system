@@ -1,12 +1,11 @@
-'use strict'
-
 /**
  * Fetches any companies that meet the search criteria from the database
  * @module FetchExistingCompaniesService
  */
 
-const CompanyModel = require('../../../models/company.model.js')
-const { db } = require('../../../../db/db.js')
+import CompanyModel from '../../../models/company.model.js'
+import { db } from '../../../../db/db.js'
+
 const NUMBER_OF_RESULTS = 15
 
 /**
@@ -16,7 +15,7 @@ const NUMBER_OF_RESULTS = 15
  *
  * @returns {Promise<object[]>} an object containing the matching companies needed to populate the view
  */
-async function go(searchInput) {
+export default async function fetchExistingCompaniesService(searchInput) {
   const sanatisedSearchInput = searchInput
     .replaceAll('\\', '\\\\')
     .replaceAll('%', String.raw`\%`)
@@ -30,8 +29,4 @@ async function go(searchInput) {
       { column: 'name', order: 'asc' }
     ])
     .limit(NUMBER_OF_RESULTS)
-}
-
-module.exports = {
-  go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Orchestrates fetching and formatting the data needed for the Monitoring station journey
  * @module DetermineLicenceMonitoringStationsService
  */
 
-const FetchMonitoringStationDetailsDal = require('../../../../dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
+import FetchMonitoringStationDetailsDal from '../../../../dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 /**
  * Orchestrates fetching and formatting the data needed for the Monitoring station journey
@@ -13,8 +11,8 @@ const FetchMonitoringStationDetailsDal = require('../../../../dal/monitoring-sta
  * @param {string} id
  * @returns {Promise<{object}>}
  */
-async function go(id) {
-  const { licenceMonitoringStations, monitoringStation } = await FetchMonitoringStationDetailsDal.go(id)
+export default async function determineLicenceMonitoringStationsService(id) {
+  const { licenceMonitoringStations, monitoringStation } = await FetchMonitoringStationDetailsDal(id)
 
   return {
     licenceMonitoringStations: _licenceMonitoringStations(licenceMonitoringStations),
@@ -88,8 +86,4 @@ function _notes(licenceMonitoringStation) {
  */
 function _thresholdGroup(measureType, thresholdValue, thresholdUnit) {
   return `${measureType}-${thresholdValue}-${thresholdUnit}`
-}
-
-module.exports = {
-  go
 }

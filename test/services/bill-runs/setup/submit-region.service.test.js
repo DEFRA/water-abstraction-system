@@ -1,21 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchRegionsService from '../../../../app/services/bill-runs/setup/fetch-regions.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitRegionService = require('../../../../app/services/bill-runs/setup/submit-region.service.js')
+import SubmitRegionService from '../../../../app/services/bill-runs/setup/submit-region.service.js'
 
 describe('Bill Runs - Setup - Submit Region service', () => {
-  let fetchSessionStub
   let payload
   let region
   let regions
@@ -28,15 +25,15 @@ describe('Bill Runs - Setup - Submit Region service', () => {
 
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    Sinon.stub(FetchRegionsService, 'go').resolves(regions)
+    vi.spyOn(FetchRegionsService, 'default').mockResolvedValue(regions)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -51,13 +48,13 @@ describe('Bill Runs - Setup - Submit Region service', () => {
         beforeEach(() => {
           sessionData = { type: 'annual' }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is complete', async () => {
-          const result = await SubmitRegionService.go(session.id, payload)
+          const result = await SubmitRegionService(session.id, payload)
 
           expect(session.region).toEqual(region.id)
           expect(session.regionName).toEqual(region.displayName)
@@ -69,13 +66,13 @@ describe('Bill Runs - Setup - Submit Region service', () => {
         beforeEach(() => {
           sessionData = { type: 'two_part_tariff' }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
-          const result = await SubmitRegionService.go(session.id, payload)
+          const result = await SubmitRegionService(session.id, payload)
 
           expect(session.region).toEqual(region.id)
           expect(session.regionName).toEqual(region.displayName)
@@ -87,13 +84,13 @@ describe('Bill Runs - Setup - Submit Region service', () => {
         beforeEach(() => {
           sessionData = { type: 'two_part_supplementary' }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
-          const result = await SubmitRegionService.go(session.id, payload)
+          const result = await SubmitRegionService(session.id, payload)
 
           expect(session.region).toEqual(region.id)
           expect(session.regionName).toEqual(region.displayName)
@@ -109,13 +106,13 @@ describe('Bill Runs - Setup - Submit Region service', () => {
 
           sessionData = { type: 'annual' }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitRegionService.go(session.id, payload)
+          const result = await SubmitRegionService(session.id, payload)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',

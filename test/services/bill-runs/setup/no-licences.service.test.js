@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const NoLicencesService = require('../../../../app/services/bill-runs/setup/no-licences.service.js')
+import NoLicencesService from '../../../../app/services/bill-runs/setup/no-licences.service.js'
 
 describe('Bill Runs - Setup - No Licences service', () => {
   const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
@@ -23,17 +21,17 @@ describe('Bill Runs - Setup - No Licences service', () => {
     beforeEach(() => {
       sessionData = { region: region.id }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     afterEach(() => {
-      Sinon.restore()
+      vi.restoreAllMocks()
     })
 
     it('returns page data for the view', async () => {
-      const result = await NoLicencesService.go(session.id)
+      const result = await NoLicencesService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',

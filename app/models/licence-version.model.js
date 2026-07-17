@@ -1,15 +1,19 @@
-'use strict'
-
 /**
  * Model for licence_versions (water.licence_versions)
  * @module LicenceVersionModel
  */
 
-const { Model, raw } = require('objection')
+import { Model, raw } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import AddressModel from './address.model.js'
+import BaseModel from './base.model.js'
+import CompanyModel from './company.model.js'
+import LicenceModel from './licence.model.js'
+import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
+import ModLogModel from './mod-log.model.js'
+import PurposeModel from './purpose.model.js'
 
-class LicenceVersionModel extends BaseModel {
+export default class LicenceVersionModel extends BaseModel {
   static get tableName() {
     return 'licenceVersions'
   }
@@ -18,7 +22,7 @@ class LicenceVersionModel extends BaseModel {
     return {
       address: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'address.model',
+        modelClass: AddressModel,
         join: {
           from: 'licenceVersions.addressId',
           to: 'addresses.id'
@@ -26,7 +30,7 @@ class LicenceVersionModel extends BaseModel {
       },
       company: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'company.model',
+        modelClass: CompanyModel,
         join: {
           from: 'licenceVersions.companyId',
           to: 'companies.id'
@@ -34,7 +38,7 @@ class LicenceVersionModel extends BaseModel {
       },
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'licenceVersions.licenceId',
           to: 'licences.id'
@@ -42,7 +46,7 @@ class LicenceVersionModel extends BaseModel {
       },
       licenceVersionPurposes: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-version-purpose.model',
+        modelClass: LicenceVersionPurposeModel,
         join: {
           from: 'licenceVersions.id',
           to: 'licenceVersionPurposes.licenceVersionId'
@@ -50,7 +54,7 @@ class LicenceVersionModel extends BaseModel {
       },
       modLogs: {
         relation: Model.HasManyRelation,
-        modelClass: 'mod-log.model',
+        modelClass: ModLogModel,
         join: {
           from: 'licenceVersions.id',
           to: 'modLogs.licenceVersionId'
@@ -58,7 +62,7 @@ class LicenceVersionModel extends BaseModel {
       },
       purposes: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'purpose.model',
+        modelClass: PurposeModel,
         join: {
           from: 'licenceVersions.id',
           through: {
@@ -262,5 +266,3 @@ class LicenceVersionModel extends BaseModel {
     return null
   }
 }
-
-module.exports = LicenceVersionModel

@@ -1,13 +1,14 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AddressModel = require('../../../app/models/address.model.js')
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
-const CompanyModel = require('../../../app/models/company.model.js')
-const ContactModel = require('../../../app/models/contact.model.js')
+import AddressModel from '../../../app/models/address.model.js'
+import BillingAccountModel from '../../../app/models/billing-account.model.js'
+import CompanyModel from '../../../app/models/company.model.js'
+import ContactModel from '../../../app/models/contact.model.js'
 
 // Thing under test
-const CreateCustomerChangePresenter = require('../../../app/presenters/charging-module/create-customer-change.presenter.js')
+import CreateCustomerChangePresenter from '../../../app/presenters/charging-module/create-customer-change.presenter.js'
 
 // NOTE: We are currently required to replicate what the legacy code is doing and unfortunately the conversion of a
 // WRLS billing billing account's address to the format required by the Charging Module is convoluted to say the least!
@@ -45,7 +46,7 @@ describe('Charging Module Create Transaction presenter', () => {
 
     describe('whatever letter the billing account number starts with', () => {
       it('returns as the region', () => {
-        const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+        const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
         expect(result.region).toEqual('B')
       })
@@ -60,7 +61,7 @@ describe('Charging Module Create Transaction presenter', () => {
     })
 
     it('returns the billing account number for customer reference', () => {
-      const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+      const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
       expect(result.customerReference).toEqual('B19120000A')
     })
@@ -79,7 +80,7 @@ describe('Charging Module Create Transaction presenter', () => {
         })
 
         it('returns the name of the "company" for customer name', () => {
-          const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+          const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
           expect(result.customerName).toEqual('AGENT COMPANY')
         })
@@ -91,7 +92,7 @@ describe('Charging Module Create Transaction presenter', () => {
         })
 
         it("returns the name of the billing account's company for customer name", () => {
-          const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+          const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
           expect(result.customerName).toEqual('BILLING ACCOUNT COMPANY')
         })
@@ -119,7 +120,7 @@ describe('Charging Module Create Transaction presenter', () => {
           })
 
           it('returns the contact name as an FAO and address1 for addressLine1', () => {
-            const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+            const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
             expect(result.addressLine1).toEqual('FAO Margherita Villar, ENVIRONMENT AGENCY')
           })
@@ -131,7 +132,7 @@ describe('Charging Module Create Transaction presenter', () => {
           })
 
           it('returns the contact name as an FAO only for addressLine1', () => {
-            const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+            const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
             expect(result.addressLine1).toEqual('FAO Margherita Villar')
           })
@@ -149,7 +150,7 @@ describe('Charging Module Create Transaction presenter', () => {
           })
 
           it('returns address1 for addressLine1', () => {
-            const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+            const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
             expect(result.addressLine1).toEqual('ENVIRONMENT AGENCY')
           })
@@ -164,7 +165,7 @@ describe('Charging Module Create Transaction presenter', () => {
           })
 
           it('returns the first populated address property for addressLine1', () => {
-            const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+            const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
             expect(result.addressLine1).toEqual('HORIZON HOUSE')
           })
@@ -193,7 +194,7 @@ describe('Charging Module Create Transaction presenter', () => {
           })
 
           it('returns address2 to address4 for addressLine2 to addressLine4', () => {
-            const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+            const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
             expect(result.addressLine2).toEqual('HORIZON HOUSE')
             expect(result.addressLine3).toEqual('DEANERY ROAD')
@@ -213,7 +214,7 @@ describe('Charging Module Create Transaction presenter', () => {
           })
 
           it('returns address4 for addressLine2 and null for the rest', () => {
-            const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+            const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
             expect(result.addressLine2).toEqual('COLLEGE GREEN')
             expect(result.addressLine3).toBeNull()
@@ -236,7 +237,7 @@ describe('Charging Module Create Transaction presenter', () => {
           })
 
           it('returns address2 to address4 for addressLine2 to addressLine4', () => {
-            const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+            const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
             expect(result.addressLine2).toEqual('HORIZON HOUSE')
             expect(result.addressLine3).toEqual('DEANERY ROAD')
@@ -256,7 +257,7 @@ describe('Charging Module Create Transaction presenter', () => {
           })
 
           it('returns the second property as addressLine2 and addressLine3 to addressLine4 are null', () => {
-            const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+            const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
             expect(result.addressLine2).toEqual('COLLEGE GREEN')
             expect(result.addressLine3).toBeNull()
@@ -276,7 +277,7 @@ describe('Charging Module Create Transaction presenter', () => {
           })
 
           it('returns null for addressLine2 to addressLine4', () => {
-            const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+            const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
             expect(result.addressLine2).toBeNull()
             expect(result.addressLine3).toBeNull()
@@ -299,7 +300,7 @@ describe('Charging Module Create Transaction presenter', () => {
       })
 
       it('returns address for addressLine5', () => {
-        const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+        const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
         expect(result.addressLine5).toEqual('BRISTOL')
       })
@@ -311,7 +312,7 @@ describe('Charging Module Create Transaction presenter', () => {
       })
 
       it('returns null for addressLine5', () => {
-        const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+        const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
         expect(result.addressLine5).toBeNull()
       })
@@ -333,7 +334,7 @@ describe('Charging Module Create Transaction presenter', () => {
       })
 
       it('returns both address6 and country for addressLine6', () => {
-        const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+        const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
         expect(result.addressLine6).toEqual('AVON, United Kingdom')
       })
@@ -348,7 +349,7 @@ describe('Charging Module Create Transaction presenter', () => {
       })
 
       it('returns an empty string for addressLine6', () => {
-        const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+        const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
         expect(result.addressLine6).toEqual('')
       })
@@ -364,7 +365,7 @@ describe('Charging Module Create Transaction presenter', () => {
       })
 
       it('returns just address for addressLine6', () => {
-        const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+        const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
         expect(result.addressLine6).toEqual('AVON')
       })
@@ -376,7 +377,7 @@ describe('Charging Module Create Transaction presenter', () => {
       })
 
       it('returns just the country for addressLine6', () => {
-        const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+        const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
         expect(result.addressLine6).toEqual('United Kingdom')
       })
@@ -391,7 +392,7 @@ describe('Charging Module Create Transaction presenter', () => {
     })
 
     it('returns the postcode for postcode', () => {
-      const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+      const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
       expect(result.postcode).toEqual('BS1 5AH')
     })
@@ -408,7 +409,7 @@ describe('Charging Module Create Transaction presenter', () => {
     })
 
     it('truncates it and replaces the last 3 characters with ...', () => {
-      const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+      const result = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
       expect(result.addressLine5).toEqual('Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoc...')
     })

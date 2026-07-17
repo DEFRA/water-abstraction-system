@@ -1,14 +1,14 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/bill-runs` page
  * @module IndexValidator
  */
 
-const Joi = require('joi').extend(require('@joi/date'))
+import base from 'joi'
+import joiDate from '@joi/date'
 
-const { billRunStatuses, billRunTypes } = require('../../lib/static-lookups.lib.js')
+import { billRunStatuses, billRunTypes } from '../../lib/static-lookups.lib.js'
 
+const Joi = base.extend(joiDate)
 const MAX_BILL_RUN_NUMBER = 999999
 const MIN_YEAR_CREATED = 2014 // Based on the minimum year a bill run has been created in the system
 
@@ -21,7 +21,7 @@ const MIN_YEAR_CREATED = 2014 // Based on the minimum year a bill run has been c
  * @returns {object} The result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, regions) {
+export default function indexValidator(payload, regions) {
   const maxYearCreated = new Date().getFullYear()
   const validRegionIds = _validRegionIds(regions)
 
@@ -77,8 +77,4 @@ function _validRegionIds(regions) {
   return regions.map((region) => {
     return region.id
   })
-}
-
-module.exports = {
-  go
 }

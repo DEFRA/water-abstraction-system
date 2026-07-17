@@ -1,15 +1,12 @@
-'use strict'
-
 /**
  * Checks all licences in the NALD extract against those in WRLS and records any with changed end dates
  * @module CheckAllLicenceEndDatesService
  */
 
-const FetchLicences = require('./fetch-licences.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const CheckLicenceEndDatesService = require('./check-licence-end-dates.service.js')
-
-const LicencesConfig = require('../../../../config/licences.config.js')
+import CheckLicenceEndDatesService from './check-licence-end-dates.service.js'
+import FetchLicences from './fetch-licences.service.js'
+import LicencesConfig from '../../../../config/licences.config.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Checks all licences in the NALD extract against those in WRLS and records any with changed end dates
@@ -35,12 +32,12 @@ const LicencesConfig = require('../../../../config/licences.config.js')
  * > If a licence in NALD does not have a status of DRAFT, and at least one current licence version then it will be
  * excluded
  */
-async function go() {
+export default async function checkAllLicenceEndDatesService() {
   try {
     const startTime = currentTimeInNanoseconds()
 
     // Fetch all licences from NALD and WRLS
-    const licences = await FetchLicences.go()
+    const licences = await FetchLicences()
 
     // Check for any licences with changed end dates
     await _checkLicences(licences)
@@ -73,9 +70,5 @@ async function _checkLicences(licences) {
   // app/requests/base.request.js
   const pMap = (await import('p-map')).default
 
-  await pMap(licences, CheckLicenceEndDatesService.go, { concurrency: LicencesConfig.endDates.batchSize })
-}
-
-module.exports = {
-  go
+  await pMap(licences, CheckLicenceEndDatesService, { concurrency: LicencesConfig.endDates.batchSize })
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the licence conditions page
  * @module ViewConditionsService
  */
 
-const ConditionsPresenter = require('../../presenters/licences/conditions.presenter.js')
-const FetchConditionsService = require('./fetch-conditions.service.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import ConditionsPresenter from '../../presenters/licences/conditions.presenter.js'
+import FetchConditionsService from './fetch-conditions.service.js'
+import FetchLicenceService from './fetch-licence.service.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence conditions page
@@ -18,14 +16,14 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence conditions template
  */
-async function go(licenceId, auth) {
-  const licence = await FetchLicenceService.go(licenceId)
+export default async function viewConditionsService(licenceId, auth) {
+  const licence = await FetchLicenceService(licenceId)
 
   const currentLicenceVersion = licence.$currentVersion()
 
-  const conditions = currentLicenceVersion ? await FetchConditionsService.go(currentLicenceVersion.id) : []
+  const conditions = currentLicenceVersion ? await FetchConditionsService(currentLicenceVersion.id) : []
 
-  const pageData = ConditionsPresenter.go(conditions, licence)
+  const pageData = ConditionsPresenter(conditions, licence)
 
   return {
     ...pageData,
@@ -33,8 +31,4 @@ async function go(licenceId, auth) {
     activeSummarySubNav: 'conditions',
     roles: userRoles(auth)
   }
-}
-
-module.exports = {
-  go
 }

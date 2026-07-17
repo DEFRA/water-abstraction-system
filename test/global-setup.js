@@ -1,23 +1,16 @@
-'use strict'
-
 /**
  * Vitest global setup — runs once in the main process before the full test suite
  * @module GlobalSetup
  */
 
-const Database = require('./support/database.js')
+import * as Database from './support/database.js'
 
 /**
  * Clean and seed the test database before any tests run
  *
- * When loaded by Vitest via ESM interop, module.exports becomes m.default. Vitest requires the default export to be a
- * function, so we export setup directly rather than wrapping it in an object.
- *
  * @returns {Promise} resolves when the database has been cleaned and seeded
  */
-async function setup() {
+export default async function globalSetup() {
   await Database.clean()
   await Database.closeConnection()
 }
-
-module.exports = setup

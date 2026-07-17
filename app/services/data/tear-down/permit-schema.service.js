@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Removes all data created for acceptance tests from the permit schema
  * @module PermitSchemaService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Removes all data created for acceptance tests from the permit schema
  *
  * @returns {Promise<object>}
  */
-async function go() {
+export default async function permitSchemaService() {
   return _deleteAllTestData()
 }
 
@@ -31,8 +29,4 @@ async function _deleteAllTestData() {
 
   ALTER TABLE permit.licence ENABLE TRIGGER ALL;
   `)
-}
-
-module.exports = {
-  go
 }

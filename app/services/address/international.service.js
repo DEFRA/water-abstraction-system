@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/international` page
  *
  * @module InternationalService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const InternationalPresenter = require('../../presenters/address/international.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import InternationalPresenter from '../../presenters/address/international.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/international` page
@@ -16,16 +14,12 @@ const InternationalPresenter = require('../../presenters/address/international.p
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function internationalService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = InternationalPresenter.go(session)
+  const pageData = InternationalPresenter(session)
 
   return {
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

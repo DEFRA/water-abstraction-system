@@ -1,16 +1,17 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CompanyAddressHelper = require('../support/helpers/company-address.helper.js')
-const CompanyAddressModel = require('../../app/models/company-address.model.js')
-const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
-const CompanyContactModel = require('../../app/models/company-contact.model.js')
-const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
-const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
-const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
+import CompanyAddressHelper from '../support/helpers/company-address.helper.js'
+import CompanyAddressModel from '../../app/models/company-address.model.js'
+import CompanyContactHelper from '../support/helpers/company-contact.helper.js'
+import CompanyContactModel from '../../app/models/company-contact.model.js'
+import LicenceDocumentRoleHelper from '../support/helpers/licence-document-role.helper.js'
+import LicenceDocumentRoleModel from '../../app/models/licence-document-role.model.js'
+import LicenceRoleHelper from '../support/helpers/licence-role.helper.js'
 
 // Thing under test
-const LicenceRoleModel = require('../../app/models/licence-role.model.js')
+import LicenceRoleModel from '../../app/models/licence-role.model.js'
 
 describe('Licence Role model', () => {
   let testCompanyAddresses

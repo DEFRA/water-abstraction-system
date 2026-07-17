@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const AbstractionPeriodLib = require('../../app/lib/abstraction-period.lib.js')
+import * as AbstractionPeriodLib from '../../app/lib/abstraction-period.lib.js'
 
 // NOTE: You might find it helpful to refresh your understanding of abstraction periods and what the service is trying
 // to fathom when referencing them to the billing and charge periods. See the documentation in the service. Also, a

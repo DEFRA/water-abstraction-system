@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/set-up` view licence set up page
  * @module SetUpPresenter
  */
 
-const { formatLongDate } = require('../base.presenter.js')
-const { supplementaryBillingNotification } = require('./base-licences.presenter.js')
+import { formatLongDate } from '../base.presenter.js'
+import { supplementaryBillingNotification } from './base-licences.presenter.js'
 
 const ROLES = {
   billing: 'billing',
@@ -35,7 +33,7 @@ const AGREEMENTS = {
  *
  * @returns {object} The data formatted for the view template
  */
-function go(chargeVersions, workflows, agreements, returnVersions, auth, licence) {
+export default function setUpPresenter(chargeVersions, workflows, agreements, returnVersions, auth, licence) {
   const licenceData = {
     licenceId: licence.id,
     ends: licence.$ends()
@@ -274,8 +272,4 @@ function _workflowStartDate(workflow) {
   const startDate = new Date(workflow.data.chargeVersion.dateRange.startDate)
 
   return formatLongDate(startDate)
-}
-
-module.exports = {
-  go
 }

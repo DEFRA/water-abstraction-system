@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-const FetchAbstractionAlertLicencesDal = require('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
-const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
-const FetchCompanyService = require('../../../app/dal/companies/fetch-company.dal.js')
+import * as FetchAbstractionAlertLicencesDal from '../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
+import * as FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
+import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-const ViewRemoveCompanyContactService = require('../../../app/services/company-contacts/view-remove-company-contact.service.js')
+import ViewRemoveCompanyContactService from '../../../app/services/company-contacts/view-remove-company-contact.service.js'
 
 describe('Company Contacts - View Remove Company Contact Service', () => {
   let companyContact
@@ -23,18 +21,18 @@ describe('Company Contacts - View Remove Company Contact Service', () => {
 
     company = CustomersFixtures.company()
 
-    Sinon.stub(FetchAbstractionAlertLicencesDal, 'go').resolves([])
-    Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchCompanyContactDal, 'go').returns(companyContact)
+    vi.spyOn(FetchAbstractionAlertLicencesDal, 'default').mockResolvedValue([])
+    vi.spyOn(FetchCompanyService, 'default').mockReturnValue(company)
+    vi.spyOn(FetchCompanyContactDal, 'default').mockReturnValue(companyContact)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewRemoveCompanyContactService.go(companyContact.id)
+      const result = await ViewRemoveCompanyContactService(companyContact.id)
 
       expect(result).toEqual({
         backLink: {

@@ -1,23 +1,20 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
+import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const FetchLiveBillRunService = require('../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js')
+import * as FetchLiveBillRunService from '../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
 
 // Thing under test
-const DetermineBlockingTwoPartAnnualService = require('../../../../app/services/bill-runs/setup/determine-blocking-two-part-annual.service.js')
+import DetermineBlockingTwoPartAnnualService from '../../../../app/services/bill-runs/setup/determine-blocking-two-part-annual.service.js'
 
 describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run service', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
 
   let billRunQueryStub
-  let fetchLiveBillRunStub
   let match
   let summer
   let year
@@ -38,40 +35,39 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
     }
 
     billRunQueryStub = {
-      select: Sinon.stub().returnsThis(),
-      where: Sinon.stub().returnsThis(),
-      whereNotIn: Sinon.stub().returnsThis(),
-      orderBy: Sinon.stub().returnsThis(),
-      withGraphFetched: Sinon.stub().returnsThis(),
-      modifyGraph: Sinon.stub().returnsThis(),
-      limit: Sinon.stub().returnsThis()
+      select: vi.fn().mockReturnThis(),
+      where: vi.fn().mockReturnThis(),
+      whereNotIn: vi.fn().mockReturnThis(),
+      orderBy: vi.fn().mockReturnThis(),
+      withGraphFetched: vi.fn().mockReturnThis(),
+      modifyGraph: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis()
     }
-
-    fetchLiveBillRunStub = Sinon.stub(FetchLiveBillRunService, 'go')
   })
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when there is a matching bill run', () => {
     describe('for an SROC era bill run', () => {
       beforeEach(() => {
-        billRunQueryStub.first = Sinon.stub().resolves(match)
+        billRunQueryStub.first = vi.fn().mockResolvedValue(match)
 
-        Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
+        vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
+        vi.spyOn(FetchLiveBillRunService, 'default').mockResolvedValue()
       })
 
       it('returns the match and determines that neither engine can be triggered', async () => {
-        const result = await DetermineBlockingTwoPartAnnualService.go(regionId, year)
+        const result = await DetermineBlockingTwoPartAnnualService(regionId, year)
 
         expect(result).toEqual({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
       })
 
       it('does not bother to check for live bill runs', async () => {
-        await DetermineBlockingTwoPartAnnualService.go(regionId, year)
+        await DetermineBlockingTwoPartAnnualService(regionId, year)
 
-        expect(fetchLiveBillRunStub.called).toBe(false)
+        expect(FetchLiveBillRunService.default).not.toHaveBeenCalled()
       })
     })
 
@@ -83,38 +79,39 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
         match.toFinancialYearEnding = year
         match.summer = summer
 
-        billRunQueryStub.first = Sinon.stub().resolves(match)
+        billRunQueryStub.first = vi.fn().mockResolvedValue(match)
 
-        Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
+        vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
+        vi.spyOn(FetchLiveBillRunService, 'default').mockResolvedValue()
       })
 
       it('returns the match and determines that neither engine can be triggered', async () => {
-        const result = await DetermineBlockingTwoPartAnnualService.go(regionId, year)
+        const result = await DetermineBlockingTwoPartAnnualService(regionId, year)
 
         expect(result).toEqual({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
       })
 
       it('does not bother to check for live bill runs', async () => {
-        await DetermineBlockingTwoPartAnnualService.go(regionId, year)
+        await DetermineBlockingTwoPartAnnualService(regionId, year)
 
-        expect(fetchLiveBillRunStub.called).toBe(false)
+        expect(FetchLiveBillRunService.default).not.toHaveBeenCalled()
       })
     })
   })
 
   describe('when there is no matching bill run', () => {
     beforeEach(() => {
-      billRunQueryStub.first = Sinon.stub().resolves(null)
+      billRunQueryStub.first = vi.fn().mockResolvedValue(null)
     })
 
     describe('and no live bill run', () => {
       beforeEach(() => {
-        fetchLiveBillRunStub.resolves(null)
+        vi.spyOn(FetchLiveBillRunService, 'default').mockResolvedValue(null)
       })
 
       describe('for an SROC era bill run', () => {
         it('returns no matches and determines that the "current" engine can be triggered', async () => {
-          const result = await DetermineBlockingTwoPartAnnualService.go(regionId, year)
+          const result = await DetermineBlockingTwoPartAnnualService(regionId, year)
 
           expect(result).toEqual({ matches: [], toFinancialYearEnding: year, trigger: engineTriggers.current })
         })
@@ -127,7 +124,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
         })
 
         it('returns no matches and determines that the "old" engine can be triggered', async () => {
-          const result = await DetermineBlockingTwoPartAnnualService.go(regionId, year, summer)
+          const result = await DetermineBlockingTwoPartAnnualService(regionId, year, summer)
 
           expect(result).toEqual({ matches: [], toFinancialYearEnding: year, trigger: engineTriggers.old })
         })
@@ -139,11 +136,11 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
         match.batchType = 'supplementary'
         match.status = 'ready'
 
-        fetchLiveBillRunStub.resolves(match)
+        vi.spyOn(FetchLiveBillRunService, 'default').mockResolvedValue(match)
       })
 
       it('returns the match and determines that neither engine can be triggered', async () => {
-        const result = await DetermineBlockingTwoPartAnnualService.go(regionId, year)
+        const result = await DetermineBlockingTwoPartAnnualService(regionId, year)
 
         expect(result).toEqual({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
       })

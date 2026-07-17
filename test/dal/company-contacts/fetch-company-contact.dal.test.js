@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
+import ContactHelper from '../../support/helpers/contact.helper.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
+import FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
 
 describe('Company Contacts - Fetch Company Contact dal', () => {
   const companyId = generateUUID()
@@ -26,7 +27,7 @@ describe('Company Contacts - Fetch Company Contact dal', () => {
 
   describe('when there is a company contact', () => {
     it('returns the company contact and associated contact record', async () => {
-      const result = await FetchCompanyContactDal.go(companyContact.id)
+      const result = await FetchCompanyContactDal(companyContact.id)
 
       expect(result).toEqual({
         abstractionAlertLicences: null,

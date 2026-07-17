@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CompanyHelper = require('../../support/helpers/company.helper.js')
+import CompanyHelper from '../../support/helpers/company.helper.js'
 
 // Thing under test
-const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
+import FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
 
 describe('Companies - Fetch Company dal', () => {
   let company
@@ -15,7 +16,7 @@ describe('Companies - Fetch Company dal', () => {
     })
 
     it('returns the matching company', async () => {
-      const result = await FetchCompanyDal.go(company.id)
+      const result = await FetchCompanyDal(company.id)
 
       expect(result).toEqual({
         id: company.id,

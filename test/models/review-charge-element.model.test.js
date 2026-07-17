@@ -1,18 +1,19 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
-const ChargeElementModel = require('../../app/models/charge-element.model.js')
-const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
-const ReviewChargeElementReturnHelper = require('../support/helpers/review-charge-element-return.helper.js')
-const ReviewChargeElementReturnModel = require('../../app/models/review-charge-element-return.model.js')
-const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
-const ReviewReturnHelper = require('../support/helpers/review-return.helper.js')
-const ReviewReturnModel = require('../../app/models/review-return.model.js')
+import ChargeElementHelper from '../support/helpers/charge-element.helper.js'
+import ChargeElementModel from '../../app/models/charge-element.model.js'
+import ReviewChargeElementHelper from '../support/helpers/review-charge-element.helper.js'
+import ReviewChargeElementReturnHelper from '../support/helpers/review-charge-element-return.helper.js'
+import ReviewChargeElementReturnModel from '../../app/models/review-charge-element-return.model.js'
+import ReviewChargeReferenceHelper from '../support/helpers/review-charge-reference.helper.js'
+import ReviewChargeReferenceModel from '../../app/models/review-charge-reference.model.js'
+import ReviewReturnHelper from '../support/helpers/review-return.helper.js'
+import ReviewReturnModel from '../../app/models/review-return.model.js'
 
 // Thing under test
-const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
+import ReviewChargeElementModel from '../../app/models/review-charge-element.model.js'
 
 describe('Review Charge Element model', () => {
   let testChargeElement

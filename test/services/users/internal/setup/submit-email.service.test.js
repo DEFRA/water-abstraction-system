@@ -1,21 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const CheckEmailExistsDal = require('../../../../../app/dal/users/check-email-exists.dal.js')
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import * as CheckEmailExistsDal from '../../../../../app/dal/users/check-email-exists.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitEmailService = require('../../../../../app/services/users/internal/setup/submit-email.service.js')
+import SubmitEmailService from '../../../../../app/services/users/internal/setup/submit-email.service.js'
 
 describe('Users - Internal - Setup - Submit Email Service', () => {
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -24,17 +21,17 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
   beforeEach(() => {
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    Sinon.stub(CheckEmailExistsDal, 'go').resolves(false)
+    vi.spyOn(CheckEmailExistsDal, 'default').mockResolvedValue(false)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a valid payload', () => {
@@ -43,17 +40,17 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitEmailService.go(session.id, payload, yarStub)
+      await SubmitEmailService(session.id, payload, yarStub)
 
       expect(session).toEqual({
         ...session,
         email: 'bob@environment-agency.gov.uk'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitEmailService.go(session.id, payload, yarStub)
+      const result = await SubmitEmailService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         redirectUrl: `/system/users/internal/setup/${session.id}/permissions`
@@ -63,17 +60,17 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
     describe('and the check page has', () => {
       describe('been visited', () => {
         beforeEach(() => {
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             ...sessionData,
             checkPageVisited: true,
             email: 'bob@environment-agency.gov.uk'
           })
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('redirects to the Check page', async () => {
-          const result = await SubmitEmailService.go(session.id, payload, yarStub)
+          const result = await SubmitEmailService(session.id, payload, yarStub)
 
           expect(result).toEqual({
             redirectUrl: `/system/users/internal/setup/${session.id}/check`
@@ -83,9 +80,9 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
         describe('and the "session" and "payload" value', () => {
           describe('match', () => {
             it('does not set a notification', async () => {
-              await SubmitEmailService.go(session.id, payload, yarStub)
+              await SubmitEmailService(session.id, payload, yarStub)
 
-              expect(yarStub.flash.called).toBe(false)
+              expect(yarStub.flash).not.toHaveBeenCalled()
             })
           })
 
@@ -95,9 +92,9 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
             })
 
             it('sets a notification', async () => {
-              await SubmitEmailService.go(session.id, payload, yarStub)
+              await SubmitEmailService(session.id, payload, yarStub)
 
-              const [flashType, bannerMessage] = yarStub.flash.args[0]
+              const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
               expect(flashType).toEqual('notification')
               expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Email address updated' })
@@ -108,9 +105,9 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
 
       describe('not been visited', () => {
         it('does not set a notification', async () => {
-          await SubmitEmailService.go(session.id, payload, yarStub)
+          await SubmitEmailService(session.id, payload, yarStub)
 
-          expect(yarStub.flash.called).toBe(false)
+          expect(yarStub.flash).not.toHaveBeenCalled()
         })
       })
     })
@@ -122,7 +119,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitEmailService.go(session.id, payload, yarStub)
+      const result = await SubmitEmailService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         activeNavBar: 'users',

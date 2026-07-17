@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view notification page
  * @module ViewNotificationService
  */
 
-const FetchNotificationService = require('./fetch-notification.service.js')
-const ViewNotificationPresenter = require('../../presenters/notifications/view-notification.presenter.js')
+import FetchNotificationService from './fetch-notification.service.js'
+import ViewNotificationPresenter from '../../presenters/notifications/view-notification.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the view notification page
@@ -27,12 +25,13 @@ const ViewNotificationPresenter = require('../../presenters/notifications/view-n
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view notification template.
  */
-async function go(notificationId, licenceId = null, returnLogId = null, companyContactId = null) {
-  const { licence, notification } = await FetchNotificationService.go(notificationId, licenceId)
+export default async function viewNotificationService(
+  notificationId,
+  licenceId = null,
+  returnLogId = null,
+  companyContactId = null
+) {
+  const { licence, notification } = await FetchNotificationService(notificationId, licenceId)
 
-  return ViewNotificationPresenter.go(notification, licence, returnLogId, companyContactId)
-}
-
-module.exports = {
-  go
+  return ViewNotificationPresenter(notification, licence, returnLogId, companyContactId)
 }

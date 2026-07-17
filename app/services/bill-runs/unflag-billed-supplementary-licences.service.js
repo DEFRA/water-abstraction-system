@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Unflag all licences in a bill run that resulted in a billing invoice (they are billed)
  * @module UnflagBilledSupplementaryLicencesService
  */
 
-const BillLicenceModel = require('../../models/bill-licence.model.js')
-const LicenceModel = require('../../models/licence.model.js')
-const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
-const WorkflowModel = require('../../models/workflow.model.js')
+import BillLicenceModel from '../../models/bill-licence.model.js'
+import LicenceModel from '../../models/licence.model.js'
+import LicenceSupplementaryYearModel from '../../models/licence-supplementary-year.model.js'
+import WorkflowModel from '../../models/workflow.model.js'
 
 /**
  * Unflag all licences in a bill run that resulted in a billing invoice (they are billed)
@@ -40,7 +38,7 @@ const WorkflowModel = require('../../models/workflow.model.js')
  *
  * @param {module:BillRunModel} billRun - Instance of the bill run being 'sent'
  */
-async function go(billRun) {
+export default async function unflagBilledSupplementaryLicencesService(billRun) {
   const { batchType, scheme } = billRun
 
   if (scheme === 'alcs') {
@@ -101,8 +99,4 @@ async function _unflagTwoPartTariff(billRun) {
         .whereColumn('licenceSupplementaryYears.licenceId', 'workflows.licenceId')
         .whereNull('workflows.deletedAt')
     )
-}
-
-module.exports = {
-  go
 }

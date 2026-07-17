@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/agreements-exceptions` page
  * @module AgreementsExceptionsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/agreements-exceptions` page
@@ -19,7 +17,7 @@ const Joi = require('joi')
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
  */
-function go(payload) {
+export default function agreementsExceptionsValidator(payload) {
   const errorMessage = 'Select if there are any agreements and exceptions needed for the requirements for returns'
 
   const schema = Joi.object({
@@ -47,7 +45,3 @@ const VALID_VALUES = [
   '56-returns-exception',
   'none'
 ]
-
-module.exports = {
-  go
-}

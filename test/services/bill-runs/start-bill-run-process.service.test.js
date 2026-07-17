@@ -1,21 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const NoBillingPeriodsError = require('../../../app/errors/no-billing-periods.error.js')
+import NoBillingPeriodsError from '../../../app/errors/no-billing-periods.error.js'
 
 // Things we need to stub
-const AnnualProcessBillRunService = require('../../../app/services/bill-runs/annual/process-bill-run.service.js')
-const DetermineBillingPeriodsService = require('../../../app/services/bill-runs/determine-billing-periods.service.js')
-const InitiateBillRunService = require('../../../app/services/bill-runs/initiate-bill-run.service.js')
-const SupplementaryProcessBillRunService = require('../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
-const TwoPartTariffProcessBillRunService = require('../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
-const TwoPartTariffSupplementaryProcessBillRunService = require('../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js')
+import * as AnnualProcessBillRunService from '../../../app/services/bill-runs/annual/process-bill-run.service.js'
+import * as DetermineBillingPeriodsService from '../../../app/services/bill-runs/determine-billing-periods.service.js'
+import * as InitiateBillRunService from '../../../app/services/bill-runs/initiate-bill-run.service.js'
+import * as SupplementaryProcessBillRunService from '../../../app/services/bill-runs/supplementary/process-bill-run.service.js'
+import * as TwoPartTariffProcessBillRunService from '../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js'
+import * as TwoPartTariffSupplementaryProcessBillRunService from '../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js'
 
 // Thing under test
-const StartBillRunProcessService = require('../../../app/services/bill-runs/start-bill-run-process.service.js')
+import StartBillRunProcessService from '../../../app/services/bill-runs/start-bill-run-process.service.js'
 
 describe('Start Bill Run Process service', () => {
   const regionId = '3b24cc01-19c5-4654-8ef6-24ddb4c8dcdf'
@@ -34,7 +32,7 @@ describe('Start Bill Run Process service', () => {
   let batchType
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service succeeds', () => {
@@ -44,7 +42,11 @@ describe('Start Bill Run Process service', () => {
         { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
       ]
 
-      Sinon.stub(DetermineBillingPeriodsService, 'go').returns(billingPeriods)
+      vi.spyOn(DetermineBillingPeriodsService, 'default').mockReturnValue(billingPeriods)
+      vi.spyOn(AnnualProcessBillRunService, 'default').mockResolvedValue()
+      vi.spyOn(SupplementaryProcessBillRunService, 'default').mockResolvedValue()
+      vi.spyOn(TwoPartTariffProcessBillRunService, 'default').mockResolvedValue()
+      vi.spyOn(TwoPartTariffSupplementaryProcessBillRunService, 'default').mockResolvedValue()
     })
 
     describe('and the bill run type is "annual"', () => {
@@ -56,23 +58,21 @@ describe('Start Bill Run Process service', () => {
           batchType
         }
 
-        Sinon.stub(InitiateBillRunService, 'go').resolves(annualBillRun)
-
-        Sinon.stub(AnnualProcessBillRunService, 'go')
+        vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(annualBillRun)
       })
 
       it('initiates a new bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
-        const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
+        const financialYearEndings = InitiateBillRunService.default.mock.calls[0][0]
 
         expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
 
       it('starts processing the bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
-        expect(AnnualProcessBillRunService.go.called).toBe(true)
+        expect(AnnualProcessBillRunService.default).toHaveBeenCalled()
       })
     })
 
@@ -85,23 +85,21 @@ describe('Start Bill Run Process service', () => {
           batchType
         }
 
-        Sinon.stub(InitiateBillRunService, 'go').resolves(supplementaryBillRun)
-
-        Sinon.stub(SupplementaryProcessBillRunService, 'go')
+        vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(supplementaryBillRun)
       })
 
       it('initiates a new bill run', async () => {
-        await StartBillRunProcessService.go(regionId, batchType, userEmail)
+        await StartBillRunProcessService(regionId, batchType, userEmail)
 
-        const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
+        const financialYearEndings = InitiateBillRunService.default.mock.calls[0][0]
 
         expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
 
       it('starts processing the bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
-        expect(SupplementaryProcessBillRunService.go.called).toBe(true)
+        expect(SupplementaryProcessBillRunService.default).toHaveBeenCalled()
       })
     })
 
@@ -114,23 +112,21 @@ describe('Start Bill Run Process service', () => {
           batchType
         }
 
-        Sinon.stub(InitiateBillRunService, 'go').resolves(twoPartTariffBillRun)
-
-        Sinon.stub(TwoPartTariffProcessBillRunService, 'go')
+        vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(twoPartTariffBillRun)
       })
 
       it('initiates a new bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
-        const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
+        const financialYearEndings = InitiateBillRunService.default.mock.calls[0][0]
 
         expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
 
       it('starts processing the bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
-        expect(TwoPartTariffProcessBillRunService.go.called).toBe(true)
+        expect(TwoPartTariffProcessBillRunService.default).toHaveBeenCalled()
       })
     })
 
@@ -143,23 +139,21 @@ describe('Start Bill Run Process service', () => {
           batchType
         }
 
-        Sinon.stub(InitiateBillRunService, 'go').resolves(twoPartTariffSupplementaryBillRun)
-
-        Sinon.stub(TwoPartTariffSupplementaryProcessBillRunService, 'go')
+        vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(twoPartTariffSupplementaryBillRun)
       })
 
       it('initiates a new bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
-        const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
+        const financialYearEndings = InitiateBillRunService.default.mock.calls[0][0]
 
         expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
 
       it('starts processing the bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
-        expect(TwoPartTariffSupplementaryProcessBillRunService.go.called).toBe(true)
+        expect(TwoPartTariffSupplementaryProcessBillRunService.default).toHaveBeenCalled()
       })
     })
   })
@@ -167,21 +161,21 @@ describe('Start Bill Run Process service', () => {
   describe('when calling the service fails', () => {
     describe('because of an unexpected error', () => {
       beforeEach(() => {
-        Sinon.stub(DetermineBillingPeriodsService, 'go').throws()
+        vi.spyOn(DetermineBillingPeriodsService, 'default').mockRejectedValue(new Error())
       })
 
       it('throws an error', async () => {
-        await expect(StartBillRunProcessService.go(regionId, userEmail)).rejects.toThrow()
+        await expect(StartBillRunProcessService(regionId, userEmail)).rejects.toThrow()
       })
     })
 
     describe('because no billing periods could be determined', () => {
       beforeEach(() => {
-        Sinon.stub(DetermineBillingPeriodsService, 'go').returns([])
+        vi.spyOn(DetermineBillingPeriodsService, 'default').mockReturnValue([])
       })
 
       it('throws a NoBillingPeriodsError', async () => {
-        const result = await StartBillRunProcessService.go(regionId, userEmail).catch((e) => {
+        const result = await StartBillRunProcessService(regionId, userEmail).catch((e) => {
           return e
         })
 

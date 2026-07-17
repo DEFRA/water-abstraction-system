@@ -1,14 +1,10 @@
-'use strict'
-
 /**
  * @module ReturnLogHelper
  */
 
-const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('./licence.helper.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const { generateReference } = require('./return-requirement.helper.js')
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import { timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateReference, generateReturnId, generateUUID } from '../generators.js'
 
 /**
  * Add a new return log
@@ -101,44 +97,6 @@ function defaults(data = {}) {
 }
 
 /**
- * Returns a randomly generated return log Id
- *
- * Unlike other tables, the previous team opted to generate a unique ID based on properties of the return log including
- * start and end dates, version and references.
- *
- * So, in order to replicate that we have this helper method, that defaults some of those values, and randomises others
- * in order to generate a unique return log ID.
- *
- * If you have known values, for example, the licence reference they can be passed to this helper and it will
- * incorporate them into the ID.
- *
- * @param {string} [startDate] - the start date as a string, for example '2022-04-01'
- * @param {string} [endDate] - the end date as a string, for example '2023-03-31'
- * @param {number} [version] - the version number to use, for example 1
- * @param {string} [licenceRef] - the licence reference to use
- * @param {string} [returnReference] - the return requirement reference to use
- *
- * @returns {string} the generated return log ID
- */
-function generateReturnId(
-  startDate = new Date('2022-04-01'),
-  endDate = new Date('2023-03-31'),
-  version = 1,
-  licenceRef = null,
-  returnReference = null
-) {
-  if (!licenceRef) {
-    licenceRef = generateLicenceRef()
-  }
-
-  if (!returnReference) {
-    returnReference = generateReference()
-  }
-
-  return `v${version}:1:${licenceRef}:${returnReference}:${formatDateObjectToISO(startDate)}:${formatDateObjectToISO(endDate)}`
-}
-
-/**
  * Checks if the return logs for a given licence reference are continuous.
  *
  * This function queries the return logs associated with the provided licence reference,
@@ -179,9 +137,8 @@ function _areDatesSequential(endDate, startDate) {
   return differenceInDays <= 1
 }
 
-module.exports = {
+export default {
   add,
   defaults,
-  generateReturnId,
   hasContinuousReturnLogs
 }

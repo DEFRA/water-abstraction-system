@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/billing-accounts/setup/{sessionId}/existing-account` page
  * @module ExistingAccountPresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the `/billing-accounts/setup/{sessionId}/existing-account` page
@@ -15,7 +13,7 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session, companies) {
+export default function existingAccountPresenter(session, companies) {
   const { billingAccount } = session
 
   return {
@@ -66,8 +64,4 @@ function _radioOptions(existingAccount, companies) {
   )
 
   return items
-}
-
-module.exports = {
-  go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module ChargeVersionNoteHelper
  */
 
-const { generateUserId } = require('./user.helper.js')
-const ChargeVersionNoteModel = require('../../../app/models/charge-version-note.model.js')
+import ChargeVersionNoteModel from '../../../app/models/charge-version-note.model.js'
+import { generateUserId } from '../generators.js'
 
 /**
  * Add a new charge version note
@@ -49,7 +47,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

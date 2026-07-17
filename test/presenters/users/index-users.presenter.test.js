@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+import UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
 
 // Thing under test
-const IndexUsersPresenter = require('../../../app/presenters/users/index-users.presenter.js')
+import IndexUsersPresenter from '../../../app/presenters/users/index-users.presenter.js'
 
 describe('Users - Index Users presenter', () => {
   let auth
@@ -29,15 +27,15 @@ describe('Users - Index Users presenter', () => {
       credentials: { scope: ['manage_accounts'] }
     }
 
-    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
+    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersManagement', true)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly presents the data', () => {
-    const result = IndexUsersPresenter.go(users, auth)
+    const result = IndexUsersPresenter(users, auth)
 
     expect(result).toEqual({
       links: {
@@ -90,7 +88,7 @@ describe('Users - Index Users presenter', () => {
   describe('the "links" property', () => {
     describe('when the user has the "manage_accounts" role', () => {
       it('returns all of the links', () => {
-        const result = IndexUsersPresenter.go(users, auth)
+        const result = IndexUsersPresenter(users, auth)
 
         expect(result.links).toEqual({
           user: {
@@ -107,7 +105,7 @@ describe('Users - Index Users presenter', () => {
       })
 
       it('returns an empty object', () => {
-        const result = IndexUsersPresenter.go(users, auth)
+        const result = IndexUsersPresenter(users, auth)
 
         expect(result.links).toEqual({})
       })
@@ -119,7 +117,7 @@ describe('Users - Index Users presenter', () => {
       describe('when the user is external', () => {
         describe('and has been linked to a licence at some point', () => {
           it('returns an empty string', () => {
-            const result = IndexUsersPresenter.go(users, auth)
+            const result = IndexUsersPresenter(users, auth)
 
             expect(result.users[1].permissions).toEqual('Returns user')
             expect(result.users[2].permissions).toEqual('None')
@@ -135,7 +133,7 @@ describe('Users - Index Users presenter', () => {
           })
 
           it('returns their permissions', () => {
-            const result = IndexUsersPresenter.go(users, auth)
+            const result = IndexUsersPresenter(users, auth)
 
             expect(result.users[1].permissions).toEqual('None')
             expect(result.users[2].permissions).toEqual('None')
@@ -146,7 +144,7 @@ describe('Users - Index Users presenter', () => {
 
       describe('when the user is internal', () => {
         it('returns their permissions', () => {
-          const result = IndexUsersPresenter.go(users, auth)
+          const result = IndexUsersPresenter(users, auth)
 
           expect(result.users[0].permissions).toEqual('Basic access')
           expect(result.users[3].permissions).toEqual('Super user')
@@ -157,7 +155,7 @@ describe('Users - Index Users presenter', () => {
     describe('the "type" property', () => {
       describe('when the user is external', () => {
         it('returns "External"', () => {
-          const result = IndexUsersPresenter.go(users, auth)
+          const result = IndexUsersPresenter(users, auth)
 
           expect(result.users[1].type).toEqual('External')
           expect(result.users[2].type).toEqual('External')
@@ -166,7 +164,7 @@ describe('Users - Index Users presenter', () => {
 
       describe('when the user is internal', () => {
         it('returns "Internal"', () => {
-          const result = IndexUsersPresenter.go(users, auth)
+          const result = IndexUsersPresenter(users, auth)
 
           expect(result.users[0].type).toEqual('Internal')
           expect(result.users[3].type).toEqual('Internal')

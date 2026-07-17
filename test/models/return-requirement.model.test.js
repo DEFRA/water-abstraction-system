@@ -1,19 +1,20 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const PointHelper = require('../support/helpers/point.helper.js')
-const PointModel = require('../../app/models/point.model.js')
-const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../app/models/return-log.model.js')
-const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
-const ReturnRequirementPointHelper = require('../support/helpers/return-requirement-point.helper.js')
-const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
-const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
-const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
-const ReturnVersionModel = require('../../app/models/return-version.model.js')
+import PointHelper from '../support/helpers/point.helper.js'
+import PointModel from '../../app/models/point.model.js'
+import ReturnLogHelper from '../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../app/models/return-log.model.js'
+import ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
+import ReturnRequirementPointHelper from '../support/helpers/return-requirement-point.helper.js'
+import ReturnRequirementPurposeHelper from '../support/helpers/return-requirement-purpose.helper.js'
+import ReturnRequirementPurposeModel from '../../app/models/return-requirement-purpose.model.js'
+import ReturnVersionHelper from '../support/helpers/return-version.helper.js'
+import ReturnVersionModel from '../../app/models/return-version.model.js'
 
 // Thing under test
-const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
+import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
 
 describe('Return Requirement model', () => {
   let testPoint

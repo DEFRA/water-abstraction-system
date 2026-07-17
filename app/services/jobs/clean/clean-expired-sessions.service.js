@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Deletes expired temporary sessions where the `created_at` date is more than 1 day ago
  * @module CleanExpiredSessionsService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+import SessionModel from '../../../models/session.model.js'
 
 /**
  * Deletes expired temporary sessions where the `created_at` date is more than 1 day ago
  *
  * @returns {Promise<number>} The number of rows deleted
  */
-async function go() {
+export default async function cleanExpiredSessionsService() {
   let deletedCount = 0
 
   try {
@@ -25,8 +23,4 @@ async function go() {
   }
 
   return deletedCount
-}
-
-module.exports = {
-  go
 }

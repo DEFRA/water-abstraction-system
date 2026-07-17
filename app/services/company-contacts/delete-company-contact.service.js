@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Deletes the company contact
  * @module DeleteCompanyContactService
  */
 
-const CompanyContactModel = require('../../models/company-contact.model.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import CompanyContactModel from '../../models/company-contact.model.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Deletes the company contact
@@ -19,14 +17,10 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * @param {string} id - The id of the company contact
  * @param {object} notified - true if the company contacts have been notified
  */
-async function go(id, notified) {
+export default async function deleteCompanyContactService(id, notified) {
   if (notified) {
     await CompanyContactModel.query().update({ deletedAt: timestampForPostgres() }).where('id', id)
   } else {
     await CompanyContactModel.query().deleteById(id)
   }
-}
-
-module.exports = {
-  go
 }

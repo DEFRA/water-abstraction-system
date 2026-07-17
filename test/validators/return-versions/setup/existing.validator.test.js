@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Thing under test
-const ExistingValidator = require('../../../../app/validators/return-versions/setup/existing.validator.js')
+import ExistingValidator from '../../../../app/validators/return-versions/setup/existing.validator.js'
 
 describe('Return Versions Setup - Existing validator', () => {
   const returnVersions = [
@@ -19,7 +20,7 @@ describe('Return Versions Setup - Existing validator', () => {
 
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = ExistingValidator.go({ existing: '60b5d10d-1372-4fb2-b222-bfac81da69ab' }, returnVersions)
+      const result = ExistingValidator({ existing: '60b5d10d-1372-4fb2-b222-bfac81da69ab' }, returnVersions)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -29,7 +30,7 @@ describe('Return Versions Setup - Existing validator', () => {
   describe('when valid data is provided', () => {
     describe('because no "existing version" is given', () => {
       it('fails validation', () => {
-        const result = ExistingValidator.go({ existing: '' }, returnVersions)
+        const result = ExistingValidator({ existing: '' }, returnVersions)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -39,7 +40,7 @@ describe('Return Versions Setup - Existing validator', () => {
 
     describe('because an unknown "reason" is given', () => {
       it('fails validation', () => {
-        const result = ExistingValidator.go({ existing: 'be1f32a8-599f-4622-ada7-9dd885f5fc80' }, returnVersions)
+        const result = ExistingValidator({ existing: 'be1f32a8-599f-4622-ada7-9dd885f5fc80' }, returnVersions)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

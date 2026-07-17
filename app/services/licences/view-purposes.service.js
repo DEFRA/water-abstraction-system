@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the licence purposes page
  * @module ViewPurposesService
  */
 
-const FetchPurposesService = require('../licences/fetch-purposes.service.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
-const PurposesPresenter = require('../../presenters/licences/purposes.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import FetchLicenceService from './fetch-licence.service.js'
+import FetchPurposesService from '../licences/fetch-purposes.service.js'
+import PurposesPresenter from '../../presenters/licences/purposes.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence purposes page
@@ -18,11 +16,11 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence purposes template
  */
-async function go(licenceId, auth) {
-  const licence = await FetchLicenceService.go(licenceId)
-  const purposes = await FetchPurposesService.go(licenceId)
+export default async function viewPurposesService(licenceId, auth) {
+  const licence = await FetchLicenceService(licenceId)
+  const purposes = await FetchPurposesService(licenceId)
 
-  const pageData = PurposesPresenter.go(purposes, licence)
+  const pageData = PurposesPresenter(purposes, licence)
 
   return {
     ...pageData,
@@ -30,8 +28,4 @@ async function go(licenceId, auth) {
     activeSummarySubNav: 'purposes',
     roles: userRoles(auth)
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
-const ContactPresenter = require('../../../../app/presenters/notices/setup/contact.presenter.js')
+import ContactPresenter from '../../../../app/presenters/notices/setup/contact.presenter.js'
 
 describe('Notices - Setup - Contact presenter', () => {
   let recipients
@@ -15,7 +16,7 @@ describe('Notices - Setup - Contact presenter', () => {
 
   describe('when the recipient is an email', () => {
     it('should return the email address', () => {
-      const result = ContactPresenter.go(recipients.primaryUser)
+      const result = ContactPresenter(recipients.primaryUser)
 
       expect(result).toEqual(['primary.user@important.com'])
     })
@@ -24,7 +25,7 @@ describe('Notices - Setup - Contact presenter', () => {
   describe('when the recipient is an address', () => {
     describe('and it is valid', () => {
       it('should return the postal address', () => {
-        const result = ContactPresenter.go(recipients.licenceHolder)
+        const result = ContactPresenter(recipients.licenceHolder)
 
         expect(result).toEqual(['Harry Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'])
       })
@@ -36,7 +37,7 @@ describe('Notices - Setup - Contact presenter', () => {
       })
 
       it('should return the postal address flagged as INVALID', () => {
-        const result = ContactPresenter.go(recipients.licenceHolder)
+        const result = ContactPresenter(recipients.licenceHolder)
 
         expect(result).toEqual([
           'Harry Potter',

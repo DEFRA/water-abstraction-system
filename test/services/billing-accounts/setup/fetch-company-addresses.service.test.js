@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AddressHelper = require('../../../support/helpers/address.helper.js')
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
-const CompanyAddressHelper = require('../../../support/helpers/company-address.helper.js')
+import AddressHelper from '../../../support/helpers/address.helper.js'
+import CompanyAddressHelper from '../../../support/helpers/company-address.helper.js'
+import CompanyHelper from '../../../support/helpers/company.helper.js'
 
 // Thing under test
-const FetchCompanyAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js')
+import FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'
 
 describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
   let address
@@ -40,7 +41,7 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
 
   describe('when a matching company exists and has an address', () => {
     it('returns the company name and matching addresses', async () => {
-      const result = await FetchCompanyAddressesService.go(company.id)
+      const result = await FetchCompanyAddressesService(company.id)
 
       expect(result).toEqual({
         company: {
@@ -65,7 +66,7 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
 
   describe('when a matching company exists and has no address', () => {
     it('returns the company name and an empty addresses array', async () => {
-      const result = await FetchCompanyAddressesService.go(companyWithNoAddress.id)
+      const result = await FetchCompanyAddressesService(companyWithNoAddress.id)
 
       expect(result).toEqual({
         company: {

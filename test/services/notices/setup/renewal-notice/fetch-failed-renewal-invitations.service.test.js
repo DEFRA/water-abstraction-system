@@ -1,15 +1,16 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const EventHelper = require('../../../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
-const NotificationHelper = require('../../../../support/helpers/notification.helper.js')
-const { compareStrings, generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+import EventHelper from '../../../../support/helpers/event.helper.js'
+import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
+import NotificationHelper from '../../../../support/helpers/notification.helper.js'
+import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
+import { compareStrings } from '../../../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-const FetchFailedRenewalInvitationsService = require('../../../../../app/services/notices/setup/renewal-notice/fetch-failed-renewal-invitations.service.js')
+import FetchFailedRenewalInvitationsService from '../../../../../app/services/notices/setup/renewal-notice/fetch-failed-renewal-invitations.service.js'
 
 describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations service', () => {
   let licenceRefs
@@ -43,7 +44,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
 
       describe('that do NOT include emails to primary users', () => {
         it('returns an object with empty properties', async () => {
-          const result = await FetchFailedRenewalInvitationsService.go(notice.id)
+          const result = await FetchFailedRenewalInvitationsService(notice.id)
 
           expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
         })
@@ -80,7 +81,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
           })
 
           it('returns the failed notification IDs plus the unique licence refs from them', async () => {
-            const result = await FetchFailedRenewalInvitationsService.go(notice.id)
+            const result = await FetchFailedRenewalInvitationsService(notice.id)
 
             const expectedNotificationIds = [notifications[1].id, notifications[2].id].sort(
               (referenceString, compareString) => {
@@ -116,7 +117,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
           })
 
           it('returns an object with empty properties', async () => {
-            const result = await FetchFailedRenewalInvitationsService.go(notice.id)
+            const result = await FetchFailedRenewalInvitationsService(notice.id)
 
             expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
           })
@@ -130,7 +131,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
       })
 
       it('returns an object with empty properties', async () => {
-        const result = await FetchFailedRenewalInvitationsService.go(notice.id)
+        const result = await FetchFailedRenewalInvitationsService(notice.id)
 
         expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
       })
@@ -143,7 +144,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
     })
 
     it('returns an object with empty properties', async () => {
-      const result = await FetchFailedRenewalInvitationsService.go(generateUUID())
+      const result = await FetchFailedRenewalInvitationsService(generateUUID())
 
       expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
     })

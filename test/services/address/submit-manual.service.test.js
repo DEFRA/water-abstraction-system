@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import SessionModelStub from '../../support/stubs/session.stub.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitManualService = require('../../../app/services/address/submit-manual.service.js')
+import SubmitManualService from '../../../app/services/address/submit-manual.service.js'
 
 describe('Address - Submit Manual Service', () => {
   let payload
@@ -36,13 +34,13 @@ describe('Address - Submit Manual Service', () => {
       }
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -58,7 +56,7 @@ describe('Address - Submit Manual Service', () => {
       })
 
       it('saves the submitted address and returns the specified redirect URL', async () => {
-        const result = await SubmitManualService.go(sessionId, payload)
+        const result = await SubmitManualService(sessionId, payload)
 
         expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -70,7 +68,7 @@ describe('Address - Submit Manual Service', () => {
           postcode: 'SW1A 1AA'
         })
         expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/manual`)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 
@@ -81,7 +79,7 @@ describe('Address - Submit Manual Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitManualService.go(sessionId, payload)
+          const result = await SubmitManualService(sessionId, payload)
 
           expect(result).toEqual({
             error: {
@@ -120,7 +118,7 @@ describe('Address - Submit Manual Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitManualService.go(sessionId, payload)
+          const result = await SubmitManualService(sessionId, payload)
 
           expect(result).toEqual({
             error: {

@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const MethodPresenter = require('../../../../app/presenters/return-versions/setup/method.presenter.js')
+import MethodPresenter from '../../../../app/presenters/return-versions/setup/method.presenter.js'
 
 describe('Return Versions - Setup - Method presenter', () => {
   let session
@@ -51,7 +52,7 @@ describe('Return Versions - Setup - Method presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = MethodPresenter.go(session)
+      const result = MethodPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -70,7 +71,7 @@ describe('Return Versions - Setup - Method presenter', () => {
 
   describe('the "backLink" property', () => {
     it('returns a link back to the "start-date" page', () => {
-      const result = MethodPresenter.go(session)
+      const result = MethodPresenter(session)
 
       expect(result.backLink).toEqual({
         href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason',
@@ -82,7 +83,7 @@ describe('Return Versions - Setup - Method presenter', () => {
   describe('the "displayCopyExisting" property', () => {
     describe('when the licence version has copyable return versions (something to copy from)', () => {
       it('returns true', () => {
-        const result = MethodPresenter.go(session)
+        const result = MethodPresenter(session)
 
         expect(result.displayCopyExisting).toBe(true)
       })
@@ -94,7 +95,7 @@ describe('Return Versions - Setup - Method presenter', () => {
       })
 
       it('returns false', () => {
-        const result = MethodPresenter.go(session)
+        const result = MethodPresenter(session)
 
         expect(result.displayCopyExisting).toBe(false)
       })
@@ -108,7 +109,7 @@ describe('Return Versions - Setup - Method presenter', () => {
       })
 
       it('returns a populated method', () => {
-        const result = MethodPresenter.go(session)
+        const result = MethodPresenter(session)
 
         expect(result.method).toEqual('set-up-manually')
       })
@@ -116,7 +117,7 @@ describe('Return Versions - Setup - Method presenter', () => {
 
     describe('when the user has not previously submitted a setup method', () => {
       it('returns an empty method', () => {
-        const result = MethodPresenter.go(session)
+        const result = MethodPresenter(session)
 
         expect(result.method).toBeNull()
       })

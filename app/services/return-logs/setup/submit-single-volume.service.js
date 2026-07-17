@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/single-volume` page
  * @module SubmitSingleVolumeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SingleVolumePresenter = require('../../../presenters/return-logs/setup/single-volume.presenter.js')
-const SingleVolumeValidator = require('../../../validators/return-logs/setup/single-volume.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SingleVolumePresenter from '../../../presenters/return-logs/setup/single-volume.presenter.js'
+import SingleVolumeValidator from '../../../validators/return-logs/setup/single-volume.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/single-volume` page
@@ -25,8 +23,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} If no errors the page data for the single-volume page else the validation error details
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitSingleVolumeService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload)
 
@@ -57,15 +55,11 @@ function _submittedSessionData(session, payload) {
   session.singleVolume = payload.singleVolume ?? null
   session.singleVolumeQuantity = payload.singleVolumeQuantity ?? null
 
-  return SingleVolumePresenter.go(session)
+  return SingleVolumePresenter(session)
 }
 
 function _validate(payload) {
-  const validationResult = SingleVolumeValidator.go(payload)
+  const validationResult = SingleVolumeValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

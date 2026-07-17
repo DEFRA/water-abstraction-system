@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
  *
  * @module ViewCancelAlertsService
  */
 
-const CancelAlertsPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/cancel-alerts.presenter.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import CancelAlertsPresenter from '../../../../presenters/notices/setup/abstraction-alerts/cancel-alerts.presenter.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
@@ -16,17 +14,13 @@ const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewCancelAlertsService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = CancelAlertsPresenter.go(session)
+  const pageData = CancelAlertsPresenter(session)
 
   return {
     activeNavBar: 'notices',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,64 +1,69 @@
-'use strict'
+import {
+  submitInternational,
+  submitManual,
+  submitPostcode,
+  submitSelect,
+  viewInternational,
+  viewManual,
+  viewPostcode,
+  viewSelect
+} from '../controllers/address.controller.js'
 
-const AddressController = require('../controllers/address.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/address/{sessionId}/postcode',
     options: {
-      handler: AddressController.viewPostcode
+      handler: viewPostcode
     }
   },
   {
     method: 'POST',
     path: '/address/{sessionId}/postcode',
     options: {
-      handler: AddressController.submitPostcode
+      handler: submitPostcode
     }
   },
   {
     method: 'GET',
     path: '/address/{sessionId}/select',
     options: {
-      handler: AddressController.viewSelect
+      handler: viewSelect
     }
   },
   {
     method: 'POST',
     path: '/address/{sessionId}/select',
     options: {
-      handler: AddressController.submitSelect
+      handler: submitSelect
     }
   },
   {
     method: 'GET',
     path: '/address/{sessionId}/manual',
     options: {
-      handler: AddressController.viewManual
+      handler: viewManual
     }
   },
   {
     method: 'POST',
     path: '/address/{sessionId}/manual',
     options: {
-      handler: AddressController.submitManual
+      handler: submitManual
     }
   },
   {
     method: 'GET',
     path: '/address/{sessionId}/international',
     options: {
-      handler: AddressController.viewInternational
+      handler: viewInternational
     }
   },
   {
     method: 'POST',
     path: '/address/{sessionId}/international',
     options: {
-      handler: AddressController.submitInternational
+      handler: submitInternational
     }
   }
 ]
-
-module.exports = routes

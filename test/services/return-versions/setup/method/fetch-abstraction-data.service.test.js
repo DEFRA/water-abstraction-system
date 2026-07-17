@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceAbstractionDataSeeder = require('../../../../support/seeders/licence-abstraction-data.seeder.js')
+import * as LicenceAbstractionDataSeeder from '../../../../support/seeders/licence-abstraction-data.seeder.js'
 
 // Thing under test
-const FetchAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
+import FetchAbstractionDataService from '../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js'
 
 describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
   let seedData
@@ -15,7 +16,7 @@ describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
 
   describe('when called', () => {
     it('returns the abstraction data for the licence and licence version', async () => {
-      const result = await FetchAbstractionDataService.go(seedData.licenceId, seedData.licenceVersions.currentId)
+      const result = await FetchAbstractionDataService(seedData.licenceId, seedData.licenceVersions.currentId)
 
       expect(result).toEqual({
         id: seedData.licenceId,

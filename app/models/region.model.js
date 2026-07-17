@@ -1,15 +1,16 @@
-'use strict'
-
 /**
  * Model for regions (water.regions)
  * @module RegionModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import BillRunModel from './bill-run.model.js'
+import CompanyModel from './company.model.js'
+import LicenceModel from './licence.model.js'
 
-class RegionModel extends BaseModel {
+export default class RegionModel extends BaseModel {
   static get tableName() {
     return 'regions'
   }
@@ -18,7 +19,7 @@ class RegionModel extends BaseModel {
     return {
       billRuns: {
         relation: Model.HasManyRelation,
-        modelClass: 'bill-run.model',
+        modelClass: BillRunModel,
         join: {
           from: 'regions.id',
           to: 'billRuns.regionId'
@@ -26,7 +27,7 @@ class RegionModel extends BaseModel {
       },
       companies: {
         relation: Model.HasManyRelation,
-        modelClass: 'company.model',
+        modelClass: CompanyModel,
         join: {
           from: 'regions.id',
           to: 'companies.regionId'
@@ -34,7 +35,7 @@ class RegionModel extends BaseModel {
       },
       licences: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'regions.id',
           to: 'licences.regionId'
@@ -43,5 +44,3 @@ class RegionModel extends BaseModel {
     }
   }
 }
-
-module.exports = RegionModel

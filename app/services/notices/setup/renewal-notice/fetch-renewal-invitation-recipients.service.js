@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches recipient data for an adhoc renewal invitation notice
  * @module FetchRenewalInvitationRecipientsService
  */
 
-const GenerateRenewalInvitationLicenceQueryDal = require('../../../../dal/notices/setup/generate-renewal-invitation-licence-query.dal.js')
-const GenerateRenewalRecipientsQueryService = require('../../../jobs/renewal-invitations/generate-renewal-recipients-query.service.js')
-const { db } = require('../../../../../db/db.js')
+import GenerateRenewalInvitationLicenceQueryDal from '../../../../dal/notices/setup/generate-renewal-invitation-licence-query.dal.js'
+import GenerateRenewalRecipientsQueryService from '../../../jobs/renewal-invitations/generate-renewal-recipients-query.service.js'
+import { db } from '../../../../../db/db.js'
 
 /**
  * Fetches recipient data for an adhoc renewal invitation notice
@@ -20,18 +18,14 @@ const { db } = require('../../../../../db/db.js')
  *
  * @returns {Promise<object[]>} The recipient data for the renewal invitation notice
  */
-async function go(session) {
+export default async function fetchRenewalInvitationRecipientsService(session) {
   const { licenceRef } = session
 
-  const { bindings, query: licenceQuery } = GenerateRenewalInvitationLicenceQueryDal.go(licenceRef)
+  const { bindings, query: licenceQuery } = GenerateRenewalInvitationLicenceQueryDal(licenceRef)
 
-  const query = GenerateRenewalRecipientsQueryService.go(licenceQuery)
+  const query = GenerateRenewalRecipientsQueryService(licenceQuery)
 
   const { rows } = await db.raw(query, bindings)
 
   return rows
-}
-
-module.exports = {
-  go
 }

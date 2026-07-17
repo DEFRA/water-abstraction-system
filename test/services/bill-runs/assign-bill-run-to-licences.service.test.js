@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceSupplementaryYearHelper = require('../../support/helpers/licence-supplementary-year.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceSupplementaryYearHelper from '../../support/helpers/licence-supplementary-year.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const AssignBillRunToLicencesService = require('../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
+import AssignBillRunToLicencesService from '../../../app/services/bill-runs/assign-bill-run-to-licences.service.js'
 
 // NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
 let billRun
@@ -54,7 +55,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
           })
 
           it('assigns the bill run to the supplementary year records', async () => {
-            await AssignBillRunToLicencesService.go(billRun.id)
+            await AssignBillRunToLicencesService(billRun.id)
 
             const result = await unassignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
 
@@ -76,7 +77,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
           })
 
           it('does not assign the bill run to the supplementary year records', async () => {
-            await AssignBillRunToLicencesService.go(billRun.id)
+            await AssignBillRunToLicencesService(billRun.id)
 
             const result = await unassignedDifferentRegionSameYear.licenceSupplementaryYear.$query().select()
 
@@ -99,7 +100,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
         })
 
         it('does not assign the bill run to the supplementary year records', async () => {
-          await AssignBillRunToLicencesService.go(billRun.id)
+          await AssignBillRunToLicencesService(billRun.id)
 
           const result = await unassignedSameRegionAndYearNonTpt.licenceSupplementaryYear.$query().select()
 
@@ -122,7 +123,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
       })
 
       it('does not assign the bill run to the supplementary year records', async () => {
-        await AssignBillRunToLicencesService.go(billRun.id)
+        await AssignBillRunToLicencesService(billRun.id)
 
         const result = await unassignedSameRegionDifferentYear.licenceSupplementaryYear.$query().select()
 
@@ -146,7 +147,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
     })
 
     it('does not assign the bill run to the supplementary year records', async () => {
-      await AssignBillRunToLicencesService.go(billRun.id)
+      await AssignBillRunToLicencesService(billRun.id)
 
       const result = await assignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
 

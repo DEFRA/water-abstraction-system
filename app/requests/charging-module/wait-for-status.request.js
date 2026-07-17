@@ -1,15 +1,12 @@
-'use strict'
-
 /**
  * Use to wait for a Charging Module bill run to be in a certain state
  * @module ChargingModuleWaitForStatusRequest
  */
 
-const ExpandedError = require('../../errors/expanded.error.js')
-const ViewBillRunStatusRequest = require('./view-bill-run-status.request.js')
-const { pause } = require('../../lib/general.lib.js')
-
-const billingConfig = require('../../../config/billing.config.js')
+import ExpandedError from '../../errors/expanded.error.js'
+import billingConfig from '../../../config/billing.config.js'
+import { pause } from '../../lib/general.lib.js'
+import viewBillRunStatusRequest from './view-bill-run-status.request.js'
 
 /**
  * Wait for a Charging Module bill run to have a specified state
@@ -44,12 +41,12 @@ const billingConfig = require('../../../config/billing.config.js')
  *
  * @returns {Promise<object>} returns the results of the wait
  */
-async function send(billRunId, statusesToWaitFor, maximumAttempts = 120) {
+export default async function waitForStatusRequest(billRunId, statusesToWaitFor, maximumAttempts = 120) {
   let attempts = 0
   let status
 
   for (let i = 1; i <= maximumAttempts; i++) {
-    const result = await ViewBillRunStatusRequest.send(billRunId)
+    const result = await viewBillRunStatusRequest(billRunId)
 
     attempts = i
 
@@ -81,8 +78,4 @@ function _requestFailed(billRunId, result) {
   })
 
   throw error
-}
-
-module.exports = {
-  send
 }

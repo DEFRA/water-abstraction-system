@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/remove' page
  *
  * @module ViewRemoveCompanyContactService
  */
 
-const FetchAbstractionAlertLicencesDal = require('../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
-const FetchCompanyContactDal = require('../../dal/company-contacts/fetch-company-contact.dal.js')
-const FetchCompanyService = require('../../dal/companies/fetch-company.dal.js')
-const RemoveCompanyContactPresenter = require('../../presenters/company-contacts/remove-company-contact.presenter.js')
+import FetchAbstractionAlertLicencesDal from '../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
+import FetchCompanyContactDal from '../../dal/company-contacts/fetch-company-contact.dal.js'
+import FetchCompanyService from '../../dal/companies/fetch-company.dal.js'
+import RemoveCompanyContactPresenter from '../../presenters/company-contacts/remove-company-contact.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/remove' page
@@ -18,20 +16,16 @@ const RemoveCompanyContactPresenter = require('../../presenters/company-contacts
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(id) {
-  const companyContact = await FetchCompanyContactDal.go(id)
+export default async function viewRemoveCompanyContactService(id) {
+  const companyContact = await FetchCompanyContactDal(id)
 
-  const company = await FetchCompanyService.go(companyContact.companyId)
+  const company = await FetchCompanyService(companyContact.companyId)
 
-  const licences = await FetchAbstractionAlertLicencesDal.go(companyContact.abstractionAlertLicences)
+  const licences = await FetchAbstractionAlertLicencesDal(companyContact.abstractionAlertLicences)
 
-  const pageData = RemoveCompanyContactPresenter.go(company, companyContact, licences)
+  const pageData = RemoveCompanyContactPresenter(company, companyContact, licences)
 
   return {
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,17 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
-const CompanyContactModel = require('../../../app/models/company-contact.model.js')
+import CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
+import CompanyContactModel from '../../../app/models/company-contact.model.js'
 
 // Thing under test
-const DeleteCompanyContactService = require('../../../app/services/company-contacts/delete-company-contact.service.js')
+import DeleteCompanyContactService from '../../../app/services/company-contacts/delete-company-contact.service.js'
 
 describe('Company contact - Delete company contact service', () => {
-  let clock
   let companyContact
   let notified
   let today
@@ -21,11 +18,11 @@ describe('Company contact - Delete company contact service', () => {
 
     today = new Date('2020-06-06')
 
-    clock = Sinon.useFakeTimers({ now: today, toFake: ['Date'] })
+    vi.useFakeTimers({ now: today, toFake: ['Date'] })
   })
 
   afterEach(async () => {
-    clock.restore()
+    vi.useRealTimers()
 
     await companyContact.$query().delete()
   })
@@ -36,7 +33,7 @@ describe('Company contact - Delete company contact service', () => {
     })
 
     it('soft deletes the company contact', async () => {
-      await DeleteCompanyContactService.go(companyContact.id, notified)
+      await DeleteCompanyContactService(companyContact.id, notified)
 
       const exists = await CompanyContactModel.query().findById(companyContact.id)
 
@@ -53,7 +50,7 @@ describe('Company contact - Delete company contact service', () => {
     })
 
     it('deletes the company contact', async () => {
-      await DeleteCompanyContactService.go(companyContact.id, notified)
+      await DeleteCompanyContactService(companyContact.id, notified)
 
       const exists = await CompanyContactModel.query().findById(companyContact.id)
 

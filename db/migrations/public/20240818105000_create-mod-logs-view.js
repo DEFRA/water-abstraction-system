@@ -1,8 +1,6 @@
-'use strict'
-
 const viewName = 'mod_logs'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.dropViewIfExists(viewName).createView(viewName, (view) => {
     view.as(
       knex('mod_logs')
@@ -34,6 +32,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.dropViewIfExists(viewName)
 }

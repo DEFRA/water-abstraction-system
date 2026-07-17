@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Controller for /return-logs endpoints
  * @module ReturnLogsController
  */
 
-const DownloadReturnLogService = require('../services/return-logs/download-return-log.service.js')
-const SubmitDetailsService = require('../services/return-logs/submit-details.service.js')
-const ViewCommunicationsService = require('../services/return-logs/view-communications.service.js')
-const ViewDetailsService = require('../services/return-logs/view-details.service.js')
+import DownloadReturnLogService from '../services/return-logs/download-return-log.service.js'
+import SubmitDetailsService from '../services/return-logs/submit-details.service.js'
+import ViewCommunicationsService from '../services/return-logs/view-communications.service.js'
+import ViewDetailsService from '../services/return-logs/view-details.service.js'
 
-async function download(request, h) {
+export async function download(request, h) {
   const {
     params: { id },
     query
@@ -18,7 +16,7 @@ async function download(request, h) {
 
   const version = Number(query.version)
 
-  const { data, type, filename } = await DownloadReturnLogService.go(id, version)
+  const { data, type, filename } = await DownloadReturnLogService(id, version)
 
   return h
     .response(data)
@@ -28,18 +26,18 @@ async function download(request, h) {
     .header('Content-Disposition', `attachment; filename="${filename}"`)
 }
 
-async function viewCommunications(request, h) {
+export async function viewCommunications(request, h) {
   const {
     params: { id },
     query: { page }
   } = request
 
-  const pageData = await ViewCommunicationsService.go(id, page)
+  const pageData = await ViewCommunicationsService(id, page)
 
   return h.view('return-logs/communications.njk', pageData)
 }
 
-async function viewDetails(request, h) {
+export async function viewDetails(request, h) {
   const {
     auth,
     params: { id },
@@ -48,22 +46,15 @@ async function viewDetails(request, h) {
 
   const version = query.version ? Number(query.version) : 0
 
-  const pageData = await ViewDetailsService.go(id, auth, version)
+  const pageData = await ViewDetailsService(id, auth, version)
 
   return h.view('return-logs/details.njk', pageData)
 }
 
-async function submitDetails(request, h) {
+export async function submitDetails(request, h) {
   const { id } = request.params
 
-  await SubmitDetailsService.go(request.payload, id)
+  await SubmitDetailsService(request.payload, id)
 
   return h.redirect(`/system/return-logs/${id}/details`)
-}
-
-module.exports = {
-  download,
-  submitDetails,
-  viewCommunications,
-  viewDetails
 }

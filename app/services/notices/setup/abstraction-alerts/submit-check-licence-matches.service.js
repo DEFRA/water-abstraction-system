@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates saving the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  *
  * @module SubmitCheckLicenceMatchesService
  */
 
-const DetermineRelevantLicenceMonitoringStationsService = require('./determine-relevant-licence-monitoring-stations.service.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import DetermineRelevantLicenceMonitoringStationsService from './determine-relevant-licence-monitoring-stations.service.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates saving the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
@@ -15,8 +13,8 @@ const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
  * @param {string} sessionId
  *
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitCheckLicenceMatchesService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
   await _save(session)
 }
@@ -24,7 +22,7 @@ async function go(sessionId) {
 async function _save(session) {
   const { alertThresholds, licenceMonitoringStations, removedThresholds, alertType } = session
 
-  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
+  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService(
     licenceMonitoringStations,
     alertThresholds,
     removedThresholds,
@@ -39,8 +37,4 @@ async function _save(session) {
   session.relevantLicenceMonitoringStations = relevantLicenceMonitoringStations
 
   return session.$update()
-}
-
-module.exports = {
-  go
 }

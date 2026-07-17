@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const AbstractionPeriodPresenter = require('../../../../app/presenters/return-versions/setup/abstraction-period.presenter.js')
+import AbstractionPeriodPresenter from '../../../../app/presenters/return-versions/setup/abstraction-period.presenter.js'
 
 describe('Return Versions Setup - Abstraction Period presenter', () => {
   const requirementIndex = 0
@@ -29,7 +30,7 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = AbstractionPeriodPresenter.go(session, requirementIndex)
+      const result = AbstractionPeriodPresenter(session, requirementIndex)
 
       expect(result).toEqual({
         abstractionPeriod: null,
@@ -58,7 +59,7 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
       })
 
       it('returns a populated abstraction period', () => {
-        const result = AbstractionPeriodPresenter.go(session, requirementIndex)
+        const result = AbstractionPeriodPresenter(session, requirementIndex)
 
         expect(result.abstractionPeriod).toEqual({
           abstractionPeriodStartDay: '07',
@@ -71,7 +72,7 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
 
     describe('when the user has not previously submitted an abstraction period', () => {
       it('returns an empty abstraction period', () => {
-        const result = AbstractionPeriodPresenter.go(session, requirementIndex)
+        const result = AbstractionPeriodPresenter(session, requirementIndex)
 
         expect(result.abstractionPeriod).toBeNull()
       })
@@ -85,7 +86,7 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = AbstractionPeriodPresenter.go(session, requirementIndex)
+        const result = AbstractionPeriodPresenter(session, requirementIndex)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -96,7 +97,7 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "points" page', () => {
-        const result = AbstractionPeriodPresenter.go(session, requirementIndex)
+        const result = AbstractionPeriodPresenter(session, requirementIndex)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/points/0',

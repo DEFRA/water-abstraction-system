@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Things we need to stub
-const FetchReviewChargeElementService = require('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
+import * as FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
 
 // Thing under test
-const ViewEditService = require('../../../../app/services/bill-runs/review/view-edit.service.js')
+import ViewEditService from '../../../../app/services/bill-runs/review/view-edit.service.js'
 
 describe('Bill Runs - Review - View Edit Service', () => {
   const elementIndex = 1
@@ -20,16 +18,16 @@ describe('Bill Runs - Review - View Edit Service', () => {
   beforeEach(() => {
     reviewChargeElement = BillRunsReviewFixture.reviewChargeElement()
 
-    Sinon.stub(FetchReviewChargeElementService, 'go').resolves(reviewChargeElement)
+    vi.spyOn(FetchReviewChargeElementService, 'default').mockResolvedValue(reviewChargeElement)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewEditService.go(reviewChargeElement.id, elementIndex)
+      const result = await ViewEditService(reviewChargeElement.id, elementIndex)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',

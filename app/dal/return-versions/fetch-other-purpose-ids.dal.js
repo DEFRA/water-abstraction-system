@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetch the primary and secondary purpose ids from the latest matching licence version with the same purpose
  * @module FetchOtherPurposeIdsDal
  */
 
-const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
+import LicenceVersionPurposeModel from '../../models/licence-version-purpose.model.js'
 
 /**
  * Fetch the primary and secondary purpose ids from the latest matching licence version with the same purpose
@@ -35,7 +33,7 @@ const LicenceVersionPurposeModel = require('../../models/licence-version-purpose
  *
  * @returns {Promise<object>} An object containing the fetched primary and secondary purpose IDs
  */
-async function go(licenceId, purposeId) {
+export default async function fetchOtherPurposeIdsDal(licenceId, purposeId) {
   const { primaryPurposeId, secondaryPurposeId } = await LicenceVersionPurposeModel.query()
     .select('primaryPurposeId', 'secondaryPurposeId')
     .innerJoinRelated('licenceVersion')
@@ -52,8 +50,4 @@ async function go(licenceId, purposeId) {
     primaryPurposeId,
     secondaryPurposeId
   }
-}
-
-module.exports = {
-  go
 }

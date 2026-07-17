@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Formats data for the return form
  * @module PreparePaperReturnPresenter
  */
 
-const { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } = require('../../../lib/dates.lib.js')
-const { formatLongDate } = require('../../base.presenter.js')
-const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
-const { splitArrayIntoGroups } = require('../../../lib/general.lib.js')
+import { formatLongDate } from '../../base.presenter.js'
+import { splitArrayIntoGroups } from '../../../lib/general.lib.js'
+import { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } from '../../../lib/dates.lib.js'
+import { naldAreaCodes, returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
 
 const RETURN_TYPE = {
   week: {
@@ -39,7 +37,7 @@ const RETURN_TYPE = {
  *
  * @returns {object} - The data formatted for the return form
  */
-function go(notification) {
+export default function preparePaperReturnPresenter(notification) {
   const {
     personalisation: {
       address_line_1: addressLine1,
@@ -269,8 +267,4 @@ function _generateDates(startDate, endDate, returnsFrequency) {
   }
 
   return _formatPeriodsToLongDate(dates)
-}
-
-module.exports = {
-  go
 }

@@ -1,6 +1,4 @@
-'use strict'
-
-const data = [
+export const data = [
   {
     id: 'b13a469a-aa38-48c8-b899-da7536b44e37',
     reference: '4.1.1',
@@ -2822,7 +2820,3 @@ const data = [
     maxVolume: 466667
   }
 ]
-
-module.exports = {
-  data
-}

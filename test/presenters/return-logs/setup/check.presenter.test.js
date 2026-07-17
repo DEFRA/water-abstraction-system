@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const CheckPresenter = require('../../../../app/presenters/return-logs/setup/check.presenter.js')
+import CheckPresenter from '../../../../app/presenters/return-logs/setup/check.presenter.js'
 
 describe('Return Logs Setup - Check presenter', () => {
   let session
@@ -12,7 +13,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
   describe('when provided with a populated session', () => {
     it('correctly presents the data', () => {
-      const result = CheckPresenter.go(session)
+      const result = CheckPresenter(session)
 
       expect(result).toEqual({
         abstractionPeriod: '1 January to 31 December',
@@ -113,7 +114,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result).toEqual({
           abstractionPeriod: '1 January to 31 December',
@@ -156,7 +157,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns "true"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.displayReadings).toBe(true)
       })
@@ -168,7 +169,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.displayReadings).toBe(false)
       })
@@ -182,7 +183,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.displayUnits).toBe(false)
       })
@@ -194,7 +195,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns "true"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.displayUnits).toBe(true)
       })
@@ -207,7 +208,7 @@ describe('Return Logs Setup - Check presenter', () => {
     })
 
     it('returns the frequency in the link text', () => {
-      const result = CheckPresenter.go(session)
+      const result = CheckPresenter(session)
 
       expect(result.enterMultipleLinkText).toContain('monthly')
     })
@@ -218,7 +219,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns "volumes" in the link text', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.enterMultipleLinkText).toEqual('Enter multiple monthly volumes')
       })
@@ -230,7 +231,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns "readings" in the link text', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.enterMultipleLinkText).toEqual('Enter multiple monthly readings')
       })
@@ -246,7 +247,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns text with the note content and the change and delete a note action', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.note).toEqual({
           actions: [
@@ -266,7 +267,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
     describe('when the user has not added a note', () => {
       it('returns text with "No notes added" and the add a note action', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.note).toEqual({
           actions: [
@@ -288,7 +289,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the description of the purpose', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.purposes).toEqual('Evaporative Cooling')
       })
@@ -300,7 +301,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the descriptions as a comma separated string', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.purposes).toEqual('Evaporative Cooling, Trickle Irrigation - Storage')
       })
@@ -314,7 +315,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the method of gathering the figures as "Meter readings"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.reportingFigures).toEqual('Meter readings')
       })
@@ -326,7 +327,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the method of gathering the figures as "Volumes"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.reportingFigures).toEqual('Volumes')
       })
@@ -370,7 +371,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" headers', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
@@ -380,7 +381,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" rows', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.rows).toEqual([
               {
@@ -440,7 +441,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" headers with an additional column for the UOM used', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
@@ -451,7 +452,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" rows with the monthlyTotal converted to cubic metres', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.rows).toEqual([
               {
@@ -517,7 +518,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" headers', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
@@ -527,7 +528,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" rows grouped in months', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.rows).toEqual([
               {
@@ -569,7 +570,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" headers with an additional column for the UOM used', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
@@ -580,7 +581,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" rows with the monthlyTotal converted to cubic metres', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.rows).toEqual([
               {
@@ -636,7 +637,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" headers', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
@@ -647,7 +648,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" rows', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.rows).toEqual([
               {
@@ -710,7 +711,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" headers with an additional column for the UOM used', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
@@ -722,7 +723,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" rows with the monthlyTotal converted to cubic metres', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.rows).toEqual([
               {
@@ -774,7 +775,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" rows with the totals shown as zeros', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.rows).toEqual([
               {
@@ -823,7 +824,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" headers', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
@@ -834,7 +835,7 @@ describe('Return Logs Setup - Check presenter', () => {
           })
 
           it('returns the "summaryTableData" rows grouped in months', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.summaryTableData.rows).toEqual([
               {
@@ -860,7 +861,7 @@ describe('Return Logs Setup - Check presenter', () => {
     })
 
     it('returns the frequency in the title', () => {
-      const result = CheckPresenter.go(session)
+      const result = CheckPresenter(session)
 
       expect(result.tableTitle).toContain('monthly')
     })
@@ -871,7 +872,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns "abstraction volumes" in the title', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.tableTitle).toEqual('Summary of monthly volumes')
       })
@@ -883,7 +884,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns "meter readings" in the title', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.tableTitle).toEqual('Summary of monthly readings')
       })
@@ -897,7 +898,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the tariff as "Two-part"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.tariff).toEqual('Two-part')
       })
@@ -909,7 +910,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the tariff as "Standard"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.tariff).toEqual('Standard')
       })
@@ -941,7 +942,7 @@ describe('Return Logs Setup - Check presenter', () => {
     })
 
     it('returns the "totalQuantity" to 6 decimal places formatted as a string', () => {
-      const result = CheckPresenter.go(session)
+      const result = CheckPresenter(session)
 
       expect(result.totalCubicMetres).toEqual('1,010.123567')
     })
@@ -973,7 +974,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the "totalQuantity" to 6 decimal places formatted as a string', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.totalQuantity).toEqual('1,010.123567')
       })
@@ -1004,7 +1005,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the "totalQuantity" as 0 formatted as a string', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.totalQuantity).toEqual('0')
       })
@@ -1018,7 +1019,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the unit of measurement as "Cubic metres"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.units).toEqual('Cubic metres')
       })
@@ -1030,7 +1031,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the unit of measurement as "Litres"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.units).toEqual('Litres')
       })
@@ -1042,7 +1043,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the unit of measurement as "Megalitres"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.units).toEqual('Megalitres')
       })
@@ -1054,7 +1055,7 @@ describe('Return Logs Setup - Check presenter', () => {
       })
 
       it('returns the unit of measurement as "Gallons"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.units).toEqual('Gallons')
       })

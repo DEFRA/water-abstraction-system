@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/authorised' page
  * @module ViewAuthorisedService
  */
 
-const AuthorisedPresenter = require('../../../presenters/bill-runs/review/authorised.presenter.js')
-const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
+import AuthorisedPresenter from '../../../presenters/bill-runs/review/authorised.presenter.js'
+import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
 
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/authorised' page
@@ -16,17 +14,13 @@ const FetchReviewChargeReferenceService = require('./fetch-review-charge-referen
  *
  * @returns {Promise<object>} the 'pageData' needed to view the amend authorised volume page
  */
-async function go(reviewChargeReferenceId) {
-  const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
+export default async function viewAuthorisedService(reviewChargeReferenceId) {
+  const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
 
-  const pageData = AuthorisedPresenter.go(reviewChargeReference)
+  const pageData = AuthorisedPresenter(reviewChargeReference)
 
   return {
     activeNavBar: 'bill-runs',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

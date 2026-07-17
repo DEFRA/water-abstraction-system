@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
-const ReturnVersionModel = require('../../../app/models/return-version.model.js')
+import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import ReturnVersionModel from '../../../app/models/return-version.model.js'
 
 // Things under test
-const UpdateReturnVersionStatusDal = require('../../../app/dal/return-versions/update-return-version-status.dal.js')
+import UpdateReturnVersionStatusDal from '../../../app/dal/return-versions/update-return-version-status.dal.js'
 
 describe('DAL - Return Versions - Update Return Version Status dal', () => {
   let status
@@ -24,7 +25,7 @@ describe('DAL - Return Versions - Update Return Version Status dal', () => {
 
   describe('when called without a transaction', () => {
     it('updates the status for the specified return version', async () => {
-      await UpdateReturnVersionStatusDal.go(returnVersion.$id(), status)
+      await UpdateReturnVersionStatusDal(returnVersion.$id(), status)
 
       const result = await returnVersion.$query()
 
@@ -44,7 +45,7 @@ describe('DAL - Return Versions - Update Return Version Status dal', () => {
     })
 
     it('updates the status for the specified return version', async () => {
-      await UpdateReturnVersionStatusDal.go(returnVersion.$id(), status, trx)
+      await UpdateReturnVersionStatusDal(returnVersion.$id(), status, trx)
       await trx.commit()
 
       const result = await returnVersion.$query()

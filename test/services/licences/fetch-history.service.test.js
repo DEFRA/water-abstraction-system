@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import ModLogHelper from '../../support/helpers/mod-log.helper.js'
 
 // Thing under test
-const FetchHistoryService = require('../../../app/services/licences/fetch-history.service.js')
+import FetchHistoryService from '../../../app/services/licences/fetch-history.service.js'
 
 describe('Licences - Fetch History service', () => {
   let licence
@@ -36,7 +37,7 @@ describe('Licences - Fetch History service', () => {
 
   describe('when the licence has licence versions', () => {
     it('returns the matching licence versions', async () => {
-      const result = await FetchHistoryService.go(licence.id)
+      const result = await FetchHistoryService(licence.id)
 
       expect(result).toEqual([
         {

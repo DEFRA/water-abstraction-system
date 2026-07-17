@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/users/external/setup/{sessionId}/licences' page
  *
  * @module SubmitLicencesService
  */
 
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const LicencesPresenter = require('../../../../presenters/users/external/setup/licences.presenter.js')
-const LicencesValidator = require('../../../../validators/users/external/setup/licences.validator.js')
-const { checkUrl } = require('../../../../lib/check-page.lib.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../../lib/submit-page.lib.js')
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import LicencesPresenter from '../../../../presenters/users/external/setup/licences.presenter.js'
+import LicencesValidator from '../../../../validators/users/external/setup/licences.validator.js'
+import { checkUrl } from '../../../../lib/check-page.lib.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for the '/users/external/setup/{sessionId}/licences' page
@@ -23,8 +21,8 @@ const { handleOneOptionSelected } = require('../../../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitLicencesService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'licences')
 
@@ -45,7 +43,7 @@ async function go(sessionId, payload, yar) {
   session.allLicences = payloadSelection.allLicences
   session.selectedLicences = payloadSelection.selectedLicences
 
-  const pageData = LicencesPresenter.go(session)
+  const pageData = LicencesPresenter(session)
 
   return {
     error,
@@ -103,11 +101,7 @@ function _payloadDiffers(payloadSelection, session) {
 }
 
 function _validate(payload) {
-  const validationResult = LicencesValidator.go(payload)
+  const validationResult = LicencesValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

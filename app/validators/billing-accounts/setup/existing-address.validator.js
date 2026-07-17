@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/billing-accounts/setup/{sessionId}/existing-address` page
  *
  * @module ExistingAddressValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/billing-accounts/setup/{sessionId}/existing-address` page
@@ -17,7 +15,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, name) {
+export default function existingAddressValidator(payload, name) {
   const errorMessage = `Select an existing address for ${name}`
 
   const schema = Joi.object({
@@ -29,8 +27,4 @@ function go(payload, name) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ReasonPresenter = require('../../../../app/presenters/return-versions/setup/reason.presenter.js')
+import ReasonPresenter from '../../../../app/presenters/return-versions/setup/reason.presenter.js'
 
 describe('Return Versions Setup - Reason presenter', () => {
   let session
@@ -26,7 +27,7 @@ describe('Return Versions Setup - Reason presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = ReasonPresenter.go(session)
+      const result = ReasonPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -49,7 +50,7 @@ describe('Return Versions Setup - Reason presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = ReasonPresenter.go(session)
+        const result = ReasonPresenter(session)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -60,7 +61,7 @@ describe('Return Versions Setup - Reason presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "start-date" page', () => {
-        const result = ReasonPresenter.go(session)
+        const result = ReasonPresenter(session)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date',
@@ -77,7 +78,7 @@ describe('Return Versions Setup - Reason presenter', () => {
       })
 
       it('returns a populated reason', () => {
-        const result = ReasonPresenter.go(session)
+        const result = ReasonPresenter(session)
 
         expect(result.reason).toEqual('major-change')
       })
@@ -85,7 +86,7 @@ describe('Return Versions Setup - Reason presenter', () => {
 
     describe('when the user has not previously submitted a reason', () => {
       it('returns an empty reason', () => {
-        const result = ReasonPresenter.go(session)
+        const result = ReasonPresenter(session)
 
         expect(result.reason).toBeNull()
       })

@@ -1,21 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
 
 //
-const DatabaseConfig = require('../../../../config/database.config.js')
+import DatabaseConfig from '../../../../config/database.config.js'
 
 // Thing under test
-const CheckPresenter = require('../../../../app/presenters/notices/setup/check.presenter.js')
+import CheckPresenter from '../../../../app/presenters/notices/setup/check.presenter.js'
 
 describe('Notices - Setup - Check presenter', () => {
-  let defaultPageSizeStub
   let page
   let recipients
   let session
@@ -35,15 +31,15 @@ describe('Notices - Setup - Check presenter', () => {
 
     recipients = [...Object.values(testRecipients)]
 
-    defaultPageSizeStub = Sinon.stub(DatabaseConfig, 'defaultPageSize').value(25)
+    vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 25)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly presents the data', () => {
-    const result = CheckPresenter.go(recipients, page, session)
+    const result = CheckPresenter(recipients, page, session)
 
     expect(result).toEqual({
       canSendNotice: true,
@@ -109,7 +105,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('returns false', () => {
-        const result = CheckPresenter.go(recipients, page, session)
+        const result = CheckPresenter(recipients, page, session)
 
         expect(result.canSendNotice).toBe(false)
       })
@@ -124,7 +120,7 @@ describe('Notices - Setup - Check presenter', () => {
         })
 
         it('returns false', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
           expect(result.canSendNotice).toBe(false)
         })
@@ -132,7 +128,7 @@ describe('Notices - Setup - Check presenter', () => {
 
       describe('and some have invalid addresses but the rest are valid', () => {
         it('returns false', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
           expect(result.canSendNotice).toBe(true)
         })
@@ -147,7 +143,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('should return the links for the "adhoc" journey', () => {
-        const result = CheckPresenter.go(recipients, page, session)
+        const result = CheckPresenter(recipients, page, session)
         expect(result.links).toEqual({
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`,
@@ -165,7 +161,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('should return the links for "alerts" journey', () => {
-        const result = CheckPresenter.go(recipients, page, session)
+        const result = CheckPresenter(recipients, page, session)
 
         expect(result.links).toEqual({
           cancel: `/system/notices/setup/${session.id}/cancel`,
@@ -176,7 +172,7 @@ describe('Notices - Setup - Check presenter', () => {
 
     describe('when the journey is for "standard"', () => {
       it('should return the links for the "standard" journey', () => {
-        const result = CheckPresenter.go(recipients, page, session)
+        const result = CheckPresenter(recipients, page, session)
         expect(result.links).toEqual({
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`,
@@ -193,7 +189,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('returns the message "No recipients with due returns."', () => {
-        const result = CheckPresenter.go(recipients, page, session)
+        const result = CheckPresenter(recipients, page, session)
 
         expect(result.readyToSend).toEqual('No recipients with due returns.')
       })
@@ -208,7 +204,7 @@ describe('Notices - Setup - Check presenter', () => {
         })
 
         it('returns the message "No valid notifications to send."', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
           expect(result.readyToSend).toEqual('No valid notifications to send.')
         })
@@ -216,7 +212,7 @@ describe('Notices - Setup - Check presenter', () => {
 
       describe('and some have invalid addresses but the rest are valid', () => {
         it('returns the message that the notifications "are ready to send."', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
           expect(result.readyToSend).toEqual('Returns invitations are ready to send.')
         })
@@ -228,7 +224,7 @@ describe('Notices - Setup - Check presenter', () => {
         })
 
         it('returns the message that the notifications "are ready to send."', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
           expect(result.readyToSend).toEqual('Renewal invitations are ready to send.')
         })
@@ -240,7 +236,7 @@ describe('Notices - Setup - Check presenter', () => {
     describe('the "contact" property', () => {
       describe('when the contact is an email', () => {
         it('should return the email address', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
           expect(result.recipients[2].contact).toEqual(['primary.user@important.com'])
         })
@@ -249,7 +245,7 @@ describe('Notices - Setup - Check presenter', () => {
       describe('when the contact is an address', () => {
         describe('and it is valid', () => {
           it('should return the postal address', () => {
-            const result = CheckPresenter.go(recipients, page, session)
+            const result = CheckPresenter(recipients, page, session)
 
             expect(result.recipients[0].contact).toEqual([
               'Harry Potter',
@@ -264,7 +260,7 @@ describe('Notices - Setup - Check presenter', () => {
 
         describe('and it is invalid', () => {
           it('should return the postal address flagged as INVALID', () => {
-            const result = CheckPresenter.go(recipients, page, session)
+            const result = CheckPresenter(recipients, page, session)
 
             expect(result.recipients[4].contact).toEqual([
               'Ronald Weasley',
@@ -282,7 +278,7 @@ describe('Notices - Setup - Check presenter', () => {
     describe('the "licences" property', () => {
       describe('when the recipient has a single licence number', () => {
         it('should return licence numbers as an array', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
           expect(result.recipients[0].licences).toEqual(testRecipients.licenceHolder.licence_refs)
         })
@@ -290,7 +286,7 @@ describe('Notices - Setup - Check presenter', () => {
 
       describe('when the recipient has multiple licence numbers', () => {
         it('should return licence numbers as an array', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
           expect(result.recipients[1].licences).toEqual(testRecipients.licenceHolderWithMultipleLicences.licence_refs)
         })
@@ -307,7 +303,7 @@ describe('Notices - Setup - Check presenter', () => {
           describe('and the method is "letter"', () => {
             describe('and the address is valid', () => {
               it('should return a link to the "preview" page', () => {
-                const result = CheckPresenter.go(recipients, page, session)
+                const result = CheckPresenter(recipients, page, session)
 
                 expect(result.recipients[0].previewLink).toEqual(
                   `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}`
@@ -317,7 +313,7 @@ describe('Notices - Setup - Check presenter', () => {
 
             describe('and the address is invalid', () => {
               it('should return null', () => {
-                const result = CheckPresenter.go(recipients, page, session)
+                const result = CheckPresenter(recipients, page, session)
 
                 expect(result.recipients[4].previewLink).toBeNull()
               })
@@ -332,7 +328,7 @@ describe('Notices - Setup - Check presenter', () => {
           })
 
           it('should return null', () => {
-            const result = CheckPresenter.go(recipients, page, session)
+            const result = CheckPresenter(recipients, page, session)
 
             expect(result.recipients[0].previewLink).toEqual(
               `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}/check-paper-return`
@@ -352,7 +348,7 @@ describe('Notices - Setup - Check presenter', () => {
         describe('and the method is "letter"', () => {
           describe('and the address is valid', () => {
             it('should return a link to the "check alert" page', () => {
-              const result = CheckPresenter.go(recipients, page, session)
+              const result = CheckPresenter(recipients, page, session)
 
               expect(result.recipients[0].previewLink).toEqual(
                 `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}/check-alert`
@@ -362,7 +358,7 @@ describe('Notices - Setup - Check presenter', () => {
 
           describe('and the address is invalid', () => {
             it('should return null', () => {
-              const result = CheckPresenter.go(recipients, page, session)
+              const result = CheckPresenter(recipients, page, session)
 
               expect(result.recipients[4].previewLink).toBeNull()
             })
@@ -375,7 +371,7 @@ describe('Notices - Setup - Check presenter', () => {
           describe('and the method is "letter"', () => {
             describe('and the address is valid', () => {
               it('should return a link to the "preview" page', () => {
-                const result = CheckPresenter.go(recipients, page, session)
+                const result = CheckPresenter(recipients, page, session)
 
                 expect(result.recipients[0].previewLink).toEqual(
                   `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}`
@@ -385,7 +381,7 @@ describe('Notices - Setup - Check presenter', () => {
 
             describe('and the address is invalid', () => {
               it('should return null', () => {
-                const result = CheckPresenter.go(recipients, page, session)
+                const result = CheckPresenter(recipients, page, session)
 
                 expect(result.recipients[4].previewLink).toBeNull()
               })
@@ -402,7 +398,7 @@ describe('Notices - Setup - Check presenter', () => {
           describe('and the method is "letter"', () => {
             describe('and the address is valid', () => {
               it('should return a link to the "preview" page', () => {
-                const result = CheckPresenter.go(recipients, page, session)
+                const result = CheckPresenter(recipients, page, session)
 
                 expect(result.recipients[0].previewLink).toEqual(
                   `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}`
@@ -412,7 +408,7 @@ describe('Notices - Setup - Check presenter', () => {
 
             describe('and the address is invalid', () => {
               it('should return null', () => {
-                const result = CheckPresenter.go(recipients, page, session)
+                const result = CheckPresenter(recipients, page, session)
 
                 expect(result.recipients[4].previewLink).toBeNull()
               })
@@ -424,9 +420,9 @@ describe('Notices - Setup - Check presenter', () => {
 
     describe('when there are <= 25 recipients ', () => {
       it('returns all the recipients', () => {
-        const result = CheckPresenter.go(recipients, page, session)
+        const result = CheckPresenter(recipients, page, session)
 
-        expect(result.recipients.length).toEqual(recipients.length)
+        expect(result.recipients).toHaveLength(recipients.length)
       })
     })
 
@@ -437,9 +433,9 @@ describe('Notices - Setup - Check presenter', () => {
 
       describe('and the page is 1', () => {
         it('returns the first 25 recipients', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
-          expect(result.recipients.length).toEqual(25)
+          expect(result.recipients).toHaveLength(25)
         })
       })
 
@@ -449,9 +445,9 @@ describe('Notices - Setup - Check presenter', () => {
         })
 
         it('returns the remaining recipients', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
-          expect(result.recipients.length).toEqual(1)
+          expect(result.recipients).toHaveLength(1)
         })
       })
     })
@@ -460,7 +456,7 @@ describe('Notices - Setup - Check presenter', () => {
   describe('the "tableCaption" property', () => {
     describe('when there is only one page of results', () => {
       it('returns the "tableCaption" with the "Showing all" message', () => {
-        const result = CheckPresenter.go(recipients, page, session)
+        const result = CheckPresenter(recipients, page, session)
 
         expect(result.tableCaption).toEqual(`Showing all ${recipients.length} recipients`)
       })
@@ -468,11 +464,11 @@ describe('Notices - Setup - Check presenter', () => {
 
     describe('when there are multiple pages of results', () => {
       beforeEach(() => {
-        defaultPageSizeStub.value(1)
+        vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1)
       })
 
       it('returns the "tableCaption" with the "Showing x of y" message', () => {
-        const result = CheckPresenter.go(recipients, page, session)
+        const result = CheckPresenter(recipients, page, session)
 
         expect(result.tableCaption).toEqual(`Showing 1 of 5 recipients`)
       })
@@ -484,11 +480,11 @@ describe('Notices - Setup - Check presenter', () => {
             // we should see 2 recipients on the last page (in this case page 2)
             page = '2'
 
-            defaultPageSizeStub.value(3)
+            vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 3)
           })
 
           it('returns the "tableCaption" with the "Showing x of y" message', () => {
-            const result = CheckPresenter.go(recipients, page, session)
+            const result = CheckPresenter(recipients, page, session)
 
             expect(result.tableCaption).toEqual(`Showing 2 of 5 recipients`)
           })
@@ -504,7 +500,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('returns null', () => {
-        const result = CheckPresenter.go(recipients, page, session)
+        const result = CheckPresenter(recipients, page, session)
 
         expect(result.warning).toBeNull()
       })
@@ -512,7 +508,7 @@ describe('Notices - Setup - Check presenter', () => {
 
     describe('when there is one recipient with an invalid address', () => {
       it('returns a warning for that recipient', () => {
-        const result = CheckPresenter.go(recipients, page, session)
+        const result = CheckPresenter(recipients, page, session)
 
         expect(result.warning).toEqual({
           iconFallbackText: 'Warning',
@@ -528,7 +524,7 @@ describe('Notices - Setup - Check presenter', () => {
         })
 
         it('returns a warning that lists the recipients', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
           expect(result.warning).toEqual({
             iconFallbackText: 'Warning',
@@ -542,11 +538,11 @@ describe('Notices - Setup - Check presenter', () => {
           recipients[2].contact.postcode = null
 
           // This proves we are checking all the recipients across pages
-          defaultPageSizeStub.value(3)
+          vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 3)
         })
 
         it('returns a warning that lists the recipients', () => {
-          const result = CheckPresenter.go(recipients, page, session)
+          const result = CheckPresenter(recipients, page, session)
 
           expect(result.warning).toEqual({
             iconFallbackText: 'Warning',

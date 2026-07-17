@@ -1,20 +1,21 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
-const MonitoringStationHelper = require('../support/helpers/monitoring-station.helper.js')
-const MonitoringStationModel = require('../../app/models/monitoring-station.model.js')
-const NotificationHelper = require('../support/helpers/notification.helper.js')
-const NotificationModel = require('../../app/models/notification.model.js')
-const UserHelper = require('../support/helpers/user.helper.js')
-const UserModel = require('../../app/models/user.model.js')
+import LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
+import LicenceVersionPurposeConditionHelper from '../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionModel from '../../app/models/licence-version-purpose-condition.model.js'
+import MonitoringStationHelper from '../support/helpers/monitoring-station.helper.js'
+import MonitoringStationModel from '../../app/models/monitoring-station.model.js'
+import NotificationHelper from '../support/helpers/notification.helper.js'
+import NotificationModel from '../../app/models/notification.model.js'
+import UserHelper from '../support/helpers/user.helper.js'
+import UserModel from '../../app/models/user.model.js'
 
 // Thing under test
-const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
+import LicenceMonitoringStationModel from '../../app/models/licence-monitoring-station.model.js'
 
 describe('Licence Monitoring Station model', () => {
   let testLicence

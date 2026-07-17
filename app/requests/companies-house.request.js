@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Use for making http requests to the GOV.UK Companies House service https://api.companieshouse.gov.uk/
  * @module CompaniesHouseRequest
  */
 
-const BaseRequest = require('./base.request.js')
-
-const companiesHouseConfig = require('../../config/companies-house.config.js')
+import { getRequest as baseGetRequest } from './base.request.js'
+import companiesHouseConfig from '../../config/companies-house.config.js'
 
 /**
  * Sends a GET request to Companies House
@@ -17,8 +14,8 @@ const companiesHouseConfig = require('../../config/companies-house.config.js')
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function get(path, searchParams) {
-  const result = await _sendRequest(path, BaseRequest.get, searchParams)
+export async function getRequest(path, searchParams) {
+  const result = await _sendRequest(path, baseGetRequest, searchParams)
 
   return _parseResult(result)
 }
@@ -80,8 +77,4 @@ function _requestOptions(accessToken, searchParams) {
     responseType: 'json',
     ...(searchParams && { searchParams })
   }
-}
-
-module.exports = {
-  get
 }

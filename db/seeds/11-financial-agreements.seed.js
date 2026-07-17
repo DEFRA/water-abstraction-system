@@ -1,10 +1,8 @@
-'use strict'
+import FinancialAgreementModel from '../../app/models/financial-agreement.model.js'
+import { data as financialAgreements } from './data/financial-agreements.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: financialAgreements } = require('./data/financial-agreements.js')
-const FinancialAgreementModel = require('../../app/models/financial-agreement.model.js')
-
-async function seed() {
+export default async function seed() {
   for (const financialAgreement of financialAgreements) {
     await _upsert(financialAgreement)
   }
@@ -15,8 +13,4 @@ async function _upsert(financialAgreement) {
     .insert({ ...financialAgreement, updatedAt: timestampForPostgres() })
     .onConflict('code')
     .merge(['description', 'disabled', 'updatedAt'])
-}
-
-module.exports = {
-  seed
 }

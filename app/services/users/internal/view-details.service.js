@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting internal user data for `/users/internal/{id}/details` page
  * @module ViewDetailsService
  */
 
-const FetchUserDetailsDal = require('../../../dal/users/internal/fetch-user-details.dal.js')
-const DetailsPresenter = require('../../../presenters/users/internal/details.presenter.js')
+import DetailsPresenter from '../../../presenters/users/internal/details.presenter.js'
+import FetchUserDetailsDal from '../../../dal/users/internal/fetch-user-details.dal.js'
 
 /**
  * Orchestrates fetching and presenting internal user data for `/users/internal/{id}/details` page
@@ -16,17 +14,13 @@ const DetailsPresenter = require('../../../presenters/users/internal/details.pre
  *
  * @returns {Promise<object>} The view data for the internal user details page
  */
-async function go(auth, id) {
-  const internalUser = await FetchUserDetailsDal.go(id)
-  const pageData = DetailsPresenter.go(auth, internalUser)
+export default async function viewDetailsService(auth, id) {
+  const internalUser = await FetchUserDetailsDal(id)
+  const pageData = DetailsPresenter(auth, internalUser)
 
   return {
     activeNavBar: 'users',
     activeSecondaryNav: 'details',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

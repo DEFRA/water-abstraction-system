@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ProfileDetailsValidator = require('../../../app/validators/users/profile-details.validator.js')
+import ProfileDetailsValidator from '../../../app/validators/users/profile-details.validator.js'
 
 describe('Users - Profile Details validator', () => {
   let payload
@@ -18,7 +19,7 @@ describe('Users - Profile Details validator', () => {
     })
 
     it('confirms the payload is valid', () => {
-      const result = ProfileDetailsValidator.go(payload)
+      const result = ProfileDetailsValidator(payload)
 
       expect(result.error).toBeUndefined()
       expect(result.value).toEqual(payload)
@@ -31,7 +32,7 @@ describe('Users - Profile Details validator', () => {
     })
 
     it('confirms the payload is valid', () => {
-      const result = ProfileDetailsValidator.go(payload)
+      const result = ProfileDetailsValidator(payload)
 
       expect(result.error).toBeUndefined()
       expect(result.value).toEqual(payload)
@@ -44,7 +45,7 @@ describe('Users - Profile Details validator', () => {
     })
 
     it('confirms the payload is valid', () => {
-      const result = ProfileDetailsValidator.go(payload)
+      const result = ProfileDetailsValidator(payload)
 
       expect(result.error).toBeUndefined()
       expect(result.value).toEqual(payload)
@@ -58,7 +59,7 @@ describe('Users - Profile Details validator', () => {
       })
 
       it('fails validation with the message "Name must be 100 characters or less"', () => {
-        const result = ProfileDetailsValidator.go(payload)
+        const result = ProfileDetailsValidator(payload)
 
         expect(result.error).not.toBeUndefined()
         expect(result.error.details[0].message).toEqual('Name must be 100 characters or less')
@@ -71,7 +72,7 @@ describe('Users - Profile Details validator', () => {
       })
 
       it('fails validation with the message "Job title must be 100 characters or less"', () => {
-        const result = ProfileDetailsValidator.go(payload)
+        const result = ProfileDetailsValidator(payload)
 
         expect(result.error).not.toBeUndefined()
         expect(result.error.details[0].message).toEqual('Job title must be 100 characters or less')
@@ -84,7 +85,7 @@ describe('Users - Profile Details validator', () => {
       })
 
       it('fails validation with the message "Telephone number must be 100 characters or less"', () => {
-        const result = ProfileDetailsValidator.go(payload)
+        const result = ProfileDetailsValidator(payload)
 
         expect(result.error).not.toBeUndefined()
         expect(result.error.details[0].message).toEqual('Telephone number must be 100 characters or less')
@@ -97,7 +98,7 @@ describe('Users - Profile Details validator', () => {
       })
 
       it('fails validation with the message "Address must be 300 characters or less"', () => {
-        const result = ProfileDetailsValidator.go(payload)
+        const result = ProfileDetailsValidator(payload)
 
         expect(result.error).not.toBeUndefined()
         expect(result.error.details[0].message).toEqual('Address must be 300 characters or less')
@@ -110,7 +111,7 @@ describe('Users - Profile Details validator', () => {
       })
 
       it('fails validation with the message "Enter a valid email address"', () => {
-        const result = ProfileDetailsValidator.go(payload)
+        const result = ProfileDetailsValidator(payload)
 
         expect(result.error).not.toBeUndefined()
         expect(result.error.details[0].message).toEqual('Enter a valid email address')
@@ -123,7 +124,7 @@ describe('Users - Profile Details validator', () => {
       })
 
       it('fails validation with the message "Email address must be @environment-agency.gov.uk"', () => {
-        const result = ProfileDetailsValidator.go(payload)
+        const result = ProfileDetailsValidator(payload)
 
         expect(result.error).not.toBeUndefined()
         expect(result.error.details[0].message).toEqual('Email address must be @environment-agency.gov.uk')

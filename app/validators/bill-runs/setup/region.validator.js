@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/bill-runs/setup/{sessionId}/region` page
  * @module BillRunsCreateRegionValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/bill-runs/setup/{sessionId}/region` page
@@ -16,7 +14,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, regions) {
+export default function regionValidator(payload, regions) {
   const validValues = regions.map((region) => {
     return region.id
   })
@@ -33,8 +31,4 @@ function go(payload, regions) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

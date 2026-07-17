@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewNoticeTypeService = require('../../../../app/services/notices/setup/view-notice-type.service.js')
+import ViewNoticeTypeService from '../../../../app/services/notices/setup/view-notice-type.service.js'
 
 describe('Notices - Setup - View Notice Type service', () => {
   let auth
@@ -26,18 +24,18 @@ describe('Notices - Setup - View Notice Type service', () => {
       journey: 'adhoc'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewNoticeTypeService.go(session.id, auth)
+      const result = await ViewNoticeTypeService(session.id, auth)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

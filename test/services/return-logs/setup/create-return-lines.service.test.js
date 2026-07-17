@@ -1,11 +1,13 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
-const ReturnSubmissionLineModel = require('../../../../app/models/return-submission-line.model.js')
+import ReturnSubmissionLineModel from '../../../../app/models/return-submission-line.model.js'
+import { generateUUID } from '../../../support/generators.js'
+import { timestampForPostgres } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const CreateReturnLinesService = require('../../../../app/services/return-logs/setup/create-return-lines.service.js')
+import CreateReturnLinesService from '../../../../app/services/return-logs/setup/create-return-lines.service.js'
 
 describe('Return Logs - Setup - Create New Return Lines service', () => {
   const timestamp = timestampForPostgres()
@@ -47,7 +49,7 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
     })
 
     it('inserts the lines', async () => {
-      await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
+      await CreateReturnLinesService(returnSubmissionId, session, timestamp)
 
       const result = await ReturnSubmissionLineModel.query().where('returnSubmissionId', returnSubmissionId)
 
@@ -69,7 +71,7 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
       })
 
       it('returns an empty array', async () => {
-        const result = await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
+        const result = await CreateReturnLinesService(returnSubmissionId, session, timestamp)
 
         expect(result).toEqual([])
       })
@@ -79,7 +81,7 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
       it('does not persist anything if an error occurs', async () => {
         try {
           await ReturnSubmissionLineModel.transaction(async (trx) => {
-            await CreateReturnLinesService.go(returnSubmissionId, session, timestamp, trx)
+            await CreateReturnLinesService(returnSubmissionId, session, timestamp, trx)
             throw new Error()
           })
         } catch (_error) {

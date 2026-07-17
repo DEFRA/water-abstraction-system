@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/contact-name' page
  * @module ContactNamePresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function contactNamePresenter(session) {
   const { company } = session
 
   return {
@@ -37,8 +35,4 @@ function _backLink(session) {
     href: `/system/companies/${company.id}/contacts`,
     text: 'Back'
   }
-}
-
-module.exports = {
-  go
 }

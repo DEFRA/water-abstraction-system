@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Initiates the session record used for setting up an existing company contact
  * @module InitiateEditSessionService
  */
 
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
-const FetchCompanyContactDal = require('../../../dal/company-contacts/setup/fetch-company-contact.dal.js')
-const FetchCompanyLicencesDal = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
-const { formatEmail } = require('../../../presenters/base.presenter.js')
+import CreateSessionDal from '../../../dal/create-session.dal.js'
+import FetchCompanyContactDal from '../../../dal/company-contacts/setup/fetch-company-contact.dal.js'
+import FetchCompanyLicencesDal from '../../../dal/company-contacts/fetch-company-licences.dal.js'
+import { formatEmail } from '../../../presenters/base.presenter.js'
 
 /**
  * Initiates the session record used for setting up an existing company contact
@@ -17,14 +15,14 @@ const { formatEmail } = require('../../../presenters/base.presenter.js')
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(companyContactId) {
-  const companyContact = await FetchCompanyContactDal.go(companyContactId)
+export default async function initiateEditSessionService(companyContactId) {
+  const companyContact = await FetchCompanyContactDal(companyContactId)
 
-  const licences = await FetchCompanyLicencesDal.go(companyContact.company.id)
+  const licences = await FetchCompanyLicencesDal(companyContact.company.id)
 
   const data = _formatDataForJourney(companyContact, licences)
 
-  return CreateSessionDal.go(data)
+  return CreateSessionDal(data)
 }
 
 /**
@@ -68,8 +66,4 @@ function _abstractionAlerts(companyContact, licences) {
   }
 
   return abstractionAlertType
-}
-
-module.exports = {
-  go
 }

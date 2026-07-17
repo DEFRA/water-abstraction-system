@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
+import { unitNames } from '../../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-const BaseReturnLogsPresenter = require('../../../app/presenters/return-logs/base-return-logs.presenter.js')
+import * as BaseReturnLogsPresenter from '../../../app/presenters/return-logs/base-return-logs.presenter.js'
 
 describe('Return Logs - Base Return Logs presenter', () => {
   describe('#formatMeterDetails()', () => {
@@ -36,7 +37,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
       it('returns null', () => {
         const result = BaseReturnLogsPresenter.formatMeterDetails(null)
 
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
 
@@ -44,7 +45,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
       it('returns null', () => {
         const result = BaseReturnLogsPresenter.formatMeterDetails({ ...testMeter, manufacturer: null })
 
-        expect(result).toEqual(null)
+        expect(result).toBeNull()
       })
     })
   })

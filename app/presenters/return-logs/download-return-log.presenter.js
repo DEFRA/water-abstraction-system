@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats return log data ready for presenting in the csv file
  * @module DownloadReturnLogPresenter
  */
 
-const { formatDateObjectToISO } = require('../../lib/dates.lib.js')
-const { transformArrayToCSVRow } = require('../../lib/transform-to-csv.lib.js')
+import { formatDateObjectToISO } from '../../lib/dates.lib.js'
+import { transformArrayToCSVRow } from '../../lib/transform-to-csv.lib.js'
 
 const HEADERS = ['end date', 'reading', 'volume']
 
@@ -17,7 +15,7 @@ const HEADERS = ['end date', 'reading', 'volume']
  *
  * @returns {object} the data needed for the csv download
  */
-function go(returnLog) {
+export default function downloadReturnLogPresenter(returnLog) {
   const { returnSubmissions } = returnLog
 
   const selectedReturnSubmission = returnSubmissions[0]
@@ -50,8 +48,4 @@ function _csvData(selectedReturnSubmission) {
 
     return transformArrayToCSVRow(row)
   })
-}
-
-module.exports = {
-  go
 }

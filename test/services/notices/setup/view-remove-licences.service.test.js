@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewRemoveLicencesService = require('../../../../app/services/notices/setup/view-remove-licences.service.js')
+import ViewRemoveLicencesService from '../../../../app/services/notices/setup/view-remove-licences.service.js'
 
 describe('Notices - Setup - View Remove Licences service', () => {
   const licences = []
@@ -25,17 +23,17 @@ describe('Notices - Setup - View Remove Licences service', () => {
 
     sessionData = { licences, referenceCode }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly presents the data', async () => {
-    const result = await ViewRemoveLicencesService.go(session.id)
+    const result = await ViewRemoveLicencesService(session.id)
 
     expect(result).toEqual({
       activeNavBar: 'notices',

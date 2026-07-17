@@ -1,15 +1,15 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Things we need to stub
-const NotifyRequest = require('../../../app/requests/notify.request.js')
+import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
-const ViewMessageDataRequest = require('../../../app/requests/notify/view-message-data.request.js')
+import ViewMessageDataRequest from '../../../app/requests/notify/view-message-data.request.js'
+
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Notify - View Message Data request', () => {
   const notificationId = '5a714bec-4ca0-45ba-8edf-8fa37db09499'
@@ -17,7 +17,7 @@ describe('Notify - View Message Data request', () => {
   let response
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -58,20 +58,20 @@ describe('Notify - View Message Data request', () => {
         }
       }
 
-      Sinon.stub(NotifyRequest, 'get').resolves({
+      vi.spyOn(NotifyRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response
       })
     })
 
     it('returns a "true" success status', async () => {
-      const result = await ViewMessageDataRequest.send(notificationId)
+      const result = await ViewMessageDataRequest(notificationId)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from Notify in the "response"', async () => {
-      const result = await ViewMessageDataRequest.send(notificationId)
+      const result = await ViewMessageDataRequest(notificationId)
 
       expect(result.response.body).toEqual(response.body)
     })
@@ -93,20 +93,20 @@ describe('Notify - View Message Data request', () => {
           }
         }
 
-        Sinon.stub(NotifyRequest, 'get').resolves({
+        vi.spyOn(NotifyRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response
         })
       })
 
       it('returns a "false" success status', async () => {
-        const result = await ViewMessageDataRequest.send(notificationId)
+        const result = await ViewMessageDataRequest(notificationId)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await ViewMessageDataRequest.send(notificationId)
+        const result = await ViewMessageDataRequest(notificationId)
 
         expect(result.response.body).toEqual(response.body)
       })

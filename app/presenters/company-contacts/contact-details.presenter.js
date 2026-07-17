@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/{id}/contact-details' page
  * @module ContactDetailsPresenter
  */
 
-const { abstractionAlertsLabel } = require('../crm.presenter.js')
-const { formatEmail, formatLongDate } = require('../base.presenter.js')
+import { abstractionAlertsLabel } from '../crm.presenter.js'
+import { formatEmail, formatLongDate } from '../base.presenter.js'
 
 /**
  * Formats data for the '/company-contacts/{id}/contact-details' page
@@ -17,7 +15,7 @@ const { formatEmail, formatLongDate } = require('../base.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, companyContact, licences) {
+export default function contactDetailsPresenter(company, companyContact, licences) {
   return {
     additionalContact: companyContact.licenceRole.name === 'additionalContact',
     backLink: {
@@ -89,8 +87,4 @@ function _warning(licences) {
     text: 'One or more licences for abstraction alerts have ended. No alerts will be sent for these.',
     iconFallbackText: 'Warning'
   }
-}
-
-module.exports = {
-  go
 }

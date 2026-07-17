@@ -1,17 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
-const RegionHelper = require('../../support/helpers/region.helper.js')
+import http2 from 'node:http2'
+
+import RegionHelper from '../../support/helpers/region.helper.js'
 
 // Things we need to stub
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
+import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-const CreateBillRunRequest = require('../../../app/requests/charging-module/create-bill-run.request.js')
+import CreateBillRunRequest from '../../../app/requests/charging-module/create-bill-run.request.js'
+
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Charging Module Create Bill Run request', () => {
   let testRegion
@@ -21,12 +22,12 @@ describe('Charging Module Create Bill Run request', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request can create a bill run', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequest, 'post').resolves({
+      vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -45,13 +46,13 @@ describe('Charging Module Create Bill Run request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+      const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the bill run id and number in the "response"', async () => {
-      const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+      const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
       expect(result.response.body.billRun.id).toEqual('2bbbe459-966e-4026-b5d2-2f10867bdddd')
       expect(result.response.body.billRun.billRunNumber).toEqual(10004)
@@ -61,7 +62,7 @@ describe('Charging Module Create Bill Run request', () => {
   describe('when the request cannot create a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'post').resolves({
+        vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: {
             info: {
@@ -80,13 +81,13 @@ describe('Charging Module Create Bill Run request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+        const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+        const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -96,20 +97,20 @@ describe('Charging Module Create Bill Run request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'post').resolves({
+        vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+        const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
+        const result = await CreateBillRunRequest(testRegion.id, 'sroc')
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

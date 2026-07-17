@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const NotificationsTablePresenter = require('../../../app/presenters/notifications/notifications-table.presenter.js')
+import NotificationsTablePresenter from '../../../app/presenters/notifications/notifications-table.presenter.js'
 
 describe('Notifications - Notification Table presenter', () => {
   let companyContactId
@@ -34,7 +35,7 @@ describe('Notifications - Notification Table presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -58,7 +59,7 @@ describe('Notifications - Notification Table presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -82,7 +83,7 @@ describe('Notifications - Notification Table presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -115,7 +116,7 @@ describe('Notifications - Notification Table presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -139,7 +140,7 @@ describe('Notifications - Notification Table presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -161,7 +162,7 @@ describe('Notifications - Notification Table presenter', () => {
   describe('when someone has removed the query params from the url', () => {
     describe('and neither licenceId,  returnLogId or companyContactId are present', () => {
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -186,7 +187,7 @@ describe('Notifications - Notification Table presenter', () => {
     })
 
     it('returns an empty array', () => {
-      const result = NotificationsTablePresenter.go([], licenceId, returnLogId, companyContactId)
+      const result = NotificationsTablePresenter([], licenceId, returnLogId, companyContactId)
 
       expect(result).toEqual([])
     })

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches existing supplementary details about a licence being removed from workflow
  * @module FetchLicenceService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Fetches existing supplementary details about a licence being removed from workflow
@@ -24,7 +22,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object>} - The data needed to determine which supplementary flags the licence needs
  */
-async function go(workflowId) {
+export default async function fetchLicenceService(workflowId) {
   const query = _query()
 
   const {
@@ -73,8 +71,4 @@ function _query() {
       ON l.id = w.licence_id
     WHERE w.id = ?
 `
-}
-
-module.exports = {
-  go
 }

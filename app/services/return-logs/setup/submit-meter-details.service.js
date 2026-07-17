@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-details` page
  * @module SubmitMeterDetailsService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const MeterDetailsPresenter = require('../../../presenters/return-logs/setup/meter-details.presenter.js')
-const MeterDetailsValidator = require('../../../validators/return-logs/setup/meter-details.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import MeterDetailsPresenter from '../../../presenters/return-logs/setup/meter-details.presenter.js'
+import MeterDetailsValidator from '../../../validators/return-logs/setup/meter-details.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-details` page
@@ -26,8 +24,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} If no errors the page data for the meter-details page else the validation error details
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitMeterDetailsService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload)
 
@@ -35,7 +33,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Reporting details changed')
+      flashNotification(yar, 'Updated', 'Reporting details changed')
     }
 
     return {
@@ -63,7 +61,7 @@ function _submittedSessionData(session, payload) {
   session.meterSerialNumber = payload.meterSerialNumber ?? null
   session.meter10TimesDisplay = payload.meter10TimesDisplay ?? null
 
-  return MeterDetailsPresenter.go(session)
+  return MeterDetailsPresenter(session)
 }
 
 async function _save(session, payload) {
@@ -75,11 +73,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = MeterDetailsValidator.go(payload)
+  const validationResult = MeterDetailsValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Calculates the charge for a charge reference for preview by a user on the review charge reference page
  * @module PreviewService
  */
 
-const { formatChargingModuleDate, formatMoney } = require('../../../presenters/base.presenter.js')
-const CalculateChargeRequest = require('../../../requests/charging-module/calculate-charge.request.js')
-const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
+import CalculateChargeRequest from '../../../requests/charging-module/calculate-charge.request.js'
+import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
+import { formatChargingModuleDate, formatMoney } from '../../../presenters/base.presenter.js'
 
 /**
  * Calculates the charge for a charge reference for preview by a user on the review charge reference page
@@ -24,8 +22,8 @@ const FetchReviewChargeReferenceService = require('./fetch-review-charge-referen
  * @param {string} reviewChargeReferenceId - The UUID of the charge reference review data to calculate the charge for
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go(reviewChargeReferenceId, yar) {
-  const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
+export default async function previewService(reviewChargeReferenceId, yar) {
+  const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
   const transaction = _transaction(reviewChargeReference)
 
   const result = await _calculateCharge(transaction)
@@ -50,7 +48,7 @@ async function _calculateCharge(transaction) {
     return { charge: 0 }
   }
 
-  const result = await CalculateChargeRequest.send(transaction)
+  const result = await CalculateChargeRequest(transaction)
 
   if (result.succeeded) {
     return { charge: result.response.body.calculation.chargeValue }
@@ -99,8 +97,4 @@ function _transaction(reviewChargeReference) {
     waterUndertaker: reviewChargeVersion.reviewLicence.licence.waterUndertaker,
     winterOnly
   }
-}
-
-module.exports = {
-  go
 }

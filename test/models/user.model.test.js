@@ -1,35 +1,36 @@
-'use strict'
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
-const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
-const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
-const CompanyContactModel = require('../../app/models/company-contact.model.js')
-const GroupHelper = require('../support/helpers/group.helper.js')
-const GroupModel = require('../../app/models/group.model.js')
-const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
-const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
-const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
-const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
-const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
-const LicenceUnregistrationHelper = require('../support/helpers/licence-unregistration.helper.js')
-const LicenceUnregistrationModel = require('../../app/models/licence-unregistration.model.js')
-const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
-const ReturnVersionModel = require('../../app/models/return-version.model.js')
-const RoleHelper = require('../support/helpers/role.helper.js')
-const RoleModel = require('../../app/models/role.model.js')
-const UserGroupHelper = require('../support/helpers/user-group.helper.js')
-const UserGroupModel = require('../../app/models/user-group.model.js')
-const UserHelper = require('../support/helpers/user.helper.js')
-const UserRoleHelper = require('../support/helpers/user-role.helper.js')
-const UserRoleModel = require('../../app/models/user-role.model.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { userPermissions } = require('../../app/lib/static-lookups.lib.js')
+import ChargeVersionNoteHelper from '../support/helpers/charge-version-note.helper.js'
+import ChargeVersionNoteModel from '../../app/models/charge-version-note.model.js'
+import CompanyContactHelper from '../support/helpers/company-contact.helper.js'
+import CompanyContactModel from '../../app/models/company-contact.model.js'
+import GroupHelper from '../support/helpers/group.helper.js'
+import GroupModel from '../../app/models/group.model.js'
+import LicenceDocumentHeaderHelper from '../support/helpers/licence-document-header.helper.js'
+import LicenceEntityHelper from '../support/helpers/licence-entity.helper.js'
+import LicenceEntityModel from '../../app/models/licence-entity.model.js'
+import LicenceEntityRoleHelper from '../support/helpers/licence-entity-role.helper.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
+import LicenceMonitoringStationModel from '../../app/models/licence-monitoring-station.model.js'
+import LicenceUnregistrationHelper from '../support/helpers/licence-unregistration.helper.js'
+import LicenceUnregistrationModel from '../../app/models/licence-unregistration.model.js'
+import ReturnVersionHelper from '../support/helpers/return-version.helper.js'
+import ReturnVersionModel from '../../app/models/return-version.model.js'
+import RoleHelper from '../support/helpers/role.helper.js'
+import RoleModel from '../../app/models/role.model.js'
+import UserGroupHelper from '../support/helpers/user-group.helper.js'
+import UserGroupModel from '../../app/models/user-group.model.js'
+import UserHelper from '../support/helpers/user.helper.js'
+import UserRoleHelper from '../support/helpers/user-role.helper.js'
+import UserRoleModel from '../../app/models/user-role.model.js'
+import { generateUUID } from '../support/generators.js'
+import { userPermissions } from '../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-const UserModel = require('../../app/models/user.model.js')
+import UserModel from '../../app/models/user.model.js'
 
 const GROUP_NPS_INDEX = 3
 const ROLE_AR_USER_INDEX = 6

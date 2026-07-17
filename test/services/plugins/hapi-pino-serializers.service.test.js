@@ -1,14 +1,17 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
 
 // Thing under test
-const HapiPinoSerializersService = require('../../../app/services/plugins/hapi-pino-serializers.service.js')
+import HapiPinoSerializersService from '../../../app/services/plugins/hapi-pino-serializers.service.js'
+
+const { HTTP_STATUS_OK } = http2.constants
 
 describe('Hapi Pino Serializers service', () => {
   describe('when called', () => {
     it('returns an object containing two functions called "req" and "res"', () => {
-      const result = HapiPinoSerializersService.go()
+      const result = HapiPinoSerializersService()
 
       expect(result.req).toBeDefined()
       expect(result.res).toBeDefined()
@@ -54,7 +57,7 @@ describe('Hapi Pino Serializers service', () => {
       })
 
       it('returns version containing only the key properties we care about', () => {
-        const { req } = HapiPinoSerializersService.go()
+        const { req } = HapiPinoSerializersService()
 
         expect(req(requestObject)).toEqual({
           id: '1737736750350:9bc56d13c48b:618:m6azkwqb:10004',
@@ -89,7 +92,7 @@ describe('Hapi Pino Serializers service', () => {
       })
 
       it('returns version containing only the key properties we care about', () => {
-        const { res } = HapiPinoSerializersService.go()
+        const { res } = HapiPinoSerializersService()
 
         expect(res(responseObject)).toEqual({
           statusCode: HTTP_STATUS_OK

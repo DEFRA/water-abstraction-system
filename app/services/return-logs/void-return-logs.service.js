@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Handles voiding the return logs for a licence after a no returns required return version has been created
  * @module VoidReturnLogsService
  */
 
-const ReturnLogModel = require('../../models/return-log.model.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import ReturnLogModel from '../../models/return-log.model.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Handles voiding the return logs for a licence after a no returns required return version has been created
@@ -16,7 +14,7 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * @param {Date} endDate - The end date of no returns required return version
  * @param {object} trx - Transaction object
  */
-async function go(licenceRef, startDate, endDate, trx) {
+export default async function voidReturnLogsService(licenceRef, startDate, endDate, trx) {
   const query = ReturnLogModel.query(trx)
     .patch({ status: 'void', updatedAt: timestampForPostgres() })
     .where('licenceRef', licenceRef)
@@ -27,8 +25,4 @@ async function go(licenceRef, startDate, endDate, trx) {
   }
 
   await query
-}
-
-module.exports = {
-  go
 }

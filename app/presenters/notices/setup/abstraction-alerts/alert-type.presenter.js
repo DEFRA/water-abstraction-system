@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
@@ -13,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function alertTypePresenter(session) {
   return {
     alertTypeOptions: _alertTypeOptions(session.alertType),
     backLink: { href: `/system/monitoring-stations/${session.monitoringStationId}`, text: 'Back' },
@@ -57,8 +55,4 @@ function _alertTypeOptions(alertType) {
       }
     }
   ]
-}
-
-module.exports = {
-  go
 }

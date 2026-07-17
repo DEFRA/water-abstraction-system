@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
  *
  * @module ViewPreviewCheckAlertService
  */
 
-const CheckAlertPresenter = require('../../../../presenters/notices/setup/preview/preview-check-alert.presenter.js')
-const FetchAbstractionAlertRecipientsDal = require('../../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import CheckAlertPresenter from '../../../../presenters/notices/setup/preview/preview-check-alert.presenter.js'
+import FetchAbstractionAlertRecipientsDal from '../../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
@@ -18,12 +16,12 @@ const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(contactHashId, sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewPreviewCheckAlertService(contactHashId, sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
   const recipientLicenceRefs = await _recipientLicenceRefs(contactHashId, session)
 
-  const pageData = CheckAlertPresenter.go(contactHashId, recipientLicenceRefs, session)
+  const pageData = CheckAlertPresenter(contactHashId, recipientLicenceRefs, session)
 
   return {
     activeNavBar: 'notices',
@@ -32,15 +30,11 @@ async function go(contactHashId, sessionId) {
 }
 
 async function _recipientLicenceRefs(contactHashId, session) {
-  const recipients = await FetchAbstractionAlertRecipientsDal.go(session)
+  const recipients = await FetchAbstractionAlertRecipientsDal(session)
 
   const matchedRecipient = recipients.find((recipient) => {
     return recipient.contact_hash_id === contactHashId
   })
 
   return matchedRecipient.licence_refs
-}
-
-module.exports = {
-  go
 }

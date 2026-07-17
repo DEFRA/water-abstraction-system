@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/meter-details` page
  * @module MeterDetailsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['yes', 'no']
 
@@ -17,7 +15,7 @@ const VALID_VALUES = ['yes', 'no']
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function meterDetailsValidator(payload) {
   const meter10TimesDisplayErrorMessage = 'Select if the meter has a ×10 display'
 
   const schema = Joi.object({
@@ -40,8 +38,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

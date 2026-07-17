@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Thing under test
-const SeasonValidator = require('../../../../app/validators/bill-runs/setup/season.validator.js')
+import SeasonValidator from '../../../../app/validators/bill-runs/setup/season.validator.js'
 
 describe('Bill Runs Setup Season validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = SeasonValidator.go({ season: 'summer' })
+      const result = SeasonValidator({ season: 'summer' })
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -16,7 +17,7 @@ describe('Bill Runs Setup Season validator', () => {
   describe('when invalid data is provided', () => {
     describe('because no "season" is given', () => {
       it('fails validation', () => {
-        const result = SeasonValidator.go({ season: '' })
+        const result = SeasonValidator({ season: '' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -26,7 +27,7 @@ describe('Bill Runs Setup Season validator', () => {
 
     describe('because an unknown "season" is given', () => {
       it('fails validation', () => {
-        const result = SeasonValidator.go({ type: 'spring' })
+        const result = SeasonValidator({ type: 'spring' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

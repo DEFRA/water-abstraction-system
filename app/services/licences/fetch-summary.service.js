@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches data needed for the view '/licences/{id}/summary` page
  * @module FetchSummaryService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+import LicenceModel from '../../models/licence.model.js'
 
 /**
  * Fetch the matching licence and return data needed for the view licence page summary tab
@@ -16,7 +14,7 @@ const LicenceModel = require('../../models/licence.model.js')
  *
  * @returns {Promise<module:LicenceModel>} the data needed to populate the view licence page summary tab
  */
-async function go(licenceId) {
+export default async function fetchSummaryService(licenceId) {
   return _fetch(licenceId)
 }
 
@@ -88,8 +86,4 @@ async function _fetch(licenceId) {
     .modifyGraph('workflows', (workflowsBuilder) => {
       workflowsBuilder.select(['id', 'status']).whereNull('deletedAt')
     })
-}
-
-module.exports = {
-  go
 }

@@ -1,23 +1,22 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
 
-const RecipientsFixture = require('../../../../support/fixtures/recipients.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../../app/lib/general.lib.js')
+import RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import { generateLicenceRef, generateNoticeReferenceCode, generateUUID } from '../../../../support/generators.js'
 
 // Things we need to stub
-const FetchRecipientsService = require('../../../../../app/services/notices/setup/fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
+import * as FetchRecipientsService from '../../../../../app/services/notices/setup/fetch-recipients.service.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as GeneratePreviewRequest from '../../../../../app/requests/notify/generate-preview.request.js'
 
 // Thing under test
-const ViewPreviewService = require('../../../../../app/services/notices/setup/preview/view-preview.service.js')
+import ViewPreviewService from '../../../../../app/services/notices/setup/preview/view-preview.service.js'
+
+const { HTTP_STATUS_OK } = http2.constants
 
 describe('Notices - Setup - Preview - View Preview service', () => {
   let licenceMonitoringStationId
@@ -26,7 +25,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
   let sessionData
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when previewing an abstraction alert notification', () => {
@@ -77,16 +76,16 @@ describe('Notices - Setup - Preview - View Preview service', () => {
         subType: 'waterAbstractionAlerts'
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
       licenceMonitoringStationId = licenceMonitoringStations[0].id
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([{ ...recipients[0] }])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
-      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+      vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -104,7 +103,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
+      const result = await ViewPreviewService(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -173,16 +172,16 @@ describe('Notices - Setup - Preview - View Preview service', () => {
         subType: 'returnInvitation'
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
       licenceMonitoringStationId = null
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([{ ...recipients[0] }])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
-      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+      vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -200,7 +199,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
+      const result = await ViewPreviewService(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -239,16 +238,16 @@ describe('Notices - Setup - Preview - View Preview service', () => {
         subType: 'renewalInvitation'
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
       licenceMonitoringStationId = null
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([{ ...recipients[0] }])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
-      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+      vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -266,7 +265,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
+      const result = await ViewPreviewService(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

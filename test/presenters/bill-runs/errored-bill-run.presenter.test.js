@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ErroredBillRunPresenter = require('../../../app/presenters/bill-runs/errored-bill-run.presenter.js')
+import ErroredBillRunPresenter from '../../../app/presenters/bill-runs/errored-bill-run.presenter.js'
 
 describe('Errored Bill Run presenter', () => {
   let billRun
@@ -12,7 +13,7 @@ describe('Errored Bill Run presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ErroredBillRunPresenter.go(billRun)
+      const result = ErroredBillRunPresenter(billRun)
 
       expect(result).toEqual({
         backLink: '/system/bill-runs',
@@ -36,7 +37,7 @@ describe('Errored Bill Run presenter', () => {
         })
 
         it('returns the matching error message', () => {
-          const result = ErroredBillRunPresenter.go(billRun)
+          const result = ErroredBillRunPresenter(billRun)
 
           expect(result.errorMessage).toEqual('Error when getting the Charging Module bill run summary.')
         })
@@ -48,7 +49,7 @@ describe('Errored Bill Run presenter', () => {
         })
 
         it('returns the generic error message', () => {
-          const result = ErroredBillRunPresenter.go(billRun)
+          const result = ErroredBillRunPresenter(billRun)
 
           expect(result.errorMessage).toEqual(
             'No error code was assigned. We have no further information at this time.'

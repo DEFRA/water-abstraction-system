@@ -1,27 +1,24 @@
-'use strict'
-
 /**
  * Fetch the selected notice and its associated notifications for the 'notices/{id}' page
  * @module FetchNoticeService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const EventModel = require('../../models/event.model.js')
-const NotificationModel = require('../../models/notification.model.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import EventModel from '../../models/event.model.js'
+import NotificationModel from '../../models/notification.model.js'
 
 /**
  * Fetch the selected notice and its associated notifications for the 'notices/{id}' page
  *
  * @param {string} noticeId - the UUID of the selected notice
  * @param {object} filters - an object containing the different filters to apply to the query
- * @param {string} [page=1] - The current page for the pagination service
+ * @param {string} [page='1'] - The current page for the pagination service
  *
  * @returns {Promise<object>} the notice and its associated notifications
  */
-async function go(noticeId, filters, page = '1') {
+export default async function fetchNoticeService(noticeId, filters, page = '1') {
   const notice = await _fetchNotice(noticeId)
 
   const notificationsQuery = _fetchNotificationsQuery(noticeId)
@@ -105,8 +102,4 @@ function _fetchNotificationsQuery(noticeId) {
       [noticeId]
     )
     .where('event_id', noticeId)
-}
-
-module.exports = {
-  go
 }

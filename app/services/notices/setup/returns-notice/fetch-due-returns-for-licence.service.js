@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the 'due' returns for a licence for the `/notices/setup/{sessionId}/paper-return` page
  * @module FetchDueReturnsForLicenceService
  */
 
-const { db } = require('../../../../../db/db.js')
-const { timestampForPostgres } = require('../../../../lib/general.lib.js')
+import { db } from '../../../../../db/db.js'
+import { timestampForPostgres } from '../../../../lib/general.lib.js'
 
 /**
  * Fetches the 'due' returns for a licence for the `/notices/setup/{sessionId}/paper-return` page
@@ -15,7 +13,7 @@ const { timestampForPostgres } = require('../../../../lib/general.lib.js')
  *
  * @returns {Promise<object[]>} The 'due' return logs for the licence
  */
-async function go(licenceRef) {
+export default async function fetchDueReturnsForLicenceService(licenceRef) {
   const { rows } = await _fetch(licenceRef)
 
   return rows
@@ -50,8 +48,4 @@ async function _fetch(licenceRef) {
   `
 
   return db.raw(query, [licenceRef, timestampForPostgres()])
-}
-
-module.exports = {
-  go
 }

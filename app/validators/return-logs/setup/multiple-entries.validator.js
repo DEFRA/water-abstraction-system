@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/{sessionId}/multiple-entries` page
  * @module MultipleEntriesValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-logs/{sessionId}/multiple-entries` page
@@ -19,7 +17,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(frequency, length, measurementType, payload, startReading) {
+export default function multipleEntriesValidator(frequency, length, measurementType, payload, startReading) {
   const schema = Joi.object({
     multipleEntries: Joi.array()
       .required()
@@ -70,8 +68,4 @@ function _meterReadingsInIncreasingOrder(value, helpers, startReading) {
   }
 
   return value
-}
-
-module.exports = {
-  go
 }

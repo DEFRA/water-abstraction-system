@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/history` view history page
  * @module HistoryPresenter
  */
 
-const { formatLongDate } = require('../base.presenter.js')
-const { linkToLicenceVersion } = require('../licence-version.presenter.js')
+import { formatLongDate } from '../base.presenter.js'
+import { linkToLicenceVersion } from '../licence-version.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/history` view history page
@@ -16,7 +14,7 @@ const { linkToLicenceVersion } = require('../licence-version.presenter.js')
  *
  * @returns The data formatted and sorted for the view template
  */
-function go(licenceHistory, licence) {
+export default function historyPresenter(licenceHistory, licence) {
   const { licenceRef } = licence
 
   return {
@@ -40,8 +38,4 @@ function _licenceVersionEntries(licenceVersions) {
       startDate: formatLongDate(licenceVersion.startDate)
     }
   })
-}
-
-module.exports = {
-  go
 }

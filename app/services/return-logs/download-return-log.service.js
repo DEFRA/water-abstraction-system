@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and formatting the data needed for the return log download link
  * @module DownloadReturnLogService
  */
 
-const DownloadReturnLogPresenter = require('../../presenters/return-logs/download-return-log.presenter.js')
-const FetchDownloadReturnLogService = require('./fetch-download-return-log.service.js')
+import DownloadReturnLogPresenter from '../../presenters/return-logs/download-return-log.presenter.js'
+import FetchDownloadReturnLogService from './fetch-download-return-log.service.js'
 
 /**
  * Orchestrates fetching and formatting the data needed for the return log download link
@@ -16,18 +14,14 @@ const FetchDownloadReturnLogService = require('./fetch-download-return-log.servi
  *
  * @returns {Promise<object>} The data for the download return log link (csv string, filename and type)
  */
-async function go(returnLogId, version) {
-  const returnLog = await FetchDownloadReturnLogService.go(returnLogId, version)
+export default async function downloadReturnLogService(returnLogId, version) {
+  const returnLog = await FetchDownloadReturnLogService(returnLogId, version)
 
-  const { data, filename } = DownloadReturnLogPresenter.go(returnLog)
+  const { data, filename } = DownloadReturnLogPresenter(returnLog)
 
   return {
     data,
     type: 'text/csv',
     filename
   }
-}
-
-module.exports = {
-  go
 }

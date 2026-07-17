@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for '/users/internal/setup/{sessionId}/email' page
  * @module ViewEmailService
  */
 
-const EmailPresenter = require('../../../../presenters/users/internal/setup/email.presenter.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import EmailPresenter from '../../../../presenters/users/internal/setup/email.presenter.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for '/users/internal/setup/{sessionId}/email' page
@@ -15,14 +13,10 @@ const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewEmailService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = EmailPresenter.go(session)
+  const pageData = EmailPresenter(session)
 
   return pageData
-}
-
-module.exports = {
-  go
 }

@@ -1,8 +1,6 @@
-'use strict'
-
 const tableName = 'licence_agreements'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.withSchema('water').createTable(tableName, (table) => {
     // Primary Key
     table.uuid('licence_agreement_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
@@ -23,6 +21,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.withSchema('water').dropTableIfExists(tableName)
 }

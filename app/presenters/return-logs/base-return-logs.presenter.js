@@ -1,10 +1,8 @@
-'use strict'
+import Big from 'big.js'
 
-const Big = require('big.js')
-
-const { formatNumber, sentenceCase } = require('../base.presenter.js')
-const { convertFromCubicMetres } = require('../../lib/general.lib.js')
-const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
+import { convertFromCubicMetres } from '../../lib/general.lib.js'
+import { formatNumber, sentenceCase } from '../base.presenter.js'
+import { returnRequirementFrequencies, returnUnits, unitNames } from '../../lib/static-lookups.lib.js'
 
 /**
  * Formats the details of a return submission meter
@@ -13,7 +11,7 @@ const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../
  *
  * @returns {object|null} The formatted meter or null if the meter is null or undefined
  */
-function formatMeterDetails(meter) {
+export function formatMeterDetails(meter) {
   if (!meter || !meter?.manufacturer) {
     return null
   }
@@ -38,7 +36,7 @@ function formatMeterDetails(meter) {
  *
  * @returns {object[]} The table headers for the summary table
  */
-function generateSummaryTableHeaders(method, frequency, units, alwaysDisplayLinkHeader = false) {
+export function generateSummaryTableHeaders(method, frequency, units, alwaysDisplayLinkHeader = false) {
   const headers = [{ text: 'Month' }]
 
   if (method !== 'abstractionVolumes') {
@@ -92,7 +90,7 @@ function generateSummaryTableHeaders(method, frequency, units, alwaysDisplayLink
  * @returns {object[]} An array of row data objects for the summary table, each containing details like month, total
  * quantity, reading, and unit totals.
  */
-function generateSummaryTableRows(method, frequency, lines, id = null, rootPath = '/system/return-submissions') {
+export function generateSummaryTableRows(method, frequency, lines, id = null, rootPath = '/system/return-submissions') {
   const groups = _groupLinesByMonth(lines)
 
   return groups.map((group) => {
@@ -187,10 +185,4 @@ function _linkDetails(id, method, frequency, endDate, rootPath) {
     href: `${rootPath}/${id}/${yearMonth}`,
     text
   }
-}
-
-module.exports = {
-  formatMeterDetails,
-  generateSummaryTableHeaders,
-  generateSummaryTableRows
 }

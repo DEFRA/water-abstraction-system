@@ -1,41 +1,41 @@
-'use strict'
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_TOO_MANY_REQUESTS } =
-  require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Things we need to stub
-const BaseRequest = require('../../app/requests/base.request.js')
-const notifyConfig = require('../../config/notify.config.js')
-const serverConfig = require('../../config/server.config.js')
+import * as BaseRequest from '../../app/requests/base.request.js'
+import notifyConfig from '../../config/notify.config.js'
+import serverConfig from '../../config/server.config.js'
 
 // Thing under test
-const NotifyRequest = require('../../app/requests/notify.request.js')
+import * as NotifyRequest from '../../app/requests/notify.request.js'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_TOO_MANY_REQUESTS } =
+  http2.constants
 
 describe('Notify Request', () => {
   const testRoute = 'TEST_ROUTE'
 
   beforeAll(async () => {
     // NotifyRequest makes use of the getNotifyToken() server method, which we therefore need to stub.
-    // Note that we only need to do this once as it is unaffected by the Sinon.restore() in our afterEach()
+    // Note that we only need to do this once as it is unaffected by the vi.restoreAllMocks() in our afterEach()
     globalThis.HapiServerMethods = {
-      getNotifyToken: Sinon.stub().resolves('ACCESS_TOKEN')
+      getNotifyToken: vi.fn().mockResolvedValue('ACCESS_TOKEN')
     }
   })
 
   beforeEach(() => {
     // Set rateLimitPause to a value that won't cause the tests to timeout. By default it's 90 seconds.
-    Sinon.stub(notifyConfig, 'rateLimitPause').value(500)
+    vi.replaceProperty(notifyConfig, 'rateLimitPause', 500)
     // Set the timeout value to 1234ms for these tests. We don't trigger a timeout but we do test that the module
     // uses it when making a request to the charging module, rather than the default request timeout config value
-    Sinon.stub(notifyConfig, 'timeout').value(1234)
-    Sinon.stub(serverConfig, 'requestTimeout').value(1000)
+    vi.replaceProperty(notifyConfig, 'timeout', 1234)
+    vi.replaceProperty(serverConfig, 'requestTimeout', 1000)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(() => {
@@ -46,7 +46,7 @@ describe('Notify Request', () => {
   describe('#get', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'get').resolves({
+        vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: HTTP_STATUS_OK,
@@ -56,36 +56,36 @@ describe('Notify Request', () => {
       })
 
       it('calls Notify with the required options', async () => {
-        await NotifyRequest.get(testRoute)
+        await NotifyRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.get.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
       })
 
       it('uses the notify timeout', async () => {
-        await NotifyRequest.get(testRoute)
+        await NotifyRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.get.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
 
       it('returns a "true" success status', async () => {
-        const result = await NotifyRequest.get(testRoute)
+        const result = await NotifyRequest.getRequest(testRoute)
 
         expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
-        const result = await NotifyRequest.get(testRoute)
+        const result = await NotifyRequest.getRequest(testRoute)
 
         expect(result.response.body.testObject.test).toEqual('yes')
       })
 
       it('returns the status code', async () => {
-        const result = await NotifyRequest.get(testRoute)
+        const result = await NotifyRequest.getRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
@@ -93,7 +93,7 @@ describe('Notify Request', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'get').resolves({
+        vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: {
             statusCode: HTTP_STATUS_NOT_FOUND,
@@ -104,19 +104,19 @@ describe('Notify Request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await NotifyRequest.get(testRoute)
+        const result = await NotifyRequest.getRequest(testRoute)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
-        const result = await NotifyRequest.get(testRoute)
+        const result = await NotifyRequest.getRequest(testRoute)
 
         expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
-        const result = await NotifyRequest.get(testRoute)
+        const result = await NotifyRequest.getRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
@@ -126,7 +126,7 @@ describe('Notify Request', () => {
   describe('#post', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'post').resolves({
+        vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: HTTP_STATUS_OK,
@@ -136,9 +136,9 @@ describe('Notify Request', () => {
       })
 
       it('calls Notify with the required options', async () => {
-        await NotifyRequest.post(testRoute, { test: 'yes' })
+        await NotifyRequest.postRequest(testRoute, { test: 'yes' })
 
-        const requestArgs = BaseRequest.post.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
@@ -146,27 +146,27 @@ describe('Notify Request', () => {
       })
 
       it('uses the Notify timeout', async () => {
-        await NotifyRequest.post(testRoute)
+        await NotifyRequest.postRequest(testRoute)
 
-        const requestArgs = BaseRequest.post.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
 
       it('returns a "true" success status', async () => {
-        const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+        const result = await NotifyRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
-        const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+        const result = await NotifyRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.response.body.testObject.test).toEqual('yes')
       })
 
       it('returns the status code', async () => {
-        const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+        const result = await NotifyRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
@@ -175,7 +175,7 @@ describe('Notify Request', () => {
     describe('when the request fails', () => {
       describe('because Notify rejects it (for example a validation error)', () => {
         beforeEach(async () => {
-          Sinon.stub(BaseRequest, 'post').resolves({
+          vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
             succeeded: false,
             response: {
               statusCode: HTTP_STATUS_BAD_REQUEST,
@@ -189,13 +189,13 @@ describe('Notify Request', () => {
         })
 
         it('returns a "false" success status', async () => {
-          const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+          const result = await NotifyRequest.postRequest(testRoute, { test: 'yes' })
 
           expect(result.succeeded).toBe(false)
         })
 
         it('returns the error response', async () => {
-          const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+          const result = await NotifyRequest.postRequest(testRoute, { test: 'yes' })
 
           expect(result.response.body.errors).toEqual([
             { error: 'BadRequestError', message: 'email_address Not a valid email address' }
@@ -203,7 +203,7 @@ describe('Notify Request', () => {
         })
 
         it('returns the status code', async () => {
-          const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+          const result = await NotifyRequest.postRequest(testRoute, { test: 'yes' })
 
           expect(result.response.statusCode).toEqual(HTTP_STATUS_BAD_REQUEST)
         })
@@ -213,9 +213,10 @@ describe('Notify Request', () => {
         let baseRequestStub
 
         beforeEach(async () => {
-          baseRequestStub = Sinon.stub(BaseRequest, 'post')
-            .onFirstCall()
-            .resolves({
+          baseRequestStub = vi
+            .spyOn(BaseRequest, 'postRequest')
+
+            .mockResolvedValueOnce({
               succeeded: false,
               response: {
                 statusCode: HTTP_STATUS_TOO_MANY_REQUESTS,
@@ -231,8 +232,8 @@ describe('Notify Request', () => {
                 }
               }
             })
-            .onSecondCall()
-            .resolves({
+
+            .mockResolvedValueOnce({
               succeeded: true,
               response: {
                 statusCode: HTTP_STATUS_OK,
@@ -242,9 +243,9 @@ describe('Notify Request', () => {
         })
 
         it('retries the request after the configured pause', async () => {
-          const result = await NotifyRequest.post(testRoute, { test: 'yes' })
+          const result = await NotifyRequest.postRequest(testRoute, { test: 'yes' })
 
-          expect(baseRequestStub.calledTwice).toBe(true)
+          expect(baseRequestStub).toHaveBeenCalledTimes(2)
           expect(result.succeeded).toBe(true)
           expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
           expect(result.response.body.testObject.test).toEqual('yes')

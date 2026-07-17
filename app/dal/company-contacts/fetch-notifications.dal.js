@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Fetches data needed for the view '/system/company-contacts/{id}/communications' page
  * @module FetchNotificationsDal
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const NotificationModel = require('../../models/notification.model.js')
-const { ignoreMessageRef } = require('../../lib/static-lookups.lib.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import NotificationModel from '../../models/notification.model.js'
+import { ignoreMessageRef } from '../../lib/static-lookups.lib.js'
 
 /**
  * Fetches data needed for the view '/system/company-contacts/{id}/communications' page
@@ -20,7 +17,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the data needed to populate the view company contacts communications
  */
-async function go(email, page = '1') {
+export default async function fetchNotificationsDal(email, page = '1') {
   const { results: notifications, total: totalNumber } = await _fetch(email, page)
 
   return { notifications, totalNumber }
@@ -52,8 +49,4 @@ async function _fetch(email, page) {
       ])
     })
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
-}
-
-module.exports = {
-  go
 }

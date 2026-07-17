@@ -1,19 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceModel = require('../../../app/models/licence.model.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import LicenceModel from '../../../app/models/licence.model.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
-const FetchSummaryService = require('../../../app/services/licences/fetch-summary.service.js')
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchSummaryService from '../../../app/services/licences/fetch-summary.service.js'
 
 // Thing under test
-const ViewSummaryService = require('../../../app/services/licences/view-summary.service.js')
+import ViewSummaryService from '../../../app/services/licences/view-summary.service.js'
 
 describe('Licences - View Summary service', () => {
   let auth
@@ -38,18 +35,18 @@ describe('Licences - View Summary service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a licence with a matching ID exists', () => {
     describe('and it has no optional fields', () => {
       beforeEach(() => {
-        Sinon.stub(FetchLicenceService, 'go').resolves(licence)
-        Sinon.stub(FetchSummaryService, 'go').resolves(summary)
+        vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licence)
+        vi.spyOn(FetchSummaryService, 'default').mockResolvedValue(summary)
       })
 
       it('will return all the mandatory data and default values for use in the licence summary page', async () => {
-        const result = await ViewSummaryService.go(licence.id, auth)
+        const result = await ViewSummaryService(licence.id, auth)
 
         expect(result).toEqual({
           abstractionAmounts: [],

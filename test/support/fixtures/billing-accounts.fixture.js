@@ -1,9 +1,6 @@
-'use strict'
-
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
-const ContactModel = require('../../../app/models/contact.model.js')
-const { generateAccountNumber } = require('../helpers/billing-account.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import BillingAccountModel from '../../../app/models/billing-account.model.js'
+import ContactModel from '../../../app/models/contact.model.js'
+import { generateAccountNumber, generateUUID } from '../generators.js'
 
 /**
  * Represents a complete response from `FetchBillingAccountService`
@@ -70,6 +67,6 @@ function billingAccount() {
   }
 }
 
-module.exports = {
+export default {
   billingAccount
 }

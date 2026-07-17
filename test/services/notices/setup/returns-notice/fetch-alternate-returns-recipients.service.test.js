@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 
 // Thing under test
-const FetchAlternateReturnsRecipients = require('../../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
+import FetchAlternateReturnsRecipients from '../../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients service', () => {
   const notificationDueDate = new Date('2025-12-24')
@@ -28,7 +29,7 @@ describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients 
 
   describe('when service is called for sending the "alternate notice"', () => {
     it('fetches the correct recipient data for sending the notice', async () => {
-      const results = await FetchAlternateReturnsRecipients.go([returnLog.id], notificationDueDate)
+      const results = await FetchAlternateReturnsRecipients([returnLog.id], notificationDueDate)
 
       const sendingResult = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 

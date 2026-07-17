@@ -1,20 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceEntityHelper = require('../../../support/helpers/licence-entity.helper.js')
-const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.js')
-const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
-const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
-const ContactHelper = require('../../../support/helpers/contact.helper.js')
+import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
+import CompanyContactModel from '../../../../app/models/company-contact.model.js'
+import ContactHelper from '../../../support/helpers/contact.helper.js'
+import LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'
+import { generateName } from '../../../support/generators.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const CleanIncompleteCompanyContactsService = require('../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js')
+import CleanIncompleteCompanyContactsService from '../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js'
 
 describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
   let companyContact
@@ -25,12 +23,12 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
 
     await contact.$query().delete()
@@ -51,7 +49,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
         })
 
         it('removes the company contact and returns the count', async () => {
-          const result = await CleanIncompleteCompanyContactsService.go()
+          const result = await CleanIncompleteCompanyContactsService()
 
           const existsResults = await CompanyContactModel.query().whereIn('id', [companyContact.id])
 
@@ -70,7 +68,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
         })
 
         it('does not remove the company contact and returns the count', async () => {
-          const result = await CleanIncompleteCompanyContactsService.go()
+          const result = await CleanIncompleteCompanyContactsService()
 
           const existsResults = await CompanyContactModel.query().whereIn('id', [companyContact.id])
 
@@ -85,7 +83,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
 
     describe('there is a contact with a populated email address', () => {
       beforeEach(async () => {
-        contact = await ContactHelper.add({ email: LicenceEntityHelper.generateName() })
+        contact = await ContactHelper.add({ email: generateName() })
       })
 
       describe('and it is linked to a company contact with the "additionalContact" role', () => {
@@ -96,7 +94,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
         })
 
         it('does not remove the company contact and returns the count', async () => {
-          const result = await CleanIncompleteCompanyContactsService.go()
+          const result = await CleanIncompleteCompanyContactsService()
 
           const existsResults = await CompanyContactModel.query().whereIn('id', [companyContact.id])
 
@@ -112,30 +110,30 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
 
   describe('when the clean errors', () => {
     beforeEach(() => {
-      Sinon.stub(CompanyContactModel, 'query').returns({
-        delete: Sinon.stub().returnsThis(),
-        innerJoinRelated: Sinon.stub().returnsThis(),
-        where: Sinon.stub().returnsThis(),
-        whereNull: Sinon.stub().rejects()
+      vi.spyOn(CompanyContactModel, 'query').mockReturnValue({
+        delete: vi.fn().mockReturnThis(),
+        innerJoinRelated: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        whereNull: vi.fn().mockRejectedValue(new Error())
       })
     })
 
     it('does not throw an error', async () => {
-      await expect(CleanIncompleteCompanyContactsService.go()).resolves.toBeDefined()
+      await expect(CleanIncompleteCompanyContactsService()).resolves.toBeDefined()
     })
 
     it('logs the error', async () => {
-      await CleanIncompleteCompanyContactsService.go()
+      await CleanIncompleteCompanyContactsService()
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg.calledWith('Clean job failed')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object), expect.any(Error))
       expect(errorLogArgs[1]).toEqual({ job: 'clean-incomplete-company-contacts' })
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })
 
     it('still returns a count', async () => {
-      const result = await CleanIncompleteCompanyContactsService.go()
+      const result = await CleanIncompleteCompanyContactsService()
 
       // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created
       // by other tests. We just want to check we are always getting a number

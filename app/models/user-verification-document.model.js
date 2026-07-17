@@ -1,13 +1,13 @@
-'use strict'
-
 /**
  * Model for user_verification_documents (crm.verification_documents)
  * @module UserVerificationDocumentModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceDocumentHeaderModel from './licence-document-header.model.js'
+import UserVerificationModel from './user-verification.model.js'
 
 /**
  * Represents an instance of a user verification document record
@@ -34,7 +34,7 @@ const BaseModel = require('./base.model.js')
  *
  * Thereafter, whenever the user claims more licences, they will be associated with that "company" entity.
  */
-class UserVerificationDocumentModel extends BaseModel {
+export default class UserVerificationDocumentModel extends BaseModel {
   static get tableName() {
     return 'userVerificationDocuments'
   }
@@ -47,7 +47,7 @@ class UserVerificationDocumentModel extends BaseModel {
     return {
       userVerification: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user-verification.model',
+        modelClass: UserVerificationModel,
         join: {
           from: 'userVerificationDocuments.userVerificationId',
           to: 'userVerifications.id'
@@ -55,7 +55,7 @@ class UserVerificationDocumentModel extends BaseModel {
       },
       licenceDocumentHeader: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-document-header.model',
+        modelClass: LicenceDocumentHeaderModel,
         join: {
           from: 'userVerificationDocuments.licenceDocumentHeaderId',
           to: 'licenceDocumentHeaders.id'
@@ -64,5 +64,3 @@ class UserVerificationDocumentModel extends BaseModel {
     }
   }
 }
-
-module.exports = UserVerificationDocumentModel

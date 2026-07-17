@@ -1,35 +1,33 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
 
 // Thing under test
-const SubmitCancelService = require('../../../../app/services/return-logs/setup/submit-cancel.service.js')
+import SubmitCancelService from '../../../../app/services/return-logs/setup/submit-cancel.service.js'
 
 describe('Return Logs Setup - Submit Cancel service', () => {
   let session
 
   beforeEach(() => {
-    session = SessionModelStub.build(Sinon, {})
+    session = SessionModelStub({})
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a user submits the return submission to be cancelled', () => {
     it('deletes the session data', async () => {
-      await SubmitCancelService.go(session.id)
+      await SubmitCancelService(session.id)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
   })
 })

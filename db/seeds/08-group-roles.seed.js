@@ -1,12 +1,10 @@
-'use strict'
+import GroupRoleModel from '../../app/models/group-role.model.js'
+import { db } from '../db.js'
+import { data as groupRoles } from './data/group-roles.js'
+import { data as groups } from './data/groups.js'
+import { data as roles } from './data/roles.js'
 
-const { db } = require('../db.js')
-const GroupRoleModel = require('../../app/models/group-role.model.js')
-const { data: groupRoles } = require('./data/group-roles.js')
-const { data: groups } = require('./data/groups.js')
-const { data: roles } = require('./data/roles.js')
-
-async function seed() {
+export default async function seed() {
   for (const groupRole of groupRoles) {
     const { group, role } = _names(groupRole)
 
@@ -54,8 +52,4 @@ function _names(groupRole) {
   })
 
   return { group, role }
-}
-
-module.exports = {
-  seed
 }

@@ -1,13 +1,14 @@
-'use strict'
-
 /**
  * Validates data submitted for abstraction periods
  * @module AbstractionPeriodValidator
  */
 
-const Joi = require('joi').extend(require('@joi/date'))
+import base from 'joi'
+import joiDate from '@joi/date'
 
-const { leftPadZeroes } = require('../presenters/base.presenter.js')
+import { leftPadZeroes } from '../presenters/base.presenter.js'
+
+const Joi = base.extend(joiDate)
 
 /**
  * Validates data submitted for abstraction periods
@@ -25,7 +26,7 @@ const { leftPadZeroes } = require('../presenters/base.presenter.js')
  * dates. Each result object will be the output of Joi's schema.validate(). If any errors are found, the 'error'
  * property will be present, detailing the issue.
  */
-function go(payload) {
+export default function abstractionPeriodValidator(payload) {
   const { abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth } =
     payload
 
@@ -61,8 +62,4 @@ function _validateAbstractionDate(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

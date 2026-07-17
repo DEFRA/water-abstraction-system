@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
  * @module SubmitIndexUsersService
  */
 
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
-const FetchUsersDal = require('../../dal/users/fetch-users.dal.js')
-const IndexUsersPresenter = require('../../presenters/users/index-users.presenter.js')
-const IndexValidator = require('../../validators/users/index.validator.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { clearFilters } = require('../../lib/submit-page.lib.js')
+import FetchUsersDal from '../../dal/users/fetch-users.dal.js'
+import IndexUsersPresenter from '../../presenters/users/index-users.presenter.js'
+import IndexValidator from '../../validators/users/index.validator.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { clearFilters } from '../../lib/submit-page.lib.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -25,7 +23,7 @@ const { clearFilters } = require('../../lib/submit-page.lib.js')
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the index page
  * else the data needed to re-render the page
  */
-async function go(payload, yar, auth, page) {
+export default async function submitIndexUsersService(payload, yar, auth, page) {
   const filterCleared = clearFilters(payload, yar, 'usersFilter')
 
   if (filterCleared) {
@@ -46,11 +44,11 @@ async function go(payload, yar, auth, page) {
 }
 
 async function _replayView(payload, error, page, savedFilters, auth) {
-  const { results: users, total: totalNumber } = await FetchUsersDal.go(savedFilters, page)
+  const { results: users, total: totalNumber } = await FetchUsersDal(savedFilters, page)
 
-  const pagination = PaginatorPresenter.go(totalNumber, page, `/system/users`, users.length, 'users')
+  const pagination = PaginatorPresenter(totalNumber, page, `/system/users`, users.length, 'users')
 
-  const pageData = IndexUsersPresenter.go(users, auth)
+  const pageData = IndexUsersPresenter(users, auth)
 
   return {
     error,
@@ -81,11 +79,7 @@ function _savedFilters(yar) {
 }
 
 function _validate(payload) {
-  const validationResult = IndexValidator.go(payload)
+  const validationResult = IndexValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

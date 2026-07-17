@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for '/notices/setup/{sessionId}/select-recipients' page
  *
  * @module SubmitSelectRecipientsService
  */
 
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
-const SelectRecipientsValidator = require('../../../validators/notices/setup/select-recipients.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import FetchRecipientsService from './fetch-recipients.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SelectRecipientsPresenter from '../../../presenters/notices/setup/select-recipients.presenter.js'
+import SelectRecipientsValidator from '../../../validators/notices/setup/select-recipients.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for '/notices/setup/{sessionId}/select-recipients' page
@@ -23,8 +21,8 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitSelectRecipientsService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'recipients')
 
@@ -33,11 +31,7 @@ async function go(sessionId, payload, yar) {
   if (!error) {
     await _save(session, payload)
 
-    GeneralLib.flashNotification(
-      yar,
-      'Updated',
-      'The recipients have been changed. Check details before sending invitations.'
-    )
+    flashNotification(yar, 'Updated', 'The recipients have been changed. Check details before sending invitations.')
 
     return {}
   }
@@ -46,9 +40,9 @@ async function go(sessionId, payload, yar) {
 
   _clearSelectedRecipients(session)
 
-  const recipients = await FetchRecipientsService.go(session)
+  const recipients = await FetchRecipientsService(session)
 
-  const pageData = SelectRecipientsPresenter.go(session, recipients, selectedRecipients)
+  const pageData = SelectRecipientsPresenter(session, recipients, selectedRecipients)
 
   return {
     error,
@@ -72,11 +66,7 @@ function _clearSelectedRecipients(session) {
 }
 
 function _validate(payload) {
-  const validationResult = SelectRecipientsValidator.go(payload)
+  const validationResult = SelectRecipientsValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

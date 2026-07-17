@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Exports an entire db schema and cleans up the files after upload
  * @module SchemaExportService
  */
 
-const os = require('node:os')
-const path = require('node:path')
+import os from 'node:os'
+import path from 'node:path'
 
-const CompressSchemaFolderService = require('./compress-schema-folder.service.js')
-const DeleteFilesService = require('./delete-files.service.js')
-const ExportTableService = require('./export-table.service.js')
-const FetchTableNamesService = require('./fetch-table-names.service.js')
-const SendToS3BucketService = require('./send-to-s3-bucket.service.js')
+import CompressSchemaFolderService from './compress-schema-folder.service.js'
+import DeleteFilesService from './delete-files.service.js'
+import ExportTableService from './export-table.service.js'
+import FetchTableNamesService from './fetch-table-names.service.js'
+import SendToS3BucketService from './send-to-s3-bucket.service.js'
 
 /**
  * Exports the specific schema by fetching table names, exporting each table to a schema folder converting the folder
@@ -21,24 +19,24 @@ const SendToS3BucketService = require('./send-to-s3-bucket.service.js')
  *
  * @param {string} schemaName - The name of the database schema to export
  */
-async function go(schemaName) {
+export default async function schemaExportService(schemaName) {
   const schemaFolderPath = _folderToUpload(schemaName)
   let compressedSchemaPath
 
   try {
-    const tableNames = await FetchTableNamesService.go(schemaName)
+    const tableNames = await FetchTableNamesService(schemaName)
 
     for (const tableName of tableNames) {
-      await ExportTableService.go(tableName, schemaFolderPath, schemaName)
+      await ExportTableService(tableName, schemaFolderPath, schemaName)
     }
 
-    compressedSchemaPath = await CompressSchemaFolderService.go(schemaFolderPath)
-    await SendToS3BucketService.go(compressedSchemaPath)
+    compressedSchemaPath = await CompressSchemaFolderService(schemaFolderPath)
+    await SendToS3BucketService(compressedSchemaPath)
   } catch (error) {
     globalThis.GlobalNotifier.omfg(`Error: Failed to export schema ${schemaName}`, null, error)
   } finally {
-    await DeleteFilesService.go(schemaFolderPath)
-    await DeleteFilesService.go(compressedSchemaPath)
+    await DeleteFilesService(schemaFolderPath)
+    await DeleteFilesService(compressedSchemaPath)
   }
 }
 
@@ -55,8 +53,4 @@ function _folderToUpload(schemaName) {
   const temporaryFilePath = os.tmpdir()
 
   return path.join(temporaryFilePath, schemaName)
-}
-
-module.exports = {
-  go
 }

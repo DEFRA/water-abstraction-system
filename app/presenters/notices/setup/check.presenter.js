@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/check` page
  * @module CheckPresenter
  */
 
-const ContactPresenter = require('./contact.presenter.js')
-const DatabaseConfig = require('../../../../config/database.config.js')
-const { compareStrings } = require('../../../lib/general.lib.js')
-const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
+import ContactPresenter from './contact.presenter.js'
+import DatabaseConfig from '../../../../config/database.config.js'
+import { compareStrings } from '../../../lib/general.lib.js'
+import { NoticeJourney, NoticeType } from '../../../lib/static-lookups.lib.js'
 
 const NOTIFICATION_TYPES = {
   [NoticeType.ABSTRACTION_ALERTS]: 'Abstraction alerts',
@@ -27,7 +25,7 @@ const NOTIFICATION_TYPES = {
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients, page, session) {
+export default function checkPresenter(recipients, page, session) {
   const { noticeType, referenceCode } = session
 
   const sortedRecipients = _recipients(noticeType, recipients, session.id)
@@ -58,7 +56,7 @@ function _canSendNotice(formattedRecipients) {
 
 function _formatRecipients(noticeType, recipients, sessionId) {
   return recipients.map((recipient) => {
-    const contact = ContactPresenter.go(recipient)
+    const contact = ContactPresenter(recipient)
 
     return {
       contact,
@@ -205,8 +203,4 @@ function _warning(formattedRecipients) {
     iconFallbackText: 'Warning',
     text: `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
   }
-}
-
-module.exports = {
-  go
 }

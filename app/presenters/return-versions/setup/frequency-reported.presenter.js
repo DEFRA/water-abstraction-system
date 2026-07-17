@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/frequency-reported` page
  * @module FrequencyReportedPresenter
@@ -13,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, requirementIndex) {
+export default function frequencyReportedPresenter(session, requirementIndex) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
@@ -36,8 +34,4 @@ function _backLinkHref(session, requirementIndex) {
   }
 
   return `/system/return-versions/setup/${id}/frequency-collected/${requirementIndex}`
-}
-
-module.exports = {
-  go
 }

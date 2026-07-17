@@ -1,47 +1,44 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitCancelService = require('../../../../app/services/notices/setup/submit-cancel.service.js')
+import SubmitCancelService from '../../../../app/services/notices/setup/submit-cancel.service.js'
 
 describe('Notices - Setup - Submit Cancel service', () => {
-  let fetchSessionStub
   let session
   let sessionData
 
   beforeEach(() => {
     sessionData = { licenceRef: '01/111', referenceCode: 'RNIV-1234' }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves(session)
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('clears the session', async () => {
-      await SubmitCancelService.go(session.id)
+      await SubmitCancelService(session.id)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     describe('when the journey is for a return', () => {
       it('returns the redirect url', async () => {
-        const result = await SubmitCancelService.go(session.id)
+        const result = await SubmitCancelService(session.id)
 
         expect(result).toEqual('/system/notices')
       })
@@ -55,13 +52,13 @@ describe('Notices - Setup - Submit Cancel service', () => {
           monitoringStationId: '123',
           referenceCode: 'WAA-1234'
         }
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns the redirect url', async () => {
-        const result = await SubmitCancelService.go(session.id)
+        const result = await SubmitCancelService(session.id)
 
         expect(result).toEqual('/system/monitoring-stations/123')
       })

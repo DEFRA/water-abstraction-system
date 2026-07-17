@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/season` page
  * @module SeasonPresenter
@@ -12,15 +10,11 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function seasonPresenter(session) {
   return {
     backlink: `/system/bill-runs/setup/${session.id}/year`,
     pageTitle: 'Select the season',
     sessionId: session.id,
     selectedSeason: session.season ? session.season : null
   }
-}
-
-module.exports = {
-  go
 }

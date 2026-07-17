@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Matches return logs to a charge element
  * @module MatchReturnsToChargeElementService
  */
 
-const { periodsOverlap } = require('../../../lib/general.lib.js')
+import { periodsOverlap } from '../../../lib/general.lib.js'
 
 /**
  * Matches return logs to a charge element
@@ -18,7 +16,7 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<module:ReturnLogModel[]>} Return logs that matched the charge element
  */
-function go(chargeElement, returnLogs) {
+export default function matchReturnsToChargeElementService(chargeElement, returnLogs) {
   const matchingReturns = _matchReturns(chargeElement, returnLogs)
 
   if (matchingReturns.length > 0) {
@@ -62,8 +60,4 @@ function _matchReturns(chargeElement, returnLogs) {
 
     return periodsOverlap(elementPeriods, returnPeriods)
   })
-}
-
-module.exports = {
-  go
 }

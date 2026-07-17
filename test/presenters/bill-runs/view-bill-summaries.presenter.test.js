@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ViewBillSummariesPresenter = require('../../../app/presenters/bill-runs/view-bill-summaries.presenter.js')
+import ViewBillSummariesPresenter from '../../../app/presenters/bill-runs/view-bill-summaries.presenter.js'
 
 describe('View Bill Summaries presenter', () => {
   let billSummaries
@@ -12,7 +13,7 @@ describe('View Bill Summaries presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ViewBillSummariesPresenter.go(billSummaries)
+      const result = ViewBillSummariesPresenter(billSummaries)
 
       expect(result).toEqual([
         {
@@ -65,7 +66,7 @@ describe('View Bill Summaries presenter', () => {
       })
 
       it('returns just the water companies group', () => {
-        const result = ViewBillSummariesPresenter.go(billSummaries)
+        const result = ViewBillSummariesPresenter(billSummaries)
 
         expect(result).toHaveLength(1)
         expect(result[0].type).toEqual('water-companies')
@@ -80,7 +81,7 @@ describe('View Bill Summaries presenter', () => {
       })
 
       it('returns just the other abstractors group', () => {
-        const result = ViewBillSummariesPresenter.go(billSummaries)
+        const result = ViewBillSummariesPresenter(billSummaries)
 
         expect(result).toHaveLength(1)
         expect(result[0].type).toEqual('other-abstractors')
@@ -91,7 +92,7 @@ describe('View Bill Summaries presenter', () => {
       // NOTE: The template iterates through the groups and builds the tables. When both groups are present we want
       // the water companies table first which is why the order of the groups is important.
       it('the first group is always the water companies and the second the other abstractors', () => {
-        const result = ViewBillSummariesPresenter.go(billSummaries)
+        const result = ViewBillSummariesPresenter(billSummaries)
 
         expect(result).toHaveLength(2)
         expect(result[0].type).toEqual('water-companies')
@@ -102,7 +103,7 @@ describe('View Bill Summaries presenter', () => {
     describe('the group "caption" property', () => {
       describe('when there is only 1 water bill summary', () => {
         it("the group's caption is singular (1 water company)", () => {
-          const result = ViewBillSummariesPresenter.go(billSummaries)
+          const result = ViewBillSummariesPresenter(billSummaries)
 
           expect(result[0].caption).toEqual('1 water company')
         })
@@ -114,7 +115,7 @@ describe('View Bill Summaries presenter', () => {
         })
 
         it("the group's caption is pluralised (2 water companies)", () => {
-          const result = ViewBillSummariesPresenter.go(billSummaries)
+          const result = ViewBillSummariesPresenter(billSummaries)
 
           expect(result[0].caption).toEqual('2 water companies')
         })
@@ -126,7 +127,7 @@ describe('View Bill Summaries presenter', () => {
         })
 
         it("the group's caption is singular (1 other abstractor)", () => {
-          const result = ViewBillSummariesPresenter.go(billSummaries)
+          const result = ViewBillSummariesPresenter(billSummaries)
 
           expect(result[1].caption).toEqual('1 other abstractor')
         })
@@ -134,7 +135,7 @@ describe('View Bill Summaries presenter', () => {
 
       describe('when there are multiple other abstractor bill summaries', () => {
         it("the group's caption is pluralised (2 other abstractors)", () => {
-          const result = ViewBillSummariesPresenter.go(billSummaries)
+          const result = ViewBillSummariesPresenter(billSummaries)
 
           expect(result[1].caption).toEqual('2 other abstractors')
         })
@@ -144,7 +145,7 @@ describe('View Bill Summaries presenter', () => {
     describe('the bill "billingContact" property', () => {
       describe('when the bill does have an agent company name', () => {
         it('returns the agent company name', () => {
-          const result = ViewBillSummariesPresenter.go(billSummaries)
+          const result = ViewBillSummariesPresenter(billSummaries)
 
           expect(result[1].bills[0].billingContact).toEqual('Geordie Leforge')
         })
@@ -152,7 +153,7 @@ describe('View Bill Summaries presenter', () => {
 
       describe('when the bill does not have an agent company name', () => {
         it('returns the company name', () => {
-          const result = ViewBillSummariesPresenter.go(billSummaries)
+          const result = ViewBillSummariesPresenter(billSummaries)
 
           expect(result[1].bills[1].billingContact).toEqual('Flint & Michigan Squash Club Ltd')
         })
@@ -161,7 +162,7 @@ describe('View Bill Summaries presenter', () => {
 
     describe('the bill "licences" property', () => {
       it('splits the licences provided by , and places the resulting references into an array', () => {
-        const result = ViewBillSummariesPresenter.go(billSummaries)
+        const result = ViewBillSummariesPresenter(billSummaries)
 
         expect(result[0].bills[0].licences).toEqual(['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'])
       })

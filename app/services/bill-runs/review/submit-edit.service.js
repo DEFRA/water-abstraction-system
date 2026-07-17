@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates validating and patching the data for the amend billable returns page
  * @module SubmitEditService
  */
 
-const EditPresenter = require('../../../presenters/bill-runs/review/edit.presenter.js')
-const EditValidator = require('../../../validators/bill-runs/review/edit.validator.js')
-const FetchReviewChargeElementService = require('./fetch-review-charge-element.service.js')
-const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
+import EditPresenter from '../../../presenters/bill-runs/review/edit.presenter.js'
+import EditValidator from '../../../validators/bill-runs/review/edit.validator.js'
+import FetchReviewChargeElementService from './fetch-review-charge-element.service.js'
+import ReviewChargeElementModel from '../../../models/review-charge-element.model.js'
 
 /**
  * Orchestrates validating the data for the amend billable returns page and patching the db value
@@ -21,7 +19,7 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
  *
  * @returns {Promise<object>} The updated value for the billable returns
  */
-async function go(reviewChargeElementId, elementIndex, yar, payload) {
+export default async function submitEditService(reviewChargeElementId, elementIndex, yar, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -31,8 +29,8 @@ async function go(reviewChargeElementId, elementIndex, yar, payload) {
     return {}
   }
 
-  const reviewChargeElement = await FetchReviewChargeElementService.go(reviewChargeElementId)
-  const pageData = EditPresenter.go(reviewChargeElement, elementIndex)
+  const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
+  const pageData = EditPresenter(reviewChargeElement, elementIndex)
 
   return {
     activeNavBar: 'bill-runs',
@@ -50,7 +48,7 @@ function _save(reviewChargeElementId, payload) {
 }
 
 function _validate(payload) {
-  const validation = EditValidator.go(payload)
+  const validation = EditValidator(payload)
 
   if (!validation.error) {
     return null
@@ -69,8 +67,4 @@ function _validate(payload) {
     errorList: [{ href: '#quantityOptions-error', text: message }],
     quantityOptionsErrorMessage: { text: message }
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceDocumentHeaderHelper = require('../../../../support/helpers/licence-document-header.helper.js')
-const LicenceDocumentHeaderModel = require('../../../../../app/models/licence-document-header.model.js')
-const LicenceUnregistrationModel = require('../../../../../app/models/licence-unregistration.model.js')
-const UsersFixture = require('../../../../support/fixtures/users.fixture.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import LicenceDocumentHeaderHelper from '../../../../support/helpers/licence-document-header.helper.js'
+import LicenceDocumentHeaderModel from '../../../../../app/models/licence-document-header.model.js'
+import LicenceUnregistrationModel from '../../../../../app/models/licence-unregistration.model.js'
+import UsersFixture from '../../../../support/fixtures/users.fixture.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-const UnregisterLicencesDal = require('../../../../../app/dal/users/external/setup/unregister-licences.dal.js')
+import UnregisterLicencesDal from '../../../../../app/dal/users/external/setup/unregister-licences.dal.js'
 
 describe('Users - External - Setup - Unregister Licences DAL', () => {
   let firstLicenceId
@@ -95,7 +96,7 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
 
   describe('when called', () => {
     it('unregisters the selected licences and records the unregistration', async () => {
-      await UnregisterLicencesDal.go(session, user)
+      await UnregisterLicencesDal(session, user)
 
       // Check first licence unregistered
       let updatedLicenceDocumentHeader = await LicenceDocumentHeaderModel.query().findById(licenceDocumentHeaders[0].id)

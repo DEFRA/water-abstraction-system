@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/check`
  * @module CheckPresenter
  */
 
-const { formatAbstractionPeriod, formatValueUnit } = require('../../base.presenter.js')
+import { formatAbstractionPeriod, formatValueUnit } from '../../base.presenter.js'
 
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/check`
@@ -14,7 +12,7 @@ const { formatAbstractionPeriod, formatValueUnit } = require('../../base.present
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function checkPresenter(session) {
   const {
     abstractionPeriodStartDay,
     abstractionPeriodStartMonth,
@@ -70,8 +68,4 @@ function _type(stopOrReduce, reduceAtThreshold) {
   }
 
   return 'Reduce with a maximum volume limit'
-}
-
-module.exports = {
-  go
 }

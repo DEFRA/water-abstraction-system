@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for previewing a paper return
  *
  * @module ProcessPreviewPaperReturnService
  */
 
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PaperReturnNotificationsPresenter = require('../../../presenters/notices/setup/paper-return-notifications.presenter.js')
-const PreparePaperReturnService = require('./prepare-paper-return.service.js')
+import FetchRecipientsService from './fetch-recipients.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PaperReturnNotificationsPresenter from '../../../presenters/notices/setup/paper-return-notifications.presenter.js'
+import PreparePaperReturnService from './prepare-paper-return.service.js'
 
 /**
  * Orchestrates fetching and presenting the data for previewing a paper return
@@ -23,8 +21,8 @@ const PreparePaperReturnService = require('./prepare-paper-return.service.js')
  *
  * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer.
  */
-async function go(sessionId, contactHashId, returnLogId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function processPreviewPaperReturnService(sessionId, contactHashId, returnLogId) {
+  const session = await FetchSessionDal(sessionId)
 
   // NOTE: The notifications the presenter generates are based on the combination of recipients and selected return logs
   // that have been set during setup. We're using the same presenter to generate our preview notification, so for this
@@ -35,21 +33,17 @@ async function go(sessionId, contactHashId, returnLogId) {
 
   // The presenter returns an array because it is also used when sending the paper return. But in this case we just want
   // to look at a single recipient and return log so we know we'll just get one notification back in the array.
-  const notifications = PaperReturnNotificationsPresenter.go(session, [selectedRecipient], null)
+  const notifications = PaperReturnNotificationsPresenter(session, [selectedRecipient], null)
 
-  const returnFormRequest = await PreparePaperReturnService.go(notifications[0])
+  const returnFormRequest = await PreparePaperReturnService(notifications[0])
 
   return returnFormRequest.response.body
 }
 
 async function _selectedRecipient(session, contactHashId) {
-  const recipients = await FetchRecipientsService.go(session)
+  const recipients = await FetchRecipientsService(session)
 
   return recipients.find((recipient) => {
     return recipient.contact_hash_id === contactHashId
   })
-}
-
-module.exports = {
-  go
 }

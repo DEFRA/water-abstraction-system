@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const FetchReturnLogService = require('../../../../app/services/return-logs/setup/fetch-return-log.service.js')
+import * as FetchReturnLogService from '../../../../app/services/return-logs/setup/fetch-return-log.service.js'
 
 // Thing under test
-const ConfirmedService = require('../../../../app/services/return-logs/setup/confirmed.service.js')
+import ConfirmedService from '../../../../app/services/return-logs/setup/confirmed.service.js'
 
 describe('Return Logs - Setup - Confirmed service', () => {
   const returnLogId = 'e8d145d9-2da4-4d2d-b338-92cedc7cea7f'
 
   beforeEach(() => {
-    Sinon.stub(FetchReturnLogService, 'go').resolves({
+    vi.spyOn(FetchReturnLogService, 'default').mockResolvedValue({
       id: returnLogId,
       licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
       licenceRef: '01/117',
@@ -41,12 +39,12 @@ describe('Return Logs - Setup - Confirmed service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ConfirmedService.go(returnLogId)
+      const result = await ConfirmedService(returnLogId)
 
       expect(result).toEqual({
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',

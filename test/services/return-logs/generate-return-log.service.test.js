@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ReturnCyclesFixture = require('../../support/fixtures/return-cycles.fixture.js')
-const ReturnRequirementsFixture = require('../../support/fixtures/return-requirements.fixture.js')
+import ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
+import ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
 
 // Thing under test
-const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
+import GenerateReturnLogService from '../../../app/services/return-logs/generate-return-log.service.js'
 
 describe('Return Logs - Generate Return Log service', () => {
   let returnCycle
@@ -23,7 +24,7 @@ describe('Return Logs - Generate Return Log service', () => {
       })
 
       it('returns the generated return log data', () => {
-        const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+        const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
         const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
@@ -86,7 +87,7 @@ describe('Return Logs - Generate Return Log service', () => {
         // NOTE: We only add one test scenario to highlight the behavior behind this property. It makes use of the helper
         // `determineEarliestDate()` which already has a suite of tests
         it('returns the earliest end date from the licence, return version, or return cycle', () => {
-          const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+          const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
           expect(result.endDate).toEqual(new Date('2025-08-31'))
         })
@@ -94,7 +95,7 @@ describe('Return Logs - Generate Return Log service', () => {
 
       describe('the "returnId" property', () => {
         it('returns a unique identifier built from the region code, licence reference, reference, start and end date', () => {
-          const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+          const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
           const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
@@ -111,7 +112,7 @@ describe('Return Logs - Generate Return Log service', () => {
             })
 
             it('returns true', () => {
-              const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+              const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
               expect(result.metadata.isFinal).toBe(true)
             })
@@ -119,7 +120,7 @@ describe('Return Logs - Generate Return Log service', () => {
 
           describe('when the calculated end date is greater than or equal to the cycle end date', () => {
             it('returns false', () => {
-              const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+              const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
               expect(result.metadata.isFinal).toBe(false)
             })
@@ -129,7 +130,7 @@ describe('Return Logs - Generate Return Log service', () => {
         describe('the metadata "purposes" property', () => {
           describe('when a purpose has an "alias"', () => {
             it('returns the alias as part of the purposes data', () => {
-              const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+              const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
               expect(result.metadata.purposes[0].alias).toEqual('Purpose alias for testing')
             })
@@ -141,7 +142,7 @@ describe('Return Logs - Generate Return Log service', () => {
             })
 
             it('returns the purposes data without an "alias" property', () => {
-              const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+              const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
               expect(result.metadata.purposes[0].alias).toBeUndefined()
             })
@@ -151,7 +152,7 @@ describe('Return Logs - Generate Return Log service', () => {
         describe('the metadata "nald" property', () => {
           describe('when the return requirement has an abstraction period set', () => {
             it('returns the "nald" property with period details set to the abstraction period', () => {
-              const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+              const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
               expect(result.metadata.nald).toEqual({
                 regionCode: 4,
@@ -176,7 +177,7 @@ describe('Return Logs - Generate Return Log service', () => {
             })
 
             it('returns the "nald" property with period details set to "null"', () => {
-              const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+              const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
               expect(result.metadata.nald).toEqual({
                 regionCode: 4,
@@ -198,7 +199,7 @@ describe('Return Logs - Generate Return Log service', () => {
         })
 
         it('returns false when the return versions quarterly-returns flag is false', () => {
-          const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+          const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
           expect(result.quarterly).toEqual(false)
         })
@@ -207,7 +208,7 @@ describe('Return Logs - Generate Return Log service', () => {
       describe('the "returnsFrequency" property', () => {
         describe('when the return requirement reporting frequency is NOT "fortnight"', () => {
           it('returns the reporting frequency as-is', () => {
-            const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+            const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
             expect(result.returnsFrequency).toEqual('day')
           })
@@ -219,7 +220,7 @@ describe('Return Logs - Generate Return Log service', () => {
           })
 
           it('returns the reporting frequency as "week"', () => {
-            const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+            const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
             expect(result.returnsFrequency).toEqual('week')
           })
@@ -234,7 +235,7 @@ describe('Return Logs - Generate Return Log service', () => {
       })
 
       it('returns the generated return log data', () => {
-        const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+        const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
         const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
@@ -297,7 +298,7 @@ describe('Return Logs - Generate Return Log service', () => {
       })
 
       it('returns null', () => {
-        const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+        const result = GenerateReturnLogService(returnRequirement, returnCycle)
 
         expect(result).toBeNull()
       })

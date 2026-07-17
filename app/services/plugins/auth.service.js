@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Used by `AuthPlugin` to authenticate and authorise users
  * @module AuthService
  */
 
-const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-groups.service.js')
-
-const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+import FetchUserRolesAndGroupsService from '../idm/fetch-user-roles-and-groups.service.js'
+import featureFlagsConfig from '../../../config/feature-flags.config.js'
 
 /**
  * Used by `AuthPlugin` to authenticate and authorise users
@@ -46,8 +43,8 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
  *
  * @returns {Promise<object>} the permission object
  */
-async function go(userId) {
-  const { user, roles, groups } = await FetchUserRolesAndGroupsService.go(userId)
+export default async function authService(userId) {
+  const { user, roles, groups } = await FetchUserRolesAndGroupsService(userId)
 
   // We put each role's name into the scope array for hapi to use for its scope authorisation
   const scope = roles.map((role) => {
@@ -115,8 +112,4 @@ function _permission(scope = []) {
     notices,
     users
   }
-}
-
-module.exports = {
-  go
 }

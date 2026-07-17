@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const PointHelper = require('../support/helpers/point.helper.js')
-const PointModel = require('../../app/models/point.model.js')
-const SourceHelper = require('../support/helpers/source.helper.js')
+import PointHelper from '../support/helpers/point.helper.js'
+import PointModel from '../../app/models/point.model.js'
+import SourceHelper from '../support/helpers/source.helper.js'
 
 // Thing under test
-const SourceModel = require('../../app/models/source.model.js')
+import SourceModel from '../../app/models/source.model.js'
 
 describe('Source model', () => {
   let testPoints

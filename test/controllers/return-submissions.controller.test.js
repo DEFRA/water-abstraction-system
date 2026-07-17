@@ -1,16 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
 
 // Things we need to stub
-const ViewReturnSubmissionService = require('../../app/services/return-submissions/view-return-submission.service.js')
+import * as ViewReturnSubmissionService from '../../app/services/return-submissions/view-return-submission.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_OK } = http2.constants
 
 describe('Return Submissions controller', () => {
   let options
@@ -22,16 +24,15 @@ describe('Return Submissions controller', () => {
   })
 
   beforeEach(() => {
-    // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
-    Sinon.stub(server.logger, 'error')
-    Sinon.stub(server.logger, 'info')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -41,7 +42,7 @@ describe('Return Submissions controller', () => {
   describe('/system/return-submissions/{yearMonth}/{returnSubmissionId}', () => {
     describe('GET', () => {
       beforeEach(() => {
-        Sinon.stub(ViewReturnSubmissionService, 'go').resolves({
+        vi.spyOn(ViewReturnSubmissionService, 'default').mockResolvedValue({
           pageTitle: 'Return Submission'
         })
 
@@ -66,9 +67,10 @@ describe('Return Submissions controller', () => {
         it('passes the parameters to the service', async () => {
           await server.inject(options)
 
-          const calls = ViewReturnSubmissionService.go.firstCall
-          expect(calls.args).toContain('d1f4826a-a8b1-479a-ac25-07b491ebcddd')
-          expect(calls.args).toContain('2025-02')
+          const calls = ViewReturnSubmissionService.default.mock.calls[0]
+
+          expect(calls).toContain('d1f4826a-a8b1-479a-ac25-07b491ebcddd')
+          expect(calls).toContain('2025-02')
         })
       })
     })

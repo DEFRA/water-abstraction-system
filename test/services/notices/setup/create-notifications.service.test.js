@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
-const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
+import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const CreateNotificationsService = require('../../../../app/services/notices/setup/create-notifications.service.js')
+import CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
 
 describe('Notices - Setup - Create Notifications service', () => {
   const noticeId = generateUUID()
@@ -82,7 +83,7 @@ describe('Notices - Setup - Create Notifications service', () => {
     })
 
     it('returns the created the abstraction alert notifications', async () => {
-      const results = await CreateNotificationsService.go(session, recipients, noticeId)
+      const results = await CreateNotificationsService(session, recipients, noticeId)
 
       expect(results).toHaveLength(2)
 
@@ -219,7 +220,7 @@ describe('Notices - Setup - Create Notifications service', () => {
     })
 
     it('returns the created the paper return notifications', async () => {
-      const results = await CreateNotificationsService.go(session, recipients, noticeId)
+      const results = await CreateNotificationsService(session, recipients, noticeId)
 
       expect(results).toHaveLength(2)
 
@@ -328,7 +329,7 @@ describe('Notices - Setup - Create Notifications service', () => {
     })
 
     it('returns the created the returns notifications', async () => {
-      const results = await CreateNotificationsService.go(session, recipients, noticeId)
+      const results = await CreateNotificationsService(session, recipients, noticeId)
 
       expect(results).toHaveLength(2)
 
@@ -412,7 +413,7 @@ describe('Notices - Setup - Create Notifications service', () => {
     })
 
     it('returns the created returns notifications', async () => {
-      const results = await CreateNotificationsService.go(session, recipients, noticeId)
+      const results = await CreateNotificationsService(session, recipients, noticeId)
 
       expect(results).toHaveLength(2)
 

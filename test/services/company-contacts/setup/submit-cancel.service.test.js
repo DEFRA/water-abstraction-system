@@ -1,22 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 // Thing under test
-const SubmitCancelService = require('../../../../app/services/company-contacts/setup/submit-cancel.service.js')
+import SubmitCancelService from '../../../../app/services/company-contacts/setup/submit-cancel.service.js'
 
 describe('Company Contacts - Setup - Cancel Service', () => {
   let company
-  let fetchSessionStub
   let session
   let sessionData
 
@@ -25,20 +22,20 @@ describe('Company Contacts - Setup - Cancel Service', () => {
 
     sessionData = { company }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('continues the journey', async () => {
-      const result = await SubmitCancelService.go(session.id)
+      const result = await SubmitCancelService(session.id)
 
       expect(result).toEqual({
         redirectUrl: `/system/companies/${company.id}/contacts`
@@ -46,25 +43,25 @@ describe('Company Contacts - Setup - Cancel Service', () => {
     })
 
     it('clears the session', async () => {
-      await SubmitCancelService.go(session.id)
+      await SubmitCancelService(session.id)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     describe('and the company contact is being edited', () => {
       beforeEach(async () => {
         sessionData.companyContact = { id: generateUUID() }
 
-        session = SessionModelStub.build(Sinon, {
+        session = SessionModelStub({
           ...sessionData,
           email: 'ERICE@TEST.COM'
         })
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitCancelService.go(session.id)
+        const result = await SubmitCancelService(session.id)
 
         expect(result).toEqual({
           redirectUrl: `/system/company-contacts/${sessionData.companyContact.id}/contact-details`

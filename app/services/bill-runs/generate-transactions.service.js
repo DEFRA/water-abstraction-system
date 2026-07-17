@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Generate transaction data from the the charge reference and other information passed in
  * @module GenerateTransactionsService
  */
 
-const { generateUUID } = require('../../lib/general.lib.js')
-
-const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-authorised-and-billable-days.service.js')
+import CalculateAuthorisedAndBillableDaysServiceService from './calculate-authorised-and-billable-days.service.js'
+import { generateUUID } from '../../lib/general.lib.js'
 
 /**
  * Generates an array of transactions ready to be persisted as `billing_transactions`
@@ -33,8 +30,15 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  *
  * @returns {object[]} an array of 0, 1 or 2 transaction objects
  */
-function go(billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker) {
-  const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService.go(
+export default function generateTransactionsService(
+  billLicenceId,
+  chargeReference,
+  billingPeriod,
+  chargePeriod,
+  newLicence,
+  waterUndertaker
+) {
+  const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService(
     chargePeriod,
     billingPeriod,
     chargeReference
@@ -156,8 +160,4 @@ function _standardTransaction(
     winterOnly: !!chargeReference.adjustments.winter,
     purposes: _generateElements(chargeReference)
   }
-}
-
-module.exports = {
-  go
 }

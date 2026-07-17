@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ReportedValidator = require('../../../../app/validators/return-logs/setup/reported.validator.js')
+import ReportedValidator from '../../../../app/validators/return-logs/setup/reported.validator.js'
 
 describe('Return Logs Setup - Reported validator', () => {
   let payload
@@ -13,7 +14,7 @@ describe('Return Logs Setup - Reported validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = ReportedValidator.go(payload)
+        const result = ReportedValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -25,7 +26,7 @@ describe('Return Logs Setup - Reported validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = ReportedValidator.go(payload)
+        const result = ReportedValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -39,7 +40,7 @@ describe('Return Logs Setup - Reported validator', () => {
       })
 
       it('fails validation with the message "Select how this return was reported"', () => {
-        const result = ReportedValidator.go(payload)
+        const result = ReportedValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select how this return was reported')

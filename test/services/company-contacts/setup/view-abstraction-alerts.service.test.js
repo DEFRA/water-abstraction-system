@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewAbstractionAlertsService = require('../../../../app/services/company-contacts/setup/view-abstraction-alerts.service.js')
+import ViewAbstractionAlertsService from '../../../../app/services/company-contacts/setup/view-abstraction-alerts.service.js'
 
 describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
   let company
@@ -23,18 +21,18 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
 
     sessionData = { company, licences: [] }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewAbstractionAlertsService.go(session.id)
+      const result = await ViewAbstractionAlertsService(session.id)
 
       expect(result).toEqual({
         abstractionAlerts: null,

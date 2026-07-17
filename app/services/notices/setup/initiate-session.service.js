@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Initiates the session record used for setting up a new notice
  * @module InitiateSessionService
  */
 
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
-const DetermineLicenceMonitoringStationsService = require('./abstraction-alerts/determine-licence-monitoring-stations.service.js')
-const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
-const { NoticeJourney, NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+import CreateSessionDal from '../../../dal/create-session.dal.js'
+import DetermineLicenceMonitoringStationsService from './abstraction-alerts/determine-licence-monitoring-stations.service.js'
+import { generateNoticeReferenceCode } from '../../../lib/general.lib.js'
+import { NoticeJourney, NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Initiates the session record used for setting up a new notice
@@ -30,13 +28,13 @@ const { NoticeJourney, NoticeType, NoticeTypes } = require('../../../lib/static-
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(journey, monitoringStationId = null) {
+export default async function initiateSessionService(journey, monitoringStationId = null) {
   const noticeProperties = _noticeProperties(journey)
 
   let additionalData = {}
 
   if (monitoringStationId) {
-    additionalData = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+    additionalData = await DetermineLicenceMonitoringStationsService(monitoringStationId)
   }
 
   const data = {
@@ -45,7 +43,7 @@ async function go(journey, monitoringStationId = null) {
     journey
   }
 
-  const session = await CreateSessionDal.go(data)
+  const session = await CreateSessionDal(data)
 
   return {
     sessionId: session.id,
@@ -85,8 +83,4 @@ function _redirect(journey) {
 
   // Ad-hoc
   return 'notice-type'
-}
-
-module.exports = {
-  go
 }

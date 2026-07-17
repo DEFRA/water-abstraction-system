@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
+import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
 
 // Thing under test
-const FetchLicenceService = require('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+import FetchLicenceService from '../../../../app/services/licences/supplementary/fetch-licence.service.js'
 
 describe('Fetch Licence Service', () => {
   let workflow
@@ -34,7 +35,7 @@ describe('Fetch Licence Service', () => {
     })
 
     it('fetches the licence data related to that workflow record', async () => {
-      const result = await FetchLicenceService.go(workflow.id)
+      const result = await FetchLicenceService(workflow.id)
 
       expect(result.id).toEqual(licence.id)
       expect(result.region_id).toEqual(licence.regionId)
@@ -44,7 +45,7 @@ describe('Fetch Licence Service', () => {
     })
 
     it('outlines which charge versions the licence has', async () => {
-      const result = await FetchLicenceService.go(workflow.id)
+      const result = await FetchLicenceService(workflow.id)
 
       expect(result.sroc_charge_versions).toEqual(true)
       expect(result.two_part_tariff_charge_versions).toEqual(true)

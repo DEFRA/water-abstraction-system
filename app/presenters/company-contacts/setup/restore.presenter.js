@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/restore' page
  * @module RestorePresenter
  */
 
-const { titleCase } = require('../../base.presenter.js')
+import { titleCase } from '../../base.presenter.js'
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/restore' page
@@ -14,7 +12,7 @@ const { titleCase } = require('../../base.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function restorePresenter(session) {
   const { company, email, name, abstractionAlerts } = session
 
   return {
@@ -28,8 +26,4 @@ function go(session) {
     pageTitle: 'You are about to restore this contact',
     pageTitleCaption: company.name
   }
-}
-
-module.exports = {
-  go
 }

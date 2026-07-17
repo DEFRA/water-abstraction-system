@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Fetches recipient data for a returns reminder notice
  * @module FetchReturnsReminderRecipientsService
  */
 
-const GenerateReturnLogsByLicenceQueryService = require('./generate-return-logs-by-licence-query.service.js')
-const GenerateReturnLogsByPeriodQueryService = require('./generate-return-logs-by-period-query.service.js')
-const GenerateRecipientsQueryService = require('./generate-recipients-query.service.js')
-const { db } = require('../../../../../db/db.js')
-const { transformStringOfLicencesToArray } = require('../../../../lib/general.lib.js')
-const { NoticeJourney } = require('../../../../lib/static-lookups.lib.js')
+import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
+import GenerateReturnLogsByLicenceQueryService from './generate-return-logs-by-licence-query.service.js'
+import GenerateReturnLogsByPeriodQueryService from './generate-return-logs-by-period-query.service.js'
+import { NoticeJourney } from '../../../../lib/static-lookups.lib.js'
+import { db } from '../../../../../db/db.js'
+import { transformStringOfLicencesToArray } from '../../../../lib/general.lib.js'
 
 /**
  * Fetches recipient data for a returns reminder notice
@@ -20,11 +18,11 @@ const { NoticeJourney } = require('../../../../lib/static-lookups.lib.js')
  *
  * @returns {Promise<object[]>} The recipient data for the returns reminder notice
  */
-async function go(session, download) {
+export default async function fetchReturnsReminderRecipientsService(session, download) {
   const { noticeType } = session
 
   const { bindings, query: dueReturnLogsQuery } = _returnLogsQuery(session)
-  const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+  const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
   const { rows } = await db.raw(query, bindings)
 
@@ -43,14 +41,10 @@ function _returnLogsQuery(session) {
   const { determinedReturnsPeriod: returnsPeriod, journey, licenceRef, noticeType, removeLicences = '' } = session
 
   if (journey === NoticeJourney.ADHOC) {
-    return GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
+    return GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
   }
 
   const licencesToExclude = transformStringOfLicencesToArray(removeLicences)
 
-  return GenerateReturnLogsByPeriodQueryService.go(noticeType, licencesToExclude, returnsPeriod)
-}
-
-module.exports = {
-  go
+  return GenerateReturnLogsByPeriodQueryService(noticeType, licencesToExclude, returnsPeriod)
 }

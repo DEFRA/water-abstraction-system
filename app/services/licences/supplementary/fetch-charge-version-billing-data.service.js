@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches the charge version billing data needed to determine the supplementary billing flags
  * @module FetchChargeVersionBillingDataService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const { determineFinancialYearEnd } = require('../../../lib/dates.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import ChargeVersionModel from '../../../models/charge-version.model.js'
+import { determineFinancialYearEnd } from '../../../lib/dates.lib.js'
 
 /**
  * Fetches the charge version billing data needed to determine the supplementary billing flags
@@ -24,7 +22,7 @@ const { determineFinancialYearEnd } = require('../../../lib/dates.lib.js')
  *
  * @returns {Promise<object>} - An object containing the charge version and related SROC bill runs
  */
-async function go(chargeVersionId) {
+export default async function fetchChargeVersionBillingDataService(chargeVersionId) {
   const chargeVersion = await _fetchChargeVersion(chargeVersionId)
 
   if (chargeVersion.scheme === 'alcs') {
@@ -62,8 +60,4 @@ async function _fetchSrocBillRuns(changeDateFinancialYearEnd, licenceId) {
     .select('billRuns.regionId', 'billRuns.scheme', 'billRuns.toFinancialYearEnding', 'billRuns.batchType')
     .distinct()
     .orderBy('billRuns.toFinancialYearEnding', 'asc')
-}
-
-module.exports = {
-  go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference factors page
  * @module FactorsPresenter
  */
 
-const { formatFinancialYear } = require('../../base.presenter.js')
-const { formatAdditionalCharges, formatChargePeriod, formatAdjustments } = require('./base-review.presenter.js')
+import { formatFinancialYear } from '../../base.presenter.js'
+import { formatAdditionalCharges, formatAdjustments, formatChargePeriod } from './base-review.presenter.js'
 
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference factors page
@@ -16,7 +14,7 @@ const { formatAdditionalCharges, formatChargePeriod, formatAdjustments } = requi
  *
  * @returns {object} page date needed for the review charge reference factors page
  */
-function go(reviewChargeReference) {
+export default function factorsPresenter(reviewChargeReference) {
   const {
     amendedAggregate,
     amendedChargeAdjustment,
@@ -38,8 +36,4 @@ function go(reviewChargeReference) {
     pageTitle: 'Set the adjustment factors',
     reviewChargeReferenceId
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/users/me/profile-details` page
  * @module ProfileDetailsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const EMAIL_DOMAIN_PATTERN = /^.+@environment-agency.gov.uk$/
 const MAX_ADDRESS_LENGTH = 300
@@ -38,7 +36,7 @@ const MESSAGES = {
  * @returns {object} the result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
  */
-function go(payload) {
+export default function profileDetailsValidator(payload) {
   const schema = Joi.object().keys({
     name: Joi.string().max(100).allow('').messages(MESSAGES.name),
     jobTitle: Joi.string().max(100).allow('').messages(MESSAGES.jobTitle),
@@ -48,8 +46,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * @module RecipientsFormatter
  */
 
-const crypto = require('node:crypto')
+import crypto from 'node:crypto'
 
-const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
-const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const { compareStrings } = require('../../../app/lib/general.lib.js')
+import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
+import LicenceEntityRoleModel from '../../../app/models/licence-entity-role.model.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import { compareStrings } from '../../../app/lib/general.lib.js'
 
 /**
  * Returns an "Additional contact" recipient
@@ -19,7 +17,7 @@ const { compareStrings } = require('../../../app/lib/general.lib.js')
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function additionalContact(licenceSeedData, additionalContact) {
+export async function additionalContact(licenceSeedData, additionalContact) {
   const { email } = additionalContact.contact
 
   return {
@@ -44,7 +42,7 @@ async function additionalContact(licenceSeedData, additionalContact) {
  *
  * @param {object} recipient - The recipient created by these seeders
  */
-async function clean(recipient) {
+export async function clean(recipient) {
   if (typeof recipient.clean === 'function') {
     await recipient.clean()
   }
@@ -71,7 +69,7 @@ async function clean(recipient) {
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function licenceHolder(licenceSeedData, licenceHolderSeedData) {
+export async function licenceHolder(licenceSeedData, licenceHolderSeedData) {
   const contact = {
     address1: licenceHolderSeedData.address.address1,
     address2: licenceHolderSeedData.address.address2,
@@ -111,7 +109,7 @@ async function licenceHolder(licenceSeedData, licenceHolderSeedData) {
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function primaryUser(licenceSeedData, primaryUserSeedData) {
+export async function primaryUser(licenceSeedData, primaryUserSeedData) {
   const { name: email } = primaryUserSeedData.individualEntity
 
   return {
@@ -146,7 +144,7 @@ async function primaryUser(licenceSeedData, primaryUserSeedData) {
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function returnsUser(licenceSeedData, returnsUserSeedData) {
+export async function returnsUser(licenceSeedData, returnsUserSeedData) {
   const { name: email } = returnsUserSeedData.individualEntity
 
   return {
@@ -175,7 +173,7 @@ async function returnsUser(licenceSeedData, returnsUserSeedData) {
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function returnsTo(licenceSeedData, returnsToHolderSeedData) {
+export async function returnsTo(licenceSeedData, returnsToHolderSeedData) {
   const contact = {
     address1: returnsToHolderSeedData.address.address1,
     address2: returnsToHolderSeedData.address.address2,
@@ -213,7 +211,7 @@ async function returnsTo(licenceSeedData, returnsToHolderSeedData) {
  *
  * @returns {object} The transformed downloading result object
  */
-function transformToDownloadingResult(recipient, returnLog) {
+export function transformToDownloadingResult(recipient, returnLog) {
   return {
     contact: recipient.contact,
     contact_hash_id: recipient.contactHashId,
@@ -245,7 +243,7 @@ function transformToDownloadingResult(recipient, returnLog) {
  *
  * @returns {object} The transformed sending result object
  */
-function transformToSendingResult(recipient) {
+export function transformToSendingResult(recipient) {
   const uniqueSortedRefs = [...new Set(recipient.licenceRefs)].sort((referenceString, compareString) => {
     return compareStrings(referenceString, compareString)
   })
@@ -286,15 +284,4 @@ function _contactHashId(contact) {
 
 function _emailHashId(email) {
   return crypto.createHash('md5').update(email.toLowerCase()).digest('hex')
-}
-
-module.exports = {
-  clean,
-  additionalContact,
-  licenceHolder,
-  primaryUser,
-  returnsUser,
-  returnsTo,
-  transformToDownloadingResult,
-  transformToSendingResult
 }

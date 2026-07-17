@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view licence set up tab
  * @module ViewSetUpService
  */
 
-const FetchAgreementsService = require('./fetch-agreements.service.js')
-const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
-const FetchReturnVersionsService = require('./fetch-return-versions.service.js')
-const FetchWorkflowsService = require('./fetch-workflows.service.js')
-const SetUpPresenter = require('../../presenters/licences/set-up.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import FetchAgreementsService from './fetch-agreements.service.js'
+import FetchChargeVersionsService from './fetch-charge-versions.service.js'
+import FetchLicenceService from './fetch-licence.service.js'
+import FetchReturnVersionsService from './fetch-return-versions.service.js'
+import FetchWorkflowsService from './fetch-workflows.service.js'
+import SetUpPresenter from '../../presenters/licences/set-up.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence set up page
@@ -21,23 +19,19 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence set up template.
  */
-async function go(licenceId, auth) {
-  const licence = await FetchLicenceService.go(licenceId)
+export default async function viewSetUpService(licenceId, auth) {
+  const licence = await FetchLicenceService(licenceId)
 
-  const agreements = await FetchAgreementsService.go(licence.licenceRef)
-  const chargeVersions = await FetchChargeVersionsService.go(licenceId)
-  const workflows = await FetchWorkflowsService.go(licenceId)
-  const returnVersions = await FetchReturnVersionsService.go(licenceId)
+  const agreements = await FetchAgreementsService(licence.licenceRef)
+  const chargeVersions = await FetchChargeVersionsService(licenceId)
+  const workflows = await FetchWorkflowsService(licenceId)
+  const returnVersions = await FetchReturnVersionsService(licenceId)
 
-  const pageData = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
+  const pageData = SetUpPresenter(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
   return {
     ...pageData,
     activeSecondaryNav: 'set-up',
     roles: userRoles(auth)
   }
-}
-
-module.exports = {
-  go
 }

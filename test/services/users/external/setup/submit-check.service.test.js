@@ -1,21 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Things we need to stub
-const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const UnregisterLicencesDal = require('../../../../../app/dal/users/external/setup/unregister-licences.dal.js')
+import * as DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as UnregisterLicencesDal from '../../../../../app/dal/users/external/setup/unregister-licences.dal.js'
 
 // Thing under test
-const SubmitCheckService = require('../../../../../app/services/users/external/setup/submit-check.service.js')
+import SubmitCheckService from '../../../../../app/services/users/external/setup/submit-check.service.js'
 
 describe('Users - External - Setup - Submit Check Service', () => {
   let auth
@@ -29,28 +27,28 @@ describe('Users - External - Setup - Submit Check Service', () => {
     sessionData = UserSessionsFixture.unregistrationSession()
     sessionData.allLicences = true
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
-    Sinon.stub(UnregisterLicencesDal, 'go').resolves()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+    vi.spyOn(UnregisterLicencesDal, 'default').mockResolvedValue()
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('deletes the session record', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      await SubmitCheckService(session.id, yarStub, auth)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     it('returns the redirect URL', async () => {
-      const result = await SubmitCheckService.go(session.id, yarStub, auth)
+      const result = await SubmitCheckService(session.id, yarStub, auth)
 
       expect(result).toEqual({
         redirectUrl: `/system/users/external/${session.user.id}/licences?back=${session.activeNavBar}`
@@ -58,15 +56,15 @@ describe('Users - External - Setup - Submit Check Service', () => {
     })
 
     it('unregisters the selected licences', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      await SubmitCheckService(session.id, yarStub, auth)
 
-      expect(UnregisterLicencesDal.go.calledWith(session, auth.credentials.user)).toBe(true)
+      expect(UnregisterLicencesDal.default).toHaveBeenCalledWith(session, auth.credentials.user)
     })
 
     it('sets a notification', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      await SubmitCheckService(session.id, yarStub, auth)
 
-      const [flashType, notificationData] = yarStub.flash.args[0]
+      const [flashType, notificationData] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(notificationData).toEqual({

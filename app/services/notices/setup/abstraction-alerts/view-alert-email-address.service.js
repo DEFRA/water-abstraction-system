@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
  * @module ViewAlertEmailAddressService
  */
 
-const AlertEmailAddressPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import AlertEmailAddressPresenter from '../../../../presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
@@ -17,17 +15,13 @@ const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, auth) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewAlertEmailAddressService(sessionId, auth) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = AlertEmailAddressPresenter.go(session, auth)
+  const pageData = AlertEmailAddressPresenter(session, auth)
 
   return {
     activeNavBar: 'notices',
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

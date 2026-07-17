@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Format data for the `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit` page
  * @module ThresholdAndUnitPresenter
  */
 
-const { thresholdUnits } = require('../../../lib/static-lookups.lib.js')
+import { thresholdUnits } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Format data for the `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit` page
@@ -14,7 +12,7 @@ const { thresholdUnits } = require('../../../lib/static-lookups.lib.js')
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function thresholdAndUnitPresenter(session) {
   const { id: sessionId, label, unit: sessionUnit, threshold } = session
 
   return {
@@ -48,8 +46,4 @@ function _units(sessionUnit) {
       text: value
     }
   })
-}
-
-module.exports = {
-  go
 }

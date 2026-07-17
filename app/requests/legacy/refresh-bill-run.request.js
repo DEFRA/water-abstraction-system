@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the water-abstraction-service to refresh a bill run
  * @module RefreshBillRunRequest
  */
 
-const LegacyRequest = require('../legacy.request.js')
+import { postRequest } from '../legacy.request.js'
 
 /**
  * Send a request to the legacy water-abstraction-service to refresh a bill run
@@ -21,12 +19,8 @@ const LegacyRequest = require('../legacy.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(billRunId) {
+export default async function refreshBillRunRequest(billRunId) {
   const path = `billing/batches/${billRunId}/refresh`
 
-  return LegacyRequest.post('water', path)
-}
-
-module.exports = {
-  send
+  return postRequest('water', path)
 }

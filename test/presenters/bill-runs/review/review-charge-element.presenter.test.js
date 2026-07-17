@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Thing under test
-const ReviewChargeElementPresenter = require('../../../../app/presenters/bill-runs/review/review-charge-element.presenter.js')
+import ReviewChargeElementPresenter from '../../../../app/presenters/bill-runs/review/review-charge-element.presenter.js'
 
 describe('Bill Runs Review - Review Charge Element presenter', () => {
   const elementIndex = 1
@@ -17,7 +18,7 @@ describe('Bill Runs Review - Review Charge Element presenter', () => {
 
   describe('when provided with a ReviewChargeElement', () => {
     it('correctly presents the data', () => {
-      const result = ReviewChargeElementPresenter.go(reviewChargeElement, elementIndex)
+      const result = ReviewChargeElementPresenter(reviewChargeElement, elementIndex)
 
       expect(result).toEqual({
         authorisedVolume: 9.092,
@@ -54,7 +55,7 @@ describe('Bill Runs Review - Review Charge Element presenter', () => {
   describe('the "matchedReturns" property', () => {
     describe('the "purpose" property', () => {
       it("returns the matched return's tertiary purpose description", () => {
-        const result = ReviewChargeElementPresenter.go(reviewChargeElement, elementIndex)
+        const result = ReviewChargeElementPresenter(reviewChargeElement, elementIndex)
 
         expect(result.matchedReturns[0].purpose).toEqual('Spray Irrigation - Direct')
       })

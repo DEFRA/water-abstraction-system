@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view licence communications tab
  * @module ViewCommunicationsService
  */
 
-const CommunicationsPresenter = require('../../presenters/licences/communications.presenter.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
-const FetchNotificationsDal = require('../../dal/licences/fetch-notifications.dal.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import CommunicationsPresenter from '../../presenters/licences/communications.presenter.js'
+import FetchLicenceService from './fetch-licence.service.js'
+import FetchNotificationsDal from '../../dal/licences/fetch-notifications.dal.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence communications page
@@ -20,14 +18,14 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence communication template.
  */
-async function go(licenceId, auth, page) {
-  const licence = await FetchLicenceService.go(licenceId)
+export default async function viewCommunicationsService(licenceId, auth, page) {
+  const licence = await FetchLicenceService(licenceId)
 
-  const { notifications, totalNumber } = await FetchNotificationsDal.go(licence.licenceRef, page)
+  const { notifications, totalNumber } = await FetchNotificationsDal(licence.licenceRef, page)
 
-  const pageData = CommunicationsPresenter.go(notifications, licence)
+  const pageData = CommunicationsPresenter(notifications, licence)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/licences/${licenceId}/communications`,
@@ -41,8 +39,4 @@ async function go(licenceId, auth, page) {
     pagination,
     roles: userRoles(auth)
   }
-}
-
-module.exports = {
-  go
 }

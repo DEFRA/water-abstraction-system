@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const SessionHelper = require('../support/helpers/session.helper.js')
+import SessionHelper from '../support/helpers/session.helper.js'
 
 // Thing under test
-const SessionModel = require('../../app/models/session.model.js')
+import SessionModel from '../../app/models/session.model.js'
 
 describe('Session model', () => {
   let testRecord

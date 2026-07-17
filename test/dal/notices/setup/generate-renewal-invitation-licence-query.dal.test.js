@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const { db } = require('../../../../db/db.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import { db } from '../../../../db/db.js'
 
 // Thing under test
-const GenerateRenewalInvitationLicenceQueryDal = require('../../../../app/dal/notices/setup/generate-renewal-invitation-licence-query.dal.js')
+import GenerateRenewalInvitationLicenceQueryDal from '../../../../app/dal/notices/setup/generate-renewal-invitation-licence-query.dal.js'
 
 describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () => {
   let licence
@@ -20,7 +21,7 @@ describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () =
 
   describe('when called', () => {
     it('returns the expected query and bindings', () => {
-      const result = GenerateRenewalInvitationLicenceQueryDal.go(licence.licenceRef)
+      const result = GenerateRenewalInvitationLicenceQueryDal(licence.licenceRef)
 
       expect(result).toEqual({
         bindings: [licence.licenceRef],
@@ -31,7 +32,7 @@ describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () =
 
   describe('when executed', () => {
     it('returns the expected licence', async () => {
-      const { bindings, query } = GenerateRenewalInvitationLicenceQueryDal.go(licence.licenceRef)
+      const { bindings, query } = GenerateRenewalInvitationLicenceQueryDal(licence.licenceRef)
       const { rows } = await db.raw(query, bindings)
 
       expect(rows).toEqual([{ licence_ref: licence.licenceRef }])

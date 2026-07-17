@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const AbstractionAlertsValidator = require('../../../../app/validators/company-contacts/setup/abstraction-alerts.validator.js')
+import AbstractionAlertsValidator from '../../../../app/validators/company-contacts/setup/abstraction-alerts.validator.js'
 
 describe('Company Contacts - Setup - Abstraction Alerts Validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = AbstractionAlertsValidator.go(payload)
+      const result = AbstractionAlertsValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +27,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = AbstractionAlertsValidator.go(payload)
+        const result = AbstractionAlertsValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

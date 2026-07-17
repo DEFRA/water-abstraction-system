@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RecipientScenariosSeeder = require('../../../support/seeders/recipient-scenarios.seeder.js')
+import * as RecipientScenariosSeeder from '../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
-const FetchRenewalRecipients = require('../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js')
+import FetchRenewalRecipients from '../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js'
 
 describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => {
   let expiredDate
@@ -24,7 +25,7 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
 
   describe('when there are renewal invitations to send', () => {
     it('fetches the correct recipient data', async () => {
-      const result = await FetchRenewalRecipients.go(new Date('2027-02-09'))
+      const result = await FetchRenewalRecipients(new Date('2027-02-09'))
 
       const expectedResults = _transformToResult(scenarios.licenceHolder)
 

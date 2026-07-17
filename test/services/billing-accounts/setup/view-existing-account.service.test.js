@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchExistingCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchExistingCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewExistingAccountService = require('../../../../app/services/billing-accounts/setup/view-existing-account.service.js')
+import ViewExistingAccountService from '../../../../app/services/billing-accounts/setup/view-existing-account.service.js'
 
 describe('Billing Accounts - Setup - View Existing Account service', () => {
   const fetchResults = _companies()
@@ -27,20 +25,20 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
       searchInput: 'Company Name'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    Sinon.stub(FetchExistingCompaniesService, 'go').returns(fetchResults)
+    vi.spyOn(FetchExistingCompaniesService, 'default').mockReturnValue(fetchResults)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewExistingAccountService.go(session.id)
+      const result = await ViewExistingAccountService(session.id)
 
       expect(result).toEqual({
         backLink: {

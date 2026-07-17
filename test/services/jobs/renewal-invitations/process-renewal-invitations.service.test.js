@@ -1,14 +1,12 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const SendRenewalInvitations = require('../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js')
+import * as SendRenewalInvitations from '../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ProcessRenewalInvitationsService = require('../../../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js')
+import ProcessRenewalInvitationsService from '../../../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js'
 
 describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () => {
   const days = '300'
@@ -16,32 +14,32 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
   let notifierStub
 
   beforeEach(() => {
-    Sinon.stub(SendRenewalInvitations, 'go').resolves(['mock invitation'])
+    vi.spyOn(SendRenewalInvitations, 'default').mockResolvedValue(['mock invitation'])
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   it('calls the "SendRenewalInvitations"', async () => {
-    await ProcessRenewalInvitationsService.go(days)
+    await ProcessRenewalInvitationsService(days)
 
-    expect(SendRenewalInvitations.go.calledWith(days)).toBe(true)
+    expect(SendRenewalInvitations.default).toHaveBeenCalledWith(days)
   })
 
   it('logs the time taken in milliseconds and seconds', async () => {
-    await ProcessRenewalInvitationsService.go(days)
+    await ProcessRenewalInvitationsService(days)
 
-    const logDataArg = notifierStub.omg.firstCall.args[1]
+    const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-    expect(notifierStub.omg.calledWith('Renewals invitation status job complete')).toBe(true)
+    expect(notifierStub.omg).toHaveBeenCalledWith('Renewals invitation status job complete', expect.any(Object))
     expect(logDataArg.timeTakenMs).toBeDefined()
     expect(logDataArg.timeTakenSs).toBeDefined()
     expect(logDataArg.count).toEqual(1)

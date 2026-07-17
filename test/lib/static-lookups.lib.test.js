@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Thing under test
-const StaticLookups = require('../../app/lib/static-lookups.lib.js')
+import * as StaticLookups from '../../app/lib/static-lookups.lib.js'
 
 describe('Static Lookups', () => {
   describe('#NoticeJourney', () => {

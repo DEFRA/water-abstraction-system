@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Sends a request to the address facade for the provided uprn
  * @module LookupUPRNRequest
  */
 
-const AddressFacadeRequest = require('../address-facade.request.js')
+import { getRequest } from '../address-facade.request.js'
 
 /**
  * Sends a request to the address facade for the provided uprn
@@ -14,12 +12,8 @@ const AddressFacadeRequest = require('../address-facade.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(uprn) {
+export default async function lookupUprnRequest(uprn) {
   const path = `address-service/v1/addresses/${uprn}?key=client1`
 
-  return AddressFacadeRequest.get(path)
-}
-
-module.exports = {
-  send
+  return getRequest(path)
 }

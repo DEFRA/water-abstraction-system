@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates creating a new notice and notifications for renewal invitation emails that failed
  *
  * @module CreateAlternateRenewalNoticeService
  */
 
-const CreateNotificationsService = require('./create-notifications.service.js')
-const EventModel = require('../../../models/event.model.js')
-const FetchAlternateRenewalRecipientsService = require('./renewal-notice/fetch-alternate-renewal-recipients.service.js')
-const { generateNoticeReferenceCode, timestampForPostgres } = require('../../../lib/general.lib.js')
-const { NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+import CreateNotificationsService from './create-notifications.service.js'
+import EventModel from '../../../models/event.model.js'
+import FetchAlternateRenewalRecipientsService from './renewal-notice/fetch-alternate-renewal-recipients.service.js'
+import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
+import { generateNoticeReferenceCode, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates creating a new notice and notifications for renewal invitation emails that failed
@@ -22,8 +20,8 @@ const { NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object>} The created alternate notice and notifications
  */
-async function go(notice, licenceRefs, expiryDate, renewalDate) {
-  const recipients = await FetchAlternateRenewalRecipientsService.go(licenceRefs)
+export default async function createAlternateRenewalNoticeService(notice, licenceRefs, expiryDate, renewalDate) {
+  const recipients = await FetchAlternateRenewalRecipientsService(licenceRefs)
   const alternateNotice = await _notice(notice, recipients, licenceRefs)
   const notifications = await _notifications(alternateNotice, recipients, expiryDate, renewalDate)
 
@@ -63,9 +61,5 @@ async function _notifications(notice, recipients, expiryDate, renewalDate) {
     renewalDate
   }
 
-  return CreateNotificationsService.go(noticeData, recipients, noticeId)
-}
-
-module.exports = {
-  go
+  return CreateNotificationsService(noticeData, recipients, noticeId)
 }

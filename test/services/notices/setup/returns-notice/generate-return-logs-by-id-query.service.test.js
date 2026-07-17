@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { db } = require('../../../../../db/db.js')
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import { db } from '../../../../../db/db.js'
 
 // Thing under test
-const GenerateReturnLogsByIdQueryService = require('../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-id-query.service.js')
+import GenerateReturnLogsByIdQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-id-query.service.js'
 
 describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Service', () => {
   let returnLogIds
@@ -45,7 +46,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
 
   describe('when called', () => {
     it('returns the expected query and bindings', () => {
-      const result = GenerateReturnLogsByIdQueryService.go(returnLogIds)
+      const result = GenerateReturnLogsByIdQueryService(returnLogIds)
 
       expect(result).toEqual({
         bindings: [returnLogIds],
@@ -69,7 +70,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
 
   describe('when executed', () => {
     it('returns the expected return logs', async () => {
-      const { bindings, query } = GenerateReturnLogsByIdQueryService.go(returnLogIds)
+      const { bindings, query } = GenerateReturnLogsByIdQueryService(returnLogIds)
       const { rows } = await db.raw(query, bindings)
 
       expect(rows).toEqual([

@@ -1,12 +1,9 @@
-'use strict'
-
 /**
  * @module LicenceDocumentHeaderHelper
  */
 
-const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('./licence.helper.js')
-const LicenceDocumentHeaderModel = require('../../../app/models/licence-document-header.model.js')
+import LicenceDocumentHeaderModel from '../../../app/models/licence-document-header.model.js'
+import { generateLicenceRef, generateRandomInteger, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence document header
@@ -93,7 +90,7 @@ function _metadata() {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

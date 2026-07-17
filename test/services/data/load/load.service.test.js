@@ -1,17 +1,18 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const ChargeReferenceModel = require('../../../../app/models/charge-reference.model.js')
-const { db } = require('../../../../db/db.js')
-const ExpandedError = require('../../../../app/errors/expanded.error.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceModel = require('../../../../app/models/licence.model.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
+import ChargeReferenceModel from '../../../../app/models/charge-reference.model.js'
+import ExpandedError from '../../../../app/errors/expanded.error.js'
+import LicenceModel from '../../../../app/models/licence.model.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import { db } from '../../../../db/db.js'
+import { generateLicenceRef } from '../../../support/generators.js'
 
 // Thing under test
-const LoadService = require('../../../../app/services/data/load/load.service.js')
+import LoadService from '../../../../app/services/data/load/load.service.js'
 
 describe('Load service', () => {
   let licenceRef
@@ -19,7 +20,7 @@ describe('Load service', () => {
   let region
 
   beforeEach(() => {
-    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceRef = generateLicenceRef()
     region = RegionHelper.select()
   })
 
@@ -50,7 +51,7 @@ describe('Load service', () => {
       })
 
       it('loads the entities into the DB', async () => {
-        const { billRuns, licences } = await LoadService.go(payload)
+        const { billRuns, licences } = await LoadService(payload)
 
         const licence = await LicenceModel.query().findById(licences[0])
 
@@ -63,7 +64,7 @@ describe('Load service', () => {
       })
 
       it('returns the generated and used IDs for the entities', async () => {
-        const result = await LoadService.go(payload)
+        const result = await LoadService(payload)
 
         expect(result.licences).toBeDefined()
         expect(result.licences).not.toHaveLength(0)
@@ -97,7 +98,7 @@ describe('Load service', () => {
         })
 
         it('transforms the lookup into the queried value', async () => {
-          await LoadService.go(payload)
+          await LoadService(payload)
 
           const chargeReference = await ChargeReferenceModel.query().findById('fa3c73d0-0459-41f0-b6cf-0e0758775ca4')
 
@@ -107,7 +108,7 @@ describe('Load service', () => {
 
       describe('that includes an entity with an "is_test" field', () => {
         it('sets the "is_test" flag on the entity instance as part of loading it', async () => {
-          const result = await LoadService.go(payload)
+          const result = await LoadService(payload)
 
           const licence = await db('licences')
             .withSchema('water')
@@ -125,7 +126,7 @@ describe('Load service', () => {
       })
 
       it('throws an exception', async () => {
-        const result = await LoadService.go(payload).catch((e) => {
+        const result = await LoadService(payload).catch((e) => {
           return e
         })
 
@@ -136,7 +137,7 @@ describe('Load service', () => {
 
     describe('with an empty payload', () => {
       it('returns an empty result', async () => {
-        const result = await LoadService.go(null)
+        const result = await LoadService(null)
 
         expect(result).toEqual({})
       })

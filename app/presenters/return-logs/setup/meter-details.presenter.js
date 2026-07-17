@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Format data for the `/return-log/setup/{sessionId}/meter-details` page
  * @module MeterDetailsPresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function meterDetailsPresenter(session) {
   const { id: sessionId, returnReference, meterMake, meterSerialNumber, meter10TimesDisplay } = session
 
   return {
@@ -24,8 +22,4 @@ function go(session) {
     pageTitleCaption: `Return reference ${returnReference}`,
     sessionId
   }
-}
-
-module.exports = {
-  go
 }

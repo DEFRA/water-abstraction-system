@@ -1,22 +1,20 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const ReturnVersionModel = require('../../../app/models/return-version.model.js')
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import ReturnVersionModel from '../../../app/models/return-version.model.js'
+import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
-const FetchChargeVersionsService = require('../../../app/services/licences/fetch-charge-versions.service.js')
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
-const FetchReturnVersionsService = require('../../../app/services/licences/fetch-return-versions.service.js')
-const FetchWorkflowsService = require('../../../app/services/licences/fetch-workflows.service.js')
+import * as FetchAgreementsService from '../../../app/services/licences/fetch-agreements.service.js'
+import * as FetchChargeVersionsService from '../../../app/services/licences/fetch-charge-versions.service.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchReturnVersionsService from '../../../app/services/licences/fetch-return-versions.service.js'
+import * as FetchWorkflowsService from '../../../app/services/licences/fetch-workflows.service.js'
 
 // Thing under test
-const ViewSetUpService = require('../../../app/services/licences/view-set-up.service.js')
+import ViewSetUpService from '../../../app/services/licences/view-set-up.service.js'
 
 describe('Licences - View Set Up service', () => {
   let agreement
@@ -86,24 +84,24 @@ describe('Licences - View Set Up service', () => {
       licenceId: licence.id
     }
 
-    Sinon.stub(FetchAgreementsService, 'go').returns([agreement])
+    vi.spyOn(FetchAgreementsService, 'default').mockReturnValue([agreement])
 
-    Sinon.stub(FetchChargeVersionsService, 'go').returns([chargeVersion])
+    vi.spyOn(FetchChargeVersionsService, 'default').mockReturnValue([chargeVersion])
 
-    Sinon.stub(FetchReturnVersionsService, 'go').returns([returnVersion])
+    vi.spyOn(FetchReturnVersionsService, 'default').mockReturnValue([returnVersion])
 
-    Sinon.stub(FetchWorkflowsService, 'go').returns([workflow])
+    vi.spyOn(FetchWorkflowsService, 'default').mockReturnValue([workflow])
 
-    Sinon.stub(FetchLicenceService, 'go').resolves(licence)
+    vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licence)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewSetUpService.go(licence.id, auth)
+      const result = await ViewSetUpService(licence.id, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'set-up',

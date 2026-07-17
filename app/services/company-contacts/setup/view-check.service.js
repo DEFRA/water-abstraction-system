@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/check' page
  *
  * @module ViewCheckService
  */
 
-const CheckPresenter = require('../../../presenters/company-contacts/setup/check.presenter.js')
-const FetchCompanyContactsDal = require('../../../dal/company-contacts/setup/fetch-company-contacts.dal.js')
-const FetchNotificationService = require('../fetch-notification.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
-const { readFlashNotification } = require('../../../lib/general.lib.js')
+import CheckPresenter from '../../../presenters/company-contacts/setup/check.presenter.js'
+import FetchCompanyContactsDal from '../../../dal/company-contacts/setup/fetch-company-contacts.dal.js'
+import FetchNotificationService from '../fetch-notification.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { markCheckPageVisited } from '../../../lib/check-page.lib.js'
+import { readFlashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/check' page
@@ -21,16 +19,16 @@ const { readFlashNotification } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewCheckService(sessionId, yar) {
+  const session = await FetchSessionDal(sessionId)
 
-  const companyContacts = await FetchCompanyContactsDal.go(session.company.id, session.companyContact)
+  const companyContacts = await FetchCompanyContactsDal(session.company.id, session.companyContact)
 
-  const sentNotification = await FetchNotificationService.go(session.email)
+  const sentNotification = await FetchNotificationService(session.email)
 
   await markCheckPageVisited(session)
 
-  const pageData = CheckPresenter.go(session, companyContacts, sentNotification)
+  const pageData = CheckPresenter(session, companyContacts, sentNotification)
 
   const notification = readFlashNotification(yar)
 
@@ -47,8 +45,4 @@ async function _save(session, matchingContact) {
     session.matchingContact = matchingContact
     await session.$update()
   }
-}
-
-module.exports = {
-  go
 }

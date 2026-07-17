@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for minimum charge transaction for the bill-licence page
  * @module ViewMinimumChargeTransactionPresenter
  */
 
-const { formatMoney } = require('../base.presenter.js')
+import { formatMoney } from '../base.presenter.js'
 
 /**
  * Formats data for minimum charge transaction for the bill-licence page
@@ -15,7 +13,7 @@ const { formatMoney } = require('../base.presenter.js')
  *
  * @returns {object} a formatted representation of the transaction specifically for the bill-licence page
  */
-function go(transaction) {
+export default function viewMinimumChargeTransactionPresenter(transaction) {
   const { chargeType, credit, netAmount } = transaction
 
   return {
@@ -26,8 +24,4 @@ function go(transaction) {
     description: 'Minimum charge',
     quantity: ''
   }
-}
-
-module.exports = {
-  go
 }

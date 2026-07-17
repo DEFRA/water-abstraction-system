@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const FetchPointsService = require('../../../../../app/services/return-versions/setup/fetch-points.service.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
+import * as FetchPointsService from '../../../../../app/services/return-versions/setup/fetch-points.service.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const CheckService = require('../../../../../app/services/return-versions/setup/check/check.service.js')
+import CheckService from '../../../../../app/services/return-versions/setup/check/check.service.js'
 
 describe('Return Versions - Setup - Check service', () => {
   let session
@@ -20,7 +18,7 @@ describe('Return Versions - Setup - Check service', () => {
   let yarStub
 
   beforeEach(() => {
-    Sinon.stub(FetchPointsService, 'go').resolves([])
+    vi.spyOn(FetchPointsService, 'default').mockResolvedValue([])
 
     sessionData = {
       checkPageVisited: false,
@@ -62,27 +60,27 @@ describe('Return Versions - Setup - Check service', () => {
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await CheckService.go(session.id, yarStub)
+      const result = await CheckService(session.id, yarStub)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await CheckService.go(session.id, yarStub)
+      const result = await CheckService(session.id, yarStub)
 
       expect(result).toMatchObject({
         licenceRef: '01/ABC',
@@ -110,10 +108,10 @@ describe('Return Versions - Setup - Check service', () => {
     })
 
     it('updates the session record to indicate user has visited the "check" page', async () => {
-      await CheckService.go(session.id, yarStub)
+      await CheckService(session.id, yarStub)
 
       expect(session.checkPageVisited).toBe(true)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
   })
 })

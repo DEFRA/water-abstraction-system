@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const ContactsPresenter = require('../../../app/presenters/companies/contacts.presenter.js')
+import ContactsPresenter from '../../../app/presenters/companies/contacts.presenter.js'
 
 describe('Companies - Contacts presenter', () => {
   let company
@@ -25,7 +26,7 @@ describe('Companies - Contacts presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactsPresenter.go(company, contacts)
+      const result = ContactsPresenter(company, contacts)
 
       expect(result).toEqual({
         backLink: {
@@ -60,7 +61,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -84,7 +85,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -108,7 +109,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -132,7 +133,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -156,7 +157,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -180,7 +181,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -204,7 +205,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -228,7 +229,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {

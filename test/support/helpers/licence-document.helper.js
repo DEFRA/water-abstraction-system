@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module LicenceDocumentHelper
  */
 
-const { generateLicenceRef } = require('./licence.helper.js')
-const LicenceDocumentModel = require('../../../app/models/licence-document.model.js')
+import LicenceDocumentModel from '../../../app/models/licence-document.model.js'
+import { generateLicenceRef } from '../generators.js'
 
 /**
  * Add a new licence document
@@ -49,7 +47,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

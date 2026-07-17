@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Handles fetching and displaying data for display on the /search page
  * @module ViewSearchService
  */
 
-const FindAllSearchMatchesService = require('./find-all-search-matches.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const SearchPresenter = require('../../presenters/search/search.presenter.js')
+import FindAllSearchMatchesService from './find-all-search-matches.service.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import SearchPresenter from '../../presenters/search/search.presenter.js'
 
 /**
  * Handles fetching and displaying data for display on the /search page
@@ -18,7 +16,7 @@ const SearchPresenter = require('../../presenters/search/search.presenter.js')
  *
  * @returns {Promise<object>} The view data for the search page
  */
-async function go(auth, yar, page) {
+export default async function viewSearchService(auth, yar, page) {
   const userScopes = auth.credentials.scope
 
   // Requests sent to the /search page might be either to just show the search page or to view search results, so we
@@ -45,7 +43,7 @@ async function go(auth, yar, page) {
 }
 
 async function _blankPage(userScopes) {
-  const formattedData = SearchPresenter.go(userScopes)
+  const formattedData = SearchPresenter(userScopes)
 
   return {
     ...formattedData
@@ -53,20 +51,16 @@ async function _blankPage(userScopes) {
 }
 
 async function _pageOfResults(userScopes, searchQuery, resultType, pageNumber) {
-  const allSearchMatches = await FindAllSearchMatchesService.go(searchQuery, resultType, pageNumber, userScopes)
+  const allSearchMatches = await FindAllSearchMatchesService(searchQuery, resultType, pageNumber, userScopes)
 
   const { results, total } = allSearchMatches
 
-  const pagination = PaginatorPresenter.go(total, pageNumber, `/system/search`, results.length, 'matches')
+  const pagination = PaginatorPresenter(total, pageNumber, `/system/search`, results.length, 'matches')
 
-  const formattedData = SearchPresenter.go(userScopes, searchQuery, resultType, pageNumber, allSearchMatches)
+  const formattedData = SearchPresenter(userScopes, searchQuery, resultType, pageNumber, allSearchMatches)
 
   return {
     ...formattedData,
     pagination
   }
-}
-
-module.exports = {
-  go
 }

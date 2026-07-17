@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/licence-monitoring-station/setup/{sessionId}/licence-number` page
  *
  * @module LicenceNumberValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { isFalse } = require('../../helpers/is-false.validator.js')
+import { isFalse } from '../../helpers/is-false.validator.js'
 
 const ENTER_A_LICENCE_NUMBER_ERROR = 'Enter a licence number'
 
@@ -21,7 +19,7 @@ const ENTER_A_LICENCE_NUMBER_ERROR = 'Enter a licence number'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, licence) {
+export default function licenceNumberValidator(payload, licence) {
   const licenceExists = !!licence
   const licenceHasEnded = licence?.$ended() ?? false
 
@@ -40,8 +38,4 @@ function go(payload, licence) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

@@ -1,19 +1,20 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
-const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
-const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
-const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
+import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import ReviewChargeElementHelper from '../../../support/helpers/review-charge-element.helper.js'
+import ReviewChargeElementReturnHelper from '../../../support/helpers/review-charge-element-return.helper.js'
+import ReviewChargeReferenceHelper from '../../../support/helpers/review-charge-reference.helper.js'
+import ReviewChargeVersionHelper from '../../../support/helpers/review-charge-version.helper.js'
+import ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
+import ReviewReturnHelper from '../../../support/helpers/review-return.helper.js'
 
 // Thing under test
-const FetchReviewChargeElementService = require('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
+import FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
 
 describe('Bill Runs Review - Fetch Review Charge Element service', () => {
   let billRun
@@ -63,7 +64,7 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
 
   describe('when a matching review charge element exists', () => {
     it('returns the match', async () => {
-      const result = await FetchReviewChargeElementService.go(reviewChargeElement.id)
+      const result = await FetchReviewChargeElementService(reviewChargeElement.id)
 
       expect(result).toEqual({
         id: reviewChargeElement.id,
@@ -138,7 +139,7 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
 
   describe('when no matching review charge element exists', () => {
     it('returns nothing', async () => {
-      const result = await FetchReviewChargeElementService.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchReviewChargeElementService('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result).toBeUndefined()
     })

@@ -1,6 +1,4 @@
-'use strict'
-
-const data = [
+export const data = [
   {
     id: 'dd2d2c0f-e71b-478b-b512-e1ae3c0d723b',
     description: 'GROUND WATER SOURCE OF SUPPLY',
@@ -210,7 +208,3 @@ const data = [
     legacyId: 'EAW SW'
   }
 ]
-
-module.exports = {
-  data
-}

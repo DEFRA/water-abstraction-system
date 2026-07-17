@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches a licence's abstraction data in order to generate new return requirements
  * @module FetchAbstractionDataService
  */
 
-const LicenceModel = require('../../../../models/licence.model.js')
+import LicenceModel from '../../../../models/licence.model.js'
 
 /**
  * Fetches a licence's abstraction data in order to generate new return requirements
@@ -18,7 +16,7 @@ const LicenceModel = require('../../../../models/licence.model.js')
  * @returns {Promise<module:LicenceModel>} the matching licence model instance with abstraction data related properties
  * populated
  */
-async function go(licenceId, licenceVersionId) {
+export default async function fetchAbstractionDataService(licenceId, licenceVersionId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select(['licences.id', 'licences.licenceRef', 'licences.waterUndertaker'])
@@ -48,8 +46,4 @@ async function go(licenceId, licenceVersionId) {
             })
         })
     })
-}
-
-module.exports = {
-  go
 }

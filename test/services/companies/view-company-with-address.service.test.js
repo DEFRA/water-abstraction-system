@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-const FetchAddressDal = require('../../../app/dal/companies/fetch-address.dal.js')
-const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
+import * as FetchAddressDal from '../../../app/dal/companies/fetch-address.dal.js'
+import * as FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-const ViewCompanyWithAddressService = require('../../../app/services/companies/view-company-with-address.service.js')
+import ViewCompanyWithAddressService from '../../../app/services/companies/view-company-with-address.service.js'
 
 describe('Companies - View Company With Address Service', () => {
   const licenceId = 'fbf2df24-ac78-4ee2-b5bb-eb7f9cf6b59a'
@@ -24,12 +22,12 @@ describe('Companies - View Company With Address Service', () => {
     company = CustomersFixtures.company()
     address = CustomersFixtures.companyAddress().address
 
-    Sinon.stub(FetchCompanyDal, 'go').returns(company)
-    Sinon.stub(FetchAddressDal, 'go').returns(address)
+    vi.spyOn(FetchCompanyDal, 'default').mockReturnValue(company)
+    vi.spyOn(FetchAddressDal, 'default').mockReturnValue(address)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -39,7 +37,7 @@ describe('Companies - View Company With Address Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewCompanyWithAddressService.go(company.id, address.id, role, licenceId)
+        const result = await ViewCompanyWithAddressService(company.id, address.id, role, licenceId)
 
         expect(result).toEqual({
           backLink: {
@@ -71,7 +69,7 @@ describe('Companies - View Company With Address Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewCompanyWithAddressService.go(company.id, address.id, role, licenceId)
+        const result = await ViewCompanyWithAddressService(company.id, address.id, role, licenceId)
 
         expect(result).toEqual({
           backLink: {

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the matching licence monitoring station record needed for the remove licence tag page
  * @module FetchLicenceMonitoringStationService
  */
 
-const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
+import LicenceMonitoringStationModel from '../../models/licence-monitoring-station.model.js'
 
 /**
  * Fetches the matching licence monitoring station record needed for the remove licence tag page
@@ -15,7 +13,7 @@ const LicenceMonitoringStationModel = require('../../models/licence-monitoring-s
  * @returns {Promise<object>} the matching instance of the `LicenceMonitoringStationModel` populated with the data
  * needed for the remove licence tag page
  */
-async function go(licenceMonitoringStationId) {
+export default async function fetchLicenceMonitoringStationService(licenceMonitoringStationId) {
   const monitoringStationLicenceTags = await _fetchMonitoringStationLicenceTags(licenceMonitoringStationId)
 
   return monitoringStationLicenceTags
@@ -42,8 +40,4 @@ async function _fetchMonitoringStationLicenceTags(licenceMonitoringStationId) {
           licenceVersionPurposeConditionTypeBuilder.select(['displayTitle'])
         })
     })
-}
-
-module.exports = {
-  go
 }

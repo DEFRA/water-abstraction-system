@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Validates data submitted for the '/users/internal/setup/{sessionId}/email' page
  *
  * @module EmailValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { isFalse } = require('../../../helpers/is-false.validator.js')
+import { isFalse } from '../../../helpers/is-false.validator.js'
 
 /**
  * Validates data submitted for the '/users/internal/setup/{sessionId}/email' page
@@ -19,7 +17,7 @@ const { isFalse } = require('../../../helpers/is-false.validator.js')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, emailExists) {
+export default function emailValidator(payload, emailExists) {
   const schema = Joi.object({
     email: Joi.string()
       .max(100)
@@ -38,8 +36,4 @@ function go(payload, emailExists) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

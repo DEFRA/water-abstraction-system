@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/fao` page
  *
  * @module FAOService
  */
 
-const FAOPresenter = require('../../../presenters/billing-accounts/setup/fao.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import FAOPresenter from '../../../presenters/billing-accounts/setup/fao.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/fao` page
@@ -16,16 +14,12 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewFaoService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = FAOPresenter.go(session)
+  const pageData = FAOPresenter(session)
 
   return {
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

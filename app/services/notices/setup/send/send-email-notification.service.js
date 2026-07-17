@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates sending an Email notification to Notify
  * @module SendEmailNotificationService
  */
 
-const CreateEmailRequest = require('../../../../requests/notify/create-email.request.js')
-const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
+import CreateEmailRequest from '../../../../requests/notify/create-email.request.js'
+import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
 
 /**
  * Orchestrates sending an email notification to Notify
@@ -16,18 +14,14 @@ const NotifyUpdatePresenter = require('../../../../presenters/notifications/noti
  *
  * @returns {Promise<object>} a notification with the Notify response
  */
-async function go(notification, referenceCode) {
-  const notifyResult = await CreateEmailRequest.send(notification.templateId, notification.recipient, {
+export default async function sendEmailNotificationService(notification, referenceCode) {
+  const notifyResult = await CreateEmailRequest(notification.templateId, notification.recipient, {
     personalisation: notification.personalisation,
     reference: referenceCode
   })
 
   return {
-    ...NotifyUpdatePresenter.go(notifyResult),
+    ...NotifyUpdatePresenter(notifyResult),
     id: notification.id
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generates the query and bindings for selecting the return logs by period that determine which recipients to fetch
  * @module GenerateReturnLogsByPeriodQueryService
  */
 
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
+import { NoticeType } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Generates the query and bindings for selecting the return logs by period that determine which recipients to fetch
@@ -16,7 +14,7 @@ const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
  *
  * @returns {object} The query to use as the 'due_return_logs` CTE in the recipients query, and the associated bindings
  */
-function go(noticeType, licencesToExclude, returnsPeriod) {
+export default function generateReturnLogsByPeriodQueryService(noticeType, licencesToExclude, returnsPeriod) {
   const { endDate, startDate, quarterly, summer } = returnsPeriod
   const bindings = [startDate, endDate, summer, quarterly, licencesToExclude]
 
@@ -57,8 +55,4 @@ function _query(dueDateCondition) {
     AND NOT (rl.licence_ref = ANY (?))
     AND rl.due_date ${dueDateCondition}
   `
-}
-
-module.exports = {
-  go
 }

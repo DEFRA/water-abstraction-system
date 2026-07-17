@@ -1,16 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
 
 // Things we need to stub
-const ViewManageService = require('../../app/services/manage/view-manage.service.js')
+import * as ViewManageService from '../../app/services/manage/view-manage.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_OK } = http2.constants
 
 describe('Manage controller', () => {
   let server
@@ -21,16 +23,15 @@ describe('Manage controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -40,7 +41,7 @@ describe('Manage controller', () => {
   describe('/manage', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(ViewManageService, 'go').resolves({
+        vi.spyOn(ViewManageService, 'default').mockResolvedValue({
           pageTitle: 'Manage reports and notices'
         })
       })

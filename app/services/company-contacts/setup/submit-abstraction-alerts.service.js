@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
  *
  * @module SubmitAbstractionAlertsService
  */
 
-const AbstractionAlertsPresenter = require('../../../presenters/company-contacts/setup/abstraction-alerts.presenter.js')
-const AbstractionAlertsValidator = require('../../../validators/company-contacts/setup/abstraction-alerts.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import AbstractionAlertsPresenter from '../../../presenters/company-contacts/setup/abstraction-alerts.presenter.js'
+import AbstractionAlertsValidator from '../../../validators/company-contacts/setup/abstraction-alerts.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
@@ -21,8 +19,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitAbstractionAlertsService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -38,7 +36,7 @@ async function go(sessionId, payload, yar) {
 
   session.abstractionAlerts = payload.abstractionAlerts
 
-  const pageData = AbstractionAlertsPresenter.go(session)
+  const pageData = AbstractionAlertsPresenter(session)
 
   return {
     error: validationResult,
@@ -67,11 +65,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = AbstractionAlertsValidator.go(payload)
+  const validationResult = AbstractionAlertsValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

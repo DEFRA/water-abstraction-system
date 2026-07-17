@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/check' page
  *
  * @module SubmitCheckService
  */
 
-const CreateUserDal = require('../../../../dal/users/internal/create-user.dal.js')
-const CreateVerificationNotificationDal = require('../../../../dal/users/internal/create-verification-notification.dal.js')
-const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const SendVerificationEmailService = require('./send-verification-email.service.js')
-const UpdateUserDal = require('../../../../dal/users/internal/update-user.dal.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
+import CreateUserDal from '../../../../dal/users/internal/create-user.dal.js'
+import CreateVerificationNotificationDal from '../../../../dal/users/internal/create-verification-notification.dal.js'
+import DeleteSessionDal from '../../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import SendVerificationEmailService from './send-verification-email.service.js'
+import UpdateUserDal from '../../../../dal/users/internal/update-user.dal.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/check' page
@@ -23,10 +21,10 @@ const { flashNotification } = require('../../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} An object containing the URL to redirect the user to after confirming
  */
-async function go(auth, sessionId, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitCheckService(auth, sessionId, yar) {
+  const session = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   if (session.user) {
     await _updateUser(auth, session, yar)
@@ -42,17 +40,17 @@ async function go(auth, sessionId, yar) {
 async function _updateUser(auth, session, yar) {
   const { email } = session
 
-  const resetGuid = await UpdateUserDal.go(auth, session)
+  const resetGuid = await UpdateUserDal(auth, session)
 
   // A resetGuid will only exist if the users email has been updated. This can only happen if the user has not yet
   // verified their email address
   if (resetGuid) {
-    const notification = await CreateVerificationNotificationDal.go(email, resetGuid)
+    const notification = await CreateVerificationNotificationDal(email, resetGuid)
 
     flashNotification(yar, 'User updated', `We have emailed ${email} instructions to complete their account set up.`)
 
     // Intentionally not awaited — fire-and-forget with internal error handling
-    SendVerificationEmailService.go(notification)
+    SendVerificationEmailService(notification)
   } else {
     flashNotification(yar, 'User updated', `User ${email} has been updated.`)
   }
@@ -61,16 +59,12 @@ async function _updateUser(auth, session, yar) {
 async function _createUser(auth, session, yar) {
   const { email } = session
 
-  const resetGuid = await CreateUserDal.go(auth, session)
+  const resetGuid = await CreateUserDal(auth, session)
 
-  const notification = await CreateVerificationNotificationDal.go(email, resetGuid)
+  const notification = await CreateVerificationNotificationDal(email, resetGuid)
 
   flashNotification(yar, 'User added', `We have emailed ${email} instructions to complete their account set up.`)
 
   // Intentionally not awaited — fire-and-forget with internal error handling
-  SendVerificationEmailService.go(notification)
-}
-
-module.exports = {
-  go
+  SendVerificationEmailService(notification)
 }

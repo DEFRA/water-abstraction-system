@@ -1,15 +1,15 @@
-'use strict'
-
 /**
  * Model for review_charge_elements_returns
  * @module ReviewChargeElementReturnModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import ReviewChargeElementModel from './review-charge-element.model.js'
+import ReviewReturnModel from './review-return.model.js'
 
-class ReviewChargeElementReturnModel extends BaseModel {
+export default class ReviewChargeElementReturnModel extends BaseModel {
   static get tableName() {
     return 'reviewChargeElementReturns'
   }
@@ -18,7 +18,7 @@ class ReviewChargeElementReturnModel extends BaseModel {
     return {
       reviewChargeElement: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'review-charge-element.model',
+        modelClass: ReviewChargeElementModel,
         join: {
           from: 'reviewChargeElementReturns.reviewChargeElementId',
           to: 'reviewChargeElements.id'
@@ -26,7 +26,7 @@ class ReviewChargeElementReturnModel extends BaseModel {
       },
       reviewReturn: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'review-return.model',
+        modelClass: ReviewReturnModel,
         join: {
           from: 'reviewChargeElementReturns.reviewReturnId',
           to: 'reviewReturns.id'
@@ -35,5 +35,3 @@ class ReviewChargeElementReturnModel extends BaseModel {
     }
   }
 }
-
-module.exports = ReviewChargeElementReturnModel

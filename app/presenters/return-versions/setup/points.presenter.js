@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/points` page
  * @module PointsPresenter
  */
 
-const { compareStrings } = require('../../../lib/general.lib.js')
+import { compareStrings } from '../../../lib/general.lib.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/points` page
@@ -17,7 +15,7 @@ const { compareStrings } = require('../../../lib/general.lib.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, requirementIndex, points) {
+export default function pointsPresenter(session, requirementIndex, points) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
@@ -56,8 +54,4 @@ function _licencePoints(points) {
   return licencePoints.sort((first, second) => {
     return compareStrings(first.description, second.description)
   })
-}
-
-module.exports = {
-  go
 }

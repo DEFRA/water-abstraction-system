@@ -1,14 +1,12 @@
-'use strict'
-
 /**
- * Connects with the Charging Module to get customer files exported in the last `x` days
+ * Connects with the Charging Module to getRequest customer files exported in the last `x` days
  * @module ChargingModuleViewBillRunRequest
  */
 
-const ChargingModuleRequest = require('../../requests/charging-module.request.js')
+import { getRequest } from '../../requests/charging-module.request.js'
 
 /**
- * Connects with the Charging Module to get customer files exported in the last `x` days
+ * Connects with the Charging Module to getRequest customer files exported in the last `x` days
  *
  * See
  * {@link https://defra.github.io/sroc-charging-module-api-docs/#/customer/ListCustomerFiles | CHA API docs}
@@ -19,13 +17,9 @@ const ChargingModuleRequest = require('../../requests/charging-module.request.js
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(days) {
+export default async function viewCustomerFilesRequest(days) {
   const path = `v3/wrls/customer-files/${days}`
-  const result = await ChargingModuleRequest.get(path)
+  const result = await getRequest(path)
 
   return result
-}
-
-module.exports = {
-  send
 }

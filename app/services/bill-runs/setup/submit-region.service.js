@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/region` page
  * @module SubmitRegionService
  */
 
-const FetchRegionsService = require('./fetch-regions.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RegionPresenter = require('../../../presenters/bill-runs/setup/region.presenter.js')
-const RegionValidator = require('../../../validators/bill-runs/setup/region.validator.js')
+import FetchRegionsService from './fetch-regions.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RegionPresenter from '../../../presenters/bill-runs/setup/region.presenter.js'
+import RegionValidator from '../../../validators/bill-runs/setup/region.validator.js'
 
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/region` page
@@ -30,9 +28,9 @@ const RegionValidator = require('../../../validators/bill-runs/setup/region.vali
  * @returns {Promise<object>} An object with a `setupComplete:` property if there are no errors else the page data for
  * the region page including the validation error details
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
-  const regions = await FetchRegionsService.go()
+export default async function submitRegionService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
+  const regions = await FetchRegionsService()
 
   const validationResult = _validate(payload, regions)
 
@@ -43,7 +41,7 @@ async function go(sessionId, payload) {
     return { setupComplete: !session.type.startsWith('two_part') }
   }
 
-  const formattedData = RegionPresenter.go(session, regions)
+  const formattedData = RegionPresenter(session, regions)
 
   return {
     activeNavBar: 'bill-runs',
@@ -65,7 +63,7 @@ async function _save(session, payload, regions) {
 }
 
 function _validate(payload, regions) {
-  const validation = RegionValidator.go(payload, regions)
+  const validation = RegionValidator(payload, regions)
 
   if (!validation.error) {
     return null
@@ -76,8 +74,4 @@ function _validate(payload, regions) {
   return {
     text: message
   }
-}
-
-module.exports = {
-  go
 }

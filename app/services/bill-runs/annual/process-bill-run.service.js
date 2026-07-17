@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Process a given annual bill run for the given billing periods
  * @module ProcessBillRunService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const BillRunError = require('../../../errors/bill-run.error.js')
-const ChargingModuleGenerateBillRunRequest = require('../../../requests/charging-module/generate-bill-run.request.js')
-const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bill-run.request.js')
-const ProcessBillingPeriodService = require('./process-billing-period.service.js')
-const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
+import BillRunError from '../../../errors/bill-run.error.js'
+import BillRunModel from '../../../models/bill-run.model.js'
+import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
+import GenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
+import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
+import ProcessBillingPeriodService from './process-billing-period.service.js'
+import RefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Process a given bill run for the given billing periods
@@ -36,7 +34,7 @@ const HandleErroredBillRunService = require('../handle-errored-bill-run.service.
  * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For
  * annual this will only ever contain a single period
  */
-async function go(billRun, billingPeriods) {
+export default async function processBillRunService(billRun, billingPeriods) {
   const { id: billRunId, batchType } = billRun
   const billingPeriod = billingPeriods[0]
 
@@ -49,14 +47,14 @@ async function go(billRun, billingPeriods) {
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, batchType })
   } catch (error) {
-    await HandleErroredBillRunService.go(billRunId, error.code)
+    await HandleErroredBillRunService(billRunId, error.code)
     globalThis.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
   }
 }
 
 async function _fetchBillingAccounts(billRun, billingPeriod) {
   try {
-    return await FetchBillingAccountsService.go(billRun.regionId, billingPeriod)
+    return await FetchBillingAccountsService(billRun.regionId, billingPeriod)
   } catch (error) {
     // We know we're saying we failed to process charge versions. But we're stuck with the legacy error codes and this
     // is the closest one related to what stage we're at in the process
@@ -75,23 +73,19 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
 
   // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
   // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
-  await ChargingModuleGenerateBillRunRequest.send(billRun.externalId)
+  await GenerateBillRunRequest(billRun.externalId)
 
-  await LegacyRefreshBillRunRequest.send(billRun.id)
+  await RefreshBillRunRequest(billRun.id)
 }
 
 async function _processBillingPeriod(billingPeriod, billRun) {
   const billingAccounts = await _fetchBillingAccounts(billRun, billingPeriod)
 
-  const billRunPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+  const billRunPopulated = await ProcessBillingPeriodService(billRun, billingPeriod, billingAccounts)
 
   await _finaliseBillRun(billRun, billRunPopulated)
 }
 
 async function _updateStatus(billRunId, status) {
   await BillRunModel.query().findById(billRunId).patch({ status })
-}
-
-module.exports = {
-  go
 }

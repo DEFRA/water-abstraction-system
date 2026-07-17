@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `address/{sessionId}/manual` page
  *
  * @module SubmitManualService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const ManualAddressPresenter = require('../../presenters/address/manual.presenter.js')
-const ManualAddressValidator = require('../../validators/address/manual.validator.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import ManualAddressPresenter from '../../presenters/address/manual.presenter.js'
+import ManualAddressValidator from '../../validators/address/manual.validator.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `address/{sessionId}/manual` page
@@ -19,8 +17,8 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitManualService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   _applyPayload(session, payload)
 
@@ -34,7 +32,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = ManualAddressPresenter.go(session)
+  const pageData = ManualAddressPresenter(session)
 
   return {
     error,
@@ -66,11 +64,7 @@ async function _save(session) {
 }
 
 function _validate(payload) {
-  const validationResult = ManualAddressValidator.go(payload)
+  const validationResult = ManualAddressValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

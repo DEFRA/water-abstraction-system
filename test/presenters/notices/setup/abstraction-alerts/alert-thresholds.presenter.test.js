@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const AlertThresholdsPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js')
+import AlertThresholdsPresenter from '../../../../../app/presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js'
 
 describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', () => {
   let licenceMonitoringStations
@@ -21,7 +22,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AlertThresholdsPresenter.go(session)
+      const result = AlertThresholdsPresenter(session)
 
       expect(result).toEqual({
         backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
@@ -47,7 +48,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
         })
 
         it('returns page data for the view, with the thresholds checked', () => {
-          const result = AlertThresholdsPresenter.go(session)
+          const result = AlertThresholdsPresenter(session)
 
           expect(result.thresholdOptions).toEqual([
             {
@@ -66,7 +67,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
         })
 
         it('returns page data for the view, with only the thresholds with stop restrictions', () => {
-          const result = AlertThresholdsPresenter.go(session)
+          const result = AlertThresholdsPresenter(session)
 
           expect(result.thresholdOptions).toEqual([
             {
@@ -91,7 +92,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
           })
 
           it('returns page data for the view, with only the thresholds with stop restrictions', () => {
-            const result = AlertThresholdsPresenter.go(session)
+            const result = AlertThresholdsPresenter(session)
 
             expect(result.thresholdOptions).toEqual([
               {
@@ -111,7 +112,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
         })
 
         it('returns page data for the view, with only the thresholds with reduce restrictions', () => {
-          const result = AlertThresholdsPresenter.go(session)
+          const result = AlertThresholdsPresenter(session)
 
           expect(result.thresholdOptions).toEqual([
             {
@@ -142,7 +143,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
           })
 
           it('returns page data for the view, with only the thresholds with "reduce" and "stop_or_reduce" restrictions', () => {
-            const result = AlertThresholdsPresenter.go(session)
+            const result = AlertThresholdsPresenter(session)
 
             expect(result.thresholdOptions).toEqual([
               // reduce
@@ -171,7 +172,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
         })
 
         it('returns page data for the view, with all the thresholds', () => {
-          const result = AlertThresholdsPresenter.go(session)
+          const result = AlertThresholdsPresenter(session)
 
           expect(result.thresholdOptions).toEqual([
             {
@@ -206,7 +207,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
         })
 
         it('sorts relevant thresholds first by flow/level alphabetically then by measurement quantity', () => {
-          const result = AlertThresholdsPresenter.go(session)
+          const result = AlertThresholdsPresenter(session)
 
           expect(result.thresholdOptions).toEqual([
             {

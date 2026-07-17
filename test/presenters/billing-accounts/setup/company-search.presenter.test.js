@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Thing under test
-const CompanySearchPresenter = require('../../../../app/presenters/billing-accounts/setup/company-search.presenter.js')
+import CompanySearchPresenter from '../../../../app/presenters/billing-accounts/setup/company-search.presenter.js'
 
 describe('Billing Accounts - Setup - Company Search Presenter', () => {
   let session
@@ -17,7 +18,7 @@ describe('Billing Accounts - Setup - Company Search Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CompanySearchPresenter.go(session)
+      const result = CompanySearchPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -34,9 +35,9 @@ describe('Billing Accounts - Setup - Company Search Presenter', () => {
   describe('the "companySearch" property', () => {
     describe('when no company search value has been entered', () => {
       it('returns null', () => {
-        const result = CompanySearchPresenter.go(session)
+        const result = CompanySearchPresenter(session)
 
-        expect(result.companySearch).toEqual(null)
+        expect(result.companySearch).toBeNull()
       })
     })
 
@@ -46,7 +47,7 @@ describe('Billing Accounts - Setup - Company Search Presenter', () => {
       })
 
       it('returns the company search value', () => {
-        const result = CompanySearchPresenter.go(session)
+        const result = CompanySearchPresenter(session)
 
         expect(result.companySearch).toEqual(session.companySearch)
       })

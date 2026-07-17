@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Check if any bill runs are being processed or cancelled
  * @module CheckBusyBillRunsService
  */
 
-const { db } = require('../../../db/db.js')
+import { db } from '../../../db/db.js'
 
 /**
  * Check if any bill runs are busy building or cancelling
@@ -15,7 +13,7 @@ const { db } = require('../../../db/db.js')
  *
  * @returns {Promise<string>} the state of busy bill runs; 'cancelling', 'building', 'both', or 'none'
  */
-async function go() {
+export default async function checkBusyBillRunsService() {
   const { building, cancelling } = await _fetch()
 
   if (building && cancelling) {
@@ -42,8 +40,4 @@ async function _fetch() {
   )
 
   return results[0]
-}
-
-module.exports = {
-  go
 }

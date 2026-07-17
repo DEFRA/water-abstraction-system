@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const RegionPresenter = require('../../../../app/presenters/bill-runs/setup/region.presenter.js')
+import RegionPresenter from '../../../../app/presenters/bill-runs/setup/region.presenter.js'
 
 describe('Bill Runs - Setup - Region presenter', () => {
   const regions = [
@@ -22,7 +23,7 @@ describe('Bill Runs - Setup - Region presenter', () => {
 
     describe('where the user has not previously selected a bill run region', () => {
       it('correctly presents the data', () => {
-        const result = RegionPresenter.go(session, regions)
+        const result = RegionPresenter(session, regions)
 
         expect(result).toEqual({
           backlink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/type',
@@ -40,7 +41,7 @@ describe('Bill Runs - Setup - Region presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = RegionPresenter.go(session, regions)
+        const result = RegionPresenter(session, regions)
 
         expect(result).toEqual({
           backlink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/type',

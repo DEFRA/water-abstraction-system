@@ -1,18 +1,19 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
-const ChargeVersionModel = require('../../app/models/charge-version.model.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
-const LicenceVersionModel = require('../../app/models/licence-version.model.js')
-const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
-const ReturnVersionModel = require('../../app/models/return-version.model.js')
-const ModLogHelper = require('../support/helpers/mod-log.helper.js')
+import ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
+import ChargeVersionModel from '../../app/models/charge-version.model.js'
+import LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import LicenceVersionHelper from '../support/helpers/licence-version.helper.js'
+import LicenceVersionModel from '../../app/models/licence-version.model.js'
+import ModLogHelper from '../support/helpers/mod-log.helper.js'
+import ReturnVersionHelper from '../support/helpers/return-version.helper.js'
+import ReturnVersionModel from '../../app/models/return-version.model.js'
 
 // Thing under test
-const ModLogModel = require('../../app/models/mod-log.model.js')
+import ModLogModel from '../../app/models/mod-log.model.js'
 
 describe('Mod Log model', () => {
   let testChargeVersion

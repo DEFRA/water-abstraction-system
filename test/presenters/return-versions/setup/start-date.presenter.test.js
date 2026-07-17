@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const StartDatePresenter = require('../../../../app/presenters/return-versions/setup/start-date.presenter.js')
+import StartDatePresenter from '../../../../app/presenters/return-versions/setup/start-date.presenter.js'
 
 describe('Return Versions Setup - Start Date presenter', () => {
   let session
@@ -25,7 +26,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = StartDatePresenter.go(session)
+      const result = StartDatePresenter(session)
 
       expect(result).toEqual({
         startDateDay: null,
@@ -53,7 +54,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = StartDatePresenter.go(session)
+        const result = StartDatePresenter(session)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -64,7 +65,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it("returns a link back to the licence page's charge tab", () => {
-        const result = StartDatePresenter.go(session)
+        const result = StartDatePresenter(session)
 
         expect(result.backLink).toEqual({
           href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
@@ -76,7 +77,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
 
   describe('the "licenceVersionStartDate" property', () => {
     it('returns the licence start date in long date format', () => {
-      const result = StartDatePresenter.go(session)
+      const result = StartDatePresenter(session)
 
       expect(result.licenceVersionStartDate).toEqual('1 January 2023')
     })
@@ -89,7 +90,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
       })
 
       it('returns the "startDateOption" property populated to re-select the option', () => {
-        const result = StartDatePresenter.go(session)
+        const result = StartDatePresenter(session)
 
         const { startDateDay, startDateMonth, startDateYear, startDateOption } = result
 
@@ -109,7 +110,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
       })
 
       it('returns the properties needed to re-populate the fields', () => {
-        const result = StartDatePresenter.go(session)
+        const result = StartDatePresenter(session)
 
         const { startDateDay, startDateMonth, startDateYear, startDateOption } = result
 

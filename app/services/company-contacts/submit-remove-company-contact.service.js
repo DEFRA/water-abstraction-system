@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/company-contacts/{id}/remove' page
  *
  * @module SubmitRemoveCompanyContactService
  */
 
-const DeleteCompanyContactService = require('./delete-company-contact.service.js')
-const FetchCompanyContactDal = require('../../dal/company-contacts/fetch-company-contact.dal.js')
-const FetchNotificationService = require('./fetch-notification.service.js')
-const { flashNotification } = require('../../lib/general.lib.js')
+import DeleteCompanyContactService from './delete-company-contact.service.js'
+import FetchCompanyContactDal from '../../dal/company-contacts/fetch-company-contact.dal.js'
+import FetchNotificationService from './fetch-notification.service.js'
+import { flashNotification } from '../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for the '/company-contacts/{id}/remove' page
@@ -19,22 +17,18 @@ const { flashNotification } = require('../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The data to redirect the user after the company contact has been removed
  */
-async function go(id, yar) {
-  const companyContact = await FetchCompanyContactDal.go(id)
+export default async function submitRemoveCompanyContactService(id, yar) {
+  const companyContact = await FetchCompanyContactDal(id)
 
-  const notification = await FetchNotificationService.go(companyContact.contact.email)
+  const notification = await FetchNotificationService(companyContact.contact.email)
 
   const notified = !!notification
 
-  await DeleteCompanyContactService.go(id, notified)
+  await DeleteCompanyContactService(id, notified)
 
   flashNotification(yar, 'Contact removed', `${companyContact.contact.$name()} was removed from this company.`)
 
   return {
     companyId: companyContact.companyId
   }
-}
-
-module.exports = {
-  go
 }

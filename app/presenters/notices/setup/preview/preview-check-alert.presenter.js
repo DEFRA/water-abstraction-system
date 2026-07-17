@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
  * @module PreviewCheckAlertPresenter
  */
 
-const DetermineRelevantLicenceMonitoringStationsService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
-const { determineRestrictionHeading, formatRestrictions } = require('../../../monitoring-stations/base.presenter.js')
+import DetermineRelevantLicenceMonitoringStationsService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js'
+import { determineRestrictionHeading, formatRestrictions } from '../../../monitoring-stations/base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
@@ -17,7 +15,7 @@ const { determineRestrictionHeading, formatRestrictions } = require('../../../mo
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(contactHashId, recipientLicenceRefs, session) {
+export default function previewCheckAlertPresenter(contactHashId, recipientLicenceRefs, session) {
   const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(recipientLicenceRefs, session)
 
   return {
@@ -61,7 +59,7 @@ function _preparedLicenceMonitoringStations(contactHashId, recipientLicenceMonit
 function _recipientLicenceMonitoringStations(recipientLicenceRefs, session) {
   const { alertThresholds, alertType, licenceMonitoringStations, removedThresholds } = session
 
-  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
+  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService(
     licenceMonitoringStations,
     alertThresholds,
     removedThresholds,
@@ -71,8 +69,4 @@ function _recipientLicenceMonitoringStations(recipientLicenceRefs, session) {
   return relevantLicenceMonitoringStations.filter((relevantLicenceMonitoringStation) => {
     return recipientLicenceRefs.includes(relevantLicenceMonitoringStation.licence.licenceRef)
   })
-}
-
-module.exports = {
-  go
 }

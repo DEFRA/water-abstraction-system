@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const RemoveLicencesPresenter = require('../../../../app/presenters/notices/setup/remove-licences.presenter.js')
+import RemoveLicencesPresenter from '../../../../app/presenters/notices/setup/remove-licences.presenter.js'
 
 describe('Notices - Setup - Remove Licences presenter', () => {
   const licences = []
@@ -21,7 +22,7 @@ describe('Notices - Setup - Remove Licences presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = RemoveLicencesPresenter.go(licences, session)
+    const result = RemoveLicencesPresenter(licences, session)
 
     expect(result).toEqual({
       backLink: {

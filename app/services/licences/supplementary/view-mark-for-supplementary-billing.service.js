@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates flagging a licence for supplementary billing
  * @module ViewMarkForSupplementaryBillingService
  */
 
-const LicenceModel = require('../../../../app/models/licence.model.js')
-const MarkForSupplementaryBillingPresenter = require('../../../presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js')
+import LicenceModel from '../../../../app/models/licence.model.js'
+import MarkForSupplementaryBillingPresenter from '../../../presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence mark for supplementary billing page
@@ -16,10 +14,10 @@ const MarkForSupplementaryBillingPresenter = require('../../../presenters/licenc
  * @returns {Promise<object>} an object representing the `pageData` needed by the mark for supplementary billing page.
  * It contains details of the last 6 years from todays date and the licence details.
  */
-async function go(licenceId) {
+export default async function viewMarkForSupplementaryBillingService(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
-  const pageData = MarkForSupplementaryBillingPresenter.go(licenceData)
+  const pageData = MarkForSupplementaryBillingPresenter(licenceData)
 
   return {
     ...pageData
@@ -28,8 +26,4 @@ async function go(licenceId) {
 
 async function _fetchLicenceData(licenceId) {
   return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
-}
-
-module.exports = {
-  go
 }

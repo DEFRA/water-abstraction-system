@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const ChargeCategoryHelper = require('../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
+import ChargeCategoryHelper from '../../support/helpers/charge-category.helper.js'
+import ChargeElementHelper from '../../support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../../support/helpers/charge-reference.helper.js'
 
 // Things we need to stub
-const CalculateAuthorisedAndBillableDaysService = require('../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js')
+import * as CalculateAuthorisedAndBillableDaysService from '../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js'
 
 // Thing under test
-const GenerateTransactionsService = require('../../../app/services/bill-runs/generate-transactions.service.js')
+import GenerateTransactionsService from '../../../app/services/bill-runs/generate-transactions.service.js'
 
 describe('Generate Transactions service', () => {
   const billLicenceId = '5e2afb53-ca92-4515-ad71-36a7cefbcebb'
@@ -43,7 +41,7 @@ describe('Generate Transactions service', () => {
   })
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a charge reference has billable days', () => {
@@ -90,7 +88,10 @@ describe('Generate Transactions service', () => {
         winterOnly: false
       }
 
-      Sinon.stub(CalculateAuthorisedAndBillableDaysService, 'go').returns({ authorisedDays: 365, billableDays: 214 })
+      vi.spyOn(CalculateAuthorisedAndBillableDaysService, 'default').mockReturnValue({
+        authorisedDays: 365,
+        billableDays: 214
+      })
     })
 
     describe('and is a water undertaker', () => {
@@ -99,7 +100,7 @@ describe('Generate Transactions service', () => {
       })
 
       it('returns an array of one transaction containing the expected data', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -118,7 +119,7 @@ describe('Generate Transactions service', () => {
       })
 
       it('returns the charge element as JSON in the transaction line "purposes" property', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -135,7 +136,7 @@ describe('Generate Transactions service', () => {
 
     describe('and is not a water undertaker', () => {
       it('returns an array of two transactions containing the expected data', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -154,7 +155,7 @@ describe('Generate Transactions service', () => {
       })
 
       it('returns a second compensation charge transaction', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -173,7 +174,7 @@ describe('Generate Transactions service', () => {
       })
 
       it('returns the charge element as JSON in both transaction lines "purposes" property', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -199,7 +200,7 @@ describe('Generate Transactions service', () => {
       })
 
       it('returns "newLicence" as true in the results', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -214,7 +215,7 @@ describe('Generate Transactions service', () => {
 
     describe('and is not a new licence', () => {
       it('returns "newLicence" as false in the results', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -230,7 +231,7 @@ describe('Generate Transactions service', () => {
     describe('and a two-part tariff agreement (section 127)', () => {
       describe('has not applied', () => {
         it('returns the standard description', () => {
-          const results = GenerateTransactionsService.go(
+          const results = GenerateTransactionsService(
             billLicenceId,
             chargeReference,
             billingPeriod,
@@ -249,7 +250,7 @@ describe('Generate Transactions service', () => {
         })
 
         it('returns the two-part tariff prefixed description', () => {
-          const results = GenerateTransactionsService.go(
+          const results = GenerateTransactionsService(
             billLicenceId,
             chargeReference,
             billingPeriod,
@@ -273,11 +274,14 @@ describe('Generate Transactions service', () => {
         endDate: new Date('2022-10-31')
       }
 
-      Sinon.stub(CalculateAuthorisedAndBillableDaysService, 'go').returns({ authorisedDays: 365, billableDays: 0 })
+      vi.spyOn(CalculateAuthorisedAndBillableDaysService, 'default').mockReturnValue({
+        authorisedDays: 365,
+        billableDays: 0
+      })
     })
 
     it('returns an empty array', () => {
-      const results = GenerateTransactionsService.go(
+      const results = GenerateTransactionsService(
         billLicenceId,
         chargeReference,
         billingPeriod,

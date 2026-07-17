@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module ReturnSubmissionLineHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
+import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new return submission line
@@ -71,7 +69,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Thing under test
-const AccountPresenter = require('../../../../app/presenters/billing-accounts/setup/account.presenter.js')
+import AccountPresenter from '../../../../app/presenters/billing-accounts/setup/account.presenter.js'
 
 describe('Billing Accounts - Setup - Account Presenter', () => {
   let session
@@ -17,7 +18,7 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AccountPresenter.go(session)
+      const result = AccountPresenter(session)
 
       expect(result).toEqual({
         accountSelected: null,
@@ -41,7 +42,7 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = AccountPresenter.go(session)
+      const result = AccountPresenter(session)
 
       expect(result).toEqual({
         accountSelected: 'another',
@@ -64,7 +65,7 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = AccountPresenter.go(session)
+      const result = AccountPresenter(session)
 
       expect(result).toEqual({
         accountSelected: 'customer',

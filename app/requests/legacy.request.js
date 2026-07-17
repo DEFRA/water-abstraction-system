@@ -1,13 +1,14 @@
-'use strict'
-
 /**
  * Use for making http requests to the legacy web services
  * @module LegacyRequest
  */
 
-const BaseRequest = require('./base.request.js')
-
-const legacyConfig = require('../../config/legacy.config.js')
+import legacyConfig from '../../config/legacy.config.js'
+import {
+  deleteRequest as baseDeleteRequest,
+  getRequest as baseGetRequest,
+  postRequest as basePostRequest
+} from './base.request.js'
 
 const services = {
   // REPO-NAME - PM2 NAME
@@ -71,8 +72,8 @@ const services = {
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function deleteRequest(serviceName, path, userId = null, apiRequest = true) {
-  return _sendRequest(BaseRequest.delete, serviceName, path, userId, apiRequest)
+export async function deleteRequest(serviceName, path, userId = null, apiRequest = true) {
+  return _sendRequest(baseDeleteRequest, serviceName, path, userId, apiRequest)
 }
 
 /**
@@ -88,8 +89,8 @@ async function deleteRequest(serviceName, path, userId = null, apiRequest = true
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function get(serviceName, path, userId = null, apiRequest = true) {
-  return _sendRequest(BaseRequest.get, serviceName, path, userId, apiRequest)
+export async function getRequest(serviceName, path, userId = null, apiRequest = true) {
+  return _sendRequest(baseGetRequest, serviceName, path, userId, apiRequest)
 }
 
 /**
@@ -106,8 +107,8 @@ async function get(serviceName, path, userId = null, apiRequest = true) {
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function post(serviceName, path, userId = null, apiRequest = true, body = {}) {
-  return _sendRequest(BaseRequest.post, serviceName, path, userId, apiRequest, body)
+export async function postRequest(serviceName, path, userId = null, apiRequest = true, body = {}) {
+  return _sendRequest(basePostRequest, serviceName, path, userId, apiRequest, body)
 }
 
 /**
@@ -197,10 +198,4 @@ function _parseResult(result) {
   }
 
   return result
-}
-
-module.exports = {
-  delete: deleteRequest,
-  get,
-  post
 }

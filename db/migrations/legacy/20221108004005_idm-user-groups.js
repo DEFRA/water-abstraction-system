@@ -1,8 +1,6 @@
-'use strict'
-
 const tableName = 'user_groups'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.withSchema('idm').createTable(tableName, (table) => {
     // Primary Key
     table.string('user_group_id').primary().notNullable()
@@ -17,6 +15,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.withSchema('idm').dropTableIfExists(tableName)
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches licence agreements data needed for the view '/licences/{id}/set-up` page
  * @module FetchAgreementsService
  */
 
-const LicenceAgreementModel = require('../../models/licence-agreement.model.js')
+import LicenceAgreementModel from '../../models/licence-agreement.model.js'
 
 /**
  * Fetches licence agreements data needed for the view '/licences/{id}/set-up` page
@@ -14,7 +12,7 @@ const LicenceAgreementModel = require('../../models/licence-agreement.model.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
-async function go(licenceRef) {
+export default async function fetchAgreementsService(licenceRef) {
   return _fetch(licenceRef)
 }
 
@@ -28,8 +26,4 @@ async function _fetch(licenceRef) {
       builder.select(['id', 'code'])
     })
     .orderBy([{ column: 'createdAt', order: 'asc' }])
-}
-
-module.exports = {
-  go
 }

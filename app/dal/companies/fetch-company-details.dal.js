@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the company details for the view '/companies/{id}/{role}' page
  * @module FetchCompanyDetailsDal
  */
 
-const CompanyModel = require('../../models/company.model.js')
+import CompanyModel from '../../models/company.model.js'
 
 /**
  * Fetches the company details for the view '/companies/{id}/{role}' page
@@ -15,7 +13,7 @@ const CompanyModel = require('../../models/company.model.js')
  *
  * @returns {Promise<module:CompanyModel>} the data needed to populate the view company page
  */
-async function go(companyId, role) {
+export default async function fetchCompanyDetailsDal(companyId, role) {
   return CompanyModel.query()
     .findById(companyId)
     .select(['id', 'name'])
@@ -44,8 +42,4 @@ async function go(companyId, role) {
           ])
         })
     })
-}
-
-module.exports = {
-  go
 }

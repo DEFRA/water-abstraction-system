@@ -1,8 +1,6 @@
-'use strict'
-
 const tableName = 'verification'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.withSchema('crm').createTable(tableName, (table) => {
     // Primary Key
     table.string('verification_id').primary()
@@ -17,6 +15,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.withSchema('crm').dropTableIfExists(tableName).drop
 }

@@ -1,15 +1,13 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things to stub
-const DetermineSearchItemsService = require('../../../app/services/search/determine-search-items.service.js')
-const FetchSearchResultsDetailsService = require('../../../app/services/search/fetch-search-results-details.service.js')
-const FetchSearchResultsService = require('../../../app/services/search/fetch-search-results.service.js')
+import * as DetermineSearchItemsService from '../../../app/services/search/determine-search-items.service.js'
+import * as FetchSearchResultsDetailsService from '../../../app/services/search/fetch-search-results-details.service.js'
+import * as FetchSearchResultsService from '../../../app/services/search/fetch-search-results.service.js'
 
 // Thing under test
-const FindAllSearchMatchesService = require('../../../app/services/search/find-all-search-matches.service.js')
+import FindAllSearchMatchesService from '../../../app/services/search/find-all-search-matches.service.js'
 
 describe('Search - Find All Search Matches service', () => {
   let page
@@ -18,9 +16,9 @@ describe('Search - Find All Search Matches service', () => {
   let userScopes
 
   beforeEach(() => {
-    Sinon.stub(DetermineSearchItemsService, 'go').resolves(['billingAccount'])
+    vi.spyOn(DetermineSearchItemsService, 'default').mockResolvedValue(['billingAccount'])
 
-    Sinon.stub(FetchSearchResultsDetailsService, 'go').resolves({
+    vi.spyOn(FetchSearchResultsDetailsService, 'default').mockResolvedValue({
       billingAccount: [
         {
           accountNumber: 'A12345678A',
@@ -33,7 +31,7 @@ describe('Search - Find All Search Matches service', () => {
       ]
     })
 
-    Sinon.stub(FetchSearchResultsService, 'go').resolves({
+    vi.spyOn(FetchSearchResultsService, 'default').mockResolvedValue({
       results: [
         { exact: true, id: 'billing-account-1', type: 'billingAccount' },
         { exact: false, id: 'billing-account-2', type: 'billingAccount' }
@@ -43,7 +41,7 @@ describe('Search - Find All Search Matches service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -55,7 +53,7 @@ describe('Search - Find All Search Matches service', () => {
     })
 
     it('returns all the matching data', async () => {
-      const result = await FindAllSearchMatchesService.go(query, resultType, page, userScopes)
+      const result = await FindAllSearchMatchesService(query, resultType, page, userScopes)
 
       expect(result).toEqual({
         results: [

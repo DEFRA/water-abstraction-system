@@ -1,21 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
+import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const BillModel = require('../../../../app/models/bill.model.js')
-const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChargingModuleCreateTransactionRequest = require('../../../../app/requests/charging-module/create-transaction.request.js')
-const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
+import * as ChargingModuleCreateTransactionRequest from '../../../../app/requests/charging-module/create-transaction.request.js'
+import * as GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
+import BillModel from '../../../../app/models/bill.model.js'
+import BillRunError from '../../../../app/errors/bill-run.error.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
 
 // Thing under test
-const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
+import ProcessBillingPeriodService from '../../../../app/services/bill-runs/annual/process-billing-period.service.js'
 
 describe('Annual Process billing period service', () => {
   const billingPeriod = determineCurrentFinancialYear()
@@ -30,17 +28,19 @@ describe('Annual Process billing period service', () => {
       externalId: generateUUID()
     }
 
-    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
+    chargingModuleCreateTransactionRequestStub = vi
+      .spyOn(ChargingModuleCreateTransactionRequest, 'default')
+      .mockImplementation(() => {})
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service is called', () => {
     describe('and there are no billing accounts to process', () => {
       it('returns false (bill run is empty)', async () => {
-        const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [])
+        const result = await ProcessBillingPeriodService(billRun, billingPeriod, [])
 
         expect(result).toBe(false)
       })
@@ -50,10 +50,10 @@ describe('Annual Process billing period service', () => {
       beforeEach(async () => {
         billingAccount = _testBillingAccount()
 
-        chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
+        chargingModuleCreateTransactionRequestStub.mockResolvedValueOnce({
           ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
         })
-        chargingModuleCreateTransactionRequestStub.onSecondCall().resolves({
+        chargingModuleCreateTransactionRequestStub.mockResolvedValueOnce({
           ..._chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
         })
       })
@@ -67,7 +67,7 @@ describe('Annual Process billing period service', () => {
         })
 
         it('returns true (bill run is not empty)', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           expect(result).toBe(true)
         })
@@ -93,17 +93,17 @@ describe('Annual Process billing period service', () => {
         })
 
         it('returns true (bill run is not empty)', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           expect(result).toBe(true)
         })
 
         it('only persists the bill licences with transactions', async () => {
-          await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           const result = await BillModel.query().findOne('billRunId', billRun.id).withGraphFetched('billLicences')
 
-          expect(result.billLicences.length).toEqual(1)
+          expect(result.billLicences).toHaveLength(1)
           expect(result.billLicences[0].licenceId).toEqual(billingAccount.chargeVersions[0].licence.id)
         })
       })
@@ -121,7 +121,7 @@ describe('Annual Process billing period service', () => {
         })
 
         it('returns false (bill run is empty)', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           expect(result).toBe(false)
         })
@@ -137,11 +137,13 @@ describe('Annual Process billing period service', () => {
 
     describe('because generating the calculated transactions fails', () => {
       beforeEach(async () => {
-        Sinon.stub(GenerateTransactionsService, 'go').throws()
+        vi.spyOn(GenerateTransactionsService, 'default').mockImplementation(() => {
+          throw new Error()
+        })
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount]).catch((e) => {
           return e
         })
 
@@ -152,11 +154,11 @@ describe('Annual Process billing period service', () => {
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        chargingModuleCreateTransactionRequestStub.rejects()
+        chargingModuleCreateTransactionRequestStub.mockRejectedValue()
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount]).catch((e) => {
           return e
         })
 

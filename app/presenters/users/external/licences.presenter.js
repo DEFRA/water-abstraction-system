@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for external users on the `/users/external/{id}/licences` page
  * @module LicencesPresenter
  */
 
-const { sourceNavigation } = require('../base-users.presenter.js')
-const { today } = require('../../../lib/general.lib.js')
+import { sourceNavigation } from '../base-users.presenter.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Formats data for external users on the `/users/external/{id}/licences` page
@@ -19,7 +17,7 @@ const { today } = require('../../../lib/general.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, licences, viewingUserScope, back) {
+export default function licencesPresenter(user, licences, viewingUserScope, back) {
   const { username } = user
 
   const formattedLicences = _userLicences(licences)
@@ -110,8 +108,4 @@ function _userLicences(licences) {
       status: _status(licenceEndDetails)
     }
   })
-}
-
-module.exports = {
-  go
 }

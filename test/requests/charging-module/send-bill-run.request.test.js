@@ -1,18 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
-const ExpandedError = require('../../../app/errors/expanded.error.js')
+import http2 from 'node:http2'
+
+import ExpandedError from '../../../app/errors/expanded.error.js'
 
 // Things we need to stub
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
-const WaitForStatusRequest = require('../../../app/requests/charging-module/wait-for-status.request.js')
+import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
+import * as WaitForStatusRequest from '../../../app/requests/charging-module/wait-for-status.request.js'
 
 // Thing under test
-const SendBillRunRequest = require('../../../app/requests/charging-module/send-bill-run.request.js')
+import SendBillRunRequest from '../../../app/requests/charging-module/send-bill-run.request.js'
+
+const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 describe('Charging Module Send Bill Run request', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
@@ -20,16 +21,16 @@ describe('Charging Module Send Bill Run request', () => {
   let chargingModuleRequestStub
 
   beforeEach(() => {
-    chargingModuleRequestStub = Sinon.stub(ChargingModuleRequest, 'patch')
+    chargingModuleRequestStub = vi.spyOn(ChargingModuleRequest, 'patchRequest').mockImplementation(() => {})
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request can send a bill run', () => {
     beforeEach(async () => {
-      chargingModuleRequestStub.resolves({
+      chargingModuleRequestStub.mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -40,23 +41,23 @@ describe('Charging Module Send Bill Run request', () => {
           body: null
         }
       })
-      Sinon.stub(WaitForStatusRequest, 'send').resolves({ succeeded: true, status: 'billed', attempts: 1 })
+      vi.spyOn(WaitForStatusRequest, 'default').mockResolvedValue({ succeeded: true, status: 'billed', attempts: 1 })
     })
 
     it('returns a "true" success status', async () => {
-      const result = await SendBillRunRequest.send(billRunId)
+      const result = await SendBillRunRequest(billRunId)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the last status received', async () => {
-      const result = await SendBillRunRequest.send(billRunId)
+      const result = await SendBillRunRequest(billRunId)
 
       expect(result.status).toEqual('billed')
     })
 
     it('returns the number of attempts', async () => {
-      const result = await SendBillRunRequest.send(billRunId)
+      const result = await SendBillRunRequest(billRunId)
 
       expect(result.attempts).toEqual(1)
     })
@@ -65,14 +66,14 @@ describe('Charging Module Send Bill Run request', () => {
   describe('when the request cannot send a bill run', () => {
     describe('because the approve request fails', () => {
       beforeEach(async () => {
-        chargingModuleRequestStub.onFirstCall().resolves({
+        chargingModuleRequestStub.mockResolvedValueOnce({
           succeeded: false,
           response: { body: 'Boom' }
         })
       })
 
       it('throws an error', async () => {
-        const error = await SendBillRunRequest.send(billRunId).catch((e) => {
+        const error = await SendBillRunRequest(billRunId).catch((e) => {
           return e
         })
 
@@ -85,15 +86,15 @@ describe('Charging Module Send Bill Run request', () => {
 
     describe('because the send request fails', () => {
       beforeEach(async () => {
-        chargingModuleRequestStub.onFirstCall().resolves({ succeeded: true })
-        chargingModuleRequestStub.onSecondCall().resolves({
+        chargingModuleRequestStub.mockResolvedValueOnce({ succeeded: true })
+        chargingModuleRequestStub.mockResolvedValueOnce({
           succeeded: false,
           response: { body: 'Boom' }
         })
       })
 
       it('throws an error', async () => {
-        const error = await SendBillRunRequest.send(billRunId).catch((e) => {
+        const error = await SendBillRunRequest(billRunId).catch((e) => {
           return e
         })
 
@@ -106,9 +107,9 @@ describe('Charging Module Send Bill Run request', () => {
 
     describe('because the wait request fails', () => {
       beforeEach(async () => {
-        chargingModuleRequestStub.onFirstCall().resolves({ succeeded: true })
-        chargingModuleRequestStub.onSecondCall().resolves({ succeeded: true })
-        Sinon.stub(WaitForStatusRequest, 'send').resolves({
+        chargingModuleRequestStub.mockResolvedValueOnce({ succeeded: true })
+        chargingModuleRequestStub.mockResolvedValueOnce({ succeeded: true })
+        vi.spyOn(WaitForStatusRequest, 'default').mockResolvedValue({
           succeeded: false,
           attempts: 100,
           response: { body: 'Boom' }
@@ -116,7 +117,7 @@ describe('Charging Module Send Bill Run request', () => {
       })
 
       it('throws an error', async () => {
-        const error = await SendBillRunRequest.send(billRunId).catch((e) => {
+        const error = await SendBillRunRequest(billRunId).catch((e) => {
           return e
         })
 

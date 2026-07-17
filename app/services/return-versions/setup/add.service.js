@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Orchestrates adding an empty object to the requirements array in the session
  * @module AddService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates adding an empty object to the requirements array in the session
@@ -18,8 +16,8 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
  * @returns {Promise<number>} The index of the new requirement. Needed by the setup pages so they know which requirement
  * to display and update
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function addService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
   await _save(session)
 
@@ -32,8 +30,4 @@ async function _save(session) {
   session.checkPageVisited = false
 
   return session.$update()
-}
-
-module.exports = {
-  go
 }

@@ -1,79 +1,71 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const CreateLicenceSupplementaryYearService = require('../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js')
-const FetchRemoveReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js')
-const ProcessBillRunPostRemove = require('../../../../app/services/bill-runs/review/process-bill-run-post-remove.service.js')
-const RemoveReviewLicenceService = require('../../../../app/services/bill-runs/review/remove-review-licence.service.js')
-const UnassignLicencesToBillRunService = require('../../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js')
+import * as CreateLicenceSupplementaryYearService from '../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js'
+import * as FetchRemoveReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js'
+import * as ProcessBillRunPostRemove from '../../../../app/services/bill-runs/review/process-bill-run-post-remove.service.js'
+import * as RemoveReviewLicenceService from '../../../../app/services/bill-runs/review/remove-review-licence.service.js'
+import * as UnassignLicencesToBillRunService from '../../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js'
 
 // Thing under test
-const SubmitRemoveService = require('../../../../app/services/bill-runs/review/submit-remove.service.js')
+import SubmitRemoveService from '../../../../app/services/bill-runs/review/submit-remove.service.js'
 
 describe('Bill Runs - Review - Submit Remove service', () => {
-  let createLicenceSupplementaryYearStub
   let removeReviewLicence
-  let removeReviewLicenceStub
-  let unassignLicencesToBillRunStub
   let yarStub
 
   beforeEach(() => {
     removeReviewLicence = BillRunsReviewFixture.removeReviewLicence()
 
-    removeReviewLicenceStub = Sinon.stub(RemoveReviewLicenceService, 'go').withArgs(removeReviewLicence.id).resolves()
+    vi.spyOn(RemoveReviewLicenceService, 'default').mockResolvedValue()
 
-    unassignLicencesToBillRunStub = Sinon.stub(UnassignLicencesToBillRunService, 'go').resolves()
+    vi.spyOn(UnassignLicencesToBillRunService, 'default').mockResolvedValue()
 
-    createLicenceSupplementaryYearStub = Sinon.stub(CreateLicenceSupplementaryYearService, 'go')
-      .withArgs(removeReviewLicence.licenceId, [removeReviewLicence.billRun.toFinancialYearEnding], true)
-      .resolves()
-
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
+    vi.spyOn(CreateLicenceSupplementaryYearService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('and the bill run is two-part tariff annual', () => {
       describe('and this is not the last licence in the bill run', () => {
         beforeEach(() => {
-          Sinon.stub(FetchRemoveReviewLicenceService, 'go').resolves(removeReviewLicence)
-          Sinon.stub(ProcessBillRunPostRemove, 'go').withArgs(removeReviewLicence.billRun.id).resolves(false)
+          vi.spyOn(FetchRemoveReviewLicenceService, 'default').mockResolvedValue(removeReviewLicence)
+          vi.spyOn(ProcessBillRunPostRemove, 'default').mockResolvedValue(false)
         })
 
         it('removes the review licence', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(removeReviewLicenceStub.called).toBe(true)
+          expect(RemoveReviewLicenceService.default).toHaveBeenCalled()
         })
 
         it('does not attempt to unassign the licence from the bill run', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(unassignLicencesToBillRunStub.called).toBe(false)
+          expect(UnassignLicencesToBillRunService.default).not.toHaveBeenCalled()
         })
 
         it('flags the licence for supplementary billing', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(createLicenceSupplementaryYearStub.called).toBe(true)
+          expect(CreateLicenceSupplementaryYearService.default).toHaveBeenCalled()
         })
 
         it('sets a notification', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(yarStub.flash.called).toBe(true)
+          expect(yarStub.flash).toHaveBeenCalled()
 
-          const [flashType, bannerMessage] = yarStub.flash.args[0]
+          const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(bannerMessage).toEqual({
@@ -83,7 +75,7 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         })
 
         it('returns the bill run ID and a flag to indicate the bill run is not empty', async () => {
-          const result = await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          const result = await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(result).toEqual({
             billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
@@ -94,36 +86,36 @@ describe('Bill Runs - Review - Submit Remove service', () => {
 
       describe('and this is the last licence in the bill run', () => {
         beforeEach(() => {
-          Sinon.stub(FetchRemoveReviewLicenceService, 'go').resolves(removeReviewLicence)
-          Sinon.stub(ProcessBillRunPostRemove, 'go').withArgs(removeReviewLicence.billRun.id).resolves(true)
+          vi.spyOn(FetchRemoveReviewLicenceService, 'default').mockResolvedValue(removeReviewLicence)
+          vi.spyOn(ProcessBillRunPostRemove, 'default').mockResolvedValue(true)
         })
 
         it('removes the review licence', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(removeReviewLicenceStub.called).toBe(true)
+          expect(RemoveReviewLicenceService.default).toHaveBeenCalled()
         })
 
         it('does not attempt to unassign the licence from the bill run', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(unassignLicencesToBillRunStub.called).toBe(false)
+          expect(UnassignLicencesToBillRunService.default).not.toHaveBeenCalled()
         })
 
         it('flags the licence for supplementary billing', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(createLicenceSupplementaryYearStub.called).toBe(true)
+          expect(CreateLicenceSupplementaryYearService.default).toHaveBeenCalled()
         })
 
         it('does not add a flash message', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(yarStub.flash.called).toBe(false)
+          expect(yarStub.flash).not.toHaveBeenCalled()
         })
 
         it('returns the bill run ID and a flag to indicate the bill run is empty', async () => {
-          const result = await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          const result = await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(result).toEqual({
             billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
@@ -137,34 +129,34 @@ describe('Bill Runs - Review - Submit Remove service', () => {
       describe('and this is not the last licence in the bill run', () => {
         beforeEach(() => {
           removeReviewLicence.billRun.batchType = 'two_part_supplementary'
-          Sinon.stub(FetchRemoveReviewLicenceService, 'go').resolves(removeReviewLicence)
-          Sinon.stub(ProcessBillRunPostRemove, 'go').withArgs(removeReviewLicence.billRun.id).resolves(false)
+          vi.spyOn(FetchRemoveReviewLicenceService, 'default').mockResolvedValue(removeReviewLicence)
+          vi.spyOn(ProcessBillRunPostRemove, 'default').mockResolvedValue(false)
         })
 
         it('removes the review licence', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(removeReviewLicenceStub.called).toBe(true)
+          expect(RemoveReviewLicenceService.default).toHaveBeenCalled()
         })
 
         it('does attempt to unassign the licence from the bill run', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(unassignLicencesToBillRunStub.called).toBe(true)
+          expect(UnassignLicencesToBillRunService.default).toHaveBeenCalled()
         })
 
         it('does not flag the licence for supplementary billing', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(createLicenceSupplementaryYearStub.called).toBe(false)
+          expect(CreateLicenceSupplementaryYearService.default).not.toHaveBeenCalled()
         })
 
         it('sets a notification', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(yarStub.flash.called).toBe(true)
+          expect(yarStub.flash).toHaveBeenCalled()
 
-          const [flashType, bannerMessage] = yarStub.flash.args[0]
+          const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(bannerMessage).toEqual({
@@ -174,7 +166,7 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         })
 
         it('returns the bill run ID and a flag to indicate the bill run is not empty', async () => {
-          const result = await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          const result = await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(result).toEqual({
             billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
@@ -186,36 +178,36 @@ describe('Bill Runs - Review - Submit Remove service', () => {
       describe('and this is the last licence in the bill run', () => {
         beforeEach(() => {
           removeReviewLicence.billRun.batchType = 'two_part_supplementary'
-          Sinon.stub(FetchRemoveReviewLicenceService, 'go').resolves(removeReviewLicence)
-          Sinon.stub(ProcessBillRunPostRemove, 'go').withArgs(removeReviewLicence.billRun.id).resolves(true)
+          vi.spyOn(FetchRemoveReviewLicenceService, 'default').mockResolvedValue(removeReviewLicence)
+          vi.spyOn(ProcessBillRunPostRemove, 'default').mockResolvedValue(true)
         })
 
         it('removes the review licence', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(removeReviewLicenceStub.called).toBe(true)
+          expect(RemoveReviewLicenceService.default).toHaveBeenCalled()
         })
 
         it('does attempt to unassign the licence from the bill run', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(unassignLicencesToBillRunStub.called).toBe(true)
+          expect(UnassignLicencesToBillRunService.default).toHaveBeenCalled()
         })
 
         it('does not flag the licence for supplementary billing', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(createLicenceSupplementaryYearStub.called).toBe(false)
+          expect(CreateLicenceSupplementaryYearService.default).not.toHaveBeenCalled()
         })
 
         it('does not add a flash message', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(yarStub.flash.called).toBe(false)
+          expect(yarStub.flash).not.toHaveBeenCalled()
         })
 
         it('returns the bill run ID and a flag to indicate the bill run is empty', async () => {
-          const result = await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          const result = await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(result).toEqual({
             billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',

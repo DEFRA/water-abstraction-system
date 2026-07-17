@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/billing-accounts/setup/{billingAccountId}/account` page
  * @module AccountPresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function accountPresenter(session) {
   const { billingAccount } = session
 
   return {
@@ -35,8 +33,4 @@ function _backLink(session) {
   }
 
   return `/system/billing-accounts/${session.billingAccount.id}`
-}
-
-module.exports = {
-  go
 }

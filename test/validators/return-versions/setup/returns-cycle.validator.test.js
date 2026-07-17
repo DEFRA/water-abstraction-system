@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ReturnsCycleValidator = require('../../../../app/validators/return-versions/setup/returns-cycle.validator.js')
+import ReturnsCycleValidator from '../../../../app/validators/return-versions/setup/returns-cycle.validator.js'
 
 describe('Return Versions Setup - Returns Cycle validator', () => {
   let payload
@@ -17,7 +18,7 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
 
   describe('when valid data is provided', () => {
     it('confirms the data is valid', async () => {
-      const result = ReturnsCycleValidator.go(payload, session)
+      const result = ReturnsCycleValidator(payload, session)
 
       expect(result.value.returnsCycle).toBeDefined()
     })
@@ -31,7 +32,7 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
     })
 
     it('fails validation with the error message "Select the returns cycle for the requirements for returns"', () => {
-      const result = ReturnsCycleValidator.go(payload, session)
+      const result = ReturnsCycleValidator(payload, session)
 
       expect(result.error.details[0].message).toEqual('Select the returns cycle for the requirements for returns')
     })
@@ -47,7 +48,7 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
     })
 
     it('fails validation with the error message "Quarterly returns submissions cannot be set for returns requirements in the summer cycle"', () => {
-      const result = ReturnsCycleValidator.go(payload, session)
+      const result = ReturnsCycleValidator(payload, session)
 
       expect(result.error.details[0].message).toEqual(
         'Quarterly returns submissions cannot be set for returns requirements in the summer cycle'
@@ -65,7 +66,7 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
     })
 
     it('confirms the data is valid', () => {
-      const result = ReturnsCycleValidator.go(payload, session)
+      const result = ReturnsCycleValidator(payload, session)
 
       expect(result.value.returnsCycle).toBeDefined()
     })
@@ -77,7 +78,7 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
     })
 
     it('fails validation', () => {
-      const result = ReturnsCycleValidator.go(payload, session)
+      const result = ReturnsCycleValidator(payload, session)
 
       expect(result.error.details[0].message).toEqual('Select the returns cycle for the requirements for returns')
     })

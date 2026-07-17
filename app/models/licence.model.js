@@ -1,17 +1,32 @@
-'use strict'
-
 /**
  * Model for licences (water.licences)
  * @module LicenceModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
-const { compareDates } = require('../lib/dates.lib.js')
-const { timestampForPostgres, today } = require('../lib/general.lib.js')
+import BaseModel from './base.model.js'
+import BillLicenceModel from './bill-licence.model.js'
+import ChargeVersionModel from './charge-version.model.js'
+import LicenceAgreementModel from './licence-agreement.model.js'
+import LicenceDocumentHeaderModel from './licence-document-header.model.js'
+import LicenceDocumentModel from './licence-document.model.js'
+import LicenceEndDateChangeModel from './licence-end-date-change.model.js'
+import LicenceMonitoringStationModel from './licence-monitoring-station.model.js'
+import LicenceSupplementaryYearModel from './licence-supplementary-year.model.js'
+import LicenceUnregistrationModel from './licence-unregistration.model.js'
+import LicenceVersionModel from './licence-version.model.js'
+import ModLogModel from './mod-log.model.js'
+import PermitLicenceModel from './permit-licence.model.js'
+import RegionModel from './region.model.js'
+import ReturnLogModel from './return-log.model.js'
+import ReturnVersionModel from './return-version.model.js'
+import ReviewLicenceModel from './review-licence.model.js'
+import WorkflowModel from './workflow.model.js'
+import { compareDates } from '../lib/dates.lib.js'
+import { timestampForPostgres, today } from '../lib/general.lib.js'
 
-class LicenceModel extends BaseModel {
+export default class LicenceModel extends BaseModel {
   static get tableName() {
     return 'licences'
   }
@@ -20,7 +35,7 @@ class LicenceModel extends BaseModel {
     return {
       billLicences: {
         relation: Model.HasManyRelation,
-        modelClass: 'bill-licence.model',
+        modelClass: BillLicenceModel,
         join: {
           from: 'licences.id',
           to: 'billLicences.licenceId'
@@ -28,7 +43,7 @@ class LicenceModel extends BaseModel {
       },
       chargeVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-version.model',
+        modelClass: ChargeVersionModel,
         join: {
           from: 'licences.id',
           to: 'chargeVersions.licenceId'
@@ -36,7 +51,7 @@ class LicenceModel extends BaseModel {
       },
       licenceAgreements: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-agreement.model',
+        modelClass: LicenceAgreementModel,
         join: {
           from: 'licences.licenceRef',
           to: 'licenceAgreements.licenceRef'
@@ -44,7 +59,7 @@ class LicenceModel extends BaseModel {
       },
       licenceDocument: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-document.model',
+        modelClass: LicenceDocumentModel,
         join: {
           from: 'licences.licenceRef',
           to: 'licenceDocuments.licenceRef'
@@ -52,7 +67,7 @@ class LicenceModel extends BaseModel {
       },
       licenceDocumentHeader: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-document-header.model',
+        modelClass: LicenceDocumentHeaderModel,
         join: {
           from: 'licences.licenceRef',
           to: 'licenceDocumentHeaders.licenceRef'
@@ -60,7 +75,7 @@ class LicenceModel extends BaseModel {
       },
       licenceEndDateChanges: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-end-date-change.model',
+        modelClass: LicenceEndDateChangeModel,
         join: {
           from: 'licences.id',
           to: 'licenceEndDateChanges.licenceId'
@@ -68,7 +83,7 @@ class LicenceModel extends BaseModel {
       },
       licenceMonitoringStations: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-monitoring-station.model',
+        modelClass: LicenceMonitoringStationModel,
         join: {
           from: 'licences.id',
           to: 'licenceMonitoringStations.licenceId'
@@ -76,7 +91,7 @@ class LicenceModel extends BaseModel {
       },
       licenceSupplementaryYears: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-supplementary-year.model',
+        modelClass: LicenceSupplementaryYearModel,
         join: {
           from: 'licences.id',
           to: 'licenceSupplementaryYears.licenceId'
@@ -84,7 +99,7 @@ class LicenceModel extends BaseModel {
       },
       licenceUnregistrations: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-unregistration.model',
+        modelClass: LicenceUnregistrationModel,
         join: {
           from: 'licences.id',
           to: 'licenceUnregistrations.licenceId'
@@ -92,7 +107,7 @@ class LicenceModel extends BaseModel {
       },
       licenceVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-version.model',
+        modelClass: LicenceVersionModel,
         join: {
           from: 'licences.id',
           to: 'licenceVersions.licenceId'
@@ -100,7 +115,7 @@ class LicenceModel extends BaseModel {
       },
       modLogs: {
         relation: Model.HasManyRelation,
-        modelClass: 'mod-log.model',
+        modelClass: ModLogModel,
         join: {
           from: 'licences.id',
           to: 'modLogs.licenceId'
@@ -108,7 +123,7 @@ class LicenceModel extends BaseModel {
       },
       permitLicence: {
         relation: Model.HasOneRelation,
-        modelClass: 'permit-licence.model',
+        modelClass: PermitLicenceModel,
         join: {
           from: 'licences.licenceRef',
           to: 'permitLicences.licenceRef'
@@ -116,7 +131,7 @@ class LicenceModel extends BaseModel {
       },
       region: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'region.model',
+        modelClass: RegionModel,
         join: {
           from: 'licences.regionId',
           to: 'regions.id'
@@ -124,7 +139,7 @@ class LicenceModel extends BaseModel {
       },
       returnLogs: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-log.model',
+        modelClass: ReturnLogModel,
         join: {
           from: 'licences.licenceRef',
           to: 'returnLogs.licenceRef'
@@ -132,7 +147,7 @@ class LicenceModel extends BaseModel {
       },
       returnVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-version.model',
+        modelClass: ReturnVersionModel,
         join: {
           from: 'licences.id',
           to: 'returnVersions.licenceId'
@@ -140,7 +155,7 @@ class LicenceModel extends BaseModel {
       },
       reviewLicences: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-licence.model',
+        modelClass: ReviewLicenceModel,
         join: {
           from: 'licences.id',
           to: 'reviewLicences.licenceId'
@@ -148,7 +163,7 @@ class LicenceModel extends BaseModel {
       },
       workflows: {
         relation: Model.HasManyRelation,
-        modelClass: 'workflow.model',
+        modelClass: WorkflowModel,
         join: {
           from: 'licences.id',
           to: 'workflows.licenceId'
@@ -423,5 +438,3 @@ class LicenceModel extends BaseModel {
     return primaryUser || null
   }
 }
-
-module.exports = LicenceModel

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches existing supplementary details about a licence being updated during import
  * @module FetchExistingLicenceDetailsService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Fetches existing supplementary details about a licence being updated during import
@@ -24,7 +22,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Promise<object>} - The data needed to determine which supplementary flags the licence needs
  */
-async function go(licenceId) {
+export default async function fetchExistingLicenceDetailsService(licenceId) {
   const query = _query()
 
   const {
@@ -85,8 +83,4 @@ function _query() {
     WHERE
       l.id = ?;
   `
-}
-
-module.exports = {
-  go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the contacts for a licence for the view '/licences/{id}/contact-details' page
  * @module FetchLicenceCRMDataService
  */
 
-const DatabaseConfig = require('../../../config/database.config.js')
-const { db } = require('../../../db/db.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetches the contacts for a licence for the view '/licences/{id}/contact-details' page
@@ -17,7 +15,7 @@ const { db } = require('../../../db/db.js')
  *
  * @returns {Promise<object[]>} the contacts for the licence
  */
-async function go(licenceId, roles, page = '1') {
+export default async function fetchLicenceCrmDataService(licenceId, roles, page = '1') {
   const authorisedForBilling = roles.includes('billing')
 
   const [{ rows: contacts }, { rows: totalNumber }] = await Promise.all([
@@ -277,8 +275,4 @@ function _query(paginationAndOrderBy = '') {
     ${paginationAndOrderBy}
     ;
   `
-}
-
-module.exports = {
-  go
 }

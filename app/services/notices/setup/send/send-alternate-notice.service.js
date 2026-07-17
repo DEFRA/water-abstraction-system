@@ -1,17 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates sending a 'failed' notice to Notify, recording the results, and checking the status when finished
  * @module SendAlternateNoticeService
  */
 
-const NotificationModel = require('../../../../models/notification.model.js')
-const RenewalInvitationAlternateNoticeService = require('./renewal-invitation-alternate-notice.service.js')
-const ReturnsInvitationAlternateNoticeService = require('./returns-invitation-alternate-notice.service.js')
-const SendLetterNotificationService = require('./send-letter-notification.service.js')
-
-const { timestampForPostgres } = require('../../../../lib/general.lib.js')
-const { NoticeType, NoticeTypes } = require('../../../../lib/static-lookups.lib.js')
+import NotificationModel from '../../../../models/notification.model.js'
+import RenewalInvitationAlternateNoticeService from './renewal-invitation-alternate-notice.service.js'
+import ReturnsInvitationAlternateNoticeService from './returns-invitation-alternate-notice.service.js'
+import SendLetterNotificationService from './send-letter-notification.service.js'
+import { timestampForPostgres } from '../../../../lib/general.lib.js'
+import { NoticeType, NoticeTypes } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates sending a 'failed' notice to Notify, recording the results, and checking the status when finished
@@ -20,7 +17,7 @@ const { NoticeType, NoticeTypes } = require('../../../../lib/static-lookups.lib.
  *
  * @returns {Promise<object>} The alternate notice that was sent, if one was created and sent else null
  */
-async function go(mainNotice) {
+export default async function sendAlternateNoticeService(mainNotice) {
   const result = await _alternateNoticeService(mainNotice)
 
   if (!result) {
@@ -37,10 +34,10 @@ async function go(mainNotice) {
 
 function _alternateNoticeService(mainNotice) {
   if (mainNotice.subtype === NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType) {
-    return RenewalInvitationAlternateNoticeService.go(mainNotice)
+    return RenewalInvitationAlternateNoticeService(mainNotice)
   }
 
-  return ReturnsInvitationAlternateNoticeService.go(mainNotice)
+  return ReturnsInvitationAlternateNoticeService(mainNotice)
 }
 
 async function _recordResult(sendResult) {
@@ -51,7 +48,7 @@ async function _recordResult(sendResult) {
 
 async function _sendNotifications(notifications, referenceCode) {
   for (const notification of notifications) {
-    const result = await SendLetterNotificationService.go(notification, referenceCode)
+    const result = await SendLetterNotificationService(notification, referenceCode)
 
     await _recordResult(result)
   }
@@ -62,8 +59,4 @@ async function _updateFailedEmailInvitations(alternateNoticeId, notificationIds)
     .patch({ alternateNoticeId, updatedAt: timestampForPostgres() })
     .whereIn('id', notificationIds)
     .whereNull('alternateNoticeId')
-}
-
-module.exports = {
-  go
 }

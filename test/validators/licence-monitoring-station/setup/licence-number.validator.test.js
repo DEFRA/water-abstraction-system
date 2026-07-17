@@ -1,19 +1,20 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { licenceEnds } = require('../../../support/fixtures/licence.fixture.js')
-const { yesterday } = require('../../../support/general.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
+import { generateLicenceRef } from '../../../support/generators.js'
+import { yesterday } from '../../../support/general.js'
 
 // Thing under test
-const LicenceNumberValidator = require('../../../../app/validators/licence-monitoring-station/setup/licence-number.validator.js')
+import LicenceNumberValidator from '../../../../app/validators/licence-monitoring-station/setup/licence-number.validator.js'
 
 describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
   let licence
   let payload = {}
 
   beforeEach(() => {
-    licence = licenceEnds()
+    licence = LicenceFixture.licenceEnds()
   })
 
   describe('when called with valid data', () => {
@@ -24,7 +25,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = LicenceNumberValidator.go(payload, licence)
+      const result = LicenceNumberValidator(payload, licence)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -38,7 +39,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicenceNumberValidator.go(payload, licence)
+        const result = LicenceNumberValidator(payload, licence)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -54,7 +55,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicenceNumberValidator.go(payload, licence)
+        const result = LicenceNumberValidator(payload, licence)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -72,7 +73,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicenceNumberValidator.go(payload, licence)
+        const result = LicenceNumberValidator(payload, licence)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -82,7 +83,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
 
     describe('because the licence has ended', () => {
       beforeEach(() => {
-        licence = licenceEnds(yesterday())
+        licence = LicenceFixture.licenceEnds(yesterday())
 
         payload = {
           licenceRef: generateLicenceRef()
@@ -90,7 +91,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicenceNumberValidator.go(payload, licence)
+        const result = LicenceNumberValidator(payload, licence)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

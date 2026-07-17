@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/licences' page
  * @module LicencesPresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function licencesPresenter(session) {
   const { company, id: sessionId, licences, abstractionAlertLicences } = session
 
   return {
@@ -34,8 +32,4 @@ function _licences(licences, abstractionAlertLicences) {
       checked: abstractionAlertLicences?.includes(licence.id) || false
     }
   })
-}
-
-module.exports = {
-  go
 }

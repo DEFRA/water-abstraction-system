@@ -1,22 +1,18 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitContactNameService = require('../../../../app/services/billing-accounts/setup/submit-contact-name.service.js')
+import SubmitContactNameService from '../../../../app/services/billing-accounts/setup/submit-contact-name.service.js'
 
 describe('Billing Accounts - Setup - Contact Name Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -26,13 +22,13 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       billingAccount
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -43,14 +39,14 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitContactNameService.go(session.id, payload)
+      await SubmitContactNameService(session.id, payload)
 
       expect(session.contactName).toEqual(payload.contactName)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitContactNameService.go(session.id, payload)
+      const result = await SubmitContactNameService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -64,20 +60,20 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
           contactName: 'Contact Name'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactNameService.go(session.id, payload)
+        await SubmitContactNameService(session.id, payload)
 
         expect(session.contactName).toEqual(payload.contactName)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactNameService.go(session.id, payload)
+        const result = await SubmitContactNameService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -93,21 +89,21 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
           contactName: 'Contact Name'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactNameService.go(session.id, payload)
+        await SubmitContactNameService(session.id, payload)
 
         expect(session.contactName).toEqual(payload.contactName)
         expect(session.checkPageVisited).toEqual(true)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns to the check page', async () => {
-        const result = await SubmitContactNameService.go(session.id, payload)
+        const result = await SubmitContactNameService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -127,22 +123,22 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
           contactName: 'Contact Name'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactNameService.go(session.id, payload)
+        await SubmitContactNameService(session.id, payload)
 
         expect(session.contactName).toEqual(payload.contactName)
         expect(session.checkPageVisited).toEqual(false)
 
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns to the check page', async () => {
-        const result = await SubmitContactNameService.go(session.id, payload)
+        const result = await SubmitContactNameService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -158,7 +154,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitContactNameService.go(session.id, payload)
+        const result = await SubmitContactNameService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -182,7 +178,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitContactNameService.go(session.id, payload)
+        const result = await SubmitContactNameService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [

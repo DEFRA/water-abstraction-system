@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/units` page
  * @module UnitsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['cubicMetres', 'litres', 'megalitres', 'gallons']
 
@@ -17,7 +15,7 @@ const VALID_VALUES = ['cubicMetres', 'litres', 'megalitres', 'gallons']
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function unitsValidator(payload) {
   const units = payload.units
 
   const errorMessage = 'Select which units were used'
@@ -34,8 +32,4 @@ function go(payload) {
   })
 
   return schema.validate({ units }, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

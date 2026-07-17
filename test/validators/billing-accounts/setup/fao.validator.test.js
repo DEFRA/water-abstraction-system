@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const FAOValidator = require('../../../../app/validators/billing-accounts/setup/fao.validator.js')
+import FAOValidator from '../../../../app/validators/billing-accounts/setup/fao.validator.js'
 
 describe('Billing Accounts - Setup - FAO Validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Billing Accounts - Setup - FAO Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = FAOValidator.go(payload)
+      const result = FAOValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +26,7 @@ describe('Billing Accounts - Setup - FAO Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = FAOValidator.go(payload)
+      const result = FAOValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

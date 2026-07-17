@@ -1,6 +1,4 @@
-'use strict'
-
-const data = [
+export const data = [
   {
     id: '4e8ee7ee-ea1f-4966-a01c-372d8451ee44',
     description: 'Major change',
@@ -191,7 +189,3 @@ const data = [
     enabledForNewChargeVersions: true
   }
 ]
-
-module.exports = {
-  data
-}

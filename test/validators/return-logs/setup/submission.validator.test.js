@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Thing under test
-const SubmissionValidator = require('../../../../app/validators/return-logs/setup/submission.validator.js')
+import SubmissionValidator from '../../../../app/validators/return-logs/setup/submission.validator.js'
 
 describe('Return Logs Setup - Submission validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = SubmissionValidator.go({ journey: 'enterReturn' })
+      const result = SubmissionValidator({ journey: 'enterReturn' })
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -16,7 +17,7 @@ describe('Return Logs Setup - Submission validator', () => {
   describe('when invalid data is provided', () => {
     describe('because no "journey" is given', () => {
       it('fails validation', () => {
-        const result = SubmissionValidator.go({ journey: '' })
+        const result = SubmissionValidator({ journey: '' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -26,7 +27,7 @@ describe('Return Logs Setup - Submission validator', () => {
 
     describe('because an unknown "type" is given', () => {
       it('fails validation', () => {
-        const result = SubmissionValidator.go({ journey: 'invalid' })
+        const result = SubmissionValidator({ journey: 'invalid' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

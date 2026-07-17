@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ContactNameValidator = require('../../../../app/validators/company-contacts/setup/contact-name.validator.js')
+import ContactNameValidator from '../../../../app/validators/company-contacts/setup/contact-name.validator.js'
 
 describe('Company Contacts - Setup - Contact Name Validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Company Contacts - Setup - Contact Name Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = ContactNameValidator.go(payload)
+      const result = ContactNameValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +27,7 @@ describe('Company Contacts - Setup - Contact Name Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = ContactNameValidator.go(payload)
+        const result = ContactNameValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -40,7 +41,7 @@ describe('Company Contacts - Setup - Contact Name Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = ContactNameValidator.go(payload)
+        const result = ContactNameValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposeConditionHelper = require('../../../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../../../support/helpers/licence-version-purpose-condition-type.helper.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import LicenceVersionPurposeConditionHelper from '../../../support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionTypeHelper from '../../../support/helpers/licence-version-purpose-condition-type.helper.js'
+import LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
 
 // Thing under test
-const FetchFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
+import FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
 
 const CES_CONDITION_TYPE = LicenceVersionPurposeConditionTypeHelper.select(20)
 const NON_CES_CONDITION_TYPE = LicenceVersionPurposeConditionTypeHelper.select(19)
@@ -52,7 +53,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('returns current CES conditions for the specified licence', async () => {
-      const results = await FetchFullConditionService.go(licence.id)
+      const results = await FetchFullConditionService(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id
@@ -62,7 +63,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('does not return conditions from other licences', async () => {
-      const results = await FetchFullConditionService.go(licence.id)
+      const results = await FetchFullConditionService(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id
@@ -72,7 +73,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('does not return non-CES conditions', async () => {
-      const results = await FetchFullConditionService.go(licence.id)
+      const results = await FetchFullConditionService(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id
@@ -82,7 +83,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('does not return superseded conditions', async () => {
-      const results = await FetchFullConditionService.go(licence.id)
+      const results = await FetchFullConditionService(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id

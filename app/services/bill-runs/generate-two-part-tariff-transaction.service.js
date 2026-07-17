@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generate a two-part tariff transaction data from the the charge reference and other information passed in
  * @module GenerateTwoPartTariffTransactionService
  */
 
-const { generateUUID } = require('../../lib/general.lib.js')
+import { generateUUID } from '../../lib/general.lib.js'
 
 /**
  * Generate a two-part tariff transaction data from the the charge reference and other information passed in
@@ -32,7 +30,13 @@ const { generateUUID } = require('../../lib/general.lib.js')
  *
  * @returns {object} the two-part tariff transaction
  */
-function go(billLicenceId, chargeReference, chargePeriod, newLicence, waterUndertaker) {
+export default function generateTwoPartTariffTransactionService(
+  billLicenceId,
+  chargeReference,
+  chargePeriod,
+  newLicence,
+  waterUndertaker
+) {
   const billableQuantity = _billableQuantity(chargeReference.chargeElements)
 
   if (billableQuantity === 0) {
@@ -129,8 +133,4 @@ function _standardTransaction(
     winterOnly: !!chargeReference.adjustments.winter,
     purposes: _generateElements(chargeReference)
   }
-}
-
-module.exports = {
-  go
 }

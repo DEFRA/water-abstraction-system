@@ -1,14 +1,11 @@
-'use strict'
-
 /**
  * Fetches the selected page of users for /users
  * @module FetchUsersDal
  */
 
-const UserModel = require('../../models/user.model.js')
-const { userPermissions } = require('../../lib/static-lookups.lib.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import UserModel from '../../models/user.model.js'
+import { userPermissions } from '../../lib/static-lookups.lib.js'
 
 /**
  * Fetches the selected page of users for /users
@@ -30,7 +27,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<module:UserModel[]>} an array of users that match the selected 'page in the data
  */
-async function go(filters, page = '1') {
+export default async function fetchUsersDal(filters, page = '1') {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)
@@ -348,8 +345,4 @@ function _fetchQuery() {
     .select(['id', 'licenceEntityId', 'userId', 'username'])
     .modify('status')
     .modify('permissions')
-}
-
-module.exports = {
-  go
 }

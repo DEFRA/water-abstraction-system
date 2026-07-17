@@ -1,14 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the `address/{sessionId}/postcode` page
  *
  * @module PostcodeValidator
  */
 
-const { postcodeValidator } = require('postcode-validator')
-
-const Joi = require('joi')
+import Joi from 'joi'
+import { postcodeValidator } from 'postcode-validator'
 
 /**
  * Validates data submitted for the `address/{sessionId}/postcode` page
@@ -18,7 +15,7 @@ const Joi = require('joi')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function postcode(payload) {
   const schema = Joi.object({
     postcode: Joi.string()
       .required()
@@ -35,8 +32,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

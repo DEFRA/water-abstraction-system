@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Updates the notification record for the new user with the result of sending a notification
  * @module UpdateNotificationDal
  */
 
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Updates the notification record for the new user with the result of sending a notification
@@ -15,14 +13,10 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The updated notification record
  */
-async function go(notification, sendResult) {
+export default async function updateNotificationDal(notification, sendResult) {
   const { notifyError, notifyId, notifyStatus, plaintext, status } = sendResult
 
   const updatedAt = timestampForPostgres()
 
   return notification.$query().patch({ notifyError, notifyId, notifyStatus, plaintext, status, updatedAt })
-}
-
-module.exports = {
-  go
 }

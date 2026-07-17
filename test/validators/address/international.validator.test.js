@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const InternationalValidator = require('../../../app/validators/address/international.validator.js')
+import InternationalValidator from '../../../app/validators/address/international.validator.js'
 
 describe('Address - International Validator', () => {
   let payload
@@ -19,7 +20,7 @@ describe('Address - International Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = InternationalValidator.go(payload)
+      const result = InternationalValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -32,7 +33,7 @@ describe('Address - International Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = InternationalValidator.go(payload)
+      const result = InternationalValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error.details[0].message).toEqual('Enter address line 1')
@@ -46,7 +47,7 @@ describe('Address - International Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = InternationalValidator.go(payload)
+      const result = InternationalValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error.details[0].message).toEqual('Address line 1 cannot start with a special character')
@@ -59,7 +60,7 @@ describe('Address - International Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = InternationalValidator.go(payload)
+      const result = InternationalValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error.details[0].message).toEqual('Address line 2 cannot start with a special character')
@@ -72,7 +73,7 @@ describe('Address - International Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = InternationalValidator.go(payload)
+      const result = InternationalValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error.details[0].message).toEqual('Address line 3 cannot start with a special character')
@@ -85,7 +86,7 @@ describe('Address - International Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = InternationalValidator.go(payload)
+      const result = InternationalValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error.details[0].message).toEqual('Address line 4 cannot start with a special character')

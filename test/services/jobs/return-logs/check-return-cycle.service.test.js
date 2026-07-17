@@ -1,19 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things to stub
-const ReturnCycleModel = require('../../../../app/models/return-cycle.model.js')
+import ReturnCycleModel from '../../../../app/models/return-cycle.model.js'
 
 // Thing under test
-const CheckReturnCycleService = require('../../../../app/services/jobs/return-logs/check-return-cycle.service.js')
+import CheckReturnCycleService from '../../../../app/services/jobs/return-logs/check-return-cycle.service.js'
 
 describe('Jobs - Return Logs - Check Return Cycle service', () => {
   const currentDate = new Date('2024-05-01')
   const id = '0055799f-8b6a-4753-ac78-57c61a6ef80b'
 
-  let clock
   let cycleData
   let firstStub
   let insertStub
@@ -21,25 +18,25 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
   let summer
 
   beforeEach(() => {
-    firstStub = Sinon.stub()
-    insertStub = Sinon.stub().returnsThis()
-    returningStub = Sinon.stub()
+    firstStub = vi.fn()
+    insertStub = vi.fn().mockReturnThis()
+    returningStub = vi.fn()
 
-    Sinon.stub(ReturnCycleModel, 'query').returns({
-      select: Sinon.stub().returnsThis(),
-      where: Sinon.stub().returnsThis(),
-      limit: Sinon.stub().returnsThis(),
+    vi.spyOn(ReturnCycleModel, 'query').mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      where: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis(),
       first: firstStub,
       returning: returningStub,
       insert: insertStub
     })
 
-    clock = Sinon.useFakeTimers(currentDate)
+    vi.useFakeTimers({ now: currentDate })
   })
 
   afterEach(() => {
-    Sinon.restore()
-    clock.restore()
+    vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   describe('when summer is true', () => {
@@ -56,16 +53,16 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
 
     describe('and there is no matching return cycle for the change date', () => {
       beforeEach(() => {
-        firstStub.resolves(undefined)
-        returningStub.resolves(cycleData)
+        firstStub.mockResolvedValue(undefined)
+        returningStub.mockResolvedValue(cycleData)
       })
 
       it('creates and then returns the new summer return cycle', async () => {
-        const result = await CheckReturnCycleService.go(summer)
+        const result = await CheckReturnCycleService(summer)
 
-        const [insertObject] = insertStub.args[0]
+        const [insertObject] = insertStub.mock.calls[0]
 
-        expect(insertStub.callCount).toEqual(1)
+        expect(insertStub).toHaveBeenCalledTimes(1)
         expect(insertObject).toMatchObject({
           dueDate: null,
           endDate: cycleData.endDate,
@@ -79,11 +76,11 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
 
     describe('and there is a matching summer return cycle for the change date', () => {
       beforeEach(() => {
-        firstStub.resolves(cycleData)
+        firstStub.mockResolvedValue(cycleData)
       })
 
       it('returns the matching summer cycle', async () => {
-        const result = await CheckReturnCycleService.go(summer)
+        const result = await CheckReturnCycleService(summer)
 
         expect(result).toEqual(cycleData)
       })
@@ -104,16 +101,16 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
 
     describe('and there is no matching return cycle for the change date', () => {
       beforeEach(() => {
-        firstStub.resolves(undefined)
-        returningStub.resolves(cycleData)
+        firstStub.mockResolvedValue(undefined)
+        returningStub.mockResolvedValue(cycleData)
       })
 
       it('creates and then returns the new summer return cycle', async () => {
-        const result = await CheckReturnCycleService.go(summer)
+        const result = await CheckReturnCycleService(summer)
 
-        const [insertObject] = insertStub.args[0]
+        const [insertObject] = insertStub.mock.calls[0]
 
-        expect(insertStub.callCount).toEqual(1)
+        expect(insertStub).toHaveBeenCalledTimes(1)
         expect(insertObject).toMatchObject({
           dueDate: null,
           endDate: cycleData.endDate,
@@ -127,11 +124,11 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
 
     describe('when there is a matching all year return cycle for the change date', () => {
       beforeEach(() => {
-        firstStub.resolves(cycleData)
+        firstStub.mockResolvedValue(cycleData)
       })
 
       it('returns the matching all year return cycle', async () => {
-        const result = await CheckReturnCycleService.go(summer)
+        const result = await CheckReturnCycleService(summer)
 
         expect(result).toEqual(cycleData)
       })

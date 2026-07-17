@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for return_submission_lines (returns.lines)
  * @module ReturnSubmissionLineModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import ReturnSubmissionModel from './return-submission.model.js'
 
-class ReturnSubmissionLineModel extends BaseModel {
+export default class ReturnSubmissionLineModel extends BaseModel {
   static get tableName() {
     return 'returnSubmissionLines'
   }
@@ -18,7 +17,7 @@ class ReturnSubmissionLineModel extends BaseModel {
     return {
       returnSubmission: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'return-submission.model',
+        modelClass: ReturnSubmissionModel,
         join: {
           from: 'returnSubmissionLines.returnSubmissionId',
           to: 'returnSubmissions.id'
@@ -27,5 +26,3 @@ class ReturnSubmissionLineModel extends BaseModel {
     }
   }
 }
-
-module.exports = ReturnSubmissionLineModel

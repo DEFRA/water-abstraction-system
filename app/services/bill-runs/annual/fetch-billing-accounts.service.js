@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches all billing accounts to be processed as part of annual billing for a region and billing period
  * @module FetchBillingAccountsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const BillingAccountModel = require('../../../models/billing-account.model.js')
-const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const Workflow = require('../../../models/workflow.model.js')
+import BillingAccountModel from '../../../models/billing-account.model.js'
+import ChargeVersionModel from '../../../models/charge-version.model.js'
+import Workflow from '../../../models/workflow.model.js'
 
 /**
  * Fetch all billing accounts to be processed as part of annual billing for a region and billing period
@@ -30,7 +28,7 @@ const Workflow = require('../../../models/workflow.model.js')
  * @returns {Promise<module:BillingAccountModel[]>} An array of `BillingAccountModel` to be billed and their relevant
  * licence, charge version, charge element etc records needed to generate the bill run
  */
-async function go(regionId, billingPeriod) {
+export default async function fetchBillingAccountsService(regionId, billingPeriod) {
   const allBillingAccounts = await _fetchNew(regionId, billingPeriod)
 
   return allBillingAccounts
@@ -158,8 +156,4 @@ function _whereExistsClause(regionId, billingPeriod) {
   query.whereColumn('chargeVersions.billingAccountId', 'billingAccounts.id')
 
   return query
-}
-
-module.exports = {
-  go
 }

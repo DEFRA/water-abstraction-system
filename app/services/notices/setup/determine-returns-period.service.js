@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines the returns period data for the provided returns period
  * @module DetermineReturnsPeriod
  */
 
-const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
+import { determineUpcomingReturnPeriods } from '../../../lib/return-periods.lib.js'
 
 /**
  * Determines the returns period data for the provided returns period
@@ -18,7 +16,7 @@ const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.
  *
  * @returns {object} - the returns period and the if the period is `summer`
  */
-function go(returnsPeriod) {
+export default function determineReturnsPeriodService(returnsPeriod) {
   return {
     returnsPeriod: _returnsPeriod(returnsPeriod),
     summer: _summer(returnsPeriod)
@@ -51,8 +49,4 @@ function _returnsPeriod(returnsPeriod) {
  */
 function _summer(returnsPeriod) {
   return returnsPeriod === 'summer' ? 'true' : 'false'
-}
-
-module.exports = {
-  go
 }

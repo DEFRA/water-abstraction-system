@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/billing-accounts/setup/{sessionId}/company-search' page
  *
  * @module SubmitCompanySearchService
  */
 
-const CompanySearchPresenter = require('../../../presenters/billing-accounts/setup/company-search.presenter.js')
-const CompanySearchValidator = require('../../../validators/billing-accounts/setup/company-search.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import CompanySearchPresenter from '../../../presenters/billing-accounts/setup/company-search.presenter.js'
+import CompanySearchValidator from '../../../validators/billing-accounts/setup/company-search.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/billing-accounts/setup/{sessionId}/company-search' page
@@ -19,8 +17,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitCompanySearchService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -67,15 +65,11 @@ async function _save(session, payload) {
 function _submissionData(session, payload) {
   session.companySearch = payload.companySearch
 
-  return CompanySearchPresenter.go(session)
+  return CompanySearchPresenter(session)
 }
 
 function _validate(payload) {
-  const validationResult = CompanySearchValidator.go(payload)
+  const validationResult = CompanySearchValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

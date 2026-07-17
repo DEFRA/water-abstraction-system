@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for
  * `/return-versions/setup/{sessionId}/remove/{requirementIndex}` page
  * @module RemoveService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RemovePresenter = require('../../../presenters/return-versions/setup/remove.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RemovePresenter from '../../../presenters/return-versions/setup/remove.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for
@@ -21,15 +19,11 @@ const RemovePresenter = require('../../../presenters/return-versions/setup/remov
  *
  * @returns {Promise<object>} The view data for the remove requirements page
  */
-async function go(sessionId, requirementIndex) {
-  const session = await FetchSessionDal.go(sessionId)
-  const formattedData = RemovePresenter.go(session, requirementIndex)
+export default async function removeService(sessionId, requirementIndex) {
+  const session = await FetchSessionDal(sessionId)
+  const formattedData = RemovePresenter(session, requirementIndex)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

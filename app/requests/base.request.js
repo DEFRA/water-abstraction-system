@@ -1,13 +1,12 @@
-'use strict'
-
 /**
  * Use for making http requests to other services
  * @module BaseRequest
  */
 
-const { HttpsProxyAgent } = require('hpagent')
+import { HttpsProxyAgent } from 'hpagent'
+import got from 'got'
 
-const serverConfig = require('../../config/server.config.js')
+import serverConfig from '../../config/server.config.js'
 
 /**
  * Returns an object containing the default options.
@@ -23,7 +22,7 @@ const serverConfig = require('../../config/server.config.js')
  *
  * @returns {object} default options to pass to Got when making a request
  */
-function defaultOptions() {
+export function defaultOptions() {
   return {
     // This uses the ternary operator to give either an `agent` object or an empty object, and the spread operator to
     // bring the result back into the top level of the `defaultOptions` object.
@@ -79,7 +78,7 @@ function defaultOptions() {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function deleteRequest(url, additionalOptions = {}) {
+export async function deleteRequest(url, additionalOptions = {}) {
   return _sendRequest('delete', url, additionalOptions)
 }
 
@@ -104,7 +103,7 @@ async function deleteRequest(url, additionalOptions = {}) {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function get(url, additionalOptions = {}) {
+export async function getRequest(url, additionalOptions = {}) {
   return _sendRequest('get', url, additionalOptions)
 }
 
@@ -129,7 +128,7 @@ async function get(url, additionalOptions = {}) {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function patch(url, additionalOptions = {}) {
+export async function patchRequest(url, additionalOptions = {}) {
   return _sendRequest('patch', url, additionalOptions)
 }
 
@@ -154,22 +153,12 @@ async function patch(url, additionalOptions = {}) {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function post(url, additionalOptions = {}) {
+export async function postRequest(url, additionalOptions = {}) {
   return _sendRequest('post', url, additionalOptions)
 }
 
 function _beforeRetryHook(error, retryCount) {
   globalThis.GlobalNotifier.omg('Retrying HTTP request', { error, retryCount })
-}
-
-async function _importGot() {
-  // As of v12, the got dependency no longer supports CJS modules. This causes us a problem as we are locked into
-  // using these for the time being. Some workarounds are provided here:
-  // https://github.com/sindresorhus/got/issues/1789 We have gone the route of using await import('got'). We cannot do
-  // this at the top level as Node doesn't support top level in CJS so we do it here instead.
-  const { default: got } = await import('got')
-
-  return got
 }
 
 /**
@@ -228,7 +217,6 @@ function _requestOptions(additionalOptions) {
 }
 
 async function _sendRequest(method, url, additionalOptions) {
-  const got = await _importGot()
   const result = {
     succeeded: false,
     response: null
@@ -252,12 +240,4 @@ async function _sendRequest(method, url, additionalOptions) {
   }
 
   return result
-}
-
-module.exports = {
-  delete: deleteRequest,
-  get,
-  patch,
-  post,
-  defaultOptions: defaultOptions()
 }

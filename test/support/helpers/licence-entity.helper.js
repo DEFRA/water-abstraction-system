@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module LicenceEntityHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
+import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
+import { generateName, generateUUID } from '../generators.js'
 
 /**
  * Add a new licence entity
@@ -51,17 +49,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Generates a random name
- *
- * @returns {string} a random name in the format [random UUID]@example.co.uk
- */
-function generateName() {
-  return `${generateUUID()}@example.co.uk`
-}
-
-module.exports = {
+export default {
   add,
-  defaults,
-  generateName
+  defaults
 }

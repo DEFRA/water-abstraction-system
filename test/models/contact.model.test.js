@@ -1,16 +1,17 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
-const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
-const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
-const CompanyContactModel = require('../../app/models/company-contact.model.js')
-const ContactHelper = require('../support/helpers/contact.helper.js')
-const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
-const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
+import BillingAccountAddressHelper from '../support/helpers/billing-account-address.helper.js'
+import BillingAccountAddressModel from '../../app/models/billing-account-address.model.js'
+import CompanyContactHelper from '../support/helpers/company-contact.helper.js'
+import CompanyContactModel from '../../app/models/company-contact.model.js'
+import ContactHelper from '../support/helpers/contact.helper.js'
+import LicenceDocumentRoleHelper from '../support/helpers/licence-document-role.helper.js'
+import LicenceDocumentRoleModel from '../../app/models/licence-document-role.model.js'
 
 // Thing under test
-const ContactModel = require('../../app/models/contact.model.js')
+import ContactModel from '../../app/models/contact.model.js'
 
 describe('Contact model', () => {
   let testBillingAccountAddresses

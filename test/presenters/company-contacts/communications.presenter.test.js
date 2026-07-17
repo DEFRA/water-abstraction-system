@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 
 // Thing under test
-const CommunicationsPresenter = require('../../../app/presenters/company-contacts/communications.presenter.js')
+import CommunicationsPresenter from '../../../app/presenters/company-contacts/communications.presenter.js'
 
 describe('Company Contacts - Communications presenter', () => {
   let companyContact
@@ -40,7 +41,7 @@ describe('Company Contacts - Communications presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CommunicationsPresenter.go(company, companyContact, notifications)
+      const result = CommunicationsPresenter(company, companyContact, notifications)
 
       expect(result).toEqual({
         backLink: {
@@ -67,7 +68,7 @@ describe('Company Contacts - Communications presenter', () => {
 
     describe('the "notifications" property', () => {
       it('returns the notifications with the company id as query string in the link', () => {
-        const result = CommunicationsPresenter.go(company, companyContact, notifications)
+        const result = CommunicationsPresenter(company, companyContact, notifications)
 
         expect(result.notifications[0].link.href).toEqual(
           `/system/notifications/${notification.id}?companyContactId=${companyContact.id}`

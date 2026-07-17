@@ -1,30 +1,28 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
-const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+import BillRunError from '../../../../app/errors/bill-run.error.js'
+import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
+import ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
+import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
+import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import FetchChargeVersionsService from '../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Things we need to stub
-const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
-const FetchPreviousTransactionsService = require('../../../../app/services/bill-runs/fetch-previous-transactions.service.js')
-const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
-const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
+import * as ChargingModuleGenerateBillRunRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
+import * as FetchPreviousTransactionsService from '../../../../app/services/bill-runs/fetch-previous-transactions.service.js'
+import * as GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
+import * as SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
 
 // Thing under test
-const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
+import ProcessBillingPeriodService from '../../../../app/services/bill-runs/supplementary/process-billing-period.service.js'
 
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const REGION_SOUTH_WEST_INDEX = 4
@@ -53,11 +51,11 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
     billRun = await BillRunHelper.add({ regionId: region.id })
 
-    Sinon.stub(FetchPreviousTransactionsService, 'go').resolves([])
+    vi.spyOn(FetchPreviousTransactionsService, 'default').mockResolvedValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service is called', () => {
@@ -67,7 +65,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       })
 
       it('returns false (bill run is empty)', async () => {
-        const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+        const result = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions)
 
         expect(result).toBe(false)
       })
@@ -96,14 +94,14 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
               abstractionPeriodEndMonth: 5
             })
 
-            const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+            const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
 
             chargeVersions = chargeVersionData.chargeVersions
           })
 
           describe('and there are no previous billed transactions', () => {
             it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+              const result = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions)
 
               expect(result).toBe(false)
             })
@@ -133,13 +131,13 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
                 abstractionPeriodEndMonth: 3
               })
 
-              const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+              const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
 
               chargeVersions = chargeVersionData.chargeVersions
             })
 
             it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+              const result = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions)
 
               expect(result).toBe(false)
             })
@@ -168,7 +166,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
             abstractionPeriodEndMonth: 3
           })
 
-          const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+          const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
 
           chargeVersions = chargeVersionData.chargeVersions
 
@@ -212,15 +210,15 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
             }
           ]
 
-          Sinon.stub(SendTransactionsService, 'go').resolves(sentTransactions)
-          Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send').resolves({
+          vi.spyOn(SendTransactionsService, 'default').mockResolvedValue(sentTransactions)
+          vi.spyOn(ChargingModuleGenerateBillRunRequest, 'default').mockResolvedValue({
             succeeded: true,
             response: {}
           })
         })
 
         it('returns true (bill run is not empty)', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions)
 
           expect(result).toBe(true)
         })
@@ -242,18 +240,20 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
       await ChargeElementHelper.add({ chargeReferenceId })
 
-      const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+      const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
 
       chargeVersions = chargeVersionData.chargeVersions
     })
 
     describe('because generating the calculated transactions fails', () => {
       beforeEach(async () => {
-        Sinon.stub(GenerateTransactionsService, 'go').throws()
+        vi.spyOn(GenerateTransactionsService, 'default').mockImplementation(() => {
+          throw new Error()
+        })
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions).catch((e) => {
           return e
         })
 
@@ -266,11 +266,11 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       beforeEach(async () => {
         const thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToCreateCharge)
 
-        Sinon.stub(SendTransactionsService, 'go').rejects(thrownError)
+        vi.spyOn(SendTransactionsService, 'default').mockRejectedValue(thrownError)
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions).catch((e) => {
           return e
         })
 

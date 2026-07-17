@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const LicenceEndDateChangeModel = require('../../../../app/models/licence-end-date-change.model.js')
+import LicenceEndDateChangeModel from '../../../../app/models/licence-end-date-change.model.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const CheckLicenceEndDatesService = require('../../../../app/services/licences/end-dates/check-licence-end-dates.service.js')
+import CheckLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-licence-end-dates.service.js'
 
 describe('Licences - End Dates - Check Licence End Dates service', () => {
   let licence
@@ -32,12 +30,12 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
 
     if (licenceEndDateChanges) {
@@ -47,11 +45,11 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
 
   describe('when the "end dates" on the licence have not changed', () => {
     it('does not record the change', async () => {
-      await CheckLicenceEndDatesService.go(licence)
+      await CheckLicenceEndDatesService(licence)
 
       const licenceEndDateChanges = await LicenceEndDateChangeModel.query().where('licenceId', licence.id)
 
-      expect(licenceEndDateChanges.length).toEqual(0)
+      expect(licenceEndDateChanges).toHaveLength(0)
     })
   })
 
@@ -62,11 +60,11 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
     })
 
     it('records the change', async () => {
-      await CheckLicenceEndDatesService.go(licence)
+      await CheckLicenceEndDatesService(licence)
 
       const licenceEndDateChanges = await LicenceEndDateChangeModel.query().where('licenceId', licence.id)
 
-      expect(licenceEndDateChanges.length).toEqual(1)
+      expect(licenceEndDateChanges).toHaveLength(1)
     })
   })
 
@@ -75,19 +73,23 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
       licence.nald_revoked_date = new Date('2023-01-01')
       licence.wrls_revoked_date = null
 
-      Sinon.stub(LicenceEndDateChangeModel, 'query').returns({
-        insert: Sinon.stub().returnsThis(),
-        onConflict: Sinon.stub().returnsThis(),
-        merge: Sinon.stub().rejects()
+      vi.spyOn(LicenceEndDateChangeModel, 'query').mockReturnValue({
+        insert: vi.fn().mockReturnThis(),
+        onConflict: vi.fn().mockReturnThis(),
+        merge: vi.fn().mockRejectedValue(new Error())
       })
     })
 
     it('handles the error', async () => {
-      await CheckLicenceEndDatesService.go(licence)
+      await CheckLicenceEndDatesService(licence)
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg.calledWith('Check licence end dates failed')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith(
+        'Check licence end dates failed',
+        expect.any(Object),
+        expect.any(Error)
+      )
       expect(errorLogArgs[1]).toEqual({
         id: licence.id,
         changedDateDetails: {

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Sends multipart/form-data to Gotenberg for generating a PDF document
  * @module GeneratePaperReturnRequest
  */
 
-const nunjucks = require('nunjucks')
-const path = require('node:path')
+import nunjucks from 'nunjucks'
+import path from 'node:path'
 
-const GotenbergRequest = require('../gotenberg.request.js')
+import { postRequest } from '../gotenberg.request.js'
 
 /**
  * Sends multipart/form-data to Gotenberg for generating a PDF document
@@ -21,13 +19,13 @@ const GotenbergRequest = require('../gotenberg.request.js')
  * @returns {Promise<object>} An object representing the result of the request, including the response 'body' as a
  * {@link https://nodejs.org/api/buffer.html|Buffer}
  */
-async function send(pageData) {
+export default async function generatePaperReturnRequest(pageData) {
   const htmlContent = await _generateHtmlContent('preview-return-forms.njk', pageData)
   const footerContent = await _generateHtmlContent('layout/footer.html', pageData)
 
   const formData = _generateFormData(htmlContent, footerContent)
 
-  return GotenbergRequest.post('forms/chromium/convert/html', formData)
+  return postRequest('forms/chromium/convert/html', formData)
 }
 
 function _generateFormData(htmlContent, footerHtml) {
@@ -51,15 +49,13 @@ function _generateFormData(htmlContent, footerHtml) {
 }
 
 function _generateHtmlContent(view, data) {
-  const nunjucksEnv = nunjucks.configure(path.resolve(__dirname, '../../views/notices/pdfs/'), { autoescape: true })
+  const nunjucksEnv = nunjucks.configure(path.resolve(import.meta.dirname, '../../views/notices/pdfs/'), {
+    autoescape: true
+  })
 
   return new Promise((resolve, reject) => {
     nunjucksEnv.render(view, data, (err, result) => {
       return err ? reject(err) : resolve(result)
     })
   })
-}
-
-module.exports = {
-  send
 }

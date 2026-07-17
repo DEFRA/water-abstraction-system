@@ -1,50 +1,52 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const CancelService = require('../../app/services/return-logs/setup/cancel.service.js')
-const CheckService = require('../../app/services/return-logs/setup/check.service.js')
-const ConfirmedService = require('../../app/services/return-logs/setup/confirmed.service.js')
-const DeleteNoteService = require('../../app/services/return-logs/setup/delete-note.service.js')
-const InitiateSessionService = require('../../app/services/return-logs/setup/initiate-session.service.js')
-const MeterDetailsService = require('../../app/services/return-logs/setup/meter-details.service.js')
-const MeterProvidedService = require('../../app/services/return-logs/setup/meter-provided.service.js')
-const MultipleEntriesService = require('../../app/services/return-logs/setup/multiple-entries.service.js')
-const NoteService = require('../../app/services/return-logs/setup/note.service.js')
-const PeriodUsedService = require('../../app/services/return-logs/setup/period-used.service.js')
-const ReadingsService = require('../../app/services/return-logs/setup/readings.service.js')
-const ReceivedService = require('../../app/services/return-logs/setup/received.service.js')
-const ReportedService = require('../../app/services/return-logs/setup/reported.service.js')
-const SingleVolumeService = require('../../app/services/return-logs/setup/single-volume.service.js')
-const StartReadingService = require('../../app/services/return-logs/setup/start-reading.service.js')
-const SubmissionService = require('../../app/services/return-logs/setup/submission.service.js')
-const SubmitCancelService = require('../../app/services/return-logs/setup/submit-cancel.service.js')
-const SubmitCheckService = require('../../app/services/return-logs/setup/submit-check.service.js')
-const SubmitConfirmedService = require('../../app/services/return-logs/setup/submit-confirmed.service.js')
-const SubmitMeterDetailsService = require('../../app/services/return-logs/setup/submit-meter-details.service.js')
-const SubmitMeterProvidedService = require('../../app/services/return-logs/setup/submit-meter-provided.service.js')
-const SubmitMultipleEntriesService = require('../../app/services/return-logs/setup/submit-multiple-entries.service.js')
-const SubmitNoteService = require('../../app/services/return-logs/setup/submit-note.service.js')
-const SubmitPeriodUsedService = require('../../app/services/return-logs/setup/submit-period-used.service.js')
-const SubmitReadingsService = require('../../app/services/return-logs/setup/submit-readings.service.js')
-const SubmitReceivedService = require('../../app/services/return-logs/setup/submit-received.service.js')
-const SubmitReportedService = require('../../app/services/return-logs/setup/submit-reported.service.js')
-const SubmitSingleVolumeService = require('../../app/services/return-logs/setup/submit-single-volume.service.js')
-const SubmitStartReadingService = require('../../app/services/return-logs/setup/submit-start-reading.service.js')
-const SubmitSubmissionService = require('../../app/services/return-logs/setup/submit-submission.service.js')
-const SubmitUnitsService = require('../../app/services/return-logs/setup/submit-units.service.js')
-const SubmitVolumesService = require('../../app/services/return-logs/setup/submit-volumes.service.js')
-const UnitsService = require('../../app/services/return-logs/setup/units.service.js')
-const VolumesService = require('../../app/services/return-logs/setup/volumes.service.js')
+import * as CancelService from '../../app/services/return-logs/setup/cancel.service.js'
+import * as CheckService from '../../app/services/return-logs/setup/check.service.js'
+import * as ConfirmedService from '../../app/services/return-logs/setup/confirmed.service.js'
+import * as DeleteNoteService from '../../app/services/return-logs/setup/delete-note.service.js'
+import * as InitiateSessionService from '../../app/services/return-logs/setup/initiate-session.service.js'
+import * as MeterDetailsService from '../../app/services/return-logs/setup/meter-details.service.js'
+import * as MeterProvidedService from '../../app/services/return-logs/setup/meter-provided.service.js'
+import * as MultipleEntriesService from '../../app/services/return-logs/setup/multiple-entries.service.js'
+import * as NoteService from '../../app/services/return-logs/setup/note.service.js'
+import * as PeriodUsedService from '../../app/services/return-logs/setup/period-used.service.js'
+import * as ReadingsService from '../../app/services/return-logs/setup/readings.service.js'
+import * as ReceivedService from '../../app/services/return-logs/setup/received.service.js'
+import * as ReportedService from '../../app/services/return-logs/setup/reported.service.js'
+import * as SingleVolumeService from '../../app/services/return-logs/setup/single-volume.service.js'
+import * as StartReadingService from '../../app/services/return-logs/setup/start-reading.service.js'
+import * as SubmissionService from '../../app/services/return-logs/setup/submission.service.js'
+import * as SubmitCancelService from '../../app/services/return-logs/setup/submit-cancel.service.js'
+import * as SubmitCheckService from '../../app/services/return-logs/setup/submit-check.service.js'
+import * as SubmitConfirmedService from '../../app/services/return-logs/setup/submit-confirmed.service.js'
+import * as SubmitMeterDetailsService from '../../app/services/return-logs/setup/submit-meter-details.service.js'
+import * as SubmitMeterProvidedService from '../../app/services/return-logs/setup/submit-meter-provided.service.js'
+import * as SubmitMultipleEntriesService from '../../app/services/return-logs/setup/submit-multiple-entries.service.js'
+import * as SubmitNoteService from '../../app/services/return-logs/setup/submit-note.service.js'
+import * as SubmitPeriodUsedService from '../../app/services/return-logs/setup/submit-period-used.service.js'
+import * as SubmitReadingsService from '../../app/services/return-logs/setup/submit-readings.service.js'
+import * as SubmitReceivedService from '../../app/services/return-logs/setup/submit-received.service.js'
+import * as SubmitReportedService from '../../app/services/return-logs/setup/submit-reported.service.js'
+import * as SubmitSingleVolumeService from '../../app/services/return-logs/setup/submit-single-volume.service.js'
+import * as SubmitStartReadingService from '../../app/services/return-logs/setup/submit-start-reading.service.js'
+import * as SubmitSubmissionService from '../../app/services/return-logs/setup/submit-submission.service.js'
+import * as SubmitUnitsService from '../../app/services/return-logs/setup/submit-units.service.js'
+import * as SubmitVolumesService from '../../app/services/return-logs/setup/submit-volumes.service.js'
+import * as UnitsService from '../../app/services/return-logs/setup/units.service.js'
+import * as VolumesService from '../../app/services/return-logs/setup/volumes.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 const sessionId = 'f01efb63-4d27-4be7-ab10-54cf177f1908'
 
@@ -59,16 +61,15 @@ describe('Return Logs - Setup - Controller', () => {
   })
 
   beforeEach(() => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -81,7 +82,7 @@ describe('Return Logs - Setup - Controller', () => {
         beforeEach(() => {
           options = postRequestOptions(`/return-logs/setup`, { payload: { returnLogId: 'RETURN_LOG_ID' } }, ['returns'])
 
-          Sinon.stub(InitiateSessionService, 'go').resolves(`/system/return-logs/setup/${sessionId}/check`)
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(`/system/return-logs/setup/${sessionId}/check`)
         })
 
         it('redirects to the returned page', async () => {
@@ -109,7 +110,7 @@ describe('Return Logs - Setup - Controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(ConfirmedService, 'go').resolves({
+          vi.spyOn(ConfirmedService, 'default').mockResolvedValue({
             licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
             licenceRef: '01/117',
             pageTitle: 'Return 10032788 received',
@@ -141,7 +142,7 @@ describe('Return Logs - Setup - Controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitConfirmedService, 'go').resolves('91aff99a-3204-4727-86bd-7bdf3ef24533')
+          vi.spyOn(SubmitConfirmedService, 'default').mockResolvedValue('91aff99a-3204-4727-86bd-7bdf3ef24533')
         })
 
         it('redirects to the licence returns page', async () => {
@@ -185,7 +186,9 @@ describe('Return Logs - Setup - Controller', () => {
 
     describe('GET', () => {
       beforeEach(() => {
-        Sinon.stub(CancelService, 'go').resolves({ pageTitle: 'You are about to cancel this return submission' })
+        vi.spyOn(CancelService, 'default').mockResolvedValue({
+          pageTitle: 'You are about to cancel this return submission'
+        })
       })
 
       describe('when the request succeeds', () => {
@@ -201,7 +204,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitCancelService, 'go').resolves()
+          vi.spyOn(SubmitCancelService, 'default').mockResolvedValue()
         })
 
         it('redirects to the "abstraction return" page', async () => {
@@ -224,7 +227,9 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(CheckService, 'go').resolves({ pageTitle: 'Check details and enter new volumes or readings' })
+          vi.spyOn(CheckService, 'default').mockResolvedValue({
+            pageTitle: 'Check details and enter new volumes or readings'
+          })
         })
 
         it('returns the page successfully', async () => {
@@ -239,7 +244,9 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitCheckService, 'go').resolves({ returnLogId: '168026d8-f29b-4165-8726-734c6b14adec' })
+          vi.spyOn(SubmitCheckService, 'default').mockResolvedValue({
+            returnLogId: '168026d8-f29b-4165-8726-734c6b14adec'
+          })
         })
 
         it('redirects to the confirmed page on success', async () => {
@@ -254,7 +261,7 @@ describe('Return Logs - Setup - Controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitCheckService, 'go').resolves({
+          vi.spyOn(SubmitCheckService, 'default').mockResolvedValue({
             error: {
               errorList: [{ text: 'Returns with an abstraction volume of 0 should be recorded as a nil return.' }]
             },
@@ -284,7 +291,7 @@ describe('Return Logs - Setup - Controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(DeleteNoteService, 'go').resolves({
+        vi.spyOn(DeleteNoteService, 'default').mockResolvedValue({
           title: 'Removed',
           text: 'Note removed'
         })
@@ -305,7 +312,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(MeterProvidedService, 'go').resolves({
+          vi.spyOn(MeterProvidedService, 'default').mockResolvedValue({
             sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
             pageTitle: 'Have meter details been provided?'
@@ -325,7 +332,7 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and a meter was provided', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'yes' })
+            vi.spyOn(SubmitMeterProvidedService, 'default').mockResolvedValue({ meterProvided: 'yes' })
           })
 
           it('redirects to the "meter details" page', async () => {
@@ -339,7 +346,7 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and a meter was not provided', () => {
           describe('and the page has not been visited previously', () => {
             beforeEach(() => {
-              Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'no' })
+              vi.spyOn(SubmitMeterProvidedService, 'default').mockResolvedValue({ meterProvided: 'no' })
             })
 
             it('redirects to the "single volume" page', async () => {
@@ -352,7 +359,10 @@ describe('Return Logs - Setup - Controller', () => {
 
           describe('and the page has been visited previously', () => {
             beforeEach(() => {
-              Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ checkPageVisited: true, meterProvided: 'no' })
+              vi.spyOn(SubmitMeterProvidedService, 'default').mockResolvedValue({
+                checkPageVisited: true,
+                meterProvided: 'no'
+              })
             })
 
             it('redirects to the "check" page', async () => {
@@ -365,7 +375,10 @@ describe('Return Logs - Setup - Controller', () => {
 
           describe('and the reported type is "meterReadings"', () => {
             beforeEach(() => {
-              Sinon.stub(SubmitMeterProvidedService, 'go').resolves({ meterProvided: 'no', reported: 'meterReadings' })
+              vi.spyOn(SubmitMeterProvidedService, 'default').mockResolvedValue({
+                meterProvided: 'no',
+                reported: 'meterReadings'
+              })
             })
 
             it('redirects to the "check" page', async () => {
@@ -380,7 +393,7 @@ describe('Return Logs - Setup - Controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitMeterProvidedService, 'go').resolves({
+          vi.spyOn(SubmitMeterProvidedService, 'default').mockResolvedValue({
             error: {
               errorList: [{ href: '#meterProvided', text: 'Select if meter details have been provided' }],
               meterProvided: { text: 'Select if meter details have been provided' }
@@ -409,7 +422,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(MeterDetailsService, 'go').resolves({
+          vi.spyOn(MeterDetailsService, 'default').mockResolvedValue({
             sessionId,
             pageTitle: 'Meter details'
           })
@@ -428,7 +441,7 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the page has not been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+            vi.spyOn(SubmitMeterDetailsService, 'default').mockResolvedValue({
               meterMake: 'Meter',
               meterSerialNumber: '1234',
               meter10TimesDisplay: 'no'
@@ -445,7 +458,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the page has been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+            vi.spyOn(SubmitMeterDetailsService, 'default').mockResolvedValue({
               checkPageVisited: true,
               meterMake: 'Meter',
               meterSerialNumber: '1234',
@@ -463,7 +476,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the reporting type is "abstractionVolumes"', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+            vi.spyOn(SubmitMeterDetailsService, 'default').mockResolvedValue({
               reported: 'abstractionVolumes',
               meterMake: 'Meter',
               meterSerialNumber: '1234',
@@ -481,7 +494,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitMeterDetailsService, 'go').resolves({
+            vi.spyOn(SubmitMeterDetailsService, 'default').mockResolvedValue({
               error: {
                 errorList: [{ href: '#meter-make', text: 'Enter the make of the meter' }],
                 meterMake: { message: 'Enter the make of the meter' }
@@ -511,7 +524,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(MultipleEntriesService, 'go').resolves({
+          vi.spyOn(MultipleEntriesService, 'default').mockResolvedValue({
             sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
             pageTitle: 'Enter multiple daily volumes'
@@ -530,7 +543,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitMultipleEntriesService, 'go').resolves({})
+          vi.spyOn(SubmitMultipleEntriesService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the "check" page', async () => {
@@ -544,7 +557,7 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitMultipleEntriesService, 'go').resolves({
+            vi.spyOn(SubmitMultipleEntriesService, 'default').mockResolvedValue({
               error: { errorList: [{ href: '#multipleEntries', text: 'Enter 12 daily volumes' }] },
               pageTitle: 'Enter multiple daily volumes',
               sessionId
@@ -570,7 +583,7 @@ describe('Return Logs - Setup - Controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(NoteService, 'go').resolves({
+        vi.spyOn(NoteService, 'default').mockResolvedValue({
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
           pageTitle: 'Add a note'
         })
@@ -589,7 +602,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitNoteService, 'go').resolves({})
+          vi.spyOn(SubmitNoteService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the "check" page', async () => {
@@ -603,7 +616,7 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitNoteService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitNoteService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -625,7 +638,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(PeriodUsedService, 'go').resolves({
+          vi.spyOn(PeriodUsedService, 'default').mockResolvedValue({
             sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
             pageTitle: 'What period was used for this volume?'
@@ -644,7 +657,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitPeriodUsedService, 'go').resolves({})
+          vi.spyOn(SubmitPeriodUsedService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the "check" page', async () => {
@@ -657,7 +670,7 @@ describe('Return Logs - Setup - Controller', () => {
 
       describe('and the validation fails', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitPeriodUsedService, 'go').resolves({
+          vi.spyOn(SubmitPeriodUsedService, 'default').mockResolvedValue({
             error: {
               errorList: [{ href: '#period-date-used-options', text: 'Select what period was used for this volume' }],
               meterMake: { message: 'Select what period was used for this volume' }
@@ -684,7 +697,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ReadingsService, 'go').resolves({ pageTitle: 'Water abstracted April 2023' })
+          vi.spyOn(ReadingsService, 'default').mockResolvedValue({ pageTitle: 'Water abstracted April 2023' })
         })
 
         it('returns the page successfully', async () => {
@@ -700,7 +713,7 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation passes', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitReadingsService, 'go').resolves({})
+            vi.spyOn(SubmitReadingsService, 'default').mockResolvedValue({})
           })
 
           it('redirects to the "check" page', async () => {
@@ -713,7 +726,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitReadingsService, 'go').resolves({
+            vi.spyOn(SubmitReadingsService, 'default').mockResolvedValue({
               error: {
                 '2023-04-30T00:00:00.000Z': {
                   text: 'Reading must be a number or blank'
@@ -748,7 +761,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ReceivedService, 'go').resolves({
+          vi.spyOn(ReceivedService, 'default').mockResolvedValue({
             sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
             pageTitle: 'When was the return received?'
@@ -768,7 +781,7 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the page has not been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitReceivedService, 'go').resolves({})
+            vi.spyOn(SubmitReceivedService, 'default').mockResolvedValue({})
           })
 
           it('redirects to the "submission" page', async () => {
@@ -781,7 +794,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the page has been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitReceivedService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitReceivedService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to the "check" page', async () => {
@@ -794,7 +807,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitReceivedService, 'go').resolves({
+            vi.spyOn(SubmitReceivedService, 'default').mockResolvedValue({
               error: {
                 errorList: [
                   {
@@ -827,7 +840,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ReportedService, 'go').resolves({
+          vi.spyOn(ReportedService, 'default').mockResolvedValue({
             sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
             pageTitle: 'How was this return reported?'
@@ -848,7 +861,7 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the page has not been visited previously', () => {
           describe('and "Meter readings" has been selected', () => {
             beforeEach(() => {
-              Sinon.stub(SubmitReportedService, 'go').resolves({ reported: 'meterReadings' })
+              vi.spyOn(SubmitReportedService, 'default').mockResolvedValue({ reported: 'meterReadings' })
             })
 
             it('redirects to the "start-reading" page', async () => {
@@ -861,7 +874,7 @@ describe('Return Logs - Setup - Controller', () => {
 
           describe('and "Abstraction Volumes" has been selected', () => {
             beforeEach(() => {
-              Sinon.stub(SubmitReportedService, 'go').resolves({ reported: 'abstractionVolumes' })
+              vi.spyOn(SubmitReportedService, 'default').mockResolvedValue({ reported: 'abstractionVolumes' })
             })
 
             it('redirects to the "units" page', async () => {
@@ -876,7 +889,10 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the page has been visited previously', () => {
           describe('and "Meter readings" has been selected', () => {
             beforeEach(() => {
-              Sinon.stub(SubmitReportedService, 'go').resolves({ checkPageVisited: true, reported: 'meterReadings' })
+              vi.spyOn(SubmitReportedService, 'default').mockResolvedValue({
+                checkPageVisited: true,
+                reported: 'meterReadings'
+              })
             })
 
             it('redirects to the "start-reading" page', async () => {
@@ -889,7 +905,7 @@ describe('Return Logs - Setup - Controller', () => {
 
           describe('and "Abstraction Volumes" has been selected', () => {
             beforeEach(() => {
-              Sinon.stub(SubmitReportedService, 'go').resolves({
+              vi.spyOn(SubmitReportedService, 'default').mockResolvedValue({
                 checkPageVisited: true,
                 reported: 'abstractionVolumes'
               })
@@ -906,7 +922,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitReportedService, 'go').resolves({
+            vi.spyOn(SubmitReportedService, 'default').mockResolvedValue({
               error: {
                 errorList: [{ href: '#reported', text: 'Select how this return was reported' }],
                 reported: { text: 'Select how this return was reported' }
@@ -934,7 +950,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmissionService, 'go').resolves({ pageTitle: 'Abstraction return' })
+          vi.spyOn(SubmissionService, 'default').mockResolvedValue({ pageTitle: 'Abstraction return' })
         })
 
         it('returns the page successfully', async () => {
@@ -950,7 +966,7 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and "Enter and submit" has been selected', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitSubmissionService, 'go').resolves({ redirect: 'reported' })
+            vi.spyOn(SubmitSubmissionService, 'default').mockResolvedValue({ redirect: 'reported' })
           })
 
           it('redirects to the "reported" page', async () => {
@@ -963,7 +979,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and "Enter a nil return" has been selected', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitSubmissionService, 'go').resolves({ redirect: 'check' })
+            vi.spyOn(SubmitSubmissionService, 'default').mockResolvedValue({ redirect: 'check' })
           })
 
           it('redirects to the "check" page', async () => {
@@ -976,7 +992,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and "Record receipt" has been selected', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitSubmissionService, 'go').resolves({
+            vi.spyOn(SubmitSubmissionService, 'default').mockResolvedValue({
               redirect: 'confirm-received',
               returnLogId: 'fb875afa-de26-44d3-9255-370020cceb3b'
             })
@@ -994,7 +1010,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitSubmissionService, 'go').resolves({ error: {} })
+            vi.spyOn(SubmitSubmissionService, 'default').mockResolvedValue({ error: {} })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -1016,7 +1032,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SingleVolumeService, 'go').resolves({
+          vi.spyOn(SingleVolumeService, 'default').mockResolvedValue({
             sessionId,
             pageTitle: 'Is it a single volume?'
           })
@@ -1035,7 +1051,7 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when a request is valid', () => {
         describe('and a single volume was provided', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitSingleVolumeService, 'go').resolves({
+            vi.spyOn(SubmitSingleVolumeService, 'default').mockResolvedValue({
               singleVolume: 'yes',
               singleVolumeQuantity: '1000'
             })
@@ -1051,7 +1067,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and a single volume was not provided', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitSingleVolumeService, 'go').resolves({
+            vi.spyOn(SubmitSingleVolumeService, 'default').mockResolvedValue({
               singleVolume: 'no'
             })
           })
@@ -1067,7 +1083,7 @@ describe('Return Logs - Setup - Controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSingleVolumeService, 'go').resolves({
+          vi.spyOn(SubmitSingleVolumeService, 'default').mockResolvedValue({
             error: {
               // Actual error message includes a ' which changes to &#39; in the HTML. For ease of testing we therefore
               // use a placeholder error message.
@@ -1098,7 +1114,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(StartReadingService, 'go').resolves({
+          vi.spyOn(StartReadingService, 'default').mockResolvedValue({
             sessionId,
             pageTitle: 'Enter the start meter reading'
           })
@@ -1117,7 +1133,7 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when a request is valid', () => {
         describe('and the page has not been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitStartReadingService, 'go').resolves({})
+            vi.spyOn(SubmitStartReadingService, 'default').mockResolvedValue({})
           })
 
           it('redirects to the "units" page', async () => {
@@ -1130,7 +1146,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the page has been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitStartReadingService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitStartReadingService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to the "check" page', async () => {
@@ -1144,7 +1160,7 @@ describe('Return Logs - Setup - Controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitStartReadingService, 'go').resolves({
+          vi.spyOn(SubmitStartReadingService, 'default').mockResolvedValue({
             error: {
               errorList: [{ text: 'Enter a start meter reading', href: '#startReading' }]
             },
@@ -1170,7 +1186,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(UnitsService, 'go').resolves({
+          vi.spyOn(UnitsService, 'default').mockResolvedValue({
             sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
             pageTitle: 'Which units were used?'
@@ -1190,7 +1206,7 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the page has not been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitUnitsService, 'go').resolves({})
+            vi.spyOn(SubmitUnitsService, 'default').mockResolvedValue({})
           })
 
           it('redirects to the "meter provided" page', async () => {
@@ -1203,7 +1219,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the page has been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitUnitsService, 'go').resolves({ checkPageVisited: true })
+            vi.spyOn(SubmitUnitsService, 'default').mockResolvedValue({ checkPageVisited: true })
           })
 
           it('redirects to the "check" page', async () => {
@@ -1216,7 +1232,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitUnitsService, 'go').resolves({
+            vi.spyOn(SubmitUnitsService, 'default').mockResolvedValue({
               error: {
                 errorList: [{ href: '#units', text: 'Select which units were used' }],
                 units: { text: 'Select which units were used' }
@@ -1244,7 +1260,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(VolumesService, 'go').resolves({ pageTitle: 'Water abstracted April 2023' })
+          vi.spyOn(VolumesService, 'default').mockResolvedValue({ pageTitle: 'Water abstracted April 2023' })
         })
 
         it('returns the page successfully', async () => {
@@ -1260,7 +1276,7 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the validation passes', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitVolumesService, 'go').resolves({})
+            vi.spyOn(SubmitVolumesService, 'default').mockResolvedValue({})
           })
 
           it('redirects to the "check" page', async () => {
@@ -1273,7 +1289,7 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitVolumesService, 'go').resolves({
+            vi.spyOn(SubmitVolumesService, 'default').mockResolvedValue({
               error: {
                 errorList: [
                   {

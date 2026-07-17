@@ -1,19 +1,19 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Test helpers
-const SessionModelStub = require('../../support/stubs/session.stub.js')
+import SessionModelStub from '../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
-const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
+import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
+import * as LookupPostcodeRequest from '../../../app/requests/address-facade/lookup-postcode.request.js'
 
 // Thing under test
-const SelectService = require('../../../app/services/address/select.service.js')
+import SelectService from '../../../app/services/address/select.service.js'
+
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Address - Select service', () => {
   const match = {
@@ -47,21 +47,21 @@ describe('Address - Select service', () => {
       }
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    lookupPostcodeRequestStub = Sinon.stub(LookupPostcodeRequest, 'send')
+    lookupPostcodeRequestStub = vi.spyOn(LookupPostcodeRequest, 'default').mockImplementation(() => {})
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('and the postcode lookup returns a match', () => {
       beforeEach(() => {
-        lookupPostcodeRequestStub.resolves({
+        lookupPostcodeRequestStub.mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: HTTP_STATUS_OK,
@@ -74,7 +74,7 @@ describe('Address - Select service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SelectService.go(sessionId)
+        const result = await SelectService(sessionId)
 
         expect(result).toEqual({
           activeNavBar: 'manage',
@@ -103,7 +103,7 @@ describe('Address - Select service', () => {
 
     describe('and the postcode lookup returns no matches', () => {
       beforeEach(() => {
-        lookupPostcodeRequestStub.resolves({
+        lookupPostcodeRequestStub.mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: HTTP_STATUS_OK,
@@ -116,7 +116,7 @@ describe('Address - Select service', () => {
       })
 
       it('returns page data that causes a redirect to the manual page', async () => {
-        const result = await SelectService.go(sessionId)
+        const result = await SelectService(sessionId)
 
         expect(result).toEqual({ redirect: true })
       })
@@ -124,7 +124,7 @@ describe('Address - Select service', () => {
 
     describe('and the postcode lookup fails', () => {
       beforeEach(() => {
-        lookupPostcodeRequestStub.resolves({
+        lookupPostcodeRequestStub.mockResolvedValue({
           succeeded: false,
           response: {
             statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
@@ -139,7 +139,7 @@ describe('Address - Select service', () => {
       })
 
       it('returns page data that causes a redirect to the manual page', async () => {
-        const result = await SelectService.go(sessionId)
+        const result = await SelectService(sessionId)
 
         expect(result).toEqual({ redirect: true })
       })

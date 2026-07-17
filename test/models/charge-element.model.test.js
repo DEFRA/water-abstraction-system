@@ -1,16 +1,17 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
-const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const PurposeHelper = require('../support/helpers/purpose.helper.js')
-const PurposeModel = require('../../app/models/purpose.model.js')
-const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
-const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
+import ChargeElementHelper from '../support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
+import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
+import PurposeHelper from '../support/helpers/purpose.helper.js'
+import PurposeModel from '../../app/models/purpose.model.js'
+import ReviewChargeElementHelper from '../support/helpers/review-charge-element.helper.js'
+import ReviewChargeElementModel from '../../app/models/review-charge-element.model.js'
 
 // Thing under test
-const ChargeElementModel = require('../../app/models/charge-element.model.js')
+import ChargeElementModel from '../../app/models/charge-element.model.js'
 
 describe('Charge Element model', () => {
   let testChargeReference

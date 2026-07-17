@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/no-returns-required` page
  * @module NoReturnsRequiredValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = [
   'abstraction-below-100-cubic-metres-per-day',
@@ -22,7 +20,7 @@ const VALID_VALUES = [
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function noReturnsRequiredValidator(payload) {
   const schema = Joi.object({
     reason: Joi.string()
       .required()
@@ -35,8 +33,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * @module TransactionHelper
  */
 
-const ChargeCategoryHelper = require('./charge-category.helper.js')
-const { determineCurrentFinancialYear } = require('../../../app/lib/general.lib.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const TransactionModel = require('../../../app/models/transaction.model.js')
+import ChargeCategoryHelper from './charge-category.helper.js'
+import TransactionModel from '../../../app/models/transaction.model.js'
+import { determineCurrentFinancialYear } from '../../../app/lib/general.lib.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new transaction
@@ -94,7 +92,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

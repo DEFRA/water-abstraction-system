@@ -1,30 +1,27 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Thing under test
-const DetermineReturnsPeriodService = require('../../../../app/services/notices/setup/determine-returns-period.service.js')
+import DetermineReturnsPeriodService from '../../../../app/services/notices/setup/determine-returns-period.service.js'
 
 describe('Notices - Setup - Determine Returns Period service', () => {
   const year = 2025
 
-  let clock
   let returnsPeriod
 
   beforeEach(async () => {
-    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
+    vi.useFakeTimers({ now: new Date(`${year}-01-01`) })
 
     returnsPeriod = 'quarterFour'
   })
 
   afterEach(() => {
-    clock.restore()
+    vi.useRealTimers()
   })
 
   describe('when the returns period is not for summer', () => {
     it('should return the returns period and summer "false"', () => {
-      const result = DetermineReturnsPeriodService.go(returnsPeriod)
+      const result = DetermineReturnsPeriodService(returnsPeriod)
 
       expect(result).toEqual({
         returnsPeriod: {
@@ -45,7 +42,7 @@ describe('Notices - Setup - Determine Returns Period service', () => {
     })
 
     it('should return the returns period and summer "true"', () => {
-      const result = DetermineReturnsPeriodService.go(returnsPeriod)
+      const result = DetermineReturnsPeriodService(returnsPeriod)
 
       expect(result).toEqual({
         returnsPeriod: {

@@ -1,18 +1,19 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const GroupHelper = require('../support/helpers/group.helper.js')
-const GroupModel = require('../../app/models/group.model.js')
-const GroupRoleHelper = require('../support/helpers/group-role.helper.js')
-const GroupRoleModel = require('../../app/models/group-role.model.js')
-const RoleHelper = require('../support/helpers/role.helper.js')
-const UserHelper = require('../support/helpers/user.helper.js')
-const UserModel = require('../../app/models/user.model.js')
-const UserRoleHelper = require('../support/helpers/user-role.helper.js')
-const UserRoleModel = require('../../app/models/user-role.model.js')
+import GroupHelper from '../support/helpers/group.helper.js'
+import GroupModel from '../../app/models/group.model.js'
+import GroupRoleHelper from '../support/helpers/group-role.helper.js'
+import GroupRoleModel from '../../app/models/group-role.model.js'
+import RoleHelper from '../support/helpers/role.helper.js'
+import UserHelper from '../support/helpers/user.helper.js'
+import UserModel from '../../app/models/user.model.js'
+import UserRoleHelper from '../support/helpers/user-role.helper.js'
+import UserRoleModel from '../../app/models/user-role.model.js'
 
 // Thing under test
-const RoleModel = require('../../app/models/role.model.js')
+import RoleModel from '../../app/models/role.model.js'
 
 const GROUP_ROLE_SUPER_AR_USER_INDEX = 16
 const GROUP_SUPER_INDEX = 5

@@ -1,8 +1,7 @@
-'use strict'
+import http2 from 'node:http2'
+import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 
-const { HTTP_STATUS_OK } = require('node:http2').constants
-
-const { NOTIFY_TEMPLATES } = require('../../../app/lib/notify-templates.lib.js')
+const { HTTP_STATUS_OK } = http2.constants
 
 /**
  * Represents a successful response from the Notify API
@@ -70,6 +69,6 @@ function successfulResponse(referenceCode) {
   }
 }
 
-module.exports = {
+export default {
   successfulResponse
 }

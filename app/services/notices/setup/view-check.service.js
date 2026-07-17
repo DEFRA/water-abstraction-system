@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup check page
  * @module ViewCheckService
  */
 
-const CheckPresenter = require('../../../presenters/notices/setup/check.presenter.js')
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const { readFlashNotification } = require('../../../lib/general.lib.js')
+import CheckPresenter from '../../../presenters/notices/setup/check.presenter.js'
+import FetchRecipientsService from './fetch-recipients.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
+import { readFlashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup check page
@@ -20,16 +18,16 @@ const { readFlashNotification } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The view data for the review page
  */
-async function go(sessionId, yar, page) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewCheckService(sessionId, yar, page) {
+  const session = await FetchSessionDal(sessionId)
 
-  const recipients = await FetchRecipientsService.go(session, false)
+  const recipients = await FetchRecipientsService(session, false)
 
   await _initialiseSelectedRecipients(recipients, session)
 
-  const pagination = PaginatorPresenter.go(recipients.length, page, `/system/notices/setup/${sessionId}/check`)
+  const pagination = PaginatorPresenter(recipients.length, page, `/system/notices/setup/${sessionId}/check`)
 
-  const pageData = CheckPresenter.go(recipients, pagination.currentPageNumber, session)
+  const pageData = CheckPresenter(recipients, pagination.currentPageNumber, session)
 
   const notification = readFlashNotification(yar)
 
@@ -61,8 +59,4 @@ async function _initialiseSelectedRecipients(recipients, session) {
 
     await session.$update()
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Handles queries submitted to the /search page
  * @module SubmitSearchService
  */
 
-const SearchPresenter = require('../../presenters/search/search.presenter.js')
-const SearchValidator = require('../../validators/search/search.validator.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+import SearchPresenter from '../../presenters/search/search.presenter.js'
+import SearchValidator from '../../validators/search/search.validator.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Handles queries submitted to the /search page
@@ -24,8 +22,8 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  * @returns {Promise<object>} The view data for the search page if there are validation errors or a redirect to the next
  * page to display, which could be the search results or the display page for a specific record
  */
-async function go(auth, payload, yar) {
-  const validationResult = SearchValidator.go(payload)
+export default async function submitSearchService(auth, payload, yar) {
+  const validationResult = SearchValidator(payload)
 
   if (validationResult.error) {
     return _failedValidationResponse(auth, payload, validationResult)
@@ -53,10 +51,6 @@ function _failedValidationResponse(auth, payload, validationResult) {
 
   return {
     error: formatValidationResult(validationResult),
-    ...SearchPresenter.go(userScopes, query, resultType)
+    ...SearchPresenter(userScopes, query, resultType)
   }
-}
-
-module.exports = {
-  go
 }

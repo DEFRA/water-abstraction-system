@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/check' page
  * @module CheckPresenter
  */
 
-const { abstractionAlertsLabel, selectedLiveLicences } = require('../../crm.presenter.js')
+import { abstractionAlertsLabel, selectedLiveLicences } from '../../crm.presenter.js'
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/check' page
@@ -17,7 +15,7 @@ const { abstractionAlertsLabel, selectedLiveLicences } = require('../../crm.pres
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session, savedCompanyContacts, sentNotification) {
+export default function checkPresenter(session, savedCompanyContacts, sentNotification) {
   const { abstractionAlertLicences, abstractionAlerts, company, companyContact, email, licences, name } = session
 
   const matchingContact = _matchingContact(email, name, savedCompanyContacts)
@@ -109,8 +107,4 @@ function _warning(matchingContact, abstractionAlertLicences, abstractionAlerts) 
     text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
     iconFallbackText: 'Warning'
   }
-}
-
-module.exports = {
-  go
 }

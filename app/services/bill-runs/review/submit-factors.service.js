@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Handles user submission for the review charge reference factors page
  * @module SubmitFactorsService
  */
 
-const FactorsPresenter = require('../../../presenters/bill-runs/review/factors.presenter.js')
-const FactorsValidator = require('../../../validators/bill-runs/review/factors.validator.js')
-const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
-const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
+import FactorsPresenter from '../../../presenters/bill-runs/review/factors.presenter.js'
+import FactorsValidator from '../../../validators/bill-runs/review/factors.validator.js'
+import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
+import ReviewChargeReferenceModel from '../../../models/review-charge-reference.model.js'
 
 /**
  * Handles user submission for the review charge reference factors page
@@ -29,7 +27,7 @@ const ReviewChargeReferenceModel = require('../../../models/review-charge-refere
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the page including the
  * validation error details
  */
-async function go(reviewChargeReferenceId, yar, payload) {
+export default async function submitFactorsService(reviewChargeReferenceId, yar, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -39,8 +37,8 @@ async function go(reviewChargeReferenceId, yar, payload) {
     return {}
   }
 
-  const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
-  const pageData = FactorsPresenter.go(reviewChargeReference)
+  const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
+  const pageData = FactorsPresenter(reviewChargeReference)
 
   return {
     activeNavBar: 'bill-runs',
@@ -54,7 +52,7 @@ async function _save(reviewChargeReferenceId, payload) {
 }
 
 function _validate(payload) {
-  const validation = FactorsValidator.go(payload)
+  const validation = FactorsValidator(payload)
 
   if (!validation.error) {
     return null
@@ -76,8 +74,4 @@ function _validate(payload) {
   })
 
   return result
-}
-
-module.exports = {
-  go
 }

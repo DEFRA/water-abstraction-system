@@ -1,19 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import LicenceVersionModel from '../../../app/models/licence-version.model.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-const FetchHistoryService = require('../../../app/services/licences/fetch-history.service.js')
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+import * as FetchHistoryService from '../../../app/services/licences/fetch-history.service.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
-const ViewHistoryService = require('../../../app/services/licences/view-history.service.js')
+import ViewHistoryService from '../../../app/services/licences/view-history.service.js'
 
 describe('Licences - View History service', () => {
   let auth
@@ -45,17 +42,17 @@ describe('Licences - View History service', () => {
       })
     ]
 
-    Sinon.stub(FetchLicenceService, 'go').returns(licence)
-    Sinon.stub(FetchHistoryService, 'go').returns(licenceHistory)
+    vi.spyOn(FetchLicenceService, 'default').mockReturnValue(licence)
+    vi.spyOn(FetchHistoryService, 'default').mockReturnValue(licenceHistory)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewHistoryService.go(licence.id, auth)
+      const result = await ViewHistoryService(licence.id, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'history',

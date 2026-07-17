@@ -1,13 +1,28 @@
-'use strict'
+import {
+  markForSupplementaryBilling,
+  markedForSupplementaryBilling,
+  noReturnsRequired,
+  returnsRequired,
+  submitMarkForSupplementaryBilling,
+  supplementary,
+  viewBills,
+  viewCommunications,
+  viewContactDetails,
+  viewHistory,
+  viewLicenceConditions,
+  viewLicencePoints,
+  viewLicencePurposes,
+  viewReturns,
+  viewSetUp,
+  viewSummary
+} from '../controllers/licences.controller.js'
 
-const LicencesController = require('../controllers/licences.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/licences/{id}/bills',
     options: {
-      handler: LicencesController.viewBills,
+      handler: viewBills,
       auth: {
         access: {
           scope: ['billing']
@@ -18,46 +33,46 @@ const routes = [
   {
     method: 'GET',
     path: '/licences/{id}/communications',
-    handler: LicencesController.viewCommunications
+    handler: viewCommunications
   },
   {
     method: 'GET',
     path: '/licences/{id}/conditions',
     options: {
-      handler: LicencesController.viewLicenceConditions
+      handler: viewLicenceConditions
     }
   },
   {
     method: 'GET',
     path: '/licences/{id}/contact-details',
-    handler: LicencesController.viewContactDetails
+    handler: viewContactDetails
   },
   {
     method: 'GET',
     path: '/licences/{id}/history',
     options: {
-      handler: LicencesController.viewHistory
+      handler: viewHistory
     }
   },
   {
     method: 'GET',
     path: '/licences/{id}/points',
     options: {
-      handler: LicencesController.viewLicencePoints
+      handler: viewLicencePoints
     }
   },
   {
     method: 'GET',
     path: '/licences/{id}/purposes',
     options: {
-      handler: LicencesController.viewLicencePurposes
+      handler: viewLicencePurposes
     }
   },
   {
     method: 'GET',
     path: '/licences/{id}/set-up',
     options: {
-      handler: LicencesController.viewSetUp,
+      handler: viewSetUp,
       auth: {
         access: {
           scope: ['view_charge_versions']
@@ -68,18 +83,18 @@ const routes = [
   {
     method: 'GET',
     path: '/licences/{id}/summary',
-    handler: LicencesController.viewSummary
+    handler: viewSummary
   },
   {
     method: 'GET',
     path: '/licences/{id}/returns',
-    handler: LicencesController.viewReturns
+    handler: viewReturns
   },
   {
     method: 'GET',
     path: '/licences/{id}/no-returns-required',
     options: {
-      handler: LicencesController.noReturnsRequired,
+      handler: noReturnsRequired,
       auth: {
         access: {
           scope: ['billing']
@@ -91,7 +106,7 @@ const routes = [
     method: 'GET',
     path: '/licences/{id}/returns-required',
     options: {
-      handler: LicencesController.returnsRequired,
+      handler: returnsRequired,
       auth: {
         access: {
           scope: ['billing']
@@ -103,7 +118,7 @@ const routes = [
     method: 'POST',
     path: '/licences/supplementary',
     options: {
-      handler: LicencesController.supplementary,
+      handler: supplementary,
       app: {
         plainOutput: true
       },
@@ -117,7 +132,7 @@ const routes = [
     method: 'GET',
     path: '/licences/{id}/mark-for-supplementary-billing',
     options: {
-      handler: LicencesController.markForSupplementaryBilling,
+      handler: markForSupplementaryBilling,
       auth: {
         access: {
           scope: ['billing']
@@ -129,7 +144,7 @@ const routes = [
     method: 'POST',
     path: '/licences/{id}/mark-for-supplementary-billing',
     options: {
-      handler: LicencesController.submitMarkForSupplementaryBilling,
+      handler: submitMarkForSupplementaryBilling,
       auth: {
         access: {
           scope: ['billing']
@@ -141,7 +156,7 @@ const routes = [
     method: 'GET',
     path: '/licences/{id}/marked-for-supplementary-billing',
     options: {
-      handler: LicencesController.markedForSupplementaryBilling,
+      handler: markedForSupplementaryBilling,
       auth: {
         access: {
           scope: ['billing']
@@ -150,5 +165,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

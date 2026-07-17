@@ -1,12 +1,12 @@
-'use strict'
-
 /**
  * @module ChangeReasonHelper
  */
 
-const ChargeReasonModel = require('../../../app/models/change-reason.model.js')
-const { data: changeReasons } = require('../../../db/seeds/data/change-reasons.js')
-const { selectRandomEntry } = require('../general.js')
+import ChargeReasonModel from '../../../app/models/change-reason.model.js'
+import { data as changeReasons } from '../../../db/seeds/data/change-reasons.js'
+import { selectRandomEntry } from '../general.js'
+
+const data = changeReasons
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -30,7 +30,7 @@ function select(index = -1) {
   return ChargeReasonModel.fromJson(selectRandomEntry(changeReasons))
 }
 
-module.exports = {
-  data: changeReasons,
+export default {
+  data,
   select
 }

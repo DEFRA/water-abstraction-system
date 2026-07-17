@@ -1,24 +1,26 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const InternationalAddressService = require('../../app/services/address/international.service.js')
-const ManualAddressService = require('../../app/services/address/manual.service.js')
-const PostcodeService = require('../../app/services/address/postcode.service.js')
-const SelectAddressService = require('../../app/services/address/select.service.js')
-const SubmitInternationalAddressService = require('../../app/services/address/submit-international.service.js')
-const SubmitManualAddressService = require('../../app/services/address/submit-manual.service.js')
-const SubmitPostcodeService = require('../../app/services/address/submit-postcode.service.js')
-const SubmitSelectAddressService = require('../../app/services/address/submit-select.service.js')
+import * as InternationalAddressService from '../../app/services/address/international.service.js'
+import * as ManualAddressService from '../../app/services/address/manual.service.js'
+import * as PostcodeService from '../../app/services/address/postcode.service.js'
+import * as SelectAddressService from '../../app/services/address/select.service.js'
+import * as SubmitInternationalAddressService from '../../app/services/address/submit-international.service.js'
+import * as SubmitManualAddressService from '../../app/services/address/submit-manual.service.js'
+import * as SubmitPostcodeService from '../../app/services/address/submit-postcode.service.js'
+import * as SubmitSelectAddressService from '../../app/services/address/submit-select.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address controller', () => {
   let options
@@ -31,16 +33,15 @@ describe('Address controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -60,7 +61,7 @@ describe('Address controller', () => {
         }
 
         const pageData = _postcodePageData()
-        Sinon.stub(PostcodeService, 'go').returns(pageData)
+        vi.spyOn(PostcodeService, 'default').mockReturnValue(pageData)
       })
 
       it('returns the page successfully', async () => {
@@ -77,7 +78,7 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitPostcodeService, 'go').returns({})
+          vi.spyOn(SubmitPostcodeService, 'default').mockReturnValue({})
         })
 
         it('redirects to the select address page', async () => {
@@ -92,7 +93,7 @@ describe('Address controller', () => {
         beforeEach(() => {
           const pageData = _postcodePageData(true)
 
-          Sinon.stub(SubmitPostcodeService, 'go').returns(pageData)
+          vi.spyOn(SubmitPostcodeService, 'default').mockReturnValue(pageData)
         })
 
         it('re-renders the postcode page with an error', async () => {
@@ -122,7 +123,7 @@ describe('Address controller', () => {
 
       describe('when addresses are found', () => {
         beforeEach(() => {
-          Sinon.stub(SelectAddressService, 'go').returns({})
+          vi.spyOn(SelectAddressService, 'default').mockReturnValue({})
         })
 
         it('returns the page successfully', async () => {
@@ -134,7 +135,7 @@ describe('Address controller', () => {
 
       describe('when addresses are not found', () => {
         beforeEach(() => {
-          Sinon.stub(SelectAddressService, 'go').returns({
+          vi.spyOn(SelectAddressService, 'default').mockReturnValue({
             redirect: true
           })
         })
@@ -155,7 +156,7 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSelectAddressService, 'go').returns({
+          vi.spyOn(SubmitSelectAddressService, 'default').mockReturnValue({
             redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
           })
         })
@@ -175,7 +176,7 @@ describe('Address controller', () => {
           beforeEach(() => {
             const pageData = _selectPageData(true)
 
-            Sinon.stub(SubmitSelectAddressService, 'go').returns(pageData)
+            vi.spyOn(SubmitSelectAddressService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the select page with an error', async () => {
@@ -190,7 +191,7 @@ describe('Address controller', () => {
 
         describe('and we do not get any resutls back from the postcode lookup', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitSelectAddressService, 'go').returns({
+            vi.spyOn(SubmitSelectAddressService, 'default').mockReturnValue({
               redirect: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual'
             })
           })
@@ -221,7 +222,7 @@ describe('Address controller', () => {
 
       describe('when addresses are found', () => {
         beforeEach(() => {
-          Sinon.stub(ManualAddressService, 'go').returns({})
+          vi.spyOn(ManualAddressService, 'default').mockReturnValue({})
         })
 
         it('returns the page successfully', async () => {
@@ -239,7 +240,7 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitManualAddressService, 'go').returns({
+          vi.spyOn(SubmitManualAddressService, 'default').mockReturnValue({
             redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
           })
         })
@@ -258,7 +259,7 @@ describe('Address controller', () => {
         beforeEach(() => {
           const pageData = _manualPageData(true)
 
-          Sinon.stub(SubmitManualAddressService, 'go').returns(pageData)
+          vi.spyOn(SubmitManualAddressService, 'default').mockReturnValue(pageData)
         })
 
         it('re-renders the page with an error', async () => {
@@ -288,7 +289,7 @@ describe('Address controller', () => {
 
       describe('when addresses are found', () => {
         beforeEach(() => {
-          Sinon.stub(InternationalAddressService, 'go').returns({})
+          vi.spyOn(InternationalAddressService, 'default').mockReturnValue({})
         })
 
         it('returns the page successfully', async () => {
@@ -306,7 +307,7 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternationalAddressService, 'go').returns({
+          vi.spyOn(SubmitInternationalAddressService, 'default').mockReturnValue({
             redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
           })
         })
@@ -325,7 +326,7 @@ describe('Address controller', () => {
         beforeEach(() => {
           const pageData = _manualPageData(true)
 
-          Sinon.stub(SubmitInternationalAddressService, 'go').returns(pageData)
+          vi.spyOn(SubmitInternationalAddressService, 'default').mockReturnValue(pageData)
         })
 
         it('re-renders the page with an error', async () => {

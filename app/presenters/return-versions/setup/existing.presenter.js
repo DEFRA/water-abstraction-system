@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/existing` page
  * @module ExistingPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
-const { returnRequirementReasons } = require('../../../lib/static-lookups.lib.js')
+import { formatLongDate } from '../../base.presenter.js'
+import { returnRequirementReasons } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/existing` page
@@ -15,7 +13,7 @@ const { returnRequirementReasons } = require('../../../lib/static-lookups.lib.js
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function existingPresenter(session) {
   const { id: sessionId, licence, licenceVersion } = session
 
   return {
@@ -63,8 +61,4 @@ function _reason(returnVersion) {
 
   // Fallback to the reason against the first mod log entry for the return version
   return modLogs[0].reasonDescription
-}
-
-module.exports = {
-  go
 }

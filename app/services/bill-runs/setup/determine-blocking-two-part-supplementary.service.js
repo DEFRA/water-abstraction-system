@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Determines if an existing bill run will block a user from creating a new two-part supplementary bill run
  * @module DetermineBlockingTwoPartSupplementaryService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import { engineTriggers } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Determines if an existing bill run will block a user from creating a new two-part supplementary bill run
@@ -37,7 +35,7 @@ const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
  * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
  * when creating it, and which bill run engine to trigger the creation with (if any)
  */
-async function go(regionId, year) {
+export default async function determineBlockingTwoPartSupplementaryService(regionId, year) {
   const toFinancialYearEnding = await _toFinancialYearEnding(regionId, year)
 
   if (toFinancialYearEnding === 0) {
@@ -88,8 +86,4 @@ async function _toFinancialYearEnding(regionId, year) {
   // folks telling us 'change X has broken billing'. So, we now return 0 here when this happens, so we can handle it
   // gracefully and avoid the pings!
   return billRun ? year : 0
-}
-
-module.exports = {
-  go
 }

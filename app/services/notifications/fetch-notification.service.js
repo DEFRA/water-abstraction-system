@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches the matching notification and licence data needed for the view
  * @module FetchNotificationService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const LicenceModel = require('../../models/licence.model.js')
-const NotificationModel = require('../../models/notification.model.js')
-const { db } = require('../../../db/db.js')
+import LicenceModel from '../../models/licence.model.js'
+import NotificationModel from '../../models/notification.model.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetches the matching notification and licence data needed for the view
@@ -21,7 +19,7 @@ const { db } = require('../../../db/db.js')
  * @returns {Promise<module:NotificationModel>} the matching `NotificationsModel` instance and
  * licence data
  */
-async function go(notificationId, licenceId = null) {
+export default async function fetchNotificationService(notificationId, licenceId = null) {
   const licence = await _fetchLicence(licenceId)
   const notification = await _fetchNotification(notificationId)
 
@@ -63,8 +61,4 @@ async function _fetchNotification(notificationId) {
         ref('metadata:options.sendingAlertType').castText().as('sendingAlertType')
       ])
     })
-}
-
-module.exports = {
-  go
 }

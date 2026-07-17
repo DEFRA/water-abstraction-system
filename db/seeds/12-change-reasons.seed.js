@@ -1,10 +1,8 @@
-'use strict'
+import ChangeReasonModel from '../../app/models/change-reason.model.js'
+import { data as changeReasons } from './data/change-reasons.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: changeReasons } = require('./data/change-reasons.js')
-const ChangeReasonModel = require('../../app/models/change-reason.model.js')
-
-async function seed() {
+export default async function seed() {
   for (const changeReason of changeReasons) {
     const exists = await _exists(changeReason)
 
@@ -45,8 +43,4 @@ async function _update(changeReason) {
     .patch({ enabledForNewChargeVersions, triggersMinimumCharge, updatedAt: timestampForPostgres() })
     .where('description', description)
     .where('type', type)
-}
-
-module.exports = {
-  seed
 }

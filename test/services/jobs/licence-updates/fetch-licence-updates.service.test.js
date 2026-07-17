@@ -1,15 +1,16 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunChargeVersionYearHelper = require('../../../support/helpers/bill-run-charge-version-year.helper.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
+import BillRunChargeVersionYearHelper from '../../../support/helpers/bill-run-charge-version-year.helper.js'
+import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
 
 // Thing under test
-const FetchLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
+import FetchLicenceUpdatesService from '../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js'
 
 describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
   let licence
@@ -26,7 +27,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
 
     describe('and the licence is new (it has no charge versions)', () => {
       it('returns the expected result', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const results = await FetchLicenceUpdatesService()
 
         const result = results.find((l) => {
           return l.id === licenceVersion.id
@@ -44,7 +45,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
       })
 
       it('returns the expected result', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const results = await FetchLicenceUpdatesService()
 
         const result = results.find((l) => {
           return l.id === licenceVersion.id
@@ -64,7 +65,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const data = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService()
 
         const results = data.filter((l) => {
           return l.licenceId === licence.id
@@ -81,7 +82,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const data = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService()
 
         const results = data.filter((l) => {
           return l.licenceId === licence.id
@@ -106,7 +107,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const data = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService()
 
         const results = data.filter((l) => {
           return l.licenceId === licence.id
@@ -122,7 +123,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const data = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService()
 
         const results = data.filter((l) => {
           return l.licenceId === licence.id

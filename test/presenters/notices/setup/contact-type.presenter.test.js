@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ContactTypePresenter = require('../../../../app/presenters/notices/setup/contact-type.presenter.js')
+import ContactTypePresenter from '../../../../app/presenters/notices/setup/contact-type.presenter.js'
 
 describe('Notices - Setup - Contact Type presenter', () => {
   let session
@@ -12,7 +13,7 @@ describe('Notices - Setup - Contact Type presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = ContactTypePresenter.go(session)
+      const result = ContactTypePresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -38,7 +39,7 @@ describe('Notices - Setup - Contact Type presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = ContactTypePresenter.go(session)
+      const result = ContactTypePresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -64,7 +65,7 @@ describe('Notices - Setup - Contact Type presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = ContactTypePresenter.go(session)
+      const result = ContactTypePresenter(session)
 
       expect(result).toEqual({
         backLink: {

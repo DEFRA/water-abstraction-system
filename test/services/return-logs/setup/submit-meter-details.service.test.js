@@ -1,20 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitMeterDetailsService = require('../../../../app/services/return-logs/setup/submit-meter-details.service.js')
+import SubmitMeterDetailsService from '../../../../app/services/return-logs/setup/submit-meter-details.service.js'
 
 describe('Return Logs Setup - Submit Meter Details service', () => {
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -26,16 +23,16 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       reported: 'meterReadings'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -49,19 +46,19 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+        await SubmitMeterDetailsService(session.id, payload, yarStub)
 
         expect(session.meterMake).toEqual('WATER')
         expect(session.meterSerialNumber).toEqual('123')
         expect(session.meter10TimesDisplay).toEqual('yes')
 
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 
     describe('and the page has been not been visited', () => {
       it('returns the correct details the controller needs to redirect the journey', async () => {
-        const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+        const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           checkPageVisited: undefined,
@@ -72,16 +69,16 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
     describe('and the page has been visited', () => {
       beforeEach(() => {
-        session = SessionModelStub.build(Sinon, {
+        session = SessionModelStub({
           ...sessionData,
           checkPageVisited: true
         })
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-        const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+        const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           checkPageVisited: true,
@@ -90,9 +87,9 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       })
 
       it('sets the notification message title to "Updated" and the text to "Reporting details changed" ', async () => {
-        await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+        await SubmitMeterDetailsService(session.id, payload, yarStub)
 
-        const [flashType, notification] = yarStub.flash.args[0]
+        const [flashType, notification] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(notification).toEqual({ titleText: 'Updated', text: 'Reporting details changed' })
@@ -105,7 +102,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+        const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
         expect(result).toMatchObject({
           backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
@@ -119,7 +116,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
       describe('because the user has not entered or selected anything', () => {
         it('includes an error for both input elements and radio elements', async () => {
-          const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+          const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -146,7 +143,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
         })
 
         it('includes an error for the make input elements', async () => {
-          const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+          const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [{ href: '#meterMake', text: 'Enter the make of the meter' }],
@@ -164,7 +161,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
         })
 
         it('includes an error for the make input elements', async () => {
-          const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+          const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [{ href: '#meterSerialNumber', text: 'Enter a serial number' }],
@@ -182,7 +179,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
         })
 
         it('includes an error for the make input elements', async () => {
-          const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+          const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [{ href: '#meter10TimesDisplay', text: 'Select if the meter has a ×10 display' }],

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/method` page
  * @module MethodService
  */
 
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const MethodPresenter = require('../../../../presenters/return-versions/setup/method.presenter.js')
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import MethodPresenter from '../../../../presenters/return-versions/setup/method.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/method` page
@@ -18,16 +16,12 @@ const MethodPresenter = require('../../../../presenters/return-versions/setup/me
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function methodService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = MethodPresenter.go(session)
+  const formattedData = MethodPresenter(session)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

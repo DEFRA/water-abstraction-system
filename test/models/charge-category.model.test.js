@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ChargeCategoryHelper = require('../support/helpers/charge-category.helper.js')
-const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
-const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
+import ChargeCategoryHelper from '../support/helpers/charge-category.helper.js'
+import ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
+import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
 
 // Thing under test
-const ChargeCategoryModel = require('../../app/models/charge-category.model.js')
+import ChargeCategoryModel from '../../app/models/charge-category.model.js'
 
 describe('Charge Category model', () => {
   let testChargeReferences

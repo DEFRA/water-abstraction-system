@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Fetches the licences and their versions, related to a company, data needed for the view '/companies/{id}/history'
  * @module FetchHistoryDal
  */
 
-const LicenceModel = require('../../models/licence.model.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import LicenceModel from '../../models/licence.model.js'
 
 /**
  * Fetches the licences and their versions, related to a company, data needed for the view '/companies/{id}/history'
@@ -17,7 +14,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the licences for the company and the pagination object
  */
-async function go(companyId, page = '1') {
+export default async function fetchHistoryDal(companyId, page = '1') {
   const { results: licences, total: totalNumber } = await _fetch(companyId, page)
 
   return { licences, totalNumber }
@@ -41,8 +38,4 @@ async function _fetch(companyId, page) {
     })
     .orderBy('licenceRef', 'asc')
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
-}
-
-module.exports = {
-  go
 }

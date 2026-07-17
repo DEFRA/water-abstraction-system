@@ -1,17 +1,13 @@
-'use strict'
-
 /**
  * Plugin to add a globally available notifier for logging and sending exceptions to Errbit
  * @module GlobalNotifierPlugin
  */
 
-const GlobalNotifierLib = require('../lib/global-notifier.lib.js')
+import GlobalNotifierLib from '../lib/global-notifier.lib.js'
 
-const GlobalNotifierPlugin = {
+export default {
   name: 'global-notifier',
   register: (server, _options) => {
     globalThis.GlobalNotifier = new GlobalNotifierLib(server.logger, server.app.airbrake)
   }
 }
-
-module.exports = GlobalNotifierPlugin

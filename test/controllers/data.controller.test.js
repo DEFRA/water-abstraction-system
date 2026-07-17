@@ -1,18 +1,20 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
 
 // Things we need to stub
-const LoadService = require('../../app/services/data/load/load.service.js')
-const SeedService = require('../../app/services/data/seed/seed.service.js')
-const TearDownService = require('../../app/services/data/tear-down/tear-down.service.js')
+import * as LoadService from '../../app/services/data/load/load.service.js'
+import * as SeedService from '../../app/services/data/seed/seed.service.js'
+import * as TearDownService from '../../app/services/data/tear-down/tear-down.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 describe('Data controller', () => {
   let server
@@ -23,16 +25,15 @@ describe('Data controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -70,7 +71,7 @@ describe('Data controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(LoadService, 'go').resolves({
+          vi.spyOn(LoadService, 'default').mockResolvedValue({
             regions: ['d0a4123d-1e19-480d-9dd4-f70f3387c4b9']
           })
         })
@@ -86,7 +87,7 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the LoadService errors', () => {
           beforeEach(async () => {
-            Sinon.stub(LoadService, 'go').rejects()
+            vi.spyOn(LoadService, 'default').mockRejectedValue(Error('LoadService error'))
           })
 
           it('returns a 500 status', async () => {
@@ -108,7 +109,7 @@ describe('Data controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(SeedService, 'go').resolves()
+          vi.spyOn(SeedService, 'default').mockResolvedValue()
         })
 
         it('displays the correct message', async () => {
@@ -121,7 +122,7 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the SeedService errors', () => {
           beforeEach(async () => {
-            Sinon.stub(SeedService, 'go').rejects()
+            vi.spyOn(SeedService, 'default').mockRejectedValue(Error('SeedService error'))
           })
 
           it('returns a 500 status', async () => {
@@ -143,7 +144,7 @@ describe('Data controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(TearDownService, 'go').resolves()
+          vi.spyOn(TearDownService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 status', async () => {
@@ -156,7 +157,7 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the TearDownService errors', () => {
           beforeEach(async () => {
-            Sinon.stub(TearDownService, 'go').rejects()
+            vi.spyOn(TearDownService, 'default').mockRejectedValue(Error('TearDownService error'))
           })
 
           it('returns a 500 status', async () => {

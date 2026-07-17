@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates presenting the data for `/notices` page
  * @module IndexNoticesService
  */
 
-const FetchNoticesService = require('./fetch-notices.service.js')
-const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { processSavedFilters } = require('../../lib/submit-page.lib.js')
+import FetchNoticesService from './fetch-notices.service.js'
+import NoticesIndexPresenter from '../../presenters/notices/index-notices.presenter.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { processSavedFilters } from '../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates presenting the data for `/notices` page
@@ -19,14 +17,14 @@ const { processSavedFilters } = require('../../lib/submit-page.lib.js')
  *
  * @returns {Promise<object>} The view data for the notices page
  */
-async function go(yar, auth, page) {
+export default async function indexNoticesService(yar, auth, page) {
   const filters = _filters(yar)
 
-  const { results: notices, total: totalNumber } = await FetchNoticesService.go(filters, page)
+  const { results: notices, total: totalNumber } = await FetchNoticesService(filters, page)
 
-  const pagination = PaginatorPresenter.go(totalNumber, page, `/system/notices`, notices.length, 'notices')
+  const pagination = PaginatorPresenter(totalNumber, page, `/system/notices`, notices.length, 'notices')
 
-  const pageData = NoticesIndexPresenter.go(notices, auth)
+  const pageData = NoticesIndexPresenter(notices, auth)
 
   return {
     activeNavBar: 'notices',
@@ -48,8 +46,4 @@ function _filters(yar) {
     toDate: null,
     ...savedFilters
   }
-}
-
-module.exports = {
-  go
 }

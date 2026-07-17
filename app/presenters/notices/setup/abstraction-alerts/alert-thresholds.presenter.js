@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  * @module AlertThresholdsPresenter
  */
 
-const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
-const { formatValueUnit, titleCase } = require('../../../base.presenter.js')
-const { unitConversion } = require('../../../../lib/static-lookups.lib.js')
+import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js'
+import { unitConversion } from '../../../../lib/static-lookups.lib.js'
+import { formatValueUnit, titleCase } from '../../../base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
@@ -16,7 +14,7 @@ const { unitConversion } = require('../../../../lib/static-lookups.lib.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function alertThresholdsPresenter(session) {
   return {
     backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
     pageTitle: 'Which thresholds do you need to send an alert for?',
@@ -95,7 +93,7 @@ function _sortedThresholds(relevantThresholds) {
  * @private
  */
 function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds = []) {
-  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
+  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsByAlertTypeService(
     licenceMonitoringStations,
     alertType
   )
@@ -116,8 +114,4 @@ function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds
       }
     }
   })
-}
-
-module.exports = {
-  go
 }

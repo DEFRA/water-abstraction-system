@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  * @module AlertEmailAddressPresenter
@@ -14,7 +12,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, auth) {
+export default function alertEmailAddressPresenter(session, auth) {
   const { alertEmailAddress, alertEmailAddressType, monitoringStationName, id: sessionId } = session
 
   return {
@@ -37,8 +35,4 @@ function _alertEmailAddressOptions(alertEmailAddress, alertEmailAddressType) {
     otherUserEmailAddressInput,
     usernameChecked
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,22 +1,23 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const PointHelper = require('../../../support/helpers/point.helper.js')
-const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
-const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
-const ReturnRequirementModel = require('../../../../app/models/return-requirement.model.js')
-const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
-const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
-const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
-const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import PointHelper from '../../../support/helpers/point.helper.js'
+import PrimaryPurposeHelper from '../../../support/helpers/primary-purpose.helper.js'
+import PurposeHelper from '../../../support/helpers/purpose.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
+import ReturnCycleHelper from '../../../support/helpers/return-cycle.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
+import ReturnRequirementModel from '../../../../app/models/return-requirement.model.js'
+import ReturnRequirementPointHelper from '../../../support/helpers/return-requirement-point.helper.js'
+import ReturnRequirementPurposeHelper from '../../../support/helpers/return-requirement-purpose.helper.js'
+import ReturnVersionHelper from '../../../support/helpers/return-version.helper.js'
+import SecondaryPurposeHelper from '../../../support/helpers/secondary-purpose.helper.js'
 
 // Thing under test
-const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
+import FetchReturnRequirementsService from '../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js'
 
 // NOTE: These have been declared outside the top level describe() by exception. We want to assert the result in detail
 // but it leads to a big block of object-code we then go on to duplicate a number of times in these tests. We've moved
@@ -81,7 +82,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
           describe('and the return requirement does not have an existing return log for the given cycle', () => {
             it('returns that matching return requirement and all related data needed to generate a return log', async () => {
-              const results = await FetchReturnRequirementsService.go(returnCycle)
+              const results = await FetchReturnRequirementsService(returnCycle)
 
               const expectedResult = _expectedResult()
 
@@ -103,7 +104,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               })
 
               it('returns that matching return requirement and all related data needed to generate a return log', async () => {
-                const results = await FetchReturnRequirementsService.go(returnCycle)
+                const results = await FetchReturnRequirementsService(returnCycle)
 
                 const expectedResult = _expectedResult()
 
@@ -124,7 +125,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               })
 
               it('does not return that return requirement', async () => {
-                const results = await FetchReturnRequirementsService.go(returnCycle)
+                const results = await FetchReturnRequirementsService(returnCycle)
 
                 const resultIds = _resultIds(results)
 
@@ -163,7 +164,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 
@@ -206,7 +207,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 
@@ -256,7 +257,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 
@@ -314,7 +315,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
           describe('and the return requirement does not have an existing return log for the given cycle', () => {
             it('returns that matching return requirement and all related data needed to generate a return log', async () => {
-              const results = await FetchReturnRequirementsService.go(returnCycle)
+              const results = await FetchReturnRequirementsService(returnCycle)
 
               const expectedResult = _expectedResult()
 
@@ -336,7 +337,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               })
 
               it('returns that matching return requirement and all related data needed to generate a return log', async () => {
-                const results = await FetchReturnRequirementsService.go(returnCycle)
+                const results = await FetchReturnRequirementsService(returnCycle)
 
                 const expectedResult = _expectedResult()
 
@@ -357,7 +358,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               })
 
               it('does not return that return requirement', async () => {
-                const results = await FetchReturnRequirementsService.go(returnCycle)
+                const results = await FetchReturnRequirementsService(returnCycle)
 
                 const resultIds = _resultIds(results)
 
@@ -396,7 +397,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 
@@ -439,7 +440,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 
@@ -489,7 +490,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 

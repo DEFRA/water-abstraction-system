@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const FetchLicenceDal = require('../../../app/dal/licence-monitoring-station/fetch-licence.dal.js')
+import FetchLicenceDal from '../../../app/dal/licence-monitoring-station/fetch-licence.dal.js'
 
 describe('Licence Monitoring Station - Fetch Licence DAL', () => {
   let licence
@@ -20,7 +21,7 @@ describe('Licence Monitoring Station - Fetch Licence DAL', () => {
 
   describe('when the licence exists', () => {
     it('returns the licence with the data needed to determine if it has ended', async () => {
-      const result = await FetchLicenceDal.go(licence.licenceRef)
+      const result = await FetchLicenceDal(licence.licenceRef)
 
       expect(result).toEqual({
         expiredDate: null,
@@ -34,7 +35,7 @@ describe('Licence Monitoring Station - Fetch Licence DAL', () => {
 
   describe('when the licence does not exist', () => {
     it('returns undefined', async () => {
-      const result = await FetchLicenceDal.go(generateUUID())
+      const result = await FetchLicenceDal(generateUUID())
 
       expect(result).toBeUndefined()
     })

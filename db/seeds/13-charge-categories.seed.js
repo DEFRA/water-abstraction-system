@@ -1,10 +1,8 @@
-'use strict'
+import ChargeCategoryModel from '../../app/models/charge-category.model.js'
+import { data as chargeCategories } from './data/charge-categories.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
-const ChargeCategoryModel = require('../../app/models/charge-category.model.js')
-const { data: chargeCategories } = require('./data/charge-categories.js')
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-
-async function seed() {
+export default async function seed() {
   for (const chargeCategory of chargeCategories) {
     await _upsert(chargeCategory)
   }
@@ -26,8 +24,4 @@ async function _upsert(chargeCategory) {
       'tidal',
       'updatedAt'
     ])
-}
-
-module.exports = {
-  seed
 }

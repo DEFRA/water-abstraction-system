@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const PreviewCheckAlertPresenter = require('../../../../../app/presenters/notices/setup/preview/preview-check-alert.presenter.js')
+import PreviewCheckAlertPresenter from '../../../../../app/presenters/notices/setup/preview/preview-check-alert.presenter.js'
 
 describe('Notices - Setup - Preview - Preview Check Alert presenter', () => {
   const contactHashId = '7a5efa5da17ab1ead8b8c91e05a0e3f7'
@@ -36,7 +37,7 @@ describe('Notices - Setup - Preview - Preview Check Alert presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PreviewCheckAlertPresenter.go(contactHashId, recipientLicenceRefs, session)
+      const result = PreviewCheckAlertPresenter(contactHashId, recipientLicenceRefs, session)
 
       expect(result).toEqual({
         backLink: { href: `/system/notices/setup/${session.id}/check`, text: 'Back' },
@@ -83,7 +84,7 @@ describe('Notices - Setup - Preview - Preview Check Alert presenter', () => {
         })
 
         it('returns only the thresholds that match the recipients licence refs', () => {
-          const result = PreviewCheckAlertPresenter.go(contactHashId, recipientLicenceRefs, session)
+          const result = PreviewCheckAlertPresenter(contactHashId, recipientLicenceRefs, session)
 
           expect(result.restrictions).toEqual([
             {
@@ -105,7 +106,7 @@ describe('Notices - Setup - Preview - Preview Check Alert presenter', () => {
 
         describe('the "action" property', () => {
           it('returns the correct action', () => {
-            const result = PreviewCheckAlertPresenter.go(contactHashId, recipientLicenceRefs, session)
+            const result = PreviewCheckAlertPresenter(contactHashId, recipientLicenceRefs, session)
 
             expect(result.restrictions[0].action).toEqual({
               link: `/system/notices/setup/${session.id}/preview/${contactHashId}/alert/${licenceMonitoringStations.two.id}`,

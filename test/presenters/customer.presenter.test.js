@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../support/fixtures/customers.fixture.js')
+import CustomersFixtures from '../support/fixtures/customers.fixture.js'
 
 // Thing under test
-const CustomerPresenter = require('../../app/presenters/customer.presenter.js')
+import * as CustomerPresenter from '../../app/presenters/customer.presenter.js'
 
 describe('Customer presenter', () => {
   describe('#formatCompanyContact', () => {

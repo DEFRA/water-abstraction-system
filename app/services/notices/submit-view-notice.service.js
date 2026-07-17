@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
  * @module SubmitViewNoticeService
  */
 
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
-const FetchNoticeService = require('../../services/notices/fetch-notice.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const ViewNoticePresenter = require('../../presenters/notices/view-notice.presenter.js')
-const ViewValidator = require('../../validators/notices/view.validator.js')
-const { clearFilters } = require('../../lib/submit-page.lib.js')
+import FetchNoticeService from '../../services/notices/fetch-notice.service.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import ViewNoticePresenter from '../../presenters/notices/view-notice.presenter.js'
+import ViewValidator from '../../validators/notices/view.validator.js'
+import { clearFilters } from '../../lib/submit-page.lib.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -25,7 +23,7 @@ const { clearFilters } = require('../../lib/submit-page.lib.js')
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the view page
  * else the data needed to re-render the page
  */
-async function go(noticeId, payload, yar, page) {
+export default async function submitViewNoticeService(noticeId, payload, yar, page) {
   const filterKey = `noticeFilter-${noticeId}`
 
   const filterCleared = clearFilters(payload, yar, filterKey)
@@ -51,16 +49,16 @@ async function go(noticeId, payload, yar, page) {
 }
 
 async function _replayView(noticeId, payload, error, page, savedFilters) {
-  const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, page, savedFilters)
+  const { notice, notifications, totalNumber } = await FetchNoticeService(noticeId, page, savedFilters)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/notices/${notice.id}`,
     notifications.length,
     'notifications'
   )
-  const pageData = ViewNoticePresenter.go(notice, notifications)
+  const pageData = ViewNoticePresenter(notice, notifications)
 
   return {
     activeNavBar: 'notices',
@@ -91,11 +89,7 @@ function _savedFilters(yar, filterKey) {
 }
 
 function _validate(payload) {
-  const validationResult = ViewValidator.go(payload)
+  const validationResult = ViewValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

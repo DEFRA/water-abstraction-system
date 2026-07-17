@@ -1,27 +1,23 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceMonitoringStationModel = require('../../../../app/models/licence-monitoring-station.model.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import LicenceMonitoringStationModel from '../../../../app/models/licence-monitoring-station.model.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Test helpers
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitCheckService = require('../../../../app/services/licence-monitoring-station/setup/submit-check.service.js')
+import SubmitCheckService from '../../../../app/services/licence-monitoring-station/setup/submit-check.service.js'
 
 describe('Licence Monitoring Station Setup - Submit Check Service', () => {
   const userId = 12345
-
-  let fetchSessionStub
   let session
   let sessionData
   let yarStub
@@ -45,22 +41,22 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       abstractionPeriodStartMonth: 1
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('creates the monitoring station tag', async () => {
-      await SubmitCheckService.go(session.id, userId, yarStub)
+      await SubmitCheckService(session.id, userId, yarStub)
 
       const result = await LicenceMonitoringStationModel.query()
         .where('monitoringStationId', sessionData.monitoringStationId)
@@ -70,7 +66,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     })
 
     it('persists the abstraction period', async () => {
-      await SubmitCheckService.go(session.id, userId, yarStub)
+      await SubmitCheckService(session.id, userId, yarStub)
 
       const result = await LicenceMonitoringStationModel.query()
         .where('monitoringStationId', sessionData.monitoringStationId)
@@ -83,7 +79,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     })
 
     it('persists the user that created the tag', async () => {
-      await SubmitCheckService.go(session.id, userId, yarStub)
+      await SubmitCheckService(session.id, userId, yarStub)
 
       const result = await LicenceMonitoringStationModel.query()
         .where('monitoringStationId', sessionData.monitoringStationId)
@@ -93,21 +89,21 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     })
 
     it('deletes the session', async () => {
-      await SubmitCheckService.go(session.id, userId, yarStub)
+      await SubmitCheckService(session.id, userId, yarStub)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitCheckService.go(session.id, userId, yarStub)
+      const result = await SubmitCheckService(session.id, userId, yarStub)
 
       expect(result).toEqual(sessionData.monitoringStationId)
     })
 
     it('sets the notification message title to "Success" and the text to "Tag for licence ... added" ', async () => {
-      await SubmitCheckService.go(session.id, userId, yarStub)
+      await SubmitCheckService(session.id, userId, yarStub)
 
-      const [flashType, notification] = yarStub.flash.args[0]
+      const [flashType, notification] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(notification).toEqual({
@@ -120,13 +116,13 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       beforeEach(() => {
         sessionData = { ...sessionData, unit: 'm3/s' }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('sets "measureType" as "flow"', async () => {
-        await SubmitCheckService.go(session.id, userId, yarStub)
+        await SubmitCheckService(session.id, userId, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -140,13 +136,13 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       beforeEach(() => {
         sessionData = { ...sessionData, unit: 'mAOD' }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('sets "measureType" as "level"', async () => {
-        await SubmitCheckService.go(session.id, userId, yarStub)
+        await SubmitCheckService(session.id, userId, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -160,13 +156,13 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       beforeEach(() => {
         sessionData = { ...sessionData, stopOrReduce: 'stop' }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('sets "restrictionType" as "stop"', async () => {
-        await SubmitCheckService.go(session.id, userId, yarStub)
+        await SubmitCheckService(session.id, userId, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -181,13 +177,13 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         beforeEach(() => {
           sessionData = { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'no' }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('sets "restrictionType" as "reduce"', async () => {
-          await SubmitCheckService.go(session.id, userId, yarStub)
+          await SubmitCheckService(session.id, userId, yarStub)
 
           const result = await LicenceMonitoringStationModel.query()
             .where('monitoringStationId', sessionData.monitoringStationId)
@@ -201,13 +197,13 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         beforeEach(() => {
           sessionData = { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'yes' }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('sets "restrictionType" as "stop_or_reduce"', async () => {
-          await SubmitCheckService.go(session.id, userId, yarStub)
+          await SubmitCheckService(session.id, userId, yarStub)
 
           const result = await LicenceMonitoringStationModel.query()
             .where('monitoringStationId', sessionData.monitoringStationId)
@@ -222,13 +218,13 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       beforeEach(() => {
         sessionData = { ...sessionData, conditionId: generateUUID() }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('persists the licence version purpose condition id', async () => {
-        await SubmitCheckService.go(session.id, userId, yarStub)
+        await SubmitCheckService(session.id, userId, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -240,7 +236,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
     describe('and "conditionId" is "no_condition"', () => {
       it('sets the licence version purpose condition id to NULL', async () => {
-        await SubmitCheckService.go(session.id, userId, yarStub)
+        await SubmitCheckService(session.id, userId, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)

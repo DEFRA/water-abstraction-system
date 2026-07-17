@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/select-recipients' page
  *
  * @module ViewSelectRecipientsService
  */
 
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
+import FetchRecipientsService from './fetch-recipients.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SelectRecipientsPresenter from '../../../presenters/notices/setup/select-recipients.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/select-recipients' page
@@ -17,14 +15,14 @@ const SelectRecipientsPresenter = require('../../../presenters/notices/setup/sel
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function viewSelectRecipientsService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
   const selectedRecipients = _selectedRecipients(session)
 
-  const recipients = await FetchRecipientsService.go(session)
+  const recipients = await FetchRecipientsService(session)
 
-  const pageData = SelectRecipientsPresenter.go(session, recipients, selectedRecipients)
+  const pageData = SelectRecipientsPresenter(session, recipients, selectedRecipients)
 
   return {
     activeNavBar: 'notices',
@@ -45,8 +43,4 @@ function _selectedRecipients(session) {
   delete session.selectedRecipients
 
   return selectedRecipients
-}
-
-module.exports = {
-  go
 }

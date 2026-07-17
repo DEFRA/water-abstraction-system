@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/single-volume` page
  * @module SingleVolumeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SingleVolumePresenter = require('../../../presenters/return-logs/setup/single-volume.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SingleVolumePresenter from '../../../presenters/return-logs/setup/single-volume.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/single-volume` page
@@ -18,16 +16,12 @@ const SingleVolumePresenter = require('../../../presenters/return-logs/setup/sin
  *
  * @returns {Promise<object>} The view data for the single volume page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function singleVolumeService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = SingleVolumePresenter.go(session)
+  const pageData = SingleVolumePresenter(session)
 
   return {
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

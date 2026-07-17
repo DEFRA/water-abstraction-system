@@ -1,15 +1,12 @@
-'use strict'
-
 /**
  * Fetches recipient data for a paper returns notice
  * @module FetchPaperReturnsRecipientsService
  */
 
-const GenerateReturnLogsByIdQueryService = require('./generate-return-logs-by-id-query.service.js')
-const GenerateRecipientsQueryService = require('./generate-recipients-query.service.js')
-const { futureDueDate } = require('../../../../presenters/notices/base.presenter.js')
-
-const { db } = require('../../../../../db/db.js')
+import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
+import GenerateReturnLogsByIdQueryService from './generate-return-logs-by-id-query.service.js'
+import { db } from '../../../../../db/db.js'
+import { futureDueDate } from '../../../../presenters/notices/base.presenter.js'
 
 /**
  * Fetches recipient data for a paper returns notice
@@ -19,11 +16,11 @@ const { db } = require('../../../../../db/db.js')
  *
  * @returns {Promise<object[]>} The recipient data for the paper returns notice
  */
-async function go(session, download) {
+export default async function fetchPaperReturnsRecipientsService(session, download) {
   const { selectedReturns, noticeType } = session
 
-  const { bindings, query: dueReturnLogsQuery } = GenerateReturnLogsByIdQueryService.go(selectedReturns)
-  const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+  const { bindings, query: dueReturnLogsQuery } = GenerateReturnLogsByIdQueryService(selectedReturns)
+  const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
   const { rows } = await db.raw(query, bindings)
 
@@ -48,8 +45,4 @@ function _applyNotificationDueDate(rows, download) {
       row.notificationDueDate = null
     }
   }
-}
-
-module.exports = {
-  go
 }

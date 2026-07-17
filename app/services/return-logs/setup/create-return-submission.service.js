@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Creates a new return submission, superseding a previous one if it exists
  * @module CreateReturnSubmissionService
  */
 
-const ReturnSubmissionModel = require('../../../models/return-submission.model.js')
-const { generateUUID } = require('../../../lib/general.lib.js')
+import ReturnSubmissionModel from '../../../models/return-submission.model.js'
+import { generateUUID } from '../../../lib/general.lib.js'
 
 /**
  * Creates a new return submission. The version number will be 1 if no previous submission exists for this return log
@@ -22,7 +20,7 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<module:ReturnSubmissionModel>} - The created return submission
  */
-async function go(metadata, session, timestamp, user, trx = null) {
+export default async function createReturnSubmissionService(metadata, session, timestamp, user, trx = null) {
   const { version, previousVersion } = await _determineVersionNumbers(session.returnLogId, trx)
 
   const returnSubmission = {
@@ -64,8 +62,4 @@ async function _markPreviousVersionAsSuperseded(returnLogId, version, trx) {
     .patch({ current: false })
     .where('returnLogId', returnLogId)
     .where('version', version)
-}
-
-module.exports = {
-  go
 }

@@ -1,20 +1,19 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test framework dependencies
-const Sinon = require('sinon')
-
-const { generateUUID, today } = require('../../../app/lib/general.lib.js')
+import { today } from '../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../support/generators.js'
 
 // Test helpers
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
+import NotificationHelper from '../../support/helpers/notification.helper.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
-const UpdateNoticeService = require('../../../app/services/notices/update-notice.service.js')
+import * as UpdateNoticeService from '../../../app/services/notices/update-notice.service.js'
+import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ProcessReturnedLetterService = require('../../../app/services/notifications/process-returned-letter.service.js')
+import ProcessReturnedLetterService from '../../../app/services/notifications/process-returned-letter.service.js'
 
 describe('Notifications - Process Returned Letter service', () => {
   const todaysDate = today()
@@ -22,8 +21,6 @@ describe('Notifications - Process Returned Letter service', () => {
   let notification
   let notifierStub
   let payload
-  let updateEventStub
-
   beforeEach(async () => {
     notification = await NotificationHelper.add({
       eventId: generateUUID(),
@@ -35,12 +32,12 @@ describe('Notifications - Process Returned Letter service', () => {
       status: 'sent'
     })
 
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
 
     if (notification) {
@@ -55,11 +52,11 @@ describe('Notifications - Process Returned Letter service', () => {
         reference: generateNoticeReferenceCode('RREM-')
       }
 
-      updateEventStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
+      vi.spyOn(UpdateNoticeService, 'default').mockResolvedValue()
     })
 
     it('updates "status" to returned and "returnedAt" to current date on the matching notification', async () => {
-      await ProcessReturnedLetterService.go(payload)
+      await ProcessReturnedLetterService(payload)
 
       const refreshedNotification = await notification.$query()
 
@@ -68,17 +65,17 @@ describe('Notifications - Process Returned Letter service', () => {
     })
 
     it('updates the linked notice to recalculate its overall status and status counts', async () => {
-      await ProcessReturnedLetterService.go(payload)
+      await ProcessReturnedLetterService(payload)
 
-      expect(updateEventStub.calledWith([notification.eventId])).toBe(true)
+      expect(UpdateNoticeService.default).toHaveBeenCalledWith([notification.eventId])
     })
 
     it('logs the time taken in milliseconds and seconds, plus the payload and matching notification', async () => {
-      await ProcessReturnedLetterService.go(payload)
+      await ProcessReturnedLetterService(payload)
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Returned letter complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Returned letter complete', expect.any(Object))
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.payload).toEqual(payload)
@@ -98,11 +95,11 @@ describe('Notifications - Process Returned Letter service', () => {
     })
 
     it('logs the time taken in milliseconds and seconds, plus the payload and an empty notification', async () => {
-      await ProcessReturnedLetterService.go(payload)
+      await ProcessReturnedLetterService(payload)
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Returned letter complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Returned letter complete', expect.any(Object))
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.payload).toEqual(payload)
@@ -117,19 +114,19 @@ describe('Notifications - Process Returned Letter service', () => {
         reference: generateNoticeReferenceCode('RREM-')
       }
 
-      Sinon.stub(UpdateNoticeService, 'go').rejects()
+      vi.spyOn(UpdateNoticeService, 'default').mockRejectedValue(new Error())
     })
 
     it('does not throw an error', async () => {
-      await ProcessReturnedLetterService.go(payload)
+      await ProcessReturnedLetterService(payload)
     })
 
     it('logs the error', async () => {
-      await ProcessReturnedLetterService.go(payload)
+      await ProcessReturnedLetterService(payload)
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg.calledWith('Returned letter failed')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Returned letter failed', expect.any(Object), expect.any(Error))
       expect(errorLogArgs[1]).toEqual(payload)
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })

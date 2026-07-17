@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewAccessService = require('../../../../../app/services/users/internal/setup/view-access.service.js')
+import ViewAccessService from '../../../../../app/services/users/internal/setup/view-access.service.js'
 
 describe('Users - Internal - Setup - View Access Service', () => {
   let session
@@ -19,18 +17,18 @@ describe('Users - Internal - Setup - View Access Service', () => {
   beforeEach(() => {
     sessionData = { access: 'enabled' }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewAccessService.go(session.id)
+      const result = await ViewAccessService(session.id)
 
       expect(result).toEqual({
         access: 'enabled',

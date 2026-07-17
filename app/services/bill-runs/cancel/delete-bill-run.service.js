@@ -1,21 +1,19 @@
-'use strict'
-
 /**
  * Deletes a bill run, all its associated records and the its match in the Charging Module API
  * @module DeleteBillRunService
  */
 
-const BillModel = require('../../../models/bill.model.js')
-const BillLicenceModel = require('../../../models/bill-licence.model.js')
-const BillRunModel = require('../../../models/bill-run.model.js')
-const BillRunChargeVersionYearModel = require('../../../models/bill-run-charge-version-year.model.js')
-const BillRunVolumeModel = require('../../../models/bill-run-volume.model.js')
-const { db } = require('../../../../db/db.js')
-const ChargingModuleDeleteBillRunRequest = require('../../../requests/charging-module/delete-bill-run.request.js')
-const { calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
-const ReviewChargeVersionModel = require('../../../models/review-charge-version.model.js')
-const ReviewLicenceModel = require('../../../models/review-licence.model.js')
-const ReviewReturnModel = require('../../../models/review-return.model.js')
+import BillLicenceModel from '../../../models/bill-licence.model.js'
+import BillModel from '../../../models/bill.model.js'
+import BillRunChargeVersionYearModel from '../../../models/bill-run-charge-version-year.model.js'
+import BillRunModel from '../../../models/bill-run.model.js'
+import BillRunVolumeModel from '../../../models/bill-run-volume.model.js'
+import DeleteBillRunRequest from '../../../requests/charging-module/delete-bill-run.request.js'
+import ReviewChargeVersionModel from '../../../models/review-charge-version.model.js'
+import ReviewLicenceModel from '../../../models/review-licence.model.js'
+import ReviewReturnModel from '../../../models/review-return.model.js'
+import { calculateAndLogTimeTaken } from '../../../lib/general.lib.js'
+import { db } from '../../../../db/db.js'
 
 /**
  * Deletes a bill run, all its associated records and its match in the Charging Module API
@@ -32,7 +30,7 @@ const ReviewReturnModel = require('../../../models/review-return.model.js')
  *
  * @param {module:BillRunModule} billRun - The bill run to be deleted
  */
-async function go(billRun) {
+export default async function deleteBillRunService(billRun) {
   try {
     const startTime = process.hrtime.bigint()
 
@@ -46,7 +44,7 @@ async function go(billRun) {
     const results = await Promise.allSettled([
       // If the Charging Module errors whilst doing this it shouldn't block us carrying on with deleting the bill run on
       // our side. It just means the the CHA will be storing an 'orphaned' bill run that will never get sent.
-      ChargingModuleDeleteBillRunRequest.send(externalId),
+      DeleteBillRunRequest(externalId),
       // We can be deleting these records whilst getting on with deleting the other things. But should it fail we'll
       // just be left with orphaned review results. As long as it's an incidental occurrence this wouldn't be a problem.
       _deleteReviewResults(billRunId),
@@ -226,8 +224,4 @@ function _logResult(startTime, billRun, results) {
   }
 
   globalThis.GlobalNotifier.omfg('Delete bill run failed', billRun, firstError.reason)
-}
-
-module.exports = {
-  go
 }

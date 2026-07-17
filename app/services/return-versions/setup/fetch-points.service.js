@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches a licence version's points needed for `/return-versions/setup/{sessionId}/points` page
  * @module FetchPointsService
  */
 
-const PointModel = require('../../../models/point.model.js')
+import PointModel from '../../../models/point.model.js'
 
 /**
  * Fetches a licence version's points needed for `/return-versions/setup/{sessionId}/points` page
@@ -14,7 +12,7 @@ const PointModel = require('../../../models/point.model.js')
  *
  * @returns {Promise<module:PointModel[]>} The distinct points for the matching licence version
  */
-async function go(licenceVersionId) {
+export default async function fetchPointsService(licenceVersionId) {
   return PointModel.query()
     .distinct(['points.id', 'points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
     .innerJoin('licenceVersionPurposePoints', 'licenceVersionPurposePoints.pointId', 'points.id')
@@ -25,8 +23,4 @@ async function go(licenceVersionId) {
     )
     .innerJoin('licenceVersions', 'licenceVersions.id', 'licenceVersionPurposes.licenceVersionId')
     .where('licenceVersions.id', licenceVersionId)
-}
-
-module.exports = {
-  go
 }

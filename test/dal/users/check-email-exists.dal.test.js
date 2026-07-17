@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const UserHelper = require('../../support/helpers/user.helper.js')
+import UserHelper from '../../support/helpers/user.helper.js'
 
 // Thing under test
-const CheckEmailExistsDal = require('../../../app/dal/users/check-email-exists.dal.js')
+import CheckEmailExistsDal from '../../../app/dal/users/check-email-exists.dal.js'
 
 describe('DAL - Check email exists dal', () => {
   let email
@@ -21,7 +22,7 @@ describe('DAL - Check email exists dal', () => {
     })
 
     it('returns "true"', async () => {
-      const result = await CheckEmailExistsDal.go(email)
+      const result = await CheckEmailExistsDal(email)
 
       expect(result).toBe(true)
     })
@@ -33,7 +34,7 @@ describe('DAL - Check email exists dal', () => {
     })
 
     it('returns "false"', async () => {
-      const result = await CheckEmailExistsDal.go(email)
+      const result = await CheckEmailExistsDal(email)
 
       expect(result).toBe(false)
     })

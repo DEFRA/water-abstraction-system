@@ -1,8 +1,6 @@
-'use strict'
-
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: primaryPurposes } = require('./data/primary-purposes.js')
-const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
+import PrimaryPurposeModel from '../../app/models/primary-purpose.model.js'
+import { data as primaryPurposes } from './data/primary-purposes.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
 /**
  * Seeds the primary purpose reference data using an upsert
@@ -14,7 +12,7 @@ const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
  * Public table name - public.primary_purposes
  *
  */
-async function seed() {
+export default async function seed() {
   for (const purpose of primaryPurposes) {
     await _upsert(purpose)
   }
@@ -25,8 +23,4 @@ async function _upsert(primaryPurpose) {
     .insert({ ...primaryPurpose, updatedAt: timestampForPostgres() })
     .onConflict('legacyId')
     .merge(['description', 'updatedAt'])
-}
-
-module.exports = {
-  seed
 }

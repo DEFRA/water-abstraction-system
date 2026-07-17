@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the selected review licence instance and related data for the two-part tariff remove review licence page
  * @module FetchRemoveReviewLicenceService
  */
 
-const ReviewLicenceModel = require('../../../models/review-licence.model.js')
+import ReviewLicenceModel from '../../../models/review-licence.model.js'
 
 /**
  * Fetches the selected review licence instance and related data for the two-part tariff remove review licence page
@@ -15,7 +13,7 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * @returns {module:ReviewLicenceModel} the matching `ReviewLicenceModel` instance and related data needed for the
  * two-part tariff remove review licence page
  */
-async function go(reviewLicenceId) {
+export default async function fetchRemoveReviewLicenceService(reviewLicenceId) {
   return _fetch(reviewLicenceId)
 }
 
@@ -32,8 +30,4 @@ async function _fetch(reviewLicenceId) {
           regionBuilder.select(['id', 'displayName'])
         })
     })
-}
-
-module.exports = {
-  go
 }

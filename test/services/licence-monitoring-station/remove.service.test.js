@@ -1,13 +1,11 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const FetchLicenceMonitoringStationService = require('../../../app/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js')
+import * as FetchLicenceMonitoringStationService from '../../../app/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js'
 
 // Thing under test
-const RemoveService = require('../../../app/services/licence-monitoring-station/remove.service.js')
+import RemoveService from '../../../app/services/licence-monitoring-station/remove.service.js'
 
 describe('Licence Monitoring Station - Remove service', () => {
   const licenceId = '7603de03-8147-42a3-9579-3948cb781c91'
@@ -34,16 +32,16 @@ describe('Licence Monitoring Station - Remove service', () => {
       licenceVersionPurposeCondition: null
     }
 
-    Sinon.stub(FetchLicenceMonitoringStationService, 'go').resolves(licenceMonitoringStation)
+    vi.spyOn(FetchLicenceMonitoringStationService, 'default').mockResolvedValue(licenceMonitoringStation)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await RemoveService.go(licenceMonitoringStationId)
+      const result = await RemoveService(licenceMonitoringStationId)
 
       expect(result).toEqual({
         backLink: `/system/monitoring-stations/${monitoringStationId}/licence/${licenceId}`,

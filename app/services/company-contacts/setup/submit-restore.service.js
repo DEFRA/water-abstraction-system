@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/check' page
  *
  * @module SubmitRestoreService
  */
 
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const UpdateCompanyContactDal = require('../../../dal/company-contacts/setup/update-company-contact.dal.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import UpdateCompanyContactDal from '../../../dal/company-contacts/setup/update-company-contact.dal.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/check' page
@@ -20,10 +18,10 @@ const { flashNotification } = require('../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, yar, auth) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitRestoreService(sessionId, yar, auth) {
+  const session = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   await _updateCompanyContact(session, auth)
 
@@ -46,9 +44,5 @@ async function _updateCompanyContact(session, auth) {
     updatedBy: auth.credentials.user.id
   }
 
-  await UpdateCompanyContactDal.go(companyContact)
-}
-
-module.exports = {
-  go
+  await UpdateCompanyContactDal(companyContact)
 }

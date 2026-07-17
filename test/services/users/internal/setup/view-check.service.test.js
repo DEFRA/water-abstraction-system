@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewCheckService = require('../../../../../app/services/users/internal/setup/view-check.service.js')
+import ViewCheckService from '../../../../../app/services/users/internal/setup/view-check.service.js'
 
 describe('Users - Internal - Setup - Check Service', () => {
   let session
@@ -23,20 +21,20 @@ describe('Users - Internal - Setup - Check Service', () => {
       permission: 'billing_and_data'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = { flash: Sinon.stub().returns([]) }
+    yarStub = { flash: vi.fn().mockReturnValue([]) }
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCheckService.go(session.id, yarStub)
+      const result = await ViewCheckService(session.id, yarStub)
 
       expect(result).toEqual({
         access: null,
@@ -57,19 +55,19 @@ describe('Users - Internal - Setup - Check Service', () => {
     })
 
     it('sets the "checkPageVisited" flag to "true"', async () => {
-      await ViewCheckService.go(session.id, yarStub)
+      await ViewCheckService(session.id, yarStub)
 
       expect(session.checkPageVisited).toBe(true)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     describe('when there is a notification', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().returns(['Test notification']) }
+        yarStub = { flash: vi.fn().mockReturnValue(['Test notification']) }
       })
 
       it('sets the notification', async () => {
-        const result = await ViewCheckService.go(session.id, yarStub)
+        const result = await ViewCheckService(session.id, yarStub)
 
         expect(result.notification).toEqual('Test notification')
       })

@@ -1,15 +1,18 @@
-'use strict'
-
 /**
  * Model for licence_monitoring_stations (water.licence_monitoring_stations)
  * @module LicenceMonitoringStationModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import LicenceModel from './licence.model.js'
+import LicenceVersionPurposeConditionModel from './licence-version-purpose-condition.model.js'
+import MonitoringStationModel from './monitoring-station.model.js'
+import NotificationModel from './notification.model.js'
+import UserModel from './user.model.js'
 
-class LicenceMonitoringStationModel extends BaseModel {
+export default class LicenceMonitoringStationModel extends BaseModel {
   static get tableName() {
     return 'licenceMonitoringStations'
   }
@@ -18,7 +21,7 @@ class LicenceMonitoringStationModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'licenceMonitoringStations.licenceId',
           to: 'licences.id'
@@ -26,7 +29,7 @@ class LicenceMonitoringStationModel extends BaseModel {
       },
       licenceVersionPurposeCondition: {
         relation: Model.HasOneRelation,
-        modelClass: 'licence-version-purpose-condition.model',
+        modelClass: LicenceVersionPurposeConditionModel,
         join: {
           from: 'licenceMonitoringStations.licenceVersionPurposeConditionId',
           to: 'licenceVersionPurposeConditions.id'
@@ -34,7 +37,7 @@ class LicenceMonitoringStationModel extends BaseModel {
       },
       monitoringStation: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'monitoring-station.model',
+        modelClass: MonitoringStationModel,
         join: {
           from: 'licenceMonitoringStations.monitoringStationId',
           to: 'monitoringStations.id'
@@ -42,7 +45,7 @@ class LicenceMonitoringStationModel extends BaseModel {
       },
       notifications: {
         relation: Model.HasManyRelation,
-        modelClass: 'notification.model',
+        modelClass: NotificationModel,
         join: {
           from: 'licenceMonitoringStations.id',
           to: 'notifications.licenceMonitoringStationId'
@@ -50,7 +53,7 @@ class LicenceMonitoringStationModel extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'licenceMonitoringStations.createdBy',
           to: 'users.userId'
@@ -59,5 +62,3 @@ class LicenceMonitoringStationModel extends BaseModel {
     }
   }
 }
-
-module.exports = LicenceMonitoringStationModel

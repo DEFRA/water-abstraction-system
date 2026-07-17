@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generates return submission metatadata
  * @module GenerateReturnSubmissionMetadataService
  */
 
-const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
+import { formatDateObjectToISO } from '../../../lib/dates.lib.js'
 
 const REPORTED = {
   VOLUMES: 'abstractionVolumes',
@@ -19,7 +17,7 @@ const REPORTED = {
  *
  * @returns {object} The return submission metadata
  */
-function go(session) {
+export default function generateReturnSubmissionMetadataService(session) {
   // Metadata is not required for nil returns
   if (session.journey === 'nilReturn') {
     return {}
@@ -94,8 +92,4 @@ function _totalProperties(session) {
       totalCustomDateEnd: session.toFullDate
     })
   }
-}
-
-module.exports = {
-  go
 }

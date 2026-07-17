@@ -1,18 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateAccountNumber } = require('../../../support/helpers/billing-account.helper.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import { generateAccountNumber, generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchBillingAccountsService = require('../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js')
+import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js'
 
 // Thing under test
-const PreGenerateBillingDataService = require('../../../../app/services/bill-runs/supplementary/pre-generate-billing-data.service.js')
+import PreGenerateBillingDataService from '../../../../app/services/bill-runs/supplementary/pre-generate-billing-data.service.js'
 
 describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => {
   const billingPeriod = {
@@ -40,7 +36,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
   let chargeVersions
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service is called', () => {
@@ -52,12 +48,12 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
         { billingAccountId: billingAccounts[1].id, licence: licences[1] }
       ]
 
-      Sinon.stub(FetchBillingAccountsService, 'go').resolves(billingAccounts)
+      vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue(billingAccounts)
     })
 
     describe('returns an object with a bills property', () => {
       it('has one key per billing account', async () => {
-        const { bills: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
+        const { bills: result } = await PreGenerateBillingDataService(chargeVersions, billRunId, billingPeriod)
 
         const keys = Object.keys(result)
 
@@ -65,7 +61,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
       })
 
       it('is keyed with the billing account id', async () => {
-        const { bills: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
+        const { bills: result } = await PreGenerateBillingDataService(chargeVersions, billRunId, billingPeriod)
 
         const entries = Object.entries(result)
 
@@ -75,7 +71,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
       })
 
       it('has the correct data for each key', async () => {
-        const { bills: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
+        const { bills: result } = await PreGenerateBillingDataService(chargeVersions, billRunId, billingPeriod)
 
         const entries = Object.entries(result)
 
@@ -91,11 +87,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
 
     describe('returns an object with a billLicences property', () => {
       it('has one key per combination of bill id and licence id', async () => {
-        const { billLicences: result } = await PreGenerateBillingDataService.go(
-          chargeVersions,
-          billRunId,
-          billingPeriod
-        )
+        const { billLicences: result } = await PreGenerateBillingDataService(chargeVersions, billRunId, billingPeriod)
 
         const keys = Object.entries(result)
 
@@ -103,11 +95,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
       })
 
       it('is keyed with the bill id and licence id', async () => {
-        const { billLicences: result } = await PreGenerateBillingDataService.go(
-          chargeVersions,
-          billRunId,
-          billingPeriod
-        )
+        const { billLicences: result } = await PreGenerateBillingDataService(chargeVersions, billRunId, billingPeriod)
 
         const entries = Object.entries(result)
 
@@ -117,11 +105,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
       })
 
       it('has the correct data for each key', async () => {
-        const { billLicences: result } = await PreGenerateBillingDataService.go(
-          chargeVersions,
-          billRunId,
-          billingPeriod
-        )
+        const { billLicences: result } = await PreGenerateBillingDataService(chargeVersions, billRunId, billingPeriod)
 
         const entries = Object.entries(result)
 

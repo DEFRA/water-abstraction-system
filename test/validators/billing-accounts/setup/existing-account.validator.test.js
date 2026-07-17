@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const ExistingAccountValidator = require('../../../../app/validators/billing-accounts/setup/existing-account.validator.js')
+import ExistingAccountValidator from '../../../../app/validators/billing-accounts/setup/existing-account.validator.js'
 
 describe('Billing Accounts - Setup - Existing Account validator', () => {
   let payload
@@ -16,7 +17,7 @@ describe('Billing Accounts - Setup - Existing Account validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = ExistingAccountValidator.go(payload)
+        const result = ExistingAccountValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -29,7 +30,7 @@ describe('Billing Accounts - Setup - Existing Account validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = ExistingAccountValidator.go(payload)
+        const result = ExistingAccountValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -43,7 +44,7 @@ describe('Billing Accounts - Setup - Existing Account validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ExistingAccountValidator.go(payload)
+      const result = ExistingAccountValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

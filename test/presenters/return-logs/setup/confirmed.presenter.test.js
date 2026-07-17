@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ConfirmedPresenter = require('../../../../app/presenters/return-logs/setup/confirmed.presenter.js')
+import ConfirmedPresenter from '../../../../app/presenters/return-logs/setup/confirmed.presenter.js'
 
 describe('Return Logs - Setup - Confirmed presenter', () => {
   let returnLog
@@ -37,7 +38,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
 
   describe('when provided with a return log', () => {
     it('correctly presents the data', () => {
-      const result = ConfirmedPresenter.go(returnLog)
+      const result = ConfirmedPresenter(returnLog)
 
       expect(result).toEqual({
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
@@ -58,7 +59,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
   describe('the "pageTitle" property', () => {
     describe('when the return log has a status of received', () => {
       it('returns pageTitle as "Return received"', () => {
-        const result = ConfirmedPresenter.go(returnLog)
+        const result = ConfirmedPresenter(returnLog)
 
         expect(result.pageTitle).toEqual('Return 10032788 received')
       })
@@ -71,7 +72,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
 
       describe('and has 1 return submission', () => {
         it('returns pageTitle as "Return submitted"', () => {
-          const result = ConfirmedPresenter.go(returnLog)
+          const result = ConfirmedPresenter(returnLog)
 
           expect(result.pageTitle).toEqual('Return 10032788 submitted')
         })
@@ -82,7 +83,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
           returnLog.submissionCount = 2
         })
         it('returns pageTitle as "Return edited"', () => {
-          const result = ConfirmedPresenter.go(returnLog)
+          const result = ConfirmedPresenter(returnLog)
 
           expect(result.pageTitle).toEqual('Return 10032788 edited')
         })
@@ -93,7 +94,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
   describe('the "purposeDetails" property', () => {
     describe('when the return log has a single purpose', () => {
       it('returns an object with a label property set to "Purpose" and a value property containing the single purpose', () => {
-        const result = ConfirmedPresenter.go(returnLog)
+        const result = ConfirmedPresenter(returnLog)
 
         expect(result.purposeDetails).toEqual({ label: 'Purpose', value: 'Spray Irrigation - Direct' })
       })
@@ -105,7 +106,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
       })
 
       it('returns an object with a label property set to "Purposes" and a value property containing the comma separated purposes as a string', () => {
-        const result = ConfirmedPresenter.go(returnLog)
+        const result = ConfirmedPresenter(returnLog)
 
         expect(result.purposeDetails).toEqual({
           label: 'Purposes',

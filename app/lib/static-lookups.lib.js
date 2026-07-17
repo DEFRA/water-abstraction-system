@@ -1,6 +1,4 @@
-'use strict'
-
-const billRunStatuses = Object.freeze({
+export const billRunStatuses = Object.freeze({
   processing: 'Building',
   cancel: 'Cancelling',
   empty: 'Empty',
@@ -10,18 +8,18 @@ const billRunStatuses = Object.freeze({
   sent: 'Sent'
 })
 
-const billRunTypes = Object.freeze({
+export const billRunTypes = Object.freeze({
   annual: 'Annual',
   supplementary: 'Supplementary',
   two_part_tariff: 'Two-part tariff',
   two_part_supplementary: 'Two-part tariff supplementary'
 })
 
-const companyTypes = ['person', 'organisation']
+export const companyTypes = ['person', 'organisation']
 
-const contactTypes = ['person', 'department']
+export const contactTypes = ['person', 'department']
 
-const countries = [
+export const countries = [
   'Afghanistan',
   'Albania',
   'Algeria',
@@ -230,12 +228,12 @@ const countries = [
   'Zimbabwe'
 ]
 
-const engineTriggers = { both: 'both', current: 'current', old: 'old', neither: 'neither' }
+export const engineTriggers = { both: 'both', current: 'current', old: 'old', neither: 'neither' }
 
 /**
  * When checking notifications are sent to an email we want to ignore these message ref types
  */
-const ignoreMessageRef = [
+export const ignoreMessageRef = [
   'email_change_email_in_use_email',
   'email_change_verification_code_email',
   'existing_user_verification_email',
@@ -250,7 +248,7 @@ const ignoreMessageRef = [
   'share_new_user'
 ]
 
-const naldAreaCodes = {
+export const naldAreaCodes = {
   ARCA: 'Central',
   AREA: 'Eastern',
   ARNA: 'Northern',
@@ -292,7 +290,7 @@ const naldAreaCodes = {
  * NALD region prefix from import.NALD_ABS_LICENCES.AREP_EIUC_CODE will be mapped to one of the below regions
  *
  */
-const naldRegions = {
+export const naldRegions = {
   AN: 'Anglian',
   MD: 'Midlands',
   NO: 'Northumbria',
@@ -304,9 +302,9 @@ const naldRegions = {
   YO: 'Yorkshire'
 }
 
-const NoticeJourney = Object.freeze({ ADHOC: 'adhoc', ALERTS: 'alerts', STANDARD: 'standard' })
+export const NoticeJourney = Object.freeze({ ADHOC: 'adhoc', ALERTS: 'alerts', STANDARD: 'standard' })
 
-const noticeMappings = {
+export const noticeMappings = {
   'hof-resume': 'HOF resume',
   'hof-stop': 'HOF stop',
   'hof-warning': 'HOF warning',
@@ -320,7 +318,7 @@ const noticeMappings = {
   renewalInvitation: 'Renewals invitation'
 }
 
-const NoticeType = Object.freeze({
+export const NoticeType = Object.freeze({
   ABSTRACTION_ALERTS: 'abstractionAlerts',
   ALTERNATE_INVITATION: 'alternateInvitations',
   INVITATIONS: 'invitations',
@@ -333,7 +331,7 @@ const NoticeType = Object.freeze({
  * The notice journey depends on some of these properties being in the session for each notice. Also, some legacy and
  * reporting functionality requires them to be set in the records. We collate them here for easy reference.
  */
-const NoticeTypes = Object.freeze({
+export const NoticeTypes = Object.freeze({
   [NoticeType.ABSTRACTION_ALERTS]: {
     name: 'Water abstraction alert',
     prefix: 'WAA-',
@@ -366,12 +364,12 @@ const NoticeTypes = Object.freeze({
   }
 })
 
-const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
+export const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
 
 /**
  * The start, end and due dates for each return cycle
  */
-const returnCycleDates = {
+export const returnCycleDates = {
   allYear: {
     dueDate: { day: 28, month: 3 },
     endDate: { day: 31, month: 2 },
@@ -387,7 +385,7 @@ const returnCycleDates = {
 /**
  * The start, end and due dates for each quarterly return period
  */
-const quarterlyReturnPeriods = {
+export const quarterlyReturnPeriods = {
   quarterOne: {
     dueDate: { day: 28, month: 6 },
     endDate: { day: 30, month: 5 },
@@ -430,12 +428,12 @@ const quarterlyReturnPeriods = {
  * | Summer       | 1 November    | 31 October    | 28th November  |
  *
  */
-const returnPeriodDates = {
+export const returnPeriodDates = {
   ...returnCycleDates,
   ...quarterlyReturnPeriods
 }
 
-const returnRequirementFrequencies = {
+export const returnRequirementFrequencies = {
   day: 'daily',
   week: 'weekly',
   fortnight: 'fortnightly',
@@ -444,7 +442,7 @@ const returnRequirementFrequencies = {
   year: 'yearly'
 }
 
-const returnRequirementReasons = {
+export const returnRequirementReasons = {
   'abstraction-below-100-cubic-metres-per-day': 'Abstraction amount below 100 cubic metres per day',
   'change-to-return-requirements': 'Change to requirements for returns',
   'change-to-special-agreement': 'Change to special agreement',
@@ -477,7 +475,7 @@ const returnRequirementReasons = {
  * with our URL argument standards.
  *
  */
-const roles = Object.freeze({
+export const roles = Object.freeze({
   'abstraction-alerts': Object.freeze({
     name: 'abstractionAlerts',
     label: 'Abstraction alerts'
@@ -515,7 +513,7 @@ const roles = Object.freeze({
 /**
  * Conversion multipliers to normalise flow units to litres per day (L/d) and level units to metres (m)
  */
-const unitConversion = {
+export const unitConversion = {
   'Ml/d': 1_000_000,
   'm3/d': 1_000,
   'm3/s': 86_400_000,
@@ -530,23 +528,23 @@ const unitConversion = {
   SLD: 1
 }
 
-const unitNames = {
+export const unitNames = {
   CUBIC_METRES: 'm³',
   LITRES: 'l',
   MEGALITRES: 'Ml',
   GALLONS: 'gal'
 }
 
-const returnUnits = {
+export const returnUnits = {
   [unitNames.CUBIC_METRES]: { multiplier: 1, label: 'cubic metres', name: 'cubicMetres' },
   [unitNames.LITRES]: { multiplier: 1000, label: 'litres', name: 'litres' },
   [unitNames.MEGALITRES]: { multiplier: 0.001, label: 'megalitres', name: 'megalitres' },
   [unitNames.GALLONS]: { multiplier: 219.969248299, label: 'gallons', name: 'gallons' }
 }
 
-const sources = ['nald', 'wrls']
+export const sources = ['nald', 'wrls']
 
-const thresholdUnits = {
+export const thresholdUnits = {
   MEGALITRES_PER_DAY: { value: 'Ml/d', label: 'megalitres per day' },
   CUBIC_METRES_PER_SECOND: { value: 'm3/s', label: 'cubic metres per second' },
   CUBIC_METRES_PER_DAY: { value: 'm3/d', label: 'cubic metres per day' },
@@ -564,7 +562,7 @@ const thresholdUnits = {
 /*
  * NOTE: Though not in alphabetical order, flowUnits has to be declared here because it depends on thresholdUnits
  */
-const flowUnits = [
+export const flowUnits = [
   thresholdUnits.MEGALITRES_PER_DAY.value,
   thresholdUnits.CUBIC_METRES_PER_SECOND.value,
   thresholdUnits.CUBIC_METRES_PER_DAY.value,
@@ -574,7 +572,7 @@ const flowUnits = [
   thresholdUnits.MILLION_GALLONS_PER_DAY.value
 ]
 
-const twoPartTariffReviewIssues = {
+export const twoPartTariffReviewIssues = {
   'abs-outside-period': 'Abstraction outside period',
   'aggregate-factor': 'Aggregate',
   'checking-query': 'Checking query',
@@ -589,7 +587,7 @@ const twoPartTariffReviewIssues = {
   'unable-to-match-return': 'Unable to match return'
 }
 
-const userPermissions = Object.freeze({
+export const userPermissions = Object.freeze({
   admin: {
     application: 'water_vml',
     groups: [],
@@ -683,7 +681,7 @@ const userPermissions = Object.freeze({
   }
 })
 
-const userNotificationTypes = Object.freeze({
+export const userNotificationTypes = Object.freeze({
   email_change_email_in_use_email: {
     label: 'Change email address - email already in use',
     protected: false,
@@ -740,35 +738,3 @@ const userNotificationTypes = Object.freeze({
     type: 'external'
   }
 })
-
-module.exports = {
-  billRunStatuses,
-  billRunTypes,
-  companyTypes,
-  contactTypes,
-  countries,
-  engineTriggers,
-  flowUnits,
-  ignoreMessageRef,
-  naldAreaCodes,
-  naldRegions,
-  NoticeJourney,
-  noticeMappings,
-  NoticeType,
-  NoticeTypes,
-  organisationTypes,
-  returnCycleDates,
-  returnPeriodDates,
-  returnRequirementFrequencies,
-  returnRequirementReasons,
-  returnUnits,
-  roles,
-  sources,
-  thresholdUnits,
-  twoPartTariffReviewIssues,
-  quarterlyReturnPeriods,
-  unitConversion,
-  unitNames,
-  userPermissions,
-  userNotificationTypes
-}

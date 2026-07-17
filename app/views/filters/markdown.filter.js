@@ -1,4 +1,4 @@
-'use strict'
+import { marked } from 'marked'
 
 /**
  * Converts Notify's custom flavour of markdown into valid HTML. Notify's flavour of markdown uses a caret (`^`)
@@ -26,17 +26,8 @@
  * @param {string} input - The markdown input to be processed.
  * @returns {string} The HTML output generated after replacing carets (`^`) with `>` and parsing the markdown.
  */
-function markdown(input = '') {
+export default function markdownFilter(input = '') {
   const replacedCaret = input.replace(/\^/gm, '>')
 
-  // NOTE: See app/plugins/views.plugin.js for details why marked is in the global scope rather than just required().
-  if (!globalThis.GlobalMarked) {
-    return input
-  }
-
-  return globalThis.GlobalMarked.parse(replacedCaret)
-}
-
-module.exports = {
-  markdown
+  return marked.parse(replacedCaret)
 }

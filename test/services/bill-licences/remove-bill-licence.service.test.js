@@ -1,28 +1,26 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const FetchBillLicenceSummaryService = require('../../../app/services/bill-licences/fetch-bill-licence-summary.service.js')
+import * as FetchBillLicenceSummaryService from '../../../app/services/bill-licences/fetch-bill-licence-summary.service.js'
 
 // Thing under test
-const RemoveBillLicenceService = require('../../../app/services/bill-licences/remove-bill-licence.service.js')
+import RemoveBillLicenceService from '../../../app/services/bill-licences/remove-bill-licence.service.js'
 
 describe('Remove Bill Licence service', () => {
   const testId = 'a4fbaa27-a91c-4328-a1b8-774ade11027b'
 
   beforeEach(() => {
-    Sinon.stub(FetchBillLicenceSummaryService, 'go').resolves(_billLicenceSummary())
+    vi.spyOn(FetchBillLicenceSummaryService, 'default').mockResolvedValue(_billLicenceSummary())
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await RemoveBillLicenceService.go(testId)
+      const result = await RemoveBillLicenceService(testId)
 
       expect(result).toEqual({
         accountName: 'Example Trading Ltd',

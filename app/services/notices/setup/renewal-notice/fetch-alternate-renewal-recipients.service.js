@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches recipient data for an alternate renewal notice
  * @module FetchAlternateRenewalRecipientsService
  */
 
-const { licenceHolderRecipientQuery } = require('../../../../dal/notices/recipient-queries.dal.js')
-const { db } = require('../../../../../db/db.js')
+import { db } from '../../../../../db/db.js'
+import { licenceHolderRecipientQuery } from '../../../../dal/notices/recipient-queries.dal.js'
 
 /**
  * Fetches recipient data for an alternate renewal notice
@@ -18,7 +16,7 @@ const { db } = require('../../../../../db/db.js')
  *
  * @returns {Promise<object[]>} The recipient data for the alternate renewal notice
  */
-async function go(licenceRefs) {
+export default async function fetchAlternateRenewalRecipientsService(licenceRefs) {
   const { rows } = await db.raw(_query(), [licenceRefs])
 
   return rows
@@ -52,8 +50,4 @@ function _query() {
       )
     SELECT * FROM results;
   `
-}
-
-module.exports = {
-  go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/period-used` page
  * @module PeriodUsedService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/period-used.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PeriodUsedPresenter from '../../../presenters/return-logs/setup/period-used.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/period-used` page
@@ -18,16 +16,12 @@ const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/perio
  *
  * @returns {Promise<object>} The view data for the period used page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function periodUsedService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const pageData = PeriodUsedPresenter.go(session)
+  const pageData = PeriodUsedPresenter(session)
 
   return {
     ...pageData
   }
-}
-
-module.exports = {
-  go
 }

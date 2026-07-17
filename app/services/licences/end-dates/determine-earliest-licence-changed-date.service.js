@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines if a licence's 'end dates' have changed, and if more than one has, which was the earliest
  * @module DetermineEarliestLicenceChangedDateService
  */
 
-const { compareDates, determineEarliestDate, sameDate } = require('../../../lib/dates.lib.js')
+import { compareDates, determineEarliestDate, sameDate } from '../../../lib/dates.lib.js'
 
 /**
  * Determines if a licence's 'end dates' have changed, and if more than one has, which was the earliest
@@ -35,7 +33,7 @@ const { compareDates, determineEarliestDate, sameDate } = require('../../../lib/
  *
  * @returns {object|null} The earliest changed date if any changes are found, otherwise null
  */
-function go(licence) {
+export default function determineEarliestLicenceChangedDateService(licence) {
   const changedDates = _changedDates(licence)
 
   if (changedDates.length === 0) {
@@ -99,8 +97,4 @@ function _earliestChangedDate(changedDates) {
   })
 
   return changedDates[0]
-}
-
-module.exports = {
-  go
 }

@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import CustomersFixture from '../../../support/fixtures/customers.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchCompanyContactsService from '../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewContactService = require('../../../../app/services/billing-accounts/setup/view-contact.service.js')
+import ViewContactService from '../../../../app/services/billing-accounts/setup/view-contact.service.js'
 
 describe('Billing Accounts - Setup - Contact Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -28,11 +26,11 @@ describe('Billing Accounts - Setup - Contact Service', () => {
   let sessionData
 
   beforeEach(() => {
-    Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
+    vi.spyOn(FetchCompanyContactsService, 'default').mockResolvedValue(companyContacts)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -43,13 +41,13 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           billingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        Sinon.stub(FetchSessionDal, 'go').resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewContactService.go(session.id)
+        const result = await ViewContactService(session.id)
 
         expect(result).toEqual({
           backLink: {
@@ -88,13 +86,13 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           existingAccount: billingAccount.company.id
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        Sinon.stub(FetchSessionDal, 'go').resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewContactService.go(session.id)
+        const result = await ViewContactService(session.id)
 
         expect(result).toEqual({
           backLink: {

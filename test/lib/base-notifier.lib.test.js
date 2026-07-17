@@ -1,19 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { NOTIFY_TEMPLATES } = require('../../app/lib/notify-templates.lib.js')
+import { NOTIFY_TEMPLATES } from '../../app/lib/notify-templates.lib.js'
 
 // Things we need to stub
-const AirbrakeModule = require('@airbrake/node')
-const AirbrakeConfig = require('../../config/airbrake.config.js')
-const CreateEmailRequest = require('../../app/requests/notify/create-email.request.js')
-const NotifyConfig = require('../../config/notify.config.js')
+import AirbrakeModule from '@airbrake/node'
+import * as CreateEmailRequest from '../../app/requests/notify/create-email.request.js'
+import AirbrakeConfig from '../../config/airbrake.config.js'
+import NotifyConfig from '../../config/notify.config.js'
 
 // Thing under test
-const BaseNotifierLib = require('../../app/lib/base-notifier.lib.js')
+import BaseNotifierLib from '../../app/lib/base-notifier.lib.js'
 
 describe('BaseNotifierLib class', () => {
   const id = '1234567890'
@@ -26,19 +24,19 @@ describe('BaseNotifierLib class', () => {
 
   beforeEach(async () => {
     // We use these fakes and the stubs in the tests to avoid Pino or Airbrake being instantiated during the test
-    airbrakeFake = { notify: Sinon.fake.resolves({ id: 1 }), flush: Sinon.fake() }
-    createEmailRequestFake = { send: Sinon.fake.resolves() }
-    pinoFake = { info: Sinon.fake(), error: Sinon.fake() }
+    airbrakeFake = { notify: vi.fn().mockResolvedValue({ id: 1 }), flush: vi.fn() }
+    createEmailRequestFake = { send: vi.fn().mockResolvedValue() }
+    pinoFake = { info: vi.fn(), error: vi.fn() }
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('#omg()', () => {
     beforeEach(async () => {
-      Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
-      Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
+      vi.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
+      vi.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
     })
 
     describe('when just a message is logged', () => {
@@ -47,7 +45,7 @@ describe('BaseNotifierLib class', () => {
 
         testNotifier.omg(message)
 
-        expect(pinoFake.info.calledOnceWith({}, message)).toBe(true)
+        expect(pinoFake.info).toHaveBeenCalledExactlyOnceWith({}, message)
       })
     })
 
@@ -57,7 +55,7 @@ describe('BaseNotifierLib class', () => {
 
         testNotifier.omg(message, { id })
 
-        expect(pinoFake.info.calledOnceWith({ id }, message)).toBe(true)
+        expect(pinoFake.info).toHaveBeenCalledExactlyOnceWith({ id }, message)
       })
     })
 
@@ -66,7 +64,7 @@ describe('BaseNotifierLib class', () => {
 
       testNotifier.omg(message)
 
-      expect(airbrakeFake.notify.notCalled).toBe(true)
+      expect(airbrakeFake.notify).not.toHaveBeenCalled()
     })
 
     it('does not log an "error" message', () => {
@@ -74,7 +72,7 @@ describe('BaseNotifierLib class', () => {
 
       testNotifier.omg(message)
 
-      expect(pinoFake.error.notCalled).toBe(true)
+      expect(pinoFake.error).not.toHaveBeenCalled()
     })
   })
 
@@ -83,8 +81,8 @@ describe('BaseNotifierLib class', () => {
 
     describe('when the Airbrake notification succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
-        Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
+        vi.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
+        vi.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
       })
 
       describe('and just a message is logged', () => {
@@ -93,7 +91,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.omfg(message)
 
-          const logPacketArgs = pinoFake.error.args[0]
+          const logPacketArgs = pinoFake.error.mock.calls[0]
 
           expect(logPacketArgs[0].err).toBeInstanceOf(Error)
           expect(logPacketArgs[0].err.message).toEqual(message)
@@ -105,7 +103,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.omfg(message)
 
-          const { error, session } = airbrakeFake.notify.args[0][0]
+          const { error, session } = airbrakeFake.notify.mock.calls[0][0]
 
           expect(error).toBeInstanceOf(Error)
           expect(error.message).toEqual(message)
@@ -119,7 +117,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.omfg(message, { id })
 
-          const logPacketArgs = pinoFake.error.args[0]
+          const logPacketArgs = pinoFake.error.mock.calls[0]
 
           expect(logPacketArgs[0].err).toBeInstanceOf(Error)
           expect(logPacketArgs[0].err.message).toEqual(message)
@@ -132,7 +130,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.omfg(message, { id })
 
-          const { error, session } = airbrakeFake.notify.args[0][0]
+          const { error, session } = airbrakeFake.notify.mock.calls[0][0]
 
           expect(error).toBeInstanceOf(Error)
           expect(error.message).toEqual(message)
@@ -146,7 +144,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.omfg(message, { id }, testError)
 
-          const logPacketArgs = pinoFake.error.args[0]
+          const logPacketArgs = pinoFake.error.mock.calls[0]
 
           expect(logPacketArgs[0].err).toBeInstanceOf(Error)
           expect(logPacketArgs[0].err.message).toEqual(testError.message)
@@ -159,7 +157,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.omfg(message, { id }, testError)
 
-          const { error, session } = airbrakeFake.notify.args[0][0]
+          const { error, session } = airbrakeFake.notify.mock.calls[0][0]
 
           expect(error).toBeInstanceOf(Error)
           expect(error.message).toEqual(testError.message)
@@ -173,7 +171,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.omfg(message, null, testError)
 
-          const logPacketArgs = pinoFake.error.args[0]
+          const logPacketArgs = pinoFake.error.mock.calls[0]
 
           expect(logPacketArgs[0].err).toBeInstanceOf(Error)
           expect(logPacketArgs[0].err.message).toEqual(testError.message)
@@ -185,7 +183,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.omfg(message, null, testError)
 
-          const { error, session } = airbrakeFake.notify.args[0][0]
+          const { error, session } = airbrakeFake.notify.mock.calls[0][0]
 
           expect(error).toBeInstanceOf(Error)
           expect(error.message).toEqual(testError.message)
@@ -198,13 +196,13 @@ describe('BaseNotifierLib class', () => {
       const airbrakeFailure = new Error('Airbrake failure')
 
       beforeEach(async () => {
-        // We specifically use a stub instead of a fake so we can then use Sinon's callsFake() function. See the test
-        // below where callsFake() is used for more details.
-        pinoFake = { info: Sinon.fake(), error: Sinon.stub() }
-        Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
+        // We specifically use a mock so we can then use Vitest's mockImplementation() function. See the test
+        // below where mockImplementation() is used for more details.
+        pinoFake = { info: vi.fn(), error: vi.fn() }
+        vi.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
 
-        airbrakeFake = { notify: Sinon.fake.resolves({ name: 'foo', error: airbrakeFailure }) }
-        Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
+        airbrakeFake = { notify: vi.fn().mockResolvedValue({ name: 'foo', error: airbrakeFailure }) }
+        vi.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
       })
 
       it('logs 2 "error" messages, the second containing details of the Airbrake failure', async () => {
@@ -212,20 +210,20 @@ describe('BaseNotifierLib class', () => {
 
         testNotifier.omfg(message)
 
-        // We use Sinon callsFake() here in order to test our expectations. This is because Airbrake notify() actually
-        // returns a promise, and it is on the calling code to handle the responses back. When we test sending the
-        // Airbrake notification control immediately comes back to us whilst work continues in the background. If we
-        // assert pinoFake.error.secondCall.calledWith() it always fails because the promise which calls it has not yet
-        // resolved. So, callsFake() tells Sinon to call our anonymous function below that includes our assertion only
-        // when pinoFake.error is called i.e. the Airbrake.notify() promise has resolved.
-        pinoFake.error.callsFake(async () => {
-          const firstCallArgs = pinoFake.error.firstCall.args
+        // We use Vitest's mockImplementation() here in order to test our expectations. This is because Airbrake
+        // notify() actually returns a promise, and it is on the calling code to handle the responses back. When we
+        // test sending the Airbrake notification control immediately comes back to us whilst work continues in the
+        // background. If we assert pinoFake.error.mock.calls directly it always fails because the promise which calls
+        // it has not yet resolved. So, mockImplementation() tells Vitest to call our anonymous function below that
+        // includes our assertion only when pinoFake.error is called i.e. the Airbrake.notify() promise has resolved.
+        pinoFake.error.mockImplementation(async () => {
+          const firstCallArgs = pinoFake.error.mock.calls[0]
 
           expect(firstCallArgs[0].err).toBeInstanceOf(Error)
           expect(firstCallArgs[0].err.message).toEqual(message)
           expect(firstCallArgs[1]).toEqual(message)
 
-          const secondCallArgs = pinoFake.error.secondCall.args
+          const secondCallArgs = pinoFake.error.mock.calls[1]
 
           expect(secondCallArgs[0]).toBeInstanceOf(Error)
           expect(secondCallArgs[0].message).toEqual(airbrakeFailure.message)
@@ -238,11 +236,11 @@ describe('BaseNotifierLib class', () => {
       const airbrakeError = new Error('Airbrake error')
 
       beforeEach(async () => {
-        pinoFake = { info: Sinon.fake(), error: Sinon.stub() }
-        Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
+        pinoFake = { info: vi.fn(), error: vi.fn() }
+        vi.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
 
-        airbrakeFake = { notify: Sinon.fake.rejects(airbrakeError) }
-        Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
+        airbrakeFake = { notify: vi.fn().mockRejectedValue(airbrakeError) }
+        vi.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
       })
 
       it('logs 2 "error" messages, the second containing details of the Airbrake errors', async () => {
@@ -250,14 +248,14 @@ describe('BaseNotifierLib class', () => {
 
         testNotifier.omfg(message)
 
-        pinoFake.error.callsFake(async () => {
-          const firstCallArgs = pinoFake.error.firstCall.args
+        pinoFake.error.mockImplementation(async () => {
+          const firstCallArgs = pinoFake.error.mock.calls[0]
 
           expect(firstCallArgs[0].err).toBeInstanceOf(Error)
           expect(firstCallArgs[0].err.message).toEqual(message)
           expect(firstCallArgs[1]).toEqual(message)
 
-          const secondCallArgs = pinoFake.error.secondCall.args
+          const secondCallArgs = pinoFake.error.mock.calls[1]
 
           expect(secondCallArgs[0]).toBeInstanceOf(Error)
           expect(secondCallArgs[0].message).toEqual(airbrakeError.message)
@@ -270,10 +268,10 @@ describe('BaseNotifierLib class', () => {
   describe('#redAlert()', () => {
     describe('when create email request service suceeds', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
-        Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
-        Sinon.stub(CreateEmailRequest, 'send').callsFake(createEmailRequestFake.send)
-        Sinon.stub(NotifyConfig, 'alertEmailAddresses').value('admin-internal@wrls.gov.uk')
+        vi.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
+        vi.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
+        vi.spyOn(CreateEmailRequest, 'default').mockImplementation(createEmailRequestFake.send)
+        vi.replaceProperty(NotifyConfig, 'alertEmailAddresses', 'admin-internal@wrls.gov.uk')
       })
 
       describe('when just a message is sent', () => {
@@ -282,7 +280,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.redAlert(message)
 
-          const args = createEmailRequestFake.send.firstCall.args
+          const args = createEmailRequestFake.send.mock.calls[0]
 
           expect(args[0]).toEqual(NOTIFY_TEMPLATES.system.statusAlert)
           expect(args[1]).toEqual(NotifyConfig.alertEmailAddresses)
@@ -296,7 +294,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.redAlert(message, error)
 
-          const args = createEmailRequestFake.send.firstCall.args
+          const args = createEmailRequestFake.send.mock.calls[0]
 
           expect(args[0]).toEqual(NOTIFY_TEMPLATES.system.statusAlert)
           expect(args[1]).toEqual(NotifyConfig.alertEmailAddresses)
@@ -306,7 +304,7 @@ describe('BaseNotifierLib class', () => {
 
       describe('and there are multiple email addresses in the config', () => {
         beforeEach(async () => {
-          Sinon.stub(NotifyConfig, 'alertEmailAddresses').value('admin-internal@wrls.gov.uk,admin@wrls.gov.uk')
+          vi.replaceProperty(NotifyConfig, 'alertEmailAddresses', 'admin-internal@wrls.gov.uk,admin@wrls.gov.uk')
         })
 
         it('sends a request to the create email request service with the correct parameters for each email', () => {
@@ -314,8 +312,8 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.redAlert(message, error)
 
-          const firstArgs = createEmailRequestFake.send.firstCall.args
-          const secondArgs = createEmailRequestFake.send.secondCall.args
+          const firstArgs = createEmailRequestFake.send.mock.calls[0]
+          const secondArgs = createEmailRequestFake.send.mock.calls[1]
 
           expect(firstArgs[0]).toEqual(NOTIFY_TEMPLATES.system.statusAlert)
           expect(firstArgs[1]).toEqual('admin-internal@wrls.gov.uk')
@@ -329,12 +327,12 @@ describe('BaseNotifierLib class', () => {
 
     describe('when the create email request service errors', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
-        Sinon.stub(NotifyConfig, 'alertEmailAddresses').value('admin-internal@wrls.gov.uk')
+        vi.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
+        vi.replaceProperty(NotifyConfig, 'alertEmailAddresses', 'admin-internal@wrls.gov.uk')
 
-        pinoFake = { info: Sinon.fake(), error: Sinon.stub() }
-        Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
-        Sinon.stub(CreateEmailRequest, 'send').rejects(new Error('CreateEmailRequest errored'))
+        pinoFake = { info: vi.fn(), error: vi.fn() }
+        vi.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
+        vi.spyOn(CreateEmailRequest, 'default').mockRejectedValue(new Error('CreateEmailRequest errored'))
       })
 
       it('logs the error', async () => {
@@ -342,8 +340,8 @@ describe('BaseNotifierLib class', () => {
 
         testNotifier.redAlert(message)
 
-        pinoFake.error.callsFake(async () => {
-          const firstCallArgs = pinoFake.error.firstCall.args
+        pinoFake.error.mockImplementation(async () => {
+          const firstCallArgs = pinoFake.error.mock.calls[0]
 
           expect(firstCallArgs[0]).toBeInstanceOf(Error)
           expect(firstCallArgs[0].message).toEqual('CreateEmailRequest errored')
@@ -355,7 +353,7 @@ describe('BaseNotifierLib class', () => {
 
   describe('#flush()', () => {
     beforeEach(async () => {
-      Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
+      vi.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
     })
 
     it('tells the underlying Airbrake notifier to flush its queue of notifications', () => {
@@ -363,22 +361,29 @@ describe('BaseNotifierLib class', () => {
 
       testNotifier.flush()
 
-      expect(airbrakeFake.flush.called).toBe(true)
+      expect(airbrakeFake.flush).toHaveBeenCalled()
     })
   })
 
   describe('when no notifier is passed to the constructor', () => {
     beforeEach(() => {
-      Sinon.replace(AirbrakeConfig, 'host', 'air')
-      Sinon.replace(AirbrakeConfig, 'projectKey', 'hosts')
-      Sinon.replace(AirbrakeConfig, 'projectId', 1)
-      Sinon.replace(AirbrakeConfig, 'environment', 'plane')
+      vi.replaceProperty(AirbrakeConfig, 'host', 'air')
+      vi.replaceProperty(AirbrakeConfig, 'projectKey', 'hosts')
+      vi.replaceProperty(AirbrakeConfig, 'projectId', 1)
+      vi.replaceProperty(AirbrakeConfig, 'environment', 'plane')
 
       // Stub the Notifier constructor
-      Sinon.stub(AirbrakeModule, 'Notifier').returns({
-        notify: Sinon.fake(),
-        flush: Sinon.fake()
-      })
+      vi.spyOn(AirbrakeModule, 'Notifier').mockImplementation(
+        class {
+          constructor(opts) {
+            this._opt = opts
+          }
+
+          notify() {}
+
+          flush() {}
+        }
+      )
     })
 
     it('creates a new Airbrake Notifier instance with config', () => {

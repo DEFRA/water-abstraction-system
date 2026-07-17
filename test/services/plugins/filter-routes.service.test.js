@@ -1,11 +1,11 @@
-'use strict'
+// Test framework
+import { describe, expect, it } from 'vitest'
 
 // Test framework dependencies
-
-const Hoek = require('@hapi/hoek')
+import * as Hoek from '@hapi/hoek'
 
 // Thing under test
-const FilterRoutesService = require('../../../app/services/plugins/filter-routes.service.js')
+import FilterRoutesService from '../../../app/services/plugins/filter-routes.service.js'
 
 describe('Filter routes service', () => {
   const routes = [
@@ -19,7 +19,7 @@ describe('Filter routes service', () => {
 
   describe('when the environment is non-production', () => {
     it('returns the routes unchanged', () => {
-      const result = FilterRoutesService.go(routes, 'dev')
+      const result = FilterRoutesService(routes, 'dev')
 
       expect(result).toEqual(routes)
     })
@@ -31,7 +31,7 @@ describe('Filter routes service', () => {
 
       filteredRoutes.pop()
 
-      const result = FilterRoutesService.go(routes, 'prd')
+      const result = FilterRoutesService(routes, 'prd')
 
       expect(result).toEqual(filteredRoutes)
     })

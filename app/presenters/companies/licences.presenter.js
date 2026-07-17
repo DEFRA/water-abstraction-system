@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/companies/{id}/licences' page
  * @module LicencesPresenter
  */
 
-const { formatLongDate } = require('../base.presenter.js')
-const { today } = require('../../lib/general.lib.js')
+import { formatLongDate } from '../base.presenter.js'
+import { today } from '../../lib/general.lib.js'
 
 /**
  * Formats data for the '/companies/{id}/licences' page
@@ -16,7 +14,7 @@ const { today } = require('../../lib/general.lib.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, licences) {
+export default function licencesPresenter(company, licences) {
   return {
     backLink: {
       href: '/',
@@ -68,8 +66,4 @@ function _status(licenceEndDetails) {
   }
 
   return null
-}
-
-module.exports = {
-  go
 }

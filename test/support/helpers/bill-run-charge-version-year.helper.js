@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module BillRunChargeVersionYearHelper
  */
 
-const BillRunChargeVersionYearModel = require('../../../app/models/bill-run-charge-version-year.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import BillRunChargeVersionYearModel from '../../../app/models/bill-run-charge-version-year.model.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new bill run charge version year record
@@ -56,7 +54,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

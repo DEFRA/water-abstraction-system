@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Given a bill run setup session, returns the URL for the 'Back' link on the /check page.
  *
@@ -7,7 +5,7 @@
  *
  * @returns {string} - The URL for the 'Back' link
  */
-function checkPageBackLink(session) {
+export function checkPageBackLink(session) {
   const { id, type, year } = session
   const srocStartYear = 2023
 
@@ -20,8 +18,4 @@ function checkPageBackLink(session) {
   }
 
   return `/system/bill-runs/setup/${id}/season`
-}
-
-module.exports = {
-  checkPageBackLink
 }

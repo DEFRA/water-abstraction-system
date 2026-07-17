@@ -1,18 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
-const { generateUserId } = require('../../support/helpers/user.helper.js')
+import LicenceFixture from '../../support/fixtures/licence.fixture.js'
+import { generateUUID, generateUserId } from '../../support/generators.js'
 
 // Things we need to stub
-const FetchLicenceMonitoringStationsDal = require('../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js')
+import * as FetchLicenceMonitoringStationsDal from '../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
 
 // Thing under test
-const ViewLicenceService = require('../../../app/services/monitoring-stations/view-licence.service.js')
+import ViewLicenceService from '../../../app/services/monitoring-stations/view-licence.service.js'
 
 describe('Monitoring Stations - View Licence service', () => {
   let auth
@@ -27,7 +24,7 @@ describe('Monitoring Stations - View Licence service', () => {
       }
     }
 
-    licence = licenceEnds()
+    licence = LicenceFixture.licenceEnds()
 
     licenceMonitoringStations = [
       {
@@ -81,7 +78,7 @@ describe('Monitoring Stations - View Licence service', () => {
     ]
     monitoringStation = { id: generateUUID(), label: 'Hades', riverName: 'The River Styx' }
 
-    Sinon.stub(FetchLicenceMonitoringStationsDal, 'go').resolves({
+    vi.spyOn(FetchLicenceMonitoringStationsDal, 'default').mockResolvedValue({
       licence,
       licenceMonitoringStations,
       monitoringStation
@@ -89,12 +86,12 @@ describe('Monitoring Stations - View Licence service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await ViewLicenceService.go(auth, licence.id, monitoringStation.id)
+      const result = await ViewLicenceService(auth, licence.id, monitoringStation.id)
 
       expect(result).toEqual({
         backLink: {

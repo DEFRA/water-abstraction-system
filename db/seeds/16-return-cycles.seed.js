@@ -1,15 +1,12 @@
-'use strict'
-
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const {
+import ReturnCycleModel from '../../app/models/return-cycle.model.js'
+import {
   determineCycleDueDate,
   determineCycleEndDate,
   determineCycleStartDate
-} = require('../../app/lib/return-cycle-dates.lib.js')
-const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
+} from '../../app/lib/return-cycle-dates.lib.js'
+import { generateUUID, timestampForPostgres } from '../../app/lib/general.lib.js'
 
-async function seed() {
+export default async function seed() {
   const currentYear = new Date().getFullYear()
 
   let year = 1959
@@ -51,8 +48,4 @@ async function _upsert(cycle) {
     .insert({ ...cycle, createdAt: timestampForPostgres(), updatedAt: timestampForPostgres() })
     .onConflict(['startDate', 'endDate', 'summer'])
     .merge(['dueDate', 'submittedInWrls', 'updatedAt'])
-}
-
-module.exports = {
-  seed
 }

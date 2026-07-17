@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines the relevant licence version for the start date selected, and which return versions are therefore copyable
  * @module DetermineRelevantLicenceVersionService
  */
 
-const FetchRelevantLicenceVersionService = require('./fetch-relevant-licence-version.service.js')
+import FetchRelevantLicenceVersionService from './fetch-relevant-licence-version.service.js'
 
 /**
  * Determines the relevant licence version for the start date selected, and which return versions are therefore copyable
@@ -14,8 +12,8 @@ const FetchRelevantLicenceVersionService = require('./fetch-relevant-licence-ver
  *
  * @returns {Promise<LicenceVersionModel>} The relevant licence version and the licence's copyable return versions
  */
-async function go(session) {
-  const relevantLicenceVersion = await FetchRelevantLicenceVersionService.go(
+export default async function determineRelevantLicenceVersionService(session) {
+  const relevantLicenceVersion = await FetchRelevantLicenceVersionService(
     session.licence.id,
     session.returnVersionStartDate
   )
@@ -66,8 +64,4 @@ function _copyableExistingReturnVersions(licenceVersion, returnVersions) {
   }
 
   return copyableReturnVersions
-}
-
-module.exports = {
-  go
 }

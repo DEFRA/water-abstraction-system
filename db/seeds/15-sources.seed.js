@@ -1,10 +1,8 @@
-'use strict'
+import SourceModel from '../../app/models/source.model.js'
+import { data as sources } from './data/sources.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
 
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: sources } = require('./data/sources.js')
-const SourceModel = require('../../app/models/source.model.js')
-
-async function seed() {
+export default async function seed() {
   for (const source of sources) {
     await _upsert(source)
   }
@@ -15,8 +13,4 @@ async function _upsert(source) {
     .insert({ ...source, createdAt: timestampForPostgres(), updatedAt: timestampForPostgres() })
     .onConflict('externalId')
     .merge(['description', 'sourceType', 'ngr', 'updatedAt'])
-}
-
-module.exports = {
-  seed
 }

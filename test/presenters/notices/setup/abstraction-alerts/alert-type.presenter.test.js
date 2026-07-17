@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const AlertTypePresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/alert-type.presenter.js')
+import AlertTypePresenter from '../../../../../app/presenters/notices/setup/abstraction-alerts/alert-type.presenter.js'
 
 describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
   let sessionData
@@ -15,7 +16,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AlertTypePresenter.go(sessionData)
+      const result = AlertTypePresenter(sessionData)
 
       expect(result).toEqual({
         alertTypeOptions: [
@@ -65,7 +66,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
         })
 
         it('returns page data for the view, with the option selected', () => {
-          const result = AlertTypePresenter.go(sessionData)
+          const result = AlertTypePresenter(sessionData)
 
           expect(result.alertTypeOptions[0]).toEqual({
             checked: true,
@@ -84,7 +85,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
         })
 
         it('returns page data for the view, with the option selected', () => {
-          const result = AlertTypePresenter.go(sessionData)
+          const result = AlertTypePresenter(sessionData)
 
           expect(result.alertTypeOptions[1]).toEqual({
             checked: true,
@@ -103,7 +104,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
         })
 
         it('returns page data for the view, with the option selected', () => {
-          const result = AlertTypePresenter.go(sessionData)
+          const result = AlertTypePresenter(sessionData)
 
           expect(result.alertTypeOptions[2]).toEqual({
             checked: true,
@@ -122,7 +123,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
         })
 
         it('returns page data for the view, with the option selected', () => {
-          const result = AlertTypePresenter.go(sessionData)
+          const result = AlertTypePresenter(sessionData)
 
           expect(result.alertTypeOptions[3]).toEqual({
             checked: true,

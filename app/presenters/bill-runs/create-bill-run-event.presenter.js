@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats a `BillRunModel` into the metadata content needed for a bill run's 'event' record
  * @module CreateBillRunEventPresenter
@@ -12,7 +10,7 @@
  *
  * @returns {object} - the formatted content
  */
-function go(billRun) {
+export default function createBillRunEventPresenter(billRun) {
   const {
     batchType,
     creditNoteCount,
@@ -58,8 +56,4 @@ function go(billRun) {
       creditNoteValue
     }
   }
-}
-
-module.exports = {
-  go
 }

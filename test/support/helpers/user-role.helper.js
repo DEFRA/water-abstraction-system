@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * @module UserRoleHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { selectRandomEntry } = require('../general.js')
-const { generateUserId } = require('./user.helper.js')
-const RoleHelper = require('./role.helper.js')
-const UserRoleModel = require('../../../app/models/user-role.model.js')
-const { data: userRoles } = require('../../../db/seeds/data/user-roles.js')
+import RoleHelper from './role.helper.js'
+import UserRoleModel from '../../../app/models/user-role.model.js'
+import { selectRandomEntry } from '../general.js'
+import { data as userRoles } from '../../../db/seeds/data/user-roles.js'
+import { generateUUID, generateUserId } from '../generators.js'
+
+const data = userRoles
 
 /**
  * Add a new user role
@@ -79,9 +78,9 @@ function select(index = -1) {
   return UserRoleModel.fromJson(selectRandomEntry(userRoles))
 }
 
-module.exports = {
+export default {
+  data,
   add,
-  data: userRoles,
   defaults,
   select
 }

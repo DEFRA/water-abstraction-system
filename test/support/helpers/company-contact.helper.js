@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module CompanyContactHelper
  */
 
-const CompanyContactModel = require('../../../app/models/company-contact.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import CompanyContactModel from '../../../app/models/company-contact.model.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new company contact
@@ -53,7 +51,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Manages removing the return requirement from the session when remove is confirmed
  * @module SubmitRemoveService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Manages deleting the selected requirement in the session when remove is confirmed
@@ -17,8 +15,8 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
  * @param {number} requirementIndex - The index of the requirement being removed
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go(sessionId, requirementIndex, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitRemoveService(sessionId, requirementIndex, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const notification = {
     title: 'Removed',
@@ -34,8 +32,4 @@ async function _removeRequirementFromSession(session, requirementIndex) {
   session.requirements.splice(requirementIndex, 1)
 
   await session.$update()
-}
-
-module.exports = {
-  go
 }

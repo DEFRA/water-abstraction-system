@@ -1,12 +1,12 @@
-'use strict'
-
 /**
  * @module FinancialAgreementHelper
  */
 
-const FinancialAgreementModel = require('../../../app/models/financial-agreement.model.js')
-const { data: financialAgreements } = require('../../../db/seeds/data/financial-agreements.js')
-const { selectRandomEntry } = require('../general.js')
+import FinancialAgreementModel from '../../../app/models/financial-agreement.model.js'
+import { data as financialAgreements } from '../../../db/seeds/data/financial-agreements.js'
+import { selectRandomEntry } from '../general.js'
+
+const data = financialAgreements
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -30,7 +30,7 @@ function select(index = -1) {
   return FinancialAgreementModel.fromJson(selectRandomEntry(financialAgreements))
 }
 
-module.exports = {
-  data: financialAgreements,
+export default {
+  data,
   select
 }

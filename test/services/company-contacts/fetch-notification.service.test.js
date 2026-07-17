@@ -1,14 +1,15 @@
-'use strict'
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const EventHelper = require('../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import EventHelper from '../../support/helpers/event.helper.js'
+import NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import NotificationHelper from '../../support/helpers/notification.helper.js'
+import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const FetchNotificationService = require('../../../app/services/company-contacts/fetch-notification.service.js')
+import FetchNotificationService from '../../../app/services/company-contacts/fetch-notification.service.js'
 
 describe('Company Contacts - Fetch Notification service', () => {
   let email
@@ -40,7 +41,7 @@ describe('Company Contacts - Fetch Notification service', () => {
     })
 
     it('returns a notification', async () => {
-      const result = await FetchNotificationService.go(email)
+      const result = await FetchNotificationService(email)
 
       expect(result).toEqual({
         id: notification.id
@@ -58,7 +59,7 @@ describe('Company Contacts - Fetch Notification service', () => {
       })
 
       it('returns undefined', async () => {
-        const result = await FetchNotificationService.go(email)
+        const result = await FetchNotificationService(email)
 
         expect(result).toBeUndefined()
       })
@@ -74,7 +75,7 @@ describe('Company Contacts - Fetch Notification service', () => {
       })
 
       it('returns undefined', async () => {
-        const result = await FetchNotificationService.go(email)
+        const result = await FetchNotificationService(email)
 
         expect(result).toBeUndefined()
       })

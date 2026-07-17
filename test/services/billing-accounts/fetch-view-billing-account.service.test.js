@@ -1,16 +1,17 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
+import AddressHelper from '../../support/helpers/address.helper.js'
+import BillHelper from '../../support/helpers/bill.helper.js'
+import BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import CompanyHelper from '../../support/helpers/company.helper.js'
+import ContactHelper from '../../support/helpers/contact.helper.js'
 
 // Thing under test
-const FetchViewBillingAccountService = require('../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
+import FetchViewBillingAccountService from '../../../app/services/billing-accounts/fetch-view-billing-account.service.js'
 
 describe('Billing Accounts - Fetch View Billing Account service', () => {
   let address
@@ -71,7 +72,7 @@ describe('Billing Accounts - Fetch View Billing Account service', () => {
     })
 
     it('returns the matching billingAccount with related address, company, and bills with a bill run status of "sent"', async () => {
-      const result = await FetchViewBillingAccountService.go(billingAccountId)
+      const result = await FetchViewBillingAccountService(billingAccountId)
 
       expect(result).toEqual({
         billingAccount: {

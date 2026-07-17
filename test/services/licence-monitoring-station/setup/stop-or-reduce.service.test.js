@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const StopOrReduceService = require('../../../../app/services/licence-monitoring-station/setup/stop-or-reduce.service.js')
+import StopOrReduceService from '../../../../app/services/licence-monitoring-station/setup/stop-or-reduce.service.js'
 
 describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
   let session
@@ -22,24 +20,24 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
       label: 'Monitoring Station Label'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await StopOrReduceService.go(session.id)
+      const result = await StopOrReduceService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await StopOrReduceService.go(session.id)
+      const result = await StopOrReduceService(session.id)
 
       expect(result).toMatchObject({
         backLink: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,

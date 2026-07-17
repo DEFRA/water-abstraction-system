@@ -1,16 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{billingAccountId}/account` page
  *
  * @module SubmitAccountService
  */
 
-const AccountPresenter = require('../../../presenters/billing-accounts/setup/account.presenter.js')
-const AccountValidator = require('../../../validators/billing-accounts/setup/account.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import AccountPresenter from '../../../presenters/billing-accounts/setup/account.presenter.js'
+import AccountValidator from '../../../validators/billing-accounts/setup/account.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{billingAccountId}/account` page
@@ -20,8 +17,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitAccountService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -97,15 +94,11 @@ function _submissionData(session, payload) {
   session.accountSelected = payload.accountSelected
   session.searchInput = payload.searchInput ?? null
 
-  return AccountPresenter.go(session)
+  return AccountPresenter(session)
 }
 
 function _validate(payload) {
-  const validationResult = AccountValidator.go(payload)
+  const validationResult = AccountValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

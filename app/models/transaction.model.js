@@ -1,15 +1,15 @@
-'use strict'
-
 /**
  * Model for transactions (water.billing_transactions)
  * @module TransactionModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import BillLicenceModel from './bill-licence.model.js'
+import ChargeReferenceModel from './charge-reference.model.js'
 
-class TransactionModel extends BaseModel {
+export default class TransactionModel extends BaseModel {
   static get tableName() {
     return 'transactions'
   }
@@ -18,7 +18,7 @@ class TransactionModel extends BaseModel {
     return {
       chargeReference: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-reference.model',
+        modelClass: ChargeReferenceModel,
         join: {
           from: 'transactions.chargeReferenceId',
           to: 'chargeReferences.id'
@@ -26,7 +26,7 @@ class TransactionModel extends BaseModel {
       },
       billLicence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'bill-licence.model',
+        modelClass: BillLicenceModel,
         join: {
           from: 'transactions.billLicenceId',
           to: 'billLicences.id'
@@ -40,5 +40,3 @@ class TransactionModel extends BaseModel {
     return ['abstractionPeriod', 'grossValuesCalculated', 'metadata', 'purposes']
   }
 }
-
-module.exports = TransactionModel

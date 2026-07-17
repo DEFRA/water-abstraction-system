@@ -1,82 +1,80 @@
-'use strict'
-
 /**
  * Controller for /return-versions/setup endpoints
  * @module ReturnVersionsSetupController
  */
 
-const AbstractionPeriodService = require('../services/return-versions/setup/abstraction-period.service.js')
-const AddService = require('../services/return-versions/setup/add.service.js')
-const AdditionalSubmissionOptionsService = require('../services/return-versions/setup/additional-submission-options.service.js')
-const AgreementsExceptionsService = require('../services/return-versions/setup/agreements-exceptions.service.js')
-const CancelService = require('../services/return-versions/setup/cancel.service.js')
-const CheckService = require('../services/return-versions/setup/check/check.service.js')
-const DeleteNoteService = require('../services/return-versions/setup/delete-note.service.js')
-const ExistingService = require('../services/return-versions/setup/existing/existing.service.js')
-const FrequencyCollectedService = require('../services/return-versions/setup/frequency-collected.service.js')
-const FrequencyReportedService = require('../services/return-versions/setup/frequency-reported.service.js')
-const MethodService = require('../services/return-versions/setup/method/method.service.js')
-const NoReturnsRequiredService = require('../services/return-versions/setup/no-returns-required.service.js')
-const NoteService = require('../services/return-versions/setup/note.service.js')
-const PointsService = require('../services/return-versions/setup/points.service.js')
-const RemoveService = require('../services/return-versions/setup/remove.service.js')
-const ReturnsCycleService = require('../services/return-versions/setup/returns-cycle.service.js')
-const SelectPurposeService = require('../services/return-versions/setup/purpose.service.js')
-const SelectReasonService = require('../services/return-versions/setup/reason.service.js')
-const SiteDescriptionService = require('../services/return-versions/setup/site-description.service.js')
-const StartDateService = require('../services/return-versions/setup/start-date.service.js')
-const SubmitAbstractionPeriod = require('../services/return-versions/setup/submit-abstraction-period.service.js')
-const SubmitAdditionalSubmissionOptionsService = require('../services/return-versions/setup/submit-additional-submission-options.service.js')
-const SubmitAgreementsExceptions = require('../services/return-versions/setup/submit-agreements-exceptions.service.js')
-const SubmitCancel = require('../services/return-versions/setup/submit-cancel.service.js')
-const SubmitCheckService = require('../services/return-versions/setup/check/submit-check.service.js')
-const SubmitExistingService = require('../services/return-versions/setup/existing/submit-existing.service.js')
-const SubmitFrequencyCollectedService = require('../services/return-versions/setup/submit-frequency-collected.service.js')
-const SubmitFrequencyReportedService = require('../services/return-versions/setup/submit-frequency-reported.service.js')
-const SubmitMethodService = require('../services/return-versions/setup/method/submit-method.service.js')
-const SubmitNoReturnsRequiredService = require('../services/return-versions/setup/submit-no-returns-required.service.js')
-const SubmitNoteService = require('../services/return-versions/setup/submit-note.service.js')
-const SubmitPointsService = require('../services/return-versions/setup/submit-points.service.js')
-const SubmitPurposeService = require('../services/return-versions/setup/submit-purpose.service.js')
-const SubmitReasonService = require('../services/return-versions/setup/submit-reason.service.js')
-const SubmitRemoveService = require('../services/return-versions/setup/submit-remove.service.js')
-const SubmitReturnsCycleService = require('../services/return-versions/setup/submit-returns-cycle.service.js')
-const SubmitSiteDescriptionService = require('../services/return-versions/setup/submit-site-description.service.js')
-const SubmitStartDateService = require('../services/return-versions/setup/submit-start-date.service.js')
+import AbstractionPeriodService from '../services/return-versions/setup/abstraction-period.service.js'
+import AddService from '../services/return-versions/setup/add.service.js'
+import AdditionalSubmissionOptionsService from '../services/return-versions/setup/additional-submission-options.service.js'
+import AgreementsExceptionsService from '../services/return-versions/setup/agreements-exceptions.service.js'
+import CancelService from '../services/return-versions/setup/cancel.service.js'
+import CheckService from '../services/return-versions/setup/check/check.service.js'
+import DeleteNoteService from '../services/return-versions/setup/delete-note.service.js'
+import ExistingService from '../services/return-versions/setup/existing/existing.service.js'
+import FrequencyCollectedService from '../services/return-versions/setup/frequency-collected.service.js'
+import FrequencyReportedService from '../services/return-versions/setup/frequency-reported.service.js'
+import MethodService from '../services/return-versions/setup/method/method.service.js'
+import NoReturnsRequiredService from '../services/return-versions/setup/no-returns-required.service.js'
+import NoteService from '../services/return-versions/setup/note.service.js'
+import PointsService from '../services/return-versions/setup/points.service.js'
+import RemoveService from '../services/return-versions/setup/remove.service.js'
+import ReturnsCycleService from '../services/return-versions/setup/returns-cycle.service.js'
+import SelectPurposeService from '../services/return-versions/setup/purpose.service.js'
+import SelectReasonService from '../services/return-versions/setup/reason.service.js'
+import SiteDescriptionService from '../services/return-versions/setup/site-description.service.js'
+import StartDateService from '../services/return-versions/setup/start-date.service.js'
+import SubmitAbstractionPeriod from '../services/return-versions/setup/submit-abstraction-period.service.js'
+import SubmitAdditionalSubmissionOptionsService from '../services/return-versions/setup/submit-additional-submission-options.service.js'
+import SubmitAgreementsExceptions from '../services/return-versions/setup/submit-agreements-exceptions.service.js'
+import SubmitCancel from '../services/return-versions/setup/submit-cancel.service.js'
+import SubmitCheckService from '../services/return-versions/setup/check/submit-check.service.js'
+import SubmitExistingService from '../services/return-versions/setup/existing/submit-existing.service.js'
+import SubmitFrequencyCollectedService from '../services/return-versions/setup/submit-frequency-collected.service.js'
+import SubmitFrequencyReportedService from '../services/return-versions/setup/submit-frequency-reported.service.js'
+import SubmitMethodService from '../services/return-versions/setup/method/submit-method.service.js'
+import SubmitNoReturnsRequiredService from '../services/return-versions/setup/submit-no-returns-required.service.js'
+import SubmitNoteService from '../services/return-versions/setup/submit-note.service.js'
+import SubmitPointsService from '../services/return-versions/setup/submit-points.service.js'
+import SubmitPurposeService from '../services/return-versions/setup/submit-purpose.service.js'
+import SubmitReasonService from '../services/return-versions/setup/submit-reason.service.js'
+import SubmitRemoveService from '../services/return-versions/setup/submit-remove.service.js'
+import SubmitReturnsCycleService from '../services/return-versions/setup/submit-returns-cycle.service.js'
+import SubmitSiteDescriptionService from '../services/return-versions/setup/submit-site-description.service.js'
+import SubmitStartDateService from '../services/return-versions/setup/submit-start-date.service.js'
 
-async function abstractionPeriod(request, h) {
+export async function abstractionPeriod(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await AbstractionPeriodService.go(sessionId, requirementIndex)
+  const pageData = await AbstractionPeriodService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/abstraction-period.njk', pageData)
 }
 
-async function add(request, h) {
+export async function add(request, h) {
   const { sessionId } = request.params
 
-  const requirementIndex = await AddService.go(sessionId)
+  const requirementIndex = await AddService(sessionId)
 
   return h.redirect(`/system/return-versions/setup/${sessionId}/purpose/${requirementIndex}`)
 }
 
-async function additionalSubmissionOptions(request, h) {
+export async function additionalSubmissionOptions(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await AdditionalSubmissionOptionsService.go(sessionId)
+  const pageData = await AdditionalSubmissionOptionsService(sessionId)
 
   return h.view('return-versions/setup/additional-submission-options.njk', pageData)
 }
 
-async function agreementsExceptions(request, h) {
+export async function agreementsExceptions(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await AgreementsExceptionsService.go(sessionId, requirementIndex)
+  const pageData = await AgreementsExceptionsService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/agreements-exceptions.njk', pageData)
 }
 
-async function approved(request, h) {
+export async function approved(request, h) {
   const { licenceId } = request.params
 
   return h.view('return-versions/setup/approved.njk', {
@@ -85,140 +83,140 @@ async function approved(request, h) {
   })
 }
 
-async function cancel(request, h) {
+export async function cancel(request, h) {
   const { sessionId } = request.params
-  const pageData = await CancelService.go(sessionId)
+  const pageData = await CancelService(sessionId)
 
   return h.view('return-versions/setup/cancel.njk', pageData)
 }
 
-async function check(request, h) {
+export async function check(request, h) {
   const { sessionId } = request.params
-  const pageData = await CheckService.go(sessionId, request.yar)
+  const pageData = await CheckService(sessionId, request.yar)
 
   return h.view('return-versions/setup/check.njk', pageData)
 }
 
-async function deleteNote(request, h) {
+export async function deleteNote(request, h) {
   const { sessionId } = request.params
 
-  await DeleteNoteService.go(sessionId, request.yar)
+  await DeleteNoteService(sessionId, request.yar)
 
   return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
-async function existing(request, h) {
+export async function existing(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ExistingService.go(sessionId)
+  const pageData = await ExistingService(sessionId)
 
   return h.view('return-versions/setup/existing.njk', pageData)
 }
 
-async function frequencyCollected(request, h) {
+export async function frequencyCollected(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await FrequencyCollectedService.go(sessionId, requirementIndex)
+  const pageData = await FrequencyCollectedService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/frequency-collected.njk', pageData)
 }
 
-async function frequencyReported(request, h) {
+export async function frequencyReported(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await FrequencyReportedService.go(sessionId, requirementIndex)
+  const pageData = await FrequencyReportedService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/frequency-reported.njk', pageData)
 }
 
-async function method(request, h) {
+export async function method(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await MethodService.go(sessionId)
+  const pageData = await MethodService(sessionId)
 
   return h.view('return-versions/setup/method.njk', pageData)
 }
 
-async function noReturnsRequired(request, h) {
+export async function noReturnsRequired(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await NoReturnsRequiredService.go(sessionId)
+  const pageData = await NoReturnsRequiredService(sessionId)
 
   return h.view('return-versions/setup/no-returns-required.njk', pageData)
 }
 
-async function note(request, h) {
+export async function note(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await NoteService.go(sessionId)
+  const pageData = await NoteService(sessionId)
 
   return h.view('return-versions/setup/note.njk', pageData)
 }
 
-async function points(request, h) {
+export async function points(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await PointsService.go(sessionId, requirementIndex)
+  const pageData = await PointsService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/points.njk', pageData)
 }
 
-async function purpose(request, h) {
+export async function purpose(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SelectPurposeService.go(sessionId, requirementIndex)
+  const pageData = await SelectPurposeService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/purpose.njk', pageData)
 }
 
-async function reason(request, h) {
+export async function reason(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SelectReasonService.go(sessionId)
+  const pageData = await SelectReasonService(sessionId)
 
   return h.view('return-versions/setup/reason.njk', pageData)
 }
 
-async function remove(request, h) {
+export async function remove(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await RemoveService.go(sessionId, requirementIndex)
+  const pageData = await RemoveService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/remove.njk', pageData)
 }
 
-async function returnsCycle(request, h) {
+export async function returnsCycle(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await ReturnsCycleService.go(sessionId, requirementIndex)
+  const pageData = await ReturnsCycleService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/returns-cycle.njk', pageData)
 }
 
-async function siteDescription(request, h) {
+export async function siteDescription(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SiteDescriptionService.go(sessionId, requirementIndex)
+  const pageData = await SiteDescriptionService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/site-description.njk', pageData)
 }
 
-async function startDate(request, h) {
+export async function startDate(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await StartDateService.go(sessionId)
+  const pageData = await StartDateService(sessionId)
 
   return h.view('return-versions/setup/start-date.njk', pageData)
 }
 
-async function submitAbstractionPeriod(request, h) {
+export async function submitAbstractionPeriod(request, h) {
   const {
     params: { requirementIndex, sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitAbstractionPeriod.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitAbstractionPeriod(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/abstraction-period.njk', pageData)
@@ -231,14 +229,14 @@ async function submitAbstractionPeriod(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/returns-cycle/${requirementIndex}`)
 }
 
-async function submitAgreementsExceptions(request, h) {
+export async function submitAgreementsExceptions(request, h) {
   const {
     params: { requirementIndex, sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitAgreementsExceptions.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitAgreementsExceptions(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/agreements-exceptions.njk', pageData)
@@ -247,14 +245,14 @@ async function submitAgreementsExceptions(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
-async function submitAdditionalSubmissionOptions(request, h) {
+export async function submitAdditionalSubmissionOptions(request, h) {
   const {
     params: { sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitAdditionalSubmissionOptionsService.go(sessionId, payload, yar)
+  const pageData = await SubmitAdditionalSubmissionOptionsService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/additional-submission-options.njk', pageData)
@@ -263,31 +261,31 @@ async function submitAdditionalSubmissionOptions(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
-async function submitCancel(request, h) {
+export async function submitCancel(request, h) {
   const { sessionId } = request.params
   const { licenceId } = request.payload
 
-  await SubmitCancel.go(sessionId)
+  await SubmitCancel(sessionId)
 
   return h.redirect(`/system/licences/${licenceId}/set-up`)
 }
 
-async function submitCheck(request, h) {
+export async function submitCheck(request, h) {
   const { sessionId } = request.params
   const { userId } = request.auth.credentials.user
 
-  const licenceId = await SubmitCheckService.go(sessionId, userId)
+  const licenceId = await SubmitCheckService(sessionId, userId)
 
   return h.redirect(`/system/return-versions/setup/${licenceId}/approved`)
 }
 
-async function submitExisting(request, h) {
+export async function submitExisting(request, h) {
   const {
     params: { sessionId },
     payload
   } = request
 
-  const pageData = await SubmitExistingService.go(sessionId, payload)
+  const pageData = await SubmitExistingService(sessionId, payload)
 
   if (pageData.error) {
     return h.view('return-versions/setup/existing.njk', pageData)
@@ -296,14 +294,14 @@ async function submitExisting(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
-async function submitFrequencyCollected(request, h) {
+export async function submitFrequencyCollected(request, h) {
   const {
     params: { requirementIndex, sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitFrequencyCollectedService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitFrequencyCollectedService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/frequency-collected.njk', pageData)
@@ -316,14 +314,14 @@ async function submitFrequencyCollected(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/frequency-reported/${requirementIndex}`)
 }
 
-async function submitFrequencyReported(request, h) {
+export async function submitFrequencyReported(request, h) {
   const {
     params: { requirementIndex, sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitFrequencyReportedService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitFrequencyReportedService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/frequency-reported.njk', pageData)
@@ -336,10 +334,10 @@ async function submitFrequencyReported(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/agreements-exceptions/${requirementIndex}`)
 }
 
-async function submitMethod(request, h) {
+export async function submitMethod(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitMethodService.go(sessionId, request.payload)
+  const pageData = await SubmitMethodService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('return-versions/setup/method.njk', pageData)
@@ -348,14 +346,14 @@ async function submitMethod(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/${pageData.redirect}`)
 }
 
-async function submitNoReturnsRequired(request, h) {
+export async function submitNoReturnsRequired(request, h) {
   const {
     params: { sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitNoReturnsRequiredService.go(sessionId, payload, yar)
+  const pageData = await SubmitNoReturnsRequiredService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/no-returns-required.njk', pageData)
@@ -364,11 +362,11 @@ async function submitNoReturnsRequired(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
-async function submitNote(request, h) {
+export async function submitNote(request, h) {
   const { sessionId } = request.params
   const { user } = request.auth.credentials
 
-  const pageData = await SubmitNoteService.go(sessionId, request.payload, user, request.yar)
+  const pageData = await SubmitNoteService(sessionId, request.payload, user, request.yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/note.njk', pageData)
@@ -377,14 +375,14 @@ async function submitNote(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
-async function submitPoints(request, h) {
+export async function submitPoints(request, h) {
   const {
     params: { requirementIndex, sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitPointsService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitPointsService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/points.njk', pageData)
@@ -397,14 +395,14 @@ async function submitPoints(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/abstraction-period/${requirementIndex}`)
 }
 
-async function submitPurpose(request, h) {
+export async function submitPurpose(request, h) {
   const {
     params: { requirementIndex, sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitPurposeService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitPurposeService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/purpose.njk', pageData)
@@ -417,14 +415,14 @@ async function submitPurpose(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/points/${requirementIndex}`)
 }
 
-async function submitReason(request, h) {
+export async function submitReason(request, h) {
   const {
     params: { sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitReasonService.go(sessionId, payload, yar)
+  const pageData = await SubmitReasonService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/reason.njk', pageData)
@@ -437,22 +435,22 @@ async function submitReason(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/method`)
 }
 
-async function submitRemove(request, h) {
+export async function submitRemove(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  await SubmitRemoveService.go(sessionId, requirementIndex, request.yar)
+  await SubmitRemoveService(sessionId, requirementIndex, request.yar)
 
   return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
 
-async function submitReturnsCycle(request, h) {
+export async function submitReturnsCycle(request, h) {
   const {
     params: { requirementIndex, sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitReturnsCycleService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitReturnsCycleService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/returns-cycle.njk', pageData)
@@ -465,14 +463,14 @@ async function submitReturnsCycle(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/site-description/${requirementIndex}`)
 }
 
-async function submitSiteDescription(request, h) {
+export async function submitSiteDescription(request, h) {
   const {
     params: { requirementIndex, sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitSiteDescriptionService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitSiteDescriptionService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/site-description.njk', pageData)
@@ -485,14 +483,14 @@ async function submitSiteDescription(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/frequency-collected/${requirementIndex}`)
 }
 
-async function submitStartDate(request, h) {
+export async function submitStartDate(request, h) {
   const {
     params: { sessionId },
     payload,
     yar
   } = request
 
-  const pageData = await SubmitStartDateService.go(sessionId, payload, yar)
+  const pageData = await SubmitStartDateService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/start-date.njk', pageData)
@@ -507,46 +505,4 @@ async function submitStartDate(request, h) {
   }
 
   return h.redirect(`/system/return-versions/setup/${sessionId}/no-returns-required`)
-}
-
-module.exports = {
-  abstractionPeriod,
-  add,
-  additionalSubmissionOptions,
-  agreementsExceptions,
-  approved,
-  cancel,
-  check,
-  deleteNote,
-  existing,
-  frequencyCollected,
-  frequencyReported,
-  method,
-  noReturnsRequired,
-  note,
-  points,
-  purpose,
-  reason,
-  remove,
-  returnsCycle,
-  siteDescription,
-  startDate,
-  submitAbstractionPeriod,
-  submitAdditionalSubmissionOptions,
-  submitAgreementsExceptions,
-  submitCancel,
-  submitCheck,
-  submitExisting,
-  submitFrequencyCollected,
-  submitFrequencyReported,
-  submitMethod,
-  submitNoReturnsRequired,
-  submitNote,
-  submitPoints,
-  submitPurpose,
-  submitReason,
-  submitRemove,
-  submitReturnsCycle,
-  submitSiteDescription,
-  submitStartDate
 }

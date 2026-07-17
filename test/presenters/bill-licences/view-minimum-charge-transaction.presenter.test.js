@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const ViewMinimumChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js')
+import ViewMinimumChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js'
 
 describe('View Minimum Charge Transaction presenter', () => {
   let transaction
@@ -20,7 +21,7 @@ describe('View Minimum Charge Transaction presenter', () => {
       })
 
       it('returns the credit property populated and the debit empty', () => {
-        const result = ViewMinimumChargeTransactionPresenter.go(transaction)
+        const result = ViewMinimumChargeTransactionPresenter(transaction)
 
         expect(result.creditAmount).toEqual('£24.01')
         expect(result.debitAmount).toEqual('')
@@ -33,7 +34,7 @@ describe('View Minimum Charge Transaction presenter', () => {
       })
 
       it('returns the debit property populated and the credit empty', () => {
-        const result = ViewMinimumChargeTransactionPresenter.go(transaction)
+        const result = ViewMinimumChargeTransactionPresenter(transaction)
 
         expect(result.creditAmount).toEqual('')
         expect(result.debitAmount).toEqual('£24.01')
@@ -41,7 +42,7 @@ describe('View Minimum Charge Transaction presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ViewMinimumChargeTransactionPresenter.go(transaction)
+      const result = ViewMinimumChargeTransactionPresenter(transaction)
 
       expect(result).toEqual({
         billableDays: '',

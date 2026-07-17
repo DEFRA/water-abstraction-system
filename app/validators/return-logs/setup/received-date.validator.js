@@ -1,13 +1,14 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/received` page
  * @module ReceivedDateValidator
  */
 
-const Joi = require('joi').extend(require('@joi/date'))
+import base from 'joi'
+import joiDate from '@joi/date'
 
-const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
+import { leftPadZeroes } from '../../../presenters/base.presenter.js'
+
+const Joi = base.extend(joiDate)
 
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/received` page
@@ -30,7 +31,7 @@ const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, startDate) {
+export default function receivedDateValidator(payload, startDate) {
   const { receivedDateOptions } = payload
 
   return _validate(
@@ -75,8 +76,4 @@ function _validate(payload, startDate) {
   })
 
   return schema.validate(payload)
-}
-
-module.exports = {
-  go
 }

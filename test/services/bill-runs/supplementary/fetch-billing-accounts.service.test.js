@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
+import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
 
 // Thing under test
-const FetchBillingAccountsService = require('../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js')
+import FetchBillingAccountsService from '../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js'
 
 describe('Fetch Billing Accounts service', () => {
   describe('when the service is called with an array of charge version', () => {
@@ -32,7 +33,7 @@ describe('Fetch Billing Accounts service', () => {
     })
 
     it('fetches the billing accounts that the charge versions link to', async () => {
-      const result = await FetchBillingAccountsService.go([
+      const result = await FetchBillingAccountsService([
         { billingAccountId: billingAccounts[0].id },
         { billingAccountId: billingAccounts[1].id }
       ])

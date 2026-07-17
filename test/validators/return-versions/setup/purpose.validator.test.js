@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const PurposeValidator = require('../../../../app/validators/return-versions/setup/purpose.validator.js')
+import PurposeValidator from '../../../../app/validators/return-versions/setup/purpose.validator.js'
 
 describe('Return Versions Setup - Purpose validator', () => {
   const validPurposeIds = [
@@ -31,7 +32,7 @@ describe('Return Versions Setup - Purpose validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = PurposeValidator.go(purposes, validPurposeIds)
+        const result = PurposeValidator(purposes, validPurposeIds)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -55,7 +56,7 @@ describe('Return Versions Setup - Purpose validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = PurposeValidator.go(purposes, validPurposeIds)
+        const result = PurposeValidator(purposes, validPurposeIds)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -71,7 +72,7 @@ describe('Return Versions Setup - Purpose validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = PurposeValidator.go(purposes, validPurposeIds)
+        const result = PurposeValidator(purposes, validPurposeIds)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -87,7 +88,7 @@ describe('Return Versions Setup - Purpose validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = PurposeValidator.go(purposes, validPurposeIds)
+        const result = PurposeValidator(purposes, validPurposeIds)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -102,7 +103,7 @@ describe('Return Versions Setup - Purpose validator', () => {
       })
 
       it('fails validation', () => {
-        const result = PurposeValidator.go(purposes, validPurposeIds)
+        const result = PurposeValidator(purposes, validPurposeIds)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -116,7 +117,7 @@ describe('Return Versions Setup - Purpose validator', () => {
       })
 
       it('fails validation', () => {
-        const result = PurposeValidator.go(purposes, validPurposeIds)
+        const result = PurposeValidator(purposes, validPurposeIds)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -138,7 +139,7 @@ describe('Return Versions Setup - Purpose validator', () => {
       })
 
       it('fails validation', () => {
-        const result = PurposeValidator.go(purposes, validPurposeIds)
+        const result = PurposeValidator(purposes, validPurposeIds)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -152,7 +153,7 @@ describe('Return Versions Setup - Purpose validator', () => {
       })
 
       it('fails validation', () => {
-        const result = PurposeValidator.go(purposes, validPurposeIds)
+        const result = PurposeValidator(purposes, validPurposeIds)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

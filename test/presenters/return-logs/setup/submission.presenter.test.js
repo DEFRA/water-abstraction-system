@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const SubmissionPresenter = require('../../../../app/presenters/return-logs/setup/submission.presenter.js')
+import SubmissionPresenter from '../../../../app/presenters/return-logs/setup/submission.presenter.js'
 
 describe('Return Logs Setup - Submission presenter', () => {
   let session
@@ -16,7 +17,7 @@ describe('Return Logs Setup - Submission presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = SubmissionPresenter.go(session)
+      const result = SubmissionPresenter(session)
 
       expect(result).toEqual({
         backLink: { href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received', text: 'Back' },
@@ -34,7 +35,7 @@ describe('Return Logs Setup - Submission presenter', () => {
         })
 
         it('returns a link back to the "check" page', () => {
-          const result = SubmissionPresenter.go(session)
+          const result = SubmissionPresenter(session)
 
           expect(result.backLink.href).toEqual('/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/check')
         })
@@ -42,7 +43,7 @@ describe('Return Logs Setup - Submission presenter', () => {
 
       describe('when the user has come from somewhere else', () => {
         it('returns a link back to the "received" page on', () => {
-          const result = SubmissionPresenter.go(session)
+          const result = SubmissionPresenter(session)
 
           expect(result.backLink.href).toEqual(
             '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/received'
@@ -58,7 +59,7 @@ describe('Return Logs Setup - Submission presenter', () => {
         })
 
         it('returns the selected option', () => {
-          const result = SubmissionPresenter.go(session)
+          const result = SubmissionPresenter(session)
 
           expect(result.journey).toEqual('enterReturn')
         })

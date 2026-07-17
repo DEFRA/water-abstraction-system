@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats a recipient into a contact
  * @module ContactPresenter
  */
 
-const NotifyAddressPresenter = require('./notify-address.presenter.js')
+import NotifyAddressPresenter from './notify-address.presenter.js'
 
 /**
  * Formats a recipient into a contact
@@ -19,14 +17,12 @@ const NotifyAddressPresenter = require('./notify-address.presenter.js')
  *
  * @returns {object} - a contact
  */
-function go(recipient) {
+export default function contactPresenter(recipient) {
   if (recipient.message_type === 'Email') {
     return [recipient.email]
   }
 
-  const notifyAddress = NotifyAddressPresenter.go(recipient.contact)
+  const notifyAddress = NotifyAddressPresenter(recipient.contact)
 
   return Object.values(notifyAddress)
 }
-
-module.exports = { go }

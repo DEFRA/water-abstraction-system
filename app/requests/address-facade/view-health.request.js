@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * View the health of the Address Facade
  * @module ViewHealthRequest
  */
 
-const BaseRequest = require('../base.request.js')
-
-const addressFacadeConfig = require('../../../config/address-facade.config.js')
+import addressFacadeConfig from '../../../config/address-facade.config.js'
+import { getRequest } from '../base.request.js'
 
 /**
  * View the health of the Address Facade
@@ -20,12 +17,8 @@ const addressFacadeConfig = require('../../../config/address-facade.config.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send() {
+export default async function viewHealthRequest() {
   const statusUrl = new URL('/address-service/hola', addressFacadeConfig.url)
 
-  return BaseRequest.get(statusUrl.href, { responseType: 'text' })
-}
-
-module.exports = {
-  send
+  return getRequest(statusUrl.href, { responseType: 'text' })
 }

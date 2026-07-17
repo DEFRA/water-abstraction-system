@@ -1,13 +1,14 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { db } = require('../../../../../db/db.js')
-const { NoticeType } = require('../../../../../app/lib/static-lookups.lib.js')
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
+import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import { db } from '../../../../../db/db.js'
 
 // Thing under test
-const GenerateRecipientsQueryService = require('../../../../../app/services/notices/setup/returns-notice/generate-recipients-query.service.js')
+import GenerateRecipientsQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-recipients-query.service.js'
 
 describe('Notices - Setup - Returns Notice - Generate Recipients Query service', () => {
   const dueReturnLogsQuery = `
@@ -180,7 +181,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('returns the expected query', () => {
-          const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const result = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will extract primary user recipients
           expect(result).toContain(primaryUserExpectedQuery)
@@ -208,7 +209,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('returns the expected query', () => {
-          const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const result = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will extract primary user recipients
           expect(result).toContain(primaryUserExpectedQuery)
@@ -242,7 +243,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('returns the expected query', () => {
-          const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const result = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will extract primary user recipients
           expect(result).toContain(primaryUserExpectedQuery)
@@ -270,7 +271,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('returns the expected query', () => {
-          const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const result = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will extract primary user recipients
           expect(result).toContain(primaryUserExpectedQuery)
@@ -304,7 +305,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('returns the expected query', () => {
-          const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const result = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will NOT extract primary user recipients
           expect(result).not.toContain(primaryUserExpectedQuery)
@@ -332,7 +333,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('returns the expected query', () => {
-          const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const result = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will NOT extract primary user recipients
           expect(result).not.toContain(primaryUserExpectedQuery)
@@ -362,7 +363,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       })
 
       it('returns the expected query', () => {
-        const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+        const result = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
         // Confirm it will NOT extract primary user recipients
         expect(result).not.toContain(primaryUserExpectedQuery)
@@ -469,18 +470,18 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('returns the expected recipients', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).toEqual(10)
+          expect(rows).toHaveLength(10)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -490,7 +491,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 2) returns both the licence holder and returns to when they are different', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -503,7 +504,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 3) returns the licence holder when only it is present and the same for multiple licences', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -518,7 +519,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 4) returns only the licence holder when it and the returns to are the same', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -532,7 +533,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 5) returns only the primary user when the licence is registered and there are no returns users', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -545,7 +546,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 6) returns the primary user and returns user when the licence is registered and they are different', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -560,7 +561,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 7) returns only the primary user when it is the same for multiple registered licences', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -582,7 +583,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 8) returns only the primary user when it and the returns user are the same for a registered licence', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -603,18 +604,18 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('returns the expected recipients', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).toEqual(13)
+          expect(rows).toHaveLength(13)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -627,7 +628,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 2) returns both the licence holder and returns to when they are different', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -640,7 +641,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 3) returns the licence holder when only it is present and the same for multiple licences', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -660,7 +661,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 4) returns only the licence holder when it and the returns to are the same', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -674,7 +675,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 5) returns only the primary user when the licence is registered and there are no returns users', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -687,7 +688,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 6) returns the primary user and returns user when the licence is registered and they are different', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -702,7 +703,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 7) returns only the primary user when it is the same for multiple registered licences', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -731,7 +732,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 8) returns only the primary user when it and the returns user are the same for a registered licence', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -758,18 +759,18 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('returns the expected recipients', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).toEqual(9)
+          expect(rows).toHaveLength(9)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -779,7 +780,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 2) returns both the licence holder and returns to when they are different', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -792,7 +793,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 3) returns the licence holder when only it is present and the same for multiple licences', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -807,7 +808,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 4) returns only the licence holder when it and the returns to are the same', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -821,7 +822,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns users', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -833,7 +834,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 6) returns the licence holder, not the primary user or returns user when the licence is registered and has a different returns user', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -848,7 +849,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 7) returns the licence holder, not the primary user when it is the same for multiple registered licences', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -870,7 +871,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 8) returns the licence holder, not the primary user when it and the returns user are the same for a registered licence', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -891,18 +892,18 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('returns the expected recipients', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).toEqual(12)
+          expect(rows).toHaveLength(12)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -915,7 +916,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 2) returns both the licence holder and returns to when they are different', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -926,7 +927,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 3) returns the licence holder when only it is present and the same for multiple licences', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -946,7 +947,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 4) returns only the licence holder when it and the returns to are the same', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -960,7 +961,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns users', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -972,7 +973,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 6) returns the licence holder, not the primary user or returns user when the licence is registered and has a different returns user', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -987,7 +988,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 7) returns the licence holder, not the primary user when it is the same for multiple registered licences', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -1018,7 +1019,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         })
 
         it('(Scenario 8) returns the licence holder, not the primary user when it and the returns user are the same for a registered licence', async () => {
-          const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+          const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
 
@@ -1041,18 +1042,18 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       })
 
       it('returns the expected recipients', async () => {
-        const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+        const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])
 
         // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
         // That means we cannot assert the order that the records come out. But we can assert the number of records,
         // and that all we expect are present
-        expect(rows.length).toEqual(8)
+        expect(rows).toHaveLength(8)
       })
 
       it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
-        const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+        const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])
 
@@ -1062,7 +1063,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       })
 
       it('(Scenario 2) returns only the licence holder, even if the returns to is different', async () => {
-        const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+        const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])
 
@@ -1076,7 +1077,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       })
 
       it('(Scenario 3) returns the licence holder when only it is present and the same for multiple licences', async () => {
-        const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+        const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])
 
@@ -1091,7 +1092,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       })
 
       it('(Scenario 4) returns only the licence holder when it and the returns to are the same', async () => {
-        const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+        const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])
 
@@ -1105,7 +1106,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       })
 
       it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns users', async () => {
-        const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+        const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])
 
@@ -1117,7 +1118,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       })
 
       it('(Scenario 6) returns the licence holder, not the primary user or returns user when the licence is registered and has a different returns user', async () => {
-        const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+        const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])
 
@@ -1132,7 +1133,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       })
 
       it('(Scenario 7) returns the licence holder, not the primary user when it is the same for multiple registered licences', async () => {
-        const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+        const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])
 
@@ -1154,7 +1155,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       })
 
       it('(Scenario 8) returns the licence holder, not the primary user when it and the returns user are the same for a registered licence', async () => {
-        const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+        const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])
 

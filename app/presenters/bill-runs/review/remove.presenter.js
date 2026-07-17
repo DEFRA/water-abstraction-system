@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats the review licence data ready for presenting in the remove review licence confirmation page
  * @module RemovePresenter
  */
 
-const { formatFinancialYear, formatLongDate } = require('../../base.presenter.js')
+import { formatFinancialYear, formatLongDate } from '../../base.presenter.js'
 
 /**
  * Formats the review licence data ready for presenting in the remove review licence confirmation page
@@ -15,7 +13,7 @@ const { formatFinancialYear, formatLongDate } = require('../../base.presenter.js
  *
  * @returns {object} page date needed for the remove review licence confirmation page
  */
-function go(reviewLicence) {
+export default function removePresenter(reviewLicence) {
   const { billRun, id: reviewLicenceId, licenceRef } = reviewLicence
   const { billRunNumber, createdAt, region, status, toFinancialYearEnding } = billRun
 
@@ -28,8 +26,4 @@ function go(reviewLicence) {
     region: region.displayName,
     reviewLicenceId
   }
-}
-
-module.exports = {
-  go
 }

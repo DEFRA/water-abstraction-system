@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the water-abstraction-service to create a bill run
  * @module CreateBillRunRequest
  */
 
-const LegacyRequest = require('../legacy.request.js')
+import { postRequest } from '../legacy.request.js'
 
 /**
  * Send a request to the legacy water-abstraction-service to create a bill run
@@ -20,7 +18,7 @@ const LegacyRequest = require('../legacy.request.js')
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(batchType, regionId, financialYearEnding, user, summer = false) {
+export default async function createBillRunRequest(batchType, regionId, financialYearEnding, user, summer = false) {
   const { userId, username: userEmail } = user
 
   const path = 'billing/batches'
@@ -32,9 +30,5 @@ async function send(batchType, regionId, financialYearEnding, user, summer = fal
     userEmail
   }
 
-  return LegacyRequest.post('water', path, userId, true, body)
-}
-
-module.exports = {
-  send
+  return postRequest('water', path, userId, true, body)
 }

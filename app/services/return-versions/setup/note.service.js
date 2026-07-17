@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/note` page
  * @module NoteService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NotePresenter = require('../../../presenters/return-versions/setup/note.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NotePresenter from '../../../presenters/return-versions/setup/note.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/note` page
@@ -18,16 +16,12 @@ const NotePresenter = require('../../../presenters/return-versions/setup/note.pr
  *
  * @returns {Promise<object>} The view data for the note page
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function noteService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = NotePresenter.go(session)
+  const formattedData = NotePresenter(session)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

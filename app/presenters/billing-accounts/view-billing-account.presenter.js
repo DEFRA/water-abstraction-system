@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats billing account data ready for presenting in the view billing account page
  * @module ViewBillingAccountPresenter
  */
 
-const { formatBillRunType } = require('../billing.presenter.js')
-const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
+import { formatBillRunType } from '../billing.presenter.js'
+import { formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
 
 /**
  * Formats billing account data ready for presenting in the view billing account page
@@ -21,7 +19,7 @@ const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js
  *
  * @returns {object} The data formatted for the view template
  */
-function go(billingAccountData, licenceId, chargeVersionId, companyId) {
+export default function viewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId) {
   const { billingAccount, bills } = billingAccountData
   const { company, createdAt, id, lastTransactionFile, lastTransactionFileCreatedAt } = billingAccount
 
@@ -80,8 +78,4 @@ function _bills(bills) {
       financialYear: bill.financialYearEnding
     }
   })
-}
-
-module.exports = {
-  go
 }

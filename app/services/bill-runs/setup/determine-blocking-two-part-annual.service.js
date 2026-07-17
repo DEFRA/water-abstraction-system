@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Determines if an existing bill run will block a user from creating a new two-part annual bill run
  * @module DetermineBlockingTwoPartAnnualService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const FetchLiveBillRunService = require('./fetch-live-bill-run.service.js')
-const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import FetchLiveBillRunService from './fetch-live-bill-run.service.js'
+import { engineTriggers } from '../../../lib/static-lookups.lib.js'
 
 const LAST_PRESROC_YEAR = 2022
 
@@ -37,13 +35,13 @@ const LAST_PRESROC_YEAR = 2022
  * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
  * when creating it, and which bill run engine to trigger the creation with (if any)
  */
-async function go(regionId, year, summer = false) {
+export default async function determineBlockingTwoPartAnnualService(regionId, year, summer = false) {
   const toFinancialYearEnding = Number(year)
 
   let match = await _fetchMatches(regionId, toFinancialYearEnding, summer)
 
   if (!match) {
-    match = await FetchLiveBillRunService.go(regionId, toFinancialYearEnding)
+    match = await FetchLiveBillRunService(regionId, toFinancialYearEnding)
   }
 
   const matches = match ? [match] : []
@@ -82,8 +80,4 @@ function _trigger(match, toFinancialYearEnding) {
   }
 
   return engineTriggers.old
-}
-
-module.exports = {
-  go
 }

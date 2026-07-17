@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const FetchRenewalLicenceDal = require('../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js')
+import FetchRenewalLicenceDal from '../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js'
 
 describe('Notices - Setup - Fetch Renewal Licence DAL', () => {
   let licence
@@ -19,7 +20,7 @@ describe('Notices - Setup - Fetch Renewal Licence DAL', () => {
 
   describe('when the licence exists', () => {
     it('returns the licence with the renewal date fields', async () => {
-      const result = await FetchRenewalLicenceDal.go(licence.licenceRef)
+      const result = await FetchRenewalLicenceDal(licence.licenceRef)
 
       expect(result).toEqual({
         expiredDate: null,
@@ -33,9 +34,9 @@ describe('Notices - Setup - Fetch Renewal Licence DAL', () => {
 
   describe('when the licence does not exist', () => {
     it('returns undefined', async () => {
-      const result = await FetchRenewalLicenceDal.go('does-not-exist')
+      const result = await FetchRenewalLicenceDal('does-not-exist')
 
-      expect(result).toEqual(undefined)
+      expect(result).toBeUndefined()
     })
   })
 })

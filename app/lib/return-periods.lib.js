@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Helper methods to deal with return periods
  * @module ReturnPeriodLib
  */
 
-const { compareDates, sameDate } = require('./dates.lib.js')
-const { returnPeriodDates } = require('./static-lookups.lib.js')
+import { returnPeriodDates } from './static-lookups.lib.js'
+import { compareDates, sameDate } from './dates.lib.js'
 
 /**
  * Determine return periods for a given return cycle.
@@ -19,7 +17,7 @@ const { returnPeriodDates } = require('./static-lookups.lib.js')
  *
  * @returns {Array<object>} An object containing calculated dates for all return periods
  */
-function determineReturnsPeriods(returnCycle) {
+export function determineReturnsPeriods(returnCycle) {
   return [
     {
       startDate: _startDate(returnCycle.startDate, returnPeriodDates.quarterOne),
@@ -61,7 +59,7 @@ function determineReturnsPeriods(returnCycle) {
  *
  * @returns {object} An object containing calculated dates for all return periods
  */
-function determineUpcomingReturnsPeriods(date = new Date()) {
+export function determineUpcomingReturnsPeriods(date = new Date()) {
   const determinationDate = new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
 
   return {
@@ -326,7 +324,7 @@ function _newYearElapsedQuarterThreeDueDate(determinationDate, period) {
  *
  * @returns {object[]} - An array of return periods
  */
-function determineUpcomingReturnPeriods(determinationDate = new Date()) {
+export function determineUpcomingReturnPeriods(determinationDate = new Date()) {
   const returnPeriods = determineUpcomingReturnsPeriods(determinationDate)
   const mappedReturnPeriods = _mapReturnsPeriods(returnPeriods)
   return _sortByDueDate(mappedReturnPeriods)
@@ -397,10 +395,4 @@ function _cycleStartDate(determinationDate, period) {
   const startYear = _isDue(determinationDate, period) ? currentYear : currentYear - 1
 
   return new Date(`${startYear}-${startMonth}-${startDay}`)
-}
-
-module.exports = {
-  determineReturnsPeriods,
-  determineUpcomingReturnsPeriods,
-  determineUpcomingReturnPeriods
 }

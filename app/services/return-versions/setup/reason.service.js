@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/reason` page
  * @module SelectReasonService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SelectReasonPresenter = require('../../../presenters/return-versions/setup/reason.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SelectReasonPresenter from '../../../presenters/return-versions/setup/reason.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/reason` page
@@ -18,16 +16,12 @@ const SelectReasonPresenter = require('../../../presenters/return-versions/setup
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function reasonService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
 
-  const formattedData = SelectReasonPresenter.go(session)
+  const formattedData = SelectReasonPresenter(session)
 
   return {
     ...formattedData
   }
-}
-
-module.exports = {
-  go
 }

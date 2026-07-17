@@ -1,15 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates the removing of a bill from a bill run
  * @module SubmitRemoveBillService
  */
 
-const BillModel = require('../../models/bill.model.js')
-
-const LegacyDeleteBillRequest = require('../../requests/legacy/delete-bill.request.js')
-const ProcessBillingFlagService = require('../licences/supplementary/process-billing-flag.service.js')
-const UnassignLicencesToBillRunService = require('../bill-runs/unassign-licences-to-bill-run.service.js')
+import BillModel from '../../models/bill.model.js'
+import DeleteBillRequest from '../../requests/legacy/delete-bill.request.js'
+import ProcessBillingFlagService from '../licences/supplementary/process-billing-flag.service.js'
+import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-bill-run.service.js'
 
 /**
  * Orchestrates the removing of a bill from a bill run
@@ -23,14 +20,14 @@ const UnassignLicencesToBillRunService = require('../bill-runs/unassign-licences
  *
  * @returns {Promise<string>} Returns the redirect path the controller needs
  */
-async function go(billId, user) {
+export default async function submitRemoveBillService(billId, user) {
   const bill = await _fetchBill(billId)
 
   const { billLicences, billRunId } = bill
 
   await _unassignLicencesToBillRun(billRunId, billLicences)
   await _flagRemovedBill(billLicences)
-  await LegacyDeleteBillRequest.send(billRunId, billId, user)
+  await DeleteBillRequest(billRunId, billId, user)
 
   return `/billing/batch/${billRunId}/processing`
 }
@@ -47,7 +44,7 @@ async function _fetchBill(billId) {
 
 async function _flagRemovedBill(billLicences) {
   for (const billLicence of billLicences) {
-    await ProcessBillingFlagService.go({ billLicenceId: billLicence.id })
+    await ProcessBillingFlagService({ billLicenceId: billLicence.id })
   }
 }
 
@@ -56,9 +53,5 @@ async function _unassignLicencesToBillRun(billRunId, billLicences) {
     return billLicence.licenceId
   })
 
-  await UnassignLicencesToBillRunService.go(licenceIds, billRunId)
-}
-
-module.exports = {
-  go
+  await UnassignLicencesToBillRunService(licenceIds, billRunId)
 }

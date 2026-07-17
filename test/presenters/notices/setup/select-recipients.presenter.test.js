@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Thing under test
-const SelectRecipientsPresenter = require('../../../../app/presenters/notices/setup/select-recipients.presenter.js')
+import SelectRecipientsPresenter from '../../../../app/presenters/notices/setup/select-recipients.presenter.js'
 
 describe('Notices - Setup - Select Recipients presenter', () => {
   let recipients
@@ -36,7 +37,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
   })
 
   it('returns page data for the view', () => {
-    const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
+    const result = SelectRecipientsPresenter(session, testRecipients, selectedRecipients)
 
     expect(result).toEqual({
       backLink: {
@@ -101,7 +102,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
       })
 
       it('returns page data for the view with relevant recipients not checked', () => {
-        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
+        const result = SelectRecipientsPresenter(session, testRecipients, selectedRecipients)
 
         expect(result.recipients).toEqual([
           {
@@ -123,7 +124,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
       })
 
       it('returns page data for the view with relevant recipients checked', () => {
-        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
+        const result = SelectRecipientsPresenter(session, testRecipients, selectedRecipients)
 
         expect(result.recipients).toEqual([
           {
@@ -148,7 +149,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
       })
 
       it('returns correct text and link', () => {
-        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
+        const result = SelectRecipientsPresenter(session, testRecipients, selectedRecipients)
 
         expect(result.setupAddress).toEqual({
           href: `/system/notices/setup/${session.id}/recipient-name`,
@@ -159,7 +160,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
 
     describe('when the "noticeType" is not "paperReturn"', () => {
       it('returns correct text and link', () => {
-        const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
+        const result = SelectRecipientsPresenter(session, testRecipients, selectedRecipients)
 
         expect(result.setupAddress).toEqual({
           href: `/system/notices/setup/${session.id}/contact-type`,

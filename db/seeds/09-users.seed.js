@@ -1,16 +1,13 @@
-'use strict'
+import bcrypt from 'bcryptjs'
 
-const bcrypt = require('bcryptjs')
+import DatabaseConfig from '../../config/database.config.js'
+import ServerConfig from '../../config/server.config.js'
+import UserModel from '../../app/models/user.model.js'
+import { db } from '../db.js'
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
+import { data as users } from './data/users.js'
 
-const { db } = require('../db.js')
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: users } = require('./data/users.js')
-const UserModel = require('../../app/models/user.model.js')
-
-const DatabaseConfig = require('../../config/database.config.js')
-const ServerConfig = require('../../config/server.config.js')
-
-async function seed() {
+export default async function seed() {
   // These users are for use in our non-production environments only
   if (ServerConfig.environment === 'production') {
     return
@@ -171,8 +168,4 @@ async function _update(user, password) {
     })
     .where('application', application)
     .andWhere('username', username)
-}
-
-module.exports = {
-  seed
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches workflow data needed for the view '/licences/{id}/set-up` page
  * @module FetchWorkflowsService
  */
 
-const WorkflowModel = require('../../models/workflow.model.js')
+import WorkflowModel from '../../models/workflow.model.js'
 
 /**
  * Fetches workflow data needed for the view '/licences/{id}/set-up` page
@@ -14,7 +12,7 @@ const WorkflowModel = require('../../models/workflow.model.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
-async function go(licenceId) {
+export default async function fetchWorkflowsService(licenceId) {
   return _fetch(licenceId)
 }
 
@@ -24,8 +22,4 @@ async function _fetch(licenceId) {
     .andWhere('deletedAt', null)
     .select(['id', 'createdAt', 'status', 'licenceId', 'data'])
     .orderBy([{ column: 'createdAt', order: 'desc' }])
-}
-
-module.exports = {
-  go
 }

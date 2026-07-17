@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Uses the session data to generate the data sets required to create a new return version for a licence
  * @module GenerateReturnVersionService
  */
 
-const DetermineNextVersionNumberDal = require('../../../../dal/return-versions/determine-next-version-number.dal.js')
-const GenerateReturnVersionRequirementsService = require('./generate-return-version-requirements.service.js')
-const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
+import DetermineNextVersionNumberDal from '../../../../dal/return-versions/determine-next-version-number.dal.js'
+import GenerateReturnVersionRequirementsService from './generate-return-version-requirements.service.js'
+import { isQuarterlyReturnSubmissions } from '../../../../lib/dates.lib.js'
 
 /**
  * Uses the session data to generate the data sets required to create a new return version for a licence
@@ -20,8 +18,8 @@ const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
  *
  * @returns {Promise<object>} The new return version and its return requirements data for a licence
  */
-async function go(session, userId) {
-  const nextVersionNumber = await DetermineNextVersionNumberDal.go(session.licence.id)
+export default async function generateReturnVersionService(session, userId) {
+  const nextVersionNumber = await DetermineNextVersionNumberDal(session.licence.id)
 
   const returnVersion = await _generateReturnVersion(nextVersionNumber, session, userId)
   const returnRequirements = await _generateReturnRequirements(session)
@@ -38,7 +36,7 @@ async function _generateReturnRequirements(session) {
     return []
   }
 
-  const returnRequirements = await GenerateReturnVersionRequirementsService.go(session.licence.id, session.requirements)
+  const returnRequirements = await GenerateReturnVersionRequirementsService(session.licence.id, session.requirements)
 
   return returnRequirements
 }
@@ -67,8 +65,4 @@ async function _generateReturnVersion(nextVersionNumber, session, userId) {
     status: 'current',
     version: nextVersionNumber
   }
-}
-
-module.exports = {
-  go
 }

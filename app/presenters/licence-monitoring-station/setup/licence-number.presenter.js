@@ -1,6 +1,4 @@
-'use strict'
-
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the `/licence-monitoring-station/setup/{sessionId}/licence-number` page
@@ -14,7 +12,7 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function licenceNumberPresenter(session) {
   const { label, licenceRef } = session
 
   return {
@@ -23,8 +21,4 @@ function go(session) {
     monitoringStationLabel: label,
     pageTitle: 'Enter the licence number this threshold applies to'
   }
-}
-
-module.exports = {
-  go
 }

@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * @module UserGroupHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { selectRandomEntry } = require('../general.js')
-const { generateUserId } = require('./user.helper.js')
-const GroupHelper = require('./group.helper.js')
-const UserGroupModel = require('../../../app/models/user-group.model.js')
-const { data: userGroups } = require('../../../db/seeds/data/user-groups.js')
+import GroupHelper from './group.helper.js'
+import UserGroupModel from '../../../app/models/user-group.model.js'
+import { selectRandomEntry } from '../general.js'
+import { data as userGroups } from '../../../db/seeds/data/user-groups.js'
+import { generateUUID, generateUserId } from '../generators.js'
+
+const data = userGroups
 
 const DEFAULT_INDEX = 4
 
@@ -81,10 +80,10 @@ function select(index = -1) {
   return UserGroupModel.fromJson(selectRandomEntry(userGroups))
 }
 
-module.exports = {
-  add,
-  data: userGroups,
+export default {
+  data,
   DEFAULT_INDEX,
+  add,
   defaults,
   select
 }

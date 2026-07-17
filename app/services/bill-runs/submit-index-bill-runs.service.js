@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
  * @module SubmitIndexBillRunsService
  */
 
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
-const CheckBusyBillRunsService = require('./check-busy-bill-runs.service.js')
-const FetchBillRunsService = require('./fetch-bill-runs.service.js')
-const FetchRegionsService = require('./setup/fetch-regions.service.js')
-const IndexBillRunsPresenter = require('../../presenters/bill-runs/index-bill-runs.presenter.js')
-const IndexValidator = require('../../validators/bill-runs/index.validator.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { clearFilters, handleOneOptionSelected } = require('../../lib/submit-page.lib.js')
+import CheckBusyBillRunsService from './check-busy-bill-runs.service.js'
+import FetchBillRunsService from './fetch-bill-runs.service.js'
+import FetchRegionsService from './setup/fetch-regions.service.js'
+import IndexBillRunsPresenter from '../../presenters/bill-runs/index-bill-runs.presenter.js'
+import IndexValidator from '../../validators/bill-runs/index.validator.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
+import { clearFilters, handleOneOptionSelected } from '../../lib/submit-page.lib.js'
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -26,7 +24,7 @@ const { clearFilters, handleOneOptionSelected } = require('../../lib/submit-page
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the index page
  * else the data needed to re-render the page
  */
-async function go(payload, yar, page) {
+export default async function submitIndexBillRunsService(payload, yar, page) {
   const filterCleared = clearFilters(payload, yar, 'billRunsFilter')
 
   if (filterCleared) {
@@ -37,7 +35,7 @@ async function go(payload, yar, page) {
   handleOneOptionSelected(payload, 'runTypes')
   handleOneOptionSelected(payload, 'statuses')
 
-  const regions = await FetchRegionsService.go()
+  const regions = await FetchRegionsService()
   const error = _validate(payload, regions)
 
   if (!error) {
@@ -58,15 +56,15 @@ async function _replayView(payload, error, page, regions, savedFilters) {
   // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
   // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
   const [busyResult, { results: billRuns, total: totalNumber }] = await Promise.all([
-    CheckBusyBillRunsService.go(),
-    FetchBillRunsService.go(savedFilters, page)
+    CheckBusyBillRunsService(),
+    FetchBillRunsService(savedFilters, page)
   ])
 
-  const pagination = PaginatorPresenter.go(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
+  const pagination = PaginatorPresenter(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
 
   const filters = { ...savedFilters, ...payload }
 
-  const pageData = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
+  const pageData = IndexBillRunsPresenter(billRuns, busyResult, filters, regions)
 
   return {
     activeNavBar: 'bill-runs',
@@ -100,11 +98,7 @@ function _savedFilters(yar) {
 }
 
 function _validate(payload, regions) {
-  const validationResult = IndexValidator.go(payload, regions)
+  const validationResult = IndexValidator(payload, regions)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

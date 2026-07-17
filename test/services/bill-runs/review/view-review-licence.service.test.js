@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-review-licence.service.js')
+import * as FetchReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-review-licence.service.js'
 
 // Thing under test
-const ViewReviewLicenceService = require('../../../../app/services/bill-runs/review/view-review-licence.service.js')
+import ViewReviewLicenceService from '../../../../app/services/bill-runs/review/view-review-licence.service.js'
 
 describe('Bill Runs - Review - View Review Licence Service', () => {
   let reviewLicence
@@ -21,22 +19,22 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
   beforeEach(() => {
     reviewLicence = BillRunsReviewFixture.reviewLicence()
 
-    Sinon.stub(FetchReviewLicenceService, 'go').resolves(reviewLicence)
+    vi.spyOn(FetchReviewLicenceService, 'default').mockResolvedValue(reviewLicence)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('and there is a flash message to display', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.flash.withArgs('banner').returns(['This licence has been marked.'])
+        yarStub = YarStub()
+        yarStub.flash.mockReturnValue(['This licence has been marked.'])
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewReviewLicenceService.go(reviewLicence.id, yarStub)
+        const result = await ViewReviewLicenceService(reviewLicence.id, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -129,12 +127,12 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
 
     describe('and there is no flash message to display', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.flash.withArgs('banner').returns([undefined])
+        yarStub = YarStub()
+        yarStub.flash.mockReturnValue([undefined])
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewReviewLicenceService.go(reviewLicence.id, yarStub)
+        const result = await ViewReviewLicenceService(reviewLicence.id, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',

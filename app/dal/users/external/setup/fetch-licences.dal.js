@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches licences linked to a user for for the external unlink licence journey
  * @module FetchLicencesDal
  */
 
-const LicenceModel = require('../../../../models/licence.model.js')
+import LicenceModel from '../../../../models/licence.model.js'
 
 /**
  * Fetches licences linked to a user for for the external unlink licence journey
@@ -16,7 +14,7 @@ const LicenceModel = require('../../../../models/licence.model.js')
  *
  * @returns {Promise<module:LicenceModel[]>} the requested user licences
  */
-async function go(licenceEntityId) {
+export default async function fetchLicencesDal(licenceEntityId) {
   return LicenceModel.query()
     .select(['licences.id', 'licences.licenceRef', 'licenceDocumentHeader.id AS licenceDocumentHeaderId'])
     .innerJoinRelated('licenceDocumentHeader')
@@ -35,8 +33,4 @@ async function go(licenceEntityId) {
     )
     .orderBy('licences.licenceRef', 'asc')
     .modify('licenceHolder')
-}
-
-module.exports = {
-  go
 }

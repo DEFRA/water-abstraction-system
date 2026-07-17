@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const AlertThresholdsValidator = require('../../../../app/validators/notices/setup/alert-thresholds.validator.js')
+import AlertThresholdsValidator from '../../../../app/validators/notices/setup/alert-thresholds.validator.js'
 
 describe('Notices Setup - Setup - Alert Thresholds validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Notices Setup - Setup - Alert Thresholds validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = AlertThresholdsValidator.go(payload)
+      const result = AlertThresholdsValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +26,7 @@ describe('Notices Setup - Setup - Alert Thresholds validator', () => {
         })
 
         it('returns with no errors', () => {
-          const result = AlertThresholdsValidator.go(payload)
+          const result = AlertThresholdsValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeUndefined()
@@ -42,7 +43,7 @@ describe('Notices Setup - Setup - Alert Thresholds validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertThresholdsValidator.go(payload)
+          const result = AlertThresholdsValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -56,7 +57,7 @@ describe('Notices Setup - Setup - Alert Thresholds validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertThresholdsValidator.go(payload)
+          const result = AlertThresholdsValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()

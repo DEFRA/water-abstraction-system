@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats the monitoring station and related licence monitoring station data for the view monitoring station page
  * @module ViewPresenter
  */
 
-const { determineRestrictionHeading, formatRestrictions } = require('./base.presenter.js')
+import { determineRestrictionHeading, formatRestrictions } from './base.presenter.js'
 
 /**
  * Formats the monitoring station and related licence monitoring station data for the view monitoring station page
@@ -26,7 +24,7 @@ const { determineRestrictionHeading, formatRestrictions } = require('./base.pres
  *
  * @returns {object} page data needed by the view template
  */
-function go(monitoringStation, licenceMonitoringStations, auth) {
+export default function viewPresenter(monitoringStation, licenceMonitoringStations, auth) {
   const {
     id: monitoringStationId,
     catchmentName,
@@ -103,8 +101,4 @@ function _tagLicenceButton(auth, monitoringStationId) {
   return {
     value: monitoringStationId
   }
-}
-
-module.exports = {
-  go
 }

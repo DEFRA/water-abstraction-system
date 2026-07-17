@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the review charge reference factors page
  * @module FactorsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { maxDecimalPlaces } = require('../../helpers/max-decimal-places.validator.js')
+import { maxDecimalPlaces } from '../../helpers/max-decimal-places.validator.js'
 
 const MAX_DECIMALS = 15
 
@@ -22,7 +20,7 @@ const MAX_DECIMALS = 15
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go(payload) {
+export default function factorsValidator(payload) {
   const schema = Joi.object({
     amendedAggregate: Joi.number().min(0).required().custom(maxDecimalPlaces(MAX_DECIMALS), 'maxDecimals').messages({
       'number.base': 'The aggregate factor must be a number',
@@ -45,8 +43,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-module.exports = {
-  go
 }

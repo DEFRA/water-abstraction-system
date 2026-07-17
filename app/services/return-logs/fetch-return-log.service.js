@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the return log needed for the view '/system/return-logs/{id}/communications' page
  * @module FetchReturnLogService
  */
 
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
+import ReturnLogModel from '../../../app/models/return-log.model.js'
 
 /**
  * Fetches the return log needed for the view '/system/return-logs/{id}/communications' page
@@ -14,7 +12,7 @@ const ReturnLogModel = require('../../../app/models/return-log.model.js')
  *
  * @returns {Promise<module:ReturnLogModel>} the return log and associated licence record
  */
-async function go(returnLogId) {
+export default async function fetchReturnLogService(returnLogId) {
   return ReturnLogModel.query()
     .findById(returnLogId)
     .select(['id'])
@@ -22,8 +20,4 @@ async function go(returnLogId) {
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
     })
-}
-
-module.exports = {
-  go
 }

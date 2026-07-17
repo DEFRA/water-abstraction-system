@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitTypeService = require('../../../../app/services/bill-runs/setup/submit-type.service.js')
+import SubmitTypeService from '../../../../app/services/bill-runs/setup/submit-type.service.js'
 
 describe('Bill Runs - Setup - Submit Type service', () => {
   let payload
@@ -20,13 +18,13 @@ describe('Bill Runs - Setup - Submit Type service', () => {
   beforeEach(() => {
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -38,16 +36,16 @@ describe('Bill Runs - Setup - Submit Type service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitTypeService.go(session.id, payload)
+        await SubmitTypeService(session.id, payload)
 
         expect(session.type).toEqual('annual')
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
-        const result = await SubmitTypeService.go(session.id, payload)
+        const result = await SubmitTypeService(session.id, payload)
 
         expect(result).toEqual({})
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 
@@ -58,7 +56,7 @@ describe('Bill Runs - Setup - Submit Type service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitTypeService.go(session.id, payload)
+          const result = await SubmitTypeService(session.id, payload)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',

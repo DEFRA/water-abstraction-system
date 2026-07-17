@@ -1,21 +1,22 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const PointHelper = require('../../support/helpers/point.helper.js')
-const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
-const ReturnRequirementPointHelper = require('../../support/helpers/return-requirement-point.helper.js')
-const ReturnRequirementPurposeHelper = require('../../support/helpers/return-requirement-purpose.helper.js')
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
-const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
-const { today } = require('../../../app/lib/general.lib.js')
-const { tomorrow, yesterday } = require('../../support/general.js')
+import LicenceHelper from '../../support/helpers/licence.helper.js'
+import PointHelper from '../../support/helpers/point.helper.js'
+import PrimaryPurposeHelper from '../../support/helpers/primary-purpose.helper.js'
+import PurposeHelper from '../../support/helpers/purpose.helper.js'
+import RegionHelper from '../../support/helpers/region.helper.js'
+import ReturnRequirementHelper from '../../support/helpers/return-requirement.helper.js'
+import ReturnRequirementPointHelper from '../../support/helpers/return-requirement-point.helper.js'
+import ReturnRequirementPurposeHelper from '../../support/helpers/return-requirement-purpose.helper.js'
+import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import SecondaryPurposeHelper from '../../support/helpers/secondary-purpose.helper.js'
+import { today } from '../../../app/lib/general.lib.js'
+import { tomorrow, yesterday } from '../../support/general.js'
 
 // Thing under test
-const FetchLicenceReturnRequirementsService = require('../../../app/services/return-logs/fetch-licence-return-requirements.service.js')
+import FetchLicenceReturnRequirementsService from '../../../app/services/return-logs/fetch-licence-return-requirements.service.js'
 
 // NOTE: These have been declared outside the top level describe() by exception. We want to assert the result in detail
 // but it leads to a big block of object-code we then go on to duplicate a number of times in these tests. We've moved
@@ -62,7 +63,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
     })
 
     it('returns no return requirements', async () => {
-      const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+      const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
       expect(results).toHaveLength(0)
     })
@@ -78,7 +79,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to "current" return versions that end on or after the change date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([
           _transformReturnVersionToResult(returnVersions[3]),
@@ -96,7 +97,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to "current" return versions that end after the change date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([
           _transformReturnVersionToResult(returnVersions[1]),
@@ -115,7 +116,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to latest "current" return version that has no end date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([_transformReturnVersionToResult(returnVersions[4])])
       })
@@ -132,7 +133,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to "current" return versions that end on or after the change date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([
           _transformReturnVersionToResult(returnVersions[3]),
@@ -150,7 +151,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to "current" return versions that end after the change date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([
           _transformReturnVersionToResult(returnVersions[1]),
@@ -169,7 +170,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to latest "current" return version that has no end date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([_transformReturnVersionToResult(returnVersions[4])])
       })

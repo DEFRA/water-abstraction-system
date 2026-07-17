@@ -1,15 +1,15 @@
-'use strict'
-
 /**
  * Model for licence_agreements (water.licence_agreements)
  * @module LicenceAgreementModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import FinancialAgreementModel from './financial-agreement.model.js'
+import LicenceModel from './licence.model.js'
 
-class LicenceAgreementModel extends BaseModel {
+export default class LicenceAgreementModel extends BaseModel {
   static get tableName() {
     return 'licenceAgreements'
   }
@@ -18,7 +18,7 @@ class LicenceAgreementModel extends BaseModel {
     return {
       financialAgreement: {
         relation: Model.HasOneRelation,
-        modelClass: 'financial-agreement.model',
+        modelClass: FinancialAgreementModel,
         join: {
           from: 'licenceAgreements.financialAgreementId',
           to: 'financialAgreements.id'
@@ -26,7 +26,7 @@ class LicenceAgreementModel extends BaseModel {
       },
       licence: {
         relation: Model.HasOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'licenceAgreements.licenceRef',
           to: 'licences.licenceRef'
@@ -35,5 +35,3 @@ class LicenceAgreementModel extends BaseModel {
     }
   }
 }
-
-module.exports = LicenceAgreementModel

@@ -1,31 +1,31 @@
-'use strict'
-
 /**
  * Controller for /jobs endpoints
  * @module JobsController
  */
 
-const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
+import http2 from 'node:http2'
 
-const ExportService = require('../services/jobs/export/export.service.js')
-const ProcessCleanService = require('../services/jobs/clean/process-clean.service.js')
-const ProcessCustomerFilesService = require('../services/jobs/customer-files/process-customer-files.service.js')
-const ProcessLicenceUpdatesService = require('../services/jobs/licence-updates/process-licence-updates.service.js')
-const ProcessNotificationStatusService = require('../services/jobs/notification-status/process-notification-status.service.js')
-const ProcessRenewalInvitationsService = require('../services/jobs/renewal-invitations/process-renewal-invitations.service.js')
-const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
-const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited/process-time-limited-licences.service.js')
+import ExportService from '../services/jobs/export/export.service.js'
+import ProcessCleanService from '../services/jobs/clean/process-clean.service.js'
+import ProcessCustomerFilesService from '../services/jobs/customer-files/process-customer-files.service.js'
+import ProcessLicenceUpdatesService from '../services/jobs/licence-updates/process-licence-updates.service.js'
+import ProcessNotificationStatusService from '../services/jobs/notification-status/process-notification-status.service.js'
+import ProcessRenewalInvitationsService from '../services/jobs/renewal-invitations/process-renewal-invitations.service.js'
+import ProcessReturnLogsService from '../services/jobs/return-logs/process-return-logs.service.js'
+import ProcessTimeLimitedLicencesService from '../services/jobs/time-limited/process-time-limited-licences.service.js'
 
-async function clean(_request, h) {
-  ProcessCleanService.go()
+const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_NOT_FOUND } = http2.constants
+
+export async function clean(_request, h) {
+  ProcessCleanService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function customerFiles(request, h) {
+export async function customerFiles(request, h) {
   const { days } = request.params
 
-  ProcessCustomerFilesService.go(days)
+  ProcessCustomerFilesService(days)
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
@@ -39,57 +39,46 @@ async function customerFiles(request, h) {
  *
  * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
  */
-async function exportDb(_request, h) {
-  ExportService.go()
+export async function exportDb(_request, h) {
+  ExportService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function licenceUpdates(_request, h) {
-  ProcessLicenceUpdatesService.go()
+export async function licenceUpdates(_request, h) {
+  ProcessLicenceUpdatesService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function notificationStatus(_request, h) {
-  ProcessNotificationStatusService.go()
+export async function notificationStatus(_request, h) {
+  ProcessNotificationStatusService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function renewalInvitations(request, h) {
+export async function renewalInvitations(request, h) {
   const { days } = request.params
 
-  ProcessRenewalInvitationsService.go(days)
+  ProcessRenewalInvitationsService(days)
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function returnLogs(request, h) {
+export async function returnLogs(request, h) {
   const { cycle } = request.params
 
   if (!['summer', 'all-year'].includes(cycle)) {
     return h.response().code(HTTP_STATUS_NOT_FOUND)
   }
 
-  ProcessReturnLogsService.go(cycle)
+  ProcessReturnLogsService(cycle)
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function timeLimited(_request, h) {
-  ProcessTimeLimitedLicencesService.go()
+export async function timeLimited(_request, h) {
+  ProcessTimeLimitedLicencesService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
-}
-
-module.exports = {
-  clean,
-  customerFiles,
-  exportDb,
-  licenceUpdates,
-  notificationStatus,
-  renewalInvitations,
-  returnLogs,
-  timeLimited
 }

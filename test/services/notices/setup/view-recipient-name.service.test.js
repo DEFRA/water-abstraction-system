@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewRecipientNameService = require('../../../../app/services/notices/setup/view-recipient-name.service.js')
+import ViewRecipientNameService from '../../../../app/services/notices/setup/view-recipient-name.service.js'
 
 describe('Notices - Setup - View Recipient Name service', () => {
   let referenceCode
@@ -22,18 +20,18 @@ describe('Notices - Setup - View Recipient Name service', () => {
     referenceCode = generateNoticeReferenceCode('RINV-')
     sessionData = { referenceCode }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewRecipientNameService.go(session.id)
+      const result = await ViewRecipientNameService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

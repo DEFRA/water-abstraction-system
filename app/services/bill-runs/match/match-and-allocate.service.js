@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Match and allocate licences to returns for a two-part tariff bill run for the given billing period
  * @module MatchAndAllocateService
  */
 
-const AllocateReturnsToChargeElementService = require('./allocate-returns-to-charge-element.service.js')
-const DetermineLicenceIssuesService = require('./determine-licence-issues.service.js')
-const FetchLicencesService = require('./fetch-licences.service.js')
-const MatchReturnsToChargeElementService = require('./match-returns-to-charge-element.service.js')
-const PersistAllocatedLicenceToResultsService = require('./persist-allocated-licence-to-results.service.js')
-const PrepareChargeVersionService = require('./prepare-charge-version.service.js')
-const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
+import AllocateReturnsToChargeElementService from './allocate-returns-to-charge-element.service.js'
+import DetermineLicenceIssuesService from './determine-licence-issues.service.js'
+import FetchLicencesService from './fetch-licences.service.js'
+import MatchReturnsToChargeElementService from './match-returns-to-charge-element.service.js'
+import PersistAllocatedLicenceToResultsService from './persist-allocated-licence-to-results.service.js'
+import PrepareChargeVersionService from './prepare-charge-version.service.js'
+import PrepareReturnLogsService from './prepare-return-logs.service.js'
 
 /**
  * Performs the two-part tariff matching and allocating
@@ -28,8 +26,8 @@ const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
  *
  * @returns {Promise<boolean>} - True if there are any licences matched to returns, else false
  */
-async function go(billRun, billingPeriod) {
-  const licences = await FetchLicencesService.go(billRun, billingPeriod)
+export default async function matchAndAllocateService(billRun, billingPeriod) {
+  const licences = await FetchLicencesService(billRun, billingPeriod)
 
   if (licences.length > 0) {
     await _process(licences, billingPeriod, billRun)
@@ -40,12 +38,12 @@ async function go(billRun, billingPeriod) {
 
 async function _process(licences, billingPeriod, billRun) {
   for (const licence of licences) {
-    await PrepareReturnLogsService.go(licence, billingPeriod)
+    await PrepareReturnLogsService(licence, billingPeriod)
 
     const { chargeVersions, returnLogs } = licence
 
     chargeVersions.forEach((chargeVersion) => {
-      PrepareChargeVersionService.go(chargeVersion, billingPeriod)
+      PrepareChargeVersionService(chargeVersion, billingPeriod)
 
       const { chargeReferences } = chargeVersion
 
@@ -57,12 +55,12 @@ async function _process(licences, billingPeriod, billRun) {
         const { chargeElements } = chargeReference
 
         chargeElements.forEach((chargeElement) => {
-          const matchingReturns = MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+          const matchingReturns = MatchReturnsToChargeElementService(chargeElement, returnLogs)
 
           if (matchingReturns.length > 0) {
             chargeReferenceMatched = true
 
-            AllocateReturnsToChargeElementService.go(
+            AllocateReturnsToChargeElementService(
               chargeElement,
               matchingReturns,
               chargeVersion.chargePeriod,
@@ -77,8 +75,8 @@ async function _process(licences, billingPeriod, billRun) {
       })
     })
 
-    DetermineLicenceIssuesService.go(licence)
-    await PersistAllocatedLicenceToResultsService.go(billRun.id, licence)
+    DetermineLicenceIssuesService(licence)
+    await PersistAllocatedLicenceToResultsService(billRun.id, licence)
   }
 }
 
@@ -103,8 +101,4 @@ function _useAuthorisedVolume(chargeReference) {
   })
 
   chargeReference.allocatedQuantity = totalAllocatedQuantity
-}
-
-module.exports = {
-  go
 }

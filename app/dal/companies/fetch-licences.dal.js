@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
  * @module FetchLicencesDal
  */
 
-const LicenceModel = require('../../models/licence.model.js')
-
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import LicenceModel from '../../models/licence.model.js'
 
 /**
  * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
@@ -17,7 +14,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the licences for the company and the pagination object
  */
-async function go(companyId, page = '1') {
+export default async function fetchLicencesDal(companyId, page = '1') {
   const { results, total: totalNumber } = await _fetch(companyId, page)
 
   const licenceIds = results.map((licence) => {
@@ -118,8 +115,4 @@ async function _fetchDetail(licenceIds) {
     ) AS latest_holder ON true`
     )
     .orderBy('licenceRef', 'asc')
-}
-
-module.exports = {
-  go
 }

@@ -1,17 +1,15 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const GenerateFromAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js')
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as GenerateFromAbstractionDataService from '../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js'
 
 // Thing under test
-const SubmitMethodService = require('../../../../../app/services/return-versions/setup/method/submit-method.service.js')
+import SubmitMethodService from '../../../../../app/services/return-versions/setup/method/submit-method.service.js'
 
 describe('Return Versions - Setup - Submit Method service', () => {
   let payload
@@ -59,13 +57,13 @@ describe('Return Versions - Setup - Submit Method service', () => {
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -75,28 +73,28 @@ describe('Return Versions - Setup - Submit Method service', () => {
           method: 'useAbstractionData'
         }
 
-        Sinon.stub(GenerateFromAbstractionDataService, 'go').resolves(_generatedReturnRequirements())
+        vi.spyOn(GenerateFromAbstractionDataService, 'default').mockResolvedValue(_generatedReturnRequirements())
       })
 
       it('saves the submitted value', async () => {
-        await SubmitMethodService.go(session.id, payload)
+        await SubmitMethodService(session.id, payload)
 
         expect(session.method).toEqual('useAbstractionData')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the user has selected to use abstraction data', () => {
         it('returns the route to the check page', async () => {
-          const result = await SubmitMethodService.go(session.id, payload)
+          const result = await SubmitMethodService(session.id, payload)
 
           expect(result.redirect).toEqual('check')
         })
 
         it('updates the updates the requirements in the session', async () => {
-          await SubmitMethodService.go(session.id, payload)
+          await SubmitMethodService(session.id, payload)
 
           expect(session.requirements).toEqual(_generatedReturnRequirements())
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -108,7 +106,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
         })
 
         it('returns the route for the select an existing requirement page', async () => {
-          const result = await SubmitMethodService.go(session.id, payload)
+          const result = await SubmitMethodService(session.id, payload)
 
           expect(result.redirect).toEqual('existing')
         })
@@ -122,7 +120,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
         })
 
         it('returns the route for the select purpose page', async () => {
-          const result = await SubmitMethodService.go(session.id, payload)
+          const result = await SubmitMethodService(session.id, payload)
 
           expect(result.redirect).toEqual('purpose/0')
         })
@@ -135,7 +133,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitMethodService.go(session.id, payload)
+        const result = await SubmitMethodService(session.id, payload)
 
         expect(result).toMatchObject({
           pageTitle: 'How do you want to set up the requirements for returns?',
@@ -152,7 +150,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for the input element', async () => {
-          const result = await SubmitMethodService.go(session.id, payload)
+          const result = await SubmitMethodService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [

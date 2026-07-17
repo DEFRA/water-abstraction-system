@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/additional-submission-options` page
  * @module AdditionalSubmissionOptionsPresenter
  */
 
-const { isQuarterlyReturnSubmissions } = require('../../../lib/dates.lib.js')
+import { isQuarterlyReturnSubmissions } from '../../../lib/dates.lib.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/additional-submission-options` page
@@ -14,7 +12,7 @@ const { isQuarterlyReturnSubmissions } = require('../../../lib/dates.lib.js')
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function additionalSubmissionOptionsPresenter(session) {
   const {
     id: sessionId,
     licence: { id: licenceId, licenceRef },
@@ -39,8 +37,4 @@ function go(session) {
     pageTitleCaption: `Licence ${licenceRef}`,
     sessionId
   }
-}
-
-module.exports = {
-  go
 }

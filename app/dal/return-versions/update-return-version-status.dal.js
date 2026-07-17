@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Updates the status of a return version
  * @module UpdateReturnVersionStatusDal
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Updates the status of a return version
@@ -14,10 +12,6 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
  * @param {string} status - The new status for the return version
  * @param {object} trx - Database transaction object to ensure all DB changes are applied, or none at all
  */
-async function go(returnVersionId, status, trx) {
+export default async function updateReturnVersionStatusDal(returnVersionId, status, trx) {
   await ReturnVersionModel.query(trx).findById(returnVersionId).patch({ status })
-}
-
-module.exports = {
-  go
 }

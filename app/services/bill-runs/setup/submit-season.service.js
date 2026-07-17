@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/type` page
  * @module SubmitSeasonService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SeasonPresenter = require('../../../presenters/bill-runs/setup/season.presenter.js')
-const SeasonValidator = require('../../../validators/bill-runs/setup/season.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SeasonPresenter from '../../../presenters/bill-runs/setup/season.presenter.js'
+import SeasonValidator from '../../../validators/bill-runs/setup/season.validator.js'
 
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/type` page
@@ -28,8 +26,8 @@ const SeasonValidator = require('../../../validators/bill-runs/setup/season.vali
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the type page including the
  * validation error details
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitSeasonService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -39,7 +37,7 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = SeasonPresenter.go(session)
+  const pageData = SeasonPresenter(session)
 
   return {
     activeNavBar: 'bill-runs',
@@ -55,7 +53,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = SeasonValidator.go(payload)
+  const validation = SeasonValidator(payload)
 
   if (!validation.error) {
     return null
@@ -66,8 +64,4 @@ function _validate(payload) {
   return {
     text: message
   }
-}
-
-module.exports = {
-  go
 }

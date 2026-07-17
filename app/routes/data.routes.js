@@ -1,13 +1,11 @@
-'use strict'
+import { dates, load, seed, tearDown } from '../controllers/data.controller.js'
 
-const DataController = require('../controllers/data.controller.js')
-
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/data/dates',
     options: {
-      handler: DataController.dates,
+      handler: dates,
       app: {
         excludeFromProd: true,
         plainOutput: true
@@ -19,7 +17,7 @@ const routes = [
     method: 'POST',
     path: '/data/load',
     options: {
-      handler: DataController.load,
+      handler: load,
       app: {
         excludeFromProd: true,
         plainOutput: true
@@ -34,7 +32,7 @@ const routes = [
     method: 'POST',
     path: '/data/seed',
     options: {
-      handler: DataController.seed,
+      handler: seed,
       app: {
         excludeFromProd: true,
         plainOutput: true
@@ -49,7 +47,7 @@ const routes = [
     method: 'POST',
     path: '/data/tear-down',
     options: {
-      handler: DataController.tearDown,
+      handler: tearDown,
       app: {
         excludeFromProd: true,
         plainOutput: true
@@ -61,5 +59,3 @@ const routes = [
     }
   }
 ]
-
-module.exports = routes

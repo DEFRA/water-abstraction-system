@@ -1,26 +1,24 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const { db } = require('../../../db/db.js')
+import { db } from '../../../db/db.js'
 
 // Thing under test
-const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
+import CheckBusyBillRunsService from '../../../app/services/bill-runs/check-busy-bill-runs.service.js'
 
 describe('Check Busy Bill Runs service', () => {
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when there are both building and cancelling bill runs', () => {
     beforeEach(() => {
-      Sinon.stub(db, 'select').resolves([{ cancelling: true, building: true }])
+      vi.spyOn(db, 'select').mockResolvedValue([{ cancelling: true, building: true }])
     })
 
     it('returns "both"', async () => {
-      const result = await CheckBusyBillRunsService.go()
+      const result = await CheckBusyBillRunsService()
 
       expect(result).toEqual('both')
     })
@@ -28,11 +26,11 @@ describe('Check Busy Bill Runs service', () => {
 
   describe('when there are cancelling bill runs', () => {
     beforeEach(() => {
-      Sinon.stub(db, 'select').resolves([{ cancelling: true, building: false }])
+      vi.spyOn(db, 'select').mockResolvedValue([{ cancelling: true, building: false }])
     })
 
     it('returns "cancelling"', async () => {
-      const result = await CheckBusyBillRunsService.go()
+      const result = await CheckBusyBillRunsService()
 
       expect(result).toEqual('cancelling')
     })
@@ -40,11 +38,11 @@ describe('Check Busy Bill Runs service', () => {
 
   describe('when there are building bill runs', () => {
     beforeEach(() => {
-      Sinon.stub(db, 'select').resolves([{ cancelling: false, building: true }])
+      vi.spyOn(db, 'select').mockResolvedValue([{ cancelling: false, building: true }])
     })
 
     it('returns "building"', async () => {
-      const result = await CheckBusyBillRunsService.go()
+      const result = await CheckBusyBillRunsService()
 
       expect(result).toEqual('building')
     })
@@ -52,11 +50,11 @@ describe('Check Busy Bill Runs service', () => {
 
   describe('when there are no building or cancelling bill runs', () => {
     beforeEach(() => {
-      Sinon.stub(db, 'select').resolves([{ cancelling: false, building: false }])
+      vi.spyOn(db, 'select').mockResolvedValue([{ cancelling: false, building: false }])
     })
 
     it('returns "none"', async () => {
-      const result = await CheckBusyBillRunsService.go()
+      const result = await CheckBusyBillRunsService()
 
       expect(result).toEqual('none')
     })

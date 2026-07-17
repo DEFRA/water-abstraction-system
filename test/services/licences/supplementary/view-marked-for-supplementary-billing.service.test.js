@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const ViewMarkedForSupplementaryBillingService = require('../../../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
+import ViewMarkedForSupplementaryBillingService from '../../../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js'
 
 describe('Licences -  View Marked For Supplementary Billing Service', () => {
   describe('when called with a valid licence ID', () => {
@@ -15,7 +16,7 @@ describe('Licences -  View Marked For Supplementary Billing Service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewMarkedForSupplementaryBillingService.go(licence.id)
+      const result = await ViewMarkedForSupplementaryBillingService(licence.id)
 
       expect(result).toEqual({
         licenceRef: licence.licenceRef,

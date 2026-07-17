@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
-const { compareStrings, generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
+import { compareStrings } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const FetchImpactedLicencesDal = require('../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js')
+import FetchImpactedLicencesDal from '../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js'
 
 describe('DAL - Fetch Impacted Licences dal', () => {
   const billingAccountId = generateUUID()
@@ -41,7 +42,7 @@ describe('DAL - Fetch Impacted Licences dal', () => {
 
   describe('when there are charge versions that match the billing account id', () => {
     it('returns an array of unique licence references', async () => {
-      const result = await FetchImpactedLicencesDal.go(billingAccountId)
+      const result = await FetchImpactedLicencesDal(billingAccountId)
 
       expect(result).toEqual([multiUseLicenceRef, singleUseLicenceRef])
     })
@@ -49,7 +50,7 @@ describe('DAL - Fetch Impacted Licences dal', () => {
 
   describe('when there are no charge versions that match the billing account id', () => {
     it('returns an empty array', async () => {
-      const result = await FetchImpactedLicencesDal.go(generateUUID())
+      const result = await FetchImpactedLicencesDal(generateUUID())
 
       expect(result).toEqual([])
     })

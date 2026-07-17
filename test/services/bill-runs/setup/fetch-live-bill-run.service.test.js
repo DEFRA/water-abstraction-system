@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Thing under test
-const FetchLiveBillRunsService = require('../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js')
+import FetchLiveBillRunsService from '../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js'
 
 describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
   const differentRegion = RegionHelper.select(0)
@@ -60,7 +61,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
     describe('for the requested region', () => {
       describe('with a matching financial year ending', () => {
         it('returns the match', async () => {
-          const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
+          const result = await FetchLiveBillRunsService(matchingRegion.id, toFinancialYearEnding)
 
           expect(result).toEqual({
             id: matchingBillRun.id,
@@ -81,7 +82,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
 
       describe('but with a different matching financial year ending', () => {
         it('is not returned as the match', async () => {
-          const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
+          const result = await FetchLiveBillRunsService(matchingRegion.id, toFinancialYearEnding)
 
           expect(nonMatchingBillRunIds).not.toContainEqual(result.id)
         })
@@ -90,7 +91,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
 
     describe('for a different region', () => {
       it('is not returned as the match', async () => {
-        const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
+        const result = await FetchLiveBillRunsService(matchingRegion.id, toFinancialYearEnding)
 
         expect(nonMatchingBillRunIds).not.toContainEqual(result.id)
       })
@@ -99,7 +100,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
 
   describe('when there is a "non-live" bill run', () => {
     it('is not returned as the match', async () => {
-      const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
+      const result = await FetchLiveBillRunsService(matchingRegion.id, toFinancialYearEnding)
 
       expect(nonMatchingBillRunIds).not.toContainEqual(result.id)
     })

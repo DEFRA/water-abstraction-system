@@ -1,13 +1,8 @@
-'use strict'
-
-const PointHelper = require('../helpers/point.helper.js')
-const PrimaryPurposeHelper = require('../helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../helpers/purpose.helper.js')
-const RegionHelper = require('../helpers/region.helper.js')
-const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
-const { generateReference } = require('../helpers/return-requirement.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
+import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
+import PurposeHelper from '../helpers/purpose.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
+import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
+import { generateLicenceRef, generateNationalGridReference, generateReference, generateUUID } from '../generators.js'
 
 /**
  * Generates the return log prefix in the format v1:regionCode:licenceRef:reference from a return requirement
@@ -101,7 +96,7 @@ function winterReturnRequirement(quarterlyReturns = false) {
 function _point(description) {
   return {
     description,
-    ngr1: PointHelper.generateNationalGridReference(),
+    ngr1: generateNationalGridReference(),
     ngr2: null,
     ngr3: null,
     ngr4: null
@@ -144,7 +139,7 @@ function _returnVersion(quarterlyReturns) {
   }
 }
 
-module.exports = {
+export default {
   returnLogPrefix,
   summerReturnRequirement,
   winterReturnRequirement

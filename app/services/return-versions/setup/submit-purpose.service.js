@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/purpose` page
  * @module SubmitPurposeService
  */
 
-const FetchPurposesService = require('./fetch-purposes.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const PurposePresenter = require('../../../presenters/return-versions/setup/purpose.presenter.js')
-const PurposeValidation = require('../../../validators/return-versions/setup/purpose.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import FetchPurposesService from './fetch-purposes.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PurposePresenter from '../../../presenters/return-versions/setup/purpose.presenter.js'
+import PurposeValidation from '../../../validators/return-versions/setup/purpose.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/purpose` page
@@ -30,9 +28,9 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the purpose page including the validation error details
  */
-async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
-  const licencePurposes = await FetchPurposesService.go(session.licenceVersion.id)
+export default async function submitPurposeService(sessionId, requirementIndex, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
+  const licencePurposes = await FetchPurposesService(session.licenceVersion.id)
 
   handleOneOptionSelected(payload, 'purposes')
 
@@ -44,7 +42,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, purposes)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
+      flashNotification(yar, 'Updated', 'Requirements for returns updated')
     }
 
     return {
@@ -93,7 +91,7 @@ async function _save(session, requirementIndex, purposes) {
 function _submittedSessionData(session, requirementIndex, purposes, licencePurposes) {
   session.requirements[requirementIndex].purposes = purposes
 
-  return PurposePresenter.go(session, requirementIndex, licencePurposes)
+  return PurposePresenter(session, requirementIndex, licencePurposes)
 }
 
 async function _validate(payload, purposesData) {
@@ -101,11 +99,7 @@ async function _validate(payload, purposesData) {
     return purpose.id
   })
 
-  const validation = PurposeValidation.go(payload, purposeIds)
+  const validation = PurposeValidation(payload, purposeIds)
 
   return formatValidationResult(validation)
-}
-
-module.exports = {
-  go
 }

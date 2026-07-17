@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module LicenceSupplementaryYearHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceSupplementaryYearModel = require('../../../app/models/licence-supplementary-year.model.js')
+import LicenceSupplementaryYearModel from '../../../app/models/licence-supplementary-year.model.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Add a new licence supplementary year record
@@ -49,7 +47,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

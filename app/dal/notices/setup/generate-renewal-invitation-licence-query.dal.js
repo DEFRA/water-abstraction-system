@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Generates the query and bindings to select a single licence ref for use in renewal invitation recipient queries
  * @module GenerateRenewalInvitationLicenceQueryDal
@@ -15,13 +13,9 @@
  *
  * @returns {object} An object containing the SQL `query` string and its `bindings`
  */
-function go(licenceRef) {
+export default function generateRenewalInvitationLicenceQueryDal(licenceRef) {
   return {
     bindings: [licenceRef],
     query: `SELECT l.licence_ref FROM public.licences l WHERE l.licence_ref = ?`
   }
-}
-
-module.exports = {
-  go
 }

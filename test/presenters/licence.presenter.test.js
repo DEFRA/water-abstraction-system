@@ -1,13 +1,14 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const PointModel = require('../../app/models/point.model.js')
-const ViewLicencesFixture = require('../support/fixtures/view-licences.fixture.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { licenceEnds } = require('../support/fixtures/licence.fixture.js')
+import LicenceFixture from '../support/fixtures/licence.fixture.js'
+import PointModel from '../../app/models/point.model.js'
+import ViewLicencesFixture from '../support/fixtures/view-licences.fixture.js'
+import { generateUUID } from '../support/generators.js'
 
 // Thing under test
-const LicencePresenter = require('../../app/presenters/licence.presenter.js')
+import * as LicencePresenter from '../../app/presenters/licence.presenter.js'
 
 describe('Licences presenter', () => {
   describe('#formatConditionTypes()', () => {
@@ -730,7 +731,7 @@ describe('Licences presenter', () => {
 
     describe('when the licence does not have an "end" date', () => {
       beforeEach(() => {
-        licence = licenceEnds()
+        licence = LicenceFixture.licenceEnds()
       })
 
       it('returns null', () => {
@@ -743,7 +744,7 @@ describe('Licences presenter', () => {
     describe('when the licence does have an "end" date', () => {
       describe('but it is in the future', () => {
         beforeEach(() => {
-          licence = licenceEnds(new Date('2099-04-01'))
+          licence = LicenceFixture.licenceEnds(new Date('2099-04-01'))
         })
 
         it('returns null', () => {
@@ -755,7 +756,7 @@ describe('Licences presenter', () => {
 
       describe('because it expired in the past', () => {
         beforeEach(() => {
-          licence = licenceEnds(new Date('2019-04-01'))
+          licence = LicenceFixture.licenceEnds(new Date('2019-04-01'))
         })
 
         it('returns "This licence expired on 1 April 2019"', () => {
@@ -770,7 +771,7 @@ describe('Licences presenter', () => {
 
       describe('because it lapsed in the past', () => {
         beforeEach(() => {
-          licence = licenceEnds()
+          licence = LicenceFixture.licenceEnds()
           licence.lapsedDate = new Date('2019-04-01')
         })
 
@@ -786,7 +787,7 @@ describe('Licences presenter', () => {
 
       describe('because it was revoked in the past', () => {
         beforeEach(() => {
-          licence = licenceEnds()
+          licence = LicenceFixture.licenceEnds()
           licence.revokedDate = new Date('2019-04-01')
         })
 

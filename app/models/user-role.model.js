@@ -1,15 +1,15 @@
-'use strict'
-
 /**
  * Model for user_roles (idm.user_roles)
  * @module UserRoleModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import RoleModel from './role.model.js'
+import UserModel from './user.model.js'
 
-class UserRoleModel extends BaseModel {
+export default class UserRoleModel extends BaseModel {
   static get tableName() {
     return 'userRoles'
   }
@@ -18,7 +18,7 @@ class UserRoleModel extends BaseModel {
     return {
       role: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'role.model',
+        modelClass: RoleModel,
         join: {
           from: 'userRoles.roleId',
           to: 'roles.id'
@@ -26,7 +26,7 @@ class UserRoleModel extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'userRoles.userId',
           to: 'users.userId'
@@ -35,5 +35,3 @@ class UserRoleModel extends BaseModel {
     }
   }
 }
-
-module.exports = UserRoleModel

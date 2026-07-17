@@ -1,18 +1,16 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewCheckService = require('../../../../../app/services/users/external/setup/view-check.service.js')
+import ViewCheckService from '../../../../../app/services/users/external/setup/view-check.service.js'
 
 describe('Users - External - Setup - View Check Service', () => {
   let session
@@ -23,21 +21,21 @@ describe('Users - External - Setup - View Check Service', () => {
     sessionData = UserSessionsFixture.unregistrationSession()
     sessionData.allLicences = true
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([{ title: 'Updated', text: 'Licences unregistered.' }])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([{ title: 'Updated', text: 'Licences unregistered.' }])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCheckService.go(session.id, yarStub)
+      const result = await ViewCheckService(session.id, yarStub)
 
       expect(result).toEqual({
         activeNavBar: 'users',
@@ -60,19 +58,19 @@ describe('Users - External - Setup - View Check Service', () => {
     })
 
     it('sets the "checkPageVisited" flag to "true"', async () => {
-      await ViewCheckService.go(session.id, yarStub)
+      await ViewCheckService(session.id, yarStub)
 
       expect(session.checkPageVisited).toBe(true)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     describe('when there is a notification', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().returns(['Test notification']) }
+        yarStub = { flash: vi.fn().mockReturnValue(['Test notification']) }
       })
 
       it('displays the notification', async () => {
-        const result = await ViewCheckService.go(session.id, yarStub)
+        const result = await ViewCheckService(session.id, yarStub)
 
         expect(result.notification).toEqual('Test notification')
       })

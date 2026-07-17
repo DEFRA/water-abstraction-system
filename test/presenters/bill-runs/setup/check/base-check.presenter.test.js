@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const BaseCheckPresenter = require('../../../../../app/presenters/bill-runs/setup/check/base-check.presenter.js')
+import * as BaseCheckPresenter from '../../../../../app/presenters/bill-runs/setup/check/base-check.presenter.js'
 
 describe('Bill Runs - Setup - Base Check presenter', () => {
   const sessionId = '98ad3a1f-8e4f-490a-be05-0aece6755466'

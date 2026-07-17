@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/licences' page
  *
  * @module SubmitLicencesService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const LicencesPresenter = require('../../../presenters/company-contacts/setup/licences.presenter.js')
-const LicencesValidator = require('../../../validators/company-contacts/setup/licences.validator.js')
-const { checkUrl } = require('../../../lib/check-page.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import LicencesPresenter from '../../../presenters/company-contacts/setup/licences.presenter.js'
+import LicencesValidator from '../../../validators/company-contacts/setup/licences.validator.js'
+import { checkUrl } from '../../../lib/check-page.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/licences' page
@@ -21,8 +19,8 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitLicencesService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'licences')
 
@@ -36,7 +34,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = LicencesPresenter.go(session)
+  const pageData = LicencesPresenter(session)
 
   return {
     error: validationResult,
@@ -51,11 +49,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = LicencesValidator.go(payload)
+  const validationResult = LicencesValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

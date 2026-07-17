@@ -1,26 +1,26 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Things we need to stub
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
+import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-const CalculateChargeRequest = require('../../../app/requests/charging-module/calculate-charge.request.js')
+import CalculateChargeRequest from '../../../app/requests/charging-module/calculate-charge.request.js'
+
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Charging Module Calculate Charge request', () => {
   const transactionData = _transactionData()
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the charge can be calculated', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequest, 'post').resolves({
+      vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -45,13 +45,13 @@ describe('Charging Module Calculate Charge request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CalculateChargeRequest.send(transactionData)
+      const result = await CalculateChargeRequest(transactionData)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the results of the calculation in the "response"', async () => {
-      const result = await CalculateChargeRequest.send(transactionData)
+      const result = await CalculateChargeRequest(transactionData)
 
       expect(result.response.body.calculation.chargeValue).toEqual(7000)
       expect(result.response.body.calculation.baseCharge).toEqual(9700)
@@ -67,7 +67,7 @@ describe('Charging Module Calculate Charge request', () => {
   describe('when the request cannot calculate a charge', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'post').resolves({
+        vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: {
             info: {
@@ -86,13 +86,13 @@ describe('Charging Module Calculate Charge request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CalculateChargeRequest.send(transactionData)
+        const result = await CalculateChargeRequest(transactionData)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CalculateChargeRequest.send(transactionData)
+        const result = await CalculateChargeRequest(transactionData)
 
         expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).toEqual('Unauthorized')
@@ -102,20 +102,20 @@ describe('Charging Module Calculate Charge request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'post').resolves({
+        vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CalculateChargeRequest.send(transactionData)
+        const result = await CalculateChargeRequest(transactionData)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CalculateChargeRequest.send(transactionData)
+        const result = await CalculateChargeRequest(transactionData)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()

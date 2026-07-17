@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const LicencesValidator = require('../../../../../app/validators/users/external/setup/licences.validator.js')
+import LicencesValidator from '../../../../../app/validators/users/external/setup/licences.validator.js'
 
 describe('Users - External - Setup - Licences Validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Users - External - Setup - Licences Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = LicencesValidator.go(payload)
+      const result = LicencesValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +27,7 @@ describe('Users - External - Setup - Licences Validator', () => {
       })
 
       it('fails validation', () => {
-        const result = LicencesValidator.go(payload)
+        const result = LicencesValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

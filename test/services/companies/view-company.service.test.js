@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-const FetchCompanyDetailsDal = require('../../../app/dal/companies/fetch-company-details.dal.js')
+import * as FetchCompanyDetailsDal from '../../../app/dal/companies/fetch-company-details.dal.js'
 
 // Thing under test
-const ViewCompanyService = require('../../../app/services/companies/view-company.service.js')
+import ViewCompanyService from '../../../app/services/companies/view-company.service.js'
 
 describe('Companies - View Company Service', () => {
   let companyDetails
@@ -28,11 +26,11 @@ describe('Companies - View Company Service', () => {
     companyAddress.address.country = null
     companyDetails.companyAddresses.push({ ...companyAddress })
 
-    Sinon.stub(FetchCompanyDetailsDal, 'go').returns(companyDetails)
+    vi.spyOn(FetchCompanyDetailsDal, 'default').mockReturnValue(companyDetails)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -42,7 +40,7 @@ describe('Companies - View Company Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewCompanyService.go(companyDetails.id, role)
+        const result = await ViewCompanyService(companyDetails.id, role)
 
         expect(result).toEqual({
           backLink: {
@@ -70,9 +68,9 @@ describe('Companies - View Company Service', () => {
       })
 
       it('calls the fetch service with role converted to camelCase', async () => {
-        await ViewCompanyService.go(companyDetails.id, role)
+        await ViewCompanyService(companyDetails.id, role)
 
-        expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'licenceHolder')).toBe(true)
+        expect(FetchCompanyDetailsDal.default).toHaveBeenCalledWith(companyDetails.id, 'licenceHolder')
       })
     })
 
@@ -82,7 +80,7 @@ describe('Companies - View Company Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewCompanyService.go(companyDetails.id, role)
+        const result = await ViewCompanyService(companyDetails.id, role)
 
         expect(result).toEqual({
           backLink: {
@@ -110,9 +108,9 @@ describe('Companies - View Company Service', () => {
       })
 
       it('calls the fetch service with role converted to camelCase', async () => {
-        await ViewCompanyService.go(companyDetails.id, role)
+        await ViewCompanyService(companyDetails.id, role)
 
-        expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'returnsTo')).toBe(true)
+        expect(FetchCompanyDetailsDal.default).toHaveBeenCalledWith(companyDetails.id, 'returnsTo')
       })
     })
   })

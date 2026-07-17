@@ -1,30 +1,28 @@
-'use strict'
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test framework dependencies
-const Sinon = require('sinon')
-
-const { returnPeriodDates } = require('../../app/lib/static-lookups.lib.js')
-const ReturnCycleHelper = require('../support/helpers/return-cycle.helper.js')
+import ReturnCycleHelper from '../support/helpers/return-cycle.helper.js'
+import { returnPeriodDates } from '../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-const ReturnPeriodLib = require('../../app/lib/return-periods.lib.js')
+import * as ReturnPeriodLib from '../../app/lib/return-periods.lib.js'
 
 describe('Return Period lib', () => {
   const year = 2024
   const nextYear = year + 1
   const lastYear = year - 1
 
-  let clock
   let testDate
   let dates
   let dueDateNextYear
 
   beforeEach(() => {
-    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
+    vi.useFakeTimers({ now: new Date(`${year}-01-01`) })
   })
 
   afterEach(() => {
-    clock.restore()
+    vi.useRealTimers()
   })
 
   describe('determineReturnsPeriods', () => {

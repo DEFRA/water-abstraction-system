@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const MeterProvidedValidator = require('../../../../app/validators/return-logs/setup/meter-provided.validator.js')
+import MeterProvidedValidator from '../../../../app/validators/return-logs/setup/meter-provided.validator.js'
 
 describe('Return Logs Setup - Meter Provided validator', () => {
   let payload
@@ -13,7 +14,7 @@ describe('Return Logs Setup - Meter Provided validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = MeterProvidedValidator.go(payload)
+        const result = MeterProvidedValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -25,7 +26,7 @@ describe('Return Logs Setup - Meter Provided validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = MeterProvidedValidator.go(payload)
+        const result = MeterProvidedValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -39,7 +40,7 @@ describe('Return Logs Setup - Meter Provided validator', () => {
       })
 
       it('fails validation with the message "Select if meter details have been provided"', () => {
-        const result = MeterProvidedValidator.go(payload)
+        const result = MeterProvidedValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select if meter details have been provided')

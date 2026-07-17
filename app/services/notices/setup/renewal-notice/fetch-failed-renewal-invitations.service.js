@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the licence refs from failed renewal invitation notifications to primary users
  * @module FetchFailedRenewalInvitationsService
  */
 
-const NotificationModel = require('../../../../models/notification.model.js')
-const { compareStrings } = require('../../../../lib/general.lib.js')
+import NotificationModel from '../../../../models/notification.model.js'
+import { compareStrings } from '../../../../lib/general.lib.js'
 
 /**
  * Fetches the licence refs from failed renewal invitation notifications to primary users
@@ -20,7 +18,7 @@ const { compareStrings } = require('../../../../lib/general.lib.js')
  * @returns {Promise<object>} An object containing the IDs of the failed notifications, plus the combined licence
  * references from them
  */
-async function go(noticeId) {
+export default async function fetchFailedRenewalInvitationsService(noticeId) {
   const notifications = await _fetch(noticeId)
 
   const licences = []
@@ -58,8 +56,4 @@ async function _fetch(eventId) {
     .where('contactType', 'primary user')
     .where('messageType', 'email')
     .whereNull('alternateNoticeId')
-}
-
-module.exports = {
-  go
 }

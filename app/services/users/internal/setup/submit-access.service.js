@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/access' page
  *
  * @module SubmitAccessService
  */
 
-const AccessPresenter = require('../../../../presenters/users/internal/setup/access.presenter.js')
-const AccessValidator = require('../../../../validators/users/internal/setup/access.validator.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
+import AccessPresenter from '../../../../presenters/users/internal/setup/access.presenter.js'
+import AccessValidator from '../../../../validators/users/internal/setup/access.validator.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/access' page
@@ -21,8 +19,8 @@ const { flashNotification } = require('../../../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function submitAccessService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -36,7 +34,7 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const pageData = AccessPresenter.go(session)
+  const pageData = AccessPresenter(session)
 
   return {
     error: validationResult,
@@ -57,11 +55,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = AccessValidator.go(payload)
+  const validationResult = AccessValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

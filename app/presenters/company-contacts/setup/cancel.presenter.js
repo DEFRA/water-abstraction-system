@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/cancel' page
  * @module CancelPresenter
  */
 
-const { abstractionAlertsLabel, selectedLiveLicences } = require('../../crm.presenter.js')
+import { abstractionAlertsLabel, selectedLiveLicences } from '../../crm.presenter.js'
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/cancel' page
@@ -14,7 +12,7 @@ const { abstractionAlertsLabel, selectedLiveLicences } = require('../../crm.pres
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function cancelPresenter(session) {
   const { abstractionAlertLicences, abstractionAlerts, company, email, licences, name } = session
 
   return {
@@ -37,8 +35,4 @@ function _pageTitle(session) {
   }
 
   return 'You are about to cancel this contact'
-}
-
-module.exports = {
-  go
 }

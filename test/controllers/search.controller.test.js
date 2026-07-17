@@ -1,18 +1,20 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const SubmitSearchService = require('../../app/services/search/submit-search.service.js')
-const ViewSearchService = require('../../app/services/search/view-search.service.js')
+import * as SubmitSearchService from '../../app/services/search/submit-search.service.js'
+import * as ViewSearchService from '../../app/services/search/view-search.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
+
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Search controller', () => {
   let server
@@ -23,16 +25,15 @@ describe('Search controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    Sinon.stub(server.logger, 'error')
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -50,7 +51,7 @@ describe('Search controller', () => {
       describe('when the request succeeds', () => {
         describe('and provides the search page', () => {
           beforeEach(async () => {
-            Sinon.stub(ViewSearchService, 'go').resolves({
+            vi.spyOn(ViewSearchService, 'default').mockResolvedValue({
               pageTitle: 'Search'
             })
           })
@@ -66,7 +67,7 @@ describe('Search controller', () => {
         describe('and shows search results', () => {
           beforeEach(async () => {
             getOptions.url = '/search?page=1'
-            Sinon.stub(ViewSearchService, 'go').resolves({
+            vi.spyOn(ViewSearchService, 'default').mockResolvedValue({
               pageTitle: 'Search results for "searchthis"',
               pagination: { currentPageNumber: 1, numberOfPages: 2, showingMessage: 'Showing all 2 matches' },
               query: 'searchthis',
@@ -97,7 +98,7 @@ describe('Search controller', () => {
         beforeEach(async () => {
           postOptions.payload.query = 'searchthis'
 
-          Sinon.stub(SubmitSearchService, 'go').resolves({ redirect: '/system/search?page=1' })
+          vi.spyOn(SubmitSearchService, 'default').mockResolvedValue({ redirect: '/system/search?page=1' })
         })
 
         it('redirects to the first page of results', async () => {
@@ -112,7 +113,7 @@ describe('Search controller', () => {
         beforeEach(async () => {
           postOptions.payload.query = ''
 
-          Sinon.stub(SubmitSearchService, 'go').resolves({
+          vi.spyOn(SubmitSearchService, 'default').mockResolvedValue({
             error: {
               errorList: [
                 {

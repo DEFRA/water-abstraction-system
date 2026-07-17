@@ -1,7 +1,8 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-const PaperReturnValidator = require('../../../../app/validators/notices/setup/paper-return.validator.js')
+import PaperReturnValidator from '../../../../app/validators/notices/setup/paper-return.validator.js'
 
 describe('Paper Return Validator', () => {
   let payload
@@ -12,7 +13,7 @@ describe('Paper Return Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = PaperReturnValidator.go(payload)
+      const result = PaperReturnValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +26,7 @@ describe('Paper Return Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = PaperReturnValidator.go(payload)
+      const result = PaperReturnValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

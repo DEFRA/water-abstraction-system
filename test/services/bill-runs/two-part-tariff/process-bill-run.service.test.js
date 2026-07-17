@@ -1,16 +1,14 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
+import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
+import * as MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ProcessBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
+import ProcessBillRunService from '../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js'
 
 describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   const billingPeriods = [{ startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }]
@@ -20,43 +18,39 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   let notifierStub
 
   beforeEach(async () => {
-    billRunPatchStub = Sinon.stub().resolves()
+    billRunPatchStub = vi.fn().mockResolvedValue()
 
-    Sinon.stub(BillRunModel, 'query').returns({
-      findById: Sinon.stub().returnsThis(),
+    vi.spyOn(BillRunModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
       patch: billRunPatchStub
     })
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
-  })
-
-  afterEach(() => {
-    Sinon.restore()
-    delete globalThis.GlobalNotifier
+    vi.spyOn(HandleErroredBillRunService, 'default').mockResolvedValue()
   })
 
   describe('when the service is called', () => {
     describe('and there are no licences to be billed', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(false)
+        vi.spyOn(MatchAndAllocateService, 'default').mockResolvedValue(false)
       })
 
       it('sets the bill run status first to "processing" and then to "empty"', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(billRunPatchStub.calledTwice).toBe(true)
-        expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
-        expect(billRunPatchStub.secondCall.firstArg).toEqual({ status: 'empty' })
+        expect(billRunPatchStub).toHaveBeenCalledTimes(2)
+        expect(billRunPatchStub.mock.calls[0][0]).toEqual({ status: 'processing' })
+        expect(billRunPatchStub.mock.calls[1][0]).toEqual({ status: 'empty' })
       })
 
       it('logs the time taken', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
-        const args = notifierStub.omg.firstCall.args
+        const args = notifierStub.omg.mock.calls[0]
 
         expect(args[0]).toEqual('Process bill run complete')
         expect(args[1].timeTakenMs).toBeDefined()
@@ -67,21 +61,21 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
 
     describe('and licences are matched and allocated', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(true)
+        vi.spyOn(MatchAndAllocateService, 'default').mockResolvedValue(true)
       })
 
       it('sets the bill run status first to "processing" and then to "review"', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(billRunPatchStub.calledTwice).toBe(true)
-        expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
-        expect(billRunPatchStub.secondCall.firstArg).toEqual({ status: 'review' })
+        expect(billRunPatchStub).toHaveBeenCalledTimes(2)
+        expect(billRunPatchStub.mock.calls[0][0]).toEqual({ status: 'processing' })
+        expect(billRunPatchStub.mock.calls[1][0]).toEqual({ status: 'review' })
       })
 
       it('logs the time taken', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
-        const args = notifierStub.omg.firstCall.args
+        const args = notifierStub.omg.mock.calls[0]
 
         expect(args[0]).toEqual('Process bill run complete')
         expect(args[1].timeTakenMs).toBeDefined()
@@ -94,20 +88,21 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   describe('when the service errors', () => {
     describe('because matching and allocating fails', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').throws('MatchAndAllocateService has gone pop')
-        Sinon.stub(HandleErroredBillRunService, 'go')
+        vi.spyOn(MatchAndAllocateService, 'default').mockRejectedValue(
+          Object.assign(new Error(), { name: 'MatchAndAllocateService has gone pop' })
+        )
       })
 
       it('calls HandleErroredBillRunService', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.go.called).toBe(true)
+        expect(HandleErroredBillRunService.default).toHaveBeenCalled()
       })
 
       it('logs the error', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Process bill run failed')
         expect(args[1].billRun.id).toEqual(billRun.id)

@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const CheckLicenceMatchesPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js')
+import CheckLicenceMatchesPresenter from '../../../../../app/presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js'
 
 describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter', () => {
   let licenceMonitoringStations
@@ -27,7 +28,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckLicenceMatchesPresenter.go(session)
+      const result = CheckLicenceMatchesPresenter(session)
 
       expect(result).toEqual({
         backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`, text: 'Back' },
@@ -85,7 +86,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
     describe('the "restrictions" property', () => {
       describe('when there are selected "alertThresholds"', () => {
         it('returns only the thresholds previously selected', () => {
-          const result = CheckLicenceMatchesPresenter.go(session)
+          const result = CheckLicenceMatchesPresenter(session)
 
           expect(result.restrictions[0]).toEqual({
             abstractionPeriod: '1 February to 1 January',
@@ -105,7 +106,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
 
         describe('the "action" property', () => {
           it('returns the correct action', () => {
-            const result = CheckLicenceMatchesPresenter.go(session)
+            const result = CheckLicenceMatchesPresenter(session)
 
             expect(result.restrictions[0].action).toEqual({
               link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.one.id}`,
@@ -117,7 +118,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
         describe('the "alertDate" property', () => {
           describe('when the "statusUpdatedAt" is not a date', () => {
             it('returns the correct action', () => {
-              const result = CheckLicenceMatchesPresenter.go(session)
+              const result = CheckLicenceMatchesPresenter(session)
 
               expect(result.restrictions[0].alertDate).toEqual('')
             })
@@ -133,7 +134,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
             })
 
             it('returns the correct action', () => {
-              const result = CheckLicenceMatchesPresenter.go(session)
+              const result = CheckLicenceMatchesPresenter(session)
 
               expect(result.restrictions[0].alertDate).toEqual('12 May 2025')
             })
@@ -146,9 +147,9 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
           })
 
           it('returns only the thresholds previously selected and not removed', () => {
-            const result = CheckLicenceMatchesPresenter.go(session)
+            const result = CheckLicenceMatchesPresenter(session)
 
-            expect(result.restrictions.length).toEqual(2)
+            expect(result.restrictions).toHaveLength(2)
 
             expect(result.restrictions).toEqual([
               {
@@ -188,7 +189,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
             })
 
             it('should not show any remove links for the remaining restriction', () => {
-              const result = CheckLicenceMatchesPresenter.go(session)
+              const result = CheckLicenceMatchesPresenter(session)
 
               expect(result.restrictions).toEqual([
                 {

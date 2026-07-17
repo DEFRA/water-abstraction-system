@@ -1,13 +1,14 @@
-'use strict'
+// Test framework
+import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const FetchReturnLogService = require('../../../../app/services/return-logs/setup/fetch-return-log.service.js')
+import FetchReturnLogService from '../../../../app/services/return-logs/setup/fetch-return-log.service.js'
 
 describe('Return Logs - Setup - Fetch Return Log service', () => {
   let licence
@@ -43,7 +44,7 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
     })
 
     it('returns the return log instance', async () => {
-      const result = await FetchReturnLogService.go(returnLog.id)
+      const result = await FetchReturnLogService(returnLog.id)
 
       expect(result).toEqual({
         id: returnLog.id,
@@ -64,7 +65,7 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
       })
 
       it('returns a count of the associated return submissions', async () => {
-        const result = await FetchReturnLogService.go(returnLog.id)
+        const result = await FetchReturnLogService(returnLog.id)
 
         expect(result.submissionCount).toEqual(2)
       })
@@ -73,7 +74,7 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
 
   describe('when a matching return log does not exist', () => {
     it('returns undefined', async () => {
-      const result = await FetchReturnLogService.go(generateUUID())
+      const result = await FetchReturnLogService(generateUUID())
 
       expect(result).toBeUndefined()
     })

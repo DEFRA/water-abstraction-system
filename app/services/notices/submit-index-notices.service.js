@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
  * @module SubmitIndexNoticesService
  */
 
-const FetchNoticesService = require('./fetch-notices.service.js')
-const IndexValidator = require('../../validators/notices/index.validator.js')
-const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
-const { clearFilters, handleOneOptionSelected } = require('../../lib/submit-page.lib.js')
+import FetchNoticesService from './fetch-notices.service.js'
+import IndexValidator from '../../validators/notices/index.validator.js'
+import NoticesIndexPresenter from '../../presenters/notices/index-notices.presenter.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
+import { clearFilters, handleOneOptionSelected } from '../../lib/submit-page.lib.js'
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -25,7 +23,7 @@ const { clearFilters, handleOneOptionSelected } = require('../../lib/submit-page
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the index page
  * else the data needed to re-render the page
  */
-async function go(payload, yar, auth, page) {
+export default async function submitIndexNoticesService(payload, yar, auth, page) {
   const filterCleared = clearFilters(payload, yar, 'noticesFilter')
 
   if (filterCleared) {
@@ -49,11 +47,11 @@ async function go(payload, yar, auth, page) {
 }
 
 async function _replayView(payload, error, page, savedFilters, auth) {
-  const { results: notices, total: totalNumber } = await FetchNoticesService.go(savedFilters, page)
+  const { results: notices, total: totalNumber } = await FetchNoticesService(savedFilters, page)
 
-  const pagination = PaginatorPresenter.go(totalNumber, page, `/system/notices`, notices.length, 'notices')
+  const pagination = PaginatorPresenter(totalNumber, page, `/system/notices`, notices.length, 'notices')
 
-  const pageData = NoticesIndexPresenter.go(notices, auth)
+  const pageData = NoticesIndexPresenter(notices, auth)
 
   return {
     activeNavBar: 'notices',
@@ -99,11 +97,7 @@ function _savedFilters(yar) {
 }
 
 function _validate(payload) {
-  const validationResult = IndexValidator.go(payload)
+  const validationResult = IndexValidator(payload)
 
   return formatValidationResult(validationResult)
-}
-
-module.exports = {
-  go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Model for sessions
  * @module SessionModel
  */
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 /**
  * Used for managing temporary session data, for example, during set up journeys
@@ -15,7 +13,7 @@ const BaseModel = require('./base.model.js')
  * > This model includes functionality to elevate the properties of `data` onto the instance when fetched. But if `data`
  * > contains these properties they will override the existing properties of the session instance.
  */
-class SessionModel extends BaseModel {
+export default class SessionModel extends BaseModel {
   static get tableName() {
     return 'sessions'
   }
@@ -96,5 +94,3 @@ class SessionModel extends BaseModel {
     return this.$query().patch({ data: currentData })
   }
 }
-
-module.exports = SessionModel

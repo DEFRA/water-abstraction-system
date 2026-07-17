@@ -1,15 +1,17 @@
-'use strict'
-
 /**
  * Model for return_requirements (water.return_requirements)
  * @module ReturnRequirementModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import PointModel from './point.model.js'
+import ReturnLogModel from './return-log.model.js'
+import ReturnRequirementPurposeModel from './return-requirement-purpose.model.js'
+import ReturnVersionModel from './return-version.model.js'
 
-class ReturnRequirementModel extends BaseModel {
+export default class ReturnRequirementModel extends BaseModel {
   static get tableName() {
     return 'returnRequirements'
   }
@@ -18,7 +20,7 @@ class ReturnRequirementModel extends BaseModel {
     return {
       points: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'point.model',
+        modelClass: PointModel,
         join: {
           from: 'returnRequirements.id',
           through: {
@@ -30,7 +32,7 @@ class ReturnRequirementModel extends BaseModel {
       },
       returnLogs: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-log.model',
+        modelClass: ReturnLogModel,
         join: {
           from: 'returnRequirements.id',
           to: 'returnLogs.returnRequirementId'
@@ -38,7 +40,7 @@ class ReturnRequirementModel extends BaseModel {
       },
       returnRequirementPurposes: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-requirement-purpose.model',
+        modelClass: ReturnRequirementPurposeModel,
         join: {
           from: 'returnRequirements.id',
           to: 'returnRequirementPurposes.returnRequirementId'
@@ -46,7 +48,7 @@ class ReturnRequirementModel extends BaseModel {
       },
       returnVersion: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'return-version.model',
+        modelClass: ReturnVersionModel,
         join: {
           from: 'returnRequirements.returnVersionId',
           to: 'returnVersions.id'
@@ -55,5 +57,3 @@ class ReturnRequirementModel extends BaseModel {
     }
   }
 }
-
-module.exports = ReturnRequirementModel

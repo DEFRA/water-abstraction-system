@@ -1,27 +1,23 @@
-'use strict'
+// Test framework
+import { vi } from 'vitest'
 
-const SessionModel = require('../../../app/models/session.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import SessionModel from '../../../app/models/session.model.js'
+import { generateUUID } from '../generators.js'
 
 /**
  * Creates a stubbed instance of the SessionModel for testing purposes.
  *
- * @param {sinon} sinon - The sinon sandbox or instance.
  * @param {object} sessionData - The raw data to populate the model with.
  *
  * @returns {module:SessionModel} A model instance with stubbed methods.
  */
-function build(sinon, sessionData) {
+export default function sessionStub(sessionData) {
   const session = SessionModel.fromJson({
     id: generateUUID(),
     ...sessionData
   })
 
-  sinon.stub(session, '$update').resolves(session)
+  vi.spyOn(session, '$update').mockResolvedValue(session)
 
   return session
-}
-
-module.exports = {
-  build
 }

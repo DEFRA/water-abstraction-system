@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
+import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Thing under test
-const CommunicationsPresenter = require('../../../../app/presenters/users/external/communications.presenter.js')
+import CommunicationsPresenter from '../../../../app/presenters/users/external/communications.presenter.js'
 
 describe('Users - External - Communications presenter', () => {
   let back
@@ -22,7 +23,7 @@ describe('Users - External - Communications presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = CommunicationsPresenter.go(user, notifications, viewingUserScope, back)
+    const result = CommunicationsPresenter(user, notifications, viewingUserScope, back)
 
     expect(result).toEqual({
       activeNavBar: 'users',

@@ -1,25 +1,23 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
-const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
-const SessionModel = require('../../../../app/models/session.model.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const UserHelper = require('../../../support/helpers/user.helper.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../../../app/models/return-log.model.js'
+import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import SessionModel from '../../../../app/models/session.model.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import UserHelper from '../../../support/helpers/user.helper.js'
 
 // Things we need to stub
-const CreateReturnLinesService = require('../../../../app/services/return-logs/setup/create-return-lines.service.js')
-const CreateReturnSubmissionService = require('../../../../app/services/return-logs/setup/create-return-submission.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const GenerateReturnSubmissionMetadata = require('../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js')
+import * as CreateReturnLinesService from '../../../../app/services/return-logs/setup/create-return-lines.service.js'
+import * as CreateReturnSubmissionService from '../../../../app/services/return-logs/setup/create-return-submission.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as GenerateReturnSubmissionMetadata from '../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js'
 
 // Thing under test
-const SubmitCheckService = require('../../../../app/services/return-logs/setup/submit-check.service.js')
+import SubmitCheckService from '../../../../app/services/return-logs/setup/submit-check.service.js'
 
 describe('Return Logs Setup - Submit Check service', () => {
   let licence
@@ -27,12 +25,6 @@ describe('Return Logs Setup - Submit Check service', () => {
   let session
   let sessionData
   let user
-
-  let createReturnLinesServiceStub
-  let createReturnSubmissionServiceStub
-  let fetchSessionStub
-  let generateReturnSubmissionMetadataStub
-
   const mockGeneratedMetadata = {
     generated: 'metadata',
     source: 'test-stub'
@@ -85,80 +77,78 @@ describe('Return Logs Setup - Submit Check service', () => {
       meterProvided: false
     }
 
-    generateReturnSubmissionMetadataStub = Sinon.stub(GenerateReturnSubmissionMetadata, 'go').returns(
-      mockGeneratedMetadata
-    )
+    vi.spyOn(GenerateReturnSubmissionMetadata, 'default').mockReturnValue(mockGeneratedMetadata)
 
-    createReturnSubmissionServiceStub = Sinon.stub(CreateReturnSubmissionService, 'go').resolves({
+    vi.spyOn(CreateReturnSubmissionService, 'default').mockResolvedValue({
       id: mockNewReturnSubmissionId
     })
 
-    createReturnLinesServiceStub = Sinon.stub(CreateReturnLinesService, 'go').resolves([])
+    vi.spyOn(CreateReturnLinesService, 'default').mockResolvedValue([])
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with valid data', () => {
     it('updates the return log status to completed', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
       expect(updatedReturnLog.status).toEqual('completed')
     })
 
     it('updates the return log received date', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
       expect(updatedReturnLog.receivedDate).toEqual(new Date('2024-01-01'))
     })
 
     it('updates the return log updatedAt date', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
       expect(updatedReturnLog.updatedAt).not.toEqual(returnLog.updatedAt)
     })
 
     it('deletes the session', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
       const deletedSession = await SessionModel.query().findById(session.id)
       expect(deletedSession).toBeUndefined()
     })
 
     it('generates metadata for the return submission', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
-      const callArgs = generateReturnSubmissionMetadataStub.firstCall.args
+      const callArgs = GenerateReturnSubmissionMetadata.default.mock.calls[0]
       expect(callArgs[0]).toBeInstanceOf(SessionModel)
     })
 
     it('calls CreateReturnSubmissionService with correct parameters', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
-      const callArgs = createReturnSubmissionServiceStub.firstCall.args
+      const callArgs = CreateReturnSubmissionService.default.mock.calls[0]
       expect(callArgs[0]).toEqual(mockGeneratedMetadata)
       expect(callArgs[1]).toBeInstanceOf(SessionModel)
       expect(callArgs[3]).toEqual(user)
     })
 
     it('calls CreateReturnLinesService with correct parameters', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
-      const callArgs = createReturnLinesServiceStub.firstCall.args
+      const callArgs = CreateReturnLinesService.default.mock.calls[0]
       expect(callArgs[0]).toEqual(mockNewReturnSubmissionId)
       expect(callArgs[1]).toBeInstanceOf(SessionModel)
     })
 
     it('returns the original returnLogId', async () => {
-      const result = await SubmitCheckService.go(session.id, user)
+      const result = await SubmitCheckService(session.id, user)
 
       expect(result).toEqual({ returnLogId: returnLog.id })
     })
@@ -179,13 +169,13 @@ describe('Return Logs Setup - Submit Check service', () => {
           }
         ]
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns the original returnLogId', async () => {
-        const result = await SubmitCheckService.go(session.id, user)
+        const result = await SubmitCheckService(session.id, user)
 
         expect(result).toEqual({ returnLogId: returnLog.id })
       })
@@ -207,13 +197,13 @@ describe('Return Logs Setup - Submit Check service', () => {
         }
       ]
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      fetchSessionStub.resolves(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns the page data including a validation error', async () => {
-      const result = await SubmitCheckService.go(session.id, user)
+      const result = await SubmitCheckService(session.id, user)
 
       expect(result).toEqual({
         abstractionPeriod: null,

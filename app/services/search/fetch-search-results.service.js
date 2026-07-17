@@ -1,13 +1,10 @@
-'use strict'
-
 /**
  * Handles fetching a list of matching search results for the /search page
  * @module FetchSearchResultsService
  */
 
-const DatabaseConfig = require('../../../config/database.config.js')
-
-const { db } = require('../../../db/db.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import { db } from '../../../db/db.js'
 
 const BILLING_ACCOUNT_SQL = `
   SELECT
@@ -108,7 +105,7 @@ const USER_SQL = `
  * @returns {Promise<object>} The list of IDs of the records by search order and the total number of matching rows that
  * exist in the database
  */
-async function go(query, resultTypes, page) {
+export default async function fetchSearchResultsService(query, resultTypes, page) {
   if (resultTypes.length === 0) {
     return { results: [], total: 0 }
   }
@@ -250,8 +247,4 @@ function _userSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) 
     `)
     countSqls.params.push(partialQuery)
   }
-}
-
-module.exports = {
-  go
 }

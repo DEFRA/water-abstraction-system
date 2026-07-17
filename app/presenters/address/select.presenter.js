@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `address/{sessionId}/select` page
  * @module SelectPresenter
@@ -13,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, addresses) {
+export default function selectPresenter(session, addresses) {
   const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {
@@ -41,8 +39,4 @@ function _addresses(addresses) {
   }
 
   return displayAddresses
-}
-
-module.exports = {
-  go
 }

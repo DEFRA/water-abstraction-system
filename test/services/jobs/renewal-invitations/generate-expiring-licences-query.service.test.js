@@ -1,12 +1,13 @@
-'use strict'
+// Test framework
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const { db } = require('../../../../db/db.js')
-const { tomorrow, yesterday } = require('../../../support/general.js')
+import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import { db } from '../../../../db/db.js'
+import { tomorrow, yesterday } from '../../../support/general.js'
 
 // Thing under test
-const GenerateExpiringLicencesQueryService = require('../../../../app/services/jobs/renewal-invitations/generate-expiring-licences-query.service.js')
+import GenerateExpiringLicencesQueryService from '../../../../app/services/jobs/renewal-invitations/generate-expiring-licences-query.service.js'
 
 describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service', () => {
   let afterExpiredDate
@@ -26,7 +27,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
 
   describe('when called', () => {
     it('returns the expected query', () => {
-      const result = GenerateExpiringLicencesQueryService.go(expiredDate)
+      const result = GenerateExpiringLicencesQueryService(expiredDate)
 
       expect(result).toEqual({
         bindings: [expiredDate],
@@ -56,7 +57,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns no results', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService.go(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([])
@@ -69,7 +70,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns no results', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService.go(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([])
@@ -82,7 +83,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns no results', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService.go(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([])
@@ -96,7 +97,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
           })
 
           it('returns no results', async () => {
-            const { bindings, query } = GenerateExpiringLicencesQueryService.go(expiredDate)
+            const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
             const { rows } = await db.raw(query, bindings)
 
             expect(rows).toEqual([])
@@ -109,7 +110,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
           })
 
           it('returns no results', async () => {
-            const { bindings, query } = GenerateExpiringLicencesQueryService.go(expiredDate)
+            const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
             const { rows } = await db.raw(query, bindings)
 
             expect(rows).toEqual([])
@@ -125,7 +126,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns the expected licences', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService.go(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([{ licence_ref: licence.licenceRef }])
@@ -138,7 +139,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns the expected licences', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService.go(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([{ licence_ref: licence.licenceRef }])
@@ -151,7 +152,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns the expected licences', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService.go(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([{ licence_ref: licence.licenceRef }])

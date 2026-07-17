@@ -1,10 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
+import UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
 
 // Thing under test
-const CheckPresenter = require('../../../../../app/presenters/users/external/setup/check.presenter.js')
+import CheckPresenter from '../../../../../app/presenters/users/external/setup/check.presenter.js'
 
 describe('Users - External - Setup - Check Presenter', () => {
   let session
@@ -16,7 +17,7 @@ describe('Users - External - Setup - Check Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckPresenter.go(session)
+      const result = CheckPresenter(session)
 
       expect(result).toEqual({
         activeNavBar: 'users',
@@ -38,7 +39,7 @@ describe('Users - External - Setup - Check Presenter', () => {
   describe('the "warning" property', () => {
     describe('when "all licences" was selected', () => {
       it('returns a message specific for "All licences"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.warning).toEqual({
           iconFallbackText: 'Warning',
@@ -54,7 +55,7 @@ describe('Users - External - Setup - Check Presenter', () => {
       })
 
       it('returns a message specific for one licence', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.warning).toEqual({
           iconFallbackText: 'Warning',
@@ -70,7 +71,7 @@ describe('Users - External - Setup - Check Presenter', () => {
       })
 
       it('returns a message specific for one licence', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.warning).toEqual({
           iconFallbackText: 'Warning',

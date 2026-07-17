@@ -1,11 +1,11 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Thing under test
-const BaseUsersPresenter = require('../../../app/presenters/users/base-users.presenter.js')
+import * as BaseUsersPresenter from '../../../app/presenters/users/base-users.presenter.js'
 
 describe('Users - Base Users presenter', () => {
   describe('#formatLicencesToUnlink', () => {

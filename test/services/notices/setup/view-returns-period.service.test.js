@@ -1,20 +1,17 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ReturnsPeriodService = require('../../../../app/services/notices/setup/view-returns-period.service.js')
+import ReturnsPeriodService from '../../../../app/services/notices/setup/view-returns-period.service.js'
 
 describe('Notices - Setup - View Returns Period service', () => {
-  let clock
   let referenceCode
   let session
   let sessionData
@@ -24,23 +21,23 @@ describe('Notices - Setup - View Returns Period service', () => {
 
     sessionData = { referenceCode, noticeType: 'invitations' }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     const testDate = new Date('2024-12-01')
 
-    clock = Sinon.useFakeTimers(testDate)
+    vi.useFakeTimers({ now: testDate })
   })
 
   afterAll(() => {
-    Sinon.restore()
-    clock.restore()
+    vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   describe('when provided no params', () => {
     it('correctly presents the data', async () => {
-      const result = await ReturnsPeriodService.go(session.id)
+      const result = await ReturnsPeriodService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

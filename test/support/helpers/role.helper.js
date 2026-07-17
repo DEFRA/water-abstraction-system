@@ -1,12 +1,12 @@
-'use strict'
-
 /**
  * @module RoleHelper
  */
 
-const RoleModel = require('../../../app/models/role.model.js')
-const { selectRandomEntry } = require('../general.js')
-const { data: roles } = require('../../../db/seeds/data/roles.js')
+import RoleModel from '../../../app/models/role.model.js'
+import { data as roles } from '../../../db/seeds/data/roles.js'
+import { selectRandomEntry } from '../general.js'
+
+const data = roles
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -30,7 +30,7 @@ function select(index = -1) {
   return RoleModel.fromJson(selectRandomEntry(roles))
 }
 
-module.exports = {
-  data: roles,
+export default {
+  data,
   select
 }

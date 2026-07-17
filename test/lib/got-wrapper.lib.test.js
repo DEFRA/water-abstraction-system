@@ -1,12 +1,15 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-const { HTTP_STATUS_CREATED, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
 
 // Test framework dependencies
-const Nock = require('nock')
+import Nock from 'nock'
 
 // Thing under test
-const { gotWrapper } = require('../../app/lib/got-wrapper.lib.js')
+import { gotWrapper } from '../../app/lib/got-wrapper.lib.js'
+
+const { HTTP_STATUS_CREATED, HTTP_STATUS_OK } = http2.constants
 
 describe('GotWrapperLib', () => {
   let request

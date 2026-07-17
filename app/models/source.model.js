@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Model for sources (water.sources)
  * @module SourceModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
+import PointModel from './point.model.js'
 
-class SourceModel extends BaseModel {
+export default class SourceModel extends BaseModel {
   static get tableName() {
     return 'sources'
   }
@@ -18,7 +17,7 @@ class SourceModel extends BaseModel {
     return {
       points: {
         relation: Model.HasManyRelation,
-        modelClass: 'point.model',
+        modelClass: PointModel,
         join: {
           from: 'sources.id',
           to: 'points.sourceId'
@@ -27,5 +26,3 @@ class SourceModel extends BaseModel {
     }
   }
 }
-
-module.exports = SourceModel

@@ -1,15 +1,15 @@
-'use strict'
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-
-// Test framework dependencies
-const Sinon = require('sinon')
+import http2 from 'node:http2'
 
 // Things we need to stub
-const CompaniesHouseRequest = require('../../../app/requests/companies-house.request.js')
+import * as CompaniesHouseRequest from '../../../app/requests/companies-house.request.js'
 
 // Thing under test
-const SearchCompaniesRequest = require('../../../app/requests/companies-house/search-companies.request.js')
+import SearchCompaniesRequest from '../../../app/requests/companies-house/search-companies.request.js'
+
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Companies House - Search Companies request', () => {
   const matches = [
@@ -22,12 +22,12 @@ describe('Companies House - Search Companies request', () => {
   const queryString = 'Example Ltd'
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
     beforeEach(async () => {
-      Sinon.stub(CompaniesHouseRequest, 'get').resolves({
+      vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -40,21 +40,21 @@ describe('Companies House - Search Companies request', () => {
     })
 
     it('hits the correct endpoint', async () => {
-      await SearchCompaniesRequest.send(queryString)
+      await SearchCompaniesRequest(queryString)
 
-      const requestArgs = CompaniesHouseRequest.get.firstCall.args
+      const requestArgs = CompaniesHouseRequest.getRequest.mock.calls[0]
 
       expect(requestArgs[0]).toEqual('search/companies')
     })
 
     it('returns a "true" success status', async () => {
-      const result = await SearchCompaniesRequest.send(queryString)
+      const result = await SearchCompaniesRequest(queryString)
 
       expect(result.succeeded).toBe(true)
     })
 
     it('returns the matching addresses', async () => {
-      const result = await SearchCompaniesRequest.send(queryString)
+      const result = await SearchCompaniesRequest(queryString)
 
       expect(result.matches).toEqual(matches)
     })
@@ -63,7 +63,7 @@ describe('Companies House - Search Companies request', () => {
   describe('when the request cannot lookup companies', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(CompaniesHouseRequest, 'get').resolves({
+        vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: {
             statusCode: HTTP_STATUS_NOT_FOUND,
@@ -74,13 +74,13 @@ describe('Companies House - Search Companies request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns an error in the "response"', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.response.body).toEqual({
           statusCode: HTTP_STATUS_NOT_FOUND,
@@ -90,7 +90,7 @@ describe('Companies House - Search Companies request', () => {
       })
 
       it('does not returns any matches', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.response.body.items).toBeUndefined()
         expect(result.matches).toBeInstanceOf(Array)
@@ -100,7 +100,7 @@ describe('Companies House - Search Companies request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(CompaniesHouseRequest, 'get').resolves({
+        vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms"),
           matches: []
@@ -108,13 +108,13 @@ describe('Companies House - Search Companies request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.response.statusCode).toBeUndefined()
         expect(result.response.body).toBeUndefined()
@@ -122,7 +122,7 @@ describe('Companies House - Search Companies request', () => {
       })
 
       it('does not returns any matches', async () => {
-        const result = await SearchCompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest(queryString)
 
         expect(result.matches).toBeDefined()
         expect(result.matches).toBeInstanceOf(Array)

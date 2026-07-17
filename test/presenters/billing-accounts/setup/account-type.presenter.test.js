@@ -1,11 +1,12 @@
-'use strict'
+// Test framework
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-const AccountTypePresenter = require('../../../../app/presenters/billing-accounts/setup/account-type.presenter.js')
+import AccountTypePresenter from '../../../../app/presenters/billing-accounts/setup/account-type.presenter.js'
 
 describe('Billing Accounts - Setup - Account Type Presenter', () => {
   let session
@@ -19,7 +20,7 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AccountTypePresenter.go(session)
+      const result = AccountTypePresenter(session)
 
       expect(result).toEqual({
         accountType: null,
@@ -41,7 +42,7 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
       })
 
       it('returns page data for the view', () => {
-        const result = AccountTypePresenter.go(session)
+        const result = AccountTypePresenter(session)
 
         expect(result.accountType).toEqual(session.accountType)
       })
@@ -54,7 +55,7 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
       })
 
       it('returns page data for the view', () => {
-        const result = AccountTypePresenter.go(session)
+        const result = AccountTypePresenter(session)
 
         expect(result.accountType).toEqual(session.accountType)
         expect(result.individualName).toEqual(session.individualName)

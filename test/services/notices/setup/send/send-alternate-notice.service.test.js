@@ -1,21 +1,19 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
+// Test framework
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
+import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
+import { generateUUID } from '../../../../support/generators.js'
 
 // Things we need to stub
-const NotificationModel = require('../../../../../app/models/notification.model.js')
-const RenewalInvitationAlternateNoticeService = require('../../../../../app/services/notices/setup/send/renewal-invitation-alternate-notice.service.js')
-const ReturnsInvitationAlternateNoticeService = require('../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js')
-const SendLetterNotificationService = require('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
+import * as RenewalInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/renewal-invitation-alternate-notice.service.js'
+import * as ReturnsInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js'
+import * as SendLetterNotificationService from '../../../../../app/services/notices/setup/send/send-letter-notification.service.js'
+import NotificationModel from '../../../../../app/models/notification.model.js'
 
 // Thing under test
-const SendAlternateNoticeService = require('../../../../../app/services/notices/setup/send/send-alternate-notice.service.js')
+import SendAlternateNoticeService from '../../../../../app/services/notices/setup/send/send-alternate-notice.service.js'
 
 describe('Notices - Setup - Send - Send Alternate Notice service', () => {
   const letterPlaintext =
@@ -30,8 +28,6 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
   let failedNotificationId
   let mainNotice
   let notificationPatchStub
-  let sendLetterNotificationStub
-
   beforeEach(() => {
     mainNotice = NoticesFixture.returnsInvitation()
     failedNotificationId = generateUUID()
@@ -42,7 +38,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
 
     alternateNotification = NotificationsFixture.returnsInvitationLetter(alternateNotice)
 
-    sendLetterNotificationStub = Sinon.stub(SendLetterNotificationService, 'go').resolves({
+    vi.spyOn(SendLetterNotificationService, 'default').mockResolvedValue({
       id: alternateNotification.id,
       notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
       notifyStatus: 'created',
@@ -50,22 +46,22 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
       status: 'pending'
     })
 
-    notificationPatchStub = Sinon.stub().returnsThis()
-    Sinon.stub(NotificationModel, 'query').returns({
-      findById: Sinon.stub().returnsThis(),
+    notificationPatchStub = vi.fn().mockReturnThis()
+    vi.spyOn(NotificationModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
       patch: notificationPatchStub,
-      whereIn: Sinon.stub().returnsThis(),
-      whereNull: Sinon.stub().returnsThis()
+      whereIn: vi.fn().mockReturnThis(),
+      whereNull: vi.fn().mockReturnThis()
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the main notice has failed primary user email notifications', () => {
     beforeEach(() => {
-      Sinon.stub(ReturnsInvitationAlternateNoticeService, 'go').resolves({
+      vi.spyOn(ReturnsInvitationAlternateNoticeService, 'default').mockResolvedValue({
         notice: alternateNotice,
         notificationIds: [failedNotificationId],
         notifications: [alternateNotification]
@@ -73,15 +69,18 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     })
 
     it('sends the alternate notifications to Notify and records the results', async () => {
-      await SendAlternateNoticeService.go(mainNotice)
+      await SendAlternateNoticeService(mainNotice)
 
-      expect(sendLetterNotificationStub.calledOnce).toBe(true)
-      expect(sendLetterNotificationStub.firstCall.args).toEqual([alternateNotification, alternateNotice.referenceCode])
+      expect(SendLetterNotificationService.default).toHaveBeenCalledOnce()
+      expect(SendLetterNotificationService.default.mock.calls[0]).toEqual([
+        alternateNotification,
+        alternateNotice.referenceCode
+      ])
 
       // The first call is recording the result. The second is updating the failed notifications with the alternate
       // notice ID (tested elsewhere)
-      expect(notificationPatchStub.calledTwice).toBe(true)
-      expect(notificationPatchStub.firstCall.args[0]).toEqual({
+      expect(notificationPatchStub).toHaveBeenCalledTimes(2)
+      expect(notificationPatchStub.mock.calls[0][0]).toEqual({
         notifyError: undefined,
         notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
         notifyStatus: 'created',
@@ -91,14 +90,14 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     })
 
     it('updates the failed notifications with the alternate notice ID', async () => {
-      await SendAlternateNoticeService.go(mainNotice)
+      await SendAlternateNoticeService(mainNotice)
 
-      expect(notificationPatchStub.calledTwice).toBe(true)
-      expect(notificationPatchStub.secondCall.args[0]).toMatchObject({ alternateNoticeId: alternateNotice.id })
+      expect(notificationPatchStub).toHaveBeenCalledTimes(2)
+      expect(notificationPatchStub.mock.calls[1][0]).toMatchObject({ alternateNoticeId: alternateNotice.id })
     })
 
     it('returns the sent alternate notice', async () => {
-      const result = await SendAlternateNoticeService.go(mainNotice)
+      const result = await SendAlternateNoticeService(mainNotice)
 
       expect(result).toEqual(alternateNotice)
     })
@@ -106,17 +105,17 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
 
   describe('when the main notice has no failed primary user email notifications', () => {
     beforeEach(() => {
-      Sinon.stub(ReturnsInvitationAlternateNoticeService, 'go').resolves(null)
+      vi.spyOn(ReturnsInvitationAlternateNoticeService, 'default').mockResolvedValue(null)
     })
 
     it('does not proceed with sending', async () => {
-      await SendAlternateNoticeService.go(mainNotice)
+      await SendAlternateNoticeService(mainNotice)
 
-      expect(sendLetterNotificationStub.called).toBe(false)
+      expect(SendLetterNotificationService.default).not.toHaveBeenCalled()
     })
 
     it('returns null', async () => {
-      const result = await SendAlternateNoticeService.go(mainNotice)
+      const result = await SendAlternateNoticeService(mainNotice)
 
       expect(result).toBeNull()
     })
@@ -132,7 +131,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
 
       alternateNotification = NotificationsFixture.renewalInvitationLetter(alternateNotice)
 
-      Sinon.stub(RenewalInvitationAlternateNoticeService, 'go').resolves({
+      vi.spyOn(RenewalInvitationAlternateNoticeService, 'default').mockResolvedValue({
         notice: alternateNotice,
         notificationIds: [failedNotificationId],
         notifications: [alternateNotification]
@@ -140,13 +139,13 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     })
 
     it('delegates to RenewalInvitationAlternateNoticeService', async () => {
-      await SendAlternateNoticeService.go(mainNotice)
+      await SendAlternateNoticeService(mainNotice)
 
-      expect(RenewalInvitationAlternateNoticeService.go.calledOnce).toBe(true)
+      expect(RenewalInvitationAlternateNoticeService.default).toHaveBeenCalledOnce()
     })
 
     it('returns the sent alternate notice', async () => {
-      const result = await SendAlternateNoticeService.go(mainNotice)
+      const result = await SendAlternateNoticeService(mainNotice)
 
       expect(result).toEqual(alternateNotice)
     })

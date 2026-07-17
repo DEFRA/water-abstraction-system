@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for internal users on the `/users/internal/{id}/details` page
  * @module DetailsPresenter
  */
 
-const { compareStrings } = require('../../../lib/general.lib.js')
-const { formatLongDateTime, sentenceCase } = require('../../base.presenter.js')
+import { compareStrings } from '../../../lib/general.lib.js'
+import { formatLongDateTime, sentenceCase } from '../../base.presenter.js'
 
 /**
  * Formats data for internal users on the `/users/internal/{id}/details` page
@@ -16,7 +14,7 @@ const { formatLongDateTime, sentenceCase } = require('../../base.presenter.js')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(auth, user) {
+export default function detailsPresenter(auth, user) {
   const { id, username } = user
 
   const status = user.$status()
@@ -102,8 +100,4 @@ function _mapRole(role) {
   }
 
   return { description, name: _convertToSentenceCase(name) }
-}
-
-module.exports = {
-  go
 }

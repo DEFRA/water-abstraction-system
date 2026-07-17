@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/profiles/me/details` page
  * @module ViewProfileDetailsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ProfileDetailsPresenter = require('../../presenters/users/profile-details.presenter.js')
-const UserModel = require('../../models/user.model.js')
-const { readFlashNotification } = require('../../lib/general.lib.js')
+import ProfileDetailsPresenter from '../../presenters/users/profile-details.presenter.js'
+import UserModel from '../../models/user.model.js'
+import { readFlashNotification } from '../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/users/me/profile-details` page
@@ -23,12 +21,12 @@ const { readFlashNotification } = require('../../lib/general.lib.js')
  *
  * @returns {Promise<object>} The view data for the profile details page
  */
-async function go(userId, yar) {
+export default async function viewProfileDetailsService(userId, yar) {
   const profileDetails = await _fetchProfileDetails(userId)
 
   const notification = readFlashNotification(yar)
 
-  const pageData = ProfileDetailsPresenter.go(profileDetails)
+  const pageData = ProfileDetailsPresenter(profileDetails)
 
   return {
     notification,
@@ -48,8 +46,4 @@ async function _fetchProfileDetails(userId) {
       ref('userData:contactDetails.name').castText().as('name'),
       ref('userData:contactDetails.tel').castText().as('tel')
     ])
-}
-
-module.exports = {
-  go
 }
