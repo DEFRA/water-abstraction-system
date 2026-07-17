@@ -8,7 +8,7 @@ import ChargeVersionModel from '../../models/charge-version.model.js'
 /**
  * Fetches licence references for the provided billing account id.
  *
- * When changing the addess for a billing account we show the user a list of the licences impacted by the change. This
+ * When changing the address for a billing account we show the user a list of the licences impacted by the change. This
  * services returns all the linked licence references for the provided billing account id.
  *
  * @param {string} billingAccountId - The UUID of the billing account.

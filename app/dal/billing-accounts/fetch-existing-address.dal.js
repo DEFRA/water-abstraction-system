@@ -8,8 +8,8 @@ import AddressModel from '../../models/address.model.js'
 /**
  * Fetches the address for the provided address id.
  *
- * When changing the addess for a billing account and the user has chosen an exisitng address this service will return that
- * address for display on the screen.
+ * When changing the address for a billing account and the user has chosen an existing address this service will return
+ * that address for display on the screen.
  *
  * @param {string} addressId - The UUID of the address.
  *
