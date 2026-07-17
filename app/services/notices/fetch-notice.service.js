@@ -14,7 +14,7 @@ import NotificationModel from '../../models/notification.model.js'
  *
  * @param {string} noticeId - the UUID of the selected notice
  * @param {object} filters - an object containing the different filters to apply to the query
- * @param {string} [page=1] - The current page for the pagination service
+ * @param {string} [page='1'] - The current page for the pagination service
  *
  * @returns {Promise<object>} the notice and its associated notifications
  */
