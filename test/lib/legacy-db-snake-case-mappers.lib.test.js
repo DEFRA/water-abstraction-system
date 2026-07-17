@@ -4,9 +4,6 @@ import { describe, expect, it } from 'vitest'
 // Thing under test
 import * as LegacyDbSnakeCaseMappersLib from '../../app/lib/legacy-db-snake-case-mappers.lib.js'
 
-// NOTE: Ideally, we would have liked to spy on the Objection snakeCase and camelCase methods to confirm they are or are
-// not being called depending on the circumstance. But all our attempts with Sinon failed (a common issue we have when
-// testing with Objection.js)
 describe('Legacy DB Snake Case Mappers lib', () => {
   describe('#legacyDbSnakeCaseMappers', () => {
     // We always pass in these options. See knexfile.application.js and how legacyDbSnakeCaseMappers() is called

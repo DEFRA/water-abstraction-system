@@ -196,8 +196,8 @@ describe('BaseNotifierLib class', () => {
       const airbrakeFailure = new Error('Airbrake failure')
 
       beforeEach(async () => {
-        // We specifically use a stub instead of a fake so we can then use Sinon's callsFake() function. See the test
-        // below where callsFake() is used for more details.
+        // We specifically use a mock so we can then use Vitest's mockImplementation() function. See the test
+        // below where mockImplementation() is used for more details.
         pinoFake = { info: vi.fn(), error: vi.fn() }
         vi.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
 
@@ -210,12 +210,12 @@ describe('BaseNotifierLib class', () => {
 
         testNotifier.omfg(message)
 
-        // We use Sinon callsFake() here in order to test our expectations. This is because Airbrake notify() actually
-        // returns a promise, and it is on the calling code to handle the responses back. When we test sending the
-        // Airbrake notification control immediately comes back to us whilst work continues in the background. If we
-        // assert pinoFake.error.secondCall.calledWith() it always fails because the promise which calls it has not yet
-        // resolved. So, callsFake() tells Sinon to call our anonymous function below that includes our assertion only
-        // when pinoFake.error is called i.e. the Airbrake.notify() promise has resolved.
+        // We use Vitest's mockImplementation() here in order to test our expectations. This is because Airbrake
+        // notify() actually returns a promise, and it is on the calling code to handle the responses back. When we
+        // test sending the Airbrake notification control immediately comes back to us whilst work continues in the
+        // background. If we assert pinoFake.error.mock.calls directly it always fails because the promise which calls
+        // it has not yet resolved. So, mockImplementation() tells Vitest to call our anonymous function below that
+        // includes our assertion only when pinoFake.error is called i.e. the Airbrake.notify() promise has resolved.
         pinoFake.error.mockImplementation(async () => {
           const firstCallArgs = pinoFake.error.mock.calls[0]
 
