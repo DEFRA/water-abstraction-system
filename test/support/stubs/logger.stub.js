@@ -11,7 +11,7 @@ import { vi } from 'vitest'
  *
  * @param {object} logger - The logger object to stub
  */
-export default function build(logger) {
+export default function loggerStub(logger) {
   vi.spyOn(logger, 'error').mockImplementation(() => {})
   vi.spyOn(logger, 'info').mockImplementation(() => {})
 }

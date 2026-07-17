@@ -9,7 +9,7 @@ import { vi } from 'vitest'
  *
  * @returns {object} A stubbed GlobalNotifier with omg, omfg and redAlert methods
  */
-export default function build() {
+export default function globalNotifierStub() {
   return {
     omg: vi.fn(),
     omfg: vi.fn(),

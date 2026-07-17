@@ -11,7 +11,7 @@ import { generateUUID } from '../generators.js'
  *
  * @returns {module:SessionModel} A model instance with stubbed methods.
  */
-export default function build(sessionData) {
+export default function sessionStub(sessionData) {
   const session = SessionModel.fromJson({
     id: generateUUID(),
     ...sessionData

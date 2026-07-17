@@ -10,7 +10,7 @@ import { vi } from 'vitest'
  *
  * @returns {object} A stubbed Yar instance with flash, get, set, clear and touch methods
  */
-export default function build() {
+export default function yarStub() {
   return {
     flash: vi.fn(),
     get: vi.fn(),
