@@ -4,6 +4,8 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
+import LoggerStub from '../support/stubs/logger.stub.js'
+
 // For running our service
 import { init } from '../../app/server.js'
 
@@ -19,9 +21,8 @@ describe('Check controller', () => {
   })
 
   beforeEach(async () => {
-    // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
-    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
-    vi.spyOn(server.logger, 'info').mockImplementation(() => {})
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
     vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)

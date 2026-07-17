@@ -1,8 +1,10 @@
 // Test framework
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import http2 from 'node:http2'
+
+import LoggerStub from '../support/stubs/logger.stub.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -15,6 +17,18 @@ describe('Root controller: GET /', () => {
   // Create server before running the tests
   beforeAll(async () => {
     server = await init()
+  })
+
+  beforeEach(async () => {
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
+
+    // We silence sending a notification to our Errbit instance using Airbrake
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {

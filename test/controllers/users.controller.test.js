@@ -5,6 +5,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import http2 from 'node:http2'
 
 import FeatureFlagsConfig from '../../config/feature-flags.config.js'
+import LoggerStub from '../support/stubs/logger.stub.js'
 import { generateUUID } from '../support/generators.js'
 import { postRequestOptions } from '../support/general.js'
 import { today } from '../../app/lib/general.lib.js'
@@ -42,14 +43,13 @@ describe('Users controller', () => {
   })
 
   beforeEach(async () => {
-    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersManagement', true)
-
-    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
-    // possible
-    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
     vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
+
+    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersManagement', true)
   })
 
   afterEach(() => {
