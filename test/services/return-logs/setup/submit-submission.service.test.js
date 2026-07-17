@@ -75,7 +75,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         beforeEach(async () => {
           payload = { journey: 'recordReceipt' }
 
-          returnLog = await ReturnLogHelper.add({ id: returnLogId })
+          returnLog = await ReturnLogHelper.add({ id: returnLogId, updatedAt: new Date('2025-02-14') })
         })
 
         it('returns the redirect as "confirm-received", updates the return log as "received", deletes the session, and returns the redirect as "confirm-received"', async () => {
