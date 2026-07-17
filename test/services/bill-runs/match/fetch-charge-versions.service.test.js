@@ -36,7 +36,6 @@ let licenceSupplementaryYear
 let otherChargeVersion
 let otherChargeReference
 let otherLicence
-let supplementary
 
 describe('Bill Runs - Match - Fetch Charge Versions service', () => {
   const billingPeriod = {
@@ -511,7 +510,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
       describe('and the first licence has been flagged for supplementary', () => {
         it('returns only its charge versions', async () => {
-          const results = await FetchChargeVersionsService(billRun, billingPeriod, supplementary)
+          const results = await FetchChargeVersionsService(billRun, billingPeriod)
 
           expect(results).toHaveLength(1)
           expect(results[0].licence.licenceRef).toEqual(licenceSeedData.licence.licenceRef)

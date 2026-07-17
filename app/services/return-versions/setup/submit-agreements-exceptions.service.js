@@ -48,7 +48,7 @@ export default async function submitAgreementsExceptionsService(sessionId, requi
     }
   }
 
-  const formattedData = AgreementsExceptionsPresenter(session, requirementIndex, payload)
+  const formattedData = AgreementsExceptionsPresenter(session, requirementIndex)
 
   return {
     error,

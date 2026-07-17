@@ -10,7 +10,6 @@ import AlertEmailAddressPresenter from '../../../../../app/presenters/notices/se
 describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter', () => {
   let auth
   let session
-  let validationResult
 
   beforeEach(() => {
     auth = {
@@ -21,13 +20,12 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
       }
     }
 
-    validationResult = null
     session = AbstractionAlertSessionData.get()
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AlertEmailAddressPresenter(session, auth, validationResult)
+      const result = AlertEmailAddressPresenter(session, auth)
 
       expect(result).toEqual({
         alertEmailAddressOptions: {
@@ -53,7 +51,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns true', () => {
-            const result = AlertEmailAddressPresenter(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.otherUserChecked).toBe(true)
           })
@@ -65,7 +63,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns false', () => {
-            const result = AlertEmailAddressPresenter(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.otherUserChecked).toBe(false)
           })
@@ -80,7 +78,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns the session.alertEmailAddress', () => {
-            const result = AlertEmailAddressPresenter(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.otherUserEmailAddressInput).toEqual('test@defra.gov.uk')
           })
@@ -92,7 +90,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns an empty string', () => {
-            const result = AlertEmailAddressPresenter(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.otherUserEmailAddressInput).toEqual('')
           })
@@ -106,7 +104,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns true', () => {
-            const result = AlertEmailAddressPresenter(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.usernameChecked).toBe(true)
           })
@@ -118,7 +116,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           })
 
           it('returns false', () => {
-            const result = AlertEmailAddressPresenter(session, auth, validationResult)
+            const result = AlertEmailAddressPresenter(session, auth)
 
             expect(result.alertEmailAddressOptions.usernameChecked).toBe(false)
           })

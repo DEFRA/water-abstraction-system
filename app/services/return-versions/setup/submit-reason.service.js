@@ -42,7 +42,7 @@ export default async function submitReasonService(sessionId, payload, yar) {
     }
   }
 
-  const formattedData = ReasonPresenter(session, payload)
+  const formattedData = ReasonPresenter(session)
 
   return {
     error: validationResult,

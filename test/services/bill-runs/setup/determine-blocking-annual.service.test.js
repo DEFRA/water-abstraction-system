@@ -62,7 +62,7 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
     })
 
     it('does not bother to check for live bill runs', async () => {
-      await DetermineBlockingAnnualService(regionId, toFinancialYearEnding)
+      await DetermineBlockingAnnualService(regionId)
 
       expect(FetchLiveBillRunService.default).not.toHaveBeenCalled()
     })

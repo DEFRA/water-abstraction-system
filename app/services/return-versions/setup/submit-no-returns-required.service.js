@@ -41,7 +41,7 @@ export default async function submitNoReturnsRequiredService(sessionId, payload,
     }
   }
 
-  const formattedData = NoReturnsRequiredPresenter(session, payload)
+  const formattedData = NoReturnsRequiredPresenter(session)
 
   return {
     error: validationResult,

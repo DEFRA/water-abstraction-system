@@ -152,7 +152,7 @@ function _submittedSessionData(session, payload) {
   session.startDateYear = payload.startDateYear ? payload.startDateYear : null
   session.startDateOptions = payload.startDateOptions ? payload.startDateOptions : null
 
-  return StartDatePresenter(session, payload)
+  return StartDatePresenter(session)
 }
 
 function _validate(payload, licenceStartDate, licenceEndDate) {
