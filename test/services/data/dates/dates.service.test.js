@@ -36,7 +36,7 @@ describe('Data - Dates service', () => {
   })
 
   it('returns the current quarterly periods', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.quarterlyPeriods).toBeDefined()
     expect(result.quarterlyPeriods.length).toBeGreaterThanOrEqual(4)

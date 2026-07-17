@@ -44,10 +44,10 @@ export default function datesService() {
   const quarterlyPeriods = determineReturnsPeriods(currentWinterReturnCycle)
   const currentFinancialYear = determineCurrentFinancialYear()
   const billingPeriods = {
-    annual: DetermineBillingPeriodsService.go('annual', currentFinancialYear.endDate.getFullYear()),
-    supplementary: DetermineBillingPeriodsService.go('supplementary', currentFinancialYear.endDate.getFullYear()),
-    twoPartTariff: DetermineBillingPeriodsService.go('two_part_tariff', currentFinancialYear.endDate.getFullYear() - 1),
-    twoPartSupplementary: DetermineBillingPeriodsService.go(
+    annual: DetermineBillingPeriodsService('annual', currentFinancialYear.endDate.getFullYear()),
+    supplementary: DetermineBillingPeriodsService('supplementary', currentFinancialYear.endDate.getFullYear()),
+    twoPartTariff: DetermineBillingPeriodsService('two_part_tariff', currentFinancialYear.endDate.getFullYear() - 1),
+    twoPartSupplementary: DetermineBillingPeriodsService(
       'two_part_supplementary',
       currentFinancialYear.endDate.getFullYear()
     )
