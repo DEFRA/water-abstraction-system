@@ -339,7 +339,7 @@ describe('Notices - Fetch Notice service', () => {
 
   describe('when no matching notice exists', () => {
     it('returns an empty result', async () => {
-      const result = await FetchNoticeService('1f0e0086-7bc4-4ef2-a696-35ea1e79d224', pageNumber, filters)
+      const result = await FetchNoticeService('1f0e0086-7bc4-4ef2-a696-35ea1e79d224', filters, pageNumber)
 
       expect(result).toEqual({
         notice: undefined,
