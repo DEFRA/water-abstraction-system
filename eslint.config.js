@@ -1,5 +1,6 @@
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import globals from 'globals'
+import importPlugin from 'eslint-plugin-import-x'
 import jsdocPlugin from 'eslint-plugin-jsdoc'
 import neostandard from 'neostandard'
 
@@ -42,7 +43,7 @@ export default [
     plugins: {
       // https://github.com/gajus/eslint-plugin-jsdoc
       jsdoc: jsdocPlugin,
-      import: neostandard.plugins['import-x'],
+      import: importPlugin,
       local: {
         rules: {
           'no-mixed-exports': noMixedExports,
