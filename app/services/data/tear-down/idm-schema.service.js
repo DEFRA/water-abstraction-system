@@ -24,6 +24,7 @@ async function _deleteAllTestData() {
       "user_data",
       '$.source'
     ) #>> '{}' = 'acceptance-test-setup'
+    OR "user_name" LIKE 'both.sides@%'
     OR "user_name" LIKE '%@example.com'
     OR "user_name" LIKE '%@e'
     OR "user_name" LIKE 'regression.tests%';
