@@ -11,20 +11,35 @@ describe('DAL - Check email exists dal', () => {
   let email
   let user
 
-  describe('when the user exists', () => {
-    beforeAll(async () => {
-      user = await UserHelper.add()
-      email = user.username
-    })
-
+  describe('when a user with the same email exists', () => {
     afterAll(async () => {
       await user.$query().delete()
     })
 
-    it('returns "true"', async () => {
-      const result = await CheckEmailExistsDal(email)
+    describe('and it is an internal account', () => {
+      beforeAll(async () => {
+        user = await UserHelper.add({ application: 'water_admin' })
+        email = user.username
+      })
 
-      expect(result).toBe(true)
+      it('returns "true"', async () => {
+        const result = await CheckEmailExistsDal(email)
+
+        expect(result).toBe(true)
+      })
+    })
+
+    describe('and it is an external account', () => {
+      beforeAll(async () => {
+        user = await UserHelper.add({ application: 'water_vml' })
+        email = user.username
+      })
+
+      it('returns "false"', async () => {
+        const result = await CheckEmailExistsDal(email)
+
+        expect(result).toBe(false)
+      })
     })
   })
 
