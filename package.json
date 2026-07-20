@@ -84,8 +84,9 @@
     "vitest": "4.1.9"
   },
   "allowScripts": {
-    "unrs-resolver@1.11.0": true,
     "@parcel/watcher@2.5.0": true,
-    "esbuild@0.27.7": true
+    "esbuild@0.27.7": true,
+    "unrs-resolver@1.12.2": true,
+    "fsevents@2.3.3": true
   }
 }
