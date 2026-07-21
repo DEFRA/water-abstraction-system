@@ -128,17 +128,17 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
             expect(chargeReferences[0].id).toEqual(chargeReference.id)
             expect(chargeReferences[0].source).toEqual('non-tidal')
             expect(chargeReferences[0].loss).toEqual('low')
-            expect(chargeReferences[0].volume).toEqual(6.819)
+            expect(chargeReferences[0].volume).toEqual(200)
             expect(chargeReferences[0].adjustments).toEqual({
               s126: null,
               s127: false,
               s130: false,
               charge: null,
               winter: false,
-              aggregate: '0.562114443'
+              aggregate: null
             })
-            expect(chargeReferences[0].additionalCharges).toEqual({ isSupplyPublicWater: true })
-            expect(chargeReferences[0].description).toEqual('Mineral washing')
+            expect(chargeReferences[0].additionalCharges).toBeNull()
+            expect(chargeReferences[0].description).toEqual('Charge reference 1 - Mineral washing')
           })
 
           describe('and against each charge reference', () => {

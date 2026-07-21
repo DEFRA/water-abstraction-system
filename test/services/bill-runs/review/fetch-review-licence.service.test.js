@@ -207,7 +207,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
                       abstractionPeriodEndDay: 31,
                       abstractionPeriodEndMonth: 3,
                       authorisedAnnualQuantity: 200,
-                      description: 'Trickle Irrigation - Direct',
+                      description: 'Mineral washing',
                       purpose: {
                         id: purpose.id,
                         description: purpose.description

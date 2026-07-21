@@ -288,17 +288,17 @@ describe('Fetch Billing Accounts service', () => {
           id: chargeReference.id,
           source: 'non-tidal',
           loss: 'low',
-          volume: 6.819,
+          volume: 200,
           adjustments: {
             s126: null,
             s127: false,
             s130: false,
             charge: null,
             winter: false,
-            aggregate: '0.562114443'
+            aggregate: null
           },
-          additionalCharges: { isSupplyPublicWater: true },
-          description: 'Mineral washing',
+          additionalCharges: null,
+          description: 'Charge reference 1 - Mineral washing',
           chargeCategory: {
             id: chargeCategory.id,
             reference: chargeCategory.reference,
