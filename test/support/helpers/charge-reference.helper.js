@@ -14,20 +14,19 @@ import { generateUUID } from '../generators.js'
  * - `chargeVersionId` - [random UUID]
  * - `source` - non-tidal
  * - `loss` - low
- * - `description` - Mineral washing
- * - `section127Agreement` - true
+ * - `description` - Charge reference 1 - Mineral washing
+ * - `section127Agreement` - false
  * - `scheme` - sroc
- * - `restrictedSource` - true
+ * - `restrictedSource` - false
  * - `waterModel` - no model
- * - `volume` - 6.819
+ * - `volume` - 200
  * - `chargeCategoryId` - [randomly selected UUID from charge categories]
- * - `additionalCharges` - { isSupplyPublicWater: true }
- * - `adjustments` - { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: 0.562114443 }
+ * - `adjustments` - { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null }
  * - `eiucRegion` - Anglian
  * - `abstractionPeriodStartDay` - 1
- * - `abstractionPeriodStartMonth` - 1
+ * - `abstractionPeriodStartMonth` - 4
  * - `abstractionPeriodEndDay` - 31
- * - `abstractionPeriodEndMonth` - 12
+ * - `abstractionPeriodEndMonth` - 3
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
@@ -58,20 +57,19 @@ function defaults(data = {}) {
     chargeVersionId: generateUUID(),
     source: 'non-tidal',
     loss: 'low',
-    description: 'Mineral washing',
-    section127Agreement: true,
+    description: 'Charge reference 1 - Mineral washing',
+    section127Agreement: false,
     scheme: 'sroc',
-    restrictedSource: true,
+    restrictedSource: false,
     waterModel: 'no model',
-    volume: 6.819,
+    volume: 200,
     chargeCategoryId,
-    additionalCharges: { isSupplyPublicWater: true },
-    adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: '0.562114443' },
+    adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null },
     eiucRegion: 'Anglian',
     abstractionPeriodStartDay: 1,
-    abstractionPeriodStartMonth: 1,
+    abstractionPeriodStartMonth: 4,
     abstractionPeriodEndDay: 31,
-    abstractionPeriodEndMonth: 12
+    abstractionPeriodEndMonth: 3
   }
 
   return {

@@ -427,8 +427,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
           chargeReferences: [
             {
               id: chargeReference.id,
-              volume: 6.819,
-              description: 'Mineral washing',
+              volume: 200,
+              description: 'Charge reference 1 - Mineral washing',
               aggregate: 0.562114443,
               s126: null,
               s127: 'true',
@@ -443,7 +443,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
               chargeElements: [
                 {
                   id: chargeElement2.id,
-                  description: 'Trickle Irrigation - Direct',
+                  description: 'Mineral washing',
                   abstractionPeriodStartDay: 1,
                   abstractionPeriodStartMonth: 4,
                   abstractionPeriodEndDay: 31,
@@ -457,7 +457,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
                 },
                 {
                   id: chargeElement1.id,
-                  description: 'Trickle Irrigation - Direct',
+                  description: 'Mineral washing',
                   abstractionPeriodStartDay: 1,
                   abstractionPeriodStartMonth: 4,
                   abstractionPeriodEndDay: 31,
