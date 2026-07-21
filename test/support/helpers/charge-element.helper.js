@@ -20,15 +20,11 @@ import { generateUUID } from '../generators.js'
  * - `abstractionPeriodEndMonth` - 3
  * - `authorisedAnnualQuantity` - 200
  * - `loss` - low
- * - `factorsOverridden` - true
- * - `billableAnnualQuantity` - 4.55
- * - `timeLimitedStartDate` - 2022-04-01
- * - `timeLimitedEndDate` - 2030-03-30
- * - `description` - Trickle Irrigation - Direct
+ * - `factorsOverridden` - false
+ * - `description` - Mineral washing
  * - `purposePrimaryId` - [randomly selected UUID from primary purposes]
  * - `purposeSecondaryId` - [randomly selected UUID from secondary purposes]
  * - `purposeId` - [randomly selected UUID from purposes]
- * - `section127Agreement` - true
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
@@ -65,15 +61,11 @@ function defaults(data = {}) {
     abstractionPeriodEndMonth: 3,
     authorisedAnnualQuantity: 200,
     loss: 'low',
-    factorsOverridden: true,
-    billableAnnualQuantity: 4.55,
-    timeLimitedStartDate: new Date('2022-04-01'),
-    timeLimitedEndDate: new Date('2030-03-30'),
-    description: 'Trickle Irrigation - Direct',
+    factorsOverridden: false,
+    description: 'Mineral washing',
     purposePrimaryId,
     purposeSecondaryId,
-    purposeId,
-    section127Agreement: true
+    purposeId
   }
 
   return {
