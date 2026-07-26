@@ -70,7 +70,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
       chargeVersionId,
       chargeCategoryId,
       description: 'Charge reference 1 - Mineral washing',
-      scheme: 'sroc',
+      scheme: 'sroc'
     })
     const { id: chargeReferenceId } = chargeReference
 

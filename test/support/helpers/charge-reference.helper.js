@@ -2,7 +2,6 @@
  * @module ChargeReferenceHelper
  */
 
-import ChargeCategoryHelper from './charge-category.helper.js'
 import ChargeReferenceModel from '../../../app/models/charge-reference.model.js'
 import { generateUUID } from '../generators.js'
 
@@ -39,8 +38,6 @@ function add(data = {}) {
  * @returns {object} - Returns the set defaults with the override data spread
  */
 function defaults(data = {}) {
-  const { id: chargeCategoryId } = ChargeCategoryHelper.select()
-
   // The table has a constraint that either authorisedAnnualQuantity or volume must be populated. But if the scheme is
   // 'alcs' (PRESROC) volume should be null. As most of our tests are for SROC, we default to 200 for volume unless the
   // scheme is 'alcs'.

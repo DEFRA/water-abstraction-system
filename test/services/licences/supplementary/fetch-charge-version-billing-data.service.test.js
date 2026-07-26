@@ -51,7 +51,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         season: 'all year',
         seasonDerived: 'all year',
         section127Agreement: true,
-        source: 'unsupported',
+        source: 'unsupported'
       })
     })
 
