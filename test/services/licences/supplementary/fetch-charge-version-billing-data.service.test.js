@@ -26,16 +26,32 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
       // Add sroc charge version and charge reference
       srocChargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, startDate: new Date('2023-04-01') })
       srocChargeReference = await ChargeReferenceHelper.add({
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: null },
         chargeVersionId: srocChargeVersion.id,
-        adjustments: { s127: true }
+        description: 'Charge reference 1 - SROC',
+        scheme: 'sroc'
       })
 
       // Add pre sroc charge version
       preSrocChargeVersion = await ChargeVersionHelper.add({ scheme: 'alcs', licenceId: licence.id })
       preSrocChargeReference = await ChargeReferenceHelper.add({
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        authorisedAnnualQuantity: 200,
         chargeVersionId: preSrocChargeVersion.id,
+        description: 'Charge element 1 - PRESROC',
+        restrictedSource: false,
         scheme: 'alcs',
-        adjustments: { s127: true }
+        season: 'all year',
+        seasonDerived: 'all year',
+        section127Agreement: true,
+        source: 'unsupported'
       })
     })
 
@@ -52,7 +68,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
             {
               id: preSrocChargeReference.id,
               scheme: 'alcs',
-              twoPartTariff: true
+              twoPartTariff: null
             }
           ],
           licence: {
