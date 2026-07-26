@@ -349,9 +349,15 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       chargeReference = await ChargeReferenceHelper.add({
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: 0.562114443 },
         chargeVersionId: chargeVersion.id,
         chargeCategoryId: chargeCategory.id,
-        adjustments: { s127: true, aggregate: 0.562114443 }
+        description: 'Charge reference 1 - Mineral washing',
+        scheme: 'sroc'
       })
 
       chargeElement1 = await ChargeElementHelper.add({
@@ -432,8 +438,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
               aggregate: 0.562114443,
               s126: null,
               s127: 'true',
-              s130: null,
-              winter: null,
+              s130: 'false',
+              winter: 'false',
               charge: null,
               chargeCategory: {
                 reference: chargeCategory.reference,

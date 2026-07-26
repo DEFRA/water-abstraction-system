@@ -207,8 +207,15 @@ describe('Fetch Billing Accounts service', () => {
 
       chargeCategory = ChargeCategoryHelper.select()
       chargeReference = await ChargeReferenceHelper.add({
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null },
         chargeVersionId: chargeVersion.id,
-        chargeCategoryId: chargeCategory.id
+        chargeCategoryId: chargeCategory.id,
+        description: 'Charge reference 1 - Mineral washing',
+        scheme: 'sroc'
       })
       chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
     })

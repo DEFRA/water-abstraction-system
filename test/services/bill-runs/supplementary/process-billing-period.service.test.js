@@ -37,6 +37,9 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
   let billingAccount
   let chargeCategory
   let changeReason
+  let chargeElement
+  let chargeReference
+  let chargeVersion
   let chargeVersions
   let licence
   let region
@@ -54,7 +57,23 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
     vi.spyOn(FetchPreviousTransactionsService, 'default').mockResolvedValue([])
   })
 
-  afterEach(() => {
+  afterEach(async () => {
+    await licence.$query().delete()
+    await billingAccount.$query().delete()
+    await billRun.$query().delete()
+
+    if (chargeElement) {
+      await chargeElement.$query().delete()
+    }
+
+    if (chargeReference) {
+      await chargeReference.$query().delete()
+    }
+
+    if (chargeVersion) {
+      await chargeVersion.$query().delete()
+    }
+
     vi.restoreAllMocks()
   })
 
@@ -75,19 +94,27 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       describe('but none of them are billable', () => {
         describe('because the billable days calculated as 0', () => {
           beforeEach(async () => {
-            const { id: chargeVersionId } = await ChargeVersionHelper.add({
+            chargeVersion = await ChargeVersionHelper.add({
               changeReasonId: changeReason.id,
               billingAccountId: billingAccount.id,
               startDate: new Date(2022, 7, 1, 9),
               licenceId: licence.id
             })
-            const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
+
+            chargeReference = await ChargeReferenceHelper.add({
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null },
               chargeCategoryId: chargeCategory.id,
-              chargeVersionId
+              chargeVersionId: chargeVersion.id,
+              description: 'Charge reference 1 - Mineral washing',
+              scheme: 'sroc'
             })
 
-            await ChargeElementHelper.add({
-              chargeReferenceId,
+            chargeElement = await ChargeElementHelper.add({
+              chargeReferenceId: chargeReference.id,
               abstractionPeriodStartDay: 1,
               abstractionPeriodStartMonth: 4,
               abstractionPeriodEndDay: 31,
@@ -111,20 +138,28 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
         describe('because the charge version status is "superseded"', () => {
           describe('and there are no previously billed transactions', () => {
             beforeEach(async () => {
-              const { id: chargeVersionId } = await ChargeVersionHelper.add({
+              chargeVersion = await ChargeVersionHelper.add({
                 changeReasonId: changeReason.id,
                 billingAccountId: billingAccount.id,
                 startDate: new Date(2022, 7, 1, 9),
                 licenceId: licence.id,
                 status: 'superseded'
               })
-              const { chargeElementId } = await ChargeReferenceHelper.add({
+
+              chargeReference = await ChargeReferenceHelper.add({
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 4,
+                abstractionPeriodEndDay: 31,
+                abstractionPeriodEndMonth: 3,
+                adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null },
                 chargeCategoryId: chargeCategory.id,
-                chargeVersionId
+                chargeVersionId: chargeVersion.id,
+                description: 'Charge reference 1 - Mineral washing',
+                scheme: 'sroc'
               })
 
-              await ChargeElementHelper.add({
-                chargeElementId,
+              chargeElement = await ChargeElementHelper.add({
+                chargeReferenceId: chargeReference.id,
                 abstractionPeriodStartDay: 1,
                 abstractionPeriodStartMonth: 4,
                 abstractionPeriodEndDay: 31,
@@ -147,19 +182,27 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
       describe('and they are billable', () => {
         beforeEach(async () => {
-          const { id: chargeVersionId } = await ChargeVersionHelper.add({
+          chargeVersion = await ChargeVersionHelper.add({
             changeReasonId: changeReason.id,
             billingAccountId: billingAccount.id,
             startDate: new Date(2022, 7, 1, 9),
             licenceId: licence.id
           })
-          const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
+
+          chargeReference = await ChargeReferenceHelper.add({
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
+            adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null },
             chargeCategoryId: chargeCategory.id,
-            chargeVersionId
+            chargeVersionId: chargeVersion.id,
+            description: 'Charge reference 1 - Mineral washing',
+            scheme: 'sroc'
           })
 
-          await ChargeElementHelper.add({
-            chargeReferenceId,
+          chargeElement = await ChargeElementHelper.add({
+            chargeReferenceId: chargeReference.id,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
@@ -228,17 +271,25 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
   describe('when the service errors', () => {
     beforeEach(async () => {
-      const { id: chargeVersionId } = await ChargeVersionHelper.add({
+      chargeVersion = await ChargeVersionHelper.add({
         changeReasonId: changeReason.id,
         billingAccountId: billingAccount.id,
         licenceId: licence.id
       })
-      const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
+
+      chargeReference = await ChargeReferenceHelper.add({
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: null },
         chargeCategoryId: chargeCategory.id,
-        chargeVersionId
+        chargeVersionId: chargeVersion.id,
+        description: 'Charge reference 1 - Mineral washing',
+        scheme: 'sroc'
       })
 
-      await ChargeElementHelper.add({ chargeReferenceId })
+      chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
 
       const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
 
