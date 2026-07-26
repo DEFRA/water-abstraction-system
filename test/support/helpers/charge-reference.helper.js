@@ -14,19 +14,7 @@ import { generateUUID } from '../generators.js'
  * - `chargeVersionId` - [random UUID]
  * - `source` - non-tidal
  * - `loss` - low
- * - `description` - Charge reference 1 - Mineral washing
- * - `section127Agreement` - false
- * - `scheme` - sroc
- * - `restrictedSource` - false
- * - `waterModel` - no model
- * - `volume` - 200
- * - `chargeCategoryId` - [randomly selected UUID from charge categories]
- * - `adjustments` - { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null }
- * - `eiucRegion` - Anglian
- * - `abstractionPeriodStartDay` - 1
- * - `abstractionPeriodStartMonth` - 4
- * - `abstractionPeriodEndDay` - 31
- * - `abstractionPeriodEndMonth` - 3
+ * - `volume` - 200 [if scheme is not 'alcs', otherwise null]
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
  *
@@ -53,23 +41,16 @@ function add(data = {}) {
 function defaults(data = {}) {
   const { id: chargeCategoryId } = ChargeCategoryHelper.select()
 
+  // The table has a constraint that either authorisedAnnualQuantity or volume must be populated. But if the scheme is
+  // 'alcs' (PRESROC) volume should be null. As most of our tests are for SROC, we default to 200 for volume unless the
+  // scheme is 'alcs'.
+  const volume = data.scheme === 'alcs' ? null : 200
+
   const defaults = {
     chargeVersionId: generateUUID(),
     source: 'non-tidal',
     loss: 'low',
-    description: 'Charge reference 1 - Mineral washing',
-    section127Agreement: false,
-    scheme: 'sroc',
-    restrictedSource: false,
-    waterModel: 'no model',
-    volume: 200,
-    chargeCategoryId,
-    adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null },
-    eiucRegion: 'Anglian',
-    abstractionPeriodStartDay: 1,
-    abstractionPeriodStartMonth: 4,
-    abstractionPeriodEndDay: 31,
-    abstractionPeriodEndMonth: 3
+    volume
   }
 
   return {
