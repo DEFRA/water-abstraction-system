@@ -2,14 +2,14 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import LicenceModel from '../../../../app/models/licence.model.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
 
 // Things we need to stub
-import * as CreateLicenceSupplementaryYearService from '../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js'
+import * as CreateLicenceSupplementaryYearService from '../../../../src/services/licences/supplementary/create-licence-supplementary-year.service.js'
 
 // Thing under test
-import PersistSupplementaryBillingFlagsService from '../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js'
+import PersistSupplementaryBillingFlagsService from '../../../../src/services/licences/supplementary/persist-supplementary-billing-flags.service.js'
 
 describe('Persist Supplementary Billing Flags Service', () => {
   beforeEach(async () => {

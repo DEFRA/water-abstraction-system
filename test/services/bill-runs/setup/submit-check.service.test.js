@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
+import { engineTriggers } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 // Things we need to stub
-import * as CreateService from '../../../../app/services/bill-runs/setup/create.service.js'
-import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
-import * as DetermineBlockingBillRunService from '../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as DeleteSessionDal from 'water-abstraction-engine/dal/delete-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as CreateService from '../../../../src/services/bill-runs/setup/create.service.js'
+import * as DetermineBlockingBillRunService from '../../../../src/services/bill-runs/setup/determine-blocking-bill-run.service.js'
 
 // Thing under test
-import SubmitCheckService from '../../../../app/services/bill-runs/setup/submit-check.service.js'
+import SubmitCheckService from '../../../../src/services/bill-runs/setup/submit-check.service.js'
 
 describe('Bill Runs - Setup - Submit Check service', () => {
   const auth = {

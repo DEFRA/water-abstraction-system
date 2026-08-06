@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import SubmitAlertThresholdsService from '../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js'
+import SubmitAlertThresholdsService from '../../../../../src/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js'
 
 describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service', () => {
   let licenceMonitoringStations

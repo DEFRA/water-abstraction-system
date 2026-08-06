@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import MultipleEntriesPresenter from '../../../../app/presenters/return-logs/setup/multiple-entries.presenter.js'
+import MultipleEntriesPresenter from '../../../../src/presenters/return-logs/setup/multiple-entries.presenter.js'
 
 describe('Return Logs Setup - Multiple Entries presenter', () => {
   let session

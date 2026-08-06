@@ -5,7 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
-import FetchRenewalInvitationRecipientsService from '../../../../../app/services/notices/setup/renewal-notice/fetch-renewal-invitation-recipients.service.js'
+import FetchRenewalInvitationRecipientsService from '../../../../../src/services/notices/setup/renewal-notice/fetch-renewal-invitation-recipients.service.js'
 
 describe('Notices - Setup - Renewal Notice - Fetch Renewal Invitation Recipients service', () => {
   let scenarios

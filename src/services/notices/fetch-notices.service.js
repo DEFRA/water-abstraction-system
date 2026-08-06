@@ -1,0 +1,143 @@
+/**
+ * Fetches the notices for the `/notices` page
+ * @module FetchNoticesService
+ */
+
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
+import EventModel from 'water-abstraction-engine/models/event.model.js'
+import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
+
+/**
+ * Fetches the notices for the `/notices` page
+ *
+ * @param {object} filters - an object containing the different filters to apply to the query
+ * @param {string} [page=1] - The current page for the pagination service
+ *
+ * @returns {Promise<object>} an object containing the matching notices and the total count of notices
+ */
+export default async function fetchNoticesService(filters, page = '1') {
+  const query = _fetchQuery()
+
+  _applyFilters(query, filters)
+
+  query.orderBy('events.createdAt', 'desc').page(Number(page) - 1, DatabaseConfig.defaultPageSize)
+
+  return query
+}
+
+function _alertNoticeTypes(noticeTypes) {
+  const alertTypes = []
+
+  for (const noticeType of noticeTypes) {
+    if (['reduce', 'resume', 'stop', 'warning'].includes(noticeType)) {
+      alertTypes.push(noticeType)
+    }
+  }
+
+  return alertTypes
+}
+
+function _applyFilters(query, filters) {
+  const { fromDate, noticeTypes, reference, sentBy, statuses, toDate } = filters
+
+  if (reference) {
+    query.whereILike('events.referenceCode', `%${reference}%`)
+  }
+
+  if (sentBy) {
+    query.whereILike('events.issuer', `%${sentBy}%`)
+  }
+
+  if (fromDate) {
+    query.where('events.createdAt', '>=', new Date(fromDate))
+  }
+
+  if (toDate) {
+    // NOTE: createdAt is a timestamp, which means it will include a time element. For example, 2025-09-19 13:47:53.859.
+    // But `toDate` will just be the date part. This means when we create a date object from it, its time will be set
+    // to minute. This means if we don't shift toDate to 23:59:99 it will exclude any notices created on the toDate
+    // specified.
+    const toDateForQuery = new Date(toDate)
+
+    toDateForQuery.setHours(23, 59, 59, 999)
+    query.where('events.createdAt', '<=', toDateForQuery.toISOString())
+  }
+
+  _applyNoticeTypeFilters(query, noticeTypes)
+  _applyStatusFilters(query, statuses)
+}
+
+function _applyNoticeTypeFilters(query, noticeTypes) {
+  const alertTypes = _alertNoticeTypes(noticeTypes)
+  const standardNoticeTypes = _standardNoticeTypes(noticeTypes)
+
+  // NOTE: If both are selected we have to apply the where clauses in such a way that standard notices without an
+  // alert type don't get excluded. To do this, we have to drop down into using `whereRaw()` to query for notices
+  // that match either the alert types or the standard notice types
+  if (alertTypes.length > 0 && standardNoticeTypes.length > 0) {
+    query.whereRaw(
+      `((events.metadata->'options'->>'sendingAlertType' = ANY (?) AND events.subtype = 'waterAbstractionAlerts') OR events.subtype = ANY (?))`,
+      [alertTypes, standardNoticeTypes]
+    )
+
+    return
+  }
+
+  if (alertTypes.length > 0) {
+    query.whereRaw(`events.metadata->'options'->>'sendingAlertType' = ANY (?)`, [alertTypes])
+    query.where('events.subtype', 'waterAbstractionAlerts')
+
+    return
+  }
+
+  if (standardNoticeTypes.length > 0) {
+    query.whereIn('events.subtype', standardNoticeTypes)
+  }
+}
+
+function _applyStatusFilters(query, statuses) {
+  if (statuses.length === 0) {
+    return
+  }
+
+  const clauses = statuses.map((status) => {
+    return `events.status_counts->>'${status}' <> '0'`
+  })
+
+  query.whereRaw(`(${clauses.join(' OR ')})`)
+}
+
+function _fetchQuery() {
+  return EventModel.query()
+    .select([
+      'events.id',
+      'events.createdAt',
+      'events.issuer',
+      'events.overallStatus',
+      'events.referenceCode',
+      'events.subtype',
+      Objection.ref('events.metadata:name').castText().as('name'),
+      Objection.ref('events.metadata:options.sendingAlertType').castText().as('alertType'),
+      Objection.ref('events.metadata:recipients').castInt().as('recipientCount')
+    ])
+    .where('events.type', 'notification')
+    .whereIn('events.status', ['sent', 'completed', 'sending'])
+}
+
+function _standardNoticeTypes(noticeTypes) {
+  const standardTypes = []
+
+  for (const noticeType of noticeTypes) {
+    if (noticeType === 'legacyNotifications') {
+      standardTypes.push('hof-stop', 'hof-resume', 'hof-warning', 'renewal')
+
+      continue
+    }
+
+    if (['paperReturnForms', 'returnInvitation', 'returnReminder', 'renewalInvitation'].includes(noticeType)) {
+      standardTypes.push(noticeType)
+    }
+  }
+
+  return standardTypes
+}

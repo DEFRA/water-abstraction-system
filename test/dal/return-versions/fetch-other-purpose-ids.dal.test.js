@@ -2,15 +2,15 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
-import PrimaryPurposeHelper from '../../support/helpers/primary-purpose.helper.js'
-import PurposeHelper from '../../support/helpers/purpose.helper.js'
-import SecondaryPurposeHelper from '../../support/helpers/secondary-purpose.helper.js'
-import { generateUUID } from '../../support/generators.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import LicenceVersionPurposeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose.helper.js'
+import PrimaryPurposeHelper from 'water-abstraction-engine/test/helpers/primary-purpose.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
+import SecondaryPurposeHelper from 'water-abstraction-engine/test/helpers/secondary-purpose.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchOtherPurposeIdsDal from '../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'
+import FetchOtherPurposeIdsDal from '../../../src/dal/return-versions/fetch-other-purpose-ids.dal.js'
 
 describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
   let currentPurposeDetails

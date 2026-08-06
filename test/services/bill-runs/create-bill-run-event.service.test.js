@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import BillRunModel from '../../../app/models/bill-run.model.js'
-import EventModel from '../../../app/models/event.model.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import EventModel from 'water-abstraction-engine/models/event.model.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Thing under test
-import CreateBillRunEventService from '../../../app/services/bill-runs/create-bill-run-event.service.js'
+import CreateBillRunEventService from '../../../src/services/bill-runs/create-bill-run-event.service.js'
 
 describe('Create Bill Run Event service', () => {
   let testDate

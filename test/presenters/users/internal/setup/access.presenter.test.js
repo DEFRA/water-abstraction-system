@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../../support/generators.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import AccessPresenter from '../../../../../app/presenters/users/internal/setup/access.presenter.js'
+import AccessPresenter from '../../../../../src/presenters/users/internal/setup/access.presenter.js'
 
 describe('Users - Internal - Setup - Access Presenter', () => {
   let session

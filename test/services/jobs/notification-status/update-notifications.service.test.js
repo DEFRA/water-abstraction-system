@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import EventHelper from '../../../support/helpers/event.helper.js'
-import NotificationHelper from '../../../support/helpers/notification.helper.js'
-import { timestampForPostgres } from '../../../../app/lib/general.lib.js'
+import EventHelper from 'water-abstraction-engine/test/helpers/event.helper.js'
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
+import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import UpdateNotificationsService from '../../../../app/services/jobs/notification-status/update-notifications.service.js'
+import UpdateNotificationsService from '../../../../src/services/jobs/notification-status/update-notifications.service.js'
 
 describe('Job - Notification Status - Update Notifications service', () => {
   let eventId

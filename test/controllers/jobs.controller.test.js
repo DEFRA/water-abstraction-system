@@ -4,20 +4,20 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
 
 // Things we need to stub
-import * as ExportService from '../../app/services/jobs/export/export.service.js'
-import * as ProcessCleanService from '../../app/services/jobs/clean/process-clean.service.js'
-import * as ProcessCustomerFilesService from '../../app/services/jobs/customer-files/process-customer-files.service.js'
-import * as ProcessLicenceUpdatesService from '../../app/services/jobs/licence-updates/process-licence-updates.service.js'
-import * as ProcessNotificationStatusService from '../../app/services/jobs/notification-status/process-notification-status.service.js'
-import * as ProcessRenewalInvitationsService from '../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js'
-import * as ProcessReturnLogsService from '../../app/services/jobs/return-logs/process-return-logs.service.js'
-import * as ProcessTimeLimitedLicencesService from '../../app/services/jobs/time-limited/process-time-limited-licences.service.js'
+import * as ExportService from '../../src/services/jobs/export/export.service.js'
+import * as ProcessCleanService from '../../src/services/jobs/clean/process-clean.service.js'
+import * as ProcessCustomerFilesService from '../../src/services/jobs/customer-files/process-customer-files.service.js'
+import * as ProcessLicenceUpdatesService from '../../src/services/jobs/licence-updates/process-licence-updates.service.js'
+import * as ProcessNotificationStatusService from '../../src/services/jobs/notification-status/process-notification-status.service.js'
+import * as ProcessRenewalInvitationsService from '../../src/services/jobs/renewal-invitations/process-renewal-invitations.service.js'
+import * as ProcessReturnLogsService from '../../src/services/jobs/return-logs/process-return-logs.service.js'
+import * as ProcessTimeLimitedLicencesService from '../../src/services/jobs/time-limited/process-time-limited-licences.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT } = http2.constants
 

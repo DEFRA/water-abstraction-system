@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import RegionHelper from '../../../support/helpers/region.helper.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import NoLicencesService from '../../../../app/services/bill-runs/setup/no-licences.service.js'
+import NoLicencesService from '../../../../src/services/bill-runs/setup/no-licences.service.js'
 
 describe('Bill Runs - Setup - No Licences service', () => {
   const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)

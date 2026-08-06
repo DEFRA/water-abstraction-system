@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ChangeAddressValidator from '../../app/validators/change-address.validator.js'
+import ChangeAddressValidator from '../../src/validators/change-address.validator.js'
 
 describe('Create Bill Run validator', () => {
   const completeAddress = {

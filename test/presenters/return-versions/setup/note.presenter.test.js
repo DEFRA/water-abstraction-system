@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import NotePresenter from '../../../../app/presenters/return-versions/setup/note.presenter.js'
+import NotePresenter from '../../../../src/presenters/return-versions/setup/note.presenter.js'
 
 describe('Return Versions Setup - Note presenter', () => {
   let session

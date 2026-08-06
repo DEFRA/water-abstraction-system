@@ -6,7 +6,7 @@ import ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js
 import ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
 
 // Thing under test
-import GenerateReturnLogService from '../../../app/services/return-logs/generate-return-log.service.js'
+import GenerateReturnLogService from '../../../src/services/return-logs/generate-return-log.service.js'
 
 describe('Return Logs - Generate Return Log service', () => {
   let returnCycle

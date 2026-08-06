@@ -2,18 +2,18 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as DetermineBillLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js'
-import * as DetermineChargeVersionFlagsService from '../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js'
-import * as DetermineExistingBillRunYearsService from '../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js'
-import * as DetermineImportedLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js'
-import * as DetermineLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-licence-flags.service.js'
-import * as DetermineReturnLogFlagsService from '../../../../app/services/licences/supplementary/determine-return-log-flags.service.js'
-import * as DetermineWorkflowFlagsService from '../../../../app/services/licences/supplementary/determine-workflow-flags.service.js'
-import * as PersistSupplementaryBillingFlagsService from '../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as DetermineBillLicenceFlagsService from '../../../../src/services/licences/supplementary/determine-bill-licence-flags.service.js'
+import * as DetermineChargeVersionFlagsService from '../../../../src/services/licences/supplementary/determine-charge-version-flags.service.js'
+import * as DetermineExistingBillRunYearsService from '../../../../src/services/licences/supplementary/determine-existing-bill-run-years.service.js'
+import * as DetermineImportedLicenceFlagsService from '../../../../src/services/licences/supplementary/determine-imported-licence-flags.service.js'
+import * as DetermineLicenceFlagsService from '../../../../src/services/licences/supplementary/determine-licence-flags.service.js'
+import * as DetermineReturnLogFlagsService from '../../../../src/services/licences/supplementary/determine-return-log-flags.service.js'
+import * as DetermineWorkflowFlagsService from '../../../../src/services/licences/supplementary/determine-workflow-flags.service.js'
+import * as PersistSupplementaryBillingFlagsService from '../../../../src/services/licences/supplementary/persist-supplementary-billing-flags.service.js'
 
 // Thing under test
-import ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
+import ProcessBillingFlagService from '../../../../src/services/licences/supplementary/process-billing-flag.service.js'
 
 describe('Licences - Supplementary - Process Billing Flag service', () => {
   let notifierStub
@@ -22,7 +22,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
   beforeEach(() => {
     vi.spyOn(PersistSupplementaryBillingFlagsService, 'default').mockResolvedValue()
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

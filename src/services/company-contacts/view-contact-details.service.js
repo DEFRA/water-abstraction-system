@@ -1,0 +1,41 @@
+/**
+ * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/contact-details' page
+ *
+ * @module ViewContactDetailsService
+ */
+
+import { readFlashNotification } from 'water-abstraction-engine/lib/general.lib.js'
+
+import ContactDetailsPresenter from '../../presenters/company-contacts/contact-details.presenter.js'
+import FetchAbstractionAlertLicencesDal from '../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
+import FetchCompanyContactDetailsService from './fetch-company-contact-details.service.js'
+import FetchCompanyService from '../../dal/companies/fetch-company.dal.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/contact-details' page
+ *
+ * @param {string} id - the UUID of the company contact
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<object>} The data formatted for the view template
+ */
+export default async function viewContactDetailsService(id, auth, yar) {
+  const companyContact = await FetchCompanyContactDetailsService(id)
+
+  const company = await FetchCompanyService(companyContact.companyId)
+
+  const licences = await FetchAbstractionAlertLicencesDal(companyContact.abstractionAlertLicences)
+
+  const pageData = ContactDetailsPresenter(company, companyContact, licences)
+
+  const notification = readFlashNotification(yar)
+
+  return {
+    activeSecondaryNav: 'contact-details',
+    notification,
+    roles: userRoles(auth),
+    ...pageData
+  }
+}

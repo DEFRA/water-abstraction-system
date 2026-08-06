@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnSubmissionLineModel from '../../../../app/models/return-submission-line.model.js'
-import { generateUUID } from '../../../support/generators.js'
-import { timestampForPostgres } from '../../../../app/lib/general.lib.js'
+import ReturnSubmissionLineModel from 'water-abstraction-engine/models/return-submission-line.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import CreateReturnLinesService from '../../../../app/services/return-logs/setup/create-return-lines.service.js'
+import CreateReturnLinesService from '../../../../src/services/return-logs/setup/create-return-lines.service.js'
 
 describe('Return Logs - Setup - Create New Return Lines service', () => {
   const timestamp = timestampForPostgres()

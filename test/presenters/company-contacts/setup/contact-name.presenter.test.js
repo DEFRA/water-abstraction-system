@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-import ContactNamePresenter from '../../../../app/presenters/company-contacts/setup/contact-name.presenter.js'
+import ContactNamePresenter from '../../../../src/presenters/company-contacts/setup/contact-name.presenter.js'
 
 describe('Company Contacts - Setup - Contact Name Presenter', () => {
   let company

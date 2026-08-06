@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Thing under test
-import ContactNamePresenter from '../../../../app/presenters/billing-accounts/setup/contact-name.presenter.js'
+import ContactNamePresenter from '../../../../src/presenters/billing-accounts/setup/contact-name.presenter.js'
 
 describe('Billing Accounts - Setup - Contact Name Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount

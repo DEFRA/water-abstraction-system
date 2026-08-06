@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Thing under test
-import ConditionsPresenter from '../../../app/presenters/licences/conditions.presenter.js'
+import ConditionsPresenter from '../../../src/presenters/licences/conditions.presenter.js'
 
 describe('Licences - Conditions presenter', () => {
   let conditions

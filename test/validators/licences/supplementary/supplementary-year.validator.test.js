@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import SupplementaryYearValidator from '../../../../app/validators/licences/supplementary/supplementary-year.validator.js'
+import SupplementaryYearValidator from '../../../../src/validators/licences/supplementary/supplementary-year.validator.js'
 
 describe('Supplementary Year validator', () => {
   let payload

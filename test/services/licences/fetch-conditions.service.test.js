@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
-import LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
-import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
-import LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
-import PointHelper from '../../support/helpers/point.helper.js'
-import PurposeHelper from '../../support/helpers/purpose.helper.js'
-import { generateUUID } from '../../support/generators.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import LicenceVersionPurposeConditionHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionTypeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose-condition-type.helper.js'
+import LicenceVersionPurposeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposePointHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose-point.helper.js'
+import PointHelper from 'water-abstraction-engine/test/helpers/point.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchConditionsService from '../../../app/services/licences/fetch-conditions.service.js'
+import FetchConditionsService from '../../../src/services/licences/fetch-conditions.service.js'
 
 describe('Licences - Fetch Conditions service', () => {
   let licence

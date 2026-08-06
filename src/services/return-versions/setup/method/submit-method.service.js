@@ -1,0 +1,82 @@
+/**
+ * Orchestrates validating the data for `/return-versions/setup/{sessionId}/method` page
+ * @module SubmitSetupService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
+
+import GenerateFromAbstractionDataService from './generate-from-abstraction-data.service.js'
+import MethodPresenter from '../../../../presenters/return-versions/setup/method.presenter.js'
+import MethodValidator from '../../../../validators/return-versions/setup/method.validator.js'
+
+/**
+ * Orchestrates validating the data for `/return-versions/setup/{sessionId}/method` page
+ *
+ * It first retrieves the session instance for the returns requirements journey in progress.
+ *
+ * The validation result is then combined with the output of the presenter to generate the page data needed by the view.
+ * If there was a validation error the controller will re-render the page so needs this information. If all is well the
+ * controller will redirect to the next page in the journey depending on which radio item was chosen.
+ *
+ * @param {string} sessionId - The UUID of the current session
+ * @param {object} payload - The submitted form data
+ *
+ * @returns {Promise<object>} If no errors a the url for where the user should be redirected else the page data for the
+ * setup page including the validation error details
+ */
+export default async function submitMethodService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
+
+  const validationResult = _validate(payload)
+
+  if (!validationResult) {
+    await _save(session, payload)
+
+    return {
+      redirect: _redirect(payload.method)
+    }
+  }
+
+  const formattedData = MethodPresenter(session, payload)
+
+  return {
+    error: validationResult,
+    ...formattedData
+  }
+}
+
+function _redirect(method) {
+  if (method === 'useAbstractionData') {
+    return 'check'
+  }
+
+  if (method === 'useExistingRequirements') {
+    return 'existing'
+  }
+
+  return 'purpose/0'
+}
+
+async function _save(session, payload) {
+  session.method = payload.method
+
+  // If the user selected the method 'Start by using abstraction data' to setup the return requirements we use
+  // `GenerateFromAbstractionDataService` to fetch the licence's abstraction data and transform it into return
+  // requirements we can persist in the session
+  if (payload.method === 'useAbstractionData') {
+    session.requirements = await GenerateFromAbstractionDataService(
+      session.licence.id,
+      session.licenceVersion.id,
+      session.returnVersionStartDate
+    )
+  }
+
+  return session.$update()
+}
+
+function _validate(payload) {
+  const validation = MethodValidator(payload)
+
+  return formatValidationResult(validation)
+}

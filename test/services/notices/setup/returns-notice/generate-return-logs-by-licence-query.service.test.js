@@ -2,14 +2,14 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
-import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
-import { db } from '../../../../../db/db.js'
-import { generateLicenceRef } from '../../../../support/generators.js'
-import { tomorrow } from '../../../../support/general.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import { db } from 'water-abstraction-engine/db/db.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
+import { tomorrow } from 'water-abstraction-engine/test/general.js'
 
 // Thing under test
-import GenerateReturnLogsByLicenceQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-licence-query.service.js'
+import GenerateReturnLogsByLicenceQueryService from '../../../../../src/services/notices/setup/returns-notice/generate-return-logs-by-licence-query.service.js'
 
 describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Query Service', () => {
   let licenceRef

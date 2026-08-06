@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceSupplementaryYearHelper from '../../support/helpers/licence-supplementary-year.helper.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
-import { generateUUID } from '../../support/generators.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceSupplementaryYearHelper from 'water-abstraction-engine/test/helpers/licence-supplementary-year.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import AssignBillRunToLicencesService from '../../../app/services/bill-runs/assign-bill-run-to-licences.service.js'
+import AssignBillRunToLicencesService from '../../../src/services/bill-runs/assign-bill-run-to-licences.service.js'
 
 // NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
 let billRun

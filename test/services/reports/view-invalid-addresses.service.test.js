@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we want to stub
-import * as FetchInvalidAddressesService from '../../../app/services/reports/fetch-invalid-addresses.service.js'
+import * as FetchInvalidAddressesService from '../../../src/services/reports/fetch-invalid-addresses.service.js'
 
 // Thing under test
-import ViewInvalidAddressesService from '../../../app/services/reports/view-invalid-addresses.service.js'
+import ViewInvalidAddressesService from '../../../src/services/reports/view-invalid-addresses.service.js'
 
 describe('Reports - View Invalid Addresses service', () => {
   beforeEach(() => {

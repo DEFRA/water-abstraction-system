@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import YarStub from '../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we want to stub
-import UserModel from '../../../app/models/user.model.js'
+import UserModel from 'water-abstraction-engine/models/user.model.js'
 
 // Thing under test
-import ViewProfileDetailsService from '../../../app/services/users/view-profile-details.service.js'
+import ViewProfileDetailsService from '../../../src/services/users/view-profile-details.service.js'
 
 describe('Users - View profile details service', () => {
   const profileDetails = {

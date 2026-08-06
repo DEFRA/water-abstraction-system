@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
 import LicenceFixture from '../../support/fixtures/licence.fixture.js'
-import LicenceModel from '../../../app/models/licence.model.js'
 import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Thing under test
-import SummaryHeadingPresenter from '../../../app/presenters/licences/summary-heading.presenter.js'
+import SummaryHeadingPresenter from '../../../src/presenters/licences/summary-heading.presenter.js'
 
 describe('Licences - Summary Heading presenter', () => {
   let licence

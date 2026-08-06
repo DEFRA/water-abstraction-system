@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import CompanyContactModel from '../../../../app/models/company-contact.model.js'
+import CompanyContactModel from 'water-abstraction-engine/models/company-contact.model.js'
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import SessionModel from '../../../../app/models/session.model.js'
-import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-import * as FetchCompanyContactDal from '../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js'
-import * as FetchCompanyLicencesDal from '../../../../app/dal/company-contacts/fetch-company-licences.dal.js'
+import * as FetchCompanyContactDal from '../../../../src/dal/company-contacts/setup/fetch-company-contact.dal.js'
+import * as FetchCompanyLicencesDal from '../../../../src/dal/company-contacts/fetch-company-licences.dal.js'
 
 // Thing under test
-import InitiateEditSessionService from '../../../../app/services/company-contacts/setup/initiate-edit-session.service.js'
+import InitiateEditSessionService from '../../../../src/services/company-contacts/setup/initiate-edit-session.service.js'
 
 describe('Company Contacts - Setup - Initiate edit Session service', () => {
   let company

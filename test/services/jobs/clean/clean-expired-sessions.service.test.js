@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionHelper from '../../../support/helpers/session.helper.js'
-import SessionModel from '../../../../app/models/session.model.js'
-import { today } from '../../../../app/lib/general.lib.js'
+import SessionHelper from 'water-abstraction-engine/test/helpers/session.helper.js'
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Things we need to stub
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 
 // Thing under test
-import CleanExpiredSessionsService from '../../../../app/services/jobs/clean/clean-expired-sessions.service.js'
+import CleanExpiredSessionsService from '../../../../src/services/jobs/clean/clean-expired-sessions.service.js'
 
 describe('Jobs - Clean - Clean Expired Sessions service', () => {
   const todaysDate = today()
@@ -20,7 +20,7 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
   let session
 
   beforeEach(async () => {
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

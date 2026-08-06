@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import RegionValidator from '../../../../app/validators/bill-runs/setup/region.validator.js'
+import RegionValidator from '../../../../src/validators/bill-runs/setup/region.validator.js'
 
 describe('Bill Runs Setup Region validator', () => {
   const regions = [

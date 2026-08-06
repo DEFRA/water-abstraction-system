@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { tomorrow } from 'water-abstraction-engine/test/general.js'
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
-import { formatLongDate } from '../../../app/presenters/base.presenter.js'
-import { tomorrow } from '../../support/general.js'
 
 // Thing under test
-import CompanyPresenter from '../../../app/presenters/companies/company.presenter.js'
+import CompanyPresenter from '../../../src/presenters/companies/company.presenter.js'
 
 describe('Companies - Company Presenter', () => {
   const role = 'licence-holder'

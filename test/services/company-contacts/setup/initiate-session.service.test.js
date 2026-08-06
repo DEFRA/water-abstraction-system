@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import SessionModel from '../../../../app/models/session.model.js'
-import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-import * as FetchCompanyLicencesDal from '../../../../app/dal/company-contacts/fetch-company-licences.dal.js'
-import * as FetchCompanyService from '../../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchCompanyLicencesDal from '../../../../src/dal/company-contacts/fetch-company-licences.dal.js'
+import * as FetchCompanyService from '../../../../src/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-import InitiateSessionService from '../../../../app/services/company-contacts/setup/initiate-session.service.js'
+import InitiateSessionService from '../../../../src/services/company-contacts/setup/initiate-session.service.js'
 
 describe('Company Contacts - Setup - Initiate Session service', () => {
   let company

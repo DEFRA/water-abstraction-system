@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Thing under test
-import CompanySearchPresenter from '../../../../app/presenters/billing-accounts/setup/company-search.presenter.js'
+import CompanySearchPresenter from '../../../../src/presenters/billing-accounts/setup/company-search.presenter.js'
 
 describe('Billing Accounts - Setup - Company Search Presenter', () => {
   let session

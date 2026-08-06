@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import EventHelper from '../../../../support/helpers/event.helper.js'
+import EventHelper from 'water-abstraction-engine/test/helpers/event.helper.js'
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
-import NotificationHelper from '../../../../support/helpers/notification.helper.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
-import { compareStrings } from '../../../../../app/lib/general.lib.js'
-import { futureDueDate } from '../../../../../app/presenters/notices/base.presenter.js'
-import { generateLicenceRef, generateUUID } from '../../../../support/generators.js'
+import { futureDueDate } from '../../../../../src/presenters/notices/base.presenter.js'
 
 // Thing under test
-import FetchFailedReturnsInvitationsService from '../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js'
+import FetchFailedReturnsInvitationsService from '../../../../../src/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations service', () => {
   let licenceRefs

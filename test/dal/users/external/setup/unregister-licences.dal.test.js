@@ -2,14 +2,14 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceDocumentHeaderHelper from '../../../../support/helpers/licence-document-header.helper.js'
-import LicenceDocumentHeaderModel from '../../../../../app/models/licence-document-header.model.js'
-import LicenceUnregistrationModel from '../../../../../app/models/licence-unregistration.model.js'
+import LicenceDocumentHeaderHelper from 'water-abstraction-engine/test/helpers/licence-document-header.helper.js'
+import LicenceDocumentHeaderModel from 'water-abstraction-engine/models/licence-document-header.model.js'
+import LicenceUnregistrationModel from 'water-abstraction-engine/models/licence-unregistration.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import UsersFixture from '../../../../support/fixtures/users.fixture.js'
-import { generateUUID } from '../../../../support/generators.js'
 
 // Thing under test
-import UnregisterLicencesDal from '../../../../../app/dal/users/external/setup/unregister-licences.dal.js'
+import UnregisterLicencesDal from '../../../../../src/dal/users/external/setup/unregister-licences.dal.js'
 
 describe('Users - External - Setup - Unregister Licences DAL', () => {
   let firstLicenceId

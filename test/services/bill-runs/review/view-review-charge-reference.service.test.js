@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
-import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
+import * as FetchReviewChargeReferenceService from '../../../../src/services/bill-runs/review/fetch-review-charge-reference.service.js'
 
 // Thing under test
-import ViewReviewChargeReferenceService from '../../../../app/services/bill-runs/review/view-review-charge-reference.service.js'
+import ViewReviewChargeReferenceService from '../../../../src/services/bill-runs/review/view-review-charge-reference.service.js'
 
 describe('Bill Runs - Review - View Review Charge Reference Service', () => {
   let reviewChargeReference

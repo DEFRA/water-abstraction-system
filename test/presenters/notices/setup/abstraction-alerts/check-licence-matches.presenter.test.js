@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-import CheckLicenceMatchesPresenter from '../../../../../app/presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js'
+import CheckLicenceMatchesPresenter from '../../../../../src/presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js'
 
 describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter', () => {
   let licenceMonitoringStations

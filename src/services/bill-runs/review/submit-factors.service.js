@@ -1,0 +1,78 @@
+/**
+ * Handles user submission for the review charge reference factors page
+ * @module SubmitFactorsService
+ */
+
+import ReviewChargeReferenceModel from 'water-abstraction-engine/models/review-charge-reference.model.js'
+
+import FactorsPresenter from '../../../presenters/bill-runs/review/factors.presenter.js'
+import FactorsValidator from '../../../validators/bill-runs/review/factors.validator.js'
+import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
+
+/**
+ * Handles user submission for the review charge reference factors page
+ *
+ * It first validates the payload of the submitted request.
+ *
+ * If there is no validation error it will save the selected value to the review charge reference then return an empty
+ * object. This will indicate to the controller that the submission was successful triggering it to redirect back to the
+ * review charge reference page.
+ *
+ * If there is a validation error it is combined with the output of the presenter to generate the page data needed to
+ * re-render the view with an error message.
+ *
+ * @param {string} reviewChargeReferenceId - The UUID of the review charge reference being updated
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} payload - The submitted form data
+ *
+ * @returns {Promise<object>} An empty object if there are no errors else the page data for the page including the
+ * validation error details
+ */
+export default async function submitFactorsService(reviewChargeReferenceId, yar, payload) {
+  const validationResult = _validate(payload)
+
+  if (!validationResult) {
+    await _save(reviewChargeReferenceId, payload)
+    yar.flash('banner', 'The adjustment factors for this licence have been updated')
+
+    return {}
+  }
+
+  const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
+  const pageData = FactorsPresenter(reviewChargeReference)
+
+  return {
+    activeNavBar: 'bill-runs',
+    error: validationResult,
+    ...pageData
+  }
+}
+
+async function _save(reviewChargeReferenceId, payload) {
+  return ReviewChargeReferenceModel.query().findById(reviewChargeReferenceId).patch(payload)
+}
+
+function _validate(payload) {
+  const validation = FactorsValidator(payload)
+
+  if (!validation.error) {
+    return null
+  }
+
+  const result = {
+    errorList: []
+  }
+
+  validation.error.details.forEach((detail) => {
+    const href = detail.context.key === 'amendedAggregate' ? '#amended-aggregate' : '#amended-charge-adjustment'
+
+    result.errorList.push({
+      href,
+      text: detail.message
+    })
+
+    result[detail.context.key] = { message: detail.message }
+  })
+
+  return result
+}

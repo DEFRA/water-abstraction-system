@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import ReverseSupplementaryTransactionsService from '../../../app/services/bill-runs/reverse-supplementary-transactions.service.js'
+import ReverseSupplementaryTransactionsService from '../../../src/services/bill-runs/reverse-supplementary-transactions.service.js'
 
 describe('Bill Runs - Reverse Supplementary Transactions service', () => {
   const transactions = [

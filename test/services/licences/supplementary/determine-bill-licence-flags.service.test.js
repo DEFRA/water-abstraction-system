@@ -2,13 +2,13 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillHelper from '../../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
 
 // Thing under test
-import DetermineBillLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js'
+import DetermineBillLicenceFlagsService from '../../../../src/services/licences/supplementary/determine-bill-licence-flags.service.js'
 
 describe('Determine Bill Licence Flags Service', () => {
   describe('when passed a bill licence ID', () => {

@@ -4,17 +4,17 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { postRequestOptions } from '../support/general.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
-import * as DownloadReturnLogService from '../../app/services/return-logs/download-return-log.service.js'
-import * as SubmitDetailsService from '../../app/services/return-logs/submit-details.service.js'
-import * as ViewCommunicationsService from '../../app/services/return-logs/view-communications.service.js'
-import * as ViewDetailsService from '../../app/services/return-logs/view-details.service.js'
+import * as DownloadReturnLogService from '../../src/services/return-logs/download-return-log.service.js'
+import * as SubmitDetailsService from '../../src/services/return-logs/submit-details.service.js'
+import * as ViewCommunicationsService from '../../src/services/return-logs/view-communications.service.js'
+import * as ViewDetailsService from '../../src/services/return-logs/view-details.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 

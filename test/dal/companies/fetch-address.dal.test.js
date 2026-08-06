@@ -2,10 +2,10 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import AddressHelper from '../../support/helpers/address.helper.js'
+import AddressHelper from 'water-abstraction-engine/test/helpers/address.helper.js'
 
 // Thing under test
-import FetchAddressDal from '../../../app/dal/companies/fetch-address.dal.js'
+import FetchAddressDal from '../../../src/dal/companies/fetch-address.dal.js'
 
 describe('Companies - Fetch Address dal', () => {
   let address

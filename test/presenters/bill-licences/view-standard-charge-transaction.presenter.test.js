@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ViewStandardChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-standard-charge-transaction.presenter.js'
+import ViewStandardChargeTransactionPresenter from '../../../src/presenters/bill-licences/view-standard-charge-transaction.presenter.js'
 
 describe('View Standard Charge Transaction presenter', () => {
   let transaction

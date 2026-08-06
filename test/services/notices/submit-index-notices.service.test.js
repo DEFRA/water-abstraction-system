@@ -5,11 +5,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Things to stub
-import * as FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'
-import YarStub from '../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
+import * as FetchNoticesService from '../../../src/services/notices/fetch-notices.service.js'
 
 // Thing under test
-import SubmitIndexNoticesService from '../../../app/services/notices/submit-index-notices.service.js'
+import SubmitIndexNoticesService from '../../../src/services/notices/submit-index-notices.service.js'
 
 describe('Notices - Submit Index Notices service', () => {
   let auth

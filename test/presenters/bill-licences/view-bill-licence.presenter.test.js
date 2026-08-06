@@ -2,12 +2,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as ViewCompensationChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js'
-import * as ViewMinimumChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js'
-import * as ViewStandardChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-standard-charge-transaction.presenter.js'
+import * as ViewCompensationChargeTransactionPresenter from '../../../src/presenters/bill-licences/view-compensation-charge-transaction.presenter.js'
+import * as ViewMinimumChargeTransactionPresenter from '../../../src/presenters/bill-licences/view-minimum-charge-transaction.presenter.js'
+import * as ViewStandardChargeTransactionPresenter from '../../../src/presenters/bill-licences/view-standard-charge-transaction.presenter.js'
 
 // Thing under test
-import ViewBillLicencePresenter from '../../../app/presenters/bill-licences/view-bill-licence.presenter.js'
+import ViewBillLicencePresenter from '../../../src/presenters/bill-licences/view-bill-licence.presenter.js'
 
 describe('View Bill Licence presenter', () => {
   let billLicence

@@ -2,11 +2,11 @@
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ChangeReasonHelper from '../../support/helpers/change-reason.helper.js'
-import ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
+import ChangeReasonHelper from 'water-abstraction-engine/test/helpers/change-reason.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
 
 // Thing under test
-import DetermineMinimumChargeService from '../../../app/services/bill-runs/determine-minimum-charge.service.js'
+import DetermineMinimumChargeService from '../../../src/services/bill-runs/determine-minimum-charge.service.js'
 
 const CHANGE_REASON_CHARGE_CANCELLED_INDEX = 7
 const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10

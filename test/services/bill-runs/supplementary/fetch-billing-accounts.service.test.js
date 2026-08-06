@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
 
 // Thing under test
-import FetchBillingAccountsService from '../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js'
+import FetchBillingAccountsService from '../../../../src/services/bill-runs/supplementary/fetch-billing-accounts.service.js'
 
 describe('Fetch Billing Accounts service', () => {
   describe('when the service is called with an array of charge version', () => {

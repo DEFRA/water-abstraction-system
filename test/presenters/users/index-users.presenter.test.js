@@ -4,11 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import UsersFixture from '../../support/fixtures/users.fixture.js'
 
-// Things we need to stub
-import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
-
 // Thing under test
-import IndexUsersPresenter from '../../../app/presenters/users/index-users.presenter.js'
+import IndexUsersPresenter from '../../../src/presenters/users/index-users.presenter.js'
 
 describe('Users - Index Users presenter', () => {
   let auth
@@ -26,8 +23,6 @@ describe('Users - Index Users presenter', () => {
     auth = {
       credentials: { scope: ['manage_accounts'] }
     }
-
-    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersManagement', true)
   })
 
   afterEach(() => {

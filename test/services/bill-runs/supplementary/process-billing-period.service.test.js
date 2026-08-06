@@ -2,27 +2,27 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillRunError from '../../../../app/errors/bill-run.error.js'
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import BillRunModel from '../../../../app/models/bill-run.model.js'
-import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
-import ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
-import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
-import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
-import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
-import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import FetchChargeVersionsService from '../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import ChangeReasonHelper from 'water-abstraction-engine/test/helpers/change-reason.helper.js'
+import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import BillRunError from '../../../../src/errors/bill-run.error.js'
+import FetchChargeVersionsService from '../../../../src/services/bill-runs/supplementary/fetch-charge-versions.service.js'
 
 // Things we need to stub
-import * as ChargingModuleGenerateBillRunRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
-import * as FetchPreviousTransactionsService from '../../../../app/services/bill-runs/fetch-previous-transactions.service.js'
-import * as GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
-import * as SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
+import * as ChargingModuleGenerateBillRunRequest from '../../../../src/requests/charging-module/generate-bill-run.request.js'
+import * as FetchPreviousTransactionsService from '../../../../src/services/bill-runs/fetch-previous-transactions.service.js'
+import * as GenerateTransactionsService from '../../../../src/services/bill-runs/generate-transactions.service.js'
+import * as SendTransactionsService from '../../../../src/services/bill-runs/send-transactions.service.js'
 
 // Thing under test
-import ProcessBillingPeriodService from '../../../../app/services/bill-runs/supplementary/process-billing-period.service.js'
+import ProcessBillingPeriodService from '../../../../src/services/bill-runs/supplementary/process-billing-period.service.js'
 
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const REGION_SOUTH_WEST_INDEX = 4

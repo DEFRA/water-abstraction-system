@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../support/generators.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchCriticalNoticesDal from '../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js'
-import * as SendAlternateNoticeService from '../../../../app/services/notices/setup/send/send-alternate-notice.service.js'
+import * as FetchCriticalNoticesDal from '../../../../src/dal/jobs/notification-status/fetch-critical-notices.dal.js'
+import * as SendAlternateNoticeService from '../../../../src/services/notices/setup/send/send-alternate-notice.service.js'
 
 // Thing under test
-import SendAlternateNoticesService from '../../../../app/services/jobs/notification-status/send-alternate-notices.service.js'
+import SendAlternateNoticesService from '../../../../src/services/jobs/notification-status/send-alternate-notices.service.js'
 
 describe('Job - Notifications - Send Alternate Notices service', () => {
   let criticalNotices

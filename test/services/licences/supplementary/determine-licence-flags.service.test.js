@@ -2,10 +2,10 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
 
 // Thing under test
-import DetermineLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-licence-flags.service.js'
+import DetermineLicenceFlagsService from '../../../../src/services/licences/supplementary/determine-licence-flags.service.js'
 
 describe('Determine Licence Flags Service', () => {
   describe('when passed a licence ID', () => {

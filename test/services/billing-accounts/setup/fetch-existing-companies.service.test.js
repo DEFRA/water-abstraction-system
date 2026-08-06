@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import CompanyHelper from '../../../support/helpers/company.helper.js'
-import CompanyModel from '../../../../app/models/company.model.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import CompanyModel from 'water-abstraction-engine/models/company.model.js'
 
 // Thing under test
-import FetchExistingCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js'
+import FetchExistingCompaniesService from '../../../../src/services/billing-accounts/setup/fetch-existing-companies.service.js'
 
 describe('Billing Accounts - Setup - Fetch Existing Companies service', () => {
   let acmeFakeCompany

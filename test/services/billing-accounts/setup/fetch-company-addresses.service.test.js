@@ -2,12 +2,12 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import AddressHelper from '../../../support/helpers/address.helper.js'
-import CompanyAddressHelper from '../../../support/helpers/company-address.helper.js'
-import CompanyHelper from '../../../support/helpers/company.helper.js'
+import AddressHelper from 'water-abstraction-engine/test/helpers/address.helper.js'
+import CompanyAddressHelper from 'water-abstraction-engine/test/helpers/company-address.helper.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
 
 // Thing under test
-import FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'
+import FetchCompanyAddressesService from '../../../../src/services/billing-accounts/setup/fetch-company-addresses.service.js'
 
 describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
   let address

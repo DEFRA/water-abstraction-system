@@ -4,14 +4,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import http2 from 'node:http2'
 
 // Test helpers
-import SessionModelStub from '../../support/stubs/session.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
-import * as LookupPostcodeRequest from '../../../app/requests/address-facade/lookup-postcode.request.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as LookupPostcodeRequest from '../../../src/requests/address-facade/lookup-postcode.request.js'
 
 // Thing under test
-import SelectService from '../../../app/services/address/select.service.js'
+import SelectService from '../../../src/services/address/select.service.js'
 
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 

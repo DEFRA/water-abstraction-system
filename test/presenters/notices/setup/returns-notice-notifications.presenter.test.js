@@ -2,14 +2,14 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
-import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
-import { generateUUID } from '../../../support/generators.js'
+import { futureDueDate } from '../../../../src/presenters/notices/base.presenter.js'
 
 // Thing under test
-import ReturnsNoticeNotificationsPresenter from '../../../../app/presenters/notices/setup/returns-notice-notifications.presenter.js'
+import ReturnsNoticeNotificationsPresenter from '../../../../src/presenters/notices/setup/returns-notice-notifications.presenter.js'
 
 describe('Notices - Setup - Returns Notice Notifications presenter', () => {
   let noticeId

@@ -6,13 +6,13 @@ import ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js
 import ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
 
 // Things we need to stub
-import * as CreateReturnLogsService from '../../../app/services/return-logs/create-return-logs.service.js'
-import * as FetchLicenceReturnRequirementsService from '../../../app/services/return-logs/fetch-licence-return-requirements.service.js'
-import * as VoidLicenceReturnLogsService from '../../../app/services/return-logs/void-licence-return-logs.service.js'
-import ReturnCycleModel from '../../../app/models/return-cycle.model.js'
+import ReturnCycleModel from 'water-abstraction-engine/models/return-cycle.model.js'
+import * as CreateReturnLogsService from '../../../src/services/return-logs/create-return-logs.service.js'
+import * as FetchLicenceReturnRequirementsService from '../../../src/services/return-logs/fetch-licence-return-requirements.service.js'
+import * as VoidLicenceReturnLogsService from '../../../src/services/return-logs/void-licence-return-logs.service.js'
 
 // Thing under test
-import ProcessLicenceReturnLogsService from '../../../app/services/return-logs/process-licence-return-logs.service.js'
+import ProcessLicenceReturnLogsService from '../../../src/services/return-logs/process-licence-return-logs.service.js'
 
 describe('Return Logs - Process Licence Return Logs service', () => {
   const licenceId = '3acf7d80-cf74-4e86-8128-13ef687ea091'

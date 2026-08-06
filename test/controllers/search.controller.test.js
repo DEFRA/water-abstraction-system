@@ -4,15 +4,15 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { postRequestOptions } from '../support/general.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
-import * as SubmitSearchService from '../../app/services/search/submit-search.service.js'
-import * as ViewSearchService from '../../app/services/search/view-search.service.js'
+import * as SubmitSearchService from '../../src/services/search/submit-search.service.js'
+import * as ViewSearchService from '../../src/services/search/view-search.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 

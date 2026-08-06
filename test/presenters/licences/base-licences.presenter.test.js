@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import * as BaseLicencesPresenter from '../../../app/presenters/licences/base-licences.presenter.js'
+import * as BaseLicencesPresenter from '../../../src/presenters/licences/base-licences.presenter.js'
 
 describe('Licences - Base Licences presenter', () => {
   describe('#formatAbstractionAmounts()', () => {

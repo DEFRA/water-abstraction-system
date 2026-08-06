@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import SeasonValidator from '../../../../app/validators/bill-runs/setup/season.validator.js'
+import SeasonValidator from '../../../../src/validators/bill-runs/setup/season.validator.js'
 
 describe('Bill Runs Setup Season validator', () => {
   describe('when valid data is provided', () => {

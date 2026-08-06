@@ -3,13 +3,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import http2 from 'node:http2'
-import legacyConfig from '../../config/legacy.config.js'
+import LegacyConfig from '../../src/config/legacy.config.js'
 
 // Things we need to stub
-import * as BaseRequest from '../../app/requests/base.request.js'
+import * as BaseRequest from 'water-abstraction-engine/requests/base.request.js'
 
 // Thing under test
-import * as LegacyRequest from '../../app/requests/legacy.request.js'
+import * as LegacyRequest from '../../src/requests/legacy.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
@@ -38,8 +38,8 @@ describe('Legacy Request', () => {
         const requestArgs = BaseRequest.deleteRequest.mock.calls[0]
 
         expect(requestArgs[0]).toEqual(testPath)
-        expect(requestArgs[1].prefixUrl).toEqual(`${legacyConfig.import.url}/import/1.0`)
-        expect(requestArgs[1].headers).toEqual({ authorization: `Bearer ${legacyConfig.legacyAuthToken}` })
+        expect(requestArgs[1].prefixUrl).toEqual(`${LegacyConfig.import.url}/import/1.0`)
+        expect(requestArgs[1].headers).toEqual({ authorization: `Bearer ${LegacyConfig.legacyAuthToken}` })
         expect(requestArgs[1].responseType).toEqual('json')
       })
 
@@ -66,7 +66,7 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.deleteRequest.mock.calls[0]
 
-        expect(requestArgs[1].prefixUrl).toEqual(legacyConfig.import.url)
+        expect(requestArgs[1].prefixUrl).toEqual(LegacyConfig.import.url)
       })
 
       it('can add the defra-user-id header', async () => {
@@ -136,8 +136,8 @@ describe('Legacy Request', () => {
         const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[0]).toEqual(testPath)
-        expect(requestArgs[1].prefixUrl).toEqual(`${legacyConfig.import.url}/import/1.0`)
-        expect(requestArgs[1].headers).toEqual({ authorization: `Bearer ${legacyConfig.legacyAuthToken}` })
+        expect(requestArgs[1].prefixUrl).toEqual(`${LegacyConfig.import.url}/import/1.0`)
+        expect(requestArgs[1].headers).toEqual({ authorization: `Bearer ${LegacyConfig.legacyAuthToken}` })
         expect(requestArgs[1].responseType).toEqual('json')
         expect(requestArgs[1].json).toBeUndefined()
       })
@@ -166,7 +166,7 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
-        expect(requestArgs[1].prefixUrl).toEqual(legacyConfig.import.url)
+        expect(requestArgs[1].prefixUrl).toEqual(LegacyConfig.import.url)
       })
 
       it('can add the defra-user-id header', async () => {
@@ -238,8 +238,8 @@ describe('Legacy Request', () => {
         const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[0]).toEqual(testPath)
-        expect(requestArgs[1].prefixUrl).toEqual(`${legacyConfig.import.url}/import/1.0`)
-        expect(requestArgs[1].headers).toEqual({ authorization: `Bearer ${legacyConfig.legacyAuthToken}` })
+        expect(requestArgs[1].prefixUrl).toEqual(`${LegacyConfig.import.url}/import/1.0`)
+        expect(requestArgs[1].headers).toEqual({ authorization: `Bearer ${LegacyConfig.legacyAuthToken}` })
         expect(requestArgs[1].responseType).toEqual('json')
         expect(requestArgs[1].json).toEqual(requestBody)
       })
@@ -268,7 +268,7 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
-        expect(requestArgs[1].prefixUrl).toEqual(legacyConfig.import.url)
+        expect(requestArgs[1].prefixUrl).toEqual(LegacyConfig.import.url)
       })
 
       it('can add the defra-user-id header', async () => {

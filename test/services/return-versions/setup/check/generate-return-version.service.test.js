@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things we need to stub
-import * as DetermineNextVersionNumberDal from '../../../../../app/dal/return-versions/determine-next-version-number.dal.js'
-import * as FetchOtherPurposeIdsDal from '../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'
+import * as DetermineNextVersionNumberDal from '../../../../../src/dal/return-versions/determine-next-version-number.dal.js'
+import * as FetchOtherPurposeIdsDal from '../../../../../src/dal/return-versions/fetch-other-purpose-ids.dal.js'
 
 // Thing under test
-import GenerateReturnVersionService from '../../../../../app/services/return-versions/setup/check/generate-return-version.service.js'
+import GenerateReturnVersionService from '../../../../../src/services/return-versions/setup/check/generate-return-version.service.js'
 
 describe('Return Versions - Setup - Generate Return Version service', () => {
   let licenceId

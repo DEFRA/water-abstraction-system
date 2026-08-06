@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ViewCancelBillRunPresenter from '../../../app/presenters/bill-runs/view-cancel-bill-run.presenter.js'
+import ViewCancelBillRunPresenter from '../../../src/presenters/bill-runs/view-cancel-bill-run.presenter.js'
 
 describe('Bill Runs - View Cancel Bill Run presenter', () => {
   let billRun

@@ -2,19 +2,19 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
-import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import ReviewChargeElementHelper from '../../../support/helpers/review-charge-element.helper.js'
-import ReviewChargeElementReturnHelper from '../../../support/helpers/review-charge-element-return.helper.js'
-import ReviewChargeReferenceHelper from '../../../support/helpers/review-charge-reference.helper.js'
-import ReviewChargeVersionHelper from '../../../support/helpers/review-charge-version.helper.js'
-import ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
-import ReviewReturnHelper from '../../../support/helpers/review-return.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReviewChargeElementHelper from 'water-abstraction-engine/test/helpers/review-charge-element.helper.js'
+import ReviewChargeElementReturnHelper from 'water-abstraction-engine/test/helpers/review-charge-element-return.helper.js'
+import ReviewChargeReferenceHelper from 'water-abstraction-engine/test/helpers/review-charge-reference.helper.js'
+import ReviewChargeVersionHelper from 'water-abstraction-engine/test/helpers/review-charge-version.helper.js'
+import ReviewLicenceHelper from 'water-abstraction-engine/test/helpers/review-licence.helper.js'
+import ReviewReturnHelper from 'water-abstraction-engine/test/helpers/review-return.helper.js'
 
 // Thing under test
-import FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
+import FetchReviewChargeElementService from '../../../../src/services/bill-runs/review/fetch-review-charge-element.service.js'
 
 describe('Bill Runs Review - Fetch Review Charge Element service', () => {
   let billRun

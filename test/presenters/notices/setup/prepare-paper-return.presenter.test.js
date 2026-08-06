@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 
 // Thing under test
-import PreparePaperReturnPresenter from '../../../../app/presenters/notices/setup/prepare-paper-return.presenter.js'
+import PreparePaperReturnPresenter from '../../../../src/presenters/notices/setup/prepare-paper-return.presenter.js'
 
 describe('Notices - Setup - Prepare Paper Return presenter', () => {
   const licenceRef = '01/123'

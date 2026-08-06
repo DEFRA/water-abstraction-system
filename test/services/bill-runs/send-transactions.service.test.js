@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillRunError from '../../../app/errors/bill-run.error.js'
-import BillRunModel from '../../../app/models/bill-run.model.js'
-import { generateLicenceRef } from '../../support/generators.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
+import BillRunError from '../../../src/errors/bill-run.error.js'
 
 // Things we need to stub
-import * as ChargingModuleCreateTransactionRequest from '../../../app/requests/charging-module/create-transaction.request.js'
+import * as ChargingModuleCreateTransactionRequest from '../../../src/requests/charging-module/create-transaction.request.js'
 
 // Thing under test
-import SendTransactionsService from '../../../app/services/bill-runs/send-transactions.service.js'
+import SendTransactionsService from '../../../src/services/bill-runs/send-transactions.service.js'
 
 describe('Bill Runs - Send Transactions service', () => {
   const accountNumber = 'ABC123'

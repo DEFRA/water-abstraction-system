@@ -1,0 +1,26 @@
+/**
+ * Orchestrates fetching and presenting the data needed for the notices setup returns period page
+ * @module ViewReturnsPeriodService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+
+import ReturnsPeriodPresenter from '../../../presenters/notices/setup/returns-period.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data needed for the notices setup returns period page
+ *
+ * @param {string} sessionId - The UUID for setup returns notification session record
+ *
+ * @returns {Promise<object>} The view data for the returns period page
+ */
+export default async function viewReturnsPeriodService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
+
+  const formattedData = ReturnsPeriodPresenter(session)
+
+  return {
+    activeNavBar: 'notices',
+    ...formattedData
+  }
+}

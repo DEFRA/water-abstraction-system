@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ProfileDetailsPresenter from '../../../app/presenters/users/profile-details.presenter.js'
+import ProfileDetailsPresenter from '../../../src/presenters/users/profile-details.presenter.js'
 
 describe('Users - Profile Details Presenter', () => {
   let profileDetails

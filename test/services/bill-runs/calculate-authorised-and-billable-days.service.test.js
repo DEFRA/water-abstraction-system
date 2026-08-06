@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ChargeElementHelper from '../../support/helpers/charge-element.helper.js'
-import ChargeReferenceHelper from '../../support/helpers/charge-reference.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
 
 // Thing under test
-import CalculateAuthorisedAndBillableDaysService from '../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js'
+import CalculateAuthorisedAndBillableDaysService from '../../../src/services/bill-runs/calculate-authorised-and-billable-days.service.js'
 
 // NOTE: You might find it helpful to refresh your understanding of abstraction periods and what the service is trying
 // to fathom when referencing them to the billing and charge periods. See the documentation in the service. Also, a

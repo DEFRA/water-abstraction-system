@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
-import { generateNoticeReferenceCode, generateUUID } from '../../../../support/generators.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { generateNoticeReferenceCode, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import ViewPreviewCheckPaperReturnService from '../../../../../app/services/notices/setup/preview/view-preview-check-paper-return.service.js'
+import ViewPreviewCheckPaperReturnService from '../../../../../src/services/notices/setup/preview/view-preview-check-paper-return.service.js'
 
 describe('Notices - Setup - Preview - View Preview Check Paper Return service', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'

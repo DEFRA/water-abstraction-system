@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
-import ContactPresenter from '../../../../app/presenters/notices/setup/contact.presenter.js'
+import ContactPresenter from '../../../../src/presenters/notices/setup/contact.presenter.js'
 
 describe('Notices - Setup - Contact presenter', () => {
   let recipients

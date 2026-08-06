@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import PostcodePresenter from '../../../app/presenters/address/postcode.presenter.js'
+import PostcodePresenter from '../../../src/presenters/address/postcode.presenter.js'
 
 describe('Address - Postcode Presenter', () => {
   let session

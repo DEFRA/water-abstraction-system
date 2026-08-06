@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { today } from '../../../app/lib/general.lib.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import IndexValidator from '../../../app/validators/notices/index.validator.js'
+import IndexValidator from '../../../src/validators/notices/index.validator.js'
 
 describe('Notices - Index validator', () => {
   let payload

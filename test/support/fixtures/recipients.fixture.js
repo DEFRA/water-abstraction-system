@@ -1,7 +1,7 @@
 import crypto from 'node:crypto'
+import { generateLicenceRef, generateReference, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
-import { futureDueDate } from '../../../app/presenters/notices/base.presenter.js'
-import { generateLicenceRef, generateReference, generateUUID } from '../generators.js'
+import { futureDueDate } from '../../../src/presenters/notices/base.presenter.js'
 
 /**
  * Creates a fixture for an ad-hoc additional email recipient

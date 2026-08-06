@@ -1,4 +1,4 @@
-import { generateLicenceRef, generateUUID } from '../generators.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Create licence monitoring station test data

@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as CrmSchemaService from '../../../../app/services/data/tear-down/crm-schema.service.js'
-import * as IdmSchemaService from '../../../../app/services/data/tear-down/idm-schema.service.js'
-import * as PermitSchemaService from '../../../../app/services/data/tear-down/permit-schema.service.js'
-import * as ReturnsSchemaService from '../../../../app/services/data/tear-down/returns-schema.service.js'
-import * as WaterSchemaService from '../../../../app/services/data/tear-down/water-schema.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as CrmSchemaService from '../../../../src/services/data/tear-down/crm-schema.service.js'
+import * as IdmSchemaService from '../../../../src/services/data/tear-down/idm-schema.service.js'
+import * as PermitSchemaService from '../../../../src/services/data/tear-down/permit-schema.service.js'
+import * as ReturnsSchemaService from '../../../../src/services/data/tear-down/returns-schema.service.js'
+import * as WaterSchemaService from '../../../../src/services/data/tear-down/water-schema.service.js'
 
 // Thing under test
-import TearDownService from '../../../../app/services/data/tear-down/tear-down.service.js'
+import TearDownService from '../../../../src/services/data/tear-down/tear-down.service.js'
 
 describe('Tear down service', () => {
   let notifierStub
@@ -21,7 +21,7 @@ describe('Tear down service', () => {
     vi.spyOn(ReturnsSchemaService, 'default').mockResolvedValue()
     vi.spyOn(WaterSchemaService, 'default').mockResolvedValue()
 
-    // TearDownService depends on the GlobalNotifier being set. This happens in app/plugins/global-notifier.plugin.js
+    // TearDownService depends on the GlobalNotifier being set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

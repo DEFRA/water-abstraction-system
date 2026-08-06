@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
 
 // Thing under test
-import CancelPresenter from '../../../../../app/presenters/users/external/setup/cancel.presenter.js'
+import CancelPresenter from '../../../../../src/presenters/users/external/setup/cancel.presenter.js'
 
 describe('Users - External - Setup - Cancel Presenter', () => {
   let session

@@ -4,15 +4,15 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
 
 // Things we need to stub
-import * as LoadService from '../../app/services/data/load/load.service.js'
-import * as SeedService from '../../app/services/data/seed/seed.service.js'
-import * as TearDownService from '../../app/services/data/tear-down/tear-down.service.js'
+import * as LoadService from '../../src/services/data/load/load.service.js'
+import * as SeedService from '../../src/services/data/seed/seed.service.js'
+import * as TearDownService from '../../src/services/data/tear-down/tear-down.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 

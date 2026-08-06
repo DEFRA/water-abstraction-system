@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../support/stubs/session.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import AgreementsExceptionsService from '../../../../app/services/return-versions/setup/agreements-exceptions.service.js'
+import AgreementsExceptionsService from '../../../../src/services/return-versions/setup/agreements-exceptions.service.js'
 
 describe('Return Versions Setup - Agreements Exceptions service', () => {
   const requirementIndex = 0

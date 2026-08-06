@@ -2,11 +2,11 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import ReturnLogModel from '../../../app/models/return-log.model.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 
 // Thing under test
-import VoidReturnLogsService from '../../../app/services/return-logs/void-return-logs.service.js'
+import VoidReturnLogsService from '../../../src/services/return-logs/void-return-logs.service.js'
 
 describe('Return Logs - Void Return Logs service', () => {
   let licenceRef = 'return-logs'

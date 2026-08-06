@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import PaperReturnValidator from '../../../../app/validators/notices/setup/paper-return.validator.js'
+import PaperReturnValidator from '../../../../src/validators/notices/setup/paper-return.validator.js'
 
 describe('Paper Return Validator', () => {
   let payload

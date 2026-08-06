@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import YarStub from '../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as CheckBusyBillRunsService from '../../../app/services/bill-runs/check-busy-bill-runs.service.js'
-import * as FetchBillRunsService from '../../../app/services/bill-runs/fetch-bill-runs.service.js'
-import * as FetchRegionsService from '../../../app/services/bill-runs/setup/fetch-regions.service.js'
+import * as CheckBusyBillRunsService from '../../../src/services/bill-runs/check-busy-bill-runs.service.js'
+import * as FetchBillRunsService from '../../../src/services/bill-runs/fetch-bill-runs.service.js'
+import * as FetchRegionsService from '../../../src/services/bill-runs/setup/fetch-regions.service.js'
 
 // Thing under test
-import IndexBillRunsService from '../../../app/services/bill-runs/index-bill-runs.service.js'
+import IndexBillRunsService from '../../../src/services/bill-runs/index-bill-runs.service.js'
 
 describe('Index Bill Runs service', () => {
   let page

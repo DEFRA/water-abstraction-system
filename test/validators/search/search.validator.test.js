@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import SearchValidator from '../../../app/validators/search/search.validator.js'
+import SearchValidator from '../../../src/validators/search/search.validator.js'
 
 describe('Search - Search validator', () => {
   let payload

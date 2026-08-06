@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import IndexBillRunsPresenter from '../../../app/presenters/bill-runs/index-bill-runs.presenter.js'
+import IndexBillRunsPresenter from '../../../src/presenters/bill-runs/index-bill-runs.presenter.js'
 
 describe('Index Bill Runs presenter', () => {
   const regions = [

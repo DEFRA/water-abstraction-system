@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import TypeValidator from '../../../../app/validators/bill-runs/setup/type.validator.js'
+import TypeValidator from '../../../../src/validators/bill-runs/setup/type.validator.js'
 
 describe('Bill Runs Setup Type validator', () => {
   describe('when valid data is provided', () => {

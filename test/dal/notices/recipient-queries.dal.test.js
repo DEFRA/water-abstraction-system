@@ -2,16 +2,16 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import { db } from 'water-abstraction-engine/db/db.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
 import * as EmptyLicence from '../../support/seeders/empty-licence.seeder.js'
 import * as RecipientScenariosSeeder from '../../support/seeders/recipient-scenarios.seeder.js'
 import * as RecipientsFormatter from '../../support/seeders/recipients.formatter.js'
-import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import { db } from '../../../db/db.js'
-import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-import * as RecipientQueriesDal from '../../../app/dal/notices/recipient-queries.dal.js'
+import * as RecipientQueriesDal from '../../../src/dal/notices/recipient-queries.dal.js'
 
 describe('Notices - Recipient Queries DAL', () => {
   describe('#currentLicenceVersionsJoin', () => {

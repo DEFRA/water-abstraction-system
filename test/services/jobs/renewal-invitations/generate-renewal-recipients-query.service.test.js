@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { db } from 'water-abstraction-engine/db/db.js'
 import * as RecipientScenariosSeeder from '../../../support/seeders/recipient-scenarios.seeder.js'
-import { db } from '../../../../db/db.js'
 
 // Thing under test
-import GenerateRenewalRecipientsQueryService from '../../../../app/services/jobs/renewal-invitations/generate-renewal-recipients-query.service.js'
+import GenerateRenewalRecipientsQueryService from '../../../../src/services/jobs/renewal-invitations/generate-renewal-recipients-query.service.js'
 
 describe('Jobs - Renewal Invitations - Generate Renewal Recipients Query Service', () => {
   const expiringLicencesQuery = `SELECT

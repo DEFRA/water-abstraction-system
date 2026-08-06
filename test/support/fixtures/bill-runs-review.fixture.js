@@ -1,4 +1,4 @@
-import BillingAccountModel from '../../../app/models/billing-account.model.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 
 /**
  * Represents a complete response from `FetchRemoveReviewLicenceService`

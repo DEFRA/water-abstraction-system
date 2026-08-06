@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceVersionPurposeConditionHelper from '../../../support/helpers/licence-version-purpose-condition.helper.js'
-import LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
+import LicenceVersionPurposeConditionHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose.helper.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things to stub
-import * as FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import * as FullConditionService from '../../../../app/services/licence-monitoring-station/setup/full-condition.service.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchFullConditionService from '../../../../src/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import * as FullConditionService from '../../../../src/services/licence-monitoring-station/setup/full-condition.service.js'
 
 // Thing under test
-import SubmitFullConditionService from '../../../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js'
+import SubmitFullConditionService from '../../../../src/services/licence-monitoring-station/setup/submit-full-condition.service.js'
 
 describe('Licence Monitoring Station Setup - Submit Full Condition Service', () => {
   let payload

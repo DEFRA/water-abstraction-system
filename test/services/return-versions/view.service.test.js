@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ContactModel from '../../../app/models/contact.model.js'
-import LicenceModel from '../../../app/models/licence.model.js'
-import ReturnVersionModel from '../../../app/models/return-version.model.js'
-import { generateUUID } from '../../support/generators.js'
+import ContactModel from 'water-abstraction-engine/models/contact.model.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import ReturnVersionModel from 'water-abstraction-engine/models/return-version.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we want to stub
-import * as FetchReturnVersionService from '../../../app/services/return-versions/fetch-return-version.service.js'
+import * as FetchReturnVersionService from '../../../src/services/return-versions/fetch-return-version.service.js'
 
 // Thing under test
-import ViewService from '../../../app/services/return-versions/view.service.js'
+import ViewService from '../../../src/services/return-versions/view.service.js'
 
 describe('Return Versions - View service', () => {
   const returnVersionId = generateUUID()

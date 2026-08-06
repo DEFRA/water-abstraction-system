@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import * as BaseReviewPresenter from '../../../../app/presenters/bill-runs/review/base-review.presenter.js'
+import * as BaseReviewPresenter from '../../../../src/presenters/bill-runs/review/base-review.presenter.js'
 
 describe('Bill Runs Review - Base Review presenter', () => {
   describe('#calculateTotalBillableReturns()', () => {

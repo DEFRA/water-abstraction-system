@@ -6,7 +6,7 @@ import NotificationsFixture from '../../support/fixtures/notifications.fixture.j
 import UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Thing under test
-import NotificationPresenter from '../../../app/presenters/users/notification.presenter.js'
+import NotificationPresenter from '../../../src/presenters/users/notification.presenter.js'
 
 describe('Users - Notification presenter', () => {
   let notification

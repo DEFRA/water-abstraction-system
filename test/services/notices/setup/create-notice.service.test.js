@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import EventModel from '../../../../app/models/event.model.js'
+import EventModel from 'water-abstraction-engine/models/event.model.js'
+import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Thing under test
-import CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
+import CreateNoticeService from '../../../../src/services/notices/setup/create-notice.service.js'
 
 describe('Notices - Setup - Create Notice service', () => {
   const issuer = 'hello@world.com'

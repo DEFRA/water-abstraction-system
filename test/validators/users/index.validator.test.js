@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import IndexValidator from '../../../app/validators/users/index.validator.js'
+import IndexValidator from '../../../src/validators/users/index.validator.js'
 
 describe('Users - Index validator', () => {
   let payload

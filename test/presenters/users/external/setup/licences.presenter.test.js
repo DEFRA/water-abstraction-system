@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
 
 // Thing under test
-import LicencesPresenter from '../../../../../app/presenters/users/external/setup/licences.presenter.js'
+import LicencesPresenter from '../../../../../src/presenters/users/external/setup/licences.presenter.js'
 
 describe('Users - External - Setup - Licences Presenter', () => {
   let session

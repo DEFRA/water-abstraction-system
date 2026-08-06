@@ -1,4 +1,4 @@
-import { generateAccountNumber, generateLicenceRef, generateUUID } from '../generators.js'
+import { generateAccountNumber, generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Represents a bill run object with generated UUIDs for the ID and external ID

@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
-import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as DeleteCompanyContactService from '../../../app/services/company-contacts/delete-company-contact.service.js'
-import * as FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
-import * as FetchNotificationService from '../../../app/services/company-contacts/fetch-notification.service.js'
-import { generateUUID } from '../../support/generators.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+import * as DeleteCompanyContactService from '../../../src/services/company-contacts/delete-company-contact.service.js'
+import * as FetchCompanyContactDal from '../../../src/dal/company-contacts/fetch-company-contact.dal.js'
+import * as FetchNotificationService from '../../../src/services/company-contacts/fetch-notification.service.js'
 
 // Thing under test
-import SubmitRemoveCompanyContactService from '../../../app/services/company-contacts/submit-remove-company-contact.service.js'
+import SubmitRemoveCompanyContactService from '../../../src/services/company-contacts/submit-remove-company-contact.service.js'
 
 describe('Company Contacts - Submit Remove Company Contact Service', () => {
   let companyContact

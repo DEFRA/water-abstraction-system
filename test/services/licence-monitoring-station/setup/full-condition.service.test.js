@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../support/stubs/session.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things to stub
-import * as FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchFullConditionService from '../../../../src/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
 
 // Thing under test
-import FullConditionService from '../../../../app/services/licence-monitoring-station/setup/full-condition.service.js'
+import FullConditionService from '../../../../src/services/licence-monitoring-station/setup/full-condition.service.js'
 
 describe('Licence Monitoring Station Setup - Full Condition Service', () => {
   let condition

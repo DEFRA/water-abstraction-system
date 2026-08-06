@@ -2,10 +2,10 @@
 import { describe, expect, it } from 'vitest'
 
 // Test helpers
-import RegionHelper from '../../support/helpers/region.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Thing under test
-import FetchRegionService from '../../../app/services/bill-runs/fetch-region.service.js'
+import FetchRegionService from '../../../src/services/bill-runs/fetch-region.service.js'
 
 describe('Fetch Region service', () => {
   const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)

@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import LicenceFixture from '../support/fixtures/licence.fixture.js'
-import { generateUUID } from '../support/generators.js'
 
 // Thing under test
-import * as CRMPresenter from '../../app/presenters/crm.presenter.js'
+import * as CRMPresenter from '../../src/presenters/crm.presenter.js'
 
 describe('CRM presenter', () => {
   describe('#abstractionAlertsLabel()', () => {

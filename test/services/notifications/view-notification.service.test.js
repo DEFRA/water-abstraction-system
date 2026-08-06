@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-import * as FetchNotificationService from '../../../app/services/notifications/fetch-notification.service.js'
+import * as FetchNotificationService from '../../../src/services/notifications/fetch-notification.service.js'
 
 // Thing under test
-import ViewNotificationService from '../../../app/services/notifications/view-notification.service.js'
+import ViewNotificationService from '../../../src/services/notifications/view-notification.service.js'
 
 describe('Notifications - View Notification service', () => {
   let companyContactId

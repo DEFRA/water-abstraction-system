@@ -6,7 +6,7 @@ import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 
 // Thing under test
-import NotificationErrorPresenter from '../../../app/presenters/notifications/notification-error.presenter.js'
+import NotificationErrorPresenter from '../../../src/presenters/notifications/notification-error.presenter.js'
 
 describe('Notifications - Notification error presenter', () => {
   let notice

@@ -1,0 +1,29 @@
+/**
+ * Orchestrates fetching and presenting the data for `/notices/setup/{sessionId}/licence` page
+ * @module ViewLicenceService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+
+import LicencePresenter from '../../../presenters/notices/setup/licence.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for `/notices/setup/{sessionId}/licence` page
+ *
+ * Supports generating the data needed for the licence page for the returns notice journeys. It fetches
+ * the current session record and formats the data needed for the form.
+ *
+ * @param {string} sessionId - The UUID of the current session
+ *
+ * @returns {Promise<object>} The view data for the licence page
+ */
+export default async function viewLicenceService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
+
+  const formattedData = LicencePresenter(session)
+
+  return {
+    activeNavBar: 'notices',
+    ...formattedData
+  }
+}

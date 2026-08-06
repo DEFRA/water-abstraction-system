@@ -1,10 +1,10 @@
-import EventModel from '../../../app/models/event.model.js'
-import LicenceModel from '../../../app/models/licence.model.js'
-import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
-import NotificationModel from '../../../app/models/notification.model.js'
-import { generateUUID } from '../generators.js'
+import EventModel from 'water-abstraction-engine/models/event.model.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
-import ServerConfig from '../../../config/server.config.js'
+import ServerConfig from 'water-abstraction-engine/config/server.config.js'
 
 const { domains } = ServerConfig
 

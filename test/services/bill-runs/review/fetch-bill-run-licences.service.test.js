@@ -2,15 +2,15 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import DatabaseConfig from '../../../../config/database.config.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
-import ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
-import { generateRandomInteger } from '../../../support/generators.js'
-import { today } from '../../../../app/lib/general.lib.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import ReviewLicenceHelper from 'water-abstraction-engine/test/helpers/review-licence.helper.js'
+import { generateRandomInteger } from 'water-abstraction-engine/test/generators.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import FetchBillRunLicencesService from '../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js'
+import FetchBillRunLicencesService from '../../../../src/services/bill-runs/review/fetch-bill-run-licences.service.js'
 
 describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
   const todaysDate = today()

@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import SubmissionValidator from '../../../../app/validators/return-logs/setup/submission.validator.js'
+import SubmissionValidator from '../../../../src/validators/return-logs/setup/submission.validator.js'
 
 describe('Return Logs Setup - Submission validator', () => {
   describe('when valid data is provided', () => {

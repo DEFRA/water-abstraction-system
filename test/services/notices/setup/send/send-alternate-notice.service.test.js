@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../../../support/generators.js'
 
 // Things we need to stub
-import * as RenewalInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/renewal-invitation-alternate-notice.service.js'
-import * as ReturnsInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js'
-import * as SendLetterNotificationService from '../../../../../app/services/notices/setup/send/send-letter-notification.service.js'
-import NotificationModel from '../../../../../app/models/notification.model.js'
+import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
+import * as RenewalInvitationAlternateNoticeService from '../../../../../src/services/notices/setup/send/renewal-invitation-alternate-notice.service.js'
+import * as ReturnsInvitationAlternateNoticeService from '../../../../../src/services/notices/setup/send/returns-invitation-alternate-notice.service.js'
+import * as SendLetterNotificationService from '../../../../../src/services/notices/setup/send/send-letter-notification.service.js'
 
 // Thing under test
-import SendAlternateNoticeService from '../../../../../app/services/notices/setup/send/send-alternate-notice.service.js'
+import SendAlternateNoticeService from '../../../../../src/services/notices/setup/send/send-alternate-notice.service.js'
 
 describe('Notices - Setup - Send - Send Alternate Notice service', () => {
   const letterPlaintext =

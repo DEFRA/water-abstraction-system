@@ -2,11 +2,11 @@
  * @module RecipientScenariosSeeder
  */
 
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 import * as CRMContactsSeeder from './crm-contacts.seeder.js'
 import * as EmptyLicence from './empty-licence.seeder.js'
 import * as RecipientsFormatter from './recipients.formatter.js'
-import LicenceVersionHelper from '../helpers/licence-version.helper.js'
-import { compareStrings } from '../../../app/lib/general.lib.js'
 
 /**
  * Seeds an additional contact recipient for an existing licence

@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../support/stubs/session.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import ViewContactTypeService from '../../../../app/services/notices/setup/view-contact-type.service.js'
+import ViewContactTypeService from '../../../../src/services/notices/setup/view-contact-type.service.js'
 
 describe('Notices - Setup - View Contact Type service', () => {
   let session

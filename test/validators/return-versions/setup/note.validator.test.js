@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import NoteValidator from '../../../../app/validators/return-versions/setup/note.validator.js'
+import NoteValidator from '../../../../src/validators/return-versions/setup/note.validator.js'
 
 describe('Return Versions Setup - Note validator', () => {
   describe('when valid data is provided', () => {

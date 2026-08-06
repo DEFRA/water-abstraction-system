@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateNoticeReferenceCode } from '../../../support/generators.js'
 
 // Things we need to stub
-import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchRecipientsService from '../../../../src/services/notices/setup/fetch-recipients.service.js'
 
 // Thing under test
-import ViewSelectRecipientsService from '../../../../app/services/notices/setup/view-select-recipients.service.js'
+import ViewSelectRecipientsService from '../../../../src/services/notices/setup/view-select-recipients.service.js'
 
 describe('Notices - Setup - View Select Recipients service', () => {
   let session

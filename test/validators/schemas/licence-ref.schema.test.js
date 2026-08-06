@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import Joi from 'joi'
 
 // Thing under test
-import { licenceRefSchema } from '../../../app/validators/schemas/licence-ref.schema.js'
+import { licenceRefSchema } from '../../../src/validators/schemas/licence-ref.schema.js'
 
 describe('Validators - Schema - licence ref schema', () => {
   let licenceExists

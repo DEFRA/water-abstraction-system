@@ -2,14 +2,14 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { generateNoticeReferenceCode, generateUUID } from 'water-abstraction-engine/test/generators.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
-import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
-import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
+import { futureDueDate } from '../../../../src/presenters/notices/base.presenter.js'
 
 // Thing under test
-import CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
+import CreateNotificationsService from '../../../../src/services/notices/setup/create-notifications.service.js'
 
 describe('Notices - Setup - Create Notifications service', () => {
   const noticeId = generateUUID()

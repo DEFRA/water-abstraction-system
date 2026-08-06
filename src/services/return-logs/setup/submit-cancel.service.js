@@ -1,0 +1,17 @@
+/**
+ * Manages cancelling the return submission session when cancel is confirmed
+ * @module SubmitCancelService
+ */
+
+import DeleteSessionDal from 'water-abstraction-engine/dal/delete-session.dal.js'
+
+/**
+ * Manages cancelling the return submission session when cancel is confirmed
+ *
+ * The return submission session data is deleted from the database when a user confirms via the cancellation button.
+ *
+ * @param {string} sessionId - The UUID for the return submission setup session record
+ */
+export default async function submitCancelService(sessionId) {
+  await DeleteSessionDal(sessionId)
+}

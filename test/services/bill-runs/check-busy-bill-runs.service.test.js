@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import { db } from '../../../db/db.js'
+import { db } from 'water-abstraction-engine/db/db.js'
 
 // Thing under test
-import CheckBusyBillRunsService from '../../../app/services/bill-runs/check-busy-bill-runs.service.js'
+import CheckBusyBillRunsService from '../../../src/services/bill-runs/check-busy-bill-runs.service.js'
 
 describe('Check Busy Bill Runs service', () => {
   afterEach(async () => {

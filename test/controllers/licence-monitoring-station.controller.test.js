@@ -4,15 +4,15 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { postRequestOptions } from '../support/general.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
-import * as RemoveService from '../../app/services/licence-monitoring-station/remove.service.js'
-import * as SubmitRemoveService from '../../app/services/licence-monitoring-station/submit-remove.service.js'
+import * as RemoveService from '../../src/services/licence-monitoring-station/remove.service.js'
+import * as SubmitRemoveService from '../../src/services/licence-monitoring-station/submit-remove.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 

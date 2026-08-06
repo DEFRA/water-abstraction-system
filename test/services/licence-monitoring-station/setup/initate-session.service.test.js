@@ -2,11 +2,11 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import MonitoringStationHelper from '../../../support/helpers/monitoring-station.helper.js'
-import SessionModel from '../../../../app/models/session.model.js'
+import MonitoringStationHelper from 'water-abstraction-engine/test/helpers/monitoring-station.helper.js'
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
 
 // Thing under test
-import InitiateSessionService from '../../../../app/services/licence-monitoring-station/setup/initiate-session.service.js'
+import InitiateSessionService from '../../../../src/services/licence-monitoring-station/setup/initiate-session.service.js'
 
 describe('Licence Monitoring Station - Setup - Initiate Session service', () => {
   let monitoringStation

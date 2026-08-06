@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { pause } from '../../../../app/lib/general.lib.js'
+import { pause } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Things we need to stub
-import * as SendBillRunService from '../../../../app/services/bill-runs/send/send-bill-run.service.js'
-import * as UpdateInvoiceNumbersService from '../../../../app/services/bill-runs/send/update-invoice-numbers.service.js'
+import * as SendBillRunService from '../../../../src/services/bill-runs/send/send-bill-run.service.js'
+import * as UpdateInvoiceNumbersService from '../../../../src/services/bill-runs/send/update-invoice-numbers.service.js'
 
 // Thing under test
-import SubmitSendBillRunService from '../../../../app/services/bill-runs/send/submit-send-bill-run.service.js'
+import SubmitSendBillRunService from '../../../../src/services/bill-runs/send/submit-send-bill-run.service.js'
 
 describe('Bill Runs - Submit Cancel Bill Run service', () => {
   const billRunId = '800b8ff7-80e6-4855-a394-c79550115265'

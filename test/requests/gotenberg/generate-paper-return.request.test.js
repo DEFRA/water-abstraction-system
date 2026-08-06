@@ -4,10 +4,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import http2 from 'node:http2'
 
 // Things we need to stub
-import * as GotenbergRequest from '../../../app/requests/gotenberg.request.js'
+import * as GotenbergRequest from '../../../src/requests/gotenberg.request.js'
 
 // Thing under test
-import GeneratePaperReturnRequest from '../../../app/requests/gotenberg/generate-paper-return.request.js'
+import GeneratePaperReturnRequest from '../../../src/requests/gotenberg/generate-paper-return.request.js'
 
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 

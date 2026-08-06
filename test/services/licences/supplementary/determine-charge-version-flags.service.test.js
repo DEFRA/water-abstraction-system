@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchChargeVersionBillingDataService from '../../../../app/services/licences/supplementary/fetch-charge-version-billing-data.service.js'
-import * as GeneralLib from '../../../../app/lib/general.lib.js'
+import * as GeneralLib from 'water-abstraction-engine/lib/general.lib.js'
+import * as FetchChargeVersionBillingDataService from '../../../../src/services/licences/supplementary/fetch-charge-version-billing-data.service.js'
 
 // Thing under test
-import DetermineChargeVersionFlagsService from '../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js'
+import DetermineChargeVersionFlagsService from '../../../../src/services/licences/supplementary/determine-charge-version-flags.service.js'
 
 describe('Licences - Supplementary - Determine Charge Version Flags service', () => {
   const chargeVersionId = '41187430-6a49-43a8-b12d-35a657dd1048'

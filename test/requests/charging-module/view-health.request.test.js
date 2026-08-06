@@ -4,10 +4,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import http2 from 'node:http2'
 
 // Things we need to stub
-import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
+import * as ChargingModuleRequest from '../../../src/requests/charging-module.request.js'
 
 // Thing under test
-import ViewHealthRequest from '../../../app/requests/charging-module/view-health.request.js'
+import ViewHealthRequest from '../../../src/requests/charging-module/view-health.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 

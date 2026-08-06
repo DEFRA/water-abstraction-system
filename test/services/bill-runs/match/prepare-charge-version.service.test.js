@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import PrepareChargeVersionService from '../../../../app/services/bill-runs/match/prepare-charge-version.service.js'
+import PrepareChargeVersionService from '../../../../src/services/bill-runs/match/prepare-charge-version.service.js'
 
 describe('Prepare Charge Version Service', () => {
   const billingPeriod = {

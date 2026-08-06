@@ -7,7 +7,7 @@ import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 
 // Thing under test
-import CommunicationsPresenter from '../../../app/presenters/company-contacts/communications.presenter.js'
+import CommunicationsPresenter from '../../../src/presenters/company-contacts/communications.presenter.js'
 
 describe('Company Contacts - Communications presenter', () => {
   let companyContact

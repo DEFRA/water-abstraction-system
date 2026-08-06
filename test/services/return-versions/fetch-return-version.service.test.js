@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import ModLogHelper from 'water-abstraction-engine/test/helpers/mod-log.helper.js'
 import * as RequirementsForReturnsSeeder from '../../support/seeders/requirements-for-returns.seeder.js'
-import ModLogHelper from '../../support/helpers/mod-log.helper.js'
 
 // Thing under test
-import FetchReturnVersionService from '../../../app/services/return-versions/fetch-return-version.service.js'
+import FetchReturnVersionService from '../../../src/services/return-versions/fetch-return-version.service.js'
 
 describe('Return Versions - Fetch Return Version service', () => {
   let modLog

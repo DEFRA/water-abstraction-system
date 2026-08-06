@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchReturnLogService from '../../../../app/services/return-logs/setup/fetch-return-log.service.js'
+import * as FetchReturnLogService from '../../../../src/services/return-logs/setup/fetch-return-log.service.js'
 
 // Thing under test
-import ConfirmedService from '../../../../app/services/return-logs/setup/confirmed.service.js'
+import ConfirmedService from '../../../../src/services/return-logs/setup/confirmed.service.js'
 
 describe('Return Logs - Setup - Confirmed service', () => {
   const returnLogId = 'e8d145d9-2da4-4d2d-b338-92cedc7cea7f'

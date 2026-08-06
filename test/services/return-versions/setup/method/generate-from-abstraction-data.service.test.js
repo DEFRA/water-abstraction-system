@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceModel from '../../../../../app/models/licence.model.js'
-import LicenceVersionPurposeModel from '../../../../../app/models/licence-version-purpose.model.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import LicenceVersionPurposeModel from 'water-abstraction-engine/models/licence-version-purpose.model.js'
 
 // Things we need to stub
-import * as DetermineTwoPartTariffAgreementService from '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
-import * as FetchAbstractionDataService from '../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js'
+import * as DetermineTwoPartTariffAgreementService from '../../../../../src/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
+import * as FetchAbstractionDataService from '../../../../../src/services/return-versions/setup/method/fetch-abstraction-data.service.js'
 
 // Thing under test
-import GenerateFromAbstractionDataService from '../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js'
+import GenerateFromAbstractionDataService from '../../../../../src/services/return-versions/setup/method/generate-from-abstraction-data.service.js'
 
 describe('Return Versions - Setup - Generate From Abstraction Data service', () => {
   const licenceId = 'af0e52a3-db43-4add-b388-1b2564a437c7'

@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
-import * as GenerateFromAbstractionDataService from '../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as GenerateFromAbstractionDataService from '../../../../../src/services/return-versions/setup/method/generate-from-abstraction-data.service.js'
 
 // Thing under test
-import SubmitMethodService from '../../../../../app/services/return-versions/setup/method/submit-method.service.js'
+import SubmitMethodService from '../../../../../src/services/return-versions/setup/method/submit-method.service.js'
 
 describe('Return Versions - Setup - Submit Method service', () => {
   let payload

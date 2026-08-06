@@ -4,10 +4,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import http2 from 'node:http2'
 
 // Things we need to stub
-import * as AddressFacadeRequest from '../../../app/requests/address-facade.request.js'
+import * as AddressFacadeRequest from '../../../src/requests/address-facade.request.js'
 
 // Thing under test
-import LookupPostcodeRequest from '../../../app/requests/address-facade/lookup-postcode.request.js'
+import LookupPostcodeRequest from '../../../src/requests/address-facade/lookup-postcode.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 

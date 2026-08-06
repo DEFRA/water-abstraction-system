@@ -2,14 +2,14 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
-import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
-import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helper.js'
 
 // Thing under test
-import FetchLicenceService from '../../../../app/services/licences/supplementary/fetch-licence.service.js'
+import FetchLicenceService from '../../../../src/services/licences/supplementary/fetch-licence.service.js'
 
 describe('Fetch Licence Service', () => {
   let workflow

@@ -2,22 +2,22 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
-import BillingAccountModel from '../../../../app/models/billing-account.model.js'
-import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
-import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
-import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
-import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
-import ReviewChargeElementHelper from '../../../support/helpers/review-charge-element.helper.js'
-import ReviewChargeReferenceHelper from '../../../support/helpers/review-charge-reference.helper.js'
-import ReviewChargeVersionHelper from '../../../support/helpers/review-charge-version.helper.js'
-import ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
+import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import ReviewChargeElementHelper from 'water-abstraction-engine/test/helpers/review-charge-element.helper.js'
+import ReviewChargeReferenceHelper from 'water-abstraction-engine/test/helpers/review-charge-reference.helper.js'
+import ReviewChargeVersionHelper from 'water-abstraction-engine/test/helpers/review-charge-version.helper.js'
+import ReviewLicenceHelper from 'water-abstraction-engine/test/helpers/review-licence.helper.js'
 
 // Thing under test
-import FetchBillingAccountsService from '../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js'
+import FetchBillingAccountsService from '../../../../src/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js'
 
 // NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
 let billRun

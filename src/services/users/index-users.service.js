@@ -1,0 +1,52 @@
+/**
+ * Orchestrates presenting the data for `/users` page
+ * @module IndexUsersService
+ */
+
+import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.presenter.js'
+import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
+import { readFlashNotification } from 'water-abstraction-engine/lib/general.lib.js'
+
+import FetchUsersDal from '../../dal/users/fetch-users.dal.js'
+import IndexUsersPresenter from '../../presenters/users/index-users.presenter.js'
+
+/**
+ * Orchestrates presenting the data for `/users` page
+ *
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {string} page - The current page for the pagination service
+ *
+ * @returns {Promise<object>} The view data for the users page
+ */
+export default async function indexUsersService(yar, auth, page) {
+  const filters = _filters(yar)
+
+  const { results: users, total: totalNumber } = await FetchUsersDal(filters, page)
+
+  const pagination = PaginatorPresenter(totalNumber, page, `/system/users`, users.length, 'users')
+
+  const pageData = IndexUsersPresenter(users, auth)
+
+  const notification = readFlashNotification(yar)
+
+  return {
+    activeNavBar: 'users',
+    filters,
+    notification,
+    pagination,
+    ...pageData
+  }
+}
+
+function _filters(yar) {
+  const savedFilters = processSavedFilters(yar, 'usersFilter')
+
+  return {
+    email: null,
+    permissions: null,
+    status: null,
+    type: null,
+    ...savedFilters
+  }
+}

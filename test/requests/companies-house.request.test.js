@@ -4,12 +4,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import http2 from 'node:http2'
 
 // Things we need to stub
-import * as BaseRequest from '../../app/requests/base.request.js'
-import companiesHouseConfig from '../../config/companies-house.config.js'
-import serverConfig from '../../config/server.config.js'
+import * as BaseRequest from 'water-abstraction-engine/requests/base.request.js'
+import ServerConfig from 'water-abstraction-engine/config/server.config.js'
+
+import CompaniesHouseConfig from '../../src/config/companies-house.config.js'
 
 // Thing under test
-import * as CompaniesHouseRequest from '../../app/requests/companies-house.request.js'
+import * as CompaniesHouseRequest from '../../src/requests/companies-house.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
@@ -20,8 +21,8 @@ describe('Companies House Request', () => {
   let searchParams
 
   beforeEach(() => {
-    vi.replaceProperty(companiesHouseConfig, 'apiKey', 'API_KEY')
-    vi.replaceProperty(serverConfig, 'requestTimeout', 1000)
+    vi.replaceProperty(CompaniesHouseConfig, 'apiKey', 'API_KEY')
+    vi.replaceProperty(ServerConfig, 'requestTimeout', 1000)
   })
 
   afterEach(() => {

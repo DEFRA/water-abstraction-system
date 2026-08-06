@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { engineTriggers } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 // Things we need to stub
-import * as LegacyCreateBillRunRequest from '../../../../app/requests/legacy/create-bill-run.request.js'
-import * as StartBillRunProcessService from '../../../../app/services/bill-runs/start-bill-run-process.service.js'
+import * as LegacyCreateBillRunRequest from '../../../../src/requests/legacy/create-bill-run.request.js'
+import * as StartBillRunProcessService from '../../../../src/services/bill-runs/start-bill-run-process.service.js'
 
 // Thing under test
-import CreateService from '../../../../app/services/bill-runs/setup/create.service.js'
+import CreateService from '../../../../src/services/bill-runs/setup/create.service.js'
 
 describe('Bill Runs - Setup - Create service', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'

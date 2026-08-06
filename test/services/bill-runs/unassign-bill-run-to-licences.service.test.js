@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import LicenceSupplementaryYearModel from '../../../app/models/licence-supplementary-year.model.js'
+import LicenceSupplementaryYearModel from 'water-abstraction-engine/models/licence-supplementary-year.model.js'
 
 // Thing under test
-import UnassignBillRunToLicencesService from '../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js'
+import UnassignBillRunToLicencesService from '../../../src/services/bill-runs/unassign-bill-run-to-licences.service.js'
 
 describe('Bill Runs - Unassign Bill Run To Licences service', () => {
   const billRunId = '091c3d3f-0328-4b10-b1a1-3eccf55416a0'

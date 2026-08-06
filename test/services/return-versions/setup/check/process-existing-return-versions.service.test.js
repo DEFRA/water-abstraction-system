@@ -2,12 +2,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchCurrentReturnVersionsDal from '../../../../../app/dal/return-versions/fetch-current-return-versions.dal.js'
-import * as UpdateReturnVersionEndDateDal from '../../../../../app/dal/return-versions/update-return-version-end-date.dal.js'
-import * as UpdateReturnVersionStatusDal from '../../../../../app/dal/return-versions/update-return-version-status.dal.js'
+import * as FetchCurrentReturnVersionsDal from '../../../../../src/dal/return-versions/fetch-current-return-versions.dal.js'
+import * as UpdateReturnVersionEndDateDal from '../../../../../src/dal/return-versions/update-return-version-end-date.dal.js'
+import * as UpdateReturnVersionStatusDal from '../../../../../src/dal/return-versions/update-return-version-status.dal.js'
 
 // Thing under test
-import ProcessExistingReturnVersionsService from '../../../../../app/services/return-versions/setup/check/process-existing-return-versions.service.js'
+import ProcessExistingReturnVersionsService from '../../../../../src/services/return-versions/setup/check/process-existing-return-versions.service.js'
 
 describe('Return Versions Setup - Process Existing Return Versions service', () => {
   let licenceId

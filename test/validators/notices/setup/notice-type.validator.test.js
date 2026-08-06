@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import NoticeTypeValidator from '../../../../app/validators/notices/setup/notice-type.validator.js'
+import NoticeTypeValidator from '../../../../src/validators/notices/setup/notice-type.validator.js'
 
 describe('Notice Type Validator', () => {
   let payload

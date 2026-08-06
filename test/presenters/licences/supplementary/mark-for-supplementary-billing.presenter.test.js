@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import MarkForSupplementaryBillingPresenter from '../../../../app/presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js'
+import MarkForSupplementaryBillingPresenter from '../../../../src/presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js'
 
 describe('Mark For Supplementary Billing presenter', () => {
   let testDate

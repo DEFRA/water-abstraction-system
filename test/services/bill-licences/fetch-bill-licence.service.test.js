@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillHelper from '../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
-import BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import ChargeElementHelper from '../../support/helpers/charge-element.helper.js'
-import ChargeReferenceHelper from '../../support/helpers/charge-reference.helper.js'
-import PurposeHelper from '../../support/helpers/purpose.helper.js'
-import TransactionHelper from '../../support/helpers/transaction.helper.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
+import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
 
 // Thing under test
-import FetchBillLicenceService from '../../../app/services/bill-licences/fetch-bill-licence.service.js'
+import FetchBillLicenceService from '../../../src/services/bill-licences/fetch-bill-licence.service.js'
 
 describe('Bill Licences - Fetch Bill Licence service', () => {
   let bill

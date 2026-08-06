@@ -2,13 +2,13 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import AddressHelper from '../../support/helpers/address.helper.js'
-import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
-import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
-import CompanyHelper from '../../support/helpers/company.helper.js'
+import AddressHelper from 'water-abstraction-engine/test/helpers/address.helper.js'
+import BillingAccountAddressHelper from 'water-abstraction-engine/test/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
 
 // Thing under test
-import FetchCompanyDal from '../../../app/dal/companies/fetch-billing-accounts.dal.js'
+import FetchCompanyDal from '../../../src/dal/companies/fetch-billing-accounts.dal.js'
 
 describe('Companies - Fetch Billing Accounts dal', () => {
   let address

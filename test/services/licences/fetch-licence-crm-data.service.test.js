@@ -2,11 +2,11 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
 import * as CRMSeeder from '../../support/seeders/crm.seeder.js'
-import DatabaseConfig from '../../../config/database.config.js'
 
 // Thing under test
-import FetchLicenceCRMDataService from '../../../app/services/licences/fetch-licence-crm-data.service.js'
+import FetchLicenceCRMDataService from '../../../src/services/licences/fetch-licence-crm-data.service.js'
 
 describe('Licences - Fetch Licence CRM data service', () => {
   let crmData

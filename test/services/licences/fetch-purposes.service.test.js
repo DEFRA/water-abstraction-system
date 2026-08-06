@@ -2,16 +2,16 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
-import LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
-import PointHelper from '../../support/helpers/point.helper.js'
-import PurposeHelper from '../../support/helpers/purpose.helper.js'
-import SourceHelper from '../../support/helpers/source.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import LicenceVersionPurposeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposePointHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose-point.helper.js'
+import PointHelper from 'water-abstraction-engine/test/helpers/point.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
+import SourceHelper from 'water-abstraction-engine/test/helpers/source.helper.js'
 
 // Thing under test
-import FetchPurposesService from '../../../app/services/licences/fetch-purposes.service.js'
+import FetchPurposesService from '../../../src/services/licences/fetch-purposes.service.js'
 
 describe('Licences - Fetch Purposes service', () => {
   let licence

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import LicencesValidator from '../../../../../app/validators/users/external/setup/licences.validator.js'
+import LicencesValidator from '../../../../../src/validators/users/external/setup/licences.validator.js'
 
 describe('Users - External - Setup - Licences Validator', () => {
   let payload

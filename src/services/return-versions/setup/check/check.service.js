@@ -1,0 +1,51 @@
+/**
+ * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/check` page
+ * @module CheckService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import { readFlashNotification } from 'water-abstraction-engine/lib/general.lib.js'
+
+import CheckPresenter from '../../../../presenters/return-versions/setup/check/check.presenter.js'
+import FetchPointsService from '../fetch-points.service.js'
+import ReturnRequirementsPresenter from '../../../../presenters/return-versions/setup/check/returns-requirements.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/check` page
+ *
+ * @param {string} sessionId - The UUID for return requirement setup session record
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<object>} page data needed by the view template
+ */
+export default async function checkService(sessionId, yar) {
+  const session = await FetchSessionDal(sessionId)
+
+  await _markCheckPageVisited(session)
+
+  const returnRequirements = await _returnRequirements(session)
+
+  const formattedData = CheckPresenter(session)
+
+  const notification = readFlashNotification(yar)
+
+  return {
+    notification,
+    ...returnRequirements,
+    ...formattedData
+  }
+}
+
+async function _markCheckPageVisited(session) {
+  session.checkPageVisited = true
+
+  return session.$update()
+}
+
+async function _returnRequirements(session) {
+  const { licenceVersion, requirements, journey } = session
+
+  const points = await FetchPointsService(licenceVersion.id)
+
+  return ReturnRequirementsPresenter(requirements, points, journey)
+}

@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
-import { generateUUID } from '../../support/generators.js'
+import ReturnVersionHelper from 'water-abstraction-engine/test/helpers/return-version.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import DetermineNextVersionNumberDal from '../../../app/dal/return-versions/determine-next-version-number.dal.js'
+import DetermineNextVersionNumberDal from '../../../src/dal/return-versions/determine-next-version-number.dal.js'
 
 describe('DAL - Return Versions - Determine Next Version Number dal', () => {
   let licenceId

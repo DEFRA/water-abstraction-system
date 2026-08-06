@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../support/generators.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import PaperReturnPresenter from '../../../../app/presenters/notices/setup/paper-return.presenter.js'
+import PaperReturnPresenter from '../../../../src/presenters/notices/setup/paper-return.presenter.js'
 
 describe('Notices - Setup - Paper Return presenter', () => {
   let dueReturn

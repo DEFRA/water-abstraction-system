@@ -2,19 +2,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceMonitoringStationModel from '../../../../app/models/licence-monitoring-station.model.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateUUID } from '../../../support/generators.js'
+import LicenceMonitoringStationModel from 'water-abstraction-engine/models/licence-monitoring-station.model.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Test helpers
-import YarStub from '../../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as DeleteSessionDal from 'water-abstraction-engine/dal/delete-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import SubmitCheckService from '../../../../app/services/licence-monitoring-station/setup/submit-check.service.js'
+import SubmitCheckService from '../../../../src/services/licence-monitoring-station/setup/submit-check.service.js'
 
 describe('Licence Monitoring Station Setup - Submit Check Service', () => {
   const userId = 12345

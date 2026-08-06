@@ -2,7 +2,7 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Thing under test
-import AdditionalSubmissionOptionsValidator from '../../../../app/validators/return-versions/setup/additional-submission-options.validator.js'
+import AdditionalSubmissionOptionsValidator from '../../../../src/validators/return-versions/setup/additional-submission-options.validator.js'
 
 describe('Return Versions Setup - Additional Submission Options validator', () => {
   let payload

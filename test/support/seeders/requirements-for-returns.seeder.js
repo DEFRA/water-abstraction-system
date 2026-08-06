@@ -2,15 +2,15 @@
  * @module RequirementsForReturnsSeeder
  */
 
-import LicenceHelper from '../helpers/licence.helper.js'
-import PointHelper from '../helpers/point.helper.js'
-import PurposeHelper from '../helpers/purpose.helper.js'
-import ReturnRequirementHelper from '../helpers/return-requirement.helper.js'
-import ReturnRequirementPointHelper from '../helpers/return-requirement-point.helper.js'
-import ReturnRequirementPurposeHelper from '../helpers/return-requirement-purpose.helper.js'
-import ReturnVersionHelper from '../helpers/return-version.helper.js'
-import UserHelper from '../helpers/user.helper.js'
-import { generateReference } from '../generators.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import PointHelper from 'water-abstraction-engine/test/helpers/point.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
+import ReturnRequirementPointHelper from 'water-abstraction-engine/test/helpers/return-requirement-point.helper.js'
+import ReturnRequirementPurposeHelper from 'water-abstraction-engine/test/helpers/return-requirement-purpose.helper.js'
+import ReturnVersionHelper from 'water-abstraction-engine/test/helpers/return-version.helper.js'
+import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
+import { generateReference } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Add a complete 'requirements for returns' record, including return version, requirements, points and purposes

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import SingleVolumePresenter from '../../../../app/presenters/return-logs/setup/single-volume.presenter.js'
+import SingleVolumePresenter from '../../../../src/presenters/return-logs/setup/single-volume.presenter.js'
 
 describe('Return Logs Setup - Single Volume presenter', () => {
   let session

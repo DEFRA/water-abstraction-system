@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceEndDateChangeHelper from '../../../support/helpers/licence-end-date-change.helper.js'
+import LicenceEndDateChangeHelper from 'water-abstraction-engine/test/helpers/licence-end-date-change.helper.js'
 
 // Things we need to stub
-import * as ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
-import * as ProcessLicenceReturnLogsService from '../../../../app/services/return-logs/process-licence-return-logs.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import LicenceEndDateChangeModel from '../../../../app/models/licence-end-date-change.model.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import LicenceEndDateChangeModel from 'water-abstraction-engine/models/licence-end-date-change.model.js'
+import * as ProcessBillingFlagService from '../../../../src/services/licences/supplementary/process-billing-flag.service.js'
+import * as ProcessLicenceReturnLogsService from '../../../../src/services/return-logs/process-licence-return-logs.service.js'
 
 // Thing under test
-import ProcessLicenceEndDateChangesService from '../../../../app/services/licences/end-dates/process-licence-end-date-changes.service.js'
+import ProcessLicenceEndDateChangesService from '../../../../src/services/licences/end-dates/process-licence-end-date-changes.service.js'
 
 describe('Licences - End Dates - Process Licence End Date Changes service', () => {
   let licenceEndDateChange
@@ -19,7 +19,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
   beforeEach(async () => {
     licenceEndDateChange = await LicenceEndDateChangeHelper.add()
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

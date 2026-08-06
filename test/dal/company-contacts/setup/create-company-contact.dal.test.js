@@ -2,13 +2,13 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import CompanyContactModel from '../../../../app/models/company-contact.model.js'
-import CompanyHelper from '../../../support/helpers/company.helper.js'
-import LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'
-import { generateUUID } from '../../../support/generators.js'
+import CompanyContactModel from 'water-abstraction-engine/models/company-contact.model.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import LicenceRoleHelper from 'water-abstraction-engine/test/helpers/licence-role.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import CreateCompanyContactDal from '../../../../app/dal/company-contacts/setup/create-company-contact.dal.js'
+import CreateCompanyContactDal from '../../../../src/dal/company-contacts/setup/create-company-contact.dal.js'
 
 describe('Company Contacts - Create Company Contact dal', () => {
   let companyContact

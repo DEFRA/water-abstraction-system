@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Thing under test
-import RemoveBillLicencePresenter from '../../../app/presenters/bill-licences/remove-bill-licence.presenter.js'
+import RemoveBillLicencePresenter from '../../../src/presenters/bill-licences/remove-bill-licence.presenter.js'
 
 describe('Remove Bill Licence presenter', () => {
   let billLicence

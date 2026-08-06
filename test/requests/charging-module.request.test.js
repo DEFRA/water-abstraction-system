@@ -4,12 +4,13 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import http2 from 'node:http2'
 
 // Things we need to stub
-import * as BaseRequest from '../../app/requests/base.request.js'
-import chargingModuleConfig from '../../config/charging-module.config.js'
-import serverConfig from '../../config/server.config.js'
+import * as BaseRequest from 'water-abstraction-engine/requests/base.request.js'
+import ServerConfig from 'water-abstraction-engine/config/server.config.js'
+
+import ChargingModuleConfig from '../../src/config/charging-module.config.js'
 
 // Thing under test
-import * as ChargingModuleRequest from '../../app/requests/charging-module.request.js'
+import * as ChargingModuleRequest from '../../src/requests/charging-module.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
@@ -34,8 +35,8 @@ describe('Charging Module Request', () => {
   beforeEach(() => {
     // Set the timeout value to 1234ms for these tests. We don't trigger a timeout but we do test that the module
     // uses it when making a request to the charging module, rather than the default request timeout config value
-    vi.replaceProperty(chargingModuleConfig, 'timeout', 1234)
-    vi.replaceProperty(serverConfig, 'requestTimeout', 1000)
+    vi.replaceProperty(ChargingModuleConfig, 'timeout', 1234)
+    vi.replaceProperty(ServerConfig, 'requestTimeout', 1000)
   })
 
   afterEach(() => {

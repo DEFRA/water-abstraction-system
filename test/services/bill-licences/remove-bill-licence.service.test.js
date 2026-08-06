@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchBillLicenceSummaryService from '../../../app/services/bill-licences/fetch-bill-licence-summary.service.js'
+import * as FetchBillLicenceSummaryService from '../../../src/services/bill-licences/fetch-bill-licence-summary.service.js'
 
 // Thing under test
-import RemoveBillLicenceService from '../../../app/services/bill-licences/remove-bill-licence.service.js'
+import RemoveBillLicenceService from '../../../src/services/bill-licences/remove-bill-licence.service.js'
 
 describe('Remove Bill Licence service', () => {
   const testId = 'a4fbaa27-a91c-4328-a1b8-774ade11027b'

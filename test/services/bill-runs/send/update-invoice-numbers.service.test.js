@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test framework dependencies
-import BillModel from '../../../../app/models/bill.model.js'
-import BillRunModel from '../../../../app/models/bill-run.model.js'
-import ExpandedError from '../../../../app/errors/expanded.error.js'
+import BillModel from 'water-abstraction-engine/models/bill.model.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
 
 // Things we need to stub
-import * as ChargingModuleSendBillRunRequest from '../../../../app/requests/charging-module/send-bill-run.request.js'
-import * as ChargingModuleViewBillRunRequest from '../../../../app/requests/charging-module/view-bill-run.request.js'
-import * as UnflagBilledSupplementaryLicencesService from '../../../../app/services/bill-runs/unflag-billed-supplementary-licences.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as ChargingModuleSendBillRunRequest from '../../../../src/requests/charging-module/send-bill-run.request.js'
+import * as ChargingModuleViewBillRunRequest from '../../../../src/requests/charging-module/view-bill-run.request.js'
+import * as UnflagBilledSupplementaryLicencesService from '../../../../src/services/bill-runs/unflag-billed-supplementary-licences.service.js'
 
 // Thing under test
-import UpdateInvoiceNumbersService from '../../../../app/services/bill-runs/send/update-invoice-numbers.service.js'
+import UpdateInvoiceNumbersService from '../../../../src/services/bill-runs/send/update-invoice-numbers.service.js'
 
 describe('Bill Runs - Send - Update Invoice Numbers service', () => {
   let billRun
@@ -35,7 +35,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
     billPatchStub = vi.fn().mockResolvedValue()
     billRunPatchStub = vi.fn().mockResolvedValue()
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

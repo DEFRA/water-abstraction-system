@@ -1,0 +1,50 @@
+/**
+ * Orchestrates presenting the data for `/notices` page
+ * @module IndexNoticesService
+ */
+
+import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.presenter.js'
+import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
+
+import FetchNoticesService from './fetch-notices.service.js'
+import NoticesIndexPresenter from '../../presenters/notices/index-notices.presenter.js'
+
+/**
+ * Orchestrates presenting the data for `/notices` page
+ *
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {string} page - The current page for the pagination service
+ *
+ * @returns {Promise<object>} The view data for the notices page
+ */
+export default async function indexNoticesService(yar, auth, page) {
+  const filters = _filters(yar)
+
+  const { results: notices, total: totalNumber } = await FetchNoticesService(filters, page)
+
+  const pagination = PaginatorPresenter(totalNumber, page, `/system/notices`, notices.length, 'notices')
+
+  const pageData = NoticesIndexPresenter(notices, auth)
+
+  return {
+    activeNavBar: 'notices',
+    filters,
+    ...pageData,
+    pagination
+  }
+}
+
+function _filters(yar) {
+  const savedFilters = processSavedFilters(yar, 'noticesFilter')
+
+  return {
+    fromDate: null,
+    noticeTypes: [],
+    reference: null,
+    sentBy: null,
+    statuses: [],
+    toDate: null,
+    ...savedFilters
+  }
+}

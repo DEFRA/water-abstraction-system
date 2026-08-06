@@ -2,15 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
+
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
 import NotifyResponseFixture from '../../../../support/fixtures/notify-response.fixture.js'
-import { generateNoticeReferenceCode } from '../../../../support/generators.js'
 
 // Things we need to stub
-import * as CreateLetterRequest from '../../../../../app/requests/notify/create-letter.request.js'
+import * as CreateLetterRequest from 'water-abstraction-engine/requests/notify/create-letter.request.js'
 
 // Thing under test
-import SendLetterNotificationService from '../../../../../app/services/notices/setup/send/send-letter-notification.service.js'
+import SendLetterNotificationService from '../../../../../src/services/notices/setup/send/send-letter-notification.service.js'
 
 describe('Notices - Setup - Send - Send Letter Notification service', () => {
   let notification

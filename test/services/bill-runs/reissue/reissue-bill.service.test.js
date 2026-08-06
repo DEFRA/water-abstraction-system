@@ -2,19 +2,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import http2 from 'node:http2'
-import BillHelper from '../../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
-import TransactionHelper from '../../../support/helpers/transaction.helper.js'
-import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-import * as ChargingModuleReissueBillRequest from '../../../../app/requests/charging-module/reissue-bill.request.js'
-import * as ChargingModuleViewBillRequest from '../../../../app/requests/charging-module/view-bill.request.js'
-import * as ChargingModuleViewBillRunStatusRequest from '../../../../app/requests/charging-module/view-bill-run-status.request.js'
+import * as ChargingModuleReissueBillRequest from '../../../../src/requests/charging-module/reissue-bill.request.js'
+import * as ChargingModuleViewBillRequest from '../../../../src/requests/charging-module/view-bill.request.js'
+import * as ChargingModuleViewBillRunStatusRequest from '../../../../src/requests/charging-module/view-bill-run-status.request.js'
 
 // Thing under test
-import ReissueBillService from '../../../../app/services/bill-runs/reissue/reissue-bill.service.js'
+import ReissueBillService from '../../../../src/services/bill-runs/reissue/reissue-bill.service.js'
 
 const { HTTP_STATUS_CONFLICT } = http2.constants
 

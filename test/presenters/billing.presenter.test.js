@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import * as BillingPresenter from '../../app/presenters/billing.presenter.js'
+import * as BillingPresenter from '../../src/presenters/billing.presenter.js'
 
 describe('Billing presenter', () => {
   describe('#formatBillRunType()', () => {

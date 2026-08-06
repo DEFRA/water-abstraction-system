@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceEndDateChangeModel from '../../../../app/models/licence-end-date-change.model.js'
-import { generateUUID } from '../../../support/generators.js'
+import LicenceEndDateChangeModel from 'water-abstraction-engine/models/licence-end-date-change.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 
 // Thing under test
-import CheckLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-licence-end-dates.service.js'
+import CheckLicenceEndDatesService from '../../../../src/services/licences/end-dates/check-licence-end-dates.service.js'
 
 describe('Licences - End Dates - Check Licence End Dates service', () => {
   let licence
@@ -27,7 +27,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
       wrls_revoked_date: null
     }
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

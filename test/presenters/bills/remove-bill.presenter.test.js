@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillingAccountModel from '../../../app/models/billing-account.model.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 
 // Thing under test
-import RemoveBillPresenter from '../../../app/presenters/bills/remove-bill.presenter.js'
+import RemoveBillPresenter from '../../../src/presenters/bills/remove-bill.presenter.js'
 
 describe('Remove Bill presenter', () => {
   let bill

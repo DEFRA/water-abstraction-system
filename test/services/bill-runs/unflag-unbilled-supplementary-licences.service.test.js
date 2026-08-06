@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillHelper from '../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceSupplementaryYearHelper from '../../support/helpers/licence-supplementary-year.helper.js'
-import WorkflowHelper from '../../support/helpers/workflow.helper.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceSupplementaryYearHelper from 'water-abstraction-engine/test/helpers/licence-supplementary-year.helper.js'
+import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helper.js'
 
 // Thing under test
-import UnflagUnbilledSupplementaryLicencesService from '../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js'
+import UnflagUnbilledSupplementaryLicencesService from '../../../src/services/bill-runs/unflag-unbilled-supplementary-licences.service.js'
 
 describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
   const billRun = { id: '42e7a42b-8a9a-42b4-b527-2baaedf952f2', scheme: 'sroc', toFinancialYearEnding: 2024 }

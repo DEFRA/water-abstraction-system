@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import FAOValidator from '../../../../app/validators/billing-accounts/setup/fao.validator.js'
+import FAOValidator from '../../../../src/validators/billing-accounts/setup/fao.validator.js'
 
 describe('Billing Accounts - Setup - FAO Validator', () => {
   let payload

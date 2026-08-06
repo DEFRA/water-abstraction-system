@@ -1,0 +1,22 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% from "water-abstraction-engine/views/macros/page-heading.njk" import pageHeading %}
+
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukInput({
+      classes: "govuk-input--width-10",
+      id: "startReading",
+      name: "startReading",
+      value: startReading,
+      errorMessage: error.startReading
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}

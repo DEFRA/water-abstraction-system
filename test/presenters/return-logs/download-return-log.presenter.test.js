@@ -2,11 +2,11 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { formatDateObjectToISO } from 'water-abstraction-engine/lib/dates.lib.js'
 import ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
-import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 
 // Thing under test
-import DownloadReturnLogPresenter from '../../../app/presenters/return-logs/download-return-log.presenter.js'
+import DownloadReturnLogPresenter from '../../../src/presenters/return-logs/download-return-log.presenter.js'
 
 describe('Return Logs - Download Return Log presenter', () => {
   let returnLog

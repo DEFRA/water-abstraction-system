@@ -5,7 +5,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import * as LicenceAbstractionDataSeeder from '../../../../support/seeders/licence-abstraction-data.seeder.js'
 
 // Thing under test
-import FetchAbstractionDataService from '../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js'
+import FetchAbstractionDataService from '../../../../../src/services/return-versions/setup/method/fetch-abstraction-data.service.js'
 
 describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
   let seedData

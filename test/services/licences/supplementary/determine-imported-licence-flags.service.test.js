@@ -2,10 +2,10 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as FetchExistingLicenceDetailsService from '../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js'
+import * as FetchExistingLicenceDetailsService from '../../../../src/services/licences/supplementary/fetch-existing-licence-details.service.js'
 
 // Thing under test
-import DetermineImportedLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js'
+import DetermineImportedLicenceFlagsService from '../../../../src/services/licences/supplementary/determine-imported-licence-flags.service.js'
 
 describe('Licences - Supplementary - Determine Imported Licence Flags service', () => {
   const licenceId = 'aad74a3d-59ea-4c18-8091-02b0f8b0a147'

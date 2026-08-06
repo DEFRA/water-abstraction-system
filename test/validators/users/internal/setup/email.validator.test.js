@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import EmailValidator from '../../../../../app/validators/users/internal/setup/email.validator.js'
+import EmailValidator from '../../../../../src/validators/users/internal/setup/email.validator.js'
 
 describe('Users - Internal - Setup - Email Validator', () => {
   let emailExists

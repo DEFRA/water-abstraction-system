@@ -5,11 +5,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Things we need to stub
-import * as FetchNotificationsDal from '../../../../app/dal/users/internal/fetch-notifications.dal.js'
-import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchNotificationsDal from '../../../../src/dal/users/internal/fetch-notifications.dal.js'
+import * as FetchUserDal from '../../../../src/dal/users/fetch-user.dal.js'
 
 // Thing under test
-import ViewCommunicationsService from '../../../../app/services/users/internal/view-communications.service.js'
+import ViewCommunicationsService from '../../../../src/services/users/internal/view-communications.service.js'
 
 describe('Users - Internal - View Communications Service', () => {
   const page = '1'

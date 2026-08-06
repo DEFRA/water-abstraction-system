@@ -5,10 +5,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-import * as FetchCompanyDetailsDal from '../../../app/dal/companies/fetch-company-details.dal.js'
+import * as FetchCompanyDetailsDal from '../../../src/dal/companies/fetch-company-details.dal.js'
 
 // Thing under test
-import ViewCompanyService from '../../../app/services/companies/view-company.service.js'
+import ViewCompanyService from '../../../src/services/companies/view-company.service.js'
 
 describe('Companies - View Company Service', () => {
   let companyDetails

@@ -2,17 +2,17 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
-import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
-import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
-import MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
-import NotificationHelper from '../../support/helpers/notification.helper.js'
-import { generateNationalGridReference, generateRandomInteger } from '../../support/generators.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceMonitoringStationHelper from 'water-abstraction-engine/test/helpers/licence-monitoring-station.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import LicenceVersionPurposeConditionHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose.helper.js'
+import MonitoringStationHelper from 'water-abstraction-engine/test/helpers/monitoring-station.helper.js'
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
+import { generateNationalGridReference, generateRandomInteger } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchMonitoringStationDetailsDal from '../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
+import FetchMonitoringStationDetailsDal from '../../../src/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
   let monitoringStation

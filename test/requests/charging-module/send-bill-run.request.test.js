@@ -4,14 +4,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import http2 from 'node:http2'
 
-import ExpandedError from '../../../app/errors/expanded.error.js'
+import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
 
 // Things we need to stub
-import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
-import * as WaitForStatusRequest from '../../../app/requests/charging-module/wait-for-status.request.js'
+import * as ChargingModuleRequest from '../../../src/requests/charging-module.request.js'
+import * as WaitForStatusRequest from '../../../src/requests/charging-module/wait-for-status.request.js'
 
 // Thing under test
-import SendBillRunRequest from '../../../app/requests/charging-module/send-bill-run.request.js'
+import SendBillRunRequest from '../../../src/requests/charging-module/send-bill-run.request.js'
 
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 

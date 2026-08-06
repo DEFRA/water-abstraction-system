@@ -4,27 +4,27 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { postRequestOptions } from '../support/general.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
-import * as PreviewService from '../../app/services/bill-runs/review/preview.service.js'
-import * as SubmitAuthorisedService from '../../app/services/bill-runs/review/submit-authorised.service.js'
-import * as SubmitEditService from '../../app/services/bill-runs/review/submit-edit.service.js'
-import * as SubmitFactorsService from '../../app/services/bill-runs/review/submit-factors.service.js'
-import * as SubmitRemoveService from '../../app/services/bill-runs/review/submit-remove.service.js'
-import * as SubmitReviewService from '../../app/services/bill-runs/review/submit-review.service.js'
-import * as ViewAuthorisedService from '../../app/services/bill-runs/review/view-authorised.service.js'
-import * as ViewEditService from '../../app/services/bill-runs/review/view-edit.service.js'
-import * as ViewFactorsService from '../../app/services/bill-runs/review/view-factors.service.js'
-import * as ViewRemoveService from '../../app/services/bill-runs/review/view-remove.service.js'
-import * as ViewReviewChargeElementService from '../../app/services/bill-runs/review/view-review-charge-element.service.js'
-import * as ViewReviewChargeReferenceService from '../../app/services/bill-runs/review/view-review-charge-reference.service.js'
-import * as ViewReviewLicenceService from '../../app/services/bill-runs/review/view-review-licence.service.js'
-import * as ViewReviewService from '../../app/services/bill-runs/review/view-review.service.js'
+import * as PreviewService from '../../src/services/bill-runs/review/preview.service.js'
+import * as SubmitAuthorisedService from '../../src/services/bill-runs/review/submit-authorised.service.js'
+import * as SubmitEditService from '../../src/services/bill-runs/review/submit-edit.service.js'
+import * as SubmitFactorsService from '../../src/services/bill-runs/review/submit-factors.service.js'
+import * as SubmitRemoveService from '../../src/services/bill-runs/review/submit-remove.service.js'
+import * as SubmitReviewService from '../../src/services/bill-runs/review/submit-review.service.js'
+import * as ViewAuthorisedService from '../../src/services/bill-runs/review/view-authorised.service.js'
+import * as ViewEditService from '../../src/services/bill-runs/review/view-edit.service.js'
+import * as ViewFactorsService from '../../src/services/bill-runs/review/view-factors.service.js'
+import * as ViewRemoveService from '../../src/services/bill-runs/review/view-remove.service.js'
+import * as ViewReviewChargeElementService from '../../src/services/bill-runs/review/view-review-charge-element.service.js'
+import * as ViewReviewChargeReferenceService from '../../src/services/bill-runs/review/view-review-charge-reference.service.js'
+import * as ViewReviewLicenceService from '../../src/services/bill-runs/review/view-review-licence.service.js'
+import * as ViewReviewService from '../../src/services/bill-runs/review/view-review.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 

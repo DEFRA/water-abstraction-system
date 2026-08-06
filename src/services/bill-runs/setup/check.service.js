@@ -1,0 +1,43 @@
+/**
+ * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/check` page
+ * @module CheckService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import { engineTriggers } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+
+import AllowedBillRunPresenter from '../../../presenters/bill-runs/setup/check/allowed-bill-run.presenter.js'
+import BlockedBillRunPresenter from '../../../../src/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js'
+import DetermineBlockingBillRunService from './determine-blocking-bill-run.service.js'
+import NoAnnualBillRunPresenter from '../../../presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/check` page
+ *
+ * @param {string} sessionId - The UUID for setup bill run session record
+ *
+ * @returns {Promise<object>} The view data for the check page
+ */
+export default async function checkService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
+  const blockingResults = await DetermineBlockingBillRunService(session)
+
+  const formattedData = _formattedData(session, blockingResults)
+
+  return {
+    activeNavBar: 'bill-runs',
+    ...formattedData
+  }
+}
+
+function _formattedData(session, blockingResults) {
+  if (blockingResults.toFinancialYearEnding === 0) {
+    return NoAnnualBillRunPresenter(session)
+  }
+
+  if (blockingResults.trigger === engineTriggers.neither) {
+    return BlockedBillRunPresenter(session, blockingResults)
+  }
+
+  return AllowedBillRunPresenter(session, blockingResults)
+}

@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
-import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchAbstractionAlertLicencesDal from '../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
-import * as FetchCompanyContactDetailsService from '../../../app/services/company-contacts/fetch-company-contact-details.service.js'
-import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchAbstractionAlertLicencesDal from '../../../src/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
+import * as FetchCompanyContactDetailsService from '../../../src/services/company-contacts/fetch-company-contact-details.service.js'
+import * as FetchCompanyService from '../../../src/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-import ViewContactDetailsService from '../../../app/services/company-contacts/view-contact-details.service.js'
+import ViewContactDetailsService from '../../../src/services/company-contacts/view-contact-details.service.js'
 
 describe('Company Contacts - View Contact Details Service', () => {
   let auth

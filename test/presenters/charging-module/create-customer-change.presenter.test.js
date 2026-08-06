@@ -2,13 +2,13 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import AddressModel from '../../../app/models/address.model.js'
-import BillingAccountModel from '../../../app/models/billing-account.model.js'
-import CompanyModel from '../../../app/models/company.model.js'
-import ContactModel from '../../../app/models/contact.model.js'
+import AddressModel from 'water-abstraction-engine/models/address.model.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
+import CompanyModel from 'water-abstraction-engine/models/company.model.js'
+import ContactModel from 'water-abstraction-engine/models/contact.model.js'
 
 // Thing under test
-import CreateCustomerChangePresenter from '../../../app/presenters/charging-module/create-customer-change.presenter.js'
+import CreateCustomerChangePresenter from '../../../src/presenters/charging-module/create-customer-change.presenter.js'
 
 // NOTE: We are currently required to replicate what the legacy code is doing and unfortunately the conversion of a
 // WRLS billing billing account's address to the format required by the Charging Module is convoluted to say the least!

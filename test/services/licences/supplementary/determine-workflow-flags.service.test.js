@@ -2,14 +2,14 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import { determineCurrentFinancialYear } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Things we need to stub
-import * as FetchLicenceService from '../../../../app/services/licences/supplementary/fetch-licence.service.js'
+import * as FetchLicenceService from '../../../../src/services/licences/supplementary/fetch-licence.service.js'
 
 // Thing under test
-import DetermineWorkflowFlagsService from '../../../../app/services/licences/supplementary/determine-workflow-flags.service.js'
+import DetermineWorkflowFlagsService from '../../../../src/services/licences/supplementary/determine-workflow-flags.service.js'
 
 describe('Determine Workflow Flags Service', () => {
   describe('when passed a workflowId', () => {

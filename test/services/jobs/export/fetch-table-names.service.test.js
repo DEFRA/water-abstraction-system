@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import FetchTableNamesService from '../../../../app/services/jobs/export/fetch-table-names.service.js'
+import FetchTableNamesService from '../../../../src/services/jobs/export/fetch-table-names.service.js'
 
 describe('Fetch table names', () => {
   describe('when given a schema name', () => {

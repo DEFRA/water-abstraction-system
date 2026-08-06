@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
-import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things to stub
-import * as FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'
+import * as FetchNoticesService from '../../../src/services/notices/fetch-notices.service.js'
 
 // Thing under test
-import IndexNoticesService from '../../../app/services/notices/index-notices.service.js'
+import IndexNoticesService from '../../../src/services/notices/index-notices.service.js'
 
 describe('Notices - Index Notices service', () => {
   let auth

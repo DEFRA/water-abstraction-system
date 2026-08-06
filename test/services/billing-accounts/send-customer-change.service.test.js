@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ExpandedError from '../../../app/errors/expanded.error.js'
+import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
 
 // Things we need to stub
-import * as ChargingModuleCreateCustomerChangePresenter from '../../../app/presenters/charging-module/create-customer-change.presenter.js'
-import * as ChargingModuleCreateCustomerChangeRequest from '../../../app/requests/charging-module/create-customer-change.request.js'
+import * as ChargingModuleCreateCustomerChangePresenter from '../../../src/presenters/charging-module/create-customer-change.presenter.js'
+import * as ChargingModuleCreateCustomerChangeRequest from '../../../src/requests/charging-module/create-customer-change.request.js'
 
 // Thing under test
-import SendCustomerChangeService from '../../../app/services/billing-accounts/send-customer-change.service.js'
+import SendCustomerChangeService from '../../../src/services/billing-accounts/send-customer-change.service.js'
 
 describe('Send Transactions service', () => {
   const billingAccount = { id: '3b53f101-d256-40f8-a6be-ddefb5f9647c' }

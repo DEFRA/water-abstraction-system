@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test framework dependencies
-import { today } from '../../../app/lib/general.lib.js'
-import { generateNoticeReferenceCode, generateUUID } from '../../support/generators.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateNoticeReferenceCode, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Test helpers
-import NotificationHelper from '../../support/helpers/notification.helper.js'
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
 
 // Things we need to stub
-import * as UpdateNoticeService from '../../../app/services/notices/update-notice.service.js'
-import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as UpdateNoticeService from '../../../src/services/notices/update-notice.service.js'
 
 // Thing under test
-import ProcessReturnedLetterService from '../../../app/services/notifications/process-returned-letter.service.js'
+import ProcessReturnedLetterService from '../../../src/services/notifications/process-returned-letter.service.js'
 
 describe('Notifications - Process Returned Letter service', () => {
   const todaysDate = today()

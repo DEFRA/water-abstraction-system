@@ -2,15 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as CheckLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-licence-end-dates.service.js'
-import * as FetchLicencesService from '../../../../app/services/licences/end-dates/fetch-licences.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import LicencesConfig from '../../../../config/licences.config.js'
-import { generateUUID } from '../../../support/generators.js'
-import { pause } from '../../../../app/lib/general.lib.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+import { pause } from 'water-abstraction-engine/lib/general.lib.js'
+
+import * as CheckLicenceEndDatesService from '../../../../src/services/licences/end-dates/check-licence-end-dates.service.js'
+import * as FetchLicencesService from '../../../../src/services/licences/end-dates/fetch-licences.service.js'
+import LicencesConfig from '../../../../src/config/licences.config.js'
 
 // Thing under test
-import CheckAllLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-all-licence-end-dates.service.js'
+import CheckAllLicenceEndDatesService from '../../../../src/services/licences/end-dates/check-all-licence-end-dates.service.js'
 
 describe('Licences - End Dates - Check All Licence End Dates service', () => {
   const batchSize = 10
@@ -26,7 +27,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
 
     vi.spyOn(FetchLicencesService, 'default').mockResolvedValue(licences)
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

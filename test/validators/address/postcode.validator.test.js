@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import PostcodeValidator from '../../../app/validators/address/postcode.validator.js'
+import PostcodeValidator from '../../../src/validators/address/postcode.validator.js'
 
 describe('Address - Postcode Validator', () => {
   let payload

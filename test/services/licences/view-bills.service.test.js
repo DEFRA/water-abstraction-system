@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef, generateUUID } from '../../support/generators.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchBillsService from '../../../app/services/licences/fetch-bills.service.js'
-import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchBillsService from '../../../src/services/licences/fetch-bills.service.js'
+import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
 
 // Thing under test
-import ViewBillsService from '../../../app/services/licences/view-bills.service.js'
+import ViewBillsService from '../../../src/services/licences/view-bills.service.js'
 
 describe('Licences - View Bills service', () => {
   let auth

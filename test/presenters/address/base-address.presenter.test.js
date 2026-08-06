@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import * as BaseAddressPresenter from '../../../app/presenters/address/base-address.presenter.js'
+import * as BaseAddressPresenter from '../../../src/presenters/address/base-address.presenter.js'
 
 describe('Address - Base Address presenter', () => {
   describe('#countryLookup()', () => {

@@ -1,0 +1,197 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% from "water-abstraction-engine/views/macros/new-line-array-items.njk" import newLineArrayItems %}
+{% from "macros/return-version-status-tag.njk" import statusTag %}
+
+{% block pageContent %}
+  {{ statusTag(status) }}
+
+  <hr class="govuk-section-break govuk-!-margin-bottom-5 govuk-section-break">
+
+  {% if reason %}
+    <p class="govuk-body-l">{{ reason }}</p>
+  {% endif %}
+
+  {% if notes %}
+    <div class="govuk-!-margin-bottom-4">
+      <p class="govuk-!-margin-bottom-1"><strong>Notes:</strong> {{ notes.firstNote }}</p>
+      {{ newLineArrayItems(notes.additionalNotes) }}
+    </div>
+  {% endif %}
+
+  {% if pagination %}
+    {{ govukPagination(pagination) }}
+  {% endif %}
+
+  {% if requirements.length > 0 %}
+    <ul class="govuk-list govuk-!-margin-bottom-6">
+      <li><a class="govuk-link" href="#requirements-for-returns">Requirements for returns</a></li>
+      {# Bookmarks - only displays when there is more than 1 return requirement #}
+      {% if requirements.length > 1 %}
+        <ul>
+          {% for requirement in requirements %}
+            {% set requirementIndex = loop.index0 %}
+            {% set bookmarkTitle %}
+              {% if requirement.siteDescription === '' %}
+                Return reference {{ requirement.returnReference }}
+              {% else %}
+                Return reference {{ requirement.returnReference }} - {{ requirement.siteDescription | safe }}
+              {% endif %}
+            {% endset %}
+            <li><a class='govuk-link' href="#requirement-{{ requirementIndex }}">{{ bookmarkTitle }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <li><a class="govuk-link" href="#additional-submission-options">Additional submission options</a></li>
+    </ul>
+
+    <section id="requirements-for-returns">
+      <h2 class="govuk-heading-m govuk-!-margin-top-3">Requirements for returns</h2>
+
+      {% for requirement in requirements %}
+        {% set rowIndex = loop.index0 %}
+
+        {# Generate the points cell #}
+        {# When a requirement has more than 5 points it is displayed as a GOVUK Details component which displays the count #}
+        {# of points as the summary. Users must expand the block to get the full list. #}
+        {% set pointCell %}
+          {% set pointsList %}
+            {{ newLineArrayItems(requirement.points) }}
+          {% endset %}
+          {% set count = requirement.points | length %}
+
+          {% if count > 5 %}
+            {{
+              govukDetails({
+                classes: 'govuk-!-margin-bottom-0',
+                summaryText: count + ' points',
+                html: pointsList
+              })
+            }}
+          {% else %}
+            <span data-test="points-{{ rowIndex }}">{{ pointsList | safe }}</span>
+          {% endif %}
+        {% endset %}
+
+        {{ govukSummaryList({
+            card: {
+              title: {
+                html: "<p>Return reference " + requirement.returnReference + "</p>" + requirement.title
+              },
+              attributes: {
+                id: 'requirement-' + rowIndex
+              }
+            },
+            attributes: {
+              'data-test': 'requirement-' + rowIndex
+            },
+            classes: "govuk-summary-list--no-border",
+            rows: [
+              {
+                key: {
+                  text: "Purpose"
+                },
+                value: {
+                  html: '<span data-test="purposes-' + rowIndex + '">' + newLineArrayItems(requirement.purposes) + '</span>'
+                }
+              },
+              {
+                key: {
+                  text: "Points"
+                },
+                value: {
+                  html: pointCell
+                }
+              },
+              {
+                key: {
+                  text: "Abstraction period"
+                },
+                value: {
+                  html: '<span data-test="abstraction-period-' + rowIndex + '">' + requirement.abstractionPeriod + '</span>'
+                }
+              },
+              {
+                key: {
+                  text: "Returns cycle"
+                },
+                value: {
+                  html: '<span data-test="returns-cycle-' + rowIndex + '">' + requirement.returnsCycle + '</span>'
+                }
+              },
+              {
+                key: {
+                  text: "Site description"
+                },
+                value: {
+                  html: '<span data-test="site-description-' + rowIndex + '">' + requirement.siteDescription + '</span>'
+                }
+              },
+              {
+                key: {
+                  text: "Collection"
+                },
+                value: {
+                  html: '<span data-test="frequency-collected-' + rowIndex + '">' + requirement.frequencyCollected | capitalize + '</span>'
+                }
+              },
+              {
+                key: {
+                  text: "Reporting"
+                },
+                value: {
+                  html: '<span data-test="frequency-reported-' + rowIndex + '">' + requirement.frequencyReported | capitalize + '</span>'
+                }
+              },
+              {
+                key: {
+                  text: "Agreements exceptions"
+                },
+                value: {
+                  html: '<span data-test="agreements-exceptions-' + rowIndex + '">' + requirement.agreementsExceptions + '</span>'
+                }
+              }
+            ]
+          }) }}
+      {% endfor %}
+    </section>
+
+    <section id="additional-submission-options">
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: 'Additional submission options',
+              classes: "govuk-heading-m govuk-!-width-one-half"
+            }
+          },
+          {
+            classes: 'govuk-summary-list__row--no-border',
+            key: {
+              text: 'Multiple upload'
+            },
+            value: {
+              text: multipleUpload
+          }
+          },
+          {
+            classes: 'govuk-summary-list__row--no-border',
+            key: {
+            text: 'Quarterly return submissions'
+          },
+            value: {
+            text: quarterlyReturns
+          }
+          } if quarterlyReturnSubmissions
+        ]
+      }) }}
+    </section>
+  {% else %}
+    <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  {% endif %}
+{% endblock %}

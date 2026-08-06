@@ -2,28 +2,28 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillHelper from '../../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
-import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
-import BillModel from '../../../../app/models/bill.model.js'
-import TransactionHelper from '../../../support/helpers/transaction.helper.js'
-import TransactionModel from '../../../../app/models/transaction.model.js'
-import { generateUUID } from '../../../support/generators.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model.js'
+import BillModel from 'water-abstraction-engine/models/bill.model.js'
+import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
+import TransactionModel from 'water-abstraction-engine/models/transaction.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchBillsToBeReissuedService from '../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js'
-import * as ReissueBillService from '../../../../app/services/bill-runs/reissue/reissue-bill.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as FetchBillsToBeReissuedService from '../../../../src/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js'
+import * as ReissueBillService from '../../../../src/services/bill-runs/reissue/reissue-bill.service.js'
 
 // Thing under test
-import ReissueBillsService from '../../../../app/services/bill-runs/reissue/reissue-bills.service.js'
+import ReissueBillsService from '../../../../src/services/bill-runs/reissue/reissue-bills.service.js'
 
 describe('Reissue Bills service', () => {
   const reissueBillRun = { regionId: generateUUID() }
 
   let notifierStub
   beforeEach(async () => {
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

@@ -1,4 +1,4 @@
-import { generateUUID } from '../generators.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Returns a summer return cycle fixture with predefined dates and properties

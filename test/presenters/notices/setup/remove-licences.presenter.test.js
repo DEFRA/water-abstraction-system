@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
+import { generateNoticeReferenceCode, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import RemoveLicencesPresenter from '../../../../app/presenters/notices/setup/remove-licences.presenter.js'
+import RemoveLicencesPresenter from '../../../../src/presenters/notices/setup/remove-licences.presenter.js'
 
 describe('Notices - Setup - Remove Licences presenter', () => {
   const licences = []

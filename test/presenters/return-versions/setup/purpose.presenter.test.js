@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import PurposePresenter from '../../../../app/presenters/return-versions/setup/purpose.presenter.js'
+import PurposePresenter from '../../../../src/presenters/return-versions/setup/purpose.presenter.js'
 
 describe('Return Versions - Setup - Purpose presenter', () => {
   const requirementIndex = 0

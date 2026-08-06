@@ -6,7 +6,7 @@ import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.f
 import CustomersFixture from '../../../support/fixtures/customers.fixture.js'
 
 // Thing under test
-import ContactPresenter from '../../../../app/presenters/billing-accounts/setup/contact.presenter.js'
+import ContactPresenter from '../../../../src/presenters/billing-accounts/setup/contact.presenter.js'
 
 describe('Billing Accounts - Setup - Contact Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount

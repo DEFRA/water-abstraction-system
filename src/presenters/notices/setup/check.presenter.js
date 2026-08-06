@@ -1,0 +1,207 @@
+/**
+ * Formats data for the `/notices/setup/check` page
+ * @module CheckPresenter
+ */
+
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
+import { NoticeJourney, NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+
+import ContactPresenter from './contact.presenter.js'
+
+const NOTIFICATION_TYPES = {
+  [NoticeType.ABSTRACTION_ALERTS]: 'Abstraction alerts',
+  [NoticeType.INVITATIONS]: 'Returns invitations',
+  [NoticeType.PAPER_RETURN]: 'Return forms',
+  [NoticeType.REMINDERS]: 'Returns reminders',
+  [NoticeType.RENEWAL_INVITATIONS]: 'Renewal invitations'
+}
+
+/**
+ * Formats data for the `/notices/setup/check` page
+ *
+ * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
+ * @param {string} page - The currently selected page
+ * @param {object} session - The session instance
+ *
+ * @returns {object} - The data formatted for the view template
+ */
+export default function checkPresenter(recipients, page, session) {
+  const { noticeType, referenceCode } = session
+
+  const sortedRecipients = _recipients(noticeType, recipients, session.id)
+  const formattedRecipients = _paginateRecipients(sortedRecipients, page)
+  const canSendNotice = _canSendNotice(formattedRecipients)
+
+  return {
+    canSendNotice,
+    links: _links(session),
+    pageTitle: 'Check the recipients',
+    pageTitleCaption: `Notice ${referenceCode}`,
+    readyToSend: _readyToSend(recipients, noticeType, canSendNotice),
+    recipients: formattedRecipients,
+    tableCaption: _tableCaption(formattedRecipients.length, recipients.length),
+    warning: _warning(sortedRecipients)
+  }
+}
+
+function _canSendNotice(formattedRecipients) {
+  if (formattedRecipients.length === 0) {
+    return false
+  }
+
+  const invalidRecipients = _invalidRecipients(formattedRecipients)
+
+  return invalidRecipients.length !== formattedRecipients.length
+}
+
+function _formatRecipients(noticeType, recipients, sessionId) {
+  return recipients.map((recipient) => {
+    const contact = ContactPresenter(recipient)
+
+    return {
+      contact,
+      licences: recipient.licence_refs,
+      method: `${recipient.message_type} - ${recipient.contact_type}`,
+      previewLink: _previewLink(noticeType, recipient, sessionId, contact)
+    }
+  })
+}
+
+function _invalidRecipients(formattedRecipients) {
+  return formattedRecipients.filter((formattedRecipient) => {
+    const { contact } = formattedRecipient
+
+    return contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')
+  })
+}
+
+function _links(session) {
+  const { id, journey } = session
+
+  const links = {
+    cancel: `/system/notices/setup/${id}/cancel`,
+    download: `/system/notices/setup/${id}/download`
+  }
+
+  if (journey === NoticeJourney.ADHOC) {
+    return {
+      ...links,
+      manage: `/system/notices/setup/${id}/select-recipients`
+    }
+  }
+
+  if (journey === NoticeJourney.ALERTS) {
+    return links
+  }
+
+  return {
+    ...links,
+    removeLicences: `/system/notices/setup/${id}/remove-licences`
+  }
+}
+
+/**
+ * Due to the complexity of the query we had to use a raw query to get the recipients data. This means we need to handle
+ * pagination (which recipients to display based on selected page and page size) in here.
+ *
+ * @private
+ */
+function _paginateRecipients(recipients, page) {
+  const pageNumber = Number(page) * DatabaseConfig.defaultPageSize
+
+  return recipients.slice(pageNumber - DatabaseConfig.defaultPageSize, pageNumber)
+}
+
+function _previewLink(noticeType, recipient, sessionId, contact) {
+  // If we are sending a letter to the recipient, and the address is invalid, we don't want to display the preview link
+  // else it might give a false impression the letter will be sent.
+  if (contact.length > 1 && contact[1].startsWith('INVALID ADDRESS')) {
+    return null
+  }
+
+  if (noticeType === NoticeType.PAPER_RETURN) {
+    return `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}/check-paper-return`
+  }
+
+  // Returns invitations and reminders can be previewed directly
+  const basePreviewLink = `/system/notices/setup/${sessionId}/preview/${recipient.contact_hash_id}`
+
+  // For abstraction alerts we need to go to an intermediate page to select the alert to preview
+  return noticeType === NoticeType.ABSTRACTION_ALERTS ? `${basePreviewLink}/check-alert` : basePreviewLink
+}
+
+function _readyToSend(formattedRecipients, noticeType, canSendNotice) {
+  if (formattedRecipients.length === 0) {
+    return 'No recipients with due returns.'
+  }
+
+  if (!canSendNotice) {
+    return 'No valid notifications to send.'
+  }
+
+  return `${NOTIFICATION_TYPES[noticeType]} are ready to send.`
+}
+
+/**
+ * Sorts, maps, and paginates the recipients list.
+ *
+ * This function first maps over the recipients to transform each recipient object into a new format, then sorts the
+ * resulting array of transformed recipients alphabetically by their contact's name.
+ *
+ * The map and sort are performed before pagination, as it is necessary to have the recipients in a defined order before
+ * determining which recipients should appear on the page.
+ *
+ * @private
+ */
+function _recipients(noticeType, recipients, sessionId) {
+  const formattedRecipients = _formatRecipients(noticeType, recipients, sessionId)
+
+  return _sortRecipients(formattedRecipients)
+}
+
+function _tableCaption(numberDisplayed, totalNumber) {
+  if (totalNumber > numberDisplayed) {
+    return `Showing ${numberDisplayed} of ${totalNumber} recipients`
+  }
+
+  return `Showing all ${totalNumber} recipients`
+}
+
+/**
+ * Sorts the recipients alphabetically by their 'contact name'.
+ *
+ * The contact name is the first element in the recipient's `contact` array. For letter-based recipients this will
+ * be either the person or organisation name, and for email recipients this will be the email address.
+ *
+ * @private
+ */
+function _sortRecipients(recipients) {
+  return recipients.sort((first, second) => {
+    return compareStrings(first.contact[0], second.contact[0])
+  })
+}
+
+function _warning(formattedRecipients) {
+  const invalidRecipients = _invalidRecipients(formattedRecipients)
+
+  if (invalidRecipients.length === 0) {
+    return null
+  }
+
+  if (invalidRecipients.length === 1) {
+    return {
+      iconFallbackText: 'Warning',
+      text: `A notification will not be sent for ${invalidRecipients[0].contact[0]} because the address is invalid.`
+    }
+  }
+
+  const contactNames = invalidRecipients.map((invalidRecipient) => {
+    return invalidRecipient.contact[0]
+  })
+
+  return {
+    iconFallbackText: 'Warning',
+    text: `Notifications will not be sent for the following recipients with invalid addresses: ${contactNames.join(', ')}`
+  }
+}

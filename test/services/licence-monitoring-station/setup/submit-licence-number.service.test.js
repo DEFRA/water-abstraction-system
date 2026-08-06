@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceModel from '../../../../app/models/licence.model.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchLicenceDal from '../../../../app/dal/licence-monitoring-station/fetch-licence.dal.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchLicenceDal from '../../../../src/dal/licence-monitoring-station/fetch-licence.dal.js'
 
 // Thing under test
-import SubmitLicenceNumberService from '../../../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js'
+import SubmitLicenceNumberService from '../../../../src/services/licence-monitoring-station/setup/submit-licence-number.service.js'
 
 describe('Licence Monitoring Station Setup - Licence Number Service', () => {
   let licence

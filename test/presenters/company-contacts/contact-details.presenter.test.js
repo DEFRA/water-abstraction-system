@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { yesterday } from 'water-abstraction-engine/test/general.js'
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 import LicenceFixture from '../../support/fixtures/licence.fixture.js'
-import { yesterday } from '../../support/general.js'
 
 // Thing under test
-import ContactDetailsPresenter from '../../../app/presenters/company-contacts/contact-details.presenter.js'
+import ContactDetailsPresenter from '../../../src/presenters/company-contacts/contact-details.presenter.js'
 
 describe('Company Contacts - Contact Details presenter', () => {
   let companyContact

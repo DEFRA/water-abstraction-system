@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import PointsValidator from '../../../../app/validators/return-versions/setup/points.validator.js'
+import PointsValidator from '../../../../src/validators/return-versions/setup/points.validator.js'
 
 describe('Return Versions Setup - Point validator', () => {
   describe('when valid data is provided', () => {

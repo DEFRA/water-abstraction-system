@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import SingleVolumeValidator from '../../../../app/validators/return-logs/setup/single-volume.validator.js'
+import SingleVolumeValidator from '../../../../src/validators/return-logs/setup/single-volume.validator.js'
 
 describe('Return Logs Setup - Single Volume validator', () => {
   let payload

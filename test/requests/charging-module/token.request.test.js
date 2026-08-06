@@ -4,10 +4,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import http2 from 'node:http2'
 
 // Things we need to stub
-import * as BaseRequest from '../../../app/requests/base.request.js'
+import * as BaseRequest from 'water-abstraction-engine/requests/base.request.js'
 
 // Thing under test
-import TokenRequest from '../../../app/requests/charging-module/token.request.js'
+import TokenRequest from '../../../src/requests/charging-module/token.request.js'
 
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 

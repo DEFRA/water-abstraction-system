@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as CleanEmptyBillRunsService from '../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js'
-import * as CleanEmptyVoidReturnLogsService from '../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js'
-import * as CleanExpiredSessionsService from '../../../../app/services/jobs/clean/clean-expired-sessions.service.js'
-import * as CleanIncompleteCompanyContactsService from '../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js'
-import * as CleanOrphanedContactsService from '../../../../app/services/jobs/clean/clean-orphaned-contacts.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as CleanEmptyBillRunsService from '../../../../src/services/jobs/clean/clean-empty-bill-runs.service.js'
+import * as CleanEmptyVoidReturnLogsService from '../../../../src/services/jobs/clean/clean-empty-void-return-logs.service.js'
+import * as CleanExpiredSessionsService from '../../../../src/services/jobs/clean/clean-expired-sessions.service.js'
+import * as CleanIncompleteCompanyContactsService from '../../../../src/services/jobs/clean/clean-incomplete-company-contacts.service.js'
+import * as CleanOrphanedContactsService from '../../../../src/services/jobs/clean/clean-orphaned-contacts.service.js'
 
 // Thing under test
-import ProcessCleanService from '../../../../app/services/jobs/clean/process-clean.service.js'
+import ProcessCleanService from '../../../../src/services/jobs/clean/process-clean.service.js'
 
 describe('Jobs - Clean - Process Clean service', () => {
   const emptyBillRunsCount = 3
@@ -27,7 +27,7 @@ describe('Jobs - Clean - Process Clean service', () => {
     vi.spyOn(CleanIncompleteCompanyContactsService, 'default').mockResolvedValue(incompleteCompanyContactsCount)
     vi.spyOn(CleanOrphanedContactsService, 'default').mockResolvedValue(orphanedContactsCount)
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

@@ -2,17 +2,17 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../support/generators.js'
-import { today } from '../../../app/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { tomorrow, yesterday } from 'water-abstraction-engine/test/general.js'
 import {
   exLicenceHolderWithSingleLicences,
   licenceHolderWithMultipleLicences,
   licenceHolderWithSingleLicence
 } from '../../support/seeders/licence.seeder.js'
-import { tomorrow, yesterday } from '../../support/general.js'
 
 // Thing under test
-import FetchCompanyLicencesDal from '../../../app/dal/company-contacts/fetch-company-licences.dal.js'
+import FetchCompanyLicencesDal from '../../../src/dal/company-contacts/fetch-company-licences.dal.js'
 
 describe('Company Contacts - Fetch Company Licences Dal', () => {
   let scenarios

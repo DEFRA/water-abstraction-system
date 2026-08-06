@@ -1,0 +1,68 @@
+/**
+ * Handles the user submission for the `/bill-runs/setup/{sessionId}/type` page
+ * @module SubmitTypeService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+
+import TypePresenter from '../../../presenters/bill-runs/setup/type.presenter.js'
+import TypeValidator from '../../../validators/bill-runs/setup/type.validator.js'
+
+/**
+ * Handles the user submission for the `/bill-runs/setup/{sessionId}/type` page
+ *
+ * It first retrieves the session instance for the setup bill run journey in progress. It then validates the payload of
+ * the submitted request.
+ *
+ * If there is no validation error it will save the selected value to the session then return an empty object. This will
+ * indicate to the controller that the submission was successful triggering it to redirect to the next page in the
+ * journey.
+ *
+ * If there is a validation error it is combined with the output of the presenter to generate the page data needed to
+ * re-render the view with an error message.
+ *
+ * @param {string} sessionId - The UUID of the current session
+ * @param {object} payload - The submitted form data
+ *
+ * @returns {Promise<object>} An empty object if there are no errors else the page data for the type page including the
+ * validation error details
+ */
+export default async function submitTypeService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
+
+  const validationResult = _validate(payload)
+
+  if (!validationResult) {
+    await _save(session, payload)
+
+    return {}
+  }
+
+  const pageData = TypePresenter(session)
+
+  return {
+    activeNavBar: 'bill-runs',
+    error: validationResult,
+    ...pageData
+  }
+}
+
+async function _save(session, payload) {
+  session.type = payload.type
+
+  return session.$update()
+}
+
+function _validate(payload) {
+  const validation = TypeValidator(payload)
+
+  if (!validation.error) {
+    return null
+  }
+
+  const { message } = validation.error.details[0]
+
+  return {
+    text: message
+  }
+}

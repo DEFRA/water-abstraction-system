@@ -1,16 +1,16 @@
-import GroupHelper from '../helpers/group.helper.js'
-import GroupModel from '../../../app/models/group.model.js'
-import GroupRoleHelper from '../helpers/group-role.helper.js'
-import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
-import LicenceEntityRoleModel from '../../../app/models/licence-entity-role.model.js'
-import RoleHelper from '../helpers/role.helper.js'
-import RoleModel from '../../../app/models/role.model.js'
-import UserGroupHelper from '../helpers/user-group.helper.js'
-import UserHelper from '../helpers/user.helper.js'
-import UserModel from '../../../app/models/user.model.js'
-import UserRoleHelper from '../helpers/user-role.helper.js'
-import { compareStrings } from '../../../app/lib/general.lib.js'
-import { generateUUID } from '../generators.js'
+import GroupHelper from 'water-abstraction-engine/test/helpers/group.helper.js'
+import GroupModel from 'water-abstraction-engine/models/group.model.js'
+import GroupRoleHelper from 'water-abstraction-engine/test/helpers/group-role.helper.js'
+import LicenceEntityModel from 'water-abstraction-engine/models/licence-entity.model.js'
+import LicenceEntityRoleModel from 'water-abstraction-engine/models/licence-entity-role.model.js'
+import RoleHelper from 'water-abstraction-engine/test/helpers/role.helper.js'
+import RoleModel from 'water-abstraction-engine/models/role.model.js'
+import UserGroupHelper from 'water-abstraction-engine/test/helpers/user-group.helper.js'
+import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
+import UserModel from 'water-abstraction-engine/models/user.model.js'
+import UserRoleHelper from 'water-abstraction-engine/test/helpers/user-role.helper.js'
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Populates a `UserModel` instance as the 'admin-internal@wrls.gov.uk' user for testing purposes
@@ -255,7 +255,7 @@ function transformToFetchUsersResult(user) {
 /**
  * Populates a `UserModel` instance based on the specified seed user for testing purposes
  *
- * @param {integer} seedIndex - The index of the user object in `db/seeds/data/users.js`
+ * @param {integer} seedIndex - The index of the user object in `water-abstraction-engine/db/seeds/data/users.js`
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */

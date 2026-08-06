@@ -2,13 +2,13 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import { db } from 'water-abstraction-engine/db/db.js'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
-import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
-import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
-import { db } from '../../../../../db/db.js'
 
 // Thing under test
-import GenerateRecipientsQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-recipients-query.service.js'
+import GenerateRecipientsQueryService from '../../../../../src/services/notices/setup/returns-notice/generate-recipients-query.service.js'
 
 describe('Notices - Setup - Returns Notice - Generate Recipients Query service', () => {
   const dueReturnLogsQuery = `

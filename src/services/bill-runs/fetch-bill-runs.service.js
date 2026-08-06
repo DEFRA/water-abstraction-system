@@ -1,0 +1,77 @@
+/**
+ * Fetches a summary of each bill run for the selected page for /bill-runs
+ * @module FetchBillRunsService
+ */
+
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
+
+/**
+ * Fetches a summary of each bill run for the selected page for /bill-runs
+ *
+ * We use Objection.js {@link https://vincit.github.io/objection.js/recipes/paging.html#paging | paging functionality}
+ * in conjunction with the
+ * {@link https://design-system.service.gov.uk/components/pagination/ | GOV.UK pagination component} to support fetching
+ * just the bill runs for the selected page.
+ *
+ * For example, if we have 100 bill runs and the default page size is 25, then we have 4 'pages' of results (100 / 4).
+ * If the user selects page 3 then our service fetches bill runs 51 to 75. For this to work you _must_ use an order by
+ * on the query (we use `createdAt DESC`).
+ *
+ * @param {object} filters - An object containing the different filters to apply to the query
+ * @param {string} [page='1'] - The current page for the pagination service
+ *
+ * @returns {Promise<module:BillRunModel[]>} An array of bill runs that match the selected 'page in the data
+ */
+export default async function fetchBillRunsService(filters, page = '1') {
+  const query = _fetchQuery()
+
+  _applyFilters(query, filters)
+
+  query.orderBy('billRuns.createdAt', 'desc').page(Number(page) - 1, DatabaseConfig.defaultPageSize)
+
+  return query
+}
+
+function _applyFilters(query, filters) {
+  const { number, regions, runTypes, statuses, yearCreated } = filters
+
+  if (number) {
+    query.where('billRuns.billRunNumber', number)
+  }
+
+  if (regions.length > 0) {
+    query.whereIn('region.id', regions)
+  }
+
+  if (runTypes.length > 0) {
+    query.whereIn('billRuns.batchType', runTypes)
+  }
+
+  if (statuses.length > 0) {
+    query.whereIn('billRuns.status', statuses)
+  }
+
+  if (yearCreated) {
+    query.whereRaw('EXTRACT(YEAR FROM bill_runs.created_at) = ?', [yearCreated])
+  }
+}
+
+function _fetchQuery() {
+  return BillRunModel.query()
+    .select([
+      'billRuns.id',
+      'billRuns.batchType',
+      'billRuns.billRunNumber',
+      'billRuns.createdAt',
+      'billRuns.netTotal',
+      'billRuns.scheme',
+      'billRuns.status',
+      'billRuns.summer',
+      BillRunModel.raw('(invoice_count + credit_note_count) AS number_of_bills'),
+      // NOTE: This is more accurate as it includes zero value bills but it is noticeably less performant
+      // BillRunModel.relatedQuery('bills').count().as('numberOfBills'),
+      'region.displayName AS region'
+    ])
+    .innerJoinRelated('region')
+}

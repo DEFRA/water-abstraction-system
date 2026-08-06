@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
-import YarStub from '../../../../support/stubs/yar.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import SubmitAccessService from '../../../../../app/services/users/internal/setup/submit-access.service.js'
+import SubmitAccessService from '../../../../../src/services/users/internal/setup/submit-access.service.js'
 
 describe('Users - Internal - Setup - Submit Access Service', () => {
   let payload

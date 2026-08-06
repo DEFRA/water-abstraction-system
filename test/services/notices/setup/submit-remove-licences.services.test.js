@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateLicenceRef, generateNoticeReferenceCode } from '../../../support/generators.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { generateLicenceRef, generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchLicenceRefsWithDueReturnsService from '../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchLicenceRefsWithDueReturnsService from '../../../../src/services/notices/setup/fetch-licence-refs-with-due-returns.service.js'
 
 // Thing under test
-import SubmitRemoveLicencesService from '../../../../app/services/notices/setup/submit-remove-licences.service.js'
+import SubmitRemoveLicencesService from '../../../../src/services/notices/setup/submit-remove-licences.service.js'
 
 describe('Notices - Setup - Submit Remove Licences service', () => {
   let licenceRefWithDueReturns

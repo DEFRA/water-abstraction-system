@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef, generateUUID } from '../../support/generators.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import * as BaseUsersPresenter from '../../../app/presenters/users/base-users.presenter.js'
+import * as BaseUsersPresenter from '../../../src/presenters/users/base-users.presenter.js'
 
 describe('Users - Base Users presenter', () => {
   describe('#formatLicencesToUnlink', () => {

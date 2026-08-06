@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Thing under test
-import ReviewChargeElementPresenter from '../../../../app/presenters/bill-runs/review/review-charge-element.presenter.js'
+import ReviewChargeElementPresenter from '../../../../src/presenters/bill-runs/review/review-charge-element.presenter.js'
 
 describe('Bill Runs Review - Review Charge Element presenter', () => {
   const elementIndex = 1

@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import AccountTypeValidator from '../../../../app/validators/billing-accounts/setup/account-type.validator.js'
+import AccountTypeValidator from '../../../../src/validators/billing-accounts/setup/account-type.validator.js'
 
 describe('Billing Accounts - Setup - Account Type Validator', () => {
   describe('when called', () => {

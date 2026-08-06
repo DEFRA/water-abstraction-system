@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import NoBillingPeriodsError from '../../../app/errors/no-billing-periods.error.js'
+import NoBillingPeriodsError from '../../../src/errors/no-billing-periods.error.js'
 
 // Things we need to stub
-import * as AnnualProcessBillRunService from '../../../app/services/bill-runs/annual/process-bill-run.service.js'
-import * as DetermineBillingPeriodsService from '../../../app/services/bill-runs/determine-billing-periods.service.js'
-import * as InitiateBillRunService from '../../../app/services/bill-runs/initiate-bill-run.service.js'
-import * as SupplementaryProcessBillRunService from '../../../app/services/bill-runs/supplementary/process-bill-run.service.js'
-import * as TwoPartTariffProcessBillRunService from '../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js'
-import * as TwoPartTariffSupplementaryProcessBillRunService from '../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js'
+import * as AnnualProcessBillRunService from '../../../src/services/bill-runs/annual/process-bill-run.service.js'
+import * as DetermineBillingPeriodsService from '../../../src/services/bill-runs/determine-billing-periods.service.js'
+import * as InitiateBillRunService from '../../../src/services/bill-runs/initiate-bill-run.service.js'
+import * as SupplementaryProcessBillRunService from '../../../src/services/bill-runs/supplementary/process-bill-run.service.js'
+import * as TwoPartTariffProcessBillRunService from '../../../src/services/bill-runs/two-part-tariff/process-bill-run.service.js'
+import * as TwoPartTariffSupplementaryProcessBillRunService from '../../../src/services/bill-runs/tpt-supplementary/process-bill-run.service.js'
 
 // Thing under test
-import StartBillRunProcessService from '../../../app/services/bill-runs/start-bill-run-process.service.js'
+import StartBillRunProcessService from '../../../src/services/bill-runs/start-bill-run-process.service.js'
 
 describe('Start Bill Run Process service', () => {
   const regionId = '3b24cc01-19c5-4654-8ef6-24ddb4c8dcdf'

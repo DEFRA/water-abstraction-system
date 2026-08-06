@@ -4,13 +4,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import http2 from 'node:http2'
 
-import RegionHelper from '../../support/helpers/region.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Things we need to stub
-import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
+import * as ChargingModuleRequest from '../../../src/requests/charging-module.request.js'
 
 // Thing under test
-import CreateBillRunRequest from '../../../app/requests/charging-module/create-bill-run.request.js'
+import CreateBillRunRequest from '../../../src/requests/charging-module/create-bill-run.request.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 

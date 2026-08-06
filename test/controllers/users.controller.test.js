@@ -4,28 +4,27 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import FeatureFlagsConfig from '../../config/feature-flags.config.js'
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { generateUUID } from '../support/generators.js'
-import { postRequestOptions } from '../support/general.js'
-import { today } from '../../app/lib/general.lib.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Things we need to stub
-import * as FetchLegacyIdDal from '../../app/dal/users/fetch-legacy-id.dal.js'
-import * as IndexUsersService from '../../app/services/users/index-users.service.js'
-import * as SubmitIndexUsersService from '../../app/services/users/submit-index-users.service.js'
-import * as SubmitProfileDetailsService from '../../app/services/users/submit-profile-details.service.js'
-import * as ViewExternalCommunicationsService from '../../app/services/users/external/view-communications.service.js'
-import * as ViewExternalDetailsService from '../../app/services/users/external/view-details.service.js'
-import * as ViewExternalLicencesService from '../../app/services/users/external/view-licences.service.js'
-import * as ViewExternalVerificationsService from '../../app/services/users/external/view-verifications.service.js'
-import * as ViewInternalCommunicationsService from '../../app/services/users/internal/view-communications.service.js'
-import * as ViewInternalDetailsService from '../../app/services/users/internal/view-details.service.js'
-import * as ViewNotificationService from '../../app/services/users/view-notification.service.js'
-import * as ViewProfileDetailsService from '../../app/services/users/view-profile-details.service.js'
+import * as FetchLegacyIdDal from '../../src/dal/users/fetch-legacy-id.dal.js'
+import * as IndexUsersService from '../../src/services/users/index-users.service.js'
+import * as SubmitIndexUsersService from '../../src/services/users/submit-index-users.service.js'
+import * as SubmitProfileDetailsService from '../../src/services/users/submit-profile-details.service.js'
+import * as ViewExternalCommunicationsService from '../../src/services/users/external/view-communications.service.js'
+import * as ViewExternalDetailsService from '../../src/services/users/external/view-details.service.js'
+import * as ViewExternalLicencesService from '../../src/services/users/external/view-licences.service.js'
+import * as ViewExternalVerificationsService from '../../src/services/users/external/view-verifications.service.js'
+import * as ViewInternalCommunicationsService from '../../src/services/users/internal/view-communications.service.js'
+import * as ViewInternalDetailsService from '../../src/services/users/internal/view-details.service.js'
+import * as ViewNotificationService from '../../src/services/users/view-notification.service.js'
+import * as ViewProfileDetailsService from '../../src/services/users/view-profile-details.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
@@ -48,8 +47,6 @@ describe('Users controller', () => {
 
     // We silence sending a notification to our Errbit instance using Airbrake
     vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
-
-    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersManagement', true)
   })
 
   afterEach(() => {

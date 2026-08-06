@@ -2,10 +2,10 @@
 import { describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../support/generators.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import ContactValidator from '../../../../app/validators/billing-accounts/setup/contact.validator.js'
+import ContactValidator from '../../../../src/validators/billing-accounts/setup/contact.validator.js'
 
 describe('Billing Accounts - Setup - Contact Validator', () => {
   describe('when called with valid data', () => {

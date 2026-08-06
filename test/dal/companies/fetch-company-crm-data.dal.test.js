@@ -5,10 +5,10 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import * as CRMSeeder from '../../support/seeders/crm.seeder.js'
 
 // Things we need to stub
-import DatabaseConfig from '../../../config/database.config.js'
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
 
 // Thing under test
-import FetchCompanyCRMDataDal from '../../../app/dal/companies/fetch-company-crm-data.dal.js'
+import FetchCompanyCRMDataDal from '../../../src/dal/companies/fetch-company-crm-data.dal.js'
 
 describe('Companies - Fetch Company CRM Data dal', () => {
   let company

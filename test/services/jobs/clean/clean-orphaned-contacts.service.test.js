@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillingAccountAddressHelper from '../../../support/helpers/billing-account-address.helper.js'
-import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
-import ContactHelper from '../../../support/helpers/contact.helper.js'
-import ContactModel from '../../../../app/models/contact.model.js'
-import LicenceDocumentRoleHelper from '../../../support/helpers/licence-document-role.helper.js'
+import BillingAccountAddressHelper from 'water-abstraction-engine/test/helpers/billing-account-address.helper.js'
+import CompanyContactHelper from 'water-abstraction-engine/test/helpers/company-contact.helper.js'
+import ContactHelper from 'water-abstraction-engine/test/helpers/contact.helper.js'
+import ContactModel from 'water-abstraction-engine/models/contact.model.js'
+import LicenceDocumentRoleHelper from 'water-abstraction-engine/test/helpers/licence-document-role.helper.js'
 
 // Things we need to stub
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 
 // Thing under test
-import CleanOrphanedContactsService from '../../../../app/services/jobs/clean/clean-orphaned-contacts.service.js'
+import CleanOrphanedContactsService from '../../../../src/services/jobs/clean/clean-orphaned-contacts.service.js'
 
 describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
   let billingAccountAddress
@@ -22,7 +22,7 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
   let notifierStub
 
   beforeEach(async () => {
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

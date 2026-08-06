@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ContactNameValidator from '../../../../app/validators/company-contacts/setup/contact-name.validator.js'
+import ContactNameValidator from '../../../../src/validators/company-contacts/setup/contact-name.validator.js'
 
 describe('Company Contacts - Setup - Contact Name Validator', () => {
   let payload

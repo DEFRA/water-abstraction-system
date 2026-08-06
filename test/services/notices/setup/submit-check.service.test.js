@@ -2,22 +2,26 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import {
+  generateLicenceRef,
+  generateNoticeReferenceCode,
+  generateUUID
+} from 'water-abstraction-engine/test/generators.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateLicenceRef, generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-import * as CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
-import * as CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
-import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
-import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import * as SendNoticeService from '../../../../app/services/notices/setup/send/send-notice.service.js'
+import * as DeleteSessionDal from 'water-abstraction-engine/dal/delete-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as CreateNoticeService from '../../../../src/services/notices/setup/create-notice.service.js'
+import * as CreateNotificationsService from '../../../../src/services/notices/setup/create-notifications.service.js'
+import * as FetchRecipientsService from '../../../../src/services/notices/setup/fetch-recipients.service.js'
+import * as SendNoticeService from '../../../../src/services/notices/setup/send/send-notice.service.js'
 
 // Thing under test
-import SubmitCheckService from '../../../../app/services/notices/setup/submit-check.service.js'
+import SubmitCheckService from '../../../../src/services/notices/setup/submit-check.service.js'
 
 describe('Notices - Setup - Submit Check service', () => {
   const auth = {

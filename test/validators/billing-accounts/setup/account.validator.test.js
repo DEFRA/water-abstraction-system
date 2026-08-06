@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../support/generators.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import AccountValidator from '../../../../app/validators/billing-accounts/setup/account.validator.js'
+import AccountValidator from '../../../../src/validators/billing-accounts/setup/account.validator.js'
 
 describe('Billing Accounts - Setup - Account Validator', () => {
   let payload

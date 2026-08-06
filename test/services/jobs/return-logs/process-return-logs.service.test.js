@@ -6,13 +6,13 @@ import ReturnCyclesFixture from '../../../support/fixtures/return-cycles.fixture
 import ReturnRequirementsFixture from '../../../support/fixtures/return-requirements.fixture.js'
 
 // Things we need to stub
-import * as CheckReturnCycleService from '../../../../app/services/jobs/return-logs/check-return-cycle.service.js'
-import * as CreateReturnLogsService from '../../../../app/services/return-logs/create-return-logs.service.js'
-import * as FetchReturnRequirementsService from '../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as CheckReturnCycleService from '../../../../src/services/jobs/return-logs/check-return-cycle.service.js'
+import * as CreateReturnLogsService from '../../../../src/services/return-logs/create-return-logs.service.js'
+import * as FetchReturnRequirementsService from '../../../../src/services/jobs/return-logs/fetch-return-requirements.service.js'
 
 // Thing under test
-import ProcessReturnLogsService from '../../../../app/services/jobs/return-logs/process-return-logs.service.js'
+import ProcessReturnLogsService from '../../../../src/services/jobs/return-logs/process-return-logs.service.js'
 
 describe('Jobs - Return Logs - Process Return Logs service', () => {
   const cycle = 'all-year'
@@ -20,7 +20,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
   let returnRequirement
 
   beforeEach(() => {
-    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // BaseRequest depends on the GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

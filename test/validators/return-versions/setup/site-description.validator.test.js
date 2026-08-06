@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import SiteDescriptionValidator from '../../../../app/validators/return-versions/setup/site-description.validator.js'
+import SiteDescriptionValidator from '../../../../src/validators/return-versions/setup/site-description.validator.js'
 
 describe('Return Versions Setup - Site Description validator', () => {
   let payload

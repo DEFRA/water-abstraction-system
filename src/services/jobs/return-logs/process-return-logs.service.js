@@ -1,0 +1,64 @@
+/**
+ * Determines what return logs need to be generated for a given cycle and creates them
+ * @module ProcessReturnLogsService
+ */
+
+import { determineEarliestDate } from 'water-abstraction-engine/lib/dates.lib.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstraction-engine/lib/general.lib.js'
+
+import CheckReturnCycleService from './check-return-cycle.service.js'
+import CreateReturnLogsService from '../../return-logs/create-return-logs.service.js'
+import FetchReturnRequirementsService from './fetch-return-requirements.service.js'
+
+/**
+ * Determines what return logs need to be generated for a given cycle and creates them
+ *
+ * The return requirement is the information held against the licence that defines how and when an abstractor needs to
+ * submit their returns.
+ *
+ * The return log is the 'header' record generated each return cycle from the requirement that an abstractor submits
+ * their returns against.
+ *
+ * When users make changes to return requirements, the service will determine if any new return logs need to be
+ * created depending on the current cycle.
+ *
+ * But if no changes are ever made to a licence's return requirements, and this job didn't exist, no new return logs
+ * would be created.
+ *
+ * So, this job will run twice yearly: once for each cycle. The job determines which return requirements need a return
+ * log created for the selected cycle and then creates them.
+ *
+ * @param {string} cycle - the return cycle to create logs for (summer or all-year)
+ */
+export default async function processReturnLogsService(cycle) {
+  try {
+    const startTime = currentTimeInNanoseconds()
+
+    const summer = cycle === 'summer'
+    const returnCycle = await CheckReturnCycleService(summer)
+    const returnRequirements = await FetchReturnRequirementsService(returnCycle)
+
+    for (const returnRequirement of returnRequirements) {
+      const licenceEndDate = _endDate(returnRequirement.returnVersion)
+
+      try {
+        await CreateReturnLogsService(returnRequirement, returnCycle, licenceEndDate)
+      } catch (error) {
+        globalThis.GlobalNotifier.omfg('Return logs creation errored', { returnRequirement, returnCycle }, error)
+      }
+    }
+
+    calculateAndLogTimeTaken(startTime, 'Return logs job complete', { count: returnRequirements.length, cycle })
+  } catch (error) {
+    const message = 'Return logs job failed'
+
+    globalThis.GlobalNotifier.omfg(message, { cycle }, error)
+    globalThis.GlobalNotifier.redAlert(message)
+  }
+}
+
+function _endDate(returnVersion) {
+  const { licence } = returnVersion
+
+  return determineEarliestDate([licence.expiredDate, licence.lapsedDate, licence.revokedDate])
+}

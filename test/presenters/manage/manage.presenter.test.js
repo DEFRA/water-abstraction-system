@@ -1,26 +1,16 @@
 // Test framework
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import AuthService from '../../../app/services/plugins/auth.service.js'
-import { data as users } from '../../../db/seeds/data/users.js'
+import { data as users } from 'water-abstraction-engine/db/seeds/data/users.js'
 
-// Things to stub
-import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
+import AuthService from '../../../src/services/plugins/auth.service.js'
 
 // Thing under test
-import ManagePresenter from '../../../app/presenters/manage/manage.presenter.js'
+import ManagePresenter from '../../../src/presenters/manage/manage.presenter.js'
 
 describe('Manage - Manage presenter', () => {
   let auth
-
-  beforeEach(() => {
-    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersView', true)
-  })
-
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
 
   describe('when the user is assigned "Super user" permissions', () => {
     beforeEach(async () => {
@@ -32,7 +22,7 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).toEqual({
         pageTitle: 'Manage',
-        manageUsers: { links: { createAccount: false }, show: false },
+        manageUsers: { links: { createAccount: true }, show: true },
         viewReports: {
           links: { digitise: true, invalidAddresses: true, kpis: true, returnsCycles: true },
           show: true
@@ -72,7 +62,7 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).toEqual({
         pageTitle: 'Manage',
-        manageUsers: { links: { createAccount: false }, show: false },
+        manageUsers: { links: { createAccount: true }, show: true },
         viewReports: {
           links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: true },
           show: true
@@ -208,5 +198,5 @@ async function _auth(username) {
     return user.username === username
   })
 
-  return AuthService(user.userId)
+  return AuthService({}, { userId: user.userId })
 }

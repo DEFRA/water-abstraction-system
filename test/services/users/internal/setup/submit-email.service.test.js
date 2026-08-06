@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
-import YarStub from '../../../../support/stubs/yar.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as CheckEmailExistsDal from '../../../../../app/dal/users/check-email-exists.dal.js'
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as CheckEmailExistsDal from '../../../../../src/dal/users/check-email-exists.dal.js'
 
 // Thing under test
-import SubmitEmailService from '../../../../../app/services/users/internal/setup/submit-email.service.js'
+import SubmitEmailService from '../../../../../src/services/users/internal/setup/submit-email.service.js'
 
 describe('Users - Internal - Setup - Submit Email Service', () => {
   let payload

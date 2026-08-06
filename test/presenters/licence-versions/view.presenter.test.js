@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
-import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-import NotifyConfig from '../../../config/notify.config.js'
+import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
 
 // Thing under test
-import ViewPresenter from '../../../app/presenters/licence-versions/view.presenter.js'
+import ViewPresenter from '../../../src/presenters/licence-versions/view.presenter.js'
 
 describe('Licence Versions - View presenter', () => {
   let auth

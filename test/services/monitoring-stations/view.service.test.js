@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import YarStub from '../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchMonitoringStationDetailsDal from '../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
+import * as FetchMonitoringStationDetailsDal from '../../../src/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 // Thing under test
-import ViewService from '../../../app/services/monitoring-stations/view.service.js'
+import ViewService from '../../../src/services/monitoring-stations/view.service.js'
 
 describe('Monitoring Stations - View service', () => {
   let auth

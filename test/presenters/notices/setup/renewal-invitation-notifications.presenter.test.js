@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { generateLicenceRef } from '../../../support/generators.js'
 
 // Thing under test
-import RenewalInvitationNotificationsPresenter from '../../../../app/presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
+import RenewalInvitationNotificationsPresenter from '../../../../src/presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
 
 describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
   const noticeId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'

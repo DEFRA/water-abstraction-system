@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillRunModel from '../../../../app/models/bill-run.model.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 
 // Things we need to stub
-import * as CancelBillRunService from '../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js'
-import * as DeleteBillRunService from '../../../../app/services/bill-runs/cancel/delete-bill-run.service.js'
-import * as UnassignBillRunToLicencesService from '../../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as CancelBillRunService from '../../../../src/services/bill-runs/cancel/cancel-bill-run.service.js'
+import * as DeleteBillRunService from '../../../../src/services/bill-runs/cancel/delete-bill-run.service.js'
+import * as UnassignBillRunToLicencesService from '../../../../src/services/bill-runs/unassign-bill-run-to-licences.service.js'
 
 // Thing under test
-import CleanEmptyBillRunsService from '../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js'
+import CleanEmptyBillRunsService from '../../../../src/services/jobs/clean/clean-empty-bill-runs.service.js'
 
 describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
   const emptyBillRuns = [{ id: 'b1c10417-77bb-421e-a9ef-15a0d1bc05d8' }, { id: 'ddc7f25f-8b83-4ef1-9b10-bf1d968e2f13' }]
@@ -32,7 +32,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
     vi.spyOn(DeleteBillRunService, 'default').mockResolvedValue()
     vi.spyOn(UnassignBillRunToLicencesService, 'default').mockResolvedValue()
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

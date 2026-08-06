@@ -1,0 +1,40 @@
+/**
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/check-notice-type` page
+ *
+ * @module ViewCheckNoticeTypeService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import { readFlashNotification } from 'water-abstraction-engine/lib/general.lib.js'
+
+import CheckNoticeTypePresenter from '../../../presenters/notices/setup/check-notice-type.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/check-notice-type` page
+ *
+ * @param {string} sessionId
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<object>} - The data formatted for the view template
+ */
+export default async function viewCheckNoticeTypeService(sessionId, yar) {
+  const session = await FetchSessionDal(sessionId)
+
+  await _markCheckPageVisited(session)
+
+  const pageData = CheckNoticeTypePresenter(session)
+
+  const notification = readFlashNotification(yar)
+
+  return {
+    ...pageData,
+    activeNavBar: 'notices',
+    notification
+  }
+}
+
+async function _markCheckPageVisited(session) {
+  session.checkPageVisited = true
+
+  return session.$update()
+}

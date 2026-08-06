@@ -1,4 +1,9 @@
-import { generateLicenceRef, generateNoticeReferenceCode, generateRandomInteger, generateUUID } from '../generators.js'
+import {
+  generateLicenceRef,
+  generateNoticeReferenceCode,
+  generateRandomInteger,
+  generateUUID
+} from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Represents a notice of type 'alert reduce'

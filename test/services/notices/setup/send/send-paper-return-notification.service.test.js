@@ -2,16 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
 import NotifyResponseFixture from '../../../../support/fixtures/notify-response.fixture.js'
-import { generateNoticeReferenceCode } from '../../../../support/generators.js'
 
 // Things we need to stub
-import * as CreatePrecompiledFileRequest from '../../../../../app/requests/notify/create-precompiled-file.request.js'
-import * as PreparePaperReturnService from '../../../../../app/services/notices/setup/prepare-paper-return.service.js'
+import * as CreatePrecompiledFileRequest from 'water-abstraction-engine/requests/notify/create-precompiled-file.request.js'
+
+import * as PreparePaperReturnService from '../../../../../src/services/notices/setup/prepare-paper-return.service.js'
 
 // Thing under test
-import SendPaperReturnNotificationService from '../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js'
+import SendPaperReturnNotificationService from '../../../../../src/services/notices/setup/send/send-paper-return-notification.service.js'
 
 describe('Notices - Setup - Send - Send Paper Return Notification service', () => {
   let buffer

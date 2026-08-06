@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
-import SessionModel from '../../../../app/models/session.model.js'
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
+import * as FetchRecipientsService from '../../../../src/services/notices/setup/fetch-recipients.service.js'
 
 // Thing under test
-import ViewCheckService from '../../../../app/services/notices/setup/view-check.service.js'
+import ViewCheckService from '../../../../src/services/notices/setup/view-check.service.js'
 
 describe('Notices - Setup - View Check service', () => {
   let session

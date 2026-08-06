@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceSupplementaryYearHelper from '../../../support/helpers/licence-supplementary-year.helper.js'
-import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'
-import { generateUUID } from '../../../support/generators.js'
+import LicenceSupplementaryYearHelper from 'water-abstraction-engine/test/helpers/licence-supplementary-year.helper.js'
+import LicenceSupplementaryYearModel from 'water-abstraction-engine/models/licence-supplementary-year.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import CreateLicenceSupplementaryYearService from '../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js'
+import CreateLicenceSupplementaryYearService from '../../../../src/services/licences/supplementary/create-licence-supplementary-year.service.js'
 
 describe('Create Licence Supplementary Years Service', () => {
   let licenceId

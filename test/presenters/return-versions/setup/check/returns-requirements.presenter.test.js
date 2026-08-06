@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import PointModel from '../../../../../app/models/point.model.js'
+import PointModel from 'water-abstraction-engine/models/point.model.js'
 
 // Thing under test
-import ReturnRequirementsPresenter from '../../../../../app/presenters/return-versions/setup/check/returns-requirements.presenter.js'
+import ReturnRequirementsPresenter from '../../../../../src/presenters/return-versions/setup/check/returns-requirements.presenter.js'
 
 describe('Return Versions Setup - Return Requirements presenter', () => {
   let journey

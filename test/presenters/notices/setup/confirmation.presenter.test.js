@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
+import { generateNoticeReferenceCode, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import ConfirmationPresenter from '../../../../app/presenters/notices/setup/confirmation.presenter.js'
+import ConfirmationPresenter from '../../../../src/presenters/notices/setup/confirmation.presenter.js'
 
 describe('Notices - Setup - Confirmation presenter', () => {
   const referenceCode = generateNoticeReferenceCode('RINV-')

@@ -2,11 +2,11 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Thing under test
-import DetermineExistingBillRunYearsService from '../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js'
+import DetermineExistingBillRunYearsService from '../../../../src/services/licences/supplementary/determine-existing-bill-run-years.service.js'
 
 describe('Determine Existing Bill Run Years Service', () => {
   describe('when passed a regionId and years', () => {

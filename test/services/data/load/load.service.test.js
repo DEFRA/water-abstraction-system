@@ -2,17 +2,17 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillRunModel from '../../../../app/models/bill-run.model.js'
-import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
-import ChargeReferenceModel from '../../../../app/models/charge-reference.model.js'
-import ExpandedError from '../../../../app/errors/expanded.error.js'
-import LicenceModel from '../../../../app/models/licence.model.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
-import { db } from '../../../../db/db.js'
-import { generateLicenceRef } from '../../../support/generators.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
+import ChargeReferenceModel from 'water-abstraction-engine/models/charge-reference.model.js'
+import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import { db } from 'water-abstraction-engine/db/db.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import LoadService from '../../../../app/services/data/load/load.service.js'
+import LoadService from '../../../../src/services/data/load/load.service.js'
 
 describe('Load service', () => {
   let licenceRef

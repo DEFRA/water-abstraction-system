@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import AdditionalSubmissionOptionsPresenter from '../../../../app/presenters/return-versions/setup/additional-submission-options.presenter.js'
+import AdditionalSubmissionOptionsPresenter from '../../../../src/presenters/return-versions/setup/additional-submission-options.presenter.js'
 
 describe('Return Versions Setup - Additional Submission Options presenter', () => {
   let session

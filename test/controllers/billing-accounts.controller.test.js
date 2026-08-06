@@ -4,15 +4,15 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
 
 // Things we need to stub
-import Boom from '@hapi/boom'
-import * as ChangeAddressService from '../../app/services/billing-accounts/change-address.service.js'
-import * as ViewBillingAccountService from '../../app/services/billing-accounts/view-billing-account.service.js'
+import Boom from 'water-abstraction-engine/wrappers/boom.wrapper.js'
+import * as ChangeAddressService from '../../src/services/billing-accounts/change-address.service.js'
+import * as ViewBillingAccountService from '../../src/services/billing-accounts/view-billing-account.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } =
   http2.constants

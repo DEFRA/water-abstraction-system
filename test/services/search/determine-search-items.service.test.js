@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import DetermineSearchItemsService from '../../../app/services/search/determine-search-items.service.js'
+import DetermineSearchItemsService from '../../../src/services/search/determine-search-items.service.js'
 
 describe('Search - Determine Search Items service', () => {
   let selectedResultType

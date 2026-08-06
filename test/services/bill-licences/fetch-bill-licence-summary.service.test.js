@@ -2,19 +2,19 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillHelper from '../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
-import BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
-import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
-import CompanyHelper from '../../support/helpers/company.helper.js'
-import ContactHelper from '../../support/helpers/contact.helper.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
-import TransactionHelper from '../../support/helpers/transaction.helper.js'
-import { generateLicenceRef } from '../../support/generators.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import BillingAccountAddressHelper from 'water-abstraction-engine/test/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import ContactHelper from 'water-abstraction-engine/test/helpers/contact.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchBillLicenceSummaryService from '../../../app/services/bill-licences/fetch-bill-licence-summary.service.js'
+import FetchBillLicenceSummaryService from '../../../src/services/bill-licences/fetch-bill-licence-summary.service.js'
 
 describe('Fetch Bill Licence Summary service', () => {
   let accountNumber

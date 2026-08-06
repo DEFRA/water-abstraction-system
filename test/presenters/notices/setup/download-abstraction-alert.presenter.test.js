@@ -6,7 +6,7 @@ import AbstractionAlertSessionData from '../../../support/fixtures/abstraction-a
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
-import DownloadAbstractionAlertPresenter from '../../../../app/presenters/notices/setup/download-abstraction-alert.presenter.js'
+import DownloadAbstractionAlertPresenter from '../../../../src/presenters/notices/setup/download-abstraction-alert.presenter.js'
 
 describe('Notices - Setup - Download Abstraction Alert presenter', () => {
   let session

@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillHelper from '../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
-import BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import { generateUUID } from '../../support/generators.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchBillService from '../../../app/services/licences/fetch-bills.service.js'
+import FetchBillService from '../../../src/services/licences/fetch-bills.service.js'
 
 describe('Licences - Fetch Bills service', () => {
   const createdDate = new Date('2022-01-01')

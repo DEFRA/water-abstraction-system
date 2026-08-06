@@ -5,7 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
-import FetchAbstractionAlertRecipientsDal from '../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
+import FetchAbstractionAlertRecipientsDal from '../../../../../src/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
 
 describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipients DAL', () => {
   let scenarios

@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import ReturnLogModel from '../../../app/models/return-log.model.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 
 // Thing under test
-import SubmitDetailsService from '../../../app/services/return-logs/submit-details.service.js'
+import SubmitDetailsService from '../../../src/services/return-logs/submit-details.service.js'
 
 describe('Return Logs - Submit Details Service', () => {
   let payload

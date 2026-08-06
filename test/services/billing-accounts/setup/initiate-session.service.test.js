@@ -5,10 +5,10 @@ import { beforeAll, describe, expect, it, vi } from 'vitest'
 import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Things we need to stub
-import * as FetchViewBillingAccountService from '../../../../app/services/billing-accounts/fetch-view-billing-account.service.js'
+import * as FetchViewBillingAccountService from '../../../../src/services/billing-accounts/fetch-view-billing-account.service.js'
 
 // Thing under test
-import InitiateSessionService from '../../../../app/services/billing-accounts/setup/initiate-session.service.js'
+import InitiateSessionService from '../../../../src/services/billing-accounts/setup/initiate-session.service.js'
 
 describe('Billing Accounts - Setup - Initiate Session service', () => {
   const billingAccountData = BillingAccountsFixture.billingAccount()

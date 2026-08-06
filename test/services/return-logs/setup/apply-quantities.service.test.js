@@ -2,7 +2,7 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ApplyQuantitiesService from '../../../../app/services/return-logs/setup/apply-quantities.service.js'
+import ApplyQuantitiesService from '../../../../src/services/return-logs/setup/apply-quantities.service.js'
 
 describe('Return Logs Setup - Update Quantities service', () => {
   let session

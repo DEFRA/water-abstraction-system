@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
 import http2 from 'node:http2'
-import LicenceModel from '../../../../app/models/licence.model.js'
 
 // Things we need to stub
-import * as FetchLicenceService from '../../../../app/services/return-versions/setup/fetch-licence.service.js'
+import * as FetchLicenceService from '../../../../src/services/return-versions/setup/fetch-licence.service.js'
 
 // Thing under test
-import InitiateSessionService from '../../../../app/services/return-versions/setup/initiate-session.service.js'
+import InitiateSessionService from '../../../../src/services/return-versions/setup/initiate-session.service.js'
 
 const { HTTP_STATUS_NOT_FOUND } = http2.constants
 

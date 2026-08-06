@@ -1,0 +1,41 @@
+/**
+ * Orchestrates fetching and presenting the data for the '/return-logs/{id}/communications' page
+ *
+ * @module ViewCommunicationsService
+ */
+
+import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.presenter.js'
+
+import CommunicationsPresenter from '../../presenters/return-logs/communications.presenter.js'
+import FetchNotificationsDal from '../../dal/return-logs/fetch-notifications.dal.js'
+import FetchReturnLogService from './fetch-return-log.service.js'
+
+/**
+ * Orchestrates fetching and presenting the data for the '/return-logs/{id}/communications' page
+ *
+ * @param {string} id - the UUID of the return log
+ * @param {string} page - The current page for the pagination service
+ *
+ * @returns {Promise<object>} The data formatted for the view template
+ */
+export default async function viewCommunicationsService(id, page) {
+  const returnLog = await FetchReturnLogService(id)
+
+  const { notifications, totalNumber } = await FetchNotificationsDal(id, page)
+
+  const pageData = CommunicationsPresenter(returnLog, notifications)
+
+  const pagination = PaginatorPresenter(
+    totalNumber,
+    page,
+    `/system/return-logs/${id}/communications`,
+    notifications.length,
+    'communications'
+  )
+
+  return {
+    activeSecondaryNav: 'communications',
+    pagination,
+    ...pageData
+  }
+}

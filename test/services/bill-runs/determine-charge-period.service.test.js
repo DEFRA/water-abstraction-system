@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import DetermineChargePeriodService from '../../../app/services/bill-runs/determine-charge-period.service.js'
+import DetermineChargePeriodService from '../../../src/services/bill-runs/determine-charge-period.service.js'
 
 describe('Determine charge period service', () => {
   const billingPeriod = {

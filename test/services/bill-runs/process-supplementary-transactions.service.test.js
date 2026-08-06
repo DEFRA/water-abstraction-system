@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ProcessSupplementaryTransactionsService from '../../../app/services/bill-runs/process-supplementary-transactions.service.js'
+import ProcessSupplementaryTransactionsService from '../../../src/services/bill-runs/process-supplementary-transactions.service.js'
 
 describe('Bill Runs - Process Supplementary Transactions service', () => {
   const billLicenceId = '9d587a65-aa00-4be6-969e-5bbb9fc6c885'

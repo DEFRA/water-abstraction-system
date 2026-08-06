@@ -2,21 +2,21 @@
  * @module TwoPartTariffSupplementarySeeder
  */
 
-import BillRunHelper from '../helpers/bill-run.helper.js'
-import BillingAccountHelper from '../helpers/billing-account.helper.js'
-import ChangeReasonHelper from '../helpers/change-reason.helper.js'
-import ChargeCategoryHelper from '../helpers/charge-category.helper.js'
-import ChargeElementHelper from '../helpers/charge-element.helper.js'
-import ChargeReferenceHelper from '../helpers/charge-reference.helper.js'
-import ChargeVersionHelper from '../helpers/charge-version.helper.js'
-import LicenceHelper from '../helpers/licence.helper.js'
-import LicenceSupplementaryYearHelper from '../helpers/licence-supplementary-year.helper.js'
-import RegionHelper from '../helpers/region.helper.js'
-import ReviewChargeElementHelper from '../helpers/review-charge-element.helper.js'
-import ReviewChargeReferenceHelper from '../helpers/review-charge-reference.helper.js'
-import ReviewChargeVersionHelper from '../helpers/review-charge-version.helper.js'
-import ReviewLicenceHelper from '../helpers/review-licence.helper.js'
-import { generateAccountNumber } from '../generators.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import ChangeReasonHelper from 'water-abstraction-engine/test/helpers/change-reason.helper.js'
+import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceSupplementaryYearHelper from 'water-abstraction-engine/test/helpers/licence-supplementary-year.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import ReviewChargeElementHelper from 'water-abstraction-engine/test/helpers/review-charge-element.helper.js'
+import ReviewChargeReferenceHelper from 'water-abstraction-engine/test/helpers/review-charge-reference.helper.js'
+import ReviewChargeVersionHelper from 'water-abstraction-engine/test/helpers/review-charge-version.helper.js'
+import ReviewLicenceHelper from 'water-abstraction-engine/test/helpers/review-licence.helper.js'
+import { generateAccountNumber } from 'water-abstraction-engine/test/generators.js'
 
 const ABATEMENT_S126 = 16
 const MAJOR_CHANGE = 0

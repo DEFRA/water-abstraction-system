@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as CompressSchemaFolderService from '../../../../app/services/jobs/export/compress-schema-folder.service.js'
-import * as DeleteFilesService from '../../../../app/services/jobs/export/delete-files.service.js'
-import * as ExportTableService from '../../../../app/services/jobs/export/export-table.service.js'
-import * as FetchTableNamesService from '../../../../app/services/jobs/export/fetch-table-names.service.js'
-import * as SendToS3BucketService from '../../../../app/services/jobs/export/send-to-s3-bucket.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as CompressSchemaFolderService from '../../../../src/services/jobs/export/compress-schema-folder.service.js'
+import * as DeleteFilesService from '../../../../src/services/jobs/export/delete-files.service.js'
+import * as ExportTableService from '../../../../src/services/jobs/export/export-table.service.js'
+import * as FetchTableNamesService from '../../../../src/services/jobs/export/fetch-table-names.service.js'
+import * as SendToS3BucketService from '../../../../src/services/jobs/export/send-to-s3-bucket.service.js'
 
 // Thing under test
-import SchemaExportService from '../../../../app/services/jobs/export/schema-export.service.js'
+import SchemaExportService from '../../../../src/services/jobs/export/schema-export.service.js'
 
 describe('Schema export service', () => {
   describe('when successful', () => {

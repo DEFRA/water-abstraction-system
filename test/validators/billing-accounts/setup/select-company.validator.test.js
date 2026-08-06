@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import SelectCompanyValidator from '../../../../app/validators/billing-accounts/setup/select-company.validator.js'
+import SelectCompanyValidator from '../../../../src/validators/billing-accounts/setup/select-company.validator.js'
 
 describe('Billing Accounts - Setup - Select Company Validator', () => {
   let payload

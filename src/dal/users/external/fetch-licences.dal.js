@@ -1,0 +1,63 @@
+/**
+ * Fetches licences linked to a user for display on the `/users/external/{id}/licences` page
+ * @module FetchLicencesDal
+ */
+
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+
+/**
+ * Fetches licences linked to a user for display on the `/users/external/{id}/licences` page
+ *
+ * This includes their related roles and current licence holder, so we can display these alongside the licence.
+ *
+ * @param {number} licenceEntityId - The licence entity ID of the requested user
+ * @param {string} [page=1] - The current page for the pagination service
+ *
+ * @returns {Promise<module:LicenceModel[]>} the requested user licences
+ */
+export default async function fetchLicencesDal(licenceEntityId, page = '1') {
+  const { results: licences, total: totalNumber } = await _fetch(licenceEntityId, page)
+
+  return { licences, totalNumber }
+}
+
+async function _fetch(licenceEntityId, page) {
+  return LicenceModel.query()
+    .select([
+      'licences.expiredDate',
+      'licences.id',
+      'licences.lapsedDate',
+      'licences.licenceRef',
+      'licences.revokedDate'
+    ])
+    .innerJoinRelated('licenceDocumentHeader')
+    .whereRaw(
+      `EXISTS (
+  SELECT
+    1
+  FROM
+    public.licence_entity_roles ler
+  WHERE
+    ler.company_entity_id = "licence_document_header".company_entity_id
+    AND ler.licence_entity_id = ?
+)
+      `,
+      [licenceEntityId]
+    )
+    .orderBy('licences.licenceRef', 'asc')
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
+    .modify('licenceHolder')
+    .withGraphFetched('licenceDocumentHeader')
+    .modifyGraph('licenceDocumentHeader', (licenceDocumentHeaderBuilder) => {
+      licenceDocumentHeaderBuilder
+        .select(['id', 'licenceRef'])
+        .withGraphFetched('licenceEntityRoles')
+        .modifyGraph('licenceEntityRoles', (licenceEntityRolesBuilder) => {
+          licenceEntityRolesBuilder
+            .select(['id', 'role'])
+            .where('licenceEntityId', licenceEntityId)
+            .orderBy('role', 'asc')
+        })
+    })
+}

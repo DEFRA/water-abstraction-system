@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ThresholdAndUnitPresenter from '../../../../app/presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js'
+import ThresholdAndUnitPresenter from '../../../../src/presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js'
 
 describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () => {
   let session

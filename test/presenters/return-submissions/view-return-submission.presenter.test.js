@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Thing under test
-import ViewReturnSubmissionPresenter from '../../../app/presenters/return-submissions/view-return-submission.presenter.js'
+import ViewReturnSubmissionPresenter from '../../../src/presenters/return-submissions/view-return-submission.presenter.js'
 
 // Test helpers
-import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import ReturnLogModel from '../../../app/models/return-log.model.js'
-import ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
-import ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
-import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
-import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
+import ReturnSubmissionLineModel from 'water-abstraction-engine/models/return-submission-line.model.js'
+import ReturnSubmissionModel from 'water-abstraction-engine/models/return-submission.model.js'
 
-import { unitNames } from '../../../app/lib/static-lookups.lib.js'
+import { unitNames } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 describe('View Return Submissions presenter', () => {
   let testReturnSubmission

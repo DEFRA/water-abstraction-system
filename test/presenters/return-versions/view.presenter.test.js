@@ -2,14 +2,14 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ContactModel from '../../../app/models/contact.model.js'
-import LicenceModel from '../../../app/models/licence.model.js'
-import PointModel from '../../../app/models/point.model.js'
-import ReturnVersionModel from '../../../app/models/return-version.model.js'
-import { generateUUID } from '../../support/generators.js'
+import ContactModel from 'water-abstraction-engine/models/contact.model.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import PointModel from 'water-abstraction-engine/models/point.model.js'
+import ReturnVersionModel from 'water-abstraction-engine/models/return-version.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import ViewPresenter from '../../../app/presenters/return-versions/view.presenter.js'
+import ViewPresenter from '../../../src/presenters/return-versions/view.presenter.js'
 
 describe('Return Versions - View presenter', () => {
   let returnVersion

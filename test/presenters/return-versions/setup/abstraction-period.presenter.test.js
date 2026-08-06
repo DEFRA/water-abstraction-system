@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import AbstractionPeriodPresenter from '../../../../app/presenters/return-versions/setup/abstraction-period.presenter.js'
+import AbstractionPeriodPresenter from '../../../../src/presenters/return-versions/setup/abstraction-period.presenter.js'
 
 describe('Return Versions Setup - Abstraction Period presenter', () => {
   const requirementIndex = 0

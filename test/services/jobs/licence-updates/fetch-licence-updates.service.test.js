@@ -2,15 +2,15 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillRunChargeVersionYearHelper from '../../../support/helpers/bill-run-charge-version-year.helper.js'
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
-import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
+import BillRunChargeVersionYearHelper from 'water-abstraction-engine/test/helpers/bill-run-charge-version-year.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helper.js'
 
 // Thing under test
-import FetchLicenceUpdatesService from '../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js'
+import FetchLicenceUpdatesService from '../../../../src/services/jobs/licence-updates/fetch-licence-updates.service.js'
 
 describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
   let licence

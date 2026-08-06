@@ -2,19 +2,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ReturnVersionModel from '../../../app/models/return-version.model.js'
+import ReturnVersionModel from 'water-abstraction-engine/models/return-version.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
-import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-import * as FetchAgreementsService from '../../../app/services/licences/fetch-agreements.service.js'
-import * as FetchChargeVersionsService from '../../../app/services/licences/fetch-charge-versions.service.js'
-import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
-import * as FetchReturnVersionsService from '../../../app/services/licences/fetch-return-versions.service.js'
-import * as FetchWorkflowsService from '../../../app/services/licences/fetch-workflows.service.js'
+import * as FetchAgreementsService from '../../../src/services/licences/fetch-agreements.service.js'
+import * as FetchChargeVersionsService from '../../../src/services/licences/fetch-charge-versions.service.js'
+import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import * as FetchReturnVersionsService from '../../../src/services/licences/fetch-return-versions.service.js'
+import * as FetchWorkflowsService from '../../../src/services/licences/fetch-workflows.service.js'
 
 // Thing under test
-import ViewSetUpService from '../../../app/services/licences/view-set-up.service.js'
+import ViewSetUpService from '../../../src/services/licences/view-set-up.service.js'
 
 describe('Licences - View Set Up service', () => {
   let agreement

@@ -4,10 +4,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import http2 from 'node:http2'
 
 // Things we need to stub
-import * as LegacyRequest from '../../../app/requests/legacy.request.js'
+import * as LegacyRequest from '../../../src/requests/legacy.request.js'
 
 // Thing under test
-import RefreshBillRunRequest from '../../../app/requests/legacy/refresh-bill-run.request.js'
+import RefreshBillRunRequest from '../../../src/requests/legacy/refresh-bill-run.request.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 

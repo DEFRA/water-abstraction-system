@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../support/stubs/session.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things we need to stub
-import * as FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchCompaniesService from '../../../../src/services/billing-accounts/setup/fetch-companies.service.js'
 
 // Test helpers
 import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Thing under test
-import ViewSelectCompanyService from '../../../../app/services/billing-accounts/setup/view-select-company.service.js'
+import ViewSelectCompanyService from '../../../../src/services/billing-accounts/setup/view-select-company.service.js'
 
 describe('Billing Accounts - Setup - View Select Company Service', () => {
   const companies = [

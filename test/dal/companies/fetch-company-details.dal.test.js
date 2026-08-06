@@ -2,14 +2,14 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import AddressHelper from '../../support/helpers/address.helper.js'
-import CompanyAddressHelper from '../../support/helpers/company-address.helper.js'
-import CompanyHelper from '../../support/helpers/company.helper.js'
-import LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
-import { tomorrow, yesterday } from '../../support/general.js'
+import AddressHelper from 'water-abstraction-engine/test/helpers/address.helper.js'
+import CompanyAddressHelper from 'water-abstraction-engine/test/helpers/company-address.helper.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import LicenceRoleHelper from 'water-abstraction-engine/test/helpers/licence-role.helper.js'
+import { tomorrow, yesterday } from 'water-abstraction-engine/test/general.js'
 
 // Thing under test
-import FetchCompanyDetailsDal from '../../../app/dal/companies/fetch-company-details.dal.js'
+import FetchCompanyDetailsDal from '../../../src/dal/companies/fetch-company-details.dal.js'
 
 describe('Companies - Fetch Company details dal', () => {
   let addressDifferentRole

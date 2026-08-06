@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 import http2 from 'node:http2'
-import BillRunModel from '../../../app/models/bill-run.model.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
 
 // Things we need to stub
-import * as ChargingModuleCreateBillRunRequest from '../../../app/requests/charging-module/create-bill-run.request.js'
-import * as CreateBillRunEventService from '../../../app/services/bill-runs/create-bill-run-event.service.js'
+import * as ChargingModuleCreateBillRunRequest from '../../../src/requests/charging-module/create-bill-run.request.js'
+import * as CreateBillRunEventService from '../../../src/services/bill-runs/create-bill-run-event.service.js'
 
 // Thing under test
-import InitiateBillRunService from '../../../app/services/bill-runs/initiate-bill-run.service.js'
+import InitiateBillRunService from '../../../src/services/bill-runs/initiate-bill-run.service.js'
 
 const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } = http2.constants
 

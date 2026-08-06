@@ -2,14 +2,14 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceModel from '../../../app/models/licence.model.js'
-import LicenceSupplementaryYearModel from '../../support/helpers/licence-supplementary-year.helper.js'
-import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import { generateUUID } from '../../support/generators.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import LicenceSupplementaryYearModel from 'water-abstraction-engine/test/helpers/licence-supplementary-year.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
 
 describe('Licences - Fetch Licence service', () => {
   let licence

@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ModLogHelper from '../../support/helpers/mod-log.helper.js'
-import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import ModLogHelper from 'water-abstraction-engine/test/helpers/mod-log.helper.js'
+import ReturnVersionHelper from 'water-abstraction-engine/test/helpers/return-version.helper.js'
 
 // Thing under test
-import FetchReturnVersionsService from '../../../app/services/licences/fetch-return-versions.service.js'
+import FetchReturnVersionsService from '../../../src/services/licences/fetch-return-versions.service.js'
 
 describe('Fetch Return Versions service', () => {
   const startDate = new Date('2022-04-01')

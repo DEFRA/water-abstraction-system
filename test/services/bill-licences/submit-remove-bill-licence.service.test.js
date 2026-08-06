@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as LegacyDeleteBillLicenceRequest from '../../../app/requests/legacy/delete-bill-licence.request.js'
-import * as ProcessBillingFlagService from '../../../app/services/licences/supplementary/process-billing-flag.service.js'
-import * as UnassignLicencesToBillRunService from '../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js'
-import BillLicenceModel from '../../../app/models/bill-licence.model.js'
+import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model.js'
+import * as LegacyDeleteBillLicenceRequest from '../../../src/requests/legacy/delete-bill-licence.request.js'
+import * as ProcessBillingFlagService from '../../../src/services/licences/supplementary/process-billing-flag.service.js'
+import * as UnassignLicencesToBillRunService from '../../../src/services/bill-runs/unassign-licences-to-bill-run.service.js'
 
 // Thing under test
-import SubmitRemoveBillLicenceService from '../../../app/services/bill-licences/submit-remove-bill-licence.service.js'
+import SubmitRemoveBillLicenceService from '../../../src/services/bill-licences/submit-remove-bill-licence.service.js'
 
 describe('Bill Licences - Submit Remove Bill Licence service', () => {
   const user = { id: '0aa9dcaa-9a26-4a77-97ab-c17db54d38a1', useremail: 'carol.shaw@atari.com' }

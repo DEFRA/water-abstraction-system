@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import LicenceModel from '../../../../app/models/licence.model.js'
-import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import LicenceSupplementaryYearModel from 'water-abstraction-engine/models/licence-supplementary-year.model.js'
 
 // Things we need to stub
-import * as DetermineExistingBillRunYearsService from '../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js'
+import * as DetermineExistingBillRunYearsService from '../../../../src/services/licences/supplementary/determine-existing-bill-run-years.service.js'
 
 // Thing under test
-import SubmitMarkForSupplementaryBillingService from '../../../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js'
+import SubmitMarkForSupplementaryBillingService from '../../../../src/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js'
 
 describe('Submit Mark For Supplementary Billing Service', () => {
   afterEach(() => {

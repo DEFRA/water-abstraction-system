@@ -1,0 +1,28 @@
+/**
+ * Create a notice from the notice setup data
+ * @module CreateNoticeService
+ */
+
+import EventModel from 'water-abstraction-engine/models/event.model.js'
+import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
+
+import CreateNoticePresenter from '../../../presenters/notices/setup/create-notice.presenter.js'
+
+/**
+ * Create a notice from the notice setup data
+ *
+ * > Notices are event records with a type as `notification`. In the future we intend to move them to their own
+ * > `water.notices` table. But for now this explains why the `EventModel` suddenly makes an appearance!
+ *
+ * @param {object} noticeData - The notice data
+ * @param {object[]} recipients - List of recipients, each containing details like email or address of the recipient
+ * @param {string} issuer - The username of the person issuing the notice
+ *
+ * @returns {Promise<module:EventModel>} the new `EventModel` (Notice) instance
+ */
+export default async function createNoticeService(noticeData, recipients, issuer) {
+  const notice = CreateNoticePresenter(noticeData, recipients, issuer)
+  const timestamp = timestampForPostgres()
+
+  return EventModel.query().insert({ ...notice, createdAt: timestamp, updatedAt: timestamp })
+}

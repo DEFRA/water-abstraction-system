@@ -6,7 +6,7 @@ import AbstractionAlertSessionDataFixture from '../../../support/fixtures/abstra
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
-import AbstractionAlertNotificationsPresenter from '../../../../app/presenters/notices/setup/abstraction-alert-notifications.presenter.js'
+import AbstractionAlertNotificationsPresenter from '../../../../src/presenters/notices/setup/abstraction-alert-notifications.presenter.js'
 
 describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
   const noticeId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'

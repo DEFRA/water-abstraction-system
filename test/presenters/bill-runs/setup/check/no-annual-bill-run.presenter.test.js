@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import NoAnnualBillRunPresenter from '../../../../../app/presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js'
+import NoAnnualBillRunPresenter from '../../../../../src/presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js'
 
 describe('Bill Runs - Setup - No Annual Bill Run presenter', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'

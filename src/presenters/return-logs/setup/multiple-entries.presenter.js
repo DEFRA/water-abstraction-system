@@ -1,0 +1,34 @@
+/**
+ * Format data for the `/return-log/setup/{sessionId}/multiple-entries` page
+ * @module MultipleEntriesPresenter
+ */
+
+import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { returnRequirementFrequencies } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+
+/**
+ * Format data for the `/return-log/setup/{sessionId}/multiple-entries` page
+ *
+ * @param {module:SessionModel} session - The return log setup session instance
+ *
+ * @returns {object} page data needed by the view template
+ */
+export default function multipleEntriesPresenter(session) {
+  const { id: sessionId, lines, multipleEntries, returnReference, returnsFrequency, reported } = session
+
+  const measurementType = reported === 'abstractionVolumes' ? 'volumes' : 'readings'
+  const frequency = returnRequirementFrequencies[returnsFrequency]
+
+  return {
+    backLink: { href: `/system/return-logs/setup/${sessionId}/check`, text: 'Back' },
+    endDate: formatLongDate(new Date(lines[lines.length - 1].startDate)),
+    frequency,
+    lineCount: lines.length,
+    measurementType,
+    multipleEntries: multipleEntries ?? null,
+    pageTitle: `Enter multiple ${frequency} ${measurementType}`,
+    pageTitleCaption: `Return reference ${returnReference}`,
+    sessionId,
+    startDate: formatLongDate(new Date(lines[0].startDate))
+  }
+}

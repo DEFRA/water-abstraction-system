@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import FullConditionValidator from '../../../../app/validators/licence-monitoring-station/setup/full-condition.validator.js'
+import FullConditionValidator from '../../../../src/validators/licence-monitoring-station/setup/full-condition.validator.js'
 
 describe('Full Condition Validator', () => {
   let payload

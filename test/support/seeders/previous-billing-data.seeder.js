@@ -2,14 +2,14 @@
  * @module PreviousBillingDataSeeder
  */
 
-import BillHelper from '../helpers/bill.helper.js'
-import BillLicenceHelper from '../helpers/bill-licence.helper.js'
-import BillRunHelper from '../helpers/bill-run.helper.js'
-import BillingAccountHelper from '../helpers/billing-account.helper.js'
-import ChargeCategoryHelper from '../helpers/charge-category.helper.js'
-import LicenceHelper from '../helpers/licence.helper.js'
-import RegionHelper from '../helpers/region.helper.js'
-import TransactionHelper from '../helpers/transaction.helper.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
 
 /**
  * Seeds previous billing data need to support testing of supplementary billing

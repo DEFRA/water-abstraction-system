@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import BillRunModel from '../../../../app/models/bill-run.model.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 
 // Thing under test
-import ViewSendBillRunService from '../../../../app/services/bill-runs/send/view-send-bill-run.service.js'
+import ViewSendBillRunService from '../../../../src/services/bill-runs/send/view-send-bill-run.service.js'
 
 describe('Bill Runs - View Send Bill Run service', () => {
   const billRunId = 'd351ee81-157e-4621-98eb-db121cb48cbb'

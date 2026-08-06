@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
-import YarStub from '../../../../support/stubs/yar.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
-import * as FetchUserDetailsDal from '../../../../../app/dal/users/internal/fetch-user-details.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchUserDetailsDal from '../../../../../src/dal/users/internal/fetch-user-details.dal.js'
 
 // Thing under test
-import SubmitPermissionsService from '../../../../../app/services/users/internal/setup/submit-permissions.service.js'
+import SubmitPermissionsService from '../../../../../src/services/users/internal/setup/submit-permissions.service.js'
 
 describe('Users - Internal - Setup - Submit Permissions Service', () => {
   let auth

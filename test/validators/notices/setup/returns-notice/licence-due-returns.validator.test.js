@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import LicenceDueReturnsValidator from '../../../../../app/validators/notices/setup/returns-notice/licence-due-returns.validator.js'
+import LicenceDueReturnsValidator from '../../../../../src/validators/notices/setup/returns-notice/licence-due-returns.validator.js'
 
 describe('Notices - Setup - Returns Notice - licence due returns validator', () => {
   let dueReturnsExist

@@ -1,3 +1,3 @@
-import { start } from './app/server.js'
+import { start } from './src/server.js'
 
 start()

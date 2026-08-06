@@ -4,13 +4,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import http2 from 'node:http2'
 
-import { generateNoticeReferenceCode } from '../../../../support/generators.js'
+import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as GeneratePreviewRequest from '../../../../../app/requests/notify/generate-preview.request.js'
+import * as GeneratePreviewRequest from 'water-abstraction-engine/requests/notify/generate-preview.request.js'
 
 // Thing under test
-import PreviewPresenter from '../../../../../app/presenters/notices/setup/preview/preview.presenter.js'
+import PreviewPresenter from '../../../../../src/presenters/notices/setup/preview/preview.presenter.js'
 
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 

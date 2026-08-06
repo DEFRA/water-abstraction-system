@@ -2,22 +2,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import ReturnLogModel from '../../../../app/models/return-log.model.js'
-import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
-import SessionModel from '../../../../app/models/session.model.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import UserHelper from '../../../support/helpers/user.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
 
 // Things we need to stub
-import * as CreateReturnLinesService from '../../../../app/services/return-logs/setup/create-return-lines.service.js'
-import * as CreateReturnSubmissionService from '../../../../app/services/return-logs/setup/create-return-submission.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import * as GenerateReturnSubmissionMetadata from '../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as CreateReturnLinesService from '../../../../src/services/return-logs/setup/create-return-lines.service.js'
+import * as CreateReturnSubmissionService from '../../../../src/services/return-logs/setup/create-return-submission.service.js'
+import * as GenerateReturnSubmissionMetadata from '../../../../src/services/return-logs/setup/generate-return-submission-metadata.service.js'
 
 // Thing under test
-import SubmitCheckService from '../../../../app/services/return-logs/setup/submit-check.service.js'
+import SubmitCheckService from '../../../../src/services/return-logs/setup/submit-check.service.js'
 
 describe('Return Logs Setup - Submit Check service', () => {
   let licence

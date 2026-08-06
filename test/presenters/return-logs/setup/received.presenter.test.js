@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
-import { today } from '../../../../app/lib/general.lib.js'
+import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import ReceivedPresenter from '../../../../app/presenters/return-logs/setup/received.presenter.js'
+import ReceivedPresenter from '../../../../src/presenters/return-logs/setup/received.presenter.js'
 
 describe('Return Logs - Setup - Received presenter', () => {
   let session

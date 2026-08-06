@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { generateUUID, generateUserId } from 'water-abstraction-engine/test/generators.js'
 import LicenceFixture from '../../support/fixtures/licence.fixture.js'
-import { generateUUID, generateUserId } from '../../support/generators.js'
 
 // Things we need to stub
-import * as FetchLicenceMonitoringStationsDal from '../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
+import * as FetchLicenceMonitoringStationsDal from '../../../src/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
 
 // Thing under test
-import ViewLicenceService from '../../../app/services/monitoring-stations/view-licence.service.js'
+import ViewLicenceService from '../../../src/services/monitoring-stations/view-licence.service.js'
 
 describe('Monitoring Stations - View Licence service', () => {
   let auth

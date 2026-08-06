@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { formatDateObjectToISO } from 'water-abstraction-engine/lib/dates.lib.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { formatDateObjectToISO } from '../../../../app/lib/dates.lib.js'
-import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
+import { futureDueDate } from '../../../../src/presenters/notices/base.presenter.js'
 
 // Thing under test
-import CreateNoticePresenter from '../../../../app/presenters/notices/setup/create-notice.presenter.js'
+import CreateNoticePresenter from '../../../../src/presenters/notices/setup/create-notice.presenter.js'
 
 describe('Notices - Setup - Create Notice presenter', () => {
   const issuer = 'hello@world.com'

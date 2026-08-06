@@ -1,0 +1,29 @@
+/**
+ * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/frequency-collected` page
+ * @module FrequencyCollectedService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+
+import FrequencyCollectedPresenter from '../../../presenters/return-versions/setup/frequency-collected.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/frequency-collected` page
+ *
+ * Supports generating the data needed for the frequency collected page in the return requirements setup journey. It
+ * fetches the current session record and combines it with the radio buttons and other information needed for the form.
+ *
+ * @param {string} sessionId - The UUID of the current session
+ * @param {string} requirementIndex - The index of the requirement being added or changed
+ *
+ * @returns {Promise<object>} The view data for the frequency collected page
+ */
+export default async function frequencyCollectedService(sessionId, requirementIndex) {
+  const session = await FetchSessionDal(sessionId)
+
+  const formattedData = FrequencyCollectedPresenter(session, requirementIndex)
+
+  return {
+    ...formattedData
+  }
+}

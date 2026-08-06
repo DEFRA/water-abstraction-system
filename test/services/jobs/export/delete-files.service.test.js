@@ -7,10 +7,10 @@ import mockFs from 'mock-fs'
 import path from 'path'
 
 // Things we need to stub
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 
 // Thing under test
-import DeleteFilesService from '../../../../app/services/jobs/export/delete-files.service.js'
+import DeleteFilesService from '../../../../src/services/jobs/export/delete-files.service.js'
 
 describe('Delete Files service', () => {
   let filenameWithPath

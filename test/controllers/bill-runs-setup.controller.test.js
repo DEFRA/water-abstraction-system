@@ -4,25 +4,25 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { postRequestOptions } from '../support/general.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
-import * as CheckService from '../../app/services/bill-runs/setup/check.service.js'
-import * as InitiateSessionService from '../../app/services/bill-runs/setup/initiate-session.service.js'
-import * as NoLicencesService from '../../app/services/bill-runs/setup/no-licences.service.js'
-import * as RegionService from '../../app/services/bill-runs/setup/region.service.js'
-import * as SeasonService from '../../app/services/bill-runs/setup/season.service.js'
-import * as SubmitCheckService from '../../app/services/bill-runs/setup/submit-check.service.js'
-import * as SubmitRegionService from '../../app/services/bill-runs/setup/submit-region.service.js'
-import * as SubmitSeasonService from '../../app/services/bill-runs/setup/submit-season.service.js'
-import * as SubmitTypeService from '../../app/services/bill-runs/setup/submit-type.service.js'
-import * as SubmitYearService from '../../app/services/bill-runs/setup/submit-year.service.js'
-import * as TypeService from '../../app/services/bill-runs/setup/type.service.js'
-import * as YearService from '../../app/services/bill-runs/setup/year.service.js'
+import * as CheckService from '../../src/services/bill-runs/setup/check.service.js'
+import * as InitiateSessionService from '../../src/services/bill-runs/setup/initiate-session.service.js'
+import * as NoLicencesService from '../../src/services/bill-runs/setup/no-licences.service.js'
+import * as RegionService from '../../src/services/bill-runs/setup/region.service.js'
+import * as SeasonService from '../../src/services/bill-runs/setup/season.service.js'
+import * as SubmitCheckService from '../../src/services/bill-runs/setup/submit-check.service.js'
+import * as SubmitRegionService from '../../src/services/bill-runs/setup/submit-region.service.js'
+import * as SubmitSeasonService from '../../src/services/bill-runs/setup/submit-season.service.js'
+import * as SubmitTypeService from '../../src/services/bill-runs/setup/submit-type.service.js'
+import * as SubmitYearService from '../../src/services/bill-runs/setup/submit-year.service.js'
+import * as TypeService from '../../src/services/bill-runs/setup/type.service.js'
+import * as YearService from '../../src/services/bill-runs/setup/year.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 

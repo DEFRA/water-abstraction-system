@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import ReasonValidator from '../../../../app/validators/return-versions/setup/reason.validator.js'
+import ReasonValidator from '../../../../src/validators/return-versions/setup/reason.validator.js'
 
 describe('Return Versions Setup - Reason validator', () => {
   describe('when valid data is provided', () => {

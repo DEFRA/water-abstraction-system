@@ -45,16 +45,16 @@ import crypto from 'node:crypto'
 import path from 'path'
 
 // Bad — named imports mixed with default imports
-import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
-import { flashNotification } from '../../../../lib/general.lib.js'
-import { formatValidationResult } from '../../../../presenters/base.presenter.js'
+import FetchLicenceDal from '../../../../dal/licences/fetch-licence.dal.js'
+import { flashNotification } from '../../../../lib/external.lib.js'
+import { formatValidationResult } from '../../../../presenters/external.presenter.js'
 import PermissionsPresenter from '../../../../presenters/users/internal/setup/permissions.presenter.js'
 
 // Good — default imports first (sorted by variable name), then named imports (sorted by file name)
-import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import FetchLicenceDal from '../../../../dal/licences/fetch-licence.dal.js'
 import PermissionsPresenter from '../../../../presenters/users/internal/setup/permissions.presenter.js'
-import { formatValidationResult } from '../../../../presenters/base.presenter.js'
-import { flashNotification } from '../../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../../presenters/external.presenter.js'
+import { flashNotification } from '../../../../lib/external.lib.js'
 ```
 
 ## 3 — External packages, internal dependencies, and config modules must be in separate groups
@@ -64,17 +64,17 @@ Group 1 is external packages (from `node_modules`, including `node:` builtins). 
 ```js
 // Bad — external packages and config mixed with other internals, and not in alpha order
 import crypto from 'node:crypto'
-import LicenceModel from '../../../models/licence.model.js'
+import FetchLicenceDal from '../../../dal/fetch-licence.dal.js'
 import path from 'path'
-import DatabaseConfig from '../../../../config/database.config.js'
-import ViewNoticeService from '../../../services/notices/view-notice.service.js'
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
+import ViewLicenceService from '../../../services/licences/view-licence.service.js'
 
 // Good — three groups, each in alpha order
 import crypto from 'node:crypto'
 import path from 'path'
 
-import LicenceModel from '../../../models/licence.model.js'
-import ViewNoticeService from '../../../services/notices/view-notice.service.js'
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
+import ViewLicenceService from '../../../services/licences/view-licence.service.js'
 
 import DatabaseConfig from '../../../../config/database.config.js'
 ```
@@ -123,7 +123,7 @@ ESM modules are always in strict mode — `'use strict'` is no longer needed and
 
 ```js
 // Bad — imports before @module, or @module at the bottom
-import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import FetchLicenceDal from '../../../../dal/licences/fetch-licence.dal.js'
 
 /**
  * @module MyService
@@ -136,5 +136,5 @@ import FetchSessionDal from '../../dal/fetch-session.dal.js'
  * @module MyService
  */
 
-import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import FetchLicenceDal from '../../../../dal/licences/fetch-licence.dal.js'
 ```

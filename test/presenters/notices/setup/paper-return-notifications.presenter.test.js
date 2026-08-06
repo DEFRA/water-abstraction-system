@@ -2,14 +2,14 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
-import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
-import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
-import { generateLicenceRef } from '../../../support/generators.js'
+import { futureDueDate } from '../../../../src/presenters/notices/base.presenter.js'
 
 // Thing under test
-import PaperReturnNotificationsPresenter from '../../../../app/presenters/notices/setup/paper-return-notifications.presenter.js'
+import PaperReturnNotificationsPresenter from '../../../../src/presenters/notices/setup/paper-return-notifications.presenter.js'
 
 describe('Notices - Setup - Paper Return Notifications presenter', () => {
   const noticeId = '32f4cab2-ce0c-4711-aac8-fb4941f3b59a'

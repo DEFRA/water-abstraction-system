@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import AccessValidator from '../../../../../app/validators/users/internal/setup/access.validator.js'
+import AccessValidator from '../../../../../src/validators/users/internal/setup/access.validator.js'
 
 describe('Users - Internal - Setup - Access Validator', () => {
   let payload

@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import ExistingValidator from '../../../../app/validators/return-versions/setup/existing.validator.js'
+import ExistingValidator from '../../../../src/validators/return-versions/setup/existing.validator.js'
 
 describe('Return Versions Setup - Existing validator', () => {
   const returnVersions = [
