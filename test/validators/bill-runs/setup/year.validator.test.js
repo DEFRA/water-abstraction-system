@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import YearValidator from '../../../../app/validators/bill-runs/setup/year.validator.js'
+import YearValidator from '../../../../src/validators/bill-runs/setup/year.validator.js'
 
 describe('Bill Runs Setup Year validator', () => {
   describe('when valid data is provided', () => {

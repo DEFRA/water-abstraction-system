@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 
 // Things we need to stub
-import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 
 // Thing under test
-import HandleErroredBillRunService from '../../../app/services/bill-runs/handle-errored-bill-run.service.js'
+import HandleErroredBillRunService from '../../../src/services/bill-runs/handle-errored-bill-run.service.js'
 
 describe('Handle Errored Bill Run service', () => {
   let billRun
@@ -17,7 +17,7 @@ describe('Handle Errored Bill Run service', () => {
   beforeEach(async () => {
     billRun = await BillRunHelper.add()
 
-    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // BaseRequest depends on the GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

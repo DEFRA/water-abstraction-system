@@ -2,15 +2,15 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceDocumentHeaderHelper from '../../../support/helpers/licence-document-header.helper.js'
-import LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
-import LicenceEntityRoleHelper from '../../../support/helpers/licence-entity-role.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import UserHelper from '../../../support/helpers/user.helper.js'
-import { generateUUID } from '../../../support/generators.js'
+import LicenceDocumentHeaderHelper from 'water-abstraction-engine/test/helpers/licence-document-header.helper.js'
+import LicenceEntityHelper from 'water-abstraction-engine/test/helpers/licence-entity.helper.js'
+import LicenceEntityRoleHelper from 'water-abstraction-engine/test/helpers/licence-entity-role.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchUserDetailsDal from '../../../../app/dal/users/external/fetch-user-details.dal.js'
+import FetchUserDetailsDal from '../../../../src/dal/users/external/fetch-user-details.dal.js'
 
 describe('Users - External - Fetch User Details DAL', () => {
   let licence

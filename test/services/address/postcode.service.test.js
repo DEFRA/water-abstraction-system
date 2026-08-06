@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../support/stubs/session.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import PostcodeService from '../../../app/services/address/postcode.service.js'
+import PostcodeService from '../../../src/services/address/postcode.service.js'
 
 describe('Address - Postcode Service', () => {
   const sessionId = 'dba48385-9fc8-454b-8ec8-3832d3b9e323'

@@ -2,19 +2,19 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import CompanyHelper from '../../../support/helpers/company.helper.js'
-import LicenceDocumentHeaderHelper from '../../../support/helpers/licence-document-header.helper.js'
-import LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
-import UserHelper from '../../../support/helpers/user.helper.js'
-import UserVerificationDocumentHelper from '../../../support/helpers/user-verification-document.helper.js'
-import UserVerificationHelper from '../../../support/helpers/user-verification.helper.js'
-import { today } from '../../../../app/lib/general.lib.js'
-import { yesterday } from '../../../support/general.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import LicenceDocumentHeaderHelper from 'water-abstraction-engine/test/helpers/licence-document-header.helper.js'
+import LicenceEntityHelper from 'water-abstraction-engine/test/helpers/licence-entity.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
+import UserVerificationDocumentHelper from 'water-abstraction-engine/test/helpers/user-verification-document.helper.js'
+import UserVerificationHelper from 'water-abstraction-engine/test/helpers/user-verification.helper.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { yesterday } from 'water-abstraction-engine/test/general.js'
 
 // Thing under test
-import FetchVerificationsDal from '../../../../app/dal/users/external/fetch-verifications.dal.js'
+import FetchVerificationsDal from '../../../../src/dal/users/external/fetch-verifications.dal.js'
 
 describe('Users - External - Fetch Verifications DAL', () => {
   let licenceData1

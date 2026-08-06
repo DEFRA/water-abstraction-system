@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
-import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
-import ReviewChargeElementModel from '../../../../app/models/review-charge-element.model.js'
+import ReviewChargeElementModel from 'water-abstraction-engine/models/review-charge-element.model.js'
+import * as FetchReviewChargeElementService from '../../../../src/services/bill-runs/review/fetch-review-charge-element.service.js'
 
 // Thing under test
-import SubmitEditService from '../../../../app/services/bill-runs/review/submit-edit.service.js'
+import SubmitEditService from '../../../../src/services/bill-runs/review/submit-edit.service.js'
 
 describe('Bill Runs Review - Submit Edit Service', () => {
   const elementIndex = 1

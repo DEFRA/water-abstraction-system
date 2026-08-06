@@ -2,15 +2,15 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import CompanyModel from '../../../app/models/company.model.js'
-import LicenceModel from '../../../app/models/licence.model.js'
-import PointModel from '../../../app/models/point.model.js'
+import CompanyModel from 'water-abstraction-engine/models/company.model.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import PointModel from 'water-abstraction-engine/models/point.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
-import { generateUUID } from '../../support/generators.js'
-import { today } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-import SummaryPresenter from '../../../app/presenters/licences/summary.presenter.js'
+import SummaryPresenter from '../../../src/presenters/licences/summary.presenter.js'
 
 describe('Licences - Summary Presenter', () => {
   let licence

@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import { formatDateObjectToISO } from 'water-abstraction-engine/lib/dates.lib.js'
 import ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
-import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import ReturnLogModel from '../../../app/models/return-log.model.js'
 import ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
-import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 
 // Thing under test
-import CreateReturnLogsService from '../../../app/services/return-logs/create-return-logs.service.js'
+import CreateReturnLogsService from '../../../src/services/return-logs/create-return-logs.service.js'
 
 describe('Return Logs - Create Return Logs service', () => {
   let results

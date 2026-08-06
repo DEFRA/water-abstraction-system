@@ -2,22 +2,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import EventModel from '../../../../app/models/event.model.js'
-import GroupHelper from '../../../support/helpers/group.helper.js'
-import RoleHelper from '../../../support/helpers/role.helper.js'
-import UserGroupHelper from '../../../support/helpers/user-group.helper.js'
-import UserGroupModel from '../../../../app/models/user-group.model.js'
-import UserHelper from '../../../support/helpers/user.helper.js'
-import UserModel from '../../../../app/models/user.model.js'
-import UserRoleHelper from '../../../support/helpers/user-role.helper.js'
-import UserRoleModel from '../../../../app/models/user-role.model.js'
-import { generateUserName } from '../../../support/generators.js'
+import EventModel from 'water-abstraction-engine/models/event.model.js'
+import GroupHelper from 'water-abstraction-engine/test/helpers/group.helper.js'
+import RoleHelper from 'water-abstraction-engine/test/helpers/role.helper.js'
+import UserGroupHelper from 'water-abstraction-engine/test/helpers/user-group.helper.js'
+import UserGroupModel from 'water-abstraction-engine/models/user-group.model.js'
+import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
+import UserModel from 'water-abstraction-engine/models/user.model.js'
+import UserRoleHelper from 'water-abstraction-engine/test/helpers/user-role.helper.js'
+import UserRoleModel from 'water-abstraction-engine/models/user-role.model.js'
+import { generateUserName } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchUserDal from '../../../../src/dal/users/fetch-user.dal.js'
 
 // Thing under test
-import UpdateUserDal from '../../../../app/dal/users/internal/update-user.dal.js'
+import UpdateUserDal from '../../../../src/dal/users/internal/update-user.dal.js'
 
 describe('Users - Internal - Update User DAL', () => {
   let auth

@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
-import MergeRecipientsService from '../../../../app/services/notices/setup/merge-recipients.service.js'
+import MergeRecipientsService from '../../../../src/services/notices/setup/merge-recipients.service.js'
 
 describe('Notices - Setup - Merge Recipients service', () => {
   let additionalRecipient

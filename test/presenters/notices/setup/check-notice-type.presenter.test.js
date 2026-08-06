@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import CheckNoticeTypePresenter from '../../../../app/presenters/notices/setup/check-notice-type.presenter.js'
+import CheckNoticeTypePresenter from '../../../../src/presenters/notices/setup/check-notice-type.presenter.js'
 
 describe('Notices - Setup - Check Notice Type presenter', () => {
   let licenceRef

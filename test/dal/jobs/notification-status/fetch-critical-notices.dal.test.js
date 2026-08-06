@@ -2,14 +2,14 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import EventHelper from '../../../support/helpers/event.helper.js'
-import EventModel from '../../../../app/models/event.model.js'
+import EventHelper from 'water-abstraction-engine/test/helpers/event.helper.js'
+import EventModel from 'water-abstraction-engine/models/event.model.js'
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
-import NotificationHelper from '../../../support/helpers/notification.helper.js'
 import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 
 // Thing under test
-import FetchCriticalNoticesDal from '../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js'
+import FetchCriticalNoticesDal from '../../../../src/dal/jobs/notification-status/fetch-critical-notices.dal.js'
 
 describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
   let criticalNoticeWithErrors

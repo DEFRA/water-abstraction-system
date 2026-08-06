@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Helpers
-import LicenceModel from '../../../../../app/models/licence.model.js'
-import { generateLicenceRef, generateUUID } from '../../../../support/generators.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchRenewalLicenceDal from '../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js'
+import * as FetchRenewalLicenceDal from '../../../../../src/dal/notices/setup/fetch-renewal-licence.dal.js'
 
 // Thing under test
-import ProcessRenewalsNoticeLicenceSubmission from '../../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js'
+import ProcessRenewalsNoticeLicenceSubmission from '../../../../../src/services/notices/setup/renewal-notice/process-licence-submission.service.js'
 
 describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Submission', () => {
   let licenceExpiryDate

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import GenerateReturnSubmissionMetadataService from '../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js'
+import GenerateReturnSubmissionMetadataService from '../../../../src/services/return-logs/setup/generate-return-submission-metadata.service.js'
 
 describe('Return Logs Setup - Generate Return Submission Metadata', () => {
   let sessionData

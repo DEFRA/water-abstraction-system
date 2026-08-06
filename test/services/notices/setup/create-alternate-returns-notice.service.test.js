@@ -2,19 +2,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import EventModel from '../../../../app/models/event.model.js'
-import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
+import EventModel from 'water-abstraction-engine/models/event.model.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
+import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
-import NotificationModel from '../../../../app/models/notification.model.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
-import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
+import { futureDueDate } from '../../../../src/presenters/notices/base.presenter.js'
 
 // Things we need to stub
-import * as FetchAlternateReturnsRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js'
+import * as FetchAlternateReturnsRecipientsService from '../../../../src/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js'
 
 // Thing under test
-import CreateAlternateReturnsNoticeService from '../../../../app/services/notices/setup/create-alternate-returns-notice.service.js'
+import CreateAlternateReturnsNoticeService from '../../../../src/services/notices/setup/create-alternate-returns-notice.service.js'
 
 describe('Notices - Setup - Create Alternate Returns Notice service', () => {
   let dueDate

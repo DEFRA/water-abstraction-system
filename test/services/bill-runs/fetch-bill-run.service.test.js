@@ -2,21 +2,21 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import AddressHelper from '../../support/helpers/address.helper.js'
-import BillHelper from '../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
-import BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import BillRunModel from '../../../app/models/bill-run.model.js'
-import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
-import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
-import CompanyHelper from '../../support/helpers/company.helper.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
-import RegionModel from '../../../app/models/region.model.js'
-import { compareStrings } from '../../../app/lib/general.lib.js'
+import AddressHelper from 'water-abstraction-engine/test/helpers/address.helper.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import BillingAccountAddressHelper from 'water-abstraction-engine/test/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import RegionModel from 'water-abstraction-engine/models/region.model.js'
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import FetchBillRunService from '../../../app/services/bill-runs/fetch-bill-run.service.js'
+import FetchBillRunService from '../../../src/services/bill-runs/fetch-bill-run.service.js'
 
 describe('Fetch Bill Run service', () => {
   let linkedBillingAccounts

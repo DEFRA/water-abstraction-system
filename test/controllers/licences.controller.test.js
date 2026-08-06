@@ -2,30 +2,30 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import Boom from '@hapi/boom'
+import Boom from 'water-abstraction-engine/wrappers/boom.wrapper.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
 import http2 from 'node:http2'
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { postRequestOptions } from '../support/general.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
-import * as InitiateSessionService from '../../app/services/return-versions/setup/initiate-session.service.js'
-import * as LicenceSupplementaryProcessBillingFlagService from '../../app/services/licences/supplementary/process-billing-flag.service.js'
-import * as SubmitMarkForSupplementaryBillingService from '../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js'
-import * as ViewBillsService from '../../app/services/licences/view-bills.service.js'
-import * as ViewCommunicationsService from '../../app/services/licences/view-communications.service.js'
-import * as ViewConditionsService from '../../app/services/licences/view-conditions.service.js'
-import * as ViewContactDetailsService from '../../app/services/licences/view-contact-details.service.js'
-import * as ViewHistoryService from '../../app/services/licences/view-history.service.js'
-import * as ViewMarkForSupplementaryBillingService from '../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js'
-import * as ViewMarkedForSupplementaryBillingService from '../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js'
-import * as ViewPointsService from '../../app/services/licences/view-points.service.js'
-import * as ViewPurposesService from '../../app/services/licences/view-purposes.service.js'
-import * as ViewReturnsService from '../../app/services/licences/view-returns.service.js'
-import * as ViewSetUpService from '../../app/services/licences/view-set-up.service.js'
-import * as ViewSummaryService from '../../app/services/licences/view-summary.service.js'
+import * as InitiateSessionService from '../../src/services/return-versions/setup/initiate-session.service.js'
+import * as LicenceSupplementaryProcessBillingFlagService from '../../src/services/licences/supplementary/process-billing-flag.service.js'
+import * as SubmitMarkForSupplementaryBillingService from '../../src/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js'
+import * as ViewBillsService from '../../src/services/licences/view-bills.service.js'
+import * as ViewCommunicationsService from '../../src/services/licences/view-communications.service.js'
+import * as ViewConditionsService from '../../src/services/licences/view-conditions.service.js'
+import * as ViewContactDetailsService from '../../src/services/licences/view-contact-details.service.js'
+import * as ViewHistoryService from '../../src/services/licences/view-history.service.js'
+import * as ViewMarkForSupplementaryBillingService from '../../src/services/licences/supplementary/view-mark-for-supplementary-billing.service.js'
+import * as ViewMarkedForSupplementaryBillingService from '../../src/services/licences/supplementary/view-marked-for-supplementary-billing.service.js'
+import * as ViewPointsService from '../../src/services/licences/view-points.service.js'
+import * as ViewPurposesService from '../../src/services/licences/view-purposes.service.js'
+import * as ViewReturnsService from '../../src/services/licences/view-returns.service.js'
+import * as ViewSetUpService from '../../src/services/licences/view-set-up.service.js'
+import * as ViewSummaryService from '../../src/services/licences/view-summary.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_FOUND, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 

@@ -1,0 +1,70 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% from "water-abstraction-engine/views/macros/page-heading.njk" import pageHeading %}
+
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukInput({
+      label: {
+        text: "Name"
+      },
+      value: name,
+      id: "name",
+      name: "name",
+      classes: "govuk-!-width-one-half",
+      errorMessage: error.name if error.name
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "Job title"
+      },
+      value: jobTitle,
+      id: "jobTitle",
+      name: "jobTitle",
+      classes: "govuk-!-width-one-half",
+      errorMessage: error.jobTitle if error.jobTitle
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "Email address"
+      },
+      value: email,
+      id: "email",
+      name: "email",
+      classes: "govuk-!-width-one-half",
+      errorMessage: error.email if error.email
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "Phone number"
+      },
+      value: tel,
+      id: "tel",
+      name: "tel",
+      classes: "govuk-!-width-one-half",
+      errorMessage: error.tel if error.tel
+    }) }}
+
+    {{ govukTextarea({
+      label: {
+        text: "Address"
+      },
+      value: address,
+      id: "address",
+      name: "address",
+      classes: "govuk-!-width-three-quarters",
+      errorMessage: error.address if error.address
+    }) }}
+
+    {{ govukButton({ text: "Update", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}

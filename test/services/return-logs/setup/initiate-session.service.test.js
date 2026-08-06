@@ -2,14 +2,14 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
-import ReturnSubmissionLineHelper from '../../../support/helpers/return-submission-line.helper.js'
-import SessionModel from '../../../../app/models/session.model.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
 
 // Thing under test
-import InitiateSessionService from '../../../../app/services/return-logs/setup/initiate-session.service.js'
+import InitiateSessionService from '../../../../src/services/return-logs/setup/initiate-session.service.js'
 
 describe('Return Logs - Setup - Initiate Session service', () => {
   let licence

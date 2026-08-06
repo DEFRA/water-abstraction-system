@@ -5,11 +5,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
-import * as FetchPointsService from '../../../app/services/licences/fetch-points.service.js'
+import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import * as FetchPointsService from '../../../src/services/licences/fetch-points.service.js'
 
 // Thing under test
-import ViewPointsService from '../../../app/services/licences/view-points.service.js'
+import ViewPointsService from '../../../src/services/licences/view-points.service.js'
 
 describe('Licences - View Points service', () => {
   let auth

@@ -2,16 +2,20 @@
 
 ## Project overview
 
-Part of a UK government digital service for managing water abstraction licences, delivered and maintained by DEFRA.
+A Node.js web app for a UK government digital service managing water abstraction licences, delivered and maintained by DEFRA.
 
-This project is incrementally replacing internal functionality in the legacy services. As features are added the legacy [water-abstraction-ui](https://github.com/DEFRA/water-abstraction-ui) service is updated to redirect to this service.
+It is the internal-facing app for the Water Resource Licencing service.
+
+It's partner is the external-facing app [water-abstraction-external](https://github.com/DEFRA/water-abstraction-external), which is used by external users to manage their licences and submit abstraction returns.
+
+Both are powered by the shared functionality contained in the [water-abstraction-engine](https://github.com/DEFRA/water-abstraction-engine).
 
 ## Technology
 
 The project is a single web service using server-side rendering.
 
-- **Runtime**: Node.js v22
-- **Language**: Vanilla JavaScript (CommonJS modules)
+- **Runtime**: Node.js v24
+- **Language**: Vanilla JavaScript (ESM modules)
 - **Framework**: Hapi
 - **Templating**: Nunjucks with GOV.UK Frontend
 - **Validation**: Joi
@@ -22,37 +26,27 @@ The project is a single web service using server-side rendering.
 
 ## Project paths quick reference
 
-```
+```text
 .agents/              # Agent configuration
 .github/
 ├── workflows         # GitHub workflows
 .vscode/              # VSCode settings and tasks. Ignored by git
-app/                  # Primary source code folder
-├── controllers/      # Handlers for Hapi routes
-├── dal/              # Data Access Layer. Logic that interacts with the database are isolated as DAL modules
-├── errors/           # Custom errors
-├── lib/              # Shared modules containing utility functions
-├── models/           # Objection.js models that also define relationships between our data entities
-├── plugins/          # Hapi plugins (auth, CSRF, CSP, views, session, etc)
-├── presenters/       # Used to transform data received from the database or a web request into a format and content needed elsewhere
-├── requests/         # All HTTP requests made by this project to external services. Built on Got.
-├── routes/           # Route handlers — one file per route group
-├── services/         # Business logic — called by controllers
-├── validators/       # Validates data submitted to the service. Built on Joi
-├── views/            # Nunjucks base layouts and error pages held in the root of the folder
-│   ├── includes/     # Reusable template fragments
-│   └── macros/       # Reusable template macros
 bin/                  # Bash scripts including our build script
 client/               # Our SASS files for custom styling
-config/               # Server, environment, and feature configuration
-db/                   # All things related to working with the database
-├── migrations
-│   ├── legacy        # Recreates database schemas and tables managed by legacy projects
-│   └── public        # Database migrations managed by this project
-├── seeds             # Database seeds primarily for test and non-production environments
-│   └── data          # Source data for our seeds
-templates/            # Works with scaffold.sh to create new boiler-plate pages in the service
-test/                 # Test files mirroring app/ structure
+src/                  # Primary source code folder
+├── config/           # Feature configuration
+├── controllers/      # Handlers for Hapi routes
+├── dal/              # Data Access Layer. Logic that interacts with the database are isolated as DAL modules
+├── plugins/          # The router plugin, and any that are only required by the external app
+├── presenters/       # Used to transform data received from the database or a web request into a format and content needed elsewhere
+├── public/           # Static assets served by the web server
+├── routes/           # Route handlers — one file per route group
+├── services/         # Business logic — called by controllers
+├── views/            # Nunjucks base layouts and error pages held in the root of the folder
+│   └── includes/     # Reusable template fragments
+test/                 # Test files mirroring src/ structure
+├── support/          # Any external-specific test helpers, stubs, and mocks
+│   └── vitest/       # Wrappers for vitest modules provided by water-abstraction-engine
 ```
 
 ## Configuration
@@ -81,7 +75,7 @@ docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system &&
 # Lint
 docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm run lint'
 
-# Test (runs clean + lab)
+# Test
 docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm test'
 
 # Database migrations

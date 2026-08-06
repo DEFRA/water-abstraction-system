@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import NotifyErrorPresenter from '../../../app/presenters/notifications/notify-error.presenter.js'
+import NotifyErrorPresenter from '../../../src/presenters/notifications/notify-error.presenter.js'
 
 describe('Notifications - Notify Error presenter', () => {
   let message

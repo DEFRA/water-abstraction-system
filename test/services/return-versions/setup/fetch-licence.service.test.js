@@ -2,15 +2,15 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import CompanyHelper from '../../../support/helpers/company.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
-import ModLogHelper from '../../../support/helpers/mod-log.helper.js'
-import ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
-import ReturnVersionHelper from '../../../support/helpers/return-version.helper.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import ModLogHelper from 'water-abstraction-engine/test/helpers/mod-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
+import ReturnVersionHelper from 'water-abstraction-engine/test/helpers/return-version.helper.js'
 
 // Thing under test
-import FetchLicenceService from '../../../../app/services/return-versions/setup/fetch-licence.service.js'
+import FetchLicenceService from '../../../../src/services/return-versions/setup/fetch-licence.service.js'
 
 describe('Return Versions - Setup - Fetch Licence service', () => {
   let company

@@ -2,21 +2,21 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import AddressHelper from '../../support/helpers/address.helper.js'
-import AddressModel from '../../../app/models/address.model.js'
-import BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
-import BillingAccountAddressModel from '../../../app/models/billing-account-address.model.js'
-import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
-import CompanyHelper from '../../support/helpers/company.helper.js'
-import CompanyModel from '../../../app/models/company.model.js'
-import ContactModel from '../../../app/models/contact.model.js'
-import { generateCompanyNumber, generateUprn } from '../../support/generators.js'
+import AddressHelper from 'water-abstraction-engine/test/helpers/address.helper.js'
+import AddressModel from 'water-abstraction-engine/models/address.model.js'
+import BillingAccountAddressHelper from 'water-abstraction-engine/test/helpers/billing-account-address.helper.js'
+import BillingAccountAddressModel from 'water-abstraction-engine/models/billing-account-address.model.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import CompanyModel from 'water-abstraction-engine/models/company.model.js'
+import ContactModel from 'water-abstraction-engine/models/contact.model.js'
+import { generateCompanyNumber, generateUprn } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as SendCustomerChangeService from '../../../app/services/billing-accounts/send-customer-change.service.js'
+import * as SendCustomerChangeService from '../../../src/services/billing-accounts/send-customer-change.service.js'
 
 // Thing under test
-import ChangeAddressService from '../../../app/services/billing-accounts/change-address.service.js'
+import ChangeAddressService from '../../../src/services/billing-accounts/change-address.service.js'
 
 describe('Change address service', () => {
   let address

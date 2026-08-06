@@ -1,5 +1,5 @@
-import LicenceModel from '../../../app/models/licence.model.js'
-import { generateLicenceRef, generateUUID } from '../generators.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Generates an instance of `LicenceModel` with an ID and a licence reference

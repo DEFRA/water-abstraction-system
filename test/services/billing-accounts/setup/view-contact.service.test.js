@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 import CustomersFixture from '../../../support/fixtures/customers.fixture.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import * as FetchCompanyContactsService from '../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchCompanyContactsService from '../../../../src/services/billing-accounts/setup/fetch-company-contacts.service.js'
 
 // Thing under test
-import ViewContactService from '../../../../app/services/billing-accounts/setup/view-contact.service.js'
+import ViewContactService from '../../../../src/services/billing-accounts/setup/view-contact.service.js'
 
 describe('Billing Accounts - Setup - Contact Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount

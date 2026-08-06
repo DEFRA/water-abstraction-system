@@ -2,10 +2,10 @@
  * @module LicenceSeeder
  */
 
-import CompanyHelper from '../helpers/company.helper.js'
-import LicenceHelper from '../helpers/licence.helper.js'
-import LicenceVersionHelper from '../helpers/licence-version.helper.js'
-import { generateUUID } from '../generators.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Seeds a licence holder that is the current licence version holder for two licences

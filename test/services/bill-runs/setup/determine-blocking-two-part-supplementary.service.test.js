@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
+import { engineTriggers } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 // Things we need to stub
-import BillRunModel from '../../../../app/models/bill-run.model.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 
 // Thing under test
-import DetermineBlockingTwoPartSupplementaryService from '../../../../app/services/bill-runs/setup/determine-blocking-two-part-supplementary.service.js'
+import DetermineBlockingTwoPartSupplementaryService from '../../../../src/services/bill-runs/setup/determine-blocking-two-part-supplementary.service.js'
 
 describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run service', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'

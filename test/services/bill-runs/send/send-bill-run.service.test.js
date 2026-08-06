@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import BillRunModel from '../../../../app/models/bill-run.model.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 
 // Thing under test
-import SendBillBunService from '../../../../app/services/bill-runs/send/send-bill-run.service.js'
+import SendBillBunService from '../../../../src/services/bill-runs/send/send-bill-run.service.js'
 
 describe('Bill Runs - Send Bill Run service', () => {
   let billRun

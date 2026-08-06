@@ -2,14 +2,14 @@
 import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import NotificationHelper from '../../../support/helpers/notification.helper.js'
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { yesterday } from 'water-abstraction-engine/test/general.js'
 import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 import UsersFixture from '../../../support/fixtures/users.fixture.js'
-import { today } from '../../../../app/lib/general.lib.js'
-import { yesterday } from '../../../support/general.js'
 
 // Thing under test
-import FetchNotificationsDal from '../../../../app/dal/users/internal/fetch-notifications.dal.js'
+import FetchNotificationsDal from '../../../../src/dal/users/internal/fetch-notifications.dal.js'
 
 describe('Users - Internal - Fetch Notifications DAL', () => {
   let notifications

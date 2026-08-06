@@ -2,13 +2,13 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import PointModel from 'water-abstraction-engine/models/point.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import LicenceFixture from '../support/fixtures/licence.fixture.js'
-import PointModel from '../../app/models/point.model.js'
 import ViewLicencesFixture from '../support/fixtures/view-licences.fixture.js'
-import { generateUUID } from '../support/generators.js'
 
 // Thing under test
-import * as LicencePresenter from '../../app/presenters/licence.presenter.js'
+import * as LicencePresenter from '../../src/presenters/licence.presenter.js'
 
 describe('Licences presenter', () => {
   describe('#formatConditionTypes()', () => {

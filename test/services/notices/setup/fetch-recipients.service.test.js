@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { NoticeJourney, NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { NoticeJourney, NoticeType } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
-import * as FetchAbstractionAlertRecipientsDal from '../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
-import * as FetchPaperReturnsRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js'
-import * as FetchRenewalInvitationRecipientsService from '../../../../app/services/notices/setup/renewal-notice/fetch-renewal-invitation-recipients.service.js'
-import * as FetchReturnsInvitationRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js'
-import * as FetchReturnsReminderRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-returns-reminder-recipients.service.js'
+import * as FetchAbstractionAlertRecipientsDal from '../../../../src/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
+import * as FetchPaperReturnsRecipientsService from '../../../../src/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js'
+import * as FetchRenewalInvitationRecipientsService from '../../../../src/services/notices/setup/renewal-notice/fetch-renewal-invitation-recipients.service.js'
+import * as FetchReturnsInvitationRecipientsService from '../../../../src/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js'
+import * as FetchReturnsReminderRecipientsService from '../../../../src/services/notices/setup/returns-notice/fetch-returns-reminder-recipients.service.js'
 
 // Thing under test
-import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import FetchRecipientsService from '../../../../src/services/notices/setup/fetch-recipients.service.js'
 
 describe('Notices - Setup - Fetch Recipients service', () => {
   let download

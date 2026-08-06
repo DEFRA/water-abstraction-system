@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import RemovePresenter from '../../../app/presenters/licence-monitoring-station/remove.presenter.js'
+import RemovePresenter from '../../../src/presenters/licence-monitoring-station/remove.presenter.js'
 
 const licenceId = '59efea40-6b01-48a8-a8ff-87a040535633'
 const monitoringStationId = 'e887e448-b684-47cc-b642-70de2ad39ab7'

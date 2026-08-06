@@ -2,14 +2,14 @@
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
-import LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
-import LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
-import MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceMonitoringStationHelper from 'water-abstraction-engine/test/helpers/licence-monitoring-station.helper.js'
+import LicenceVersionPurposeConditionHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionTypeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose-condition-type.helper.js'
+import MonitoringStationHelper from 'water-abstraction-engine/test/helpers/monitoring-station.helper.js'
 
 // Thing under test
-import FetchLicenceMonitoringStationService from '../../../app/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js'
+import FetchLicenceMonitoringStationService from '../../../src/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js'
 
 describe('Licence Monitoring Station - Fetch Licence Monitoring Station service', () => {
   let licence

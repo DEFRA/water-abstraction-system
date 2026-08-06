@@ -2,10 +2,10 @@
  * @module ViewLicencesFixture
  */
 
-import LicenceModel from '../../../app/models/licence.model.js'
-import LicenceVersionModel from '../../../app/models/licence-version.model.js'
-import PointModel from '../../../app/models/point.model.js'
-import { generateLicenceRef, generateUUID } from '../generators.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import LicenceVersionModel from 'water-abstraction-engine/models/licence-version.model.js'
+import PointModel from 'water-abstraction-engine/models/point.model.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Represents a licence condition

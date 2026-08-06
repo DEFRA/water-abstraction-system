@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as AllocateReturnsToChargeElementService from '../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js'
-import * as DetermineLicenceIssuesService from '../../../../app/services/bill-runs/match/determine-licence-issues.service.js'
-import * as FetchLicencesService from '../../../../app/services/bill-runs/match/fetch-licences.service.js'
-import * as MatchReturnsToChargeElementService from '../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js'
-import * as PersistAllocatedLicenceToResultsService from '../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
-import * as PrepareChargeVersionService from '../../../../app/services/bill-runs/match/prepare-charge-version.service.js'
-import * as PrepareReturnLogsService from '../../../../app/services/bill-runs/match/prepare-return-logs.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as AllocateReturnsToChargeElementService from '../../../../src/services/bill-runs/match/allocate-returns-to-charge-element.service.js'
+import * as DetermineLicenceIssuesService from '../../../../src/services/bill-runs/match/determine-licence-issues.service.js'
+import * as FetchLicencesService from '../../../../src/services/bill-runs/match/fetch-licences.service.js'
+import * as MatchReturnsToChargeElementService from '../../../../src/services/bill-runs/match/match-returns-to-charge-element.service.js'
+import * as PersistAllocatedLicenceToResultsService from '../../../../src/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
+import * as PrepareChargeVersionService from '../../../../src/services/bill-runs/match/prepare-charge-version.service.js'
+import * as PrepareReturnLogsService from '../../../../src/services/bill-runs/match/prepare-return-logs.service.js'
 
 // Thing under test
-import MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
+import MatchAndAllocateService from '../../../../src/services/bill-runs/match/match-and-allocate.service.js'
 
 describe('Bill Runs - Match - Match And Allocate service', () => {
   let notifierStub

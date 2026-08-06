@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
-import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
+import { determineCurrentFinancialYear } from 'water-abstraction-engine/lib/general.lib.js'
+import { engineTriggers } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 // Things we need to stub
-import BillRunModel from '../../../../app/models/bill-run.model.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 
 // Thing under test
-import DetermineBlockingSupplementaryService from '../../../../app/services/bill-runs/setup/determine-blocking-supplementary.service.js'
+import DetermineBlockingSupplementaryService from '../../../../src/services/bill-runs/setup/determine-blocking-supplementary.service.js'
 
 describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service', () => {
   const currentFinancialYear = determineCurrentFinancialYear()

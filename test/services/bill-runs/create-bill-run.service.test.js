@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillRunModel from '../../../app/models/bill-run.model.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
-import RegionModel from '../../../app/models/region.model.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import RegionModel from 'water-abstraction-engine/models/region.model.js'
 
 // Thing under test
-import CreateBillRunService from '../../../app/services/bill-runs/create-bill-run.service.js'
+import CreateBillRunService from '../../../src/services/bill-runs/create-bill-run.service.js'
 
 describe('Create Bill Run service', () => {
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }

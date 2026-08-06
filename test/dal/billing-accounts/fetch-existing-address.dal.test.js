@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import AddressHelper from '../../support/helpers/address.helper.js'
-import { generateUUID } from '../../support/generators.js'
+import AddressHelper from 'water-abstraction-engine/test/helpers/address.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchExistingAddress from '../../../app/dal/billing-accounts/fetch-existing-address.dal.js'
+import FetchExistingAddress from '../../../src/dal/billing-accounts/fetch-existing-address.dal.js'
 
 describe('DAL - Fetch Existing Address dal', () => {
   let address

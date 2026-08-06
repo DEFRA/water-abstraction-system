@@ -2,17 +2,17 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillHelper from '../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
-import BillModel from '../../../app/models/bill.model.js'
-import BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import BillRunModel from '../../../app/models/bill-run.model.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
-import RegionModel from '../../../app/models/region.model.js'
-import TransactionHelper from '../../support/helpers/transaction.helper.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import BillModel from 'water-abstraction-engine/models/bill.model.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import RegionModel from 'water-abstraction-engine/models/region.model.js'
+import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
 
 // Thing under test
-import FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
+import FetchBillService from '../../../src/services/bills/fetch-bill-service.js'
 
 describe('Fetch Bill service', () => {
   let linkedBillLicences

@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
-import ReturnSubmissionLineHelper from '../../../support/helpers/return-submission-line.helper.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
 
 // Things we need to stub
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 
 // Thing under test
-import FetchReturnLogsForLicenceService from '../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
+import FetchReturnLogsForLicenceService from '../../../../src/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
 
 describe('Fetch Return Logs for Licence service', () => {
   const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
@@ -19,7 +19,7 @@ describe('Fetch Return Logs for Licence service', () => {
   let returnLogRecord
 
   beforeEach(() => {
-    // This depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // This depends on the GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

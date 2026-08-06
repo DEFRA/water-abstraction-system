@@ -5,10 +5,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Things we need to stub
-import * as FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
+import * as FetchReviewChargeElementService from '../../../../src/services/bill-runs/review/fetch-review-charge-element.service.js'
 
 // Thing under test
-import ViewEditService from '../../../../app/services/bill-runs/review/view-edit.service.js'
+import ViewEditService from '../../../../src/services/bill-runs/review/view-edit.service.js'
 
 describe('Bill Runs - Review - View Edit Service', () => {
   const elementIndex = 1

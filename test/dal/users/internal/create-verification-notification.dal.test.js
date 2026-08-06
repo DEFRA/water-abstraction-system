@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import NotificationModel from '../../../../app/models/notification.model.js'
-import ServerConfig from '../../../../config/server.config.js'
-import { generateUUID, generateUserName } from '../../../support/generators.js'
+import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
+import ServerConfig from 'water-abstraction-engine/config/server.config.js'
+import { generateUUID, generateUserName } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import CreateVerificationNotificationDal from '../../../../app/dal/users/internal/create-verification-notification.dal.js'
+import CreateVerificationNotificationDal from '../../../../src/dal/users/internal/create-verification-notification.dal.js'
 
 const { domains } = ServerConfig
 

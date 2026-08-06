@@ -1,0 +1,29 @@
+/**
+ * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/season` page
+ * @module BillRunsCreateSeasonService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+
+import SeasonPresenter from '../../../presenters/bill-runs/setup/season.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/season` page
+ *
+ * Supports generating the data needed for the type page in the create bill run journey. It fetches the current
+ * session record and formats the data needed for the form.
+ *
+ * @param {string} sessionId - The UUID for setup bill run session record
+ *
+ * @returns {Promise<object>} The view data for the season page
+ */
+export default async function seasonService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
+
+  const formattedData = SeasonPresenter(session)
+
+  return {
+    activeNavBar: 'bill-runs',
+    ...formattedData
+  }
+}

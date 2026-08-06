@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ChargeCategoryHelper from '../../support/helpers/charge-category.helper.js'
-import ChargeElementHelper from '../../support/helpers/charge-element.helper.js'
-import ChargeReferenceHelper from '../../support/helpers/charge-reference.helper.js'
+import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
 
 // Things we need to stub
-import * as CalculateAuthorisedAndBillableDaysService from '../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js'
+import * as CalculateAuthorisedAndBillableDaysService from '../../../src/services/bill-runs/calculate-authorised-and-billable-days.service.js'
 
 // Thing under test
-import GenerateTransactionsService from '../../../app/services/bill-runs/generate-transactions.service.js'
+import GenerateTransactionsService from '../../../src/services/bill-runs/generate-transactions.service.js'
 
 describe('Generate Transactions service', () => {
   const billLicenceId = '5e2afb53-ca92-4515-ad71-36a7cefbcebb'

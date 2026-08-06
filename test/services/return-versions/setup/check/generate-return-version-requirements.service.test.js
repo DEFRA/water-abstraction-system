@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchOtherPurposeIdsDal from '../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'
+import * as FetchOtherPurposeIdsDal from '../../../../../src/dal/return-versions/fetch-other-purpose-ids.dal.js'
 
 // Thing under test
-import GenerateReturnVersionRequirementsService from '../../../../../app/services/return-versions/setup/check/generate-return-version-requirements.service.js'
+import GenerateReturnVersionRequirementsService from '../../../../../src/services/return-versions/setup/check/generate-return-version-requirements.service.js'
 
 describe('Return Versions - Setup - Generate Return Version Requirements service', () => {
   let licenceId

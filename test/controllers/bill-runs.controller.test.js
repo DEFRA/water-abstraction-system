@@ -4,22 +4,22 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { postRequestOptions } from '../support/general.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
-import Boom from '@hapi/boom'
-import * as GenerateTwoPartTariffBillRunService from '../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
-import * as IndexBillRunsService from '../../app/services/bill-runs/index-bill-runs.service.js'
-import * as SubmitCancelBillRunService from '../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js'
-import * as SubmitIndexBillRunsService from '../../app/services/bill-runs/submit-index-bill-runs.service.js'
-import * as SubmitSendBillRunService from '../../app/services/bill-runs/send/submit-send-bill-run.service.js'
-import * as ViewBillRunService from '../../app/services/bill-runs/view-bill-run.service.js'
-import * as ViewCancelBillRunService from '../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js'
-import * as ViewSendBillRunService from '../../app/services/bill-runs/send/view-send-bill-run.service.js'
+import Boom from 'water-abstraction-engine/wrappers/boom.wrapper.js'
+import * as GenerateTwoPartTariffBillRunService from '../../src/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
+import * as IndexBillRunsService from '../../src/services/bill-runs/index-bill-runs.service.js'
+import * as SubmitCancelBillRunService from '../../src/services/bill-runs/cancel/submit-cancel-bill-run.service.js'
+import * as SubmitIndexBillRunsService from '../../src/services/bill-runs/submit-index-bill-runs.service.js'
+import * as SubmitSendBillRunService from '../../src/services/bill-runs/send/submit-send-bill-run.service.js'
+import * as ViewBillRunService from '../../src/services/bill-runs/view-bill-run.service.js'
+import * as ViewCancelBillRunService from '../../src/services/bill-runs/cancel/view-cancel-bill-run.service.js'
+import * as ViewSendBillRunService from '../../src/services/bill-runs/send/view-send-bill-run.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 

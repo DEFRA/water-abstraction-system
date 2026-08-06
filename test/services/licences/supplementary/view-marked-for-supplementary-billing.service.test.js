@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
 
 // Thing under test
-import ViewMarkedForSupplementaryBillingService from '../../../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js'
+import ViewMarkedForSupplementaryBillingService from '../../../../src/services/licences/supplementary/view-marked-for-supplementary-billing.service.js'
 
 describe('Licences -  View Marked For Supplementary Billing Service', () => {
   describe('when called with a valid licence ID', () => {

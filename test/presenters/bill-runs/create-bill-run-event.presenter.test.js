@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import BillRunModel from '../../../app/models/bill-run.model.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Thing under test
-import CreateBillRunEventPresenter from '../../../app/presenters/bill-runs/create-bill-run-event.presenter.js'
+import CreateBillRunEventPresenter from '../../../src/presenters/bill-runs/create-bill-run-event.presenter.js'
 
 describe('Create Bill Run Event presenter', () => {
   describe('when a BillRunModel instance is provided', () => {

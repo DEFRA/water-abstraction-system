@@ -1,0 +1,29 @@
+/**
+ * Orchestrates handling the data for `/notices/setup/{sessionId}/cancel` page
+ * @module SubmitCancelService
+ */
+
+import DeleteSessionDal from 'water-abstraction-engine/dal/delete-session.dal.js'
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import { NoticeJourney } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+
+/**
+ * Orchestrates handling the data for `/notices/setup/{sessionId}/cancel` page
+ *
+ * This service will delete the session record and provide the redirect url.
+ *
+ * @param {string} sessionId - The UUID for the notification setup session record
+ *
+ * @returns {Promise<string>} - returns the redirect url, which can contain some session data that needs to be deleted
+ */
+export default async function submitCancelService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
+
+  await DeleteSessionDal(sessionId)
+
+  if (session.journey === NoticeJourney.ALERTS) {
+    return `/system/monitoring-stations/${session.monitoringStationId}`
+  }
+
+  return '/system/notices'
+}

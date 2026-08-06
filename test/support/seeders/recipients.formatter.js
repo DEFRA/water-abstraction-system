@@ -4,10 +4,10 @@
 
 import crypto from 'node:crypto'
 
-import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
-import LicenceEntityRoleModel from '../../../app/models/licence-entity-role.model.js'
-import ReturnLogModel from '../../../app/models/return-log.model.js'
-import { compareStrings } from '../../../app/lib/general.lib.js'
+import LicenceEntityModel from 'water-abstraction-engine/models/licence-entity.model.js'
+import LicenceEntityRoleModel from 'water-abstraction-engine/models/licence-entity-role.model.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 
 /**
  * Returns an "Additional contact" recipient

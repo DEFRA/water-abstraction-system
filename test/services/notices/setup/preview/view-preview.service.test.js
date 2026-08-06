@@ -4,17 +4,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import http2 from 'node:http2'
 
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import {
+  generateLicenceRef,
+  generateNoticeReferenceCode,
+  generateUUID
+} from 'water-abstraction-engine/test/generators.js'
 import RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
-import { generateLicenceRef, generateNoticeReferenceCode, generateUUID } from '../../../../support/generators.js'
 
 // Things we need to stub
-import * as FetchRecipientsService from '../../../../../app/services/notices/setup/fetch-recipients.service.js'
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
-import * as GeneratePreviewRequest from '../../../../../app/requests/notify/generate-preview.request.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as GeneratePreviewRequest from 'water-abstraction-engine/requests/notify/generate-preview.request.js'
+
+import * as FetchRecipientsService from '../../../../../src/services/notices/setup/fetch-recipients.service.js'
 
 // Thing under test
-import ViewPreviewService from '../../../../../app/services/notices/setup/preview/view-preview.service.js'
+import ViewPreviewService from '../../../../../src/services/notices/setup/preview/view-preview.service.js'
 
 const { HTTP_STATUS_OK } = http2.constants
 

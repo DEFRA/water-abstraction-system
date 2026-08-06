@@ -2,10 +2,10 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import UserHelper from '../../support/helpers/user.helper.js'
+import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
 
 // Thing under test
-import CheckEmailExistsDal from '../../../app/dal/users/check-email-exists.dal.js'
+import CheckEmailExistsDal from '../../../src/dal/users/check-email-exists.dal.js'
 
 describe('DAL - Check email exists dal', () => {
   let email

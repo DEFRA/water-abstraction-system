@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
-import CompanyContactModel from '../../../app/models/company-contact.model.js'
+import CompanyContactHelper from 'water-abstraction-engine/test/helpers/company-contact.helper.js'
+import CompanyContactModel from 'water-abstraction-engine/models/company-contact.model.js'
 
 // Thing under test
-import DeleteCompanyContactService from '../../../app/services/company-contacts/delete-company-contact.service.js'
+import DeleteCompanyContactService from '../../../src/services/company-contacts/delete-company-contact.service.js'
 
 describe('Company contact - Delete company contact service', () => {
   let companyContact

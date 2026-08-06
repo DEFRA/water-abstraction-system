@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { engineTriggers } from '../../../../../app/lib/static-lookups.lib.js'
+import { engineTriggers } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 // Thing under test
-import BlockedBillRunPresenter from '../../../../../app/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js'
+import BlockedBillRunPresenter from '../../../../../src/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js'
 
 describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
   const region = { id: '292fe1c3-c9d4-47dd-a01b-0ac916497af5', displayName: 'Avalon' }

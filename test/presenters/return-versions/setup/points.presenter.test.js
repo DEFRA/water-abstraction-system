@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import PointModel from '../../../../app/models/point.model.js'
+import PointModel from 'water-abstraction-engine/models/point.model.js'
 
 // Thing under test
-import PointsPresenter from '../../../../app/presenters/return-versions/setup/points.presenter.js'
+import PointsPresenter from '../../../../src/presenters/return-versions/setup/points.presenter.js'
 
 describe('Return Versions Setup - Points presenter', () => {
   const requirementIndex = 0

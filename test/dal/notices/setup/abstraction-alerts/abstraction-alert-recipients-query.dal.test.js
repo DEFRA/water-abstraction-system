@@ -2,15 +2,15 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
+import { db } from 'water-abstraction-engine/db/db.js'
 import * as CRMContactsSeeder from '../../../../support/seeders/crm-contacts.seeder.js'
 import * as EmptyLicence from '../../../../support/seeders/empty-licence.seeder.js'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 import * as RecipientsFormatter from '../../../../support/seeders/recipients.formatter.js'
-import { compareStrings } from '../../../../../app/lib/general.lib.js'
-import { db } from '../../../../../db/db.js'
 
 // Thing under test
-import * as AbstractionAlertRecipientsQueryDal from '../../../../../app/dal/notices/setup/abstraction-alerts/abstraction-alert-recipients-query.dal.js'
+import * as AbstractionAlertRecipientsQueryDal from '../../../../../src/dal/notices/setup/abstraction-alerts/abstraction-alert-recipients-query.dal.js'
 
 describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Query DAL', () => {
   const query = AbstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery

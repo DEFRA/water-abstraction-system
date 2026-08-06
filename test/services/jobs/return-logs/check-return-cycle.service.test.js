@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things to stub
-import ReturnCycleModel from '../../../../app/models/return-cycle.model.js'
+import ReturnCycleModel from 'water-abstraction-engine/models/return-cycle.model.js'
 
 // Thing under test
-import CheckReturnCycleService from '../../../../app/services/jobs/return-logs/check-return-cycle.service.js'
+import CheckReturnCycleService from '../../../../src/services/jobs/return-logs/check-return-cycle.service.js'
 
 describe('Jobs - Return Logs - Check Return Cycle service', () => {
   const currentDate = new Date('2024-05-01')

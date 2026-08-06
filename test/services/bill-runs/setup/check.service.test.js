@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
+import { engineTriggers } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 // Things we need to stub
-import * as DetermineBlockingBillRunService from '../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js'
-import SessionModel from '../../../../app/models/session.model.js'
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
+import * as DetermineBlockingBillRunService from '../../../../src/services/bill-runs/setup/determine-blocking-bill-run.service.js'
 
 // Thing under test
-import CheckService from '../../../../app/services/bill-runs/setup/check.service.js'
+import CheckService from '../../../../src/services/bill-runs/setup/check.service.js'
 
 // NOTE: We have broken our normal pattern for tests of services that provide formatted page data. Because of the number
 // of scenarios that need to be covered for this service, we've broken up the presenter logic. This means the tests for

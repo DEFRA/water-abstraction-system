@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchReturnLogsForLicenceService from '../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
+import * as FetchReturnLogsForLicenceService from '../../../../src/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
 
 // Thing under test
-import PrepareReturnLogService from '../../../../app/services/bill-runs/match/prepare-return-logs.service.js'
+import PrepareReturnLogService from '../../../../src/services/bill-runs/match/prepare-return-logs.service.js'
 
 describe('Prepare Return Logs Service', () => {
   const billingPeriod = {

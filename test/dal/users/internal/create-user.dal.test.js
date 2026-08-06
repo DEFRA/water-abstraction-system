@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import EventModel from '../../../../app/models/event.model.js'
-import UserGroupModel from '../../../../app/models/user-group.model.js'
-import UserModel from '../../../../app/models/user.model.js'
-import UserRoleModel from '../../../../app/models/user-role.model.js'
-import { generateUserName } from '../../../support/generators.js'
+import EventModel from 'water-abstraction-engine/models/event.model.js'
+import UserGroupModel from 'water-abstraction-engine/models/user-group.model.js'
+import UserModel from 'water-abstraction-engine/models/user.model.js'
+import UserRoleModel from 'water-abstraction-engine/models/user-role.model.js'
+import { generateUserName } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchUserDal from '../../../../src/dal/users/fetch-user.dal.js'
 
 // Thing under test
-import CreateUserDal from '../../../../app/dal/users/internal/create-user.dal.js'
+import CreateUserDal from '../../../../src/dal/users/internal/create-user.dal.js'
 
 describe('Users - Internal - Create User DAL', () => {
   let auth

@@ -2,14 +2,14 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
-import CompanyContactModel from '../../../../app/models/company-contact.model.js'
-import ContactHelper from '../../../support/helpers/contact.helper.js'
-import LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'
-import UserHelper from '../../../support/helpers/user.helper.js'
+import CompanyContactHelper from 'water-abstraction-engine/test/helpers/company-contact.helper.js'
+import CompanyContactModel from 'water-abstraction-engine/models/company-contact.model.js'
+import ContactHelper from 'water-abstraction-engine/test/helpers/contact.helper.js'
+import LicenceRoleHelper from 'water-abstraction-engine/test/helpers/licence-role.helper.js'
+import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
 
 // Thing under test
-import UpdateCompanyContactDal from '../../../../app/dal/company-contacts/setup/update-company-contact.dal.js'
+import UpdateCompanyContactDal from '../../../../src/dal/company-contacts/setup/update-company-contact.dal.js'
 
 describe('Company Contacts - Update Company Contact dal', () => {
   let today

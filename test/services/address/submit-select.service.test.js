@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import http2 from 'node:http2'
-import SessionModelStub from '../../support/stubs/session.stub.js'
-import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
-import * as LookupPostcodeRequest from '../../../app/requests/address-facade/lookup-postcode.request.js'
-import * as LookupUPRNRequest from '../../../app/requests/address-facade/lookup-uprn.request.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as LookupPostcodeRequest from '../../../src/requests/address-facade/lookup-postcode.request.js'
+import * as LookupUPRNRequest from '../../../src/requests/address-facade/lookup-uprn.request.js'
 
 // Thing under test
-import SubmitSelectService from '../../../app/services/address/submit-select.service.js'
+import SubmitSelectService from '../../../src/services/address/submit-select.service.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 

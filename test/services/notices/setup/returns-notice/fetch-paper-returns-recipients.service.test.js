@@ -2,12 +2,12 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 import NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
-import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 
 // Thing under test
-import FetchPaperReturnsRecipientsService from '../../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js'
+import FetchPaperReturnsRecipientsService from '../../../../../src/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients service', () => {
   let download

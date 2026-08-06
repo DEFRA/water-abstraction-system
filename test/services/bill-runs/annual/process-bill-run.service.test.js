@@ -2,21 +2,21 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillRunError from '../../../../app/errors/bill-run.error.js'
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import BillRunModel from '../../../../app/models/bill-run.model.js'
-import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import { determineCurrentFinancialYear } from 'water-abstraction-engine/lib/general.lib.js'
+import BillRunError from '../../../../src/errors/bill-run.error.js'
 
 // Things we need to stub
-import * as ChargingModuleGenerateRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
-import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js'
-import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
-import * as LegacyRefreshBillRunRequest from '../../../../app/requests/legacy/refresh-bill-run.request.js'
-import * as ProcessBillingPeriodService from '../../../../app/services/bill-runs/annual/process-billing-period.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as ChargingModuleGenerateRequest from '../../../../src/requests/charging-module/generate-bill-run.request.js'
+import * as FetchBillingAccountsService from '../../../../src/services/bill-runs/annual/fetch-billing-accounts.service.js'
+import * as HandleErroredBillRunService from '../../../../src/services/bill-runs/handle-errored-bill-run.service.js'
+import * as LegacyRefreshBillRunRequest from '../../../../src/requests/legacy/refresh-bill-run.request.js'
+import * as ProcessBillingPeriodService from '../../../../src/services/bill-runs/annual/process-billing-period.service.js'
 
 // Thing under test
-import ProcessBillRunService from '../../../../app/services/bill-runs/annual/process-bill-run.service.js'
+import ProcessBillRunService from '../../../../src/services/bill-runs/annual/process-bill-run.service.js'
 
 describe('Annual Process Bill Run service', () => {
   const billingPeriod = determineCurrentFinancialYear()
@@ -33,7 +33,7 @@ describe('Annual Process Bill Run service', () => {
       toFinancialYearEnding: financialYearEnd
     })
 
-    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // BaseRequest depends on the GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

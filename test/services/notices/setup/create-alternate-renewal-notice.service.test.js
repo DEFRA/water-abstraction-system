@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import EventModel from '../../../../app/models/event.model.js'
-import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
+import EventModel from 'water-abstraction-engine/models/event.model.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
-import NotificationModel from '../../../../app/models/notification.model.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Things we need to stub
-import * as FetchAlternateRenewalRecipientsService from '../../../../app/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js'
+import * as FetchAlternateRenewalRecipientsService from '../../../../src/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js'
 
 // Thing under test
-import CreateAlternateRenewalNoticeService from '../../../../app/services/notices/setup/create-alternate-renewal-notice.service.js'
+import CreateAlternateRenewalNoticeService from '../../../../src/services/notices/setup/create-alternate-renewal-notice.service.js'
 
 describe('Notices - Setup - Create Alternate Renewal Notice service', () => {
   let expiryDate

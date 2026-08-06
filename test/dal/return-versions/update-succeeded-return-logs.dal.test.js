@@ -2,14 +2,14 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import ReturnLogModel from '../../../app/models/return-log.model.js'
-import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
-import { yesterday } from '../../support/general.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import ReturnVersionHelper from 'water-abstraction-engine/test/helpers/return-version.helper.js'
+import { yesterday } from 'water-abstraction-engine/test/general.js'
 
 // Thing under test
-import UpdateSucceededReturnLogsDal from '../../../app/dal/return-versions/update-succeeded-return-logs.dal.js'
+import UpdateSucceededReturnLogsDal from '../../../src/dal/return-versions/update-succeeded-return-logs.dal.js'
 
 describe('DAL - Return Versions - Update Succeeded Return Logs dal', () => {
   let licence

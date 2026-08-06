@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import { generateLicenceRef } from '../../../support/generators.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchLicenceRefsWithDueReturnsService from '../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js'
+import FetchLicenceRefsWithDueReturnsService from '../../../../src/services/notices/setup/fetch-licence-refs-with-due-returns.service.js'
 
 describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => {
   const returnsPeriod = {

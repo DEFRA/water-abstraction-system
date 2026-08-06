@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
-import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-import ExistingAddressPresenter from '../../../../app/presenters/billing-accounts/setup/existing-address.presenter.js'
+import ExistingAddressPresenter from '../../../../src/presenters/billing-accounts/setup/existing-address.presenter.js'
 
 describe('Billing Accounts - Setup - Existing Address Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount

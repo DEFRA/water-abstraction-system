@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../support/generators.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import NoticeTypePresenter from '../../../../app/presenters/notices/setup/notice-type.presenter.js'
+import NoticeTypePresenter from '../../../../src/presenters/notices/setup/notice-type.presenter.js'
 
 describe('Notice - Setup - Notice Type Presenter', () => {
   let auth

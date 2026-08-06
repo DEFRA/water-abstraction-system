@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef, generateUUID } from '../../support/generators.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchNotificationsDal from '../../../app/dal/return-logs/fetch-notifications.dal.js'
-import * as FetchReturnLogService from '../../../app/services/return-logs/fetch-return-log.service.js'
+import * as FetchNotificationsDal from '../../../src/dal/return-logs/fetch-notifications.dal.js'
+import * as FetchReturnLogService from '../../../src/services/return-logs/fetch-return-log.service.js'
 
 // Thing under test
-import ViewCommunicationsService from '../../../app/services/return-logs/view-communications.service.js'
+import ViewCommunicationsService from '../../../src/services/return-logs/view-communications.service.js'
 
 describe('Return Logs - View Communications Service', () => {
   const page = '1'

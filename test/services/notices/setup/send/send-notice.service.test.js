@@ -6,13 +6,13 @@ import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
-import * as SendAlternateNoticeService from '../../../../../app/services/notices/setup/send/send-alternate-notice.service.js'
-import * as SendMainNoticeService from '../../../../../app/services/notices/setup/send/send-main-notice.service.js'
-import * as UpdateNoticeService from '../../../../../app/services/notices/update-notice.service.js'
-import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as SendAlternateNoticeService from '../../../../../src/services/notices/setup/send/send-alternate-notice.service.js'
+import * as SendMainNoticeService from '../../../../../src/services/notices/setup/send/send-main-notice.service.js'
+import * as UpdateNoticeService from '../../../../../src/services/notices/update-notice.service.js'
 
 // Thing under test
-import SendNoticeService from '../../../../../app/services/notices/setup/send/send-notice.service.js'
+import SendNoticeService from '../../../../../src/services/notices/setup/send/send-notice.service.js'
 
 describe('Notices - Setup - Send - Send Notice service', () => {
   let notice
@@ -22,7 +22,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
     vi.spyOn(SendMainNoticeService, 'default').mockResolvedValue()
     vi.spyOn(UpdateNoticeService, 'default').mockResolvedValue()
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import { transformArrayToCSVRow } from '../../app/lib/transform-to-csv.lib.js'
+import { transformArrayToCSVRow } from '../../src/lib/transform-to-csv.lib.js'
 
 describe('Transform to csv', () => {
   describe('#transformArrayToCSVRow', () => {

@@ -2,12 +2,12 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import { db } from '../../../../db/db.js'
-import { tomorrow, yesterday } from '../../../support/general.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import { db } from 'water-abstraction-engine/db/db.js'
+import { tomorrow, yesterday } from 'water-abstraction-engine/test/general.js'
 
 // Thing under test
-import GenerateExpiringLicencesQueryService from '../../../../app/services/jobs/renewal-invitations/generate-expiring-licences-query.service.js'
+import GenerateExpiringLicencesQueryService from '../../../../src/services/jobs/renewal-invitations/generate-expiring-licences-query.service.js'
 
 describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service', () => {
   let afterExpiredDate

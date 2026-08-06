@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Thing under test
-import FetchLiveBillRunsService from '../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js'
+import FetchLiveBillRunsService from '../../../../src/services/bill-runs/setup/fetch-live-bill-run.service.js'
 
 describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
   const differentRegion = RegionHelper.select(0)

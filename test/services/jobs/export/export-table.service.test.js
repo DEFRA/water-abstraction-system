@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchTableService from '../../../../app/services/jobs/export/fetch-table.service.js'
-import * as WriteTableToFileService from '../../../../app/services/jobs/export/write-table-to-file.service.js'
+import * as FetchTableService from '../../../../src/services/jobs/export/fetch-table.service.js'
+import * as WriteTableToFileService from '../../../../src/services/jobs/export/write-table-to-file.service.js'
 
 // Thing under test
-import ExportTableService from '../../../../app/services/jobs/export/export-table.service.js'
+import ExportTableService from '../../../../src/services/jobs/export/export-table.service.js'
 
 describe('Table Export service', () => {
   beforeEach(async () => {

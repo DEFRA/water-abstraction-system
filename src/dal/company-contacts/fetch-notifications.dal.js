@@ -1,0 +1,51 @@
+/**
+ * Fetches data needed for the view '/system/company-contacts/{id}/communications' page
+ * @module FetchNotificationsDal
+ */
+
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
+import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
+import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
+import { ignoreMessageRef } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+
+/**
+ * Fetches data needed for the view '/system/company-contacts/{id}/communications' page
+ *
+ * @param {string} email - The email of the company contact id
+ * @param {string} [page=1] - The current page for the pagination service
+ *
+ * @returns {Promise<object>} the data needed to populate the view company contacts communications
+ */
+export default async function fetchNotificationsDal(email, page = '1') {
+  const { results: notifications, total: totalNumber } = await _fetch(email, page)
+
+  return { notifications, totalNumber }
+}
+
+async function _fetch(email, page) {
+  if (!email) {
+    return { results: [], total: 0 }
+  }
+
+  return NotificationModel.query()
+    .select(['createdAt', 'id', 'messageType', 'status'])
+    .whereNotNull('recipient')
+    .where('recipient', email)
+    .whereNotIn('messageRef', ignoreMessageRef)
+    .orderBy([
+      { column: 'createdAt', order: 'desc' },
+      { column: 'messageType', order: 'asc' },
+      { column: 'status', order: 'asc' },
+      { column: 'id', order: 'asc' }
+    ])
+    .withGraphFetched('event')
+    .modifyGraph('event', (builder) => {
+      builder.select([
+        'id',
+        'issuer',
+        'subtype',
+        Objection.ref('metadata:options.sendingAlertType').castText().as('sendingAlertType')
+      ])
+    })
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
+}

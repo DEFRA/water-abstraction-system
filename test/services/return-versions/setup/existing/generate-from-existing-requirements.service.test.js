@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js'
+import * as FetchExistingRequirementsService from '../../../../../src/services/return-versions/setup/existing/fetch-existing-requirements.service.js'
 
 // Thing under test
-import GenerateFromExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js'
+import GenerateFromExistingRequirementsService from '../../../../../src/services/return-versions/setup/existing/generate-from-existing-requirements.service.js'
 
 describe('Return Versions Setup - Generate From Existing Requirements service', () => {
   const returnVersionId = '7af310df-8bd1-476e-8476-eac7ce4153e9'

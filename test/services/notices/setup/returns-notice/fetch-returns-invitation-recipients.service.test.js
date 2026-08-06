@@ -2,15 +2,15 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 import NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
-import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
-import { compareStrings } from '../../../../../app/lib/general.lib.js'
-import { futureDueDate } from '../../../../../app/presenters/notices/base.presenter.js'
-import { generateUUID } from '../../../../support/generators.js'
+import { futureDueDate } from '../../../../../src/presenters/notices/base.presenter.js'
 
 // Thing under test
-import FetchReturnsInvitationRecipients from '../../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js'
+import FetchReturnsInvitationRecipients from '../../../../../src/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients service', () => {
   let download

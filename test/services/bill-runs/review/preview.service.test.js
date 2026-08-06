@@ -6,14 +6,14 @@ import http2 from 'node:http2'
 import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Test helpers
-import YarStub from '../../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as CalculateChargeRequest from '../../../../app/requests/charging-module/calculate-charge.request.js'
-import * as FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
+import * as CalculateChargeRequest from '../../../../src/requests/charging-module/calculate-charge.request.js'
+import * as FetchReviewChargeReferenceService from '../../../../src/services/bill-runs/review/fetch-review-charge-reference.service.js'
 
 // Thing under test
-import PreviewService from '../../../../app/services/bill-runs/review/preview.service.js'
+import PreviewService from '../../../../src/services/bill-runs/review/preview.service.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } = http2.constants
 

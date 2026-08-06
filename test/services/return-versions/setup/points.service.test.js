@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import PointModel from '../../../../app/models/point.model.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
+import PointModel from 'water-abstraction-engine/models/point.model.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Things we need to stub
-import * as FetchPointsService from '../../../../app/services/return-versions/setup/fetch-points.service.js'
+import * as FetchPointsService from '../../../../src/services/return-versions/setup/fetch-points.service.js'
 
 // Thing under test
-import SelectPointsService from '../../../../app/services/return-versions/setup/points.service.js'
+import SelectPointsService from '../../../../src/services/return-versions/setup/points.service.js'
 
 describe('Return Versions - Setup - Points service', () => {
   const requirementIndex = 0

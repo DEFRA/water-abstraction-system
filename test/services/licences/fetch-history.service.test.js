@@ -2,12 +2,12 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import ModLogHelper from '../../support/helpers/mod-log.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import ModLogHelper from 'water-abstraction-engine/test/helpers/mod-log.helper.js'
 
 // Thing under test
-import FetchHistoryService from '../../../app/services/licences/fetch-history.service.js'
+import FetchHistoryService from '../../../src/services/licences/fetch-history.service.js'
 
 describe('Licences - Fetch History service', () => {
   let licence

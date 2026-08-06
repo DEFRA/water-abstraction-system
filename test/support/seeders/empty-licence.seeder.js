@@ -2,11 +2,11 @@
  * @module EmptyLicenceSeeder
  */
 
-import LicenceDocumentHeaderHelper from '../helpers/licence-document-header.helper.js'
-import LicenceDocumentHelper from '../helpers/licence-document.helper.js'
-import LicenceHelper from '../helpers/licence.helper.js'
-import RegionHelper from '../helpers/region.helper.js'
-import { generateLicenceRef } from '../generators.js'
+import LicenceDocumentHeaderHelper from 'water-abstraction-engine/test/helpers/licence-document-header.helper.js'
+import LicenceDocumentHelper from 'water-abstraction-engine/test/helpers/licence-document.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Adds a licence

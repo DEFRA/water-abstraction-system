@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import MultipleEntriesValidator from '../../../../app/validators/return-logs/setup/multiple-entries.validator.js'
+import MultipleEntriesValidator from '../../../../src/validators/return-logs/setup/multiple-entries.validator.js'
 
 describe('Return Logs Setup - Multiple Entries validator', () => {
   let frequency

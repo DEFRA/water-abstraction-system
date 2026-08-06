@@ -1,6 +1,6 @@
-import BillingAccountModel from '../../../app/models/billing-account.model.js'
-import ContactModel from '../../../app/models/contact.model.js'
-import { generateAccountNumber, generateUUID } from '../generators.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
+import ContactModel from 'water-abstraction-engine/models/contact.model.js'
+import { generateAccountNumber, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Represents a complete response from `FetchBillingAccountService`

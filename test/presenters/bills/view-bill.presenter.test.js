@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillingAccountModel from '../../../app/models/billing-account.model.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 
 // Thing under test
-import ViewBillPresenter from '../../../app/presenters/bills/view-bill.presenter.js'
+import ViewBillPresenter from '../../../src/presenters/bills/view-bill.presenter.js'
 
 describe('View Bill presenter', () => {
   let bill

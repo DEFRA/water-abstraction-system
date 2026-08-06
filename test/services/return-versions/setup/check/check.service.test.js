@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import * as FetchPointsService from '../../../../../app/services/return-versions/setup/fetch-points.service.js'
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
-import YarStub from '../../../../support/stubs/yar.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
+import * as FetchPointsService from '../../../../../src/services/return-versions/setup/fetch-points.service.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import CheckService from '../../../../../app/services/return-versions/setup/check/check.service.js'
+import CheckService from '../../../../../src/services/return-versions/setup/check/check.service.js'
 
 describe('Return Versions - Setup - Check service', () => {
   let session

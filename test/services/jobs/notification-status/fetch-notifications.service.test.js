@@ -2,18 +2,18 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
+import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { yesterday } from 'water-abstraction-engine/test/general.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
-import NotificationHelper from '../../../support/helpers/notification.helper.js'
-import NotificationModel from '../../../../app/models/notification.model.js'
 import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
-import { today } from '../../../../app/lib/general.lib.js'
-import { yesterday } from '../../../support/general.js'
 
 // Things we need to stub
-import notifyConfig from '../../../../config/notify.config.js'
+import notifyConfig from 'water-abstraction-engine/config/notify.config.js'
 
 // Thing under test
-import FetchNotificationsService from '../../../../app/services/jobs/notification-status/fetch-notifications.service.js'
+import FetchNotificationsService from '../../../../src/services/jobs/notification-status/fetch-notifications.service.js'
 
 const DAYS_OF_RETENTION = 7
 

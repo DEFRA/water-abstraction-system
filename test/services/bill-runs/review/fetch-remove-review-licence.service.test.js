@@ -2,12 +2,12 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
-import ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import ReviewLicenceHelper from 'water-abstraction-engine/test/helpers/review-licence.helper.js'
 
 // Thing under test
-import FetchRemoveReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js'
+import FetchRemoveReviewLicenceService from '../../../../src/services/bill-runs/review/fetch-remove-review-licence.service.js'
 
 describe('Bill Runs - Review - Fetch Remove Review Licence service', () => {
   let billRun

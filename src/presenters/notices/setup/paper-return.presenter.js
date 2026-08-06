@@ -1,0 +1,50 @@
+/**
+ * Formats data for the `/notices/setup/{sessionId}/paper-return` page
+ * @module PaperReturnPresenter
+ */
+
+import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+
+/**
+ * Formats data for the `/notices/setup/{sessionId}/paper-return` page
+ *
+ * @param {module:SessionModel} session - The session instance
+ *
+ * @returns {object} - The data formatted for the view template
+ */
+export default function paperReturnPresenter(session) {
+  const { checkPageVisited, dueReturns, id: sessionId, selectedReturns } = session
+
+  return {
+    backLink: _backLink(sessionId, checkPageVisited),
+    pageTitle: 'Select the returns for the paper return',
+    returns: _returns(dueReturns, selectedReturns)
+  }
+}
+
+function _backLink(sessionId, checkPageVisited) {
+  if (checkPageVisited) {
+    return {
+      href: `/system/notices/setup/${sessionId}/check-notice-type`,
+      text: 'Back'
+    }
+  }
+
+  return {
+    href: `/system/notices/setup/${sessionId}/licence`,
+    text: 'Back'
+  }
+}
+
+function _returns(returns, selectedReturns = []) {
+  return returns.map((returnItem) => {
+    return {
+      checked: selectedReturns.includes(returnItem.returnLogId),
+      hint: {
+        text: `${formatLongDate(new Date(returnItem.startDate))} to ${formatLongDate(new Date(returnItem.endDate))}`
+      },
+      text: `${returnItem.returnReference} ${returnItem.siteDescription}`,
+      value: returnItem.returnLogId
+    }
+  })
+}

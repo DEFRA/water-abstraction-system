@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ExpandedErrorError from '../../../app/errors/expanded.error.js'
+import ExpandedErrorError from 'water-abstraction-engine/errors/expanded.error.js'
 
 // Things we need to stub
-import * as GenerateAnnualBillRunService from '../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js'
-import * as GenerateSupplementaryBillRunService from '../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
-import BillRunModel from '../../../app/models/bill-run.model.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import * as GenerateAnnualBillRunService from '../../../src/services/bill-runs/two-part-tariff/generate-bill-run.service.js'
+import * as GenerateSupplementaryBillRunService from '../../../src/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
 
 // Thing under test
-import GenerateTwoPartTariffBillRunService from '../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
+import GenerateTwoPartTariffBillRunService from '../../../src/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
 
 describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
   const billRunDetails = {

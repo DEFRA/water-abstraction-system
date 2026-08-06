@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as TarWrapperLib from '../../../../app/lib/tar-wrapper.lib.js'
+import * as TarWrapperLib from '../../../../src/lib/tar-wrapper.lib.js'
 
 // Thing under test
-import CompressSchemaFolderService from '../../../../app/services/jobs/export/compress-schema-folder.service.js'
+import CompressSchemaFolderService from '../../../../src/services/jobs/export/compress-schema-folder.service.js'
 
 describe('Jobs - Export - Compress Schema Folder service', () => {
   beforeEach(() => {

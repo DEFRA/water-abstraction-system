@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ReportedValidator from '../../../../app/validators/return-logs/setup/reported.validator.js'
+import ReportedValidator from '../../../../src/validators/return-logs/setup/reported.validator.js'
 
 describe('Return Logs Setup - Reported validator', () => {
   let payload

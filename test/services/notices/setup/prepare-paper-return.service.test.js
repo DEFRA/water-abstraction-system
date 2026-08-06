@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
-import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
-import { generateLicenceRef } from '../../../support/generators.js'
 
 // Things we need to stub
-import * as GeneratePaperReturnRequest from '../../../../app/requests/gotenberg/generate-paper-return.request.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as GeneratePaperReturnRequest from '../../../../src/requests/gotenberg/generate-paper-return.request.js'
 
 // Thing under test
-import PreparePaperReturnService from '../../../../app/services/notices/setup/prepare-paper-return.service.js'
+import PreparePaperReturnService from '../../../../src/services/notices/setup/prepare-paper-return.service.js'
 
 describe('Notices - Setup - Prepare Paper Return service', () => {
   const buffer = new TextEncoder().encode('mock file').buffer

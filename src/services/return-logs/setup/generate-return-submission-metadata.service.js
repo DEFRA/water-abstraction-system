@@ -1,0 +1,95 @@
+/**
+ * Generates return submission metatadata
+ * @module GenerateReturnSubmissionMetadataService
+ */
+
+import { formatDateObjectToISO } from 'water-abstraction-engine/lib/dates.lib.js'
+
+const REPORTED = {
+  VOLUMES: 'abstractionVolumes',
+  READINGS: 'meterReadings'
+}
+
+/**
+ * Generates return submission metatadata based on the provided session data
+ *
+ * @param {object} session - Session object containing the return submission data
+ *
+ * @returns {object} The return submission metadata
+ */
+export default function generateReturnSubmissionMetadataService(session) {
+  // Metadata is not required for nil returns
+  if (session.journey === 'nilReturn') {
+    return {}
+  }
+
+  return {
+    meters: _determineMeters(session),
+    method: session.reported === REPORTED.VOLUMES ? 'abstractionVolumes' : 'oneMeter',
+    units: session.unitSymbol,
+    // Legacy code sets reported to `estimated` ONLY if we have volumes with no meter; otherwise it's `measured`
+    type: session.reported === REPORTED.VOLUMES && session.meterProvided === 'no' ? 'estimated' : 'measured',
+    ..._totalProperties(session)
+  }
+}
+
+function _formatReadings(lines) {
+  return lines.reduce((acc, line) => {
+    const { startDate, endDate, reading } = line
+
+    const key = `${formatDateObjectToISO(new Date(startDate))}_${formatDateObjectToISO(new Date(endDate))}`
+    acc[key] = reading
+
+    return acc
+  }, {})
+}
+
+function _determineMeters(session) {
+  // We set meters array as empty ONLY if we have volumes with no meter; in all other scenarios we populate the array
+  if (session.reported === REPORTED.VOLUMES && session.meterProvided === 'no') {
+    return []
+  }
+
+  // Otherwise, we return an array containing a single meter object
+  return [
+    {
+      meterDetailsProvided: session.meterProvided === 'yes',
+      // Legacy code always sets multiplier, regardless of whether we have meter details. We follow suit for consistency
+      multiplier: session.meter10TimesDisplay === 'yes' ? 10 : 1,
+      // Manufacturer and serial number are only set if meter details are provided
+      ...(session.meterProvided === 'yes' && {
+        manufacturer: session.meterMake,
+        serialNumber: session.meterSerialNumber
+      }),
+      // Units, readings and start reading are only set if this is a meter reading return
+      ...(session.reported === REPORTED.READINGS && {
+        units: session.unitSymbol,
+        readings: _formatReadings(session.lines),
+        startReading: session.startReading
+      })
+    }
+  ]
+}
+
+function _totalProperties(session) {
+  if (!session.singleVolume) {
+    return {
+      totalFlag: false
+    }
+  }
+
+  const total = {
+    totalFlag: true,
+    total: session.singleVolume ? session.singleVolumeQuantity : null,
+    totalCustomDates: session.singleVolume && session.periodDateUsedOptions === 'custom-dates'
+  }
+
+  return {
+    ...total,
+    // Custom date fields are only required if the custom date option has been selected
+    ...(total.totalCustomDates && {
+      totalCustomDateStart: session.fromFullDate,
+      totalCustomDateEnd: session.toFullDate
+    })
+  }
+}

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import FrequencyCollectedPresenter from '../../../../app/presenters/return-versions/setup/frequency-collected.presenter.js'
+import FrequencyCollectedPresenter from '../../../../src/presenters/return-versions/setup/frequency-collected.presenter.js'
 
 describe('Return Versions Setup - Frequency Collected presenter', () => {
   const requirementIndex = 0

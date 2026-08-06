@@ -1,0 +1,32 @@
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
+
+/**
+ * Format data for the `/return-log/setup/{sessionId}/reported` page
+ * @module ReportedPresenter
+ */
+
+/**
+ * Format data for the `/return-log/setup/{sessionId}/reported` page
+ *
+ * @param {module:SessionModel} session - The return log setup session instance
+ *
+ * @returns {object} page data needed by the view template
+ */
+export default function reportedPresenter(session) {
+  const { id: sessionId, returnReference, reported } = session
+
+  return {
+    backLink: _backLink(session),
+    pageTitle: 'How was this return reported?',
+    pageTitleCaption: `Return reference ${returnReference}`,
+    reported: reported ?? null,
+    sessionId
+  }
+}
+
+function _backLink(session) {
+  return {
+    href: checkUrl(session, `/system/return-logs/setup/${session.id}/submission`),
+    text: 'Back'
+  }
+}

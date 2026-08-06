@@ -4,14 +4,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import http2 from 'node:http2'
 
-import ExpandedError from '../../../app/errors/expanded.error.js'
-import billingConfig from '../../../config/billing.config.js'
+import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
+import BillingConfig from '../../../src/config/billing.config.js'
 
 // Things we need to stub
-import * as ChargingModuleViewBillRunStatusRequest from '../../../app/requests/charging-module/view-bill-run-status.request.js'
+import * as ChargingModuleViewBillRunStatusRequest from '../../../src/requests/charging-module/view-bill-run-status.request.js'
 
 // Thing under test
-import ChargingModuleWaitForStatusRequest from '../../../app/requests/charging-module/wait-for-status.request.js'
+import ChargingModuleWaitForStatusRequest from '../../../src/requests/charging-module/wait-for-status.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
@@ -28,7 +28,7 @@ describe('Charging Module Wait For Status request', () => {
       .mockImplementation(() => {})
 
     // Set the pause between requests to just 50ms so our tests are not slowed down or cause a timeout
-    vi.replaceProperty(billingConfig, 'waitForStatusPauseInMs', 50)
+    vi.replaceProperty(BillingConfig, 'waitForStatusPauseInMs', 50)
   })
 
   afterEach(() => {

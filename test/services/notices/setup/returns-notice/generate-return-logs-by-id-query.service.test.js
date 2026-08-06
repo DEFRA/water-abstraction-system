@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
-import { db } from '../../../../../db/db.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import { db } from 'water-abstraction-engine/db/db.js'
 
 // Thing under test
-import GenerateReturnLogsByIdQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-id-query.service.js'
+import GenerateReturnLogsByIdQueryService from '../../../../../src/services/notices/setup/returns-notice/generate-return-logs-by-id-query.service.js'
 
 describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Service', () => {
   let returnLogIds

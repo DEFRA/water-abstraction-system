@@ -1,0 +1,28 @@
+/**
+ * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/received` page
+ * @module ReceivedService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+
+import ReceivedPresenter from '../../../presenters/return-logs/setup/received.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/received` page
+ *
+ * Supports generating the data needed for the received page in the return log setup journey. It fetches the
+ * current session record and formats the data needed for the page.
+ *
+ * @param {string} sessionId - The UUID of the current session
+ *
+ * @returns {Promise<object>} The view data for the received page
+ */
+export default async function receivedService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
+
+  const formattedData = ReceivedPresenter(session)
+
+  return {
+    ...formattedData
+  }
+}

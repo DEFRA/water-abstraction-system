@@ -13,9 +13,9 @@
   ],
   "recurseDepth": 10,
   "source": {
-    "include": ["./app"],
+    "include": ["./src"],
     "includePattern": ".js$",
-    "excludePattern": "(db/|docs/|node_modules/|test/)"
+    "excludePattern": "(docs/|node_modules/|test/)"
   },
   "sourceType": "module",
   "tags": {

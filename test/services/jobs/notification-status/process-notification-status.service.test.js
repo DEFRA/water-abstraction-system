@@ -6,14 +6,14 @@ import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
-import * as CheckNotificationStatusService from '../../../../app/services/notifications/check-notification-status.service.js'
-import * as FetchNotificationsService from '../../../../app/services/jobs/notification-status/fetch-notifications.service.js'
-import * as SendAlternateNoticesService from '../../../../app/services/jobs/notification-status/send-alternate-notices.service.js'
-import * as UpdateNoticeService from '../../../../app/services/notices/update-notice.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as CheckNotificationStatusService from '../../../../src/services/notifications/check-notification-status.service.js'
+import * as FetchNotificationsService from '../../../../src/services/jobs/notification-status/fetch-notifications.service.js'
+import * as SendAlternateNoticesService from '../../../../src/services/jobs/notification-status/send-alternate-notices.service.js'
+import * as UpdateNoticeService from '../../../../src/services/notices/update-notice.service.js'
 
 // Thing under test
-import ProcessNotificationStatusService from '../../../../app/services/jobs/notification-status/process-notification-status.service.js'
+import ProcessNotificationStatusService from '../../../../src/services/jobs/notification-status/process-notification-status.service.js'
 
 describe('Job - Notifications - Process Notification Status service', () => {
   let noticeA
@@ -47,7 +47,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
     vi.spyOn(UpdateNoticeService, 'default').mockResolvedValue()
     vi.spyOn(SendAlternateNoticesService, 'default').mockResolvedValue()
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

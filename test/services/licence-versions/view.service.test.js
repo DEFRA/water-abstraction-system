@@ -5,12 +5,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-import * as FetchConditionsService from '../../../app/services/licences/fetch-conditions.service.js'
-import * as FetchLicenceVersionDal from '../../../app/dal/licence-versions/fetch-licence-version.dal.js'
-import NotifyConfig from '../../../config/notify.config.js'
+import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
+
+import * as FetchConditionsService from '../../../src/services/licences/fetch-conditions.service.js'
+import * as FetchLicenceVersionDal from '../../../src/dal/licence-versions/fetch-licence-version.dal.js'
 
 // Thing under test
-import ViewService from '../../../app/services/licence-versions/view.service.js'
+import ViewService from '../../../src/services/licence-versions/view.service.js'
 
 describe('Licence Versions - View service', () => {
   let auth

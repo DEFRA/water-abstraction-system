@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things to stub
-import * as CheckBusyBillRunsService from '../../../app/services/bill-runs/check-busy-bill-runs.service.js'
-import * as FetchBillRunsService from '../../../app/services/bill-runs/fetch-bill-runs.service.js'
-import * as FetchRegionsService from '../../../app/services/bill-runs/setup/fetch-regions.service.js'
-import YarStub from '../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
+import * as CheckBusyBillRunsService from '../../../src/services/bill-runs/check-busy-bill-runs.service.js'
+import * as FetchBillRunsService from '../../../src/services/bill-runs/fetch-bill-runs.service.js'
+import * as FetchRegionsService from '../../../src/services/bill-runs/setup/fetch-regions.service.js'
 
 // Thing under test
-import SubmitIndexBillRunsService from '../../../app/services/bill-runs/submit-index-bill-runs.service.js'
+import SubmitIndexBillRunsService from '../../../src/services/bill-runs/submit-index-bill-runs.service.js'
 
 describe('Bill Runs - Submit Index Bill Runs service', () => {
   let payload

@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchBillRunService from '../../../app/services/bill-runs/fetch-bill-run.service.js'
+import * as FetchBillRunService from '../../../src/services/bill-runs/fetch-bill-run.service.js'
 
 // Thing under test
-import ViewBillRunService from '../../../app/services/bill-runs/view-bill-run.service.js'
+import ViewBillRunService from '../../../src/services/bill-runs/view-bill-run.service.js'
 
 describe('View Bill Run service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'

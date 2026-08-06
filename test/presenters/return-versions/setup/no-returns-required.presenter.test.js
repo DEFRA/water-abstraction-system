@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import NoReturnsRequiredPresenter from '../../../../app/presenters/return-versions/setup/no-returns-required.presenter.js'
+import NoReturnsRequiredPresenter from '../../../../src/presenters/return-versions/setup/no-returns-required.presenter.js'
 
 describe('Return Versions Setup - No Returns Required presenter', () => {
   let session

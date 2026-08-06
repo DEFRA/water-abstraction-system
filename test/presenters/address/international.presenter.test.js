@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { countryLookup } from '../../../app/presenters/address/base-address.presenter.js'
+import { countryLookup } from '../../../src/presenters/address/base-address.presenter.js'
 
 // Thing under test
-import InternationalPresenter from '../../../app/presenters/address/international.presenter.js'
+import InternationalPresenter from '../../../src/presenters/address/international.presenter.js'
 
 describe('Address - International Presenter', () => {
   let session

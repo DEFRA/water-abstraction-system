@@ -1,0 +1,41 @@
+/**
+ * Orchestrates presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
+ *
+ * @module ViewPreviewCheckAlertService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+
+import CheckAlertPresenter from '../../../../presenters/notices/setup/preview/preview-check-alert.presenter.js'
+import FetchAbstractionAlertRecipientsDal from '../../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
+
+/**
+ * Orchestrates presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
+ *
+ * @param {string} contactHashId - The recipients unique identifier
+ * @param {string} sessionId - The UUID of the current session
+ *
+ * @returns {Promise<object>} - The data formatted for the view template
+ */
+export default async function viewPreviewCheckAlertService(contactHashId, sessionId) {
+  const session = await FetchSessionDal(sessionId)
+
+  const recipientLicenceRefs = await _recipientLicenceRefs(contactHashId, session)
+
+  const pageData = CheckAlertPresenter(contactHashId, recipientLicenceRefs, session)
+
+  return {
+    activeNavBar: 'notices',
+    ...pageData
+  }
+}
+
+async function _recipientLicenceRefs(contactHashId, session) {
+  const recipients = await FetchAbstractionAlertRecipientsDal(session)
+
+  const matchedRecipient = recipients.find((recipient) => {
+    return recipient.contact_hash_id === contactHashId
+  })
+
+  return matchedRecipient.licence_refs
+}

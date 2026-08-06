@@ -2,18 +2,18 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
-import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
-import LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
-import LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
-import MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
-import NotificationHelper from '../../support/helpers/notification.helper.js'
-import UserHelper from '../../support/helpers/user.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceMonitoringStationHelper from 'water-abstraction-engine/test/helpers/licence-monitoring-station.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import LicenceVersionPurposeConditionHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeConditionTypeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose-condition-type.helper.js'
+import LicenceVersionPurposeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose.helper.js'
+import MonitoringStationHelper from 'water-abstraction-engine/test/helpers/monitoring-station.helper.js'
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
+import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
 
 // Thing under test
-import FetchLicenceMonitoringStationsDal from '../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
+import FetchLicenceMonitoringStationsDal from '../../../src/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
 
 describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
   let licence

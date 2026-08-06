@@ -1,0 +1,55 @@
+/**
+ * Format data for the `/return-log/setup/{sessionId}/received` page
+ * @module ReceivedPresenter
+ */
+
+import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+
+/**
+ * Format data for the `/return-log/setup/{sessionId}/received` page
+ *
+ * @param {module:SessionModel} session - The return log setup session instance
+ *
+ * @returns {object} page data needed by the view template
+ */
+export default function receivedPresenter(session) {
+  const {
+    id: sessionId,
+    returnReference,
+    receivedDateOptions,
+    receivedDateDay,
+    receivedDateMonth,
+    receivedDateYear
+  } = session
+
+  return {
+    backLink: { href: _backLinkHref(session), text: 'Back' },
+    pageTitle: 'When was the return received?',
+    pageTitleCaption: `Return reference ${returnReference}`,
+    receivedDateDay: receivedDateDay ?? null,
+    receivedDateMonth: receivedDateMonth ?? null,
+    receivedDateOption: receivedDateOptions ?? null,
+    receivedDateYear: receivedDateYear ?? null,
+    sessionId,
+    todaysDate: formatLongDate(today()),
+    yesterdaysDate: _yesterdaysDate()
+  }
+}
+
+function _backLinkHref(session) {
+  const { checkPageVisited, id, returnLogId } = session
+
+  if (checkPageVisited) {
+    return `/system/return-logs/setup/${id}/check`
+  }
+
+  return `/system/return-logs/${returnLogId}/details`
+}
+
+function _yesterdaysDate() {
+  const yesterdaysDate = new Date()
+  yesterdaysDate.setDate(yesterdaysDate.getDate() - 1)
+
+  return formatLongDate(yesterdaysDate)
+}

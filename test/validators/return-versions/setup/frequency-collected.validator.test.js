@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import FrequencyCollectedValidator from '../../../../app/validators/return-versions/setup/frequency-collected.validator.js'
+import FrequencyCollectedValidator from '../../../../src/validators/return-versions/setup/frequency-collected.validator.js'
 
 describe('Return Versions Setup - Frequency Collected validator', () => {
   let payload

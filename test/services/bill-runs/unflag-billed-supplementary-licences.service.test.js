@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillHelper from '../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceSupplementaryYearHelper from '../../support/helpers/licence-supplementary-year.helper.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
-import WorkflowHelper from '../../support/helpers/workflow.helper.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceSupplementaryYearHelper from 'water-abstraction-engine/test/helpers/licence-supplementary-year.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helper.js'
 
 // Thing under test
-import UnflagBilledSupplementaryLicencesService from '../../../app/services/bill-runs/unflag-billed-supplementary-licences.service.js'
+import UnflagBilledSupplementaryLicencesService from '../../../src/services/bill-runs/unflag-billed-supplementary-licences.service.js'
 
 describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
   const { id: regionId } = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)

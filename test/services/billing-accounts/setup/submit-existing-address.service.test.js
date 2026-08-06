@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateUUID } from '../../../support/generators.js'
 
 // Things to stub
-import * as FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchCompanyAddressesService from '../../../../src/services/billing-accounts/setup/fetch-company-addresses.service.js'
 
 // Thing under test
-import SubmitExistingAddressService from '../../../../app/services/billing-accounts/setup/submit-existing-address.service.js'
+import SubmitExistingAddressService from '../../../../src/services/billing-accounts/setup/submit-existing-address.service.js'
 
 describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount

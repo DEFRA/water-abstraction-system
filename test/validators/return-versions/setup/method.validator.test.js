@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import MethodValidator from '../../../../app/validators/return-versions/setup/method.validator.js'
+import MethodValidator from '../../../../src/validators/return-versions/setup/method.validator.js'
 
 describe('Return Versions Setup - Method validator', () => {
   describe('when valid data is provided', () => {

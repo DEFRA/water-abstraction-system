@@ -4,14 +4,14 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
 
 // Things we need to stub
-import * as ViewLicenceService from '../../app/services/monitoring-stations/view-licence.service.js'
-import * as ViewService from '../../app/services/monitoring-stations/view.service.js'
+import * as ViewLicenceService from '../../src/services/monitoring-stations/view-licence.service.js'
+import * as ViewService from '../../src/services/monitoring-stations/view.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_OK } = http2.constants
 

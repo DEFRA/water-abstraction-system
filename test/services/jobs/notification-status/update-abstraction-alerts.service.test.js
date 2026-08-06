@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceMonitoringStationHelper from '../../../support/helpers/licence-monitoring-station.helper.js'
+import LicenceMonitoringStationHelper from 'water-abstraction-engine/test/helpers/licence-monitoring-station.helper.js'
 
 // Thing under test
-import UpdateAbstractionAlertsService from '../../../../app/services/jobs/notification-status/update-abstraction-alerts.service.js'
+import UpdateAbstractionAlertsService from '../../../../src/services/jobs/notification-status/update-abstraction-alerts.service.js'
 
 describe('Job - Notification Status - Update Abstraction Alerts service', () => {
   let licenceMonitoringStation

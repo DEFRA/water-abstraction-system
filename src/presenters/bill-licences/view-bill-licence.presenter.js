@@ -1,0 +1,101 @@
+/**
+ * Formats data for a bill licence including its transactions into what is needed for the bill-licence page
+ * @module ViewBillLicencePresenter
+ */
+
+import { formatMoney } from 'water-abstraction-engine/presenters/base.presenter.js'
+
+import ViewCompensationChargeTransactionPresenter from './view-compensation-charge-transaction.presenter.js'
+import ViewMinimumChargeTransactionPresenter from './view-minimum-charge-transaction.presenter.js'
+import ViewStandardChargeTransactionPresenter from './view-standard-charge-transaction.presenter.js'
+import { displayCreditDebitTotals } from '../billing.presenter.js'
+
+/**
+ * Formats data for a bill licence including its transactions into what is needed for the bill-licence page
+ *
+ * @param {module:BillLicenceModel} billLicence - an instance of `BillLicence` with linked bill, bill run and
+ * transactions
+ *
+ * @returns {object} a formatted representation of the bill licence and its transactions specifically for the
+ * view bill-licence page
+ */
+export default function viewBillLicencePresenter(billLicence) {
+  const { id: billLicenceId, bill, licenceId, licenceRef, transactions } = billLicence
+
+  const { creditTotal, debitTotal, total } = _totals(transactions)
+
+  return {
+    accountNumber: bill.accountNumber,
+    billId: bill.id,
+    creditTotal,
+    debitTotal,
+    displayCreditDebitTotals: displayCreditDebitTotals(bill.billRun.batchType),
+    licenceId,
+    licenceRef,
+    removeLicenceLink: _removeLicenceLink(bill.billRun, billLicenceId),
+    scheme: bill.billRun.scheme,
+    pageTitle: `Transactions for ${licenceRef}`,
+    tableCaption: _tableCaption(transactions),
+    transactions: _transactions(transactions),
+    transactionsTotal: total
+  }
+}
+
+function _removeLicenceLink(billRun, billLicenceId) {
+  const { status } = billRun
+
+  if (status !== 'ready') {
+    return null
+  }
+
+  return `/system/bill-licences/${billLicenceId}/remove`
+}
+
+function _tableCaption(transactions) {
+  const numberOfTransactions = transactions.length
+
+  if (numberOfTransactions === 1) {
+    return '1 transaction'
+  }
+
+  return `${numberOfTransactions} transactions`
+}
+
+function _totals(transactions) {
+  let creditTotal = 0
+  let debitTotal = 0
+  let total = 0
+
+  transactions.forEach((transaction) => {
+    const { credit, netAmount } = transaction
+
+    total += netAmount
+    if (credit) {
+      creditTotal += netAmount
+    } else {
+      debitTotal += netAmount
+    }
+  })
+
+  return {
+    creditTotal: formatMoney(creditTotal),
+    debitTotal: formatMoney(debitTotal),
+    total: formatMoney(total, true)
+  }
+}
+
+function _transactions(transactions) {
+  return transactions.map((transaction) => {
+    const { chargeType } = transaction
+
+    if (chargeType === 'minimum_charge') {
+      return ViewMinimumChargeTransactionPresenter(transaction)
+    }
+
+    if (chargeType === 'compensation') {
+      return ViewCompensationChargeTransactionPresenter(transaction)
+    }
+
+    return ViewStandardChargeTransactionPresenter(transaction)
+  })
+}

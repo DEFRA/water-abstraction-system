@@ -2,11 +2,11 @@
 import { describe, expect, it } from 'vitest'
 
 // Test helpers
-import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
-import { tomorrow } from '../../support/general.js'
+import { formatDateObjectToISO } from 'water-abstraction-engine/lib/dates.lib.js'
+import { tomorrow } from 'water-abstraction-engine/test/general.js'
 
 // Thing under test
-import ViewInvalidAddressesPresenter from '../../../app/presenters/reports/view-invalid-addresses.presenter.js'
+import ViewInvalidAddressesPresenter from '../../../src/presenters/reports/view-invalid-addresses.presenter.js'
 
 describe('Reports - View invalid addresses presenter', () => {
   describe('when there are no addresses to display', () => {

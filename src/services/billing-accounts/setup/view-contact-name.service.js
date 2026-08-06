@@ -1,0 +1,26 @@
+/**
+ * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/contact-name` page
+ *
+ * @module ViewContactNameService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+
+import ContactNamePresenter from '../../../presenters/billing-accounts/setup/contact-name.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/contact-name` page
+ *
+ * @param {string} sessionId - The UUID of the current session
+ *
+ * @returns {Promise<object>} The data formatted for the view template
+ */
+export default async function viewContactNameService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
+
+  const pageData = ContactNamePresenter(session)
+
+  return {
+    ...pageData
+  }
+}

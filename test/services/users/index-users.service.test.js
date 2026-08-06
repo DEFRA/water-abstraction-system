@@ -2,15 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import UsersFixture from '../../support/fixtures/users.fixture.js'
-import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things to stub
-import * as FetchUsersDal from '../../../app/dal/users/fetch-users.dal.js'
-import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
+import * as FetchUsersDal from '../../../src/dal/users/fetch-users.dal.js'
 
 // Thing under test
-import IndexUsersService from '../../../app/services/users/index-users.service.js'
+import IndexUsersService from '../../../src/services/users/index-users.service.js'
 
 describe('Users - Index Users service', () => {
   let auth
@@ -19,9 +18,6 @@ describe('Users - Index Users service', () => {
   let yarStub
 
   beforeEach(() => {
-    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersManagement', true)
-    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersView', true)
-
     auth = {
       credentials: { scope: ['manage_accounts'] }
     }

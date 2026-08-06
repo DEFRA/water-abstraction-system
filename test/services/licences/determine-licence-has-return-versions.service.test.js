@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import ReturnVersionHelper from 'water-abstraction-engine/test/helpers/return-version.helper.js'
 
 // Thing under test
-import FetchLicenceHasRequirementsService from '../../../app/services/licences/determine-licence-has-return-versions.service.js'
+import FetchLicenceHasRequirementsService from '../../../src/services/licences/determine-licence-has-return-versions.service.js'
 
 describe('Fetch Licence Has Requirements service', () => {
   const licenceId = 'e004c0c9-0316-42fc-a6e3-5ae9a271b3c6'

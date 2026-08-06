@@ -4,10 +4,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import http2 from 'node:http2'
 
 // Things we need to stub
-import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
+import * as ChargingModuleRequest from '../../../src/requests/charging-module.request.js'
 
 // Thing under test
-import CreateTransactionRequest from '../../../app/requests/charging-module/create-transaction.request.js'
+import CreateTransactionRequest from '../../../src/requests/charging-module/create-transaction.request.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 

@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
-import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as CreateLicenceSupplementaryYearService from '../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js'
-import * as FetchRemoveReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js'
-import * as ProcessBillRunPostRemove from '../../../../app/services/bill-runs/review/process-bill-run-post-remove.service.js'
-import * as RemoveReviewLicenceService from '../../../../app/services/bill-runs/review/remove-review-licence.service.js'
-import * as UnassignLicencesToBillRunService from '../../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js'
+import * as CreateLicenceSupplementaryYearService from '../../../../src/services/licences/supplementary/create-licence-supplementary-year.service.js'
+import * as FetchRemoveReviewLicenceService from '../../../../src/services/bill-runs/review/fetch-remove-review-licence.service.js'
+import * as ProcessBillRunPostRemove from '../../../../src/services/bill-runs/review/process-bill-run-post-remove.service.js'
+import * as RemoveReviewLicenceService from '../../../../src/services/bill-runs/review/remove-review-licence.service.js'
+import * as UnassignLicencesToBillRunService from '../../../../src/services/bill-runs/unassign-licences-to-bill-run.service.js'
 
 // Thing under test
-import SubmitRemoveService from '../../../../app/services/bill-runs/review/submit-remove.service.js'
+import SubmitRemoveService from '../../../../src/services/bill-runs/review/submit-remove.service.js'
 
 describe('Bill Runs - Review - Submit Remove service', () => {
   let removeReviewLicence

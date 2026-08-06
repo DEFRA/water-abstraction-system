@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import SearchPresenter from '../../../app/presenters/search/search.presenter.js'
+import SearchPresenter from '../../../src/presenters/search/search.presenter.js'
 
 describe('Search - Search presenter', () => {
   let allSearchMatches

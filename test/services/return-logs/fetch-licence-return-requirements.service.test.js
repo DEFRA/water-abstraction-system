@@ -2,21 +2,21 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import PointHelper from '../../support/helpers/point.helper.js'
-import PrimaryPurposeHelper from '../../support/helpers/primary-purpose.helper.js'
-import PurposeHelper from '../../support/helpers/purpose.helper.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
-import ReturnRequirementHelper from '../../support/helpers/return-requirement.helper.js'
-import ReturnRequirementPointHelper from '../../support/helpers/return-requirement-point.helper.js'
-import ReturnRequirementPurposeHelper from '../../support/helpers/return-requirement-purpose.helper.js'
-import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
-import SecondaryPurposeHelper from '../../support/helpers/secondary-purpose.helper.js'
-import { today } from '../../../app/lib/general.lib.js'
-import { tomorrow, yesterday } from '../../support/general.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import PointHelper from 'water-abstraction-engine/test/helpers/point.helper.js'
+import PrimaryPurposeHelper from 'water-abstraction-engine/test/helpers/primary-purpose.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
+import ReturnRequirementPointHelper from 'water-abstraction-engine/test/helpers/return-requirement-point.helper.js'
+import ReturnRequirementPurposeHelper from 'water-abstraction-engine/test/helpers/return-requirement-purpose.helper.js'
+import ReturnVersionHelper from 'water-abstraction-engine/test/helpers/return-version.helper.js'
+import SecondaryPurposeHelper from 'water-abstraction-engine/test/helpers/secondary-purpose.helper.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { tomorrow, yesterday } from 'water-abstraction-engine/test/general.js'
 
 // Thing under test
-import FetchLicenceReturnRequirementsService from '../../../app/services/return-logs/fetch-licence-return-requirements.service.js'
+import FetchLicenceReturnRequirementsService from '../../../src/services/return-logs/fetch-licence-return-requirements.service.js'
 
 // NOTE: These have been declared outside the top level describe() by exception. We want to assert the result in detail
 // but it leads to a big block of object-code we then go on to duplicate a number of times in these tests. We've moved

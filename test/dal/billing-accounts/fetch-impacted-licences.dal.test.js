@@ -2,12 +2,12 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
-import { compareStrings } from '../../../app/lib/general.lib.js'
-import { generateLicenceRef, generateUUID } from '../../support/generators.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchImpactedLicencesDal from '../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js'
+import FetchImpactedLicencesDal from '../../../src/dal/billing-accounts/fetch-impacted-licences.dal.js'
 
 describe('DAL - Fetch Impacted Licences dal', () => {
   const billingAccountId = generateUUID()

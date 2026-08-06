@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
-import { generateUUID } from '../../support/generators.js'
 
 // Test helpers
-import YarStub from '../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchCompanyContactsDal from '../../../app/dal/companies/fetch-company-crm-data.dal.js'
-import * as FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchCompanyContactsDal from '../../../src/dal/companies/fetch-company-crm-data.dal.js'
+import * as FetchCompanyDal from '../../../src/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-import ViewContactsService from '../../../app/services/companies/view-contacts.service.js'
+import ViewContactsService from '../../../src/services/companies/view-contacts.service.js'
 
 describe('Companies - View Contacts service', () => {
   let auth

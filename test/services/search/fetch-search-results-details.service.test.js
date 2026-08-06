@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things to stub
-import BillingAccountModel from '../../../app/models/billing-account.model.js'
-import CompanyModel from '../../../app/models/company.model.js'
-import LicenceModel from '../../../app/models/licence.model.js'
-import MonitoringStationModel from '../../../app/models/monitoring-station.model.js'
-import ReturnLogModel from '../../../app/models/return-log.model.js'
-import UserModel from '../../../app/models/user.model.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
+import CompanyModel from 'water-abstraction-engine/models/company.model.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import MonitoringStationModel from 'water-abstraction-engine/models/monitoring-station.model.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import UserModel from 'water-abstraction-engine/models/user.model.js'
 
 // Thing under test
-import FetchSearchResultsDetailsService from '../../../app/services/search/fetch-search-results-details.service.js'
+import FetchSearchResultsDetailsService from '../../../src/services/search/fetch-search-results-details.service.js'
 
 describe('Search - Fetch Search Results Details service', () => {
   let idsByType

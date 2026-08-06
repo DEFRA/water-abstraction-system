@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ChangeReasonHelper from '../../support/helpers/change-reason.helper.js'
-import ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
-import ChargeVersionModel from '../../../app/models/charge-version.model.js'
-import { generateUUID } from '../../support/generators.js'
+import ChangeReasonHelper from 'water-abstraction-engine/test/helpers/change-reason.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import ChargeVersionModel from 'water-abstraction-engine/models/charge-version.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchChargeVersionsService from '../../../app/services/licences/fetch-charge-versions.service.js'
+import FetchChargeVersionsService from '../../../src/services/licences/fetch-charge-versions.service.js'
 
 describe('Licences - Fetch Charge Versions service', () => {
   const licenceId = generateUUID()

@@ -1,0 +1,31 @@
+/**
+ * Helper functions when presenting licence holders (customers)
+ * @module CustomerPresenter
+ */
+
+import { formatEmail } from 'water-abstraction-engine/presenters/base.presenter.js'
+
+/**
+ * We have a couple of places where we need to show the company contact (in some places this is referred to as the customer contact)
+ *
+ * This function formats the company contact into an object used to show the company contacts.
+ *
+ * @param {module:CompanyContactModel} companyContact - a company contact
+ *
+ * @returns {object} The company contact for the view
+ */
+export function formatCompanyContact(companyContact) {
+  return {
+    communicationType: _communicationType(companyContact),
+    name: companyContact.contact.$name(),
+    email: formatEmail(companyContact.contact.email)
+  }
+}
+
+function _communicationType(companyContact) {
+  if (companyContact.abstractionAlerts) {
+    return 'Water abstraction alerts'
+  }
+
+  return companyContact.licenceRole.label
+}

@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef } from '../../support/generators.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as DetermineLicenceHasReturnVersionsService from '../../../app/services/licences/determine-licence-has-return-versions.service.js'
-import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
-import * as FetchReturnsService from '../../../app/services/licences/fetch-returns.service.js'
+import * as DetermineLicenceHasReturnVersionsService from '../../../src/services/licences/determine-licence-has-return-versions.service.js'
+import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import * as FetchReturnsService from '../../../src/services/licences/fetch-returns.service.js'
 
 // Thing under test
-import ViewReturnsService from '../../../app/services/licences/view-returns.service.js'
+import ViewReturnsService from '../../../src/services/licences/view-returns.service.js'
 
 describe('Licences - View Returns service', () => {
   const page = '1'

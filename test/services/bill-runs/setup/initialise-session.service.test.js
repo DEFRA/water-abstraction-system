@@ -2,10 +2,10 @@
 import { describe, expect, it } from 'vitest'
 
 // Test helpers
-import SessionModel from '../../../../app/models/session.model.js'
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
 
 // Thing under test
-import InitiateSessionService from '../../../../app/services/bill-runs/setup/initiate-session.service.js'
+import InitiateSessionService from '../../../../src/services/bill-runs/setup/initiate-session.service.js'
 
 describe('Bill Run - Setup - Initiate Session service', () => {
   describe('when called', () => {

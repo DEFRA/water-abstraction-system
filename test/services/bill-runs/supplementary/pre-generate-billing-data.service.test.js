@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateAccountNumber, generateLicenceRef, generateUUID } from '../../../support/generators.js'
+import { generateAccountNumber, generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js'
+import * as FetchBillingAccountsService from '../../../../src/services/bill-runs/supplementary/fetch-billing-accounts.service.js'
 
 // Thing under test
-import PreGenerateBillingDataService from '../../../../app/services/bill-runs/supplementary/pre-generate-billing-data.service.js'
+import PreGenerateBillingDataService from '../../../../src/services/bill-runs/supplementary/pre-generate-billing-data.service.js'
 
 describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => {
   const billingPeriod = {

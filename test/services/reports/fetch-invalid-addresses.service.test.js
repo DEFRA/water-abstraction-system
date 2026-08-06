@@ -2,12 +2,12 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceDocumentHeaderHelper from '../../support/helpers/licence-document-header.helper.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import { tomorrow, yesterday } from '../../support/general.js'
+import LicenceDocumentHeaderHelper from 'water-abstraction-engine/test/helpers/licence-document-header.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import { tomorrow, yesterday } from 'water-abstraction-engine/test/general.js'
 
 // Thing under test
-import FetchInvalidAddressesService from '../../../app/services/reports/fetch-invalid-addresses.service.js'
+import FetchInvalidAddressesService from '../../../src/services/reports/fetch-invalid-addresses.service.js'
 
 describe('Reports - Fetch Invalid Addresses service', () => {
   const metadata = {

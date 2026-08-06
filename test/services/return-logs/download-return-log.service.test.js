@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { formatDateObjectToISO } from 'water-abstraction-engine/lib/dates.lib.js'
 import ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
-import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 
 // Things we need to stub
-import * as FetchDownloadReturnLogService from '../../../app/services/return-logs/fetch-download-return-log.service.js'
+import * as FetchDownloadReturnLogService from '../../../src/services/return-logs/fetch-download-return-log.service.js'
 
 // Thing under test
-import DownloadReturnLogService from '../../../app/services/return-logs/download-return-log.service.js'
+import DownloadReturnLogService from '../../../src/services/return-logs/download-return-log.service.js'
 
 describe('Return Logs - Download Return Log Service', () => {
   let returnLog

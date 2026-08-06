@@ -1,0 +1,37 @@
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
+
+/**
+ * Format data for the `/return-log/setup/{sessionId}/units` page
+ * @module UnitsPresenter
+ */
+
+/**
+ * Format data for the `/return-log/setup/{sessionId}/units` page
+ *
+ * @param {module:SessionModel} session - The return log setup session instance
+ *
+ * @returns {object} page data needed by the view template
+ */
+export default function unitsPresenter(session) {
+  const { id: sessionId, returnReference, units } = session
+
+  return {
+    backLink: _backLink(session),
+    pageTitle: 'Which units were used?',
+    pageTitleCaption: `Return reference ${returnReference}`,
+    sessionId,
+    units: units ?? null
+  }
+}
+
+function _backLink(session) {
+  const url =
+    session.reported === 'meterReadings'
+      ? `/system/return-logs/setup/${session.id}/start-reading`
+      : `/system/return-logs/setup/${session.id}/reported`
+
+  return {
+    href: checkUrl(session, url),
+    text: 'Back'
+  }
+}

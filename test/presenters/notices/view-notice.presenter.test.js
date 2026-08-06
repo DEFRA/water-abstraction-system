@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateNoticeReferenceCode } from '../../support/generators.js'
+import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import ViewNoticePresenter from '../../../app/presenters/notices/view-notice.presenter.js'
+import ViewNoticePresenter from '../../../src/presenters/notices/view-notice.presenter.js'
 
 describe('Notices - View Notice presenter', () => {
   let notice

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import StartReadingPresenter from '../../../../app/presenters/return-logs/setup/start-reading.presenter.js'
+import StartReadingPresenter from '../../../../src/presenters/return-logs/setup/start-reading.presenter.js'
 
 describe('Return Logs Setup - Start Reading presenter', () => {
   let session

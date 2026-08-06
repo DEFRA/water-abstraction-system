@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateReference, generateUUID } from '../../../support/generators.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { generateReference, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as DeleteSessionDal from 'water-abstraction-engine/dal/delete-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import SubmitSubmissionService from '../../../../app/services/return-logs/setup/submit-submission.service.js'
+import SubmitSubmissionService from '../../../../src/services/return-logs/setup/submit-submission.service.js'
 
 describe('Return Logs - Setup - Submit Submission service', () => {
   let payload

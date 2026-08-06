@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-import PreviewCheckAlertPresenter from '../../../../../app/presenters/notices/setup/preview/preview-check-alert.presenter.js'
+import PreviewCheckAlertPresenter from '../../../../../src/presenters/notices/setup/preview/preview-check-alert.presenter.js'
 
 describe('Notices - Setup - Preview - Preview Check Alert presenter', () => {
   const contactHashId = '7a5efa5da17ab1ead8b8c91e05a0e3f7'

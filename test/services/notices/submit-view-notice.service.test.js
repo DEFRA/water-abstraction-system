@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateNoticeReferenceCode } from '../../support/generators.js'
+import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
 
 // Things to stub
-import * as FetchNoticeService from '../../../app/services/notices/fetch-notice.service.js'
-import YarStub from '../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
+import * as FetchNoticeService from '../../../src/services/notices/fetch-notice.service.js'
 
 // Thing under test
-import SubmitViewNoticeService from '../../../app/services/notices/submit-view-notice.service.js'
+import SubmitViewNoticeService from '../../../src/services/notices/submit-view-notice.service.js'
 
 describe('Notices - Submit View Notice service', () => {
   const noticeId = 'ed9e8145-8f2b-4561-b200-d3ee95d30938'

@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModel from '../../../../../app/models/session.model.js'
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
 
 // Things we need to stub
-import * as FetchUserDetailsDal from '../../../../../app/dal/users/internal/fetch-user-details.dal.js'
+import * as FetchUserDetailsDal from '../../../../../src/dal/users/internal/fetch-user-details.dal.js'
 
 // Thing under test
-import InitiateEditSessionService from '../../../../../app/services/users/internal/setup/initiate-edit-session.service.js'
+import InitiateEditSessionService from '../../../../../src/services/users/internal/setup/initiate-edit-session.service.js'
 
 describe('Users - Internal - Setup - Initiate Edit Session service', () => {
   const id = 'd26787fc-6df4-4606-aa9d-c04951b3761f'

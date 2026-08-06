@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Thing under test
-import CompanyWithAddressPresenter from '../../../app/presenters/companies/company-with-address.presenter.js'
+import CompanyWithAddressPresenter from '../../../src/presenters/companies/company-with-address.presenter.js'
 
 describe('Companies - Company With Address Presenter', () => {
   const licenceId = 'fbf2df24-ac78-4ee2-b5bb-eb7f9cf6b59a'

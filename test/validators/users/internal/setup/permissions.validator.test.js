@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import PermissionsValidator from '../../../../../app/validators/users/internal/setup/permissions.validator.js'
+import PermissionsValidator from '../../../../../src/validators/users/internal/setup/permissions.validator.js'
 
 describe('Users - Internal - Setup - Permissions Validator', () => {
   let payload

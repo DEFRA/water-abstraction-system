@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchDownloadNotificationService from '../../../app/services/notifications/fetch-notification-download.service.js'
+import * as FetchDownloadNotificationService from '../../../src/services/notifications/fetch-notification-download.service.js'
 
 // Thing under test
-import DownloadNotificationService from '../../../app/services/notifications/download-notification.service.js'
-import { generateUUID } from '../../support/generators.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+import DownloadNotificationService from '../../../src/services/notifications/download-notification.service.js'
 
 describe('Notifications - Download Notification service', () => {
   let notificationId

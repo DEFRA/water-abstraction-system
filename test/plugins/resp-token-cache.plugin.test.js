@@ -2,10 +2,10 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as RespTokenRequest from '../../app/requests/resp/token.request.js'
+import * as RespTokenRequest from '../../src/requests/resp/token.request.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const LONG_EXPIRY_TIME = 3600
 const SHORT_EXPIRY_TIME = 1

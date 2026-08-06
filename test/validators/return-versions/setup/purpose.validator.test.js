@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import PurposeValidator from '../../../../app/validators/return-versions/setup/purpose.validator.js'
+import PurposeValidator from '../../../../src/validators/return-versions/setup/purpose.validator.js'
 
 describe('Return Versions Setup - Purpose validator', () => {
   const validPurposeIds = [

@@ -2,13 +2,13 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import { yesterday } from 'water-abstraction-engine/test/general.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
-import LicenceModel from '../../../app/models/licence.model.js'
-import { yesterday } from '../../support/general.js'
-import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Thing under test
-import LicencesPresenter from '../../../app/presenters/companies/licences.presenter.js'
+import LicencesPresenter from '../../../src/presenters/companies/licences.presenter.js'
 
 describe('Companies - Licences presenter', () => {
   let company

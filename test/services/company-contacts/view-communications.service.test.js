@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
-import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-import * as FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
-import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
-import * as FetchNotificationsDal from '../../../app/dal/company-contacts/fetch-notifications.dal.js'
+import * as FetchCompanyContactDal from '../../../src/dal/company-contacts/fetch-company-contact.dal.js'
+import * as FetchCompanyService from '../../../src/dal/companies/fetch-company.dal.js'
+import * as FetchNotificationsDal from '../../../src/dal/company-contacts/fetch-notifications.dal.js'
 
 // Thing under test
-import ViewCommunicationsService from '../../../app/services/company-contacts/view-communications.service.js'
+import ViewCommunicationsService from '../../../src/services/company-contacts/view-communications.service.js'
 
 describe('Company Contacts - View Communications Service', () => {
   const page = '1'

@@ -2,19 +2,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillRunError from '../../../../app/errors/bill-run.error.js'
+import BillRunError from '../../../../src/errors/bill-run.error.js'
 
 // Things we need to stub
-import * as ChargingModuleGenerateRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
-import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js'
-import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
-import * as LegacyRefreshBillRunRequest from '../../../../app/requests/legacy/refresh-bill-run.request.js'
-import * as ProcessBillingPeriodService from '../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js'
-import BillRunModel from '../../../../app/models/bill-run.model.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as ChargingModuleGenerateRequest from '../../../../src/requests/charging-module/generate-bill-run.request.js'
+import * as FetchBillingAccountsService from '../../../../src/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js'
+import * as HandleErroredBillRunService from '../../../../src/services/bill-runs/handle-errored-bill-run.service.js'
+import * as LegacyRefreshBillRunRequest from '../../../../src/requests/legacy/refresh-bill-run.request.js'
+import * as ProcessBillingPeriodService from '../../../../src/services/bill-runs/two-part-tariff/process-billing-period.service.js'
 
 // Thing under test
-import GenerateBillRunService from '../../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js'
+import GenerateBillRunService from '../../../../src/services/bill-runs/two-part-tariff/generate-bill-run.service.js'
 
 describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
   const billRun = {
@@ -36,7 +36,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
       patch: billRunPatchStub
     })
 
-    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // BaseRequest depends on the GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

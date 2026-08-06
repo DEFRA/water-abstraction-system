@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef } from '../../support/generators.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import ReturnsPresenter from '../../../app/presenters/licences/returns.presenter.js'
+import ReturnsPresenter from '../../../src/presenters/licences/returns.presenter.js'
 
 describe('Licences - Returns presenter', () => {
   let returnLogs

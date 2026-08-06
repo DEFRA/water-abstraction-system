@@ -1,0 +1,44 @@
+/**
+ * Orchestrates fetching and presenting the data for the '/companies/{id}/history' page
+ *
+ * @module ViewHistoryService
+ */
+
+import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.presenter.js'
+
+import FetchCompanyDal from '../../dal/companies/fetch-company.dal.js'
+import FetchHistoryDal from '../../dal/companies/fetch-history.dal.js'
+import HistoryPresenter from '../../presenters/companies/history.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for the '/companies/{id}/history' page
+ *
+ * @param {string} companyId - the UUID of the company
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {string} page - The current page for the pagination service
+ *
+ * @returns {Promise<object>} The data formatted for the view template
+ */
+export default async function viewHistoryService(companyId, auth, page) {
+  const company = await FetchCompanyDal(companyId)
+
+  const { licences, totalNumber } = await FetchHistoryDal(companyId, page)
+
+  const pageData = HistoryPresenter(company, licences)
+
+  const pagination = PaginatorPresenter(
+    totalNumber,
+    page,
+    `/system/companies/${companyId}/history`,
+    licences.length,
+    'licences'
+  )
+
+  return {
+    ...pageData,
+    activeSecondaryNav: 'history',
+    pagination,
+    roles: userRoles(auth)
+  }
+}

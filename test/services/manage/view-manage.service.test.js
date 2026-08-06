@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ViewManageService from '../../../app/services/manage/view-manage.service.js'
+import ViewManageService from '../../../src/services/manage/view-manage.service.js'
 
 describe('Manage - View Manage service', () => {
   let userAuth

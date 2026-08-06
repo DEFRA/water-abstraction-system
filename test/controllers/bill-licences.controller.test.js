@@ -4,17 +4,17 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { postRequestOptions } from '../support/general.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
-import Boom from '@hapi/boom'
-import * as RemoveBillLicenceService from '../../app/services/bill-licences/remove-bill-licence.service.js'
-import * as SubmitRemoveBillLicenceService from '../../app/services/bill-licences/submit-remove-bill-licence.service.js'
-import * as ViewBillLicenceService from '../../app/services/bill-licences/view-bill-licence.service.js'
+import Boom from 'water-abstraction-engine/wrappers/boom.wrapper.js'
+import * as RemoveBillLicenceService from '../../src/services/bill-licences/remove-bill-licence.service.js'
+import * as SubmitRemoveBillLicenceService from '../../src/services/bill-licences/submit-remove-bill-licence.service.js'
+import * as ViewBillLicenceService from '../../src/services/bill-licences/view-bill-licence.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 

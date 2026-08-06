@@ -2,10 +2,10 @@
 import { describe, expect, it } from 'vitest'
 
 // Test helper
-import RegionHelper from '../../../support/helpers/region.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Thing under test
-import FetchRegionsService from '../../../../app/services/bill-runs/setup/fetch-regions.service.js'
+import FetchRegionsService from '../../../../src/services/bill-runs/setup/fetch-regions.service.js'
 
 describe('Bill Runs Setup - Setup - Fetch Regions service', () => {
   describe('when called', () => {

@@ -2,19 +2,19 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import DatabaseConfig from '../../../config/database.config.js'
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
 
 // Test helpers
-import LicenceDocumentHeaderHelper from '../../support/helpers/licence-document-header.helper.js'
-import LicenceEntityHelper from '../../support/helpers/licence-entity.helper.js'
-import LicenceEntityRoleHelper from '../../support/helpers/licence-entity-role.helper.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import UserHelper from '../../support/helpers/user.helper.js'
+import LicenceDocumentHeaderHelper from 'water-abstraction-engine/test/helpers/licence-document-header.helper.js'
+import LicenceEntityHelper from 'water-abstraction-engine/test/helpers/licence-entity.helper.js'
+import LicenceEntityRoleHelper from 'water-abstraction-engine/test/helpers/licence-entity-role.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import UsersFixture from '../../support/fixtures/users.fixture.js'
-import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-import FetchUsersDal from '../../../app/dal/users/fetch-users.dal.js'
+import FetchUsersDal from '../../../src/dal/users/fetch-users.dal.js'
 
 describe('Users - Fetch Users DAL', () => {
   const seededUsersLength = UserHelper.data.length

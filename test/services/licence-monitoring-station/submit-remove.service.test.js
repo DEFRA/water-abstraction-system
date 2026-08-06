@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
-import YarStub from '../../support/stubs/yar.stub.js'
+import LicenceMonitoringStationHelper from 'water-abstraction-engine/test/helpers/licence-monitoring-station.helper.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Thing under test
-import SubmitRemoveService from '../../../app/services/licence-monitoring-station/submit-remove.service.js'
+import SubmitRemoveService from '../../../src/services/licence-monitoring-station/submit-remove.service.js'
 
 describe('Licence Monitoring Station - Submit Remove service', () => {
   const licenceRef = '99/999/9999'

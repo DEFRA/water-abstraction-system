@@ -4,19 +4,19 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
 
 // Things we need to stub
-import * as DatabaseHealthCheckService from '../../app/services/health/database-health-check.service.js'
-import * as InfoService from '../../app/services/health/info.service.js'
+import * as ViewInfoService from '../../src/services/health/view-info.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
+const { HTTP_STATUS_OK } = http2.constants
 
 describe('Health controller', () => {
-  let airbrakeStub
+  let info
+  let options
   let server
 
   // Create server before running the tests
@@ -29,7 +29,7 @@ describe('Health controller', () => {
     LoggerStub(server.logger)
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    airbrakeStub = vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
@@ -40,70 +40,38 @@ describe('Health controller', () => {
     await server.stop()
   })
 
-  describe('GET /health/airbrake', () => {
-    const options = {
-      method: 'GET',
-      url: '/health/airbrake'
-    }
-
-    it('returns a 500 error', async () => {
-      const response = await server.inject(options)
-
-      expect(response.statusCode).toEqual(HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    })
-
-    it('causes Airbrake to send a notification', async () => {
-      await server.inject(options)
-
-      expect(airbrakeStub).toHaveBeenCalled()
-    })
-  })
-
-  describe('GET /health/database', () => {
-    const options = {
-      method: 'GET',
-      url: '/health/database'
-    }
-
-    describe('when the request succeeds', () => {
-      beforeEach(async () => {
-        vi.spyOn(DatabaseHealthCheckService, 'default').mockResolvedValue()
-      })
-
-      it('returns stats about each table', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
-      })
-    })
-  })
-
   describe('GET /health/info', () => {
-    const options = {
-      method: 'GET',
-      url: '/health/info'
-    }
+    beforeEach(() => {
+      info = {
+        pageTitle: 'Info',
+        addressFacadeData: 'hola',
+        appData: {
+          name: 'Service - foreground',
+          url: 'http://localhost:8001',
+          version: '3.1.2',
+          commit: 'e5186e106ac8d7a2873faf5ae09f963fc5db8a1c'
+        },
+        chargingModuleData: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+        redisConnectivityData: 'ERROR: Command failed: redis-server --version /bin/sh: 1: redis-server: not found',
+        virusScannerData: 'ClamAV 0.103.6/26738/Fri Dec 2 11:12:06 2022'
+      }
+
+      options = {
+        method: 'GET',
+        url: `/health/info`
+      }
+    })
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        vi.spyOn(InfoService, 'default').mockResolvedValue({
-          virusScannerData: 'ClamAV 0.103.6/26738/Fri Dec 2 11:12:06 2022',
-          redisConnectivityData: 'ERROR: Command failed: redis-server --version /bin/sh: 1: redis-server: not found',
-          addressFacadeData: 'hola',
-          chargingModuleData: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
-          appData: {
-            name: 'Service - foreground',
-            url: 'http://localhost:8001',
-            version: '3.1.2',
-            commit: 'e5186e106ac8d7a2873faf5ae09f963fc5db8a1c'
-          }
-        })
+        vi.spyOn(ViewInfoService, 'default').mockResolvedValue(info)
       })
 
-      it('returns stats about each table', async () => {
+      it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain(info.pageTitle)
       })
     })
   })

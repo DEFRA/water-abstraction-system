@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import AgreementsExceptionsPresenter from '../../../../app/presenters/return-versions/setup/agreements-exceptions.presenter.js'
+import AgreementsExceptionsPresenter from '../../../../src/presenters/return-versions/setup/agreements-exceptions.presenter.js'
 
 describe('Return Versions Setup - Agreements Exceptions presenter', () => {
   const requirementIndex = 0

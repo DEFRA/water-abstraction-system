@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
-import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 
 // Thing under test
-import FetchAlternateReturnsRecipients from '../../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js'
+import FetchAlternateReturnsRecipients from '../../../../../src/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients service', () => {
   const notificationDueDate = new Date('2025-12-24')

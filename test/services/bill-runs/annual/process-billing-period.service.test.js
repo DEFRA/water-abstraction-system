@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
-import { generateUUID } from '../../../support/generators.js'
+import { determineCurrentFinancialYear } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as ChargingModuleCreateTransactionRequest from '../../../../app/requests/charging-module/create-transaction.request.js'
-import * as GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
-import BillModel from '../../../../app/models/bill.model.js'
-import BillRunError from '../../../../app/errors/bill-run.error.js'
-import BillRunModel from '../../../../app/models/bill-run.model.js'
+import BillModel from 'water-abstraction-engine/models/bill.model.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import * as ChargingModuleCreateTransactionRequest from '../../../../src/requests/charging-module/create-transaction.request.js'
+import * as GenerateTransactionsService from '../../../../src/services/bill-runs/generate-transactions.service.js'
+import BillRunError from '../../../../src/errors/bill-run.error.js'
 
 // Thing under test
-import ProcessBillingPeriodService from '../../../../app/services/bill-runs/annual/process-billing-period.service.js'
+import ProcessBillingPeriodService from '../../../../src/services/bill-runs/annual/process-billing-period.service.js'
 
 describe('Annual Process billing period service', () => {
   const billingPeriod = determineCurrentFinancialYear()

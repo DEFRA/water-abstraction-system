@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import RemoveLicencesValidator from '../../../../app/validators/notices/setup/remove-licences.validator.js'
+import RemoveLicencesValidator from '../../../../src/validators/notices/setup/remove-licences.validator.js'
 
 describe('Notices - Setup - Remove Licences validator', () => {
   let licenceRefsWithDueReturns

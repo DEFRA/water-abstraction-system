@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Thing under test
-import FetchLegacyIdDal from '../../../app/dal/users/fetch-legacy-id.dal.js'
+import FetchLegacyIdDal from '../../../src/dal/users/fetch-legacy-id.dal.js'
 
 // NOTE: The users are seeded as part of setting up the test database, along with with their groups and roles. So,
 // unlike other fetch tests we don't create any test records and assert they are in our results as we already have

@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchReturnSubmissionService from '../../../app/services/return-submissions/fetch-return-submission.service.js'
+import * as FetchReturnSubmissionService from '../../../src/services/return-submissions/fetch-return-submission.service.js'
 
 // Test helpers
-import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import ReturnLogModel from '../../../app/models/return-log.model.js'
-import ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
-import ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
-import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
-import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
+import ReturnSubmissionLineModel from 'water-abstraction-engine/models/return-submission-line.model.js'
+import ReturnSubmissionModel from 'water-abstraction-engine/models/return-submission.model.js'
 
 // Thing under test
-import ViewReturnSubmissionService from '../../../app/services/return-submissions/view-return-submission.service.js'
+import ViewReturnSubmissionService from '../../../src/services/return-submissions/view-return-submission.service.js'
 
 describe('View Return Submission service', () => {
   beforeEach(() => {

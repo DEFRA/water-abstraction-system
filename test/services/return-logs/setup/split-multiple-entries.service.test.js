@@ -2,7 +2,7 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Thing under test
-import SplitMultipleEntriesService from '../../../../app/services/return-logs/setup/split-multiple-entries.service.js'
+import SplitMultipleEntriesService from '../../../../src/services/return-logs/setup/split-multiple-entries.service.js'
 
 describe('Return Logs - Split Multiple Entries Service', () => {
   let multipleEntries

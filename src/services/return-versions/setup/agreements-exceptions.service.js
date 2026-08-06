@@ -1,0 +1,29 @@
+/**
+ * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/agreements-exceptions` page
+ * @module AgreementExceptionService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+
+import AgreementsExceptionsPresenter from '../../../presenters/return-versions/setup/agreements-exceptions.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/agreements-exceptions` page
+ *
+ * Supports generating the data needed for the agreements and exceptions page in the return requirements setup journey.
+ * It fetches the current session record and combines it with the date fields and other information needed for the form.
+ *
+ * @param {string} sessionId - The UUID of the current session
+ * @param {string} requirementIndex - The index of the requirement being added or changed
+ *
+ * @returns {Promise<object>} The view data for the agreements and exceptions page
+ */
+export default async function agreementsExceptionsService(sessionId, requirementIndex) {
+  const session = await FetchSessionDal(sessionId)
+
+  const formattedData = AgreementsExceptionsPresenter(session, requirementIndex)
+
+  return {
+    ...formattedData
+  }
+}

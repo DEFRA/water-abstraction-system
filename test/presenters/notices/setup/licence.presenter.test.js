@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import LicencePresenter from '../../../../app/presenters/notices/setup/licence.presenter.js'
+import LicencePresenter from '../../../../src/presenters/notices/setup/licence.presenter.js'
 
 describe('Notices - Setup - Licence presenter', () => {
   let session

@@ -2,11 +2,11 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import { generateLicenceRef, generateReference, generateUUID } from '../../support/generators.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import { generateLicenceRef, generateReference, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import VoidLicenceReturnLogsService from '../../../app/services/return-logs/void-licence-return-logs.service.js'
+import VoidLicenceReturnLogsService from '../../../src/services/return-logs/void-licence-return-logs.service.js'
 
 describe('Return Logs - Void Licence Return Logs service', () => {
   let reissuedReturnIds

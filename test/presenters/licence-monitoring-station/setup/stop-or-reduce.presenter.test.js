@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import StopOrReducePresenter from '../../../../app/presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js'
+import StopOrReducePresenter from '../../../../src/presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js'
 
 describe('Licence Monitoring Station Setup - Stop Or Reduce presenter', () => {
   let session

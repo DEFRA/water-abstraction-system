@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 
 // Things we need to stub
-import * as ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
+import * as ProcessBillingFlagService from '../../../../src/services/licences/supplementary/process-billing-flag.service.js'
 
 // Thing under test
-import SubmitConfirmedService from '../../../../app/services/return-logs/setup/submit-confirmed.service.js'
+import SubmitConfirmedService from '../../../../src/services/return-logs/setup/submit-confirmed.service.js'
 
 describe('Return Logs Setup - Submit Confirmed service', () => {
   let licence

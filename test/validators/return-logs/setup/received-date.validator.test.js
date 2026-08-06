@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { today } from '../../../../app/lib/general.lib.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import ReceivedDateValidator from '../../../../app/validators/return-logs/setup/received-date.validator.js'
+import ReceivedDateValidator from '../../../../src/validators/return-logs/setup/received-date.validator.js'
 
 describe('Return Logs Setup - Received Date validator', () => {
   const returnStartDate = '2023-01-01T00:00:00.000Z'

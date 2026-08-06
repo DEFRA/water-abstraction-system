@@ -1,0 +1,86 @@
+/**
+ * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
+ * @module SubmitIndexUsersService
+ */
+
+import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.presenter.js'
+import { clearFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
+import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
+
+import FetchUsersDal from '../../dal/users/fetch-users.dal.js'
+import IndexUsersPresenter from '../../presenters/users/index-users.presenter.js'
+import IndexValidator from '../../validators/users/index.validator.js'
+
+/**
+ * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
+ *
+ * Users can also opt to clear any filters applied.
+ *
+ * @param {object} payload - The `request.payload` containing the filter data.
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {string} page - The current page for the pagination service
+ *
+ * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the index page
+ * else the data needed to re-render the page
+ */
+export default async function submitIndexUsersService(payload, yar, auth, page) {
+  const filterCleared = clearFilters(payload, yar, 'usersFilter')
+
+  if (filterCleared) {
+    return {}
+  }
+
+  const error = _validate(payload)
+
+  if (!error) {
+    _save(payload, yar)
+
+    return {}
+  }
+
+  const savedFilters = _savedFilters(yar)
+
+  return _replayView(payload, error, page, savedFilters, auth)
+}
+
+async function _replayView(payload, error, page, savedFilters, auth) {
+  const { results: users, total: totalNumber } = await FetchUsersDal(savedFilters, page)
+
+  const pagination = PaginatorPresenter(totalNumber, page, `/system/users`, users.length, 'users')
+
+  const pageData = IndexUsersPresenter(users, auth)
+
+  return {
+    error,
+    filters: { ...savedFilters, ...payload },
+    ...pageData,
+    pagination
+  }
+}
+
+function _save(payload, yar) {
+  yar.set('usersFilter', {
+    email: payload.email ?? null,
+    permissions: payload.permissions ?? null,
+    status: payload.status ?? null,
+    type: payload.type ?? null
+  })
+}
+
+function _savedFilters(yar) {
+  return {
+    email: null,
+    openFilter: true,
+    permissions: null,
+    status: null,
+    type: null,
+    ...yar.get('usersFilter')
+  }
+}
+
+function _validate(payload) {
+  const validationResult = IndexValidator(payload)
+
+  return formatValidationResult(validationResult)
+}

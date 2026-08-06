@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Thing under test
-import DetermineBillingYearsService from '../../../../app/services/licences/supplementary/determine-billing-years.service.js'
+import DetermineBillingYearsService from '../../../../src/services/licences/supplementary/determine-billing-years.service.js'
 
 describe('Determine Billing Years Service', () => {
   let endDate

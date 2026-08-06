@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test Helpers
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateLicenceRef, generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
-import * as FetchNotificationsDal from '../../../app/dal/licences/fetch-notifications.dal.js'
+import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import * as FetchNotificationsDal from '../../../src/dal/licences/fetch-notifications.dal.js'
 
 // Thing under test
-import ViewCommunicationsService from '../../../app/services/licences/view-communications.service.js'
+import ViewCommunicationsService from '../../../src/services/licences/view-communications.service.js'
 
 describe('Licences - View Communications service', () => {
   const page = '1'

@@ -1,0 +1,220 @@
+/**
+ * Formats Licence condition types for the view
+ * @module LicencePresenter
+ */
+
+import PointModel from 'water-abstraction-engine/models/point.model.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { formatAbstractionPeriod, formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+
+import { formatAbstractionAmounts } from './licences/base-licences.presenter.js'
+
+/**
+ * Formats Licence condition types for the view
+ *
+ * Used by the 'conditionsSummaryCards' macro
+ *
+ * @param {object[]} conditionTypes -condition types from the licence conditions
+ *
+ * @returns {object[]} - the condition types formatted to be displayed
+ */
+export function formatConditionTypes(conditionTypes) {
+  return conditionTypes.map((conditionType) => {
+    const { displayTitle, licenceVersionPurposeConditions } = conditionType
+
+    const conditions = _formatConditions(licenceVersionPurposeConditions, conditionType)
+
+    return {
+      conditions,
+      displayTitle
+    }
+  })
+}
+
+/**
+ * Formats Licence points for the view
+ *
+ * Used by the 'pointsSummaryCards' macro
+ *
+ * @param {object[]} points - points from the licence version purposes
+ *
+ * @returns {object[]} - the points formatted to be displayed
+ */
+export function formatLicencePoints(points) {
+  return points.map((point) => {
+    // NOTE: We create a `PointModel` instance so we can use the `$describe()` instance method
+    const pointInstance = PointModel.fromJson(point)
+
+    return {
+      bgsReference: pointInstance.bgsReference ?? '',
+      category: pointInstance.category ?? '',
+      depth: pointInstance.depth.toString(),
+      description: pointInstance.description ?? '',
+      gridReference: pointInstance.$describe(),
+      hydroInterceptDistance: pointInstance.hydroInterceptDistance.toString(),
+      hydroOffsetDistance: pointInstance.hydroOffsetDistance.toString(),
+      hydroReference: pointInstance.hydroReference ?? '',
+      locationNote: pointInstance.locationNote ?? '',
+      note: pointInstance.note ?? '',
+      primaryType: pointInstance.primaryType ?? '',
+      secondaryType: pointInstance.secondaryType ?? '',
+      sourceDescription: pointInstance.sourceDescription ?? '',
+      sourceType: pointInstance.sourceType ?? '',
+      wellReference: pointInstance.wellReference ?? ''
+    }
+  })
+}
+
+/**
+ * Formats Licence purposes for the view
+ *
+ * Used by the 'purposesSummaryCards' macro
+ *
+ * @param {object[]} purposes - purposes from the licence version purposes
+ *
+ * @returns {object[]} - the purposes formatted to be displayed
+ */
+export function formatLicencePurposes(purposes) {
+  return purposes.map((purpose) => {
+    const abstractionAmounts = _formatAbstractionAmounts(purpose)
+    const abstractionMethods = _formatAbstractionMethod(purpose.licenceVersionPurposePoints)
+    const abstractionPoints = _formatAbstractionPoints(purpose.points)
+
+    return {
+      abstractionAmounts,
+      abstractionAmountsTitle: abstractionAmounts.length > 1 ? 'Abstraction amounts' : 'Abstraction amount',
+      abstractionMethods,
+      abstractionMethodsTitle:
+        purpose.licenceVersionPurposePoints.length > 1 ? 'Methods of abstraction' : 'Method of abstraction',
+      abstractionPeriod: _abstractionPeriod(purpose),
+      abstractionPoints,
+      abstractionPointsTitle: abstractionPoints.length > 1 ? 'Abstraction points' : 'Abstraction point',
+      purposeDescription: purpose.purpose.description
+    }
+  })
+}
+
+function _abstractionPeriod(licenceVersionPurpose) {
+  const {
+    abstractionPeriodStartDay: startDay,
+    abstractionPeriodStartMonth: startMonth,
+    abstractionPeriodEndDay: endDay,
+    abstractionPeriodEndMonth: endMonth
+  } = licenceVersionPurpose
+
+  return formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
+}
+
+function _abstractionPoints(licenceVersionPurposePoints) {
+  const points = licenceVersionPurposePoints.flatMap((licenceVersionPurposePoint) => {
+    return licenceVersionPurposePoint.point
+  })
+
+  const descriptions = _formatAbstractionPoints(points)
+
+  return {
+    label: descriptions.length === 1 ? 'Abstraction point' : 'Abstraction points',
+    descriptions
+  }
+}
+
+function _formatAbstractionAmounts(licenceVersionPurpose) {
+  if (!licenceVersionPurpose) {
+    return []
+  }
+
+  return formatAbstractionAmounts(licenceVersionPurpose)
+}
+
+function _formatAbstractionMethod(licenceVersionPurposePoints) {
+  const abstractionMethods = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
+    return licenceVersionPurposePoint.abstractionMethod
+  })
+
+  const uniqueAbstractionMethods = Array.from(new Set(abstractionMethods))
+
+  if (uniqueAbstractionMethods.length === 1) {
+    return uniqueAbstractionMethods[0]
+  }
+
+  if (uniqueAbstractionMethods.length === 2) {
+    return uniqueAbstractionMethods.join(' and ')
+  }
+
+  const abstractionMethodsExceptLast = uniqueAbstractionMethods.slice(0, -1).join(', ')
+  const lastAbstractionMethod = uniqueAbstractionMethods.at(-1)
+
+  return `${abstractionMethodsExceptLast}, and ${lastAbstractionMethod}`
+}
+
+function _formatAbstractionPoints(points) {
+  return points.map((point) => {
+    return point.$describe()
+  })
+}
+
+function _formatConditions(licenceVersionPurposeConditions, conditionType) {
+  const { description, param1Label, param2Label, subcodeDescription } = conditionType
+
+  return licenceVersionPurposeConditions.map((licenceVersionPurposeCondition) => {
+    const { licenceVersionPurpose, notes, param1, param2 } = licenceVersionPurposeCondition
+
+    return {
+      abstractionPoints: _abstractionPoints(licenceVersionPurpose.licenceVersionPurposePoints),
+      conditionType: description,
+      otherInformation: notes ? notes.trim() : null,
+      param1: _param(param1Label, param1, 1),
+      param2: _param(param2Label, param2, 2),
+      purpose: licenceVersionPurpose.purpose.description,
+      subcodeDescription
+    }
+  })
+}
+
+function _param(paramLabel, param, noteNumber) {
+  // Label nor value set then we don't display the param
+  if (!paramLabel && !param) {
+    return null
+  }
+
+  return {
+    label: paramLabel ?? `Note ${noteNumber}`,
+    value: param
+  }
+}
+
+/**
+ * Determines the warning to display when a licence has ended
+ *
+ * @param {module:LicenceModel} licence - the licence
+ *
+ * @returns {object} `null` if the licence has not ended else an object containing the warning
+ */
+export function licenceEndsWarning(licence) {
+  const ends = licence.$ends()
+
+  if (!ends || ends.date > today()) {
+    return null
+  }
+
+  const formattedDate = formatLongDate(ends.date)
+
+  if (ends.reason === 'revoked') {
+    return {
+      text: `This licence was revoked on ${formattedDate}`,
+      iconFallbackText: 'Warning'
+    }
+  }
+
+  if (ends.reason === 'lapsed') {
+    return {
+      text: `This licence lapsed on ${formattedDate}`,
+      iconFallbackText: 'Warning'
+    }
+  }
+
+  return {
+    text: `This licence expired on ${formattedDate}`,
+    iconFallbackText: 'Warning'
+  }
+}

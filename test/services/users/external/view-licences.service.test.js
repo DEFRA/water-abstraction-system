@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import UsersFixture from '../../../support/fixtures/users.fixture.js'
-import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we want to stub
-import * as FetchLicencesDal from '../../../../app/dal/users/external/fetch-licences.dal.js'
-import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchLicencesDal from '../../../../src/dal/users/external/fetch-licences.dal.js'
+import * as FetchUserDal from '../../../../src/dal/users/fetch-user.dal.js'
 
 // Thing under test
-import ViewLicencesService from '../../../../app/services/users/external/view-licences.service.js'
+import ViewLicencesService from '../../../../src/services/users/external/view-licences.service.js'
 
 describe('Users - External - View Licences service', () => {
   const auth = {

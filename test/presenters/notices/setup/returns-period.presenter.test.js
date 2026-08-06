@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
+import { generateNoticeReferenceCode, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import ReturnsPeriodPresenter from '../../../../app/presenters/notices/setup/returns-period.presenter.js'
+import ReturnsPeriodPresenter from '../../../../src/presenters/notices/setup/returns-period.presenter.js'
 
 describe('Notices - Setup - Returns Period presenter', () => {
   const currentYear = 2025

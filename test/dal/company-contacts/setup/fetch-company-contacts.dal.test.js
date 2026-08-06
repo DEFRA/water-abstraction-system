@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
-import ContactHelper from '../../../support/helpers/contact.helper.js'
+import CompanyContactHelper from 'water-abstraction-engine/test/helpers/company-contact.helper.js'
+import ContactHelper from 'water-abstraction-engine/test/helpers/contact.helper.js'
 
 // Thing under test
-import FetchCompanyContactsDal from '../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js'
+import FetchCompanyContactsDal from '../../../../src/dal/company-contacts/setup/fetch-company-contacts.dal.js'
 
 describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
   let additionalCompanyContact

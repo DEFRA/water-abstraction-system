@@ -2,10 +2,10 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import WorkflowHelper from '../../support/helpers/workflow.helper.js'
+import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helper.js'
 
 // Thing under test
-import FetchWorkflowsService from '../../../app/services/licences/fetch-workflows.service.js'
+import FetchWorkflowsService from '../../../src/services/licences/fetch-workflows.service.js'
 
 describe('Licences - Fetch Workflows service', () => {
   let workflow

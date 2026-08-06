@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { generateNoticeReferenceCode, generateUUID } from 'water-abstraction-engine/test/generators.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { generateNoticeReferenceCode, generateUUID } from '../../../support/generators.js'
 
 //
-import DatabaseConfig from '../../../../config/database.config.js'
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
 
 // Thing under test
-import CheckPresenter from '../../../../app/presenters/notices/setup/check.presenter.js'
+import CheckPresenter from '../../../../src/presenters/notices/setup/check.presenter.js'
 
 describe('Notices - Setup - Check presenter', () => {
   let page

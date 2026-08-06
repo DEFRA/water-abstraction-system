@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import NotificationHelper from '../../../support/helpers/notification.helper.js'
-import { generateUUID, generateUserName } from '../../../support/generators.js'
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
+import { generateUUID, generateUserName } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import UpdateNotificationDal from '../../../../app/dal/users/internal/update-notification.dal.js'
+import UpdateNotificationDal from '../../../../src/dal/users/internal/update-notification.dal.js'
 
 describe('Users - Internal - Update Notification DAL', () => {
   let notification

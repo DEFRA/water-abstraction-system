@@ -1,0 +1,93 @@
+{% extends "govuk/template.njk" %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% from "water-abstraction-engine/views/macros/page-heading.njk" import pageHeading %}
+
+{% block pageTitle %}{{ pageTitle }} - GOV.UK{% endblock %}
+
+{% block head %}
+  <!--[if !IE 8]><!-->
+  <link href="{{ assetPath }}/stylesheets/application.css" rel="stylesheet" />
+  <!--<![endif]-->
+
+  {# For Internet Explorer 8, you need to compile specific stylesheet #}
+  {# see https://github.com/alphagov/govuk-frontend/blob/master/docs/installation/supporting-internet-explorer-8.md #}
+  <!--[if IE 8]>
+    <link href="{{ assetPath }}/govuk-frontend/all-ie8.css" rel="stylesheet" />
+  <![endif]-->
+
+  {# For older browsers to allow them to recognise HTML5 elements such as `<header>` #}
+  <!--[if lt IE 9]>
+  <script src="/html5-shiv/html5shiv.js"></script>
+  <![endif]-->
+{% endblock %}
+
+{% block header %}
+  {{ govukHeader({
+    homepageUrl: "#",
+    containerClasses: "govuk-width-container",
+    serviceName: "Manage your water abstraction or impoundment licence",
+    serviceUrl: "/",
+    useTudorCrown: true,
+    navigation: navigationLinks
+  }) }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukPhaseBanner({
+    tag: { text: "Beta" },
+    html: 'This is a new service - your <a class="govuk-link" href="/feedback">feedback</a> will help us to improve it.'
+  }) }}
+  {% if auth.authenticated %}
+    {% include "includes/nav-bar.njk" %}
+  {% endif %}
+
+  {% block breadcrumbs %}
+    {% if backLink %}
+      {{ govukBackLink(backLink) }}
+    {% endif %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({ titleText: "There is a problem", errorList: error.errorList }) }}
+  {% endif %}
+
+  {% if notification %}
+    {{ govukNotificationBanner(notification) }}
+  {% endif %}
+
+  {{ pageHeading(pageTitle, pageTitleCaption) }}
+
+  {% if warning %}
+    {{ govukWarningText(warning) }}
+  {% endif %}
+
+  {% block pageContent %}
+  {% endblock %}
+{% endblock %}
+
+{% block footer %}
+  {{ govukFooter({
+    meta: {
+      items: [
+        { href: "/cookies", text: "Cookies" },
+        { href: "/privacy-policy", text: "Privacy" },
+        { href: "/accessibility", text: "Accessibility" }
+      ]
+    }
+  }) }}
+{% endblock %}
+
+{% block bodyEnd %}
+  <script src="{{ assetPath }}/all.js"></script>
+  <script nonce="{{ cspNonce }}">
+    window.GOVUKFrontend.initAll()
+  </script>
+{% endblock %}

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import CancelPresenter from '../../../../app/presenters/return-versions/setup/cancel.presenter.js'
+import CancelPresenter from '../../../../src/presenters/return-versions/setup/cancel.presenter.js'
 
 describe('Return Versions Setup - Cancel presenter', () => {
   let session

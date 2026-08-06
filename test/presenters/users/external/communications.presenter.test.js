@@ -6,7 +6,7 @@ import NotificationsFixture from '../../../support/fixtures/notifications.fixtur
 import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Thing under test
-import CommunicationsPresenter from '../../../../app/presenters/users/external/communications.presenter.js'
+import CommunicationsPresenter from '../../../../src/presenters/users/external/communications.presenter.js'
 
 describe('Users - External - Communications presenter', () => {
   let back

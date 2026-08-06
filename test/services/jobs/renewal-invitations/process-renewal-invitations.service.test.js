@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as SendRenewalInvitations from '../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as SendRenewalInvitations from '../../../../src/services/jobs/renewal-invitations/send-renewal-invitations.service.js'
 
 // Thing under test
-import ProcessRenewalInvitationsService from '../../../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js'
+import ProcessRenewalInvitationsService from '../../../../src/services/jobs/renewal-invitations/process-renewal-invitations.service.js'
 
 describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () => {
   const days = '300'
@@ -16,7 +16,7 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
   beforeEach(() => {
     vi.spyOn(SendRenewalInvitations, 'default').mockResolvedValue(['mock invitation'])
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

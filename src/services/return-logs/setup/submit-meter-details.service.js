@@ -1,0 +1,80 @@
+/**
+ * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-details` page
+ * @module SubmitMeterDetailsService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
+import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
+
+import MeterDetailsPresenter from '../../../presenters/return-logs/setup/meter-details.presenter.js'
+import MeterDetailsValidator from '../../../validators/return-logs/setup/meter-details.validator.js'
+
+/**
+ * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-details` page
+ *
+ * It first retrieves the session instance for the return log setup session in progress.
+ *
+ * The validation result is then combined with the output of the presenter to generate the page data needed by the view.
+ * If there was a validation error the controller will re-render the page so needs this information. If all is well the
+ * controller will redirect to the next page in the journey.
+ *
+ * @param {string} sessionId - The UUID of the current session
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<object>} If no errors the page data for the meter-details page else the validation error details
+ */
+export default async function submitMeterDetailsService(sessionId, payload, yar) {
+  const session = await FetchSessionDal(sessionId)
+
+  const error = _validate(payload)
+
+  if (!error) {
+    await _save(session, payload)
+
+    if (session.checkPageVisited) {
+      flashNotification(yar, 'Updated', 'Reporting details changed')
+    }
+
+    return {
+      checkPageVisited: session.checkPageVisited,
+      reported: session.reported
+    }
+  }
+
+  const pageData = _submittedSessionData(session, payload)
+
+  return {
+    error,
+    ...pageData
+  }
+}
+
+/**
+ * Combines the existing session data with the submitted payload formatted by the presenter. If nothing is submitted by
+ * the user, payload will be an empty object.
+ *
+ * @private
+ */
+function _submittedSessionData(session, payload) {
+  session.meterMake = payload.meterMake ?? null
+  session.meterSerialNumber = payload.meterSerialNumber ?? null
+  session.meter10TimesDisplay = payload.meter10TimesDisplay ?? null
+
+  return MeterDetailsPresenter(session)
+}
+
+async function _save(session, payload) {
+  session.meterMake = payload.meterMake
+  session.meterSerialNumber = payload.meterSerialNumber
+  session.meter10TimesDisplay = payload.meter10TimesDisplay
+
+  return session.$update()
+}
+
+function _validate(payload) {
+  const validationResult = MeterDetailsValidator(payload)
+
+  return formatValidationResult(validationResult)
+}

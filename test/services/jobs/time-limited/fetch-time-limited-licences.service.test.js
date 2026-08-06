@@ -2,16 +2,16 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
-import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
-import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
-import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helper.js'
 
 // Thing under test
-import FetchTimeLimitedLicencesService from '../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js'
+import FetchTimeLimitedLicencesService from '../../../../src/services/jobs/time-limited/fetch-time-limited-licences.service.js'
 
 describe('Fetch Time Limited Licences service', () => {
   let chargeVersionId

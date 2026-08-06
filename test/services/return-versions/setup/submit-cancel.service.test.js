@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../support/stubs/session.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things we need to stub
-import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as DeleteSessionDal from 'water-abstraction-engine/dal/delete-session.dal.js'
 
 // Thing under test
-import SubmitCancelService from '../../../../app/services/return-versions/setup/submit-cancel.service.js'
+import SubmitCancelService from '../../../../src/services/return-versions/setup/submit-cancel.service.js'
 
 describe('Return Versions Setup - Submit Cancel service', () => {
   let session

@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as SchemaExportService from '../../../../app/services/jobs/export/schema-export.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as SchemaExportService from '../../../../src/services/jobs/export/schema-export.service.js'
 
 // Thing under test
-import ExportService from '../../../../app/services/jobs/export/export.service.js'
+import ExportService from '../../../../src/services/jobs/export/export.service.js'
 
 describe('Export Service', () => {
   let notifierStub

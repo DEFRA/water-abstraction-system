@@ -2,14 +2,14 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { ref } from 'objection'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceModel from '../../../app/models/licence.model.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
-import TransactionHelper from '../../support/helpers/transaction.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
 
 // Thing under test
-import CreateTransactionPresenter from '../../../app/presenters/charging-module/create-transaction.presenter.js'
+import CreateTransactionPresenter from '../../../src/presenters/charging-module/create-transaction.presenter.js'
 
 describe('Charging Module Create Transaction presenter', () => {
   const accountNumber = 'A51542397A'
@@ -35,11 +35,11 @@ describe('Charging Module Create Transaction presenter', () => {
         .select([
           'id',
           'licenceRef',
-          ref('licences.regions:historicalAreaCode').castText().as('historicalAreaCode'),
-          ref('licences.regions:regionalChargeArea').castText().as('regionalChargeArea')
+          Objection.ref('licences.regions:historicalAreaCode').castText().as('historicalAreaCode'),
+          Objection.ref('licences.regions:regionalChargeArea').castText().as('regionalChargeArea')
         ])
         .withGraphFetched('region')
-        .modifyGraph('licence.region', (builder) => {
+        .modifyGraph('region', (builder) => {
           builder.select(['id', 'chargeRegionId'])
         })
 

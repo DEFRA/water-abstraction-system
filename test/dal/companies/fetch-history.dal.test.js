@@ -2,16 +2,16 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
-import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-import DatabaseConfig from '../../../config/database.config.js'
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
 
 // Thing under test
-import FetchHistoryDal from '../../../app/dal/companies/fetch-history.dal.js'
+import FetchHistoryDal from '../../../src/dal/companies/fetch-history.dal.js'
 
 describe('Companies - Fetch History dal', () => {
   let licence

@@ -2,15 +2,15 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import DatabaseConfig from '../../../config/database.config.js'
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
 
 // Test helpers
-import EventHelper from '../../support/helpers/event.helper.js'
-import EventModel from '../../../app/models/event.model.js'
+import EventHelper from 'water-abstraction-engine/test/helpers/event.helper.js'
+import EventModel from 'water-abstraction-engine/models/event.model.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Thing under test
-import FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'
+import FetchNoticesService from '../../../src/services/notices/fetch-notices.service.js'
 
 describe('Notices - Fetch Notices service', () => {
   let abstractionAlertNotice

@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillHelper from '../../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
-import BillModel from '../../../../app/models/bill.model.js'
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import TransactionHelper from '../../../support/helpers/transaction.helper.js'
-import { generateUUID } from '../../../support/generators.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import BillModel from 'water-abstraction-engine/models/bill.model.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 
 // Thing under test
-import FetchBillsToBeReissuedService from '../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js'
+import FetchBillsToBeReissuedService from '../../../../src/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js'
 
 describe('Fetch Bills To Be Reissued service', () => {
   let billRun

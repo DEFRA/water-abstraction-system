@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
 import AbstractionAlertSessionDataFixture from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 import RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
-import { generateNoticeReferenceCode } from '../../../../support/generators.js'
 
 // Things we need to stub
-import * as FetchAbstractionAlertRecipientsDal from '../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchAbstractionAlertRecipientsDal from '../../../../../src/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
 
 // Thing under test
-import ViewPreviewCheckAlertService from '../../../../../app/services/notices/setup/preview/view-preview-check-alert.service.js'
+import ViewPreviewCheckAlertService from '../../../../../src/services/notices/setup/preview/view-preview-check-alert.service.js'
 
 describe('Notices - Setup - Preview - View Preview Check Alert service', () => {
   let licenceMonitoringStations

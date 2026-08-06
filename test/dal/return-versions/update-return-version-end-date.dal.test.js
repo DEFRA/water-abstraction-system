@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
-import ReturnVersionModel from '../../../app/models/return-version.model.js'
+import ReturnVersionHelper from 'water-abstraction-engine/test/helpers/return-version.helper.js'
+import ReturnVersionModel from 'water-abstraction-engine/models/return-version.model.js'
 
 // Things under test
-import UpdateReturnVersionEndDateDal from '../../../app/dal/return-versions/update-return-version-end-date.dal.js'
+import UpdateReturnVersionEndDateDal from '../../../src/dal/return-versions/update-return-version-end-date.dal.js'
 
 describe('DAL - Return Versions - Update Return Version End Date dal', () => {
   let endDate

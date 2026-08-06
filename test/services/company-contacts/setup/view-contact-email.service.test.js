@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import ViewContactEmailService from '../../../../app/services/company-contacts/setup/view-contact-email.service.js'
+import ViewContactEmailService from '../../../../src/services/company-contacts/setup/view-contact-email.service.js'
 
 describe('Company Contacts - Setup - Contact Email Service', () => {
   let company

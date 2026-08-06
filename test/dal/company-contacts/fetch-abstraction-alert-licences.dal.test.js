@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import { generateUUID } from '../../support/generators.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchAbstractionAlertLicencesDal from '../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
+import FetchAbstractionAlertLicencesDal from '../../../src/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
 
 describe('Company Contacts - Fetch Abstraction Alert Licences Dal', () => {
   let licence

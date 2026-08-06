@@ -4,11 +4,11 @@ import { beforeEach, describe, expect, it } from 'vitest'
 // Test helpers
 import NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.js'
-import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
+import { addressToCSV } from '../../../../src/presenters/notices/base.presenter.js'
+import { transformArrayToCSVRow } from '../../../../src/lib/transform-to-csv.lib.js'
 
 // Thing under test
-import DownloadReturnsNoticePresenter from '../../../../app/presenters/notices/setup/download-returns-notice.presenter.js'
+import DownloadReturnsNoticePresenter from '../../../../src/presenters/notices/setup/download-returns-notice.presenter.js'
 
 describe('Notices - Setup - Download Returns Notice presenter', () => {
   let recipient

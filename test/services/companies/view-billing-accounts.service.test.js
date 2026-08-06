@@ -5,11 +5,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-import * as FetchBillingAccountsDal from '../../../app/dal/companies/fetch-billing-accounts.dal.js'
-import * as FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchBillingAccountsDal from '../../../src/dal/companies/fetch-billing-accounts.dal.js'
+import * as FetchCompanyDal from '../../../src/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-import ViewBillingAccountsService from '../../../app/services/companies/view-billing-accounts.service.js'
+import ViewBillingAccountsService from '../../../src/services/companies/view-billing-accounts.service.js'
 
 describe('Companies - View Billing Accounts service', () => {
   let auth

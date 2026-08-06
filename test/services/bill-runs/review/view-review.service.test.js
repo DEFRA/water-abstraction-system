@@ -2,18 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import RegionHelper from '../../../support/helpers/region.helper.js'
-import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Test helpers
-import YarStub from '../../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchBillRunLicencesService from '../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js'
-import DatabaseConfig from '../../../../config/database.config.js'
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
+import * as FetchBillRunLicencesService from '../../../../src/services/bill-runs/review/fetch-bill-run-licences.service.js'
 
 // Thing under test
-import ViewReviewService from '../../../../app/services/bill-runs/review/view-review.service.js'
+import ViewReviewService from '../../../../src/services/bill-runs/review/view-review.service.js'
 
 const billRunId = generateUUID()
 

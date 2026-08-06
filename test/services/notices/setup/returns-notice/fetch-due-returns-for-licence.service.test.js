@@ -2,12 +2,12 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import RegionHelper from '../../../../support/helpers/region.helper.js'
-import ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
-import { generateLicenceRef } from '../../../../support/generators.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchDueReturnsForLicence from '../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'
+import FetchDueReturnsForLicence from '../../../../../src/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence service', () => {
   let licenceRef

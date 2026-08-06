@@ -2,16 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as CheckNotificationStatusService from '../../../../../app/services/notifications/check-notification-status.service.js'
-import * as CreateEmailRequest from '../../../../../app/requests/notify/create-email.request.js'
-import * as GeneralLib from '../../../../../app/lib/general.lib.js'
-import * as NotifyUpdatePresenter from '../../../../../app/presenters/notifications/notify-update.presenter.js'
-import * as UpdateNotificationDal from '../../../../../app/dal/users/internal/update-notification.dal.js'
-import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
-import NotifyConfig from '../../../../../config/notify.config.js'
+import * as CreateEmailRequest from 'water-abstraction-engine/requests/notify/create-email.request.js'
+import * as GeneralLib from 'water-abstraction-engine/lib/general.lib.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
+
+import * as CheckNotificationStatusService from '../../../../../src/services/notifications/check-notification-status.service.js'
+import * as NotifyUpdatePresenter from '../../../../../src/presenters/notifications/notify-update.presenter.js'
+import * as UpdateNotificationDal from '../../../../../src/dal/users/internal/update-notification.dal.js'
 
 // Thing under test
-import SendVerificationEmailService from '../../../../../app/services/users/internal/setup/send-verification-email.service.js'
+import SendVerificationEmailService from '../../../../../src/services/users/internal/setup/send-verification-email.service.js'
 
 describe('Users - Internal - Setup - Send Verification Email service', () => {
   const notificationId = '46dd6e22-dfd3-4b2d-a618-ba88662db03e'
@@ -60,7 +61,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     // used to give Notify a chance to process the email notifications.
     vi.replaceProperty(NotifyConfig, 'waitForStatus', 25)
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

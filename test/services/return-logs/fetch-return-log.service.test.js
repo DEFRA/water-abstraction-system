@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 
 // Thing under test
-import FetchReturnLogService from '../../../app/services/return-logs/fetch-return-log.service.js'
+import FetchReturnLogService from '../../../src/services/return-logs/fetch-return-log.service.js'
 
 describe('Return Logs - Fetch Return Log service', () => {
   let licence

@@ -5,7 +5,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import * as RequirementsForReturnsSeeder from '../../../../support/seeders/requirements-for-returns.seeder.js'
 
 // Thing under test
-import FetchExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js'
+import FetchExistingRequirementsService from '../../../../../src/services/return-versions/setup/existing/fetch-existing-requirements.service.js'
 
 describe('Return Versions Setup - Fetch Existing Requirements service', () => {
   let seededReturnRequirementOne

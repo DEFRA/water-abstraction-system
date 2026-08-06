@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import PeriodUsedValidator from '../../../../app/validators/return-logs/setup/period-used.validator.js'
+import PeriodUsedValidator from '../../../../src/validators/return-logs/setup/period-used.validator.js'
 
 describe('Return Logs Setup - Period Used validator', () => {
   const startDate = '2023-04-01'

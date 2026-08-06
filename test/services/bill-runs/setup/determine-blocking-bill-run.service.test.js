@@ -2,19 +2,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
+import { engineTriggers } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 // Things we need to stub
-import * as DetermineBlockingAnnualService from '../../../../app/services/bill-runs/setup/determine-blocking-annual.service.js'
-import * as DetermineBlockingSupplementaryService from '../../../../app/services/bill-runs/setup/determine-blocking-supplementary.service.js'
-import * as DetermineBlockingTwoPartAnnualService from '../../../../app/services/bill-runs/setup/determine-blocking-two-part-annual.service.js'
-import * as DetermineBlockingTwoPartSupplementaryService from '../../../../app/services/bill-runs/setup/determine-blocking-two-part-supplementary.service.js'
+import * as DetermineBlockingAnnualService from '../../../../src/services/bill-runs/setup/determine-blocking-annual.service.js'
+import * as DetermineBlockingSupplementaryService from '../../../../src/services/bill-runs/setup/determine-blocking-supplementary.service.js'
+import * as DetermineBlockingTwoPartAnnualService from '../../../../src/services/bill-runs/setup/determine-blocking-two-part-annual.service.js'
+import * as DetermineBlockingTwoPartSupplementaryService from '../../../../src/services/bill-runs/setup/determine-blocking-two-part-supplementary.service.js'
 
 // Test helpers
-import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
+import { determineCurrentFinancialYear } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import DetermineBlockingBillRunService from '../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js'
+import DetermineBlockingBillRunService from '../../../../src/services/bill-runs/setup/determine-blocking-bill-run.service.js'
 
 describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
   const currentFinancialYear = determineCurrentFinancialYear()

@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Helpers
-import LicenceModel from '../../../../../app/models/licence.model.js'
-import { generateLicenceRef, generateUUID } from '../../../../support/generators.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import LicenceRenewalValidator from '../../../../../app/validators/notices/setup/renewal-notice/licence-renewal.validator.js'
+import LicenceRenewalValidator from '../../../../../src/validators/notices/setup/renewal-notice/licence-renewal.validator.js'
 
 describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   let licenceRenewal

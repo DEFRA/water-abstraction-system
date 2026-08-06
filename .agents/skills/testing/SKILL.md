@@ -20,13 +20,13 @@ Test files do not use JSDoc or `@module`. The top-of-file order is imports group
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SomeModelHelper from '../support/helpers/some-model.helper.js'
+import SomeModelHelper from 'water-abstraction-engine/test/helpers/some-model.helper.js'
 
 // Things we need to stub
-import * as SomeDal from '../../app/dal/some.dal.js'
+import * as SomeDal from '../../src/dal/some.dal.js'
 
 // Thing under test
-import SubjectUnderTest from '../../app/services/subject-under-test.service.js'
+import SubjectUnderTest from '../../src/services/subject-under-test.service.js'
 ```
 
 - Use these section comments in order, omitting any that are not needed:
@@ -56,7 +56,7 @@ Use `vi.spyOn()` and `vi.fn()` — vitest's built-in mocking, not Sinon.
 - To stub a static/class method (e.g. an Objection model), spy directly on the default import — mutating a method on the object works even though the import binding itself is read-only:
 
 ```js
-import ReturnLogModel from '../../../app/models/return-log.model.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 
 vi.spyOn(ReturnLogModel, 'query').mockReturnValue({
   patch: vi.fn().mockReturnThis(),
@@ -67,7 +67,7 @@ vi.spyOn(ReturnLogModel, 'query').mockReturnValue({
 - To stub a module's default-exported function (e.g. a service or DAL), you can't spy on the default import binding directly — import it as a namespace instead and spy on the `'default'` property:
 
 ```js
-import * as FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
+import * as FetchBillService from '../../../src/services/bills/fetch-bill-service.js'
 
 vi.spyOn(FetchBillService, 'default').mockResolvedValue(billData)
 ```
@@ -109,15 +109,15 @@ expect(result).toMatchObject(testRecord)
 Use the docker exec wrapper to run tests. You can pass specific files or patterns as additional arguments:
 
 ```sh
-docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm run test -- test/services/notices/setup/my-service.test.js'
-docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm run test -- test/services/notices/setup/foo.test.js test/services/notices/setup/bar.test.js'
+docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-external && npm run test -- test/services/notices/setup/my-service.test.js'
+docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-external && npm run test -- test/services/notices/setup/foo.test.js test/services/notices/setup/bar.test.js'
 ```
 
 Do not use `npx vitest` directly.
 
 ## Writing tests
 
-- Tests live in `test/` mirroring the `app/` structure
+- Tests live in `test/` mirroring the `src/` structure
 - Test file names match the module they test with a `.test.js` extension (e.g. `delete-session.dal.test.js`)
 - Test behaviour, not implementation
 - Never leave `describe.only()` or `it.only()` in committed code — CI will fail on these

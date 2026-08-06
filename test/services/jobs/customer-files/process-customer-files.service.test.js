@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 import http2 from 'node:http2'
-import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
-import BillingAccountModel from '../../../../app/models/billing-account.model.js'
 
 // Things we need to stub
-import * as ChargingModuleViewCustomerFilesRequest from '../../../../app/requests/charging-module/view-customer-files.request.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as ChargingModuleViewCustomerFilesRequest from '../../../../src/requests/charging-module/view-customer-files.request.js'
 
 // Thing under test
-import ProcessCustomerFilesService from '../../../../app/services/jobs/customer-files/process-customer-files.service.js'
+import ProcessCustomerFilesService from '../../../../src/services/jobs/customer-files/process-customer-files.service.js'
 
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
@@ -25,7 +25,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
   let notifierStub
 
   beforeEach(async () => {
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

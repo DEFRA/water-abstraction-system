@@ -4,10 +4,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 
 // Things we need to stub
-import * as FetchRelevantLicenceVersionService from '../../../../app/services/return-versions/setup/fetch-relevant-licence-version.service.js'
+import * as FetchRelevantLicenceVersionService from '../../../../src/services/return-versions/setup/fetch-relevant-licence-version.service.js'
 
 // Thing under test
-import DetermineRelevantLicenceVersionService from '../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js'
+import DetermineRelevantLicenceVersionService from '../../../../src/services/return-versions/setup/determine-relevant-licence-version.service.js'
 
 describe('Return Versions - Setup - Determine Relevant Licence Version service', () => {
   let licenceVersion

@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import http2 from 'node:http2'
 
 // Thing under test
-import NotifyUpdatePresenter from '../../../app/presenters/notifications/notify-update.presenter.js'
+import NotifyUpdatePresenter from '../../../src/presenters/notifications/notify-update.presenter.js'
 
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 

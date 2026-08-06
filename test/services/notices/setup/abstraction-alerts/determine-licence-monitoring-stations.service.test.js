@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+import { yesterday } from 'water-abstraction-engine/test/general.js'
 import LicenceFixture from '../../../../support/fixtures/licence.fixture.js'
-import { generateUUID } from '../../../../support/generators.js'
-import { yesterday } from '../../../../support/general.js'
 
 // Things we need to stub
-import * as FetchMonitoringStationDetailsDal from '../../../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
+import * as FetchMonitoringStationDetailsDal from '../../../../../src/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 // Thing under test
-import DetermineLicenceMonitoringStationsService from '../../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
+import DetermineLicenceMonitoringStationsService from '../../../../../src/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
 
 describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stations service', () => {
   let licenceMonitoringStations

@@ -2,7 +2,7 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ReturnsCycleValidator from '../../../../app/validators/return-versions/setup/returns-cycle.validator.js'
+import ReturnsCycleValidator from '../../../../src/validators/return-versions/setup/returns-cycle.validator.js'
 
 describe('Return Versions Setup - Returns Cycle validator', () => {
   let payload

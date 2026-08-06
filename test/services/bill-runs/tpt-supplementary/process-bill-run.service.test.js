@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as AssignBillRunToLicencesService from '../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js'
-import * as GenerateBillRunService from '../../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
-import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
-import * as MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
-import BillRunModel from '../../../../app/models/bill-run.model.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as AssignBillRunToLicencesService from '../../../../src/services/bill-runs/assign-bill-run-to-licences.service.js'
+import * as GenerateBillRunService from '../../../../src/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
+import * as HandleErroredBillRunService from '../../../../src/services/bill-runs/handle-errored-bill-run.service.js'
+import * as MatchAndAllocateService from '../../../../src/services/bill-runs/match/match-and-allocate.service.js'
 
 // Thing under test
-import ProcessBillRunService from '../../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js'
+import ProcessBillRunService from '../../../../src/services/bill-runs/tpt-supplementary/process-bill-run.service.js'
 
 describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   const billingPeriods = [{ startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') }]
@@ -27,7 +27,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       patch: billRunPatchStub
     })
 
-    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // BaseRequest depends on the GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

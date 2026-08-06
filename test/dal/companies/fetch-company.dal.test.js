@@ -2,10 +2,10 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import CompanyHelper from '../../support/helpers/company.helper.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
 
 // Thing under test
-import FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
+import FetchCompanyDal from '../../../src/dal/companies/fetch-company.dal.js'
 
 describe('Companies - Fetch Company dal', () => {
   let company

@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import * as TwoPartTariffSupplementarySeeder from '../../../support/seeders/two-part-tariff-supplementary.seeder.js'
 
 // Thing under test
-import FetchBillingAccountsService from '../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js'
+import FetchBillingAccountsService from '../../../../src/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js'
 
 describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () => {
   let seedData

@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
-import * as ViewBillLicencePresenter from '../../../app/presenters/bill-licences/view-bill-licence.presenter.js'
-import * as ViewBillPresenter from '../../../app/presenters/bills/view-bill.presenter.js'
-import * as ViewLicenceSummariesPresenter from '../../../app/presenters/bills/view-licence-summaries.presenter.js'
-import BillingAccountModel from '../../../app/models/billing-account.model.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
+import * as FetchBillService from '../../../src/services/bills/fetch-bill-service.js'
+import * as ViewBillLicencePresenter from '../../../src/presenters/bill-licences/view-bill-licence.presenter.js'
+import * as ViewBillPresenter from '../../../src/presenters/bills/view-bill.presenter.js'
+import * as ViewLicenceSummariesPresenter from '../../../src/presenters/bills/view-licence-summaries.presenter.js'
 
 // Thing under test
-import ViewBillService from '../../../app/services/bills/view-bill.service.js'
+import ViewBillService from '../../../src/services/bills/view-bill.service.js'
 
 describe('View Bill service', () => {
   const testId = '64924759-8142-4a08-9d1e-1e902cd9d316'

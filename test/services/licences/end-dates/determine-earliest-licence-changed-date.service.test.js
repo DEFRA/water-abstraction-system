@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import DetermineEarliestLicenceChangedDateService from '../../../../app/services/licences/end-dates/determine-earliest-licence-changed-date.service.js'
+import DetermineEarliestLicenceChangedDateService from '../../../../src/services/licences/end-dates/determine-earliest-licence-changed-date.service.js'
 
 describe('Licences - End Dates - Determine Earliest Licence Changed Date service', () => {
   let licence

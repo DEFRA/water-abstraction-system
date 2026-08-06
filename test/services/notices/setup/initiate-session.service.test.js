@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
 import AbstractionAlertSessionData from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
-import SessionModel from '../../../../app/models/session.model.js'
 
 // Things we need to stub
-import * as DetermineLicenceMonitoringStationsService from '../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
+import * as DetermineLicenceMonitoringStationsService from '../../../../src/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
 
 // Thing under test
-import InitiateSessionService from '../../../../app/services/notices/setup/initiate-session.service.js'
+import InitiateSessionService from '../../../../src/services/notices/setup/initiate-session.service.js'
 
 describe('Notices - Setup - Initiate Session service', () => {
   let journey

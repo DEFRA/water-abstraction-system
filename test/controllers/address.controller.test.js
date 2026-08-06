@@ -4,21 +4,21 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { postRequestOptions } from '../support/general.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
-import * as InternationalAddressService from '../../app/services/address/international.service.js'
-import * as ManualAddressService from '../../app/services/address/manual.service.js'
-import * as PostcodeService from '../../app/services/address/postcode.service.js'
-import * as SelectAddressService from '../../app/services/address/select.service.js'
-import * as SubmitInternationalAddressService from '../../app/services/address/submit-international.service.js'
-import * as SubmitManualAddressService from '../../app/services/address/submit-manual.service.js'
-import * as SubmitPostcodeService from '../../app/services/address/submit-postcode.service.js'
-import * as SubmitSelectAddressService from '../../app/services/address/submit-select.service.js'
+import * as InternationalAddressService from '../../src/services/address/international.service.js'
+import * as ManualAddressService from '../../src/services/address/manual.service.js'
+import * as PostcodeService from '../../src/services/address/postcode.service.js'
+import * as SelectAddressService from '../../src/services/address/select.service.js'
+import * as SubmitInternationalAddressService from '../../src/services/address/submit-international.service.js'
+import * as SubmitManualAddressService from '../../src/services/address/submit-manual.service.js'
+import * as SubmitPostcodeService from '../../src/services/address/submit-postcode.service.js'
+import * as SubmitSelectAddressService from '../../src/services/address/submit-select.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 

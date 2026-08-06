@@ -2,27 +2,27 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test framework dependencies
-import BillHelper from '../../../support/helpers/bill.helper.js'
-import BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
-import BillRunChargeVersionYearHelper from '../../../support/helpers/bill-run-charge-version-year.helper.js'
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import BillRunVolumeHelper from '../../../support/helpers/bill-run-volume.helper.js'
-import ReviewChargeElementHelper from '../../../support/helpers/review-charge-element.helper.js'
-import ReviewChargeElementReturnHelper from '../../../support/helpers/review-charge-element-return.helper.js'
-import ReviewChargeReferenceHelper from '../../../support/helpers/review-charge-reference.helper.js'
-import ReviewChargeVersionHelper from '../../../support/helpers/review-charge-version.helper.js'
-import ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
-import ReviewReturnHelper from '../../../support/helpers/review-return.helper.js'
-import TransactionHelper from '../../../support/helpers/transaction.helper.js'
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import BillRunChargeVersionYearHelper from 'water-abstraction-engine/test/helpers/bill-run-charge-version-year.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import BillRunVolumeHelper from 'water-abstraction-engine/test/helpers/bill-run-volume.helper.js'
+import ReviewChargeElementHelper from 'water-abstraction-engine/test/helpers/review-charge-element.helper.js'
+import ReviewChargeElementReturnHelper from 'water-abstraction-engine/test/helpers/review-charge-element-return.helper.js'
+import ReviewChargeReferenceHelper from 'water-abstraction-engine/test/helpers/review-charge-reference.helper.js'
+import ReviewChargeVersionHelper from 'water-abstraction-engine/test/helpers/review-charge-version.helper.js'
+import ReviewLicenceHelper from 'water-abstraction-engine/test/helpers/review-licence.helper.js'
+import ReviewReturnHelper from 'water-abstraction-engine/test/helpers/review-return.helper.js'
+import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
 
 // Things we need to stub
-import * as ChargingModuleDeleteBillRunRequest from '../../../../app/requests/charging-module/delete-bill-run.request.js'
-import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
+import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import ReviewLicenceModel from 'water-abstraction-engine/models/review-licence.model.js'
+import * as ChargingModuleDeleteBillRunRequest from '../../../../src/requests/charging-module/delete-bill-run.request.js'
 
 // Thing under test
-import DeleteBillBunService from '../../../../app/services/bill-runs/cancel/delete-bill-run.service.js'
+import DeleteBillBunService from '../../../../src/services/bill-runs/cancel/delete-bill-run.service.js'
 
 describe('Bill Runs - Delete Bill Run service', () => {
   let billRun
@@ -35,7 +35,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
       .mockImplementation(() => {})
 
     // The service depends on GlobalNotifier to have been set. This happens in
-    // app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered. As we're not
+    // the GlobalNotifierPlugin when the app starts up and the plugin is registered. As we're not
     // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our
     // own stub
     notifierStub = GlobalNotifierStub()

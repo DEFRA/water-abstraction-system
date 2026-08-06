@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import EventHelper from '../../support/helpers/event.helper.js'
+import EventHelper from 'water-abstraction-engine/test/helpers/event.helper.js'
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
-import NotificationHelper from '../../support/helpers/notification.helper.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-import FetchNotificationsDal from '../../../app/dal/company-contacts/fetch-notifications.dal.js'
+import FetchNotificationsDal from '../../../src/dal/company-contacts/fetch-notifications.dal.js'
 
 describe('Company contact - Fetch Notifications DAL', () => {
   let notice

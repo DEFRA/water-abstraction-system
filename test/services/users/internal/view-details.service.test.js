@@ -5,18 +5,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Things we want to stub
-import * as FetchUserDetailsDal from '../../../../app/dal/users/internal/fetch-user-details.dal.js'
-import FeatureFlagsConfig from '../../../../config/feature-flags.config.js'
+import * as FetchUserDetailsDal from '../../../../src/dal/users/internal/fetch-user-details.dal.js'
 
 // Thing under test
-import ViewDetailsService from '../../../../app/services/users/internal/view-details.service.js'
+import ViewDetailsService from '../../../../src/services/users/internal/view-details.service.js'
 
 describe('Users - Internal - View Details service', () => {
   const auth = { credentials: { user: { id: '367e5f4b-07d1-460b-842f-adf8f5dad7ef' } } }
   const user = UsersFixture.basicAccess()
 
   beforeEach(() => {
-    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersView', true)
     vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
   })
 

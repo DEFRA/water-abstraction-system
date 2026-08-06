@@ -2,11 +2,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import { db } from '../../../../db/db.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import { db } from 'water-abstraction-engine/db/db.js'
 
 // Thing under test
-import GenerateRenewalInvitationLicenceQueryDal from '../../../../app/dal/notices/setup/generate-renewal-invitation-licence-query.dal.js'
+import GenerateRenewalInvitationLicenceQueryDal from '../../../../src/dal/notices/setup/generate-renewal-invitation-licence-query.dal.js'
 
 describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () => {
   let licence

@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../../support/generators.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import PreviewCheckPaperReturnPresenter from '../../../../../app/presenters/notices/setup/preview/preview-check-paper-return.presenter.js'
+import PreviewCheckPaperReturnPresenter from '../../../../../src/presenters/notices/setup/preview/preview-check-paper-return.presenter.js'
 
 describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'

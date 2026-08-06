@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
 // Thing under test
-import ViewLicencesService from '../../../../../app/services/users/external/setup/view-licences.service.js'
+import ViewLicencesService from '../../../../../src/services/users/external/setup/view-licences.service.js'
 
 describe('Users - External - Setup - View Licences Service', () => {
   let session

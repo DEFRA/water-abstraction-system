@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import BillingAccountsFixture from '../../support/fixtures/billing-accounts.fixture.js'
-import { generateUUID } from '../../support/generators.js'
 
 // Things we need to stub
-import * as FetchViewBillingAccountService from '../../../app/services/billing-accounts/fetch-view-billing-account.service.js'
+import * as FetchViewBillingAccountService from '../../../src/services/billing-accounts/fetch-view-billing-account.service.js'
 
 // Thing under test
-import ViewBillingAccountService from '../../../app/services/billing-accounts/view-billing-account.service.js'
+import ViewBillingAccountService from '../../../src/services/billing-accounts/view-billing-account.service.js'
 
 describe('Billing Accounts - View Billing Account service', () => {
   let billingAccountData

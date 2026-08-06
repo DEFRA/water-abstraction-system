@@ -1,0 +1,56 @@
+/**
+ * Orchestrates sending the verification email to the new user, recording the results, and checking the status
+ * @module SendVerificationEmailService
+ */
+
+import CreateEmailRequest from 'water-abstraction-engine/requests/notify/create-email.request.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
+import { pause } from 'water-abstraction-engine/lib/general.lib.js'
+
+import CheckNotificationStatusService from '../../../notifications/check-notification-status.service.js'
+import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
+import UpdateNotificationDal from '../../../../dal/users/internal/update-notification.dal.js'
+
+/**
+ * Orchestrates sending the verification email to the new user, recording the results, and checking the status
+ *
+ * @param {object} notification - The notification linked to the verification email to be sent
+ */
+export default async function sendVerificationEmailService(notification) {
+  try {
+    const notificationStatus = await _sendEmail(notification)
+
+    if (notificationStatus !== 'error') {
+      // If we rush to check the status too quickly, Notify will respond with a result for emails that is 'still sending'.
+      // The default wait is 5 seconds, which we have found is more than enough time.
+      await pause(NotifyConfig.waitForStatus)
+
+      await CheckNotificationStatusService(notification)
+    }
+  } catch (error) {
+    globalThis.GlobalNotifier.omfg(
+      'Failed when trying to send internal user verification email',
+      { notification },
+      error
+    )
+  }
+}
+
+async function _createEmailRequest(notification) {
+  const { personalisation, recipient } = notification
+
+  const templateId = NOTIFY_TEMPLATES.users.verificationEmail
+
+  const notifyResult = await CreateEmailRequest(templateId, recipient, { personalisation })
+
+  return NotifyUpdatePresenter(notifyResult)
+}
+
+async function _sendEmail(notification) {
+  const sendResult = await _createEmailRequest(notification)
+
+  await UpdateNotificationDal(notification, sendResult)
+
+  return sendResult.status
+}

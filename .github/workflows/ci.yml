@@ -90,7 +90,7 @@ jobs:
       # Alongside this, check we haven't accidentally left any `console.log` or `console.dir` while checking results in app and tests
       - name: Temporary log check
         run: |
-          if grep -R 'console.log(\|console.dir(' ./app/ ./test/; then
+          if grep -R 'console.log(\|console.dir(' ./src/ ./test/; then
             echo "console statement found. Please remove it."
             exit 1
           fi

@@ -1,0 +1,26 @@
+/**
+ * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/fao` page
+ *
+ * @module FAOService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+
+import FAOPresenter from '../../../presenters/billing-accounts/setup/fao.presenter.js'
+
+/**
+ * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/fao` page
+ *
+ * @param {string} sessionId
+ *
+ * @returns {Promise<object>} The data formatted for the view template
+ */
+export default async function viewFaoService(sessionId) {
+  const session = await FetchSessionDal(sessionId)
+
+  const pageData = FAOPresenter(session)
+
+  return {
+    ...pageData
+  }
+}

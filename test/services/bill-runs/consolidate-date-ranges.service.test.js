@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import ConsolidateDateRangesService from '../../../app/services/bill-runs/consolidate-date-ranges.service.js'
+import ConsolidateDateRangesService from '../../../src/services/bill-runs/consolidate-date-ranges.service.js'
 
 describe('ConsolidateDateRanges service', () => {
   describe('when the provided ranges are non-overlapping', () => {

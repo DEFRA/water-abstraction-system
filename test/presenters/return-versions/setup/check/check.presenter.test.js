@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import CheckPresenter from '../../../../../app/presenters/return-versions/setup/check/check.presenter.js'
+import CheckPresenter from '../../../../../src/presenters/return-versions/setup/check/check.presenter.js'
 
 describe('Return Versions Setup - Check presenter', () => {
   let session

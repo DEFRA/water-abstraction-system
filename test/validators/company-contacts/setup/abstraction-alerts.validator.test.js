@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import AbstractionAlertsValidator from '../../../../app/validators/company-contacts/setup/abstraction-alerts.validator.js'
+import AbstractionAlertsValidator from '../../../../src/validators/company-contacts/setup/abstraction-alerts.validator.js'
 
 describe('Company Contacts - Setup - Abstraction Alerts Validator', () => {
   let payload

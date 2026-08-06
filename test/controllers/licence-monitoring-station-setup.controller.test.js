@@ -4,26 +4,26 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { postRequestOptions } from '../support/general.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
-import * as AbstractionPeriodService from '../../app/services/licence-monitoring-station/setup/abstraction-period.service.js'
-import * as CheckService from '../../app/services/licence-monitoring-station/setup/check.service.js'
-import * as FullConditionService from '../../app/services/licence-monitoring-station/setup/full-condition.service.js'
-import * as InitiateSessionService from '../../app/services/licence-monitoring-station/setup/initiate-session.service.js'
-import * as LicenceNumberService from '../../app/services/licence-monitoring-station/setup/licence-number.service.js'
-import * as StopOrReduceService from '../../app/services/licence-monitoring-station/setup/stop-or-reduce.service.js'
-import * as SubmitAbstractionPeriodService from '../../app/services/licence-monitoring-station/setup/submit-abstraction-period.service.js'
-import * as SubmitCheckService from '../../app/services/licence-monitoring-station/setup/submit-check.service.js'
-import * as SubmitFullConditionService from '../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js'
-import * as SubmitLicenceNumberService from '../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js'
-import * as SubmitStopOrReduceService from '../../app/services/licence-monitoring-station/setup/submit-stop-or-reduce.service.js'
-import * as SubmitThresholdAndUnitService from '../../app/services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js'
-import * as ThresholdAndUnitService from '../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js'
+import * as AbstractionPeriodService from '../../src/services/licence-monitoring-station/setup/abstraction-period.service.js'
+import * as CheckService from '../../src/services/licence-monitoring-station/setup/check.service.js'
+import * as FullConditionService from '../../src/services/licence-monitoring-station/setup/full-condition.service.js'
+import * as InitiateSessionService from '../../src/services/licence-monitoring-station/setup/initiate-session.service.js'
+import * as LicenceNumberService from '../../src/services/licence-monitoring-station/setup/licence-number.service.js'
+import * as StopOrReduceService from '../../src/services/licence-monitoring-station/setup/stop-or-reduce.service.js'
+import * as SubmitAbstractionPeriodService from '../../src/services/licence-monitoring-station/setup/submit-abstraction-period.service.js'
+import * as SubmitCheckService from '../../src/services/licence-monitoring-station/setup/submit-check.service.js'
+import * as SubmitFullConditionService from '../../src/services/licence-monitoring-station/setup/submit-full-condition.service.js'
+import * as SubmitLicenceNumberService from '../../src/services/licence-monitoring-station/setup/submit-licence-number.service.js'
+import * as SubmitStopOrReduceService from '../../src/services/licence-monitoring-station/setup/submit-stop-or-reduce.service.js'
+import * as SubmitThresholdAndUnitService from '../../src/services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js'
+import * as ThresholdAndUnitService from '../../src/services/licence-monitoring-station/setup/threshold-and-unit.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 

@@ -2,14 +2,14 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../support/helpers/licence.helper.js'
-import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
-import ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
-import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
+import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
+import ReturnSubmissionModel from 'water-abstraction-engine/models/return-submission.model.js'
 
 // Thing under test
-import FetchReturnLogDetailsService from '../../../app/services/return-logs/fetch-return-log-details.service.js'
+import FetchReturnLogDetailsService from '../../../src/services/return-logs/fetch-return-log-details.service.js'
 
 describe('Return Logs - Fetch Return Log Details service', () => {
   let licence

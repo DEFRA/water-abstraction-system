@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import DetermineLicenceIssuesService from '../../../../app/services/bill-runs/match/determine-licence-issues.service.js'
+import DetermineLicenceIssuesService from '../../../../src/services/bill-runs/match/determine-licence-issues.service.js'
 
 describe('Determine Licence Issues Service', () => {
   describe('when given a licence', () => {

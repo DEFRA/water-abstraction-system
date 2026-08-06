@@ -4,19 +4,19 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { generateUUID } from '../support/generators.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as ViewBillingAccountsService from '../../app/services/companies/view-billing-accounts.service.js'
-import * as ViewCompanyService from '../../app/services/companies/view-company.service.js'
-import * as ViewCompanyWithAddressService from '../../app/services/companies/view-company-with-address.service.js'
-import * as ViewContactsService from '../../app/services/companies/view-contacts.service.js'
-import * as ViewHistoryService from '../../app/services/companies/view-history.service.js'
-import * as ViewLicencesService from '../../app/services/companies/view-licences.service.js'
+import * as ViewBillingAccountsService from '../../src/services/companies/view-billing-accounts.service.js'
+import * as ViewCompanyService from '../../src/services/companies/view-company.service.js'
+import * as ViewCompanyWithAddressService from '../../src/services/companies/view-company-with-address.service.js'
+import * as ViewContactsService from '../../src/services/companies/view-contacts.service.js'
+import * as ViewHistoryService from '../../src/services/companies/view-history.service.js'
+import * as ViewLicencesService from '../../src/services/companies/view-licences.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_NOT_FOUND } = http2.constants
 

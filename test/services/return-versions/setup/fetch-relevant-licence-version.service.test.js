@@ -2,11 +2,11 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
-import { generateUUID } from '../../../support/generators.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchRelevantLicenceVersionService from '../../../../app/services/return-versions/setup/fetch-relevant-licence-version.service.js'
+import FetchRelevantLicenceVersionService from '../../../../src/services/return-versions/setup/fetch-relevant-licence-version.service.js'
 
 describe('Return Versions - Setup - Fetch Relevant Licence Version service', () => {
   const licenceId = generateUUID()

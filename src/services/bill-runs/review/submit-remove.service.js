@@ -1,0 +1,73 @@
+/**
+ * Orchestrates removing a review licence from a two-part tariff bill run whilst it is at the review stage
+ * @module SubmitRemoveService
+ */
+
+import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
+
+import CreateLicenceSupplementaryYearService from '../../licences/supplementary/create-licence-supplementary-year.service.js'
+import FetchRemoveReviewLicenceModel from './fetch-remove-review-licence.service.js'
+import ProcessBillRunPostRemove from './process-bill-run-post-remove.service.js'
+import RemoveReviewLicenceService from './remove-review-licence.service.js'
+import UnassignLicencesToBillRunService from '../unassign-licences-to-bill-run.service.js'
+
+/**
+ * Orchestrates removing a review licence from a two-part tariff bill run whilst it is at the review stage
+ *
+ * It does this by deleting all of the persisted data relating to the licence from the review tables. The licence will
+ * then be flagged for 2PT supplementary billing.
+ *
+ * If after removing the review licence the bill run is empty, the bill run status will be set to `empty`. We also let
+ * the controller know so that the user is redirected back to the Bill runs page rather than Review bill run page.
+ *
+ * @param {string} reviewLicenceId - The UUID of the review licence that is being removed from the bill run
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<object>} an object containing the bill run ID plus a boolean flag that indicates whether this was
+ * the last licence in the bill run (bill run is now empty)
+ */
+export default async function submitRemoveService(reviewLicenceId, yar) {
+  const reviewLicence = await FetchRemoveReviewLicenceModel(reviewLicenceId)
+
+  await RemoveReviewLicenceService(reviewLicenceId)
+
+  await _flagForSupplementaryBilling(reviewLicence)
+
+  const empty = await _empty(reviewLicence)
+
+  if (!empty) {
+    // NOTE: The banner message is only set if licences remain in the bill run. This is because if there are no longer
+    // any licences remaining in the bill run the user is redirected to the "Bill runs" page instead of "Review
+    // licences". As the banner isn't displayed on the "Bill runs" page the message would remain in the cookie.
+    flashNotification(yar, 'Licence removed', `Licence ${reviewLicence.licenceRef} removed from the bill run.`)
+  }
+
+  return {
+    billRunId: reviewLicence.billRun.id,
+    empty
+  }
+}
+
+async function _empty(reviewLicence) {
+  const { billRun } = reviewLicence
+
+  return ProcessBillRunPostRemove(billRun.id)
+}
+
+async function _flagForSupplementaryBilling(reviewLicence) {
+  const { billRun, licenceId } = reviewLicence
+
+  // If the bill run is two-part tariff supplementary, then it was a licence having a supplementary year record which
+  // caused it to be included in the bill run. If we are removing the licence, we need to unassign it so that it will
+  // be processed by the next TPT supplementary bill run.
+  if (billRun.batchType === 'two_part_supplementary') {
+    await UnassignLicencesToBillRunService([licenceId], billRun.id)
+
+    return
+  }
+
+  // If the batch type is not supplementary, then it wasn't a supplementary year record that caused the licence to be
+  // included in the bill run. If we remove the licence, we want to ensure it gets picked up and processed by the next
+  // supplementary bill run.
+  await CreateLicenceSupplementaryYearService(licenceId, [billRun.toFinancialYearEnding], true)
+}

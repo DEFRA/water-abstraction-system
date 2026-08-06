@@ -1,0 +1,41 @@
+/**
+ * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
+ * @module FetchReturnsService
+ */
+
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+
+/**
+ * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
+ *
+ * @param {string} licenceId - The UUID for the licence to fetch
+ * @param {string} [page=1] - The current page for the pagination service
+ *
+ * @returns {Promise<object>} the data needed to populate the view licence page's returns tab
+ */
+export default async function fetchReturnsService(licenceId, page = '1') {
+  const { results: returns, total: totalNumber } = await _fetch(licenceId, page)
+
+  return { returns, totalNumber }
+}
+
+async function _fetch(licenceId, page) {
+  // NOTE: Because the return references are held in a varchar field, we have to convert them to an integer in our
+  // order by for the results to be ordered as expected. Hence, we need to use orderByRaw()
+  return ReturnLogModel.query()
+    .select([
+      'returnLogs.id',
+      'returnLogs.dueDate',
+      'returnLogs.endDate',
+      'returnLogs.metadata',
+      'returnLogs.returnId',
+      'returnLogs.returnReference',
+      'returnLogs.startDate',
+      'returnLogs.status'
+    ])
+    .innerJoinRelated('licence')
+    .where('licence.id', licenceId)
+    .orderByRaw('return_logs.start_date desc, return_logs.return_reference::integer desc, return_logs.end_date desc')
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
+}

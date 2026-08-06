@@ -4,19 +4,21 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
+
 import NoticesFixture from '../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../support/fixtures/notifications.fixture.js'
-import { generateLicenceRef, generateUUID } from '../support/generators.js'
 
 // Things we need to stub
-import * as DownloadNotificationService from '../../app/services/notifications/download-notification.service.js'
-import * as ProcessReturnedLetterService from '../../app/services/notifications/process-returned-letter.service.js'
-import * as ViewNotificationService from '../../app/services/notifications/view-notification.service.js'
-import notifyConfig from '../../config/notify.config.js'
+import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
+
+import * as DownloadNotificationService from '../../src/services/notifications/download-notification.service.js'
+import * as ProcessReturnedLetterService from '../../src/services/notifications/process-returned-letter.service.js'
+import * as ViewNotificationService from '../../src/services/notifications/view-notification.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
@@ -249,7 +251,7 @@ describe('Notifications controller', () => {
     describe('/notifications/callbacks/letters', () => {
       describe('POST', () => {
         beforeEach(() => {
-          vi.replaceProperty(notifyConfig, 'callbackToken', 'valid')
+          vi.replaceProperty(NotifyConfig, 'callbackToken', 'valid')
 
           vi.spyOn(ProcessReturnedLetterService, 'default').mockResolvedValue()
         })
@@ -258,7 +260,7 @@ describe('Notifications controller', () => {
           beforeEach(() => {
             options = {
               headers: {
-                authorization: `Bearer ${notifyConfig.callbackToken}`
+                authorization: `Bearer ${NotifyConfig.callbackToken}`
               },
               method: 'POST',
               payload: {

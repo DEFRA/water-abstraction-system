@@ -2,19 +2,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
-import YarStub from '../../../../support/stubs/yar.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as CreateUserDal from '../../../../../app/dal/users/internal/create-user.dal.js'
-import * as CreateVerificationNotificationDal from '../../../../../app/dal/users/internal/create-verification-notification.dal.js'
-import * as DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
-import * as SendVerificationEmailService from '../../../../../app/services/users/internal/setup/send-verification-email.service.js'
-import * as UpdateUserDal from '../../../../../app/dal/users/internal/update-user.dal.js'
+import * as DeleteSessionDal from 'water-abstraction-engine/dal/delete-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as CreateUserDal from '../../../../../src/dal/users/internal/create-user.dal.js'
+import * as CreateVerificationNotificationDal from '../../../../../src/dal/users/internal/create-verification-notification.dal.js'
+import * as SendVerificationEmailService from '../../../../../src/services/users/internal/setup/send-verification-email.service.js'
+import * as UpdateUserDal from '../../../../../src/dal/users/internal/update-user.dal.js'
 
 // Thing under test
-import SubmitCheckService from '../../../../../app/services/users/internal/setup/submit-check.service.js'
+import SubmitCheckService from '../../../../../src/services/users/internal/setup/submit-check.service.js'
 
 describe('Users - Internal - Setup - Submit Check Service', () => {
   let auth

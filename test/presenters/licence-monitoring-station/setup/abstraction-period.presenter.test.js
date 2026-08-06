@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import AbstractionPeriodPresenter from '../../../../app/presenters/licence-monitoring-station/setup/abstraction-period.presenter.js'
+import AbstractionPeriodPresenter from '../../../../src/presenters/licence-monitoring-station/setup/abstraction-period.presenter.js'
 
 describe('Abstraction Period Presenter', () => {
   let session

@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things to stub
-import * as FindAllSearchMatchesService from '../../../app/services/search/find-all-search-matches.service.js'
+import * as FindAllSearchMatchesService from '../../../src/services/search/find-all-search-matches.service.js'
 
 // Thing under test
-import ViewSearchService from '../../../app/services/search/view-search.service.js'
+import ViewSearchService from '../../../src/services/search/view-search.service.js'
 
 describe('Search - View Search service', () => {
   let page

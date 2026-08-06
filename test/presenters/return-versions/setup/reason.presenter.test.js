@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ReasonPresenter from '../../../../app/presenters/return-versions/setup/reason.presenter.js'
+import ReasonPresenter from '../../../../src/presenters/return-versions/setup/reason.presenter.js'
 
 describe('Return Versions Setup - Reason presenter', () => {
   let session

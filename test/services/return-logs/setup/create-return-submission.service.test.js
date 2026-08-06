@@ -2,14 +2,14 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnLogModel from '../../../../app/models/return-log.model.js'
-import ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
-import ReturnSubmissionModel from '../../../../app/models/return-submission.model.js'
-import { timestampForPostgres } from '../../../../app/lib/general.lib.js'
-import { generateReturnId, generateUUID } from '../../../support/generators.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
+import ReturnSubmissionModel from 'water-abstraction-engine/models/return-submission.model.js'
+import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateReturnId, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import CreateReturnSubmissionService from '../../../../app/services/return-logs/setup/create-return-submission.service.js'
+import CreateReturnSubmissionService from '../../../../src/services/return-logs/setup/create-return-submission.service.js'
 
 describe('Return Logs - Setup - Create Return Submission service', () => {
   const metadata = {}

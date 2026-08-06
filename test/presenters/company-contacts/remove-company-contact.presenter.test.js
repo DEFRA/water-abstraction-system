@@ -6,7 +6,7 @@ import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 import LicenceFixture from '../../support/fixtures/licence.fixture.js'
 
 // Thing under test
-import RemoveCompanyContactPresenter from '../../../app/presenters/company-contacts/remove-company-contact.presenter.js'
+import RemoveCompanyContactPresenter from '../../../src/presenters/company-contacts/remove-company-contact.presenter.js'
 
 describe('Company Contacts - Remove Company Contact Presenter', () => {
   let companyContact

@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import { data as chargeCategories } from 'water-abstraction-engine/db/seeds/data/charge-categories.js'
+import { db } from 'water-abstraction-engine/db/db.js'
 import fs from 'fs'
 import path from 'path'
-import { data as chargeCategories } from '../../../../db/seeds/data/charge-categories.js'
-import { db } from '../../../../db/db.js'
 
 // Thing under test
-import WriteTableToFileService from '../../../../app/services/jobs/export/write-table-to-file.service.js'
+import WriteTableToFileService from '../../../../src/services/jobs/export/write-table-to-file.service.js'
 
 const tableName = 'billing_charge_categories'
 const schemaName = 'water'

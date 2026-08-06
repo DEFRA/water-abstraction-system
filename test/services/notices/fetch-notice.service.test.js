@@ -2,12 +2,12 @@
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import EventHelper from '../../support/helpers/event.helper.js'
-import NotificationHelper from '../../support/helpers/notification.helper.js'
-import { generateNoticeReferenceCode } from '../../support/generators.js'
+import EventHelper from 'water-abstraction-engine/test/helpers/event.helper.js'
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
+import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchNoticeService from '../../../app/services/notices/fetch-notice.service.js'
+import FetchNoticeService from '../../../src/services/notices/fetch-notice.service.js'
 
 describe('Notices - Fetch Notice service', () => {
   const pageNumber = '1'

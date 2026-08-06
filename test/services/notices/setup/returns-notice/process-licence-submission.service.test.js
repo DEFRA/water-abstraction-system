@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as CheckLicenceExistsDal from '../../../../../app/dal/notices/setup/check-licence-exists.dal.js'
-import * as FetchDueReturnsForLicenceService from '../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'
+import * as CheckLicenceExistsDal from '../../../../../src/dal/notices/setup/check-licence-exists.dal.js'
+import * as FetchDueReturnsForLicenceService from '../../../../../src/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'
 
 // Thing under test
-import ProcessReturnsNoticeLicenceSubmission from '../../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js'
+import ProcessReturnsNoticeLicenceSubmission from '../../../../../src/services/notices/setup/returns-notice/process-licence-submission.service.js'
 
 describe('Notices - Setup - Returns Notice - Process Returns Notice Licence Submission', () => {
   let dueReturns

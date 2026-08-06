@@ -1,6 +1,11 @@
-import RegionHelper from '../helpers/region.helper.js'
-import { NoticeJourney, NoticeType, NoticeTypes } from '../../../app/lib/static-lookups.lib.js'
-import { generateLicenceRef, generateNoticeReferenceCode, generateReference, generateUUID } from '../generators.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import { NoticeJourney, NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+import {
+  generateLicenceRef,
+  generateNoticeReferenceCode,
+  generateReference,
+  generateUUID
+} from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Creates an abstraction alert stop notice setup session fixture for testing purposes

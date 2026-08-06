@@ -2,14 +2,14 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 import NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
 import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.js'
-import { generateLicenceRef } from '../../../support/generators.js'
-import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
+import { addressToCSV } from '../../../../src/presenters/notices/base.presenter.js'
+import { transformArrayToCSVRow } from '../../../../src/lib/transform-to-csv.lib.js'
 
 // Thing under test
-import DownloadRenewalInvitationPresenter from '../../../../app/presenters/notices/setup/download-renewal-invitation.presenter.js'
+import DownloadRenewalInvitationPresenter from '../../../../src/presenters/notices/setup/download-renewal-invitation.presenter.js'
 
 describe('Notices - Setup - Download Renewal Invitation presenter', () => {
   let recipient

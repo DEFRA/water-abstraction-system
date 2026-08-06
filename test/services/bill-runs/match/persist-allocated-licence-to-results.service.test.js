@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
-import { generateReturnId, generateUUID } from '../../../support/generators.js'
+import ReviewLicenceModel from 'water-abstraction-engine/models/review-licence.model.js'
+import { generateReturnId, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import PersistAllocatedLicenceToResultsService from '../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
+import PersistAllocatedLicenceToResultsService from '../../../../src/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
 
 describe('Persist Allocated Licence to Results service', () => {
   const billRunId = generateUUID()

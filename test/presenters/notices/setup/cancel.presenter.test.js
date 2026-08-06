@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef } from '../../../support/generators.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import CancelPresenter from '../../../../app/presenters/notices/setup/cancel.presenter.js'
+import CancelPresenter from '../../../../src/presenters/notices/setup/cancel.presenter.js'
 
 describe('Notices - Setup - Cancel presenter', () => {
   const referenceCode = 'RNIV-1234'

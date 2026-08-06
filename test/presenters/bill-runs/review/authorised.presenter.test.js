@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Thing under test
-import AuthorisedPresenter from '../../../../app/presenters/bill-runs/review/authorised.presenter.js'
+import AuthorisedPresenter from '../../../../src/presenters/bill-runs/review/authorised.presenter.js'
 
 describe('Bill Runs Review - Authorised presenter', () => {
   let reviewChargeReference

@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
-import { generateUUID } from '../../support/generators.js'
 
 // Thing under test
-import NotificationsTablePresenter from '../../../app/presenters/notifications/notifications-table.presenter.js'
+import NotificationsTablePresenter from '../../../src/presenters/notifications/notifications-table.presenter.js'
 
 describe('Notifications - Notification Table presenter', () => {
   let companyContactId

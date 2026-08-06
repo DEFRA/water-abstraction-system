@@ -1,8 +1,13 @@
-import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
-import PurposeHelper from '../helpers/purpose.helper.js'
-import RegionHelper from '../helpers/region.helper.js'
-import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
-import { generateLicenceRef, generateNationalGridReference, generateReference, generateUUID } from '../generators.js'
+import PrimaryPurposeHelper from 'water-abstraction-engine/test/helpers/primary-purpose.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import SecondaryPurposeHelper from 'water-abstraction-engine/test/helpers/secondary-purpose.helper.js'
+import {
+  generateLicenceRef,
+  generateNationalGridReference,
+  generateReference,
+  generateUUID
+} from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Generates the return log prefix in the format v1:regionCode:licenceRef:reference from a return requirement

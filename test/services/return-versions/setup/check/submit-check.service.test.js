@@ -2,21 +2,21 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 
 // Things we need to stub
-import * as CreateReturnVersionService from '../../../../../app/services/return-versions/setup/check/create-return-version.service.js'
-import * as DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
-import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
-import * as GenerateReturnVersionService from '../../../../../app/services/return-versions/setup/check/generate-return-version.service.js'
-import * as ProcessExistingReturnVersionsService from '../../../../../app/services/return-versions/setup/check/process-existing-return-versions.service.js'
-import * as ProcessLicenceReturnLogsService from '../../../../../app/services/return-logs/process-licence-return-logs.service.js'
-import * as UpdateSucceededReturnLogsDal from '../../../../../app/dal/return-versions/update-succeeded-return-logs.dal.js'
-import * as VoidReturnLogsService from '../../../../../app/services/return-logs/void-return-logs.service.js'
-import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
+import * as DeleteSessionDal from 'water-abstraction-engine/dal/delete-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as CreateReturnVersionService from '../../../../../src/services/return-versions/setup/check/create-return-version.service.js'
+import * as GenerateReturnVersionService from '../../../../../src/services/return-versions/setup/check/generate-return-version.service.js'
+import * as ProcessExistingReturnVersionsService from '../../../../../src/services/return-versions/setup/check/process-existing-return-versions.service.js'
+import * as ProcessLicenceReturnLogsService from '../../../../../src/services/return-logs/process-licence-return-logs.service.js'
+import * as UpdateSucceededReturnLogsDal from '../../../../../src/dal/return-versions/update-succeeded-return-logs.dal.js'
+import * as VoidReturnLogsService from '../../../../../src/services/return-logs/void-return-logs.service.js'
 
 // Thing under test
-import SubmitCheckService from '../../../../../app/services/return-versions/setup/check/submit-check.service.js'
+import SubmitCheckService from '../../../../../src/services/return-versions/setup/check/submit-check.service.js'
 
 describe('Return Versions - Setup - Submit Check service', () => {
   let generatedReturnVersionData
@@ -127,7 +127,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
 
     vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
 
-    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // BaseRequest depends on the GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

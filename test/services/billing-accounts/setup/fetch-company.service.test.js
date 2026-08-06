@@ -4,10 +4,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import http2 from 'node:http2'
 
 // Things we need to stub
-import * as LookupCompanysHouseNumberRequest from '../../../../app/requests/companies-house/lookup-companies-house-number.request.js'
+import * as LookupCompanysHouseNumberRequest from '../../../../src/requests/companies-house/lookup-companies-house-number.request.js'
 
 // Thing under test
-import FetchCompanyService from '../../../../app/services/billing-accounts/setup/fetch-company.service.js'
+import FetchCompanyService from '../../../../src/services/billing-accounts/setup/fetch-company.service.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 

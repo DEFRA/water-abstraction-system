@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Thing under test
-import NoReturnsRequiredValidator from '../../../../app/validators/return-versions/setup/no-returns-required.validator.js'
+import NoReturnsRequiredValidator from '../../../../src/validators/return-versions/setup/no-returns-required.validator.js'
 
 describe('Return Versions Setup - No Returns Required validator', () => {
   describe('when valid data is provided', () => {

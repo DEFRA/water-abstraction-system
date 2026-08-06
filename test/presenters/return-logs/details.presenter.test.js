@@ -2,13 +2,13 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { formatNumber } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { unitNames } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
-import { formatNumber } from '../../../app/presenters/base.presenter.js'
-import { today } from '../../../app/lib/general.lib.js'
-import { unitNames } from '../../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-import DetailsPresenter from '../../../app/presenters/return-logs/details.presenter.js'
+import DetailsPresenter from '../../../src/presenters/return-logs/details.presenter.js'
 
 describe('Return Logs - Details presenter', () => {
   let auth

@@ -2,20 +2,20 @@
  * @module LicenceAbstractionDataSeeder
  */
 
-import LicenceHelper from '../helpers/licence.helper.js'
-import LicenceVersionHelper from '../helpers/licence-version.helper.js'
-import LicenceVersionPurposeHelper from '../helpers/licence-version-purpose.helper.js'
-import LicenceVersionPurposePointHelper from '../helpers/licence-version-purpose-point.helper.js'
-import PointHelper from '../helpers/point.helper.js'
-import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
-import PurposeHelper from '../helpers/purpose.helper.js'
-import RegionHelper from '../helpers/region.helper.js'
-import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import LicenceVersionPurposeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposePointHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose-point.helper.js'
+import PointHelper from 'water-abstraction-engine/test/helpers/point.helper.js'
+import PrimaryPurposeHelper from 'water-abstraction-engine/test/helpers/primary-purpose.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import SecondaryPurposeHelper from 'water-abstraction-engine/test/helpers/secondary-purpose.helper.js'
 import {
   generateLicenceRef,
   generateLicenceVersionExternalId,
   generateLicenceVersionPurposeExternalId
-} from '../generators.js'
+} from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Seeds a licence with all the related records to get a 'real' set of abstraction data

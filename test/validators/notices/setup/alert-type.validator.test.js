@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import AbstractionAlertSessionData from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-import AlertTypeValidator from '../../../../app/validators/notices/setup/alert-type.validator.js'
+import AlertTypeValidator from '../../../../src/validators/notices/setup/alert-type.validator.js'
 
 describe('Notices - Setup - Alert Type validator', () => {
   let licenceMonitoringStations

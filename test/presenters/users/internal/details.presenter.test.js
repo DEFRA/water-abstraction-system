@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Thing under test
-import DetailsPresenter from '../../../../app/presenters/users/internal/details.presenter.js'
+import DetailsPresenter from '../../../../src/presenters/users/internal/details.presenter.js'
 
 describe('Users - Internal - Details Presenter', () => {
   let auth

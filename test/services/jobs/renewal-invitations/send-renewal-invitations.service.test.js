@@ -2,17 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef, generateUUID } from '../../../support/generators.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
-import * as CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
-import * as FetchRenewalRecipients from '../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js'
-import * as SendNoticeService from '../../../../app/services/notices/setup/send/send-notice.service.js'
-import NotifyConfig from '../../../../config/notify.config.js'
+import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
+
+import * as CreateNoticeService from '../../../../src/services/notices/setup/create-notice.service.js'
+import * as CreateNotificationsService from '../../../../src/services/notices/setup/create-notifications.service.js'
+import * as FetchRenewalRecipients from '../../../../src/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js'
+import * as SendNoticeService from '../../../../src/services/notices/setup/send/send-notice.service.js'
 
 // Thing under test
-import SendRenewalInvitations from '../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js'
+import SendRenewalInvitations from '../../../../src/services/jobs/renewal-invitations/send-renewal-invitations.service.js'
 
 describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => {
   const days = '300'

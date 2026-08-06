@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import RemovePresenter from '../../../../app/presenters/return-versions/setup/remove.presenter.js'
+import RemovePresenter from '../../../../src/presenters/return-versions/setup/remove.presenter.js'
 
 describe('Return Versions Setup - Remove presenter', () => {
   const requirementIndex = 0

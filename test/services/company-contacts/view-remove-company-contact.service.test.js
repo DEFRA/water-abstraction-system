@@ -5,12 +5,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-import * as FetchAbstractionAlertLicencesDal from '../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
-import * as FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
-import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchAbstractionAlertLicencesDal from '../../../src/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
+import * as FetchCompanyContactDal from '../../../src/dal/company-contacts/fetch-company-contact.dal.js'
+import * as FetchCompanyService from '../../../src/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-import ViewRemoveCompanyContactService from '../../../app/services/company-contacts/view-remove-company-contact.service.js'
+import ViewRemoveCompanyContactService from '../../../src/services/company-contacts/view-remove-company-contact.service.js'
 
 describe('Company Contacts - View Remove Company Contact Service', () => {
   let companyContact

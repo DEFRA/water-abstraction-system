@@ -2,19 +2,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateLicenceRef } from '../../../support/generators.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Test helpers
-import YarStub from '../../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import * as ProcessRenewalsNoticeLicenceSubmission from '../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js'
-import * as ProcessReturnsNoticeLicenceSubmission from '../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as ProcessRenewalsNoticeLicenceSubmission from '../../../../src/services/notices/setup/renewal-notice/process-licence-submission.service.js'
+import * as ProcessReturnsNoticeLicenceSubmission from '../../../../src/services/notices/setup/returns-notice/process-licence-submission.service.js'
 
 // Thing under test
-import SubmitLicenceService from '../../../../app/services/notices/setup/submit-licence.service.js'
+import SubmitLicenceService from '../../../../src/services/notices/setup/submit-licence.service.js'
 
 describe('Notices - Setup - Submit Licence service', () => {
   let licenceRef

@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import { generateUUID } from '../../../support/generators.js'
 
 // Things we need to stub
-import * as FetchExistingCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchExistingCompaniesService from '../../../../src/services/billing-accounts/setup/fetch-existing-companies.service.js'
 
 // Thing under test
-import ViewExistingAccountService from '../../../../app/services/billing-accounts/setup/view-existing-account.service.js'
+import ViewExistingAccountService from '../../../../src/services/billing-accounts/setup/view-existing-account.service.js'
 
 describe('Billing Accounts - Setup - View Existing Account service', () => {
   const fetchResults = _companies()

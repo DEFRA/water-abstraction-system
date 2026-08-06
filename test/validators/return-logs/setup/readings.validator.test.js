@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ReadingsValidator from '../../../../app/validators/return-logs/setup/readings.validator.js'
+import ReadingsValidator from '../../../../src/validators/return-logs/setup/readings.validator.js'
 
 describe('Return Logs Setup - Readings validator', () => {
   const session = {

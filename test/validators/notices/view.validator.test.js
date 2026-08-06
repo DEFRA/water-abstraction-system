@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ViewValidator from '../../../app/validators/notices/view.validator.js'
+import ViewValidator from '../../../src/validators/notices/view.validator.js'
 
 describe('Notices - View validator', () => {
   let payload

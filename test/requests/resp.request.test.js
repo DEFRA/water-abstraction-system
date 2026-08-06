@@ -4,10 +4,10 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import http2 from 'node:http2'
 
 // Things we need to stub
-import * as BaseRequest from '../../app/requests/base.request.js'
+import * as BaseRequest from 'water-abstraction-engine/requests/base.request.js'
 
 // Thing under test
-import * as RespRequest from '../../app/requests/resp.request.js'
+import * as RespRequest from '../../src/requests/resp.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 

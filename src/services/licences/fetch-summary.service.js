@@ -1,0 +1,89 @@
+/**
+ * Fetches data needed for the view '/licences/{id}/summary` page
+ * @module FetchSummaryService
+ */
+
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+
+/**
+ * Fetch the matching licence and return data needed for the view licence page summary tab
+ *
+ * Was built to provide the data needed for the '/licences/{id}/summary' page
+ *
+ * @param {string} licenceId - The UUID for the licence to fetch
+ *
+ * @returns {Promise<module:LicenceModel>} the data needed to populate the view licence page summary tab
+ */
+export default async function fetchSummaryService(licenceId) {
+  return _fetch(licenceId)
+}
+
+async function _fetch(licenceId) {
+  return LicenceModel.query()
+    .findById(licenceId)
+    .select(['expiredDate', 'id', 'startDate', 'issueDate'])
+    .modify('licenceName')
+    .modify('primaryUser')
+    .modify('currentVersion')
+    .modify('licenceHolder')
+    .withGraphFetched('region')
+    .modifyGraph('region', (regionBuilder) => {
+      regionBuilder.select(['id', 'displayName'])
+    })
+    .withGraphFetched('licenceVersions')
+    .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
+      licenceVersionsBuilder
+        .select(['id', 'licenceId'])
+        .withGraphFetched('licenceVersionPurposes')
+        .modifyGraph('licenceVersionPurposes', (licenceVersionPurposesBuilder) => {
+          licenceVersionPurposesBuilder
+            .select([
+              'id',
+              'abstractionPeriodStartDay',
+              'abstractionPeriodStartMonth',
+              'abstractionPeriodEndDay',
+              'abstractionPeriodEndMonth',
+              'annualQuantity',
+              'dailyQuantity',
+              'hourlyQuantity',
+              'instantQuantity'
+            ])
+            .withGraphFetched('points')
+            .modifyGraph('points', (pointsBuilder) => {
+              pointsBuilder
+                .select(['points.description', 'points.id', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
+                .withGraphFetched('source')
+                .modifyGraph('source', (sourceBuilder) => {
+                  sourceBuilder.select(['sources.description', 'sources.id'])
+                })
+            })
+            .withGraphFetched('purpose')
+            .modifyGraph('purpose', (purposeBuilder) => {
+              purposeBuilder.select(['id', 'description'])
+            })
+            .withGraphFetched('licenceVersionPurposeConditions')
+            .modifyGraph('licenceVersionPurposeConditions', (licenceVersionPurposeConditionsBuilder) => {
+              licenceVersionPurposeConditionsBuilder
+                .select(['id'])
+                .withGraphFetched('licenceVersionPurposeConditionType')
+                .modifyGraph('licenceVersionPurposeConditionType', (licenceVersionPurposeConditionTypeBuilder) => {
+                  licenceVersionPurposeConditionTypeBuilder.select(['id', 'displayTitle'])
+                })
+            })
+        })
+    })
+    .withGraphFetched('licenceMonitoringStations')
+    .modifyGraph('licenceMonitoringStations', (licenceMonitoringStationsBuilder) => {
+      licenceMonitoringStationsBuilder
+        .select(['id'])
+        .whereNull('deletedAt')
+        .withGraphFetched('monitoringStation')
+        .modifyGraph('monitoringStation', (monitoringStationBuilder) => {
+          monitoringStationBuilder.select(['id', 'label'])
+        })
+    })
+    .withGraphFetched('workflows')
+    .modifyGraph('workflows', (workflowsBuilder) => {
+      workflowsBuilder.select(['id', 'status']).whereNull('deletedAt')
+    })
+}

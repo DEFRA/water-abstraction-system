@@ -2,10 +2,10 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
 
 // Thing under test
-import CheckLicenceExistsDal from '../../../../app/dal/notices/setup/check-licence-exists.dal.js'
+import CheckLicenceExistsDal from '../../../../src/dal/notices/setup/check-licence-exists.dal.js'
 
 describe('Notices - Setup - Check Licence Exists DAL', () => {
   let licence

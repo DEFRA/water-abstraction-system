@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import TypePresenter from '../../../../app/presenters/bill-runs/setup/type.presenter.js'
+import TypePresenter from '../../../../src/presenters/bill-runs/setup/type.presenter.js'
 
 describe('Bill Runs - Setup - Type presenter', () => {
   let session

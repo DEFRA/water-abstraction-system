@@ -2,20 +2,20 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import MonitoringStationHelper from 'water-abstraction-engine/test/helpers/monitoring-station.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
 import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
 import * as EmptyLicenceSeeder from '../../support/seeders/empty-licence.seeder.js'
-import BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
-import CompanyHelper from '../../support/helpers/company.helper.js'
-import MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
-import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
-import UserHelper from '../../support/helpers/user.helper.js'
 
 // Things we need to stub
-import DatabaseConfig from '../../../config/database.config.js'
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
 
 // Thing under test
-import FetchSearchResultsService from '../../../app/services/search/fetch-search-results.service.js'
+import FetchSearchResultsService from '../../../src/services/search/fetch-search-results.service.js'
 
 describe('Search - Fetch Search Results service', () => {
   const billingAccounts = []

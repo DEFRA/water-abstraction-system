@@ -2,22 +2,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import AddressHelper from '../../../support/helpers/address.helper.js'
-import BillingAccountAddressHelper from '../../../support/helpers/billing-account-address.helper.js'
-import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
-import CompanyHelper from '../../../support/helpers/company.helper.js'
-import ContactHelper from '../../../support/helpers/contact.helper.js'
+import AddressHelper from 'water-abstraction-engine/test/helpers/address.helper.js'
+import BillingAccountAddressHelper from 'water-abstraction-engine/test/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import ContactHelper from 'water-abstraction-engine/test/helpers/contact.helper.js'
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import CustomersFixture from '../../../support/fixtures/customers.fixture.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub
-import * as FetchCompanyContactsService from '../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js'
-import * as FetchCompanyService from '../../../../app/services/billing-accounts/setup/fetch-company.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import * as SendCustomerChangeService from '../../../../app/services/billing-accounts/send-customer-change.service.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchCompanyContactsService from '../../../../src/services/billing-accounts/setup/fetch-company-contacts.service.js'
+import * as FetchCompanyService from '../../../../src/services/billing-accounts/setup/fetch-company.service.js'
+import * as SendCustomerChangeService from '../../../../src/services/billing-accounts/send-customer-change.service.js'
 
 // Thing under test
-import SubmitCheckService from '../../../../app/services/billing-accounts/setup/submit-check.service.js'
+import SubmitCheckService from '../../../../src/services/billing-accounts/setup/submit-check.service.js'
 
 describe('Billing Accounts - Setup - Submit Check Service', () => {
   let address

@@ -2,16 +2,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import SessionModel from '../../../../../app/models/session.model.js'
+import SessionModel from 'water-abstraction-engine/models/session.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import UsersFixture from '../../../../support/fixtures/users.fixture.js'
-import { generateUUID } from '../../../../support/generators.js'
 
 // Things to stub
-import * as FetchLicencesDal from '../../../../../app/dal/users/external/setup/fetch-licences.dal.js'
-import * as FetchUsersDal from '../../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchLicencesDal from '../../../../../src/dal/users/external/setup/fetch-licences.dal.js'
+import * as FetchUsersDal from '../../../../../src/dal/users/fetch-user.dal.js'
 
 // Thing under test
-import InitiateSessionService from '../../../../../app/services/users/external/setup/initiate-session.service.js'
+import InitiateSessionService from '../../../../../src/services/users/external/setup/initiate-session.service.js'
 
 describe('Users - External - Setup - Initiate Session service', () => {
   let back

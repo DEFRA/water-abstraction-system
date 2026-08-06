@@ -2,20 +2,20 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import RegionHelper from '../../../support/helpers/region.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 import TwoPartTariffFixture from '../../../support/fixtures/two-part-tariff.fixture.js'
 
 // Things we need to stub
-import * as GenerateTwoPartTariffTransactionService from '../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js'
-import * as SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
-import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
-import BillModel from '../../../../app/models/bill.model.js'
-import BillRunError from '../../../../app/errors/bill-run.error.js'
-import BillRunModel from '../../../../app/models/bill-run.model.js'
-import TransactionModel from '../../../../app/models/transaction.model.js'
+import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model.js'
+import BillModel from 'water-abstraction-engine/models/bill.model.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import TransactionModel from 'water-abstraction-engine/models/transaction.model.js'
+import * as GenerateTwoPartTariffTransactionService from '../../../../src/services/bill-runs/generate-two-part-tariff-transaction.service.js'
+import * as SendTransactionsService from '../../../../src/services/bill-runs/send-transactions.service.js'
+import BillRunError from '../../../../src/errors/bill-run.error.js'
 
 // Thing under test
-import ProcessBillingPeriodService from '../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js'
+import ProcessBillingPeriodService from '../../../../src/services/bill-runs/two-part-tariff/process-billing-period.service.js'
 
 describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
   const billingPeriod = {

@@ -5,7 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import * as PreviousBillingDataSeeder from '../../support/seeders/previous-billing-data.seeder.js'
 
 // Thing under test
-import FetchPreviousTransactionsService from '../../../app/services/bill-runs/fetch-previous-transactions.service.js'
+import FetchPreviousTransactionsService from '../../../src/services/bill-runs/fetch-previous-transactions.service.js'
 
 describe('Bill Runs - Fetch Previous Transactions service', () => {
   let seededData

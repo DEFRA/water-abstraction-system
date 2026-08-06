@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import RecipientsFixture from '../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
-import * as BasePresenter from '../../../app/presenters/notices/base.presenter.js'
+import * as BasePresenter from '../../../src/presenters/notices/base.presenter.js'
 
 describe('Notices - Base presenter', () => {
   afterEach(() => {

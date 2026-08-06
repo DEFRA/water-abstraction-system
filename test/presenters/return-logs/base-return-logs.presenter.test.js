@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { unitNames } from '../../../app/lib/static-lookups.lib.js'
+import { unitNames } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 // Thing under test
-import * as BaseReturnLogsPresenter from '../../../app/presenters/return-logs/base-return-logs.presenter.js'
+import * as BaseReturnLogsPresenter from '../../../src/presenters/return-logs/base-return-logs.presenter.js'
 
 describe('Return Logs - Base Return Logs presenter', () => {
   describe('#formatMeterDetails()', () => {

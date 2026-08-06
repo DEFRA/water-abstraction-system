@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateUUID } from '../../../support/generators.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Test helpers
-import YarStub from '../../../support/stubs/yar.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Thing under test
-import SubmitReviewService from '../../../../app/services/bill-runs/review/submit-review.service.js'
+import SubmitReviewService from '../../../../src/services/bill-runs/review/submit-review.service.js'
 
 describe('Bill Runs - Review - Submit Review Service', () => {
   const billRunId = generateUUID()

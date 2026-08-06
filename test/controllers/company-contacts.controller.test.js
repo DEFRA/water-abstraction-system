@@ -4,18 +4,18 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { generateUUID } from '../support/generators.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as SubmitRemoveCompanyContactService from '../../app/services/company-contacts/submit-remove-company-contact.service.js'
-import * as ViewCommunicationsService from '../../app/services/company-contacts/view-communications.service.js'
-import * as ViewContactDetailsService from '../../app/services/company-contacts/view-contact-details.service.js'
-import * as ViewRemoveCompanyContactService from '../../app/services/company-contacts/view-remove-company-contact.service.js'
+import * as SubmitRemoveCompanyContactService from '../../src/services/company-contacts/submit-remove-company-contact.service.js'
+import * as ViewCommunicationsService from '../../src/services/company-contacts/view-communications.service.js'
+import * as ViewContactDetailsService from '../../src/services/company-contacts/view-contact-details.service.js'
+import * as ViewRemoveCompanyContactService from '../../src/services/company-contacts/view-remove-company-contact.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
-import { postRequestOptions } from '../support/general.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
+import { init } from '../../src/server.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 

@@ -2,22 +2,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import WorkflowModel from '../../../../app/models/workflow.model.js'
-import { generateUUID } from '../../../support/generators.js'
+import WorkflowModel from 'water-abstraction-engine/models/workflow.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchLicenceUpdatesService from '../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js'
-import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as FetchLicenceUpdatesService from '../../../../src/services/jobs/licence-updates/fetch-licence-updates.service.js'
 
 // Thing under test
-import ProcessLicenceUpdatesService from '../../../../app/services/jobs/licence-updates/process-licence-updates.service.js'
+import ProcessLicenceUpdatesService from '../../../../src/services/jobs/licence-updates/process-licence-updates.service.js'
 
 describe('Jobs - Licence Updates - Process Licence Updates service', () => {
   let fetchResults
   let notifierStub
 
   beforeEach(async () => {
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()

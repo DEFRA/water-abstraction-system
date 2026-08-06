@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import ContactTypePresenter from '../../../../app/presenters/notices/setup/contact-type.presenter.js'
+import ContactTypePresenter from '../../../../src/presenters/notices/setup/contact-type.presenter.js'
 
 describe('Notices - Setup - Contact Type presenter', () => {
   let session

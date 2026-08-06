@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import AlertThresholdsValidator from '../../../../app/validators/notices/setup/alert-thresholds.validator.js'
+import AlertThresholdsValidator from '../../../../src/validators/notices/setup/alert-thresholds.validator.js'
 
 describe('Notices Setup - Setup - Alert Thresholds validator', () => {
   let payload

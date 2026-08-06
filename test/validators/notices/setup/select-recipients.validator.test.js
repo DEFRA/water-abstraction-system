@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import SelectRecipientsValidator from '../../../../app/validators/notices/setup/select-recipients.validator.js'
+import SelectRecipientsValidator from '../../../../src/validators/notices/setup/select-recipients.validator.js'
 
 describe('Select Recipients Validator', () => {
   let payload

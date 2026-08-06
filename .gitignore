@@ -43,7 +43,7 @@ coverage.html
 lcov.info
 
 # Build assets
-app/public/build
+src/public/build
 
 # JSDoc documentation output
 docs/

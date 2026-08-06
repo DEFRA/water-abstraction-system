@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import FactorsValidator from '../../../../app/validators/bill-runs/review/factors.validator.js'
+import FactorsValidator from '../../../../src/validators/bill-runs/review/factors.validator.js'
 
 describe('Bill Runs Review - Factors validator', () => {
   let payload

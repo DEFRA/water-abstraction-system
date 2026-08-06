@@ -6,13 +6,17 @@
 [![shai-hulud-detect](https://github.com/DEFRA/water-abstraction-system/actions/workflows/shai-hulud-detect.yml/badge.svg)](https://github.com/DEFRA/water-abstraction-system/actions/workflows/shai-hulud-detect.yml)
 [![Licence](https://img.shields.io/badge/Licence-OGLv3-blue.svg)](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3)
 
-This API provides an interface for calculating charges, queuing transactions and generating transaction files used to produce invoices.
+A Node.js web app built using [Hapi](https://hapi.dev/). Designed and built specifically as the internal-facing app for the Water Resource Licencing service to help users to manage the service.
+
+It's partner is the external-facing app [water-abstraction-external](https://github.com/DEFRA/water-abstraction-external), which is used by external users to manage their licences and submit abstraction returns.
+
+Both are powered by the shared functionality contained in the [water-abstraction-engine](https://github.com/DEFRA/water-abstraction-engine).
 
 ## Prerequisites
 
 Make sure you already have:
 
-- [Node.js v22.\*](https://nodejs.org/en/)
+- [Node.js v24.\*](https://nodejs.org/en/)
 - [PostgreSQL v15](https://www.postgresql.org/)
 
 ## Running locally
@@ -33,15 +37,7 @@ Refer to the [config files](config) for details of all the configuration used.
 
 ## Scaffolding
 
-We use a set of tooling referred to as [Scaffolding](templates/README.md) to generate boilerplate templates. This system is designed for ongoing use to ensure consistency and alignment with our project standards whenever features / journeys are added.
-
-## Contributing to this project
-
-If you have an idea you'd like to contribute please log an issue.
-
-All contributions should be submitted via a pull request.
-
-The code style is dictated by [Prettier](https://prettier.io/), and we follow [StandardJS](https://standardjs.com/) code rules as implemented by [neostandard](https://github.com/neostandard/neostandard). This is all managed through [ESLint](https://eslint.org/) so should play nice with all IDE's.
+We use a set of tooling referred to as [Scaffolding](https://github.com/DEFRA/water-abstraction-engine/blob/main/bin/templates/README.md) to generate boilerplate templates. This system is designed for ongoing use to ensure consistency and alignment with our project standards whenever features / journeys are added.
 
 ## License
 

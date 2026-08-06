@@ -2,17 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
-import SessionModelStub from '../../../support/stubs/session.stub.js'
-import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as FetchCompanyContactsDal from '../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js'
-import * as FetchNotificationService from '../../../../app/services/company-contacts/fetch-notification.service.js'
-import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as FetchCompanyContactsDal from '../../../../src/dal/company-contacts/setup/fetch-company-contacts.dal.js'
+import * as FetchNotificationService from '../../../../src/services/company-contacts/fetch-notification.service.js'
 
 // Thing under test
-import ViewCheckService from '../../../../app/services/company-contacts/setup/view-check.service.js'
+import ViewCheckService from '../../../../src/services/company-contacts/setup/view-check.service.js'
 
 describe('Company Contacts - Setup - Check Service', () => {
   let company

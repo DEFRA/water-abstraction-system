@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
+import { yesterday } from 'water-abstraction-engine/test/general.js'
 import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
-import { generateLicenceRef } from '../../../support/generators.js'
-import { yesterday } from '../../../support/general.js'
 
 // Thing under test
-import LicenceNumberValidator from '../../../../app/validators/licence-monitoring-station/setup/licence-number.validator.js'
+import LicenceNumberValidator from '../../../../src/validators/licence-monitoring-station/setup/licence-number.validator.js'
 
 describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
   let licence

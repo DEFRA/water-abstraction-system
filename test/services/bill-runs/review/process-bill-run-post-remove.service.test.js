@@ -2,11 +2,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as GenerateTwoPartTariffBillRunService from '../../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
-import BillRunModel from '../../../../app/models/bill-run.model.js'
+import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import * as GenerateTwoPartTariffBillRunService from '../../../../src/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
 
 // Thing under test
-import ProcessBillRunPostRemoveService from '../../../../app/services/bill-runs/review/process-bill-run-post-remove.service.js'
+import ProcessBillRunPostRemoveService from '../../../../src/services/bill-runs/review/process-bill-run-post-remove.service.js'
 
 describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
   const billRunId = 'd4b76592-8f98-4064-892c-399ff83928f7'

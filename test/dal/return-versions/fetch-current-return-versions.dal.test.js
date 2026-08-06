@@ -2,12 +2,12 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
-import ReturnVersionModel from '../../../app/models/return-version.model.js'
-import { generateUUID } from '../../support/generators.js'
+import ReturnVersionHelper from 'water-abstraction-engine/test/helpers/return-version.helper.js'
+import ReturnVersionModel from 'water-abstraction-engine/models/return-version.model.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things under test
-import FetchCurrentReturnVersionsDal from '../../../app/dal/return-versions/fetch-current-return-versions.dal.js'
+import FetchCurrentReturnVersionsDal from '../../../src/dal/return-versions/fetch-current-return-versions.dal.js'
 
 describe('DAL - Return Versions - Fetch Current Return Versions dal', () => {
   let licenceId

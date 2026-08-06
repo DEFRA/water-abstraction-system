@@ -2,12 +2,12 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import LicenceSupplementaryYearHelper from '../../../support/helpers/licence-supplementary-year.helper.js'
-import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceSupplementaryYearHelper from 'water-abstraction-engine/test/helpers/licence-supplementary-year.helper.js'
+import LicenceSupplementaryYearModel from 'water-abstraction-engine/models/licence-supplementary-year.model.js'
 
 // Thing under test
-import FetchLicenceSupplementaryYearsService from '../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js'
+import FetchLicenceSupplementaryYearsService from '../../../../src/services/bill-runs/setup/fetch-licence-supplementary-years.service.js'
 
 describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => {
   const regionId = 'acbfbba3-d5ac-422e-9e48-8683c1797e86'

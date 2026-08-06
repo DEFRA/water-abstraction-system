@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceVersionModel from '../../../app/models/licence-version.model.js'
-import { generateLicenceRef, generateUUID } from '../../support/generators.js'
+import LicenceVersionModel from 'water-abstraction-engine/models/licence-version.model.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchHistoryService from '../../../app/services/licences/fetch-history.service.js'
-import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchHistoryService from '../../../src/services/licences/fetch-history.service.js'
+import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
 
 // Thing under test
-import ViewHistoryService from '../../../app/services/licences/view-history.service.js'
+import ViewHistoryService from '../../../src/services/licences/view-history.service.js'
 
 describe('Licences - View History service', () => {
   let auth

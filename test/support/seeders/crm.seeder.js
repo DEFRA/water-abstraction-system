@@ -2,22 +2,22 @@
  * @module CRMSeeder
  */
 
-import BillingAccountHelper from '../helpers/billing-account.helper.js'
-import ChangeReasonHelper from '../helpers/change-reason.helper.js'
-import ChargeVersionHelper from '../helpers/charge-version.helper.js'
-import CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
-import CompanyHelper from '../helpers/company.helper.js'
-import ContactHelper from '../../support/helpers/contact.helper.js'
-import LicenceDocumentHeaderHelper from '../helpers/licence-document-header.helper.js'
-import LicenceDocumentHelper from '../../support/helpers/licence-document.helper.js'
-import LicenceDocumentRoleHelper from '../helpers/licence-document-role.helper.js'
-import LicenceEntityHelper from '../helpers/licence-entity.helper.js'
-import LicenceEntityRoleHelper from '../helpers/licence-entity-role.helper.js'
-import LicenceHelper from '../helpers/licence.helper.js'
-import LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
-import LicenceVersionHelper from '../helpers/licence-version.helper.js'
-import UserModel from '../helpers/user.helper.js'
-import { generateLicenceRef } from '../generators.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import ChangeReasonHelper from 'water-abstraction-engine/test/helpers/change-reason.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import CompanyContactHelper from 'water-abstraction-engine/test/helpers/company-contact.helper.js'
+import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
+import ContactHelper from 'water-abstraction-engine/test/helpers/contact.helper.js'
+import LicenceDocumentHeaderHelper from 'water-abstraction-engine/test/helpers/licence-document-header.helper.js'
+import LicenceDocumentHelper from 'water-abstraction-engine/test/helpers/licence-document.helper.js'
+import LicenceDocumentRoleHelper from 'water-abstraction-engine/test/helpers/licence-document-role.helper.js'
+import LicenceEntityHelper from 'water-abstraction-engine/test/helpers/licence-entity.helper.js'
+import LicenceEntityRoleHelper from 'water-abstraction-engine/test/helpers/licence-entity-role.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceRoleHelper from 'water-abstraction-engine/test/helpers/licence-role.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import UserModel from 'water-abstraction-engine/test/helpers/user.helper.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * Seed CRM data

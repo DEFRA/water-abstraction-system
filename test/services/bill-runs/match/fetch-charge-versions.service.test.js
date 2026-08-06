@@ -2,23 +2,23 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import ChangeReasonHelper from 'water-abstraction-engine/test/helpers/change-reason.helper.js'
+import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import LicenceSupplementaryYearHelper from 'water-abstraction-engine/test/helpers/licence-supplementary-year.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import * as CRMContactsSeeder from '../../../support/seeders/crm-contacts.seeder.js'
 import * as EmptyLicenceSeeder from '../../../support/seeders/empty-licence.seeder.js'
-import BillRunHelper from '../../../support/helpers/bill-run.helper.js'
-import ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
-import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
-import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
-import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
-import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import LicenceSupplementaryYearHelper from '../../../support/helpers/licence-supplementary-year.helper.js'
-import PurposeHelper from '../../../support/helpers/purpose.helper.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
-import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
-import { generateUUID } from '../../../support/generators.js'
 
 // Thing under test
-import FetchChargeVersionsService from '../../../../app/services/bill-runs/match/fetch-charge-versions.service.js'
+import FetchChargeVersionsService from '../../../../src/services/bill-runs/match/fetch-charge-versions.service.js'
 
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const PURPOSE_SPRAY_IRRIGATION_INDEX = 41

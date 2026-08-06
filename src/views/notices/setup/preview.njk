@@ -1,0 +1,19 @@
+{% extends 'layout.njk' %}
+
+{% from "water-abstraction-engine/views/macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% block pageContent %}
+  {% if contents === 'error' %}
+    <p>Failed to generate a preview for this notice. <a href="{{ refreshPageLink }}" class="govuk-link">Try again</a>.</p>
+  {% else %}
+    <div class="govuk-body message-preview">
+      {% if messageType === 'letter' %}
+        <p>{{ newLineArrayItems(address) }}</p>
+      {% else %}
+        <p>Sent to: {{ address }}</p>
+      {% endif %}
+
+      {{ contents | markdown | safe }}
+    </div>
+  {% endif %}
+{% endblock %}

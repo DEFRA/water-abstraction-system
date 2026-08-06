@@ -1,5 +1,5 @@
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 import UsersFixture from './users.fixture.js'
-import { generateLicenceRef, generateUUID } from '../generators.js'
 
 /**
  * Creates an external user unregistration session fixture for testing purposes

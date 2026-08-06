@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
-import LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
-import PurposeHelper from '../../../support/helpers/purpose.helper.js'
+import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
+import LicenceVersionPurposeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
 
 // Thing under test
-import FetchPurposesService from '../../../../app/services/return-versions/setup/fetch-purposes.service.js'
+import FetchPurposesService from '../../../../src/services/return-versions/setup/fetch-purposes.service.js'
 
 describe('Return Versions - Setup - Fetch Purposes service', () => {
   let licenceVersion

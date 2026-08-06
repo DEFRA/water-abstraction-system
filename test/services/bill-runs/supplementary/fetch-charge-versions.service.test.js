@@ -2,17 +2,17 @@
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
-import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
-import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
-import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
-import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
-import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
+import ChangeReasonHelper from 'water-abstraction-engine/test/helpers/change-reason.helper.js'
+import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helper.js'
 
 // Thing under test
-import FetchChargeVersionsService from '../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js'
+import FetchChargeVersionsService from '../../../../src/services/bill-runs/supplementary/fetch-charge-versions.service.js'
 
 const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
 const REGION_THAMES_INDEX = 6

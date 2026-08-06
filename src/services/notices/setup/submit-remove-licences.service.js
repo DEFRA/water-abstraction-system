@@ -1,0 +1,62 @@
+/**
+ * Orchestrates validating the data for the notice setup remove licences page
+ * @module SubmitRemoveLicencesService
+ */
+
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
+
+import FetchLicenceRefsWithDueReturnsService from './fetch-licence-refs-with-due-returns.service.js'
+import RemoveLicencesPresenter from '../../../presenters/notices/setup/remove-licences.presenter.js'
+import RemoveLicencesValidator from '../../../validators/notices/setup/remove-licences.validator.js'
+
+/**
+ * Orchestrates validating the data for the notice setup remove licences page
+ *
+ * @param {string} sessionId - The UUID for setup notice session record
+ * @param {object} payload - The submitted form data
+ *
+ * @returns {Promise<object>} An object containing where to redirect to if there are no errors else the page data for the view
+ * including the validation error details
+ */
+export default async function submitRemoveLicencesService(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
+
+  const licenceRefsWithDueReturns = await _fetchLicenceRefsWithDueReturns(session)
+
+  const validationResult = _validate(payload, licenceRefsWithDueReturns)
+
+  if (validationResult) {
+    const formattedData = RemoveLicencesPresenter(payload.removeLicences, session)
+
+    return {
+      activeNavBar: 'notices',
+      error: validationResult,
+      ...formattedData
+    }
+  }
+
+  await _save(session, payload)
+
+  return {
+    redirect: `${sessionId}/check`
+  }
+}
+
+async function _fetchLicenceRefsWithDueReturns(session) {
+  const { determinedReturnsPeriod, noticeType } = session
+
+  return FetchLicenceRefsWithDueReturnsService(determinedReturnsPeriod, noticeType)
+}
+
+async function _save(session, payload) {
+  session.removeLicences = payload.removeLicences
+
+  return session.$update()
+}
+
+function _validate(payload, validLicences) {
+  const validationResult = RemoveLicencesValidator(payload, validLicences)
+
+  return formatValidationResult(validationResult)
+}

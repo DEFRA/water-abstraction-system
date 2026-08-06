@@ -2,12 +2,12 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillRunHelper from '../../support/helpers/bill-run.helper.js'
-import DatabaseConfig from '../../../config/database.config.js'
-import RegionHelper from '../../support/helpers/region.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
+import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Thing under test
-import FetchBillRunsService from '../../../app/services/bill-runs/fetch-bill-runs.service.js'
+import FetchBillRunsService from '../../../src/services/bill-runs/fetch-bill-runs.service.js'
 
 describe('Fetch Bill Runs service', () => {
   const region = RegionHelper.select()

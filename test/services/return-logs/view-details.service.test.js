@@ -2,14 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
 
 // Things we need to stub
-import * as FetchReturnLogDetailsService from '../../../app/services/return-logs/fetch-return-log-details.service.js'
+import * as FetchReturnLogDetailsService from '../../../src/services/return-logs/fetch-return-log-details.service.js'
 
 // Thing under test
-import ViewDetailsService from '../../../app/services/return-logs/view-details.service.js'
+import ViewDetailsService from '../../../src/services/return-logs/view-details.service.js'
 
 describe('Return Logs - View Details service', () => {
   let returnLog

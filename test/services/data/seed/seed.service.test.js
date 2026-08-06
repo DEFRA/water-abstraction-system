@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import { db } from '../../../../db/db.js'
+import { db } from 'water-abstraction-engine/db/db.js'
 
 // Thing under test
-import SeedService from '../../../../app/services/data/seed/seed.service.js'
+import SeedService from '../../../../src/services/data/seed/seed.service.js'
 
 describe('Seed service', () => {
   let knexRunStub

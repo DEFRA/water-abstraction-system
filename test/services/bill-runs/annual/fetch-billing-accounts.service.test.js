@@ -2,21 +2,21 @@
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
-import BillingAccountModel from '../../../../app/models/billing-account.model.js'
-import ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
-import ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
-import ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
-import ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
-import ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
-import LicenceHelper from '../../../support/helpers/licence.helper.js'
-import RegionHelper from '../../../support/helpers/region.helper.js'
-import WorkflowHelper from '../../../support/helpers/workflow.helper.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
+import ChangeReasonHelper from 'water-abstraction-engine/test/helpers/change-reason.helper.js'
+import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
+import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from 'water-abstraction-engine/test/helpers/charge-version.helper.js'
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helper.js'
 
-import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
+import { determineCurrentFinancialYear } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import FetchBillingAccountsService from '../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js'
+import FetchBillingAccountsService from '../../../../src/services/bill-runs/annual/fetch-billing-accounts.service.js'
 
 const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
 const REGION_ANGLIAN_INDEX = 0

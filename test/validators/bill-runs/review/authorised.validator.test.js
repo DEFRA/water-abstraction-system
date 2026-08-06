@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Thing under test
-import AuthorisedValidator from '../../../../app/validators/bill-runs/review/authorised.validator.js'
+import AuthorisedValidator from '../../../../src/validators/bill-runs/review/authorised.validator.js'
 
 describe('Bill Runs Review - Authorised validator', () => {
   let payload

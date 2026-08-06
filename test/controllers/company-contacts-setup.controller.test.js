@@ -4,31 +4,31 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import http2 from 'node:http2'
 
-import LoggerStub from '../support/stubs/logger.stub.js'
-import { generateUUID } from '../support/generators.js'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as InitiateEditSessionService from '../../app/services/company-contacts/setup/initiate-edit-session.service.js'
-import * as InitiateSessionService from '../../app/services/company-contacts/setup/initiate-session.service.js'
-import * as SubmitAbstractionAlertsService from '../../app/services/company-contacts/setup/submit-abstraction-alerts.service.js'
-import * as SubmitCancelService from '../../app/services/company-contacts/setup/submit-cancel.service.js'
-import * as SubmitCheckService from '../../app/services/company-contacts/setup/submit-check.service.js'
-import * as SubmitContactEmailService from '../../app/services/company-contacts/setup/submit-contact-email.service.js'
-import * as SubmitContactNameService from '../../app/services/company-contacts/setup/submit-contact-name.service.js'
-import * as SubmitLicencesService from '../../app/services/company-contacts/setup/submit-licences.service.js'
-import * as SubmitRestoreService from '../../app/services/company-contacts/setup/submit-restore.service.js'
-import * as ViewAbstractionAlertsService from '../../app/services/company-contacts/setup/view-abstraction-alerts.service.js'
-import * as ViewCancelService from '../../app/services/company-contacts/setup/view-cancel.service.js'
-import * as ViewCheckService from '../../app/services/company-contacts/setup/view-check.service.js'
-import * as ViewContactEmailService from '../../app/services/company-contacts/setup/view-contact-email.service.js'
-import * as ViewContactNameService from '../../app/services/company-contacts/setup/view-contact-name.service.js'
-import * as ViewLicencesService from '../../app/services/company-contacts/setup/view-licences.service.js'
-import * as ViewRestoreService from '../../app/services/company-contacts/setup/view-restore.service.js'
+import * as InitiateEditSessionService from '../../src/services/company-contacts/setup/initiate-edit-session.service.js'
+import * as InitiateSessionService from '../../src/services/company-contacts/setup/initiate-session.service.js'
+import * as SubmitAbstractionAlertsService from '../../src/services/company-contacts/setup/submit-abstraction-alerts.service.js'
+import * as SubmitCancelService from '../../src/services/company-contacts/setup/submit-cancel.service.js'
+import * as SubmitCheckService from '../../src/services/company-contacts/setup/submit-check.service.js'
+import * as SubmitContactEmailService from '../../src/services/company-contacts/setup/submit-contact-email.service.js'
+import * as SubmitContactNameService from '../../src/services/company-contacts/setup/submit-contact-name.service.js'
+import * as SubmitLicencesService from '../../src/services/company-contacts/setup/submit-licences.service.js'
+import * as SubmitRestoreService from '../../src/services/company-contacts/setup/submit-restore.service.js'
+import * as ViewAbstractionAlertsService from '../../src/services/company-contacts/setup/view-abstraction-alerts.service.js'
+import * as ViewCancelService from '../../src/services/company-contacts/setup/view-cancel.service.js'
+import * as ViewCheckService from '../../src/services/company-contacts/setup/view-check.service.js'
+import * as ViewContactEmailService from '../../src/services/company-contacts/setup/view-contact-email.service.js'
+import * as ViewContactNameService from '../../src/services/company-contacts/setup/view-contact-name.service.js'
+import * as ViewLicencesService from '../../src/services/company-contacts/setup/view-licences.service.js'
+import * as ViewRestoreService from '../../src/services/company-contacts/setup/view-restore.service.js'
 
 // For running our service
-import { init } from '../../app/server.js'
+import { init } from '../../src/server.js'
 
-import { postRequestOptions } from '../support/general.js'
+import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 

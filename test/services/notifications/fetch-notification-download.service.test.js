@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import NotificationHelper from '../../support/helpers/notification.helper.js'
+import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
 
 // Thing under test
-import FetchDownloadNotificationService from '../../../app/services/notifications/fetch-notification-download.service.js'
+import FetchDownloadNotificationService from '../../../src/services/notifications/fetch-notification-download.service.js'
 
 describe('Notifications - Fetch Download Notification service', () => {
   let notification

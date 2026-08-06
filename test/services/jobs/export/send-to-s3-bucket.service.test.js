@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
 // Thing under test
-import SendToS3BucketService from '../../../../app/services/jobs/export/send-to-s3-bucket.service.js'
+import SendToS3BucketService from '../../../../src/services/jobs/export/send-to-s3-bucket.service.js'
 
 describe('Send to S3 bucket service', () => {
   let s3Stub

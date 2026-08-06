@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import BillingAccountModel from '../../../app/models/billing-account.model.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 
 // Things we need to stub
-import * as FetchBillSummaryService from '../../../app/services/bills/fetch-bill-summary.service.js'
+import * as FetchBillSummaryService from '../../../src/services/bills/fetch-bill-summary.service.js'
 
 // Thing under test
-import RemoveBillService from '../../../app/services/bills/remove-bill.service.js'
+import RemoveBillService from '../../../src/services/bills/remove-bill.service.js'
 
 describe('Remove Bill service', () => {
   const testId = '71d03336-f683-42fe-b67c-c861f25f1fbd'

@@ -1,8 +1,8 @@
-import BillingAccountModel from '../../../app/models/billing-account.model.js'
-import CompanyContactModel from '../../../app/models/company-contact.model.js'
-import ContactModel from '../../../app/models/contact.model.js'
-import LicenceModel from '../../../app/models/licence.model.js'
-import { generateAccountNumber, generateLicenceRef, generateUUID } from '../generators.js'
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
+import CompanyContactModel from 'water-abstraction-engine/models/company-contact.model.js'
+import ContactModel from 'water-abstraction-engine/models/contact.model.js'
+import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
+import { generateAccountNumber, generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 /**
  * A representation from the billing accounts 'FetchBillingAccountsService'

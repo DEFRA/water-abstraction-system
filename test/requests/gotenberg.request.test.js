@@ -4,12 +4,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import http2 from 'node:http2'
 
 // Things we need to stub
-import * as BaseRequest from '../../app/requests/base.request.js'
-import gotenbergConfig from '../../config/gotenberg.config.js'
-import serverConfig from '../../config/server.config.js'
+import * as BaseRequest from 'water-abstraction-engine/requests/base.request.js'
+import ServerConfig from 'water-abstraction-engine/config/server.config.js'
+
+import GotenbergConfig from '../../src/config/gotenberg.config.js'
 
 // Thing under test
-import * as GotenbergRequest from '../../app/requests/gotenberg.request.js'
+import * as GotenbergRequest from '../../src/requests/gotenberg.request.js'
 
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
@@ -23,11 +24,11 @@ describe('Gotenberg Request', () => {
 
   beforeEach(() => {
     // Set delay to a value that won't cause the tests to timeout or run needlessly slow. By default it's 2 seconds.
-    vi.replaceProperty(gotenbergConfig, 'delay', 25)
+    vi.replaceProperty(GotenbergConfig, 'delay', 25)
     // Set the timeout value to 1234ms for these tests. We don't trigger a timeout but we do test that the module
     // uses it when making a request to the charging module, rather than the default request timeout config value
-    vi.replaceProperty(gotenbergConfig, 'timeout', 1234)
-    vi.replaceProperty(serverConfig, 'requestTimeout', 1000)
+    vi.replaceProperty(GotenbergConfig, 'timeout', 1234)
+    vi.replaceProperty(ServerConfig, 'requestTimeout', 1000)
 
     formData = new FormData()
     formData.append('index.html', new Blob([Buffer.from('<p>Test</p>')]), 'index.html')

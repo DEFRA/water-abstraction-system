@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import CustomersFixtures from '../support/fixtures/customers.fixture.js'
 
 // Thing under test
-import * as CustomerPresenter from '../../app/presenters/customer.presenter.js'
+import * as CustomerPresenter from '../../src/presenters/customer.presenter.js'
 
 describe('Customer presenter', () => {
   describe('#formatCompanyContact', () => {

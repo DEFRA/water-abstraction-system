@@ -6,11 +6,11 @@ import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
-import * as CreateAlternateReturnsNoticeService from '../../../../../app/services/notices/setup/create-alternate-returns-notice.service.js'
-import * as FetchFailedReturnsInvitationsService from '../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js'
+import * as CreateAlternateReturnsNoticeService from '../../../../../src/services/notices/setup/create-alternate-returns-notice.service.js'
+import * as FetchFailedReturnsInvitationsService from '../../../../../src/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js'
 
 // Thing under test
-import ReturnsInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js'
+import ReturnsInvitationAlternateNoticeService from '../../../../../src/services/notices/setup/send/returns-invitation-alternate-notice.service.js'
 
 describe('Notices - Setup - Send - Returns Invitation Alternate Notice service', () => {
   let alternateNotice
