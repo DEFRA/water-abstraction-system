@@ -88,7 +88,7 @@ function _combineAndDedupeRoles(rolesArrayToDedupe) {
   // dedupe by going through each Role object in the original array and only adding it to the accumulated results array
   // if a Role object with the same id isn't already in it
   const dedupedArray = rolesArrayToDedupe.reduce((acc, current) => {
-    const roleIsAlreadyInAcc = acc.find((item) => {
+    const roleIsAlreadyInAcc = acc.some((item) => {
       return item.id === current.id
     })
 
