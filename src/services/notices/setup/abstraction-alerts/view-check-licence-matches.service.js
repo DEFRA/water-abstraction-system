@@ -23,7 +23,7 @@ export default async function viewCheckLicenceMatchesService(sessionId, yar) {
 
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = CheckLicenceMatchesPresenter(filters, session, yar)
+  const pageData = CheckLicenceMatchesPresenter(filters, session)
 
   if (pageData.clearFilter) {
     yar.clear('absPeriodFilter')

@@ -11,11 +11,12 @@ import { determineRestrictionHeading, formatRestrictions } from '../../../monito
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  *
+ * @param {object} filters - The filters object
  * @param {module:SessionModel} session - The session instance
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function checkLicenceMatchesPresenter(filters, session, yar) {
+export default function checkLicenceMatchesPresenter(filters, session) {
   let absPeriodFilter = filters.absPeriod
 
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(session)
@@ -24,14 +25,15 @@ export default function checkLicenceMatchesPresenter(filters, session, yar) {
     relevantLicenceMonitoringStations
   )
 
-  const licenceMonitoringStationsToDisplay = _licenceMonitoringStationsToDisplay(
-    absPeriodFilter,
-    filteredLicenceMonitoringStations,
-    relevantLicenceMonitoringStations
-  )
+  if (filteredLicenceMonitoringStations.length === 0) {
+    absPeriodFilter = null
+  }
+
+  const licenceMonitoringStationsToDisplay =
+    filteredLicenceMonitoringStations.length > 0 ? filteredLicenceMonitoringStations : relevantLicenceMonitoringStations
 
   return {
-    actionHeaderLink: _actionHeaderLink(filters, session.id, filteredLicenceMonitoringStations),
+    actionHeaderLink: _actionHeaderLink(absPeriodFilter, session.id, filteredLicenceMonitoringStations),
     backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`, text: 'Back' },
     cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
     clearFilter: filteredLicenceMonitoringStations.length === 0,
@@ -50,10 +52,10 @@ function _action(sessionId, licenceMonitoringStation) {
   }
 }
 
-function _actionHeaderLink(filters, sessionId, licenceMonitoringStations) {
-  if (filters.absPeriod && licenceMonitoringStations.length > 0) {
+function _actionHeaderLink(absPeriodFilter, sessionId, licenceMonitoringStations) {
+  if (absPeriodFilter) {
     return {
-      link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-filtered-thresholds/${filters.absPeriod}`,
+      link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-filtered-thresholds/${absPeriodFilter}`,
       text: `Remove ${licenceMonitoringStations.length} alerts`
     }
   }
@@ -100,20 +102,6 @@ function _items(absPeriodFilter, licenceMonitoringStations) {
   }
 
   return items
-}
-
-function _licenceMonitoringStationsToDisplay(
-  absPeriodFilter,
-  filteredLicenceMonitoringStations,
-  relevantLicenceMonitoringStations
-) {
-  if (filteredLicenceMonitoringStations.length > 0) {
-    return filteredLicenceMonitoringStations
-  }
-
-  absPeriodFilter = null
-
-  return relevantLicenceMonitoringStations
 }
 
 function _periodValue(licenceMonitoringStation) {
