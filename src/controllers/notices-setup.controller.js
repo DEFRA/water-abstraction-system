@@ -7,6 +7,7 @@ import InitiateSessionService from '../services/notices/setup/initiate-session.s
 import ProcessAddRecipientService from '../services/notices/setup/process-add-recipient.service.js'
 import ProcessDownloadRecipientsService from '../services/notices/setup/process-download-recipients.service.js'
 import ProcessPreviewPaperReturnService from '../services/notices/setup/process-preview-paper-return.service.js'
+import ProcessRemoveFilteredThresholdsService from '../services/notices/setup/abstraction-alerts/process-remove-filtered-thresholds.service.js'
 import ProcessRemoveThresholdService from '../services/notices/setup/abstraction-alerts/process-remove-threshold.service.js'
 import SubmitAlertEmailAddressService from '../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js'
 import SubmitAlertThresholdsService from '../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js'
@@ -77,6 +78,17 @@ export async function processPreviewPaperReturn(request, h) {
   const fileBuffer = await ProcessPreviewPaperReturnService(sessionId, contactHashId, returnLogId)
 
   return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
+}
+
+export async function processRemoveFilteredThresholds(request, h) {
+  const {
+    params: { sessionId, absPeriodFilter },
+    yar
+  } = request
+
+  await ProcessRemoveFilteredThresholdsService(absPeriodFilter, sessionId, yar)
+
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
 export async function processRemoveThreshold(request, h) {

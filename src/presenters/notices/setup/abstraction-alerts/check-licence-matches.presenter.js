@@ -57,9 +57,13 @@ function _action(sessionId, licenceMonitoringStation) {
 
 function _actionHeaderLink(absPeriodFilter, sessionId, licenceMonitoringStations) {
   if (absPeriodFilter) {
+    const numberOfAlerts = (licenceMonitoringStations.length === 1
+    ? '1 alert'
+    : `${licenceMonitoringStations.length} alerts`)
+
     return {
       link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-filtered-thresholds/${absPeriodFilter}`,
-      text: `Remove ${licenceMonitoringStations.length} alerts`
+      text: `Remove ${numberOfAlerts}`
     }
   }
 
