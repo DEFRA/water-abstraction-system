@@ -37,6 +37,7 @@ export default function checkLicenceMatchesPresenter(filters, session) {
     backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`, text: 'Back' },
     cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
     clearFilter: filteredLicenceMonitoringStations.length === 0,
+    caption: absPeriodFilter ? 'Showing alerts filtered by abstraction period' : null,
     items: _items(absPeriodFilter, relevantLicenceMonitoringStations),
     pageTitle: 'Check the licence matches for the selected thresholds',
     pageTitleCaption: session.monitoringStationName,
