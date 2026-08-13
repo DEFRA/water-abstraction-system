@@ -178,10 +178,16 @@ export async function submitCheck(request, h) {
 
 export async function submitCheckLicenceMatches(request, h) {
   const {
-    params: { sessionId }
+    params: { sessionId },
+    payload,
+    yar
   } = request
 
-  await SubmitCheckLicenceMatchesService(sessionId)
+  const pageData = await SubmitCheckLicenceMatchesService(payload, sessionId, yar)
+
+  if (pageData.checkLicenceMatches) {
+    return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
+  }
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-email-address`)
 }
