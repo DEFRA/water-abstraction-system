@@ -6,7 +6,6 @@
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
-import { formatRestrictionType, formatValueUnit } from 'water-abstraction-engine/presenters/base.presenter.js'
 
 /**
  * Orchestrates removing multiple licence monitoring stations from the thresholds list for - `/notices/setup/{sessionId}/abstraction-alerts/remove-filtered-thresholds/{absPeriodFilter}` page
