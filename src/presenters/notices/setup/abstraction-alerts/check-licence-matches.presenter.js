@@ -25,6 +25,8 @@ export default function checkLicenceMatchesPresenter(filters, session) {
     relevantLicenceMonitoringStations
   )
 
+  // If applying the filter results in no records being returned (because records have been deleted after the filter has
+  // been applied). The filter should be treated as though it is not set and the service instructed to clear the filter.
   if (filteredLicenceMonitoringStations.length === 0) {
     absPeriodFilter = null
   }
