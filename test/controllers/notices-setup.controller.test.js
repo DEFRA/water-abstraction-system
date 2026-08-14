@@ -12,6 +12,7 @@ import * as InitiateSessionService from '../../src/services/notices/setup/initia
 import * as ProcessAddRecipientService from '../../src/services/notices/setup/process-add-recipient.service.js'
 import * as ProcessDownloadRecipientsService from '../../src/services/notices/setup/process-download-recipients.service.js'
 import * as ProcessPreviewPaperReturnService from '../../src/services/notices/setup/process-preview-paper-return.service.js'
+import * as ProcessRemoveFilteredThresholdsService from '../../src/services/notices/setup/abstraction-alerts/process-remove-filtered-thresholds.service.js'
 import * as ProcessRemoveThresholdService from '../../src/services/notices/setup/abstraction-alerts/process-remove-threshold.service.js'
 import * as SubmitAlertEmailAddressService from '../../src/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js'
 import * as SubmitAlertThresholdsService from '../../src/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js'
@@ -675,20 +676,75 @@ describe('Notices Setup controller', () => {
 
       describe('POST', () => {
         describe('when a request is valid', () => {
-          beforeEach(async () => {
-            postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/check-licence-matches`, {}, [
-              'hof_notifications'
-            ])
+          describe('and `checkLicenceMatches` is false as the "Continue" button has been clicked', () => {
+            beforeEach(async () => {
+              postOptions = postRequestOptions(
+                basePath + `/${session.id}/abstraction-alerts/check-licence-matches`,
+                {},
+                ['hof_notifications']
+              )
 
-            vi.spyOn(SubmitCheckLicenceMatchesService, 'default').mockResolvedValue()
+              vi.spyOn(SubmitCheckLicenceMatchesService, 'default').mockResolvedValue({ checkLicenceMatches: false })
+            })
+
+            it('redirects to the next page', async () => {
+              const response = await server.inject(postOptions)
+
+              expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+              expect(response.headers.location).toEqual(
+                `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`
+              )
+            })
           })
 
-          it('redirects to the next page', async () => {
-            const response = await server.inject(postOptions)
+          describe('and `checkLicenceMatches` is true as filters have been applied', () => {
+            beforeEach(async () => {
+              postOptions = postRequestOptions(
+                basePath + `/${session.id}/abstraction-alerts/check-licence-matches`,
+                { applyFilters: 'apply' },
+                ['hof_notifications']
+              )
+
+              vi.spyOn(SubmitCheckLicenceMatchesService, 'default').mockResolvedValue({ checkLicenceMatches: true })
+            })
+
+            it('redirects back to the check licence matches page', async () => {
+              const response = await server.inject(postOptions)
+
+              expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+              expect(response.headers.location).toEqual(
+                `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`
+              )
+            })
+          })
+        })
+      })
+    })
+
+    describe('/remove-filtered-thresholds/{absPeriodFilter}', () => {
+      describe('GET', () => {
+        const absPeriodFilter = '1-4-31-3'
+
+        beforeEach(async () => {
+          getOptions = {
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/remove-filtered-thresholds/${absPeriodFilter}`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['hof_notifications'] }
+            }
+          }
+
+          vi.spyOn(ProcessRemoveFilteredThresholdsService, 'default').mockResolvedValue()
+        })
+
+        describe('when a request is valid', () => {
+          it('redirects back to the check licence matches page', async () => {
+            const response = await server.inject(getOptions)
 
             expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
             expect(response.headers.location).toEqual(
-              `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`
+              `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`
             )
           })
         })

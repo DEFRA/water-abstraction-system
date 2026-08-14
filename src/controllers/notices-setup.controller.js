@@ -195,9 +195,9 @@ export async function submitCheckLicenceMatches(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitCheckLicenceMatchesService(payload, sessionId, yar)
+  const { checkLicenceMatches } = await SubmitCheckLicenceMatchesService(payload, sessionId, yar)
 
-  if (pageData.checkLicenceMatches) {
+  if (checkLicenceMatches) {
     return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
   }
 
