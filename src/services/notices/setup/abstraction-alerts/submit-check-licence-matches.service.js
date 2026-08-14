@@ -37,20 +37,9 @@ async function _save(session, yar) {
   const savedFilter = yar.get(`checkLicenceMatchesFilter-${session.id}`)
   const selectedPeriods = savedFilter?.periods ?? []
 
-  // Anything filtered out by the selected abstraction periods is treated the same as a manually removed threshold,
-  // so the rest of the journey (for example the preview pages) stays consistent with what was filtered here
-  if (selectedPeriods.length > 0) {
-    const filteredOutIds = relevantLicenceMonitoringStations
-      .filter((station) => {
-        return !selectedPeriods.includes(_periodValue(station))
-      })
-      .map((station) => {
-        return station.id
-      })
-
-    session.removedThresholds = Array.from(new Set([...(removedThresholds ?? []), ...filteredOutIds]))
-  }
-
+  // Note: we deliberately don't fold anything the abstraction period filter excludes into `removedThresholds` here.
+  // That's reserved for the explicit, permanent "Remove" action - if we merged filtered-out stations into it too,
+  // going back to this page later would only ever show the reduced list of periods rather than the full original one
   const finalRelevantLicenceMonitoringStations = relevantLicenceMonitoringStations.filter((station) => {
     return selectedPeriods.length === 0 || selectedPeriods.includes(_periodValue(station))
   })
