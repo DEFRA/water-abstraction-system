@@ -7,6 +7,8 @@
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 
+import DetermineRelevantLicenceMonitoringStationsService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js'
+
 /**
  * Orchestrates removing multiple licence monitoring stations from the thresholds list for - `/notices/setup/{sessionId}/abstraction-alerts/remove-filtered-thresholds/{absPeriodFilter}` page
  *
@@ -18,9 +20,11 @@ import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 export default async function processRemoveFilteredThresholdsService(absPeriodFilter, sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
+  const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(session)
+
   const licenceMonitoringStationIdsToRemove = _licenceMonitoringStationIdsToRemove(
     absPeriodFilter,
-    session.licenceMonitoringStations
+    relevantLicenceMonitoringStations
   )
 
   await _save(session, licenceMonitoringStationIdsToRemove)
@@ -54,6 +58,17 @@ function _periodValue(licenceMonitoringStation) {
     licenceMonitoringStation
 
   return `${abstractionPeriodStartDay}-${abstractionPeriodStartMonth}-${abstractionPeriodEndDay}-${abstractionPeriodEndMonth}`
+}
+
+function _relevantLicenceMonitoringStations(session) {
+  const { alertThresholds, alertType, licenceMonitoringStations, removedThresholds } = session
+
+  return DetermineRelevantLicenceMonitoringStationsService(
+    licenceMonitoringStations,
+    alertThresholds,
+    removedThresholds,
+    alertType
+  )
 }
 
 async function _save(session, licenceMonitoringStationIdsToRemove) {

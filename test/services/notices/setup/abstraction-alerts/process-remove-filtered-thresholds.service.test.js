@@ -24,7 +24,15 @@ describe('Notices - Setup - Abstraction Alerts - Process Remove Filtered Thresho
 
     licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
-    sessionData = AbstractionAlertSessionData.get(licenceMonitoringStations)
+    sessionData = {
+      ...AbstractionAlertSessionData.get(licenceMonitoringStations),
+      alertThresholds: [
+        licenceMonitoringStations.one.thresholdGroup,
+        licenceMonitoringStations.two.thresholdGroup,
+        licenceMonitoringStations.three.thresholdGroup
+      ],
+      alertType: 'warning'
+    }
 
     session = SessionModelStub(sessionData)
 
