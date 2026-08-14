@@ -12,19 +12,19 @@ import DetermineRelevantLicenceMonitoringStationsService from './determine-relev
  * Orchestrates saving the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  *
  * @param {string} sessionId
- * @param {object} [query] - Express request query object
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-export default async function submitCheckLicenceMatchesService(sessionId, query = {}) {
+export default async function submitCheckLicenceMatchesService(sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
-  await _save(session, query.periods)
+  await _save(session, yar)
 }
 
 function _periodValue(station) {
   return `${station.abstractionPeriodStartDay}-${station.abstractionPeriodStartMonth}-${station.abstractionPeriodEndDay}-${station.abstractionPeriodEndMonth}`
 }
 
-async function _save(session, periods) {
+async function _save(session, yar) {
   const { alertThresholds, licenceMonitoringStations, removedThresholds, alertType } = session
 
   const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService(
@@ -34,7 +34,8 @@ async function _save(session, periods) {
     alertType
   )
 
-  const selectedPeriods = Array.isArray(periods) ? periods : periods ? [periods] : []
+  const savedFilter = yar.get(`checkLicenceMatchesFilter-${session.id}`)
+  const selectedPeriods = savedFilter?.periods ?? []
 
   // Anything filtered out by the selected abstraction periods is treated the same as a manually removed threshold,
   // so the rest of the journey (for example the preview pages) stays consistent with what was filtered here

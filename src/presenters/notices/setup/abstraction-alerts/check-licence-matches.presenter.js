@@ -4,6 +4,7 @@
  */
 
 import { formatAbstractionPeriod } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
 import DetermineRelevantLicenceMonitoringStationsService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js'
 import { determineRestrictionHeading, formatRestrictions } from '../../../monitoring-stations/base.presenter.js'
@@ -12,14 +13,20 @@ import { determineRestrictionHeading, formatRestrictions } from '../../../monito
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  *
  * @param {module:SessionModel} session - The session instance
- * @param {object} query - Express request query object
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @returns {object} - The data formatted for the view template
  */
-export default function checkLicenceMatchesPresenter(session, query = {}) {
+export default function checkLicenceMatchesPresenter(session, yar) {
   const allStations = _relevantLicenceMonitoringStations(session)
 
-  // Normalize selected period query params into an array
-  const selectedPeriods = Array.isArray(query.periods) ? query.periods : query.periods ? [query.periods] : []
+  const savedFilter = processSavedFilters(yar, `checkLicenceMatchesFilter-${session.id}`)
+
+  // Drop any saved period that no longer matches a station, for example because the last station with that period
+  // has since been removed. Otherwise the table would stay stuck filtered down to nothing with no visible reason
+  const availablePeriods = allStations.map(_getPeriodValue)
+  const selectedPeriods = (savedFilter.periods ?? []).filter((period) => {
+    return availablePeriods.includes(period)
+  })
 
   // Filter stations based on selected periods (if any are selected)
   const filteredStations = _filterStationsByPeriods(allStations, selectedPeriods)
@@ -29,35 +36,20 @@ export default function checkLicenceMatchesPresenter(session, query = {}) {
     cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
     pageTitle: 'Check the licence matches for the selected thresholds',
     pageTitleCaption: session.monitoringStationName,
-    restrictions: _restrictions(filteredStations, session.id, selectedPeriods),
+    restrictions: _restrictions(filteredStations, session.id),
     restrictionHeading: determineRestrictionHeading(filteredStations),
-    // The filter options must always list every period for this alert, even ones a previous filter submission
-    // removed from `allStations`, otherwise a period the user filtered out becomes impossible to bring back
-    filter: _filter(session.id, selectedPeriods, _allLicenceMonitoringStations(session))
+    // Built from `allStations` (not `filteredStations`) so every period still available stays selectable, even
+    // when it isn't part of the current filter selection. A period disappears once no station has it any more,
+    // for example once the last station with that period has been removed
+    filter: _filter(session.id, selectedPeriods, selectedPeriods.length > 0, allStations)
   }
 }
 
-function _action(sessionId, licenceMonitoringStation, selectedPeriods) {
-  const queryString = _periodsQueryString(selectedPeriods)
-
+function _action(sessionId, licenceMonitoringStation) {
   return {
-    link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-threshold/${licenceMonitoringStation.id}${queryString}`,
+    link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-threshold/${licenceMonitoringStation.id}`,
     text: 'Remove'
   }
-}
-
-function _periodsQueryString(selectedPeriods) {
-  if (selectedPeriods.length === 0) {
-    return ''
-  }
-
-  const params = new URLSearchParams()
-
-  selectedPeriods.forEach((period) => {
-    params.append('periods', period)
-  })
-
-  return `?${params.toString()}`
 }
 
 function _relevantLicenceMonitoringStations(session) {
@@ -69,12 +61,6 @@ function _relevantLicenceMonitoringStations(session) {
     removedThresholds,
     alertType
   )
-}
-
-function _allLicenceMonitoringStations(session) {
-  const { alertThresholds, alertType, licenceMonitoringStations } = session
-
-  return DetermineRelevantLicenceMonitoringStationsService(licenceMonitoringStations, alertThresholds, null, alertType)
 }
 
 function _getPeriodValue(station) {
@@ -99,13 +85,13 @@ function _filterStationsByPeriods(stations, selectedPeriods) {
   })
 }
 
-function _restrictions(relevantLicenceMonitoringStations, sessionId, selectedPeriods) {
+function _restrictions(relevantLicenceMonitoringStations, sessionId) {
   const multipleRestrictions = relevantLicenceMonitoringStations.length > 1
 
   const preparedLicenceMonitoringStations = relevantLicenceMonitoringStations.map((licenceMonitoringStation) => {
     return {
       ...licenceMonitoringStation,
-      action: multipleRestrictions ? _action(sessionId, licenceMonitoringStation, selectedPeriods) : null,
+      action: multipleRestrictions ? _action(sessionId, licenceMonitoringStation) : null,
       statusUpdatedAt: licenceMonitoringStation.statusUpdatedAt
         ? new Date(licenceMonitoringStation.statusUpdatedAt)
         : null
@@ -115,7 +101,7 @@ function _restrictions(relevantLicenceMonitoringStations, sessionId, selectedPer
   return formatRestrictions(preparedLicenceMonitoringStations)
 }
 
-function _filter(sessionId, selectedPeriods, allStations) {
+function _filter(sessionId, selectedPeriods, openFilter, allStations) {
   const periodMap = new Map()
 
   allStations.forEach((station) => {
@@ -138,8 +124,8 @@ function _filter(sessionId, selectedPeriods, allStations) {
   })
 
   return {
-    clearLink: `/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`,
+    actionLink: `/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches/filter`,
     periods: Array.from(periodMap.values()),
-    openFilter: selectedPeriods.length > 0
+    openFilter
   }
 }

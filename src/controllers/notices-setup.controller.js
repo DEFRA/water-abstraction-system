@@ -13,6 +13,7 @@ import SubmitAlertThresholdsService from '../services/notices/setup/abstraction-
 import SubmitAlertTypeService from '../services/notices/setup/abstraction-alerts/submit-alert-type.service.js'
 import SubmitCancelAlertsService from '../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js'
 import SubmitCancelService from '../services/notices/setup/submit-cancel.service.js'
+import SubmitCheckLicenceMatchesFilterService from '../services/notices/setup/abstraction-alerts/submit-check-licence-matches-filter.service.js'
 import SubmitCheckLicenceMatchesService from '../services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js'
 import SubmitCheckNoticeTypeService from '../services/notices/setup/submit-check-notice-type.service.js'
 import SubmitCheckService from '../services/notices/setup/submit-check.service.js'
@@ -82,31 +83,12 @@ export async function processPreviewPaperReturn(request, h) {
 export async function processRemoveThreshold(request, h) {
   const {
     params: { sessionId, licenceMonitoringStationId },
-    query,
     yar
   } = request
 
   await ProcessRemoveThresholdService(sessionId, licenceMonitoringStationId, yar)
 
-  return h.redirect(
-    `/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches${_periodsQueryString(query.periods)}`
-  )
-}
-
-function _periodsQueryString(periods) {
-  if (!periods) {
-    return ''
-  }
-
-  const params = new URLSearchParams()
-
-  const selectedPeriods = Array.isArray(periods) ? periods : [periods]
-
-  selectedPeriods.forEach((period) => {
-    params.append('periods', period)
-  })
-
-  return `?${params.toString()}`
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
 export async function setup(request, h) {
@@ -198,12 +180,24 @@ export async function submitCheck(request, h) {
 export async function submitCheckLicenceMatches(request, h) {
   const {
     params: { sessionId },
-    query
+    yar
   } = request
 
-  await SubmitCheckLicenceMatchesService(sessionId, query)
+  await SubmitCheckLicenceMatchesService(sessionId, yar)
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-email-address`)
+}
+
+export async function submitCheckLicenceMatchesFilter(request, h) {
+  const {
+    params: { sessionId },
+    payload,
+    yar
+  } = request
+
+  await SubmitCheckLicenceMatchesFilterService(sessionId, payload, yar)
+
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
 export async function submitCheckNoticeType(request, h) {
@@ -406,11 +400,10 @@ export async function viewCheck(request, h) {
 export async function viewCheckLicenceMatches(request, h) {
   const {
     params: { sessionId },
-    query,
     yar
   } = request
 
-  const pageData = await ViewCheckLicenceMatchesService(sessionId, yar, query)
+  const pageData = await ViewCheckLicenceMatchesService(sessionId, yar)
 
   return h.view(`notices/setup/check-licence-matches.njk`, pageData)
 }

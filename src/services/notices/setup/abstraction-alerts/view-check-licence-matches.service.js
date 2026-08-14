@@ -15,13 +15,12 @@ import CheckLicenceMatchesPresenter from '../../../../presenters/notices/setup/a
  * @param {string} sessionId - The UUID of the current session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @param query
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function viewCheckLicenceMatchesService(sessionId, yar, query) {
+export default async function viewCheckLicenceMatchesService(sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = CheckLicenceMatchesPresenter(session, query)
+  const pageData = CheckLicenceMatchesPresenter(session, yar)
 
   const notification = readFlashNotification(yar)
 

@@ -10,7 +10,9 @@
 {% block pageContent %}
   {% set filtersForm %}
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
-    <form method="get">
+    <form method="post" action="{{ filter.actionLink }}">
+      <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
+
       {{ govukCheckboxes({
         name: "periods",
         classes: "govuk-checkboxes--small",
@@ -32,8 +34,10 @@
 
         {{ govukButton({
           classes: "govuk-button--secondary",
-          text: "Clear filters",
-          href: filter.clearLink
+          name: "clearFilters",
+          value: "reset",
+          preventDoubleClick: true,
+          text: "Clear filters"
         }) }}
       </div>
     </form>
