@@ -12,15 +12,19 @@ import DetermineRelevantLicenceMonitoringStationsService from './determine-relev
  * Orchestrates saving the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  *
  * @param {string} sessionId
- *
+ * @param {object} [query] - Express request query object
  */
-export default async function submitCheckLicenceMatchesService(sessionId) {
+export default async function submitCheckLicenceMatchesService(sessionId, query = {}) {
   const session = await FetchSessionDal(sessionId)
 
-  await _save(session)
+  await _save(session, query.periods)
 }
 
-async function _save(session) {
+function _periodValue(station) {
+  return `${station.abstractionPeriodStartDay}-${station.abstractionPeriodStartMonth}-${station.abstractionPeriodEndDay}-${station.abstractionPeriodEndMonth}`
+}
+
+async function _save(session, periods) {
   const { alertThresholds, licenceMonitoringStations, removedThresholds, alertType } = session
 
   const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService(
@@ -30,12 +34,32 @@ async function _save(session) {
     alertType
   )
 
-  const relevantLicenceRefs = relevantLicenceMonitoringStations.map((station) => {
+  const selectedPeriods = Array.isArray(periods) ? periods : periods ? [periods] : []
+
+  // Anything filtered out by the selected abstraction periods is treated the same as a manually removed threshold,
+  // so the rest of the journey (for example the preview pages) stays consistent with what was filtered here
+  if (selectedPeriods.length > 0) {
+    const filteredOutIds = relevantLicenceMonitoringStations
+      .filter((station) => {
+        return !selectedPeriods.includes(_periodValue(station))
+      })
+      .map((station) => {
+        return station.id
+      })
+
+    session.removedThresholds = Array.from(new Set([...(removedThresholds ?? []), ...filteredOutIds]))
+  }
+
+  const finalRelevantLicenceMonitoringStations = relevantLicenceMonitoringStations.filter((station) => {
+    return selectedPeriods.length === 0 || selectedPeriods.includes(_periodValue(station))
+  })
+
+  const relevantLicenceRefs = finalRelevantLicenceMonitoringStations.map((station) => {
     return station.licence.licenceRef
   })
 
   session.licenceRefs = Array.from(new Set(relevantLicenceRefs))
-  session.relevantLicenceMonitoringStations = relevantLicenceMonitoringStations
+  session.relevantLicenceMonitoringStations = finalRelevantLicenceMonitoringStations
 
   return session.$update()
 }

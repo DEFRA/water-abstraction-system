@@ -55,6 +55,14 @@ describe('Notices - Setup - Abstraction Alerts - View Check Licence Matches serv
           text: 'Back'
         },
         cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
+        filter: {
+          clearLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
+          openFilter: false,
+          periods: [
+            { checked: false, text: '1 February to 1 January', value: '1-2-1-1' },
+            { checked: false, text: '1 January to 31 March', value: '1-1-31-3' }
+          ]
+        },
         notification: undefined,
         pageTitle: 'Check the licence matches for the selected thresholds',
         pageTitleCaption: 'Death star',

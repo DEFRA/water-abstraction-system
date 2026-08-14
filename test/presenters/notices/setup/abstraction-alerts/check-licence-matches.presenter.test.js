@@ -33,6 +33,14 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
       expect(result).toEqual({
         backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`, text: 'Back' },
         cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
+        filter: {
+          clearLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
+          openFilter: false,
+          periods: [
+            { checked: false, text: '1 February to 1 January', value: '1-2-1-1' },
+            { checked: false, text: '1 January to 31 March', value: '1-1-31-3' }
+          ]
+        },
         pageTitle: 'Check the licence matches for the selected thresholds',
         pageTitleCaption: 'Death star',
         restrictionHeading: 'Flow and level restriction type and threshold',
@@ -203,6 +211,15 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
                   restrictionCount: 1,
                   threshold: '100m'
                 }
+              ])
+            })
+
+            it("still lists the removed threshold's period as a filter option", () => {
+              const result = CheckLicenceMatchesPresenter(session)
+
+              expect(result.filter.periods).toEqual([
+                { checked: false, text: '1 February to 1 January', value: '1-2-1-1' },
+                { checked: false, text: '1 January to 31 March', value: '1-1-31-3' }
               ])
             })
           })
