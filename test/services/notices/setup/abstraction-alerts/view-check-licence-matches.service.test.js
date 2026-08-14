@@ -49,12 +49,33 @@ describe('Notices - Setup - Abstraction Alerts - View Check Licence Matches serv
       const result = await ViewCheckLicenceMatchesService(session.id, yarStub)
 
       expect(result).toEqual({
+        actionHeaderLink: null,
         activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`,
           text: 'Back'
         },
         cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
+        caption: null,
+        clearFilter: false,
+        filters: {
+          absPeriod: null,
+          openFilter: false
+        },
+        items: [
+          {
+            checked: false,
+            id: '1-2-1-1',
+            text: '1 February to 1 January',
+            value: '1-2-1-1'
+          },
+          {
+            checked: false,
+            id: '1-1-31-3',
+            text: '1 January to 31 March',
+            value: '1-1-31-3'
+          }
+        ],
         notification: undefined,
         pageTitle: 'Check the licence matches for the selected thresholds',
         pageTitleCaption: 'Death star',
@@ -103,6 +124,76 @@ describe('Notices - Setup - Abstraction Alerts - View Check Licence Matches serv
             threshold: '100m'
           }
         ]
+      })
+    })
+
+    describe('when an abstraction period filter has been saved', () => {
+      beforeEach(() => {
+        yarStub.get.mockReturnValueOnce({ absPeriod: '1-1-31-3' })
+      })
+
+      it('returns the saved "filters"', async () => {
+        const result = await ViewCheckLicenceMatchesService(session.id, yarStub)
+
+        expect(result.filters).toEqual({
+          absPeriod: '1-1-31-3',
+          openFilter: true
+        })
+      })
+
+      it('returns the page data filtered by the abstraction period', async () => {
+        const result = await ViewCheckLicenceMatchesService(session.id, yarStub)
+
+        expect(result.caption).toEqual('Showing alerts filtered by abstraction period')
+        expect(result.actionHeaderLink).toEqual({
+          link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-filtered-thresholds/1-1-31-3`,
+          text: 'Remove 2 alerts'
+        })
+
+        expect(result.restrictions).toHaveLength(2)
+      })
+
+      it('does not clear the "absPeriodFilter" object from the session', async () => {
+        await ViewCheckLicenceMatchesService(session.id, yarStub)
+
+        expect(yarStub.clear).not.toHaveBeenCalled()
+      })
+
+      describe('but the filter no longer matches any thresholds', () => {
+        beforeEach(() => {
+          sessionData.removedThresholds = [licenceMonitoringStations.one.id]
+
+          session = SessionModelStub(sessionData)
+
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+
+          yarStub = YarStub()
+          yarStub.flash.mockResolvedValue()
+          yarStub.get.mockReturnValueOnce({ absPeriod: '1-2-1-1' })
+        })
+
+        it('clears the "absPeriodFilter" object from the session', async () => {
+          await ViewCheckLicenceMatchesService(session.id, yarStub)
+
+          expect(yarStub.clear).toHaveBeenCalledWith('absPeriodFilter')
+        })
+
+        it('returns the "filters" reset to their defaults', async () => {
+          const result = await ViewCheckLicenceMatchesService(session.id, yarStub)
+
+          expect(result.filters).toEqual({
+            absPeriod: null,
+            openFilter: false
+          })
+        })
+
+        it('returns the page data unfiltered', async () => {
+          const result = await ViewCheckLicenceMatchesService(session.id, yarStub)
+
+          expect(result.caption).toBeNull()
+          expect(result.actionHeaderLink).toBeNull()
+          expect(result.restrictions).toHaveLength(2)
+        })
       })
     })
 
