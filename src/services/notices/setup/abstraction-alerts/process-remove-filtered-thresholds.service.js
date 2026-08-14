@@ -41,9 +41,10 @@ function _licenceMonitoringStationIdsToRemove(absPeriodFilter, licenceMonitoring
 }
 
 function _notificationMessage(licenceMonitoringStationIdsToRemove) {
-  const numberOfAlerts = (licenceMonitoringStationIdsToRemove.length === 1
-    ? '1 alert'
-    : `${licenceMonitoringStationIdsToRemove.length} alerts`)
+  const numberOfAlerts =
+    licenceMonitoringStationIdsToRemove.length === 1
+      ? '1 alert'
+      : `${licenceMonitoringStationIdsToRemove.length} alerts`
 
   return `${numberOfAlerts} removed from the send list.`
 }
