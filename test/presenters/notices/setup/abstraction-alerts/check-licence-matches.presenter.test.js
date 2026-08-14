@@ -8,10 +8,13 @@ import AbstractionAlertSessionData from '../../../../support/fixtures/abstractio
 import CheckLicenceMatchesPresenter from '../../../../../src/presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js'
 
 describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter', () => {
+  const filters = {}
+
   let licenceMonitoringStations
   let session
 
   beforeEach(async () => {
+    filters.absPeriod = null
     licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
     const abstractionAlertSessionData = AbstractionAlertSessionData.get(licenceMonitoringStations)
@@ -28,11 +31,28 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckLicenceMatchesPresenter(session)
+      const result = CheckLicenceMatchesPresenter(filters, session)
 
       expect(result).toEqual({
+        actionHeaderLink: null,
         backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`, text: 'Back' },
         cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
+        caption: null,
+        clearFilter: false,
+        items: [
+          {
+            checked: false,
+            id: '1-2-1-1',
+            text: '1 February to 1 January',
+            value: '1-2-1-1'
+          },
+          {
+            checked: false,
+            id: '1-1-31-3',
+            text: '1 January to 31 March',
+            value: '1-1-31-3'
+          }
+        ],
         pageTitle: 'Check the licence matches for the selected thresholds',
         pageTitleCaption: 'Death star',
         restrictionHeading: 'Flow and level restriction type and threshold',
@@ -86,7 +106,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
     describe('the "restrictions" property', () => {
       describe('when there are selected "alertThresholds"', () => {
         it('returns only the thresholds previously selected', () => {
-          const result = CheckLicenceMatchesPresenter(session)
+          const result = CheckLicenceMatchesPresenter(filters, session)
 
           expect(result.restrictions[0]).toEqual({
             abstractionPeriod: '1 February to 1 January',
@@ -106,7 +126,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
 
         describe('the "action" property', () => {
           it('returns the correct action', () => {
-            const result = CheckLicenceMatchesPresenter(session)
+            const result = CheckLicenceMatchesPresenter(filters, session)
 
             expect(result.restrictions[0].action).toEqual({
               link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.one.id}`,
@@ -118,7 +138,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
         describe('the "alertDate" property', () => {
           describe('when the "statusUpdatedAt" is not a date', () => {
             it('returns the correct action', () => {
-              const result = CheckLicenceMatchesPresenter(session)
+              const result = CheckLicenceMatchesPresenter(filters, session)
 
               expect(result.restrictions[0].alertDate).toEqual('')
             })
@@ -134,7 +154,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
             })
 
             it('returns the correct action', () => {
-              const result = CheckLicenceMatchesPresenter(session)
+              const result = CheckLicenceMatchesPresenter(filters, session)
 
               expect(result.restrictions[0].alertDate).toEqual('12 May 2025')
             })
@@ -147,7 +167,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
           })
 
           it('returns only the thresholds previously selected and not removed', () => {
-            const result = CheckLicenceMatchesPresenter(session)
+            const result = CheckLicenceMatchesPresenter(filters, session)
 
             expect(result.restrictions).toHaveLength(2)
 
@@ -189,7 +209,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
             })
 
             it('should not show any remove links for the remaining restriction', () => {
-              const result = CheckLicenceMatchesPresenter(session)
+              const result = CheckLicenceMatchesPresenter(filters, session)
 
               expect(result.restrictions).toEqual([
                 {
