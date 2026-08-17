@@ -291,6 +291,18 @@ describe('Search - Determine Search Items service', () => {
         expect(result).toContain('licence')
       })
     })
+
+    describe('because it contains an ampersand', () => {
+      beforeEach(() => {
+        query = '99/99/99/9999/S&G'
+      })
+
+      it('returns the licence type', () => {
+        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+        expect(result).toContain('licence')
+      })
+    })
   })
 
   describe('when the search is not valid for a licence reference', () => {

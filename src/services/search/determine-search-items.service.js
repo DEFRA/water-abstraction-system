@@ -82,8 +82,8 @@ function _licences(resultTypes, query, selectedResultType) {
     return
   }
 
-  // Licence references are alphanumeric, with slashes and stars and dots and hyphens and brackets
-  if (!query.match(/^[a-z0-9/*.()-]+$/i)) {
+  // Licence references are alphanumeric, with slashes, stars, dots, hyphens, brackets and ampersands
+  if (!query.match(/^[a-z0-9/*.()&-]+$/i)) {
     return
   }
 
