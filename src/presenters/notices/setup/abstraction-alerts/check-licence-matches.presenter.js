@@ -3,26 +3,45 @@
  * @module CheckLicenceMatchesPresenter
  */
 
+import { formatAbstractionPeriod } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
+
 import DetermineRelevantLicenceMonitoringStationsService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js'
 import { determineRestrictionHeading, formatRestrictions } from '../../../monitoring-stations/base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  *
+ * @param {object} filters - The filters object
  * @param {module:SessionModel} session - The session instance
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function checkLicenceMatchesPresenter(session) {
+export default function checkLicenceMatchesPresenter(filters, session) {
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(session)
+
+  // Drop any saved period filter that no longer matches a station. For example, because the last station with that
+  // period has since been removed. Otherwise the table would stay stuck filtered down to nothing with no visible reason
+  const availablePeriods = relevantLicenceMonitoringStations.map(_getPeriodValue)
+  const selectedPeriods = (filters.periods).filter((period) => {
+    return availablePeriods.includes(period)
+  })
+
+  // Filter stations based on selected periods (if any are selected)
+  const filteredLicenceMonitoringStations = _filterStationsByPeriods(relevantLicenceMonitoringStations, selectedPeriods)
 
   return {
     backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`, text: 'Back' },
     cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
+    // Built from `relevantLicenceMonitoringStations` (not `filteredLicenceMonitoringStations`) so every period still
+    // available stays selectable, even when it isn't part of the current filter selection. A period disappears once no
+    // station has it any more, for example once the last station with that period has been removed
+    caption: selectedPeriods.length > 0 ? 'Showing alerts filtered by abstraction period' : null,
+    filter: _filter(session.id, selectedPeriods, selectedPeriods.length > 0, relevantLicenceMonitoringStations),
     pageTitle: 'Check the licence matches for the selected thresholds',
     pageTitleCaption: session.monitoringStationName,
-    restrictions: _restrictions(relevantLicenceMonitoringStations, session.id),
-    restrictionHeading: determineRestrictionHeading(relevantLicenceMonitoringStations)
+    restrictions: _restrictions(filteredLicenceMonitoringStations, session.id),
+    restrictionHeading: determineRestrictionHeading(filteredLicenceMonitoringStations)
   }
 }
 
@@ -31,6 +50,57 @@ function _action(sessionId, licenceMonitoringStation) {
     link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-threshold/${licenceMonitoringStation.id}`,
     text: 'Remove'
   }
+}
+
+function _filter(sessionId, selectedPeriods, openFilter, relevantLicenceMonitoringStations) {
+  const periodMap = new Map()
+
+  relevantLicenceMonitoringStations.forEach((relevantLicenceMonitoringStation) => {
+    const value = _getPeriodValue(relevantLicenceMonitoringStation)
+
+    if (!periodMap.has(value)) {
+      const text = formatAbstractionPeriod(
+        relevantLicenceMonitoringStation.abstractionPeriodStartDay,
+        relevantLicenceMonitoringStation.abstractionPeriodStartMonth,
+        relevantLicenceMonitoringStation.abstractionPeriodEndDay,
+        relevantLicenceMonitoringStation.abstractionPeriodEndMonth
+      )
+
+      periodMap.set(value, {
+        text,
+        value,
+        checked: selectedPeriods.includes(value)
+      })
+    }
+  })
+
+  return {
+    actionLink: `/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches/filter`,
+    periods: Array.from(periodMap.values()),
+    openFilter
+  }
+}
+
+function _filterStationsByPeriods(relevantLicenceMonitoringStations, selectedPeriods) {
+  if (selectedPeriods.length === 0) {
+    return relevantLicenceMonitoringStations
+  }
+
+  return relevantLicenceMonitoringStations.filter((relevantLicenceMonitoringStation) => {
+    const periodValue = _getPeriodValue(relevantLicenceMonitoringStation)
+    return selectedPeriods.includes(periodValue)
+  })
+}
+
+function _getPeriodValue(relevantLicenceMonitoringStation) {
+  const {
+    abstractionPeriodStartDay: startDay,
+    abstractionPeriodStartMonth: startMonth,
+    abstractionPeriodEndDay: endDay,
+    abstractionPeriodEndMonth: endMonth
+  } = relevantLicenceMonitoringStation
+
+  return `${startDay}-${startMonth}-${endDay}-${endMonth}`
 }
 
 function _relevantLicenceMonitoringStations(session) {
