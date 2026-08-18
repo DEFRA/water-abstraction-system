@@ -38,7 +38,7 @@ function _filters(sessionId, yar) {
   const savedFilters = processSavedFilters(yar, `checkLicenceMatchesFilter-${sessionId}`)
 
   return {
-    absPeriod: null,
+    selectedPeriods: [],
     ...savedFilters
   }
 }
