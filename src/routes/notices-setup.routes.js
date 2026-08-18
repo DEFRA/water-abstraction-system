@@ -11,6 +11,7 @@ import {
   submitCancelAlerts,
   submitCheck,
   submitCheckLicenceMatches,
+  submitCheckLicenceMatchesFilter,
   submitCheckNoticeType,
   submitContactType,
   submitLicence,
@@ -176,6 +177,17 @@ export default [
     }
   },
   {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches/filter',
+    options: {
+      handler: submitCheckLicenceMatchesFilter,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },  {
     method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}',
     options: {
