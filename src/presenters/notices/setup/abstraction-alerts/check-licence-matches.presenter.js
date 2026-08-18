@@ -76,7 +76,9 @@ function _filterItems(selectedPeriods, relevantLicenceMonitoringStations) {
     }
   }
 
-  return Array.from(periodMap.values())
+  return Array.from(periodMap.values()).sort((firstItem, secondItem) => {
+    return _sortByAbstractionPeriod(firstItem, secondItem)
+  })
 }
 
 function _filterStationsByPeriods(relevantLicenceMonitoringStations, selectedPeriods) {
@@ -126,4 +128,17 @@ function _restrictions(relevantLicenceMonitoringStations, sessionId) {
   })
 
   return formatRestrictions(preparedLicenceMonitoringStations)
+}
+
+function _sortByAbstractionPeriod(firstItem, secondItem) {
+  const [firstStartDay, firstStartMonth, firstEndDay, firstEndMonth] = firstItem.value.split('-').map(Number)
+  const [secondStartDay, secondStartMonth, secondEndDay, secondEndMonth] = secondItem.value.split('-').map(Number)
+
+  // `value` is day-first, so we deliberately compare month before day to get chronological ordering
+  return (
+    firstStartMonth - secondStartMonth ||
+    firstStartDay - secondStartDay ||
+    firstEndMonth - secondEndMonth ||
+    firstEndDay - secondEndDay
+  )
 }
