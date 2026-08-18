@@ -187,7 +187,8 @@ export default [
         }
       }
     }
-  },  {
+  },
+  {
     method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}',
     options: {

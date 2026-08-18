@@ -5,8 +5,8 @@
  */
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
-import { readFlashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
+import { readFlashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 
 import CheckLicenceMatchesPresenter from '../../../../presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js'
 

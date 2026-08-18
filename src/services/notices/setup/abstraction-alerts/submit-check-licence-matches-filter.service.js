@@ -5,6 +5,7 @@
  * @module SubmitCheckLicenceMatchesFilterService
  */
 import { clearFilters, handleOneOptionSelected } from 'water-abstraction-engine/lib/submit-page.lib.js'
+
 /**
  * Orchestrates saving the abstraction period filter for the
  * `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
