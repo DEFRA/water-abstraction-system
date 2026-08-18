@@ -21,8 +21,10 @@ export default function checkLicenceMatchesPresenter(filters, session) {
 
   // Drop any saved period filter that no longer matches a station. For example, because the last station with that
   // period has since been removed. Otherwise the table would stay stuck filtered down to nothing with no visible reason
-  const availablePeriods = relevantLicenceMonitoringStations.map(_getPeriodValue)
-  const selectedPeriods = (filters.periods).filter((period) => {
+  const availablePeriods = relevantLicenceMonitoringStations.map((relevantLicenceMonitoringStation) => {
+    return _getPeriodValue(relevantLicenceMonitoringStation)
+  })
+  const selectedPeriods = filters.periods.filter((period) => {
     return availablePeriods.includes(period)
   })
 
@@ -36,7 +38,8 @@ export default function checkLicenceMatchesPresenter(filters, session) {
     // available stays selectable, even when it isn't part of the current filter selection. A period disappears once no
     // station has it any more, for example once the last station with that period has been removed
     caption: selectedPeriods.length > 0 ? 'Showing alerts filtered by abstraction period' : null,
-    filter: _filter(session.id, selectedPeriods, selectedPeriods.length > 0, relevantLicenceMonitoringStations),
+    filterActionLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches/filter`,
+    filterItems: _filterItems(selectedPeriods, relevantLicenceMonitoringStations),
     pageTitle: 'Check the licence matches for the selected thresholds',
     pageTitleCaption: session.monitoringStationName,
     restrictions: _restrictions(filteredLicenceMonitoringStations, session.id),
@@ -51,7 +54,7 @@ function _action(sessionId, licenceMonitoringStation) {
   }
 }
 
-function _filter(sessionId, selectedPeriods, openFilter, relevantLicenceMonitoringStations) {
+function _filterItems(selectedPeriods, relevantLicenceMonitoringStations) {
   const periodMap = new Map()
 
   relevantLicenceMonitoringStations.forEach((relevantLicenceMonitoringStation) => {
@@ -73,11 +76,7 @@ function _filter(sessionId, selectedPeriods, openFilter, relevantLicenceMonitori
     }
   })
 
-  return {
-    actionLink: `/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches/filter`,
-    periods: Array.from(periodMap.values()),
-    openFilter
-  }
+  return Array.from(periodMap.values())
 }
 
 function _filterStationsByPeriods(relevantLicenceMonitoringStations, selectedPeriods) {

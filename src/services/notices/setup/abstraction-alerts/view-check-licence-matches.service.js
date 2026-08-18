@@ -29,6 +29,7 @@ export default async function viewCheckLicenceMatchesService(sessionId, yar) {
 
   return {
     activeNavBar: 'notices',
+    filters,
     ...pageData,
     notification
   }
