@@ -35,7 +35,7 @@ async function _save(session, yar) {
   )
 
   const savedFilter = yar.get(`checkLicenceMatchesFilter-${session.id}`)
-  const selectedPeriods = savedFilter?.selectedPeriods ?? []
+  const selectedPeriods = savedFilter?.periods ?? []
 
   // Note: we deliberately don't fold anything the abstraction period filter excludes into `removedThresholds` here.
   // That's reserved for the explicit, permanent "Remove" action - if we merged filtered-out stations into it too,
