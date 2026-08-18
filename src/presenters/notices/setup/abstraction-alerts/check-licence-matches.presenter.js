@@ -4,7 +4,6 @@
  */
 
 import { formatAbstractionPeriod } from 'water-abstraction-engine/presenters/base.presenter.js'
-import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
 import DetermineRelevantLicenceMonitoringStationsService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js'
 import { determineRestrictionHeading, formatRestrictions } from '../../../monitoring-stations/base.presenter.js'
