@@ -57,7 +57,7 @@ function _action(sessionId, licenceMonitoringStation) {
 function _filterItems(selectedPeriods, relevantLicenceMonitoringStations) {
   const periodMap = new Map()
 
-  relevantLicenceMonitoringStations.forEach((relevantLicenceMonitoringStation) => {
+  for (const relevantLicenceMonitoringStation of relevantLicenceMonitoringStations) {
     const value = _getPeriodValue(relevantLicenceMonitoringStation)
 
     if (!periodMap.has(value)) {
@@ -74,7 +74,7 @@ function _filterItems(selectedPeriods, relevantLicenceMonitoringStations) {
         checked: selectedPeriods.includes(value)
       })
     }
-  })
+  }
 
   return Array.from(periodMap.values())
 }
