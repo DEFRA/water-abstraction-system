@@ -42,8 +42,8 @@ export default function checkLicenceMatchesPresenter(filters, session) {
     filterItems: _filterItems(selectedPeriods, relevantLicenceMonitoringStations),
     pageTitle: 'Check the licence matches for the selected thresholds',
     pageTitleCaption: session.monitoringStationName,
-    restrictions: _restrictions(filteredLicenceMonitoringStations, session.id),
-    restrictionHeading: determineRestrictionHeading(filteredLicenceMonitoringStations)
+    restrictionHeading: determineRestrictionHeading(filteredLicenceMonitoringStations),
+    restrictions: _restrictions(filteredLicenceMonitoringStations, session.id)
   }
 }
 
