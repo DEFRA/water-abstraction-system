@@ -15,14 +15,16 @@ import { determineRestrictionHeading, formatRestrictions } from '../../../monito
  * @returns {object} - The data formatted for the view template
  */
 export default function previewCheckAlertPresenter(contactHashId, recipientLicenceRefs, session) {
-  const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(recipientLicenceRefs, session)
+  const { id: sessionId, referenceCode, relevantLicenceMonitoringStations } = session
+
+  const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(recipientLicenceRefs, relevantLicenceMonitoringStations)
 
   return {
-    backLink: { href: `/system/notices/setup/${session.id}/check`, text: 'Back' },
+    backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
     pageTitle: 'Check the recipient previews',
-    pageTitleCaption: `Notice ${session.referenceCode}`,
+    pageTitleCaption: `Notice ${referenceCode}`,
     restrictionHeading: determineRestrictionHeading(recipientLicenceMonitoringStations),
-    restrictions: _restrictions(contactHashId, recipientLicenceMonitoringStations, session.id)
+    restrictions: _restrictions(contactHashId, recipientLicenceMonitoringStations, sessionId)
   }
 }
 
@@ -55,9 +57,7 @@ function _preparedLicenceMonitoringStations(contactHashId, recipientLicenceMonit
   })
 }
 
-function _recipientLicenceMonitoringStations(recipientLicenceRefs, session) {
-  const { relevantLicenceMonitoringStations } = session
-
+function _recipientLicenceMonitoringStations(recipientLicenceRefs, relevantLicenceMonitoringStations) {
   return relevantLicenceMonitoringStations.filter((relevantLicenceMonitoringStation) => {
     return recipientLicenceRefs.includes(relevantLicenceMonitoringStation.licence.licenceRef)
   })
