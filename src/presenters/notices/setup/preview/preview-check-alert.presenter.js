@@ -56,7 +56,7 @@ function _preparedLicenceMonitoringStations(contactHashId, recipientLicenceMonit
 }
 
 function _recipientLicenceMonitoringStations(recipientLicenceRefs, session) {
-  const { alertThresholds, alertType, relevantLicenceMonitoringStations, removedThresholds } = session
+  const { relevantLicenceMonitoringStations } = session
 
   return relevantLicenceMonitoringStations.filter((relevantLicenceMonitoringStation) => {
     return recipientLicenceRefs.includes(relevantLicenceMonitoringStation.licence.licenceRef)
