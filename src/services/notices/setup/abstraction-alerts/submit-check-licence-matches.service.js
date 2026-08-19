@@ -21,7 +21,14 @@ export default async function submitCheckLicenceMatchesService(sessionId, yar) {
 }
 
 function _periodValue(station) {
-  return `${station.abstractionPeriodStartDay}-${station.abstractionPeriodStartMonth}-${station.abstractionPeriodEndDay}-${station.abstractionPeriodEndMonth}`
+  const {
+    abstractionPeriodStartDay: startDay,
+    abstractionPeriodStartMonth: startMonth,
+    abstractionPeriodEndDay: endDay,
+    abstractionPeriodEndMonth: endMonth
+  } = station
+
+  return `${startDay}-${startMonth}-${endDay}-${endMonth}`
 }
 
 async function _save(session, yar) {

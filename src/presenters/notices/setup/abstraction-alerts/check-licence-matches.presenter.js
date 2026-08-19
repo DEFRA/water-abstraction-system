@@ -22,7 +22,7 @@ export default function checkLicenceMatchesPresenter(filters, session) {
   // Drop any saved period filter that no longer matches a station. For example, because the last station with that
   // period has since been removed. Otherwise the table would stay stuck filtered down to nothing with no visible reason
   const availablePeriods = relevantLicenceMonitoringStations.map((relevantLicenceMonitoringStation) => {
-    return _getPeriodValue(relevantLicenceMonitoringStation)
+    return _periodValue(relevantLicenceMonitoringStation)
   })
   const selectedPeriods = filters.periods.filter((period) => {
     return availablePeriods.includes(period)
@@ -66,7 +66,7 @@ function _filterItems(selectedPeriods, relevantLicenceMonitoringStations) {
   const periodMap = new Map()
 
   for (const relevantLicenceMonitoringStation of relevantLicenceMonitoringStations) {
-    const value = _getPeriodValue(relevantLicenceMonitoringStation)
+    const value = _periodValue(relevantLicenceMonitoringStation)
 
     if (!periodMap.has(value)) {
       const text = formatAbstractionPeriod(
@@ -95,13 +95,13 @@ function _filterStationsByPeriods(relevantLicenceMonitoringStations, selectedPer
   }
 
   return relevantLicenceMonitoringStations.filter((relevantLicenceMonitoringStation) => {
-    const periodValue = _getPeriodValue(relevantLicenceMonitoringStation)
+    const periodValue = _periodValue(relevantLicenceMonitoringStation)
 
     return selectedPeriods.includes(periodValue)
   })
 }
 
-function _getPeriodValue(relevantLicenceMonitoringStation) {
+function _periodValue(relevantLicenceMonitoringStation) {
   const {
     abstractionPeriodStartDay: startDay,
     abstractionPeriodStartMonth: startMonth,
