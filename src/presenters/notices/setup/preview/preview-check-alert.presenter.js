@@ -3,7 +3,6 @@
  * @module PreviewCheckAlertPresenter
  */
 
-import DetermineRelevantLicenceMonitoringStationsService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js'
 import { determineRestrictionHeading, formatRestrictions } from '../../../monitoring-stations/base.presenter.js'
 
 /**
@@ -57,14 +56,7 @@ function _preparedLicenceMonitoringStations(contactHashId, recipientLicenceMonit
 }
 
 function _recipientLicenceMonitoringStations(recipientLicenceRefs, session) {
-  const { alertThresholds, alertType, licenceMonitoringStations, removedThresholds } = session
-
-  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService(
-    licenceMonitoringStations,
-    alertThresholds,
-    removedThresholds,
-    alertType
-  )
+  const { alertThresholds, alertType, relevantLicenceMonitoringStations, removedThresholds } = session
 
   return relevantLicenceMonitoringStations.filter((relevantLicenceMonitoringStation) => {
     return recipientLicenceRefs.includes(relevantLicenceMonitoringStation.licence.licenceRef)
