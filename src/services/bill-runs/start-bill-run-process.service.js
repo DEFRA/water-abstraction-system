@@ -3,8 +3,9 @@
  * @module StartBillRunProcessService
  */
 
+import DetermineBillingPeriodsService from 'water-abstraction-engine/services/bill-runs/determine-billing-periods.service.js'
+
 import AnnualProcessBillRunService from './annual/process-bill-run.service.js'
-import DetermineBillingPeriodsService from './determine-billing-periods.service.js'
 import InitiateBillRunService from './initiate-bill-run.service.js'
 import NoBillingPeriodsError from '../../errors/no-billing-periods.error.js'
 import SupplementaryProcessBillRunService from './supplementary/process-bill-run.service.js'
