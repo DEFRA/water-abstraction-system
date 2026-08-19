@@ -17,7 +17,10 @@ import { determineRestrictionHeading, formatRestrictions } from '../../../monito
 export default function previewCheckAlertPresenter(contactHashId, recipientLicenceRefs, session) {
   const { id: sessionId, referenceCode, relevantLicenceMonitoringStations } = session
 
-  const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(recipientLicenceRefs, relevantLicenceMonitoringStations)
+  const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(
+    recipientLicenceRefs,
+    relevantLicenceMonitoringStations
+  )
 
   return {
     backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
