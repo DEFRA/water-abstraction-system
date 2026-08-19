@@ -34,9 +34,6 @@ export default function checkLicenceMatchesPresenter(filters, session) {
   return {
     backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`, text: 'Back' },
     cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
-    // Built from `relevantLicenceMonitoringStations` (not `filteredLicenceMonitoringStations`) so every period still
-    // available stays selectable, even when it isn't part of the current filter selection. A period disappears once no
-    // station has it any more, for example once the last station with that period has been removed
     caption: _caption(filteredLicenceMonitoringStations, relevantLicenceMonitoringStations),
     filterActionLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches/filter`,
     filterItems: _filterItems(selectedPeriods, relevantLicenceMonitoringStations),
@@ -80,9 +77,9 @@ function _filterItems(selectedPeriods, relevantLicenceMonitoringStations) {
       )
 
       periodMap.set(value, {
+        checked: selectedPeriods.includes(value),
         text,
-        value,
-        checked: selectedPeriods.includes(value)
+        value
       })
     }
   }
@@ -99,6 +96,7 @@ function _filterStationsByPeriods(relevantLicenceMonitoringStations, selectedPer
 
   return relevantLicenceMonitoringStations.filter((relevantLicenceMonitoringStation) => {
     const periodValue = _getPeriodValue(relevantLicenceMonitoringStation)
+
     return selectedPeriods.includes(periodValue)
   })
 }
