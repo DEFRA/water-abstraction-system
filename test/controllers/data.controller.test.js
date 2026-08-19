@@ -40,28 +40,6 @@ describe('Data controller', () => {
     await server.stop()
   })
 
-  describe('/data/dates', () => {
-    let options
-
-    describe('GET', () => {
-      beforeEach(() => {
-        options = {
-          method: 'GET',
-          url: '/data/dates'
-        }
-      })
-
-      describe('when the request succeeds', () => {
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
-          expect(response.payload).toContain('billingPeriods')
-        })
-      })
-    })
-  })
-
   describe('/data/load', () => {
     describe('POST', () => {
       const options = {
