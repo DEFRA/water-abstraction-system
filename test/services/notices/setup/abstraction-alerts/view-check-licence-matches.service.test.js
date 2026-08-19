@@ -55,6 +55,16 @@ describe('Notices - Setup - Abstraction Alerts - View Check Licence Matches serv
           text: 'Back'
         },
         cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
+        caption: 'Showing all 3 abstraction alerts',
+        filterActionLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches/filter`,
+        filterItems: [
+          { checked: false, text: '1 January to 31 March', value: '1-1-31-3' },
+          { checked: false, text: '1 February to 1 January', value: '1-2-1-1' }
+        ],
+        filters: {
+          openFilter: false,
+          periods: []
+        },
         notification: undefined,
         pageTitle: 'Check the licence matches for the selected thresholds',
         pageTitleCaption: 'Death star',
@@ -104,6 +114,12 @@ describe('Notices - Setup - Abstraction Alerts - View Check Licence Matches serv
           }
         ]
       })
+    })
+
+    it('looks for the abstraction period filter saved against the session', async () => {
+      await ViewCheckLicenceMatchesService(session.id, yarStub)
+
+      expect(yarStub.get).toHaveBeenCalledWith(`checkLicenceMatchesFilter-${session.id}`)
     })
 
     describe('when there is a notification', () => {
