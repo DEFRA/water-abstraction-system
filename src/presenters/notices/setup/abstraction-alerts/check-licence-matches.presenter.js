@@ -37,7 +37,7 @@ export default function checkLicenceMatchesPresenter(filters, session) {
     // Built from `relevantLicenceMonitoringStations` (not `filteredLicenceMonitoringStations`) so every period still
     // available stays selectable, even when it isn't part of the current filter selection. A period disappears once no
     // station has it any more, for example once the last station with that period has been removed
-    caption: selectedPeriods.length > 0 ? 'Showing alerts filtered by abstraction period' : null,
+    caption: _caption(filteredLicenceMonitoringStations, relevantLicenceMonitoringStations),
     filterActionLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches/filter`,
     filterItems: _filterItems(selectedPeriods, relevantLicenceMonitoringStations),
     pageTitle: 'Check the licence matches for the selected thresholds',
@@ -52,6 +52,17 @@ function _action(sessionId, licenceMonitoringStation) {
     link: `/system/notices/setup/${sessionId}/abstraction-alerts/remove-threshold/${licenceMonitoringStation.id}`,
     text: 'Remove'
   }
+}
+
+function _caption(filteredLicenceMonitoringStations, relevantLicenceMonitoringStations) {
+  const numberOfFilteredAlerts = filteredLicenceMonitoringStations.length
+  const numberOfAlerts = relevantLicenceMonitoringStations.length
+
+  if (numberOfFilteredAlerts === numberOfAlerts) {
+    return `Showing all ${numberOfAlerts} abstraction alerts`
+  }
+
+  return `Showing ${numberOfFilteredAlerts} of ${numberOfAlerts} abstraction alerts`
 }
 
 function _filterItems(selectedPeriods, relevantLicenceMonitoringStations) {
