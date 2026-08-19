@@ -31,7 +31,8 @@ describe('Notices - Setup - Preview - Preview Check Alert presenter', () => {
         licenceMonitoringStations.two.thresholdGroup,
         licenceMonitoringStations.three.thresholdGroup
       ],
-      referenceCode: 'WAA-XM0WMH'
+      referenceCode: 'WAA-XM0WMH',
+      relevantLicenceMonitoringStations: abstractionAlertSessionData.licenceMonitoringStations
     }
   })
 
