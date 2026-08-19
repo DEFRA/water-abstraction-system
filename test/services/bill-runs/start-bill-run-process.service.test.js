@@ -5,8 +5,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import NoBillingPeriodsError from '../../../src/errors/no-billing-periods.error.js'
 
 // Things we need to stub
+import * as DetermineBillingPeriodsService from 'water-abstraction-engine/services/bill-runs/determine-billing-periods.service.js'
 import * as AnnualProcessBillRunService from '../../../src/services/bill-runs/annual/process-bill-run.service.js'
-import * as DetermineBillingPeriodsService from '../../../src/services/bill-runs/determine-billing-periods.service.js'
 import * as InitiateBillRunService from '../../../src/services/bill-runs/initiate-bill-run.service.js'
 import * as SupplementaryProcessBillRunService from '../../../src/services/bill-runs/supplementary/process-bill-run.service.js'
 import * as TwoPartTariffProcessBillRunService from '../../../src/services/bill-runs/two-part-tariff/process-bill-run.service.js'
