@@ -7,7 +7,6 @@ import http2 from 'node:http2'
 
 import LoadService from '../services/data/load/load.service.js'
 import SeedService from '../services/data/seed/seed.service.js'
-import TearDownService from '../../../water-abstraction-acceptance-tests/tests/tear-down/tear-down.service.js'
 
 const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
