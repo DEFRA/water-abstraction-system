@@ -12,7 +12,7 @@ import * as SeedService from '../../src/services/data/seed/seed.service.js'
 // For running our service
 import { init } from '../../src/server.js'
 
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT } = http2.constants
 
 describe('Data controller', () => {
   let server
