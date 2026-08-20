@@ -62,6 +62,16 @@ function _caption(filteredLicenceMonitoringStations, relevantLicenceMonitoringSt
   return `Showing ${numberOfFilteredAlerts} of ${numberOfAlerts} abstraction alerts`
 }
 
+/**
+ * Generates the checkbox items for the abstraction period filter
+ *
+ * Multiple licence monitoring stations can share the same abstraction period, but we only want to show one checkbox
+ * per period. So, we build the items in a `Map`, which is a collection of key/value pairs where the keys are unique.
+ * Setting an entry with a key we've already used simply overwrites the previous one, which saves us having to check
+ * whether we've already added a checkbox for that period.
+ *
+ * @private
+ */
 function _filterItems(selectedPeriods, relevantLicenceMonitoringStations) {
   const periodMap = new Map()
 
