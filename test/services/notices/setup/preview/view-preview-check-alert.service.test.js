@@ -33,7 +33,8 @@ describe('Notices - Setup - Preview - View Preview Check Alert service', () => {
         licenceMonitoringStations.two.thresholdGroup,
         licenceMonitoringStations.three.thresholdGroup
       ],
-      referenceCode: generateNoticeReferenceCode('WAA-')
+      referenceCode: generateNoticeReferenceCode('WAA-'),
+      relevantLicenceMonitoringStations: abstractionAlertSessionData.licenceMonitoringStations
     }
 
     session = SessionModelStub(sessionData)

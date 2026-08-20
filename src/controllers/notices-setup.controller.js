@@ -13,6 +13,7 @@ import SubmitAlertThresholdsService from '../services/notices/setup/abstraction-
 import SubmitAlertTypeService from '../services/notices/setup/abstraction-alerts/submit-alert-type.service.js'
 import SubmitCancelAlertsService from '../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js'
 import SubmitCancelService from '../services/notices/setup/submit-cancel.service.js'
+import SubmitCheckLicenceMatchesFilterService from '../services/notices/setup/abstraction-alerts/submit-check-licence-matches-filter.service.js'
 import SubmitCheckLicenceMatchesService from '../services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js'
 import SubmitCheckNoticeTypeService from '../services/notices/setup/submit-check-notice-type.service.js'
 import SubmitCheckService from '../services/notices/setup/submit-check.service.js'
@@ -178,10 +179,11 @@ export async function submitCheck(request, h) {
 
 export async function submitCheckLicenceMatches(request, h) {
   const {
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  await SubmitCheckLicenceMatchesService(sessionId)
+  await SubmitCheckLicenceMatchesService(sessionId, yar)
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-email-address`)
 }
@@ -194,6 +196,18 @@ export async function submitCheckNoticeType(request, h) {
   await SubmitCheckNoticeTypeService(sessionId)
 
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
+}
+
+export async function submitCheckLicenceMatchesFilter(request, h) {
+  const {
+    params: { sessionId },
+    payload,
+    yar
+  } = request
+
+  await SubmitCheckLicenceMatchesFilterService(sessionId, payload, yar)
+
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
 export async function submitContactType(request, h) {

@@ -5,6 +5,7 @@
  */
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
 import { readFlashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 
 import CheckLicenceMatchesPresenter from '../../../../presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js'
@@ -20,13 +21,25 @@ import CheckLicenceMatchesPresenter from '../../../../presenters/notices/setup/a
 export default async function viewCheckLicenceMatchesService(sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = CheckLicenceMatchesPresenter(session)
+  const filters = _filters(sessionId, yar)
+
+  const pageData = CheckLicenceMatchesPresenter(filters, session)
 
   const notification = readFlashNotification(yar)
 
   return {
     activeNavBar: 'notices',
+    filters,
     ...pageData,
     notification
+  }
+}
+
+function _filters(sessionId, yar) {
+  const savedFilters = processSavedFilters(yar, `checkLicenceMatchesFilter-${sessionId}`)
+
+  return {
+    periods: [],
+    ...savedFilters
   }
 }

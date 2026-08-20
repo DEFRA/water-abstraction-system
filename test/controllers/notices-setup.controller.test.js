@@ -18,6 +18,7 @@ import * as SubmitAlertThresholdsService from '../../src/services/notices/setup/
 import * as SubmitAlertTypeService from '../../src/services/notices/setup/abstraction-alerts/submit-alert-type.service.js'
 import * as SubmitCancelAlertsService from '../../src/services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js'
 import * as SubmitCancelService from '../../src/services/notices/setup/submit-cancel.service.js'
+import * as SubmitCheckLicenceMatchesFilterService from '../../src/services/notices/setup/abstraction-alerts/submit-check-licence-matches-filter.service.js'
 import * as SubmitCheckLicenceMatchesService from '../../src/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js'
 import * as SubmitCheckNoticeTypeService from '../../src/services/notices/setup/submit-check-notice-type.service.js'
 import * as SubmitCheckService from '../../src/services/notices/setup/submit-check.service.js'
@@ -689,6 +690,31 @@ describe('Notices Setup controller', () => {
             expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
             expect(response.headers.location).toEqual(
               `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`
+            )
+          })
+        })
+      })
+    })
+
+    describe('/check-licence-matches/filter', () => {
+      describe('POST', () => {
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            postOptions = postRequestOptions(
+              basePath + `/${session.id}/abstraction-alerts/check-licence-matches/filter`,
+              { periods: '1-1-31-3' },
+              ['hof_notifications']
+            )
+
+            vi.spyOn(SubmitCheckLicenceMatchesFilterService, 'default').mockResolvedValue()
+          })
+
+          it('redirects back to the check licence matches page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(
+              `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`
             )
           })
         })
