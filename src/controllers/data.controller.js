@@ -7,7 +7,7 @@ import http2 from 'node:http2'
 
 import LoadService from '../services/data/load/load.service.js'
 import SeedService from '../services/data/seed/seed.service.js'
-import TearDownService from '../services/data/tear-down/tear-down.service.js'
+import TearDownService from '../../../water-abstraction-acceptance-tests/tests/tear-down/tear-down.service.js'
 
 const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
@@ -19,12 +19,6 @@ export async function load(request, h) {
 
 export async function seed(_request, h) {
   await SeedService()
-
-  return h.response().code(HTTP_STATUS_NO_CONTENT)
-}
-
-export async function tearDown(_request, h) {
-  await TearDownService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
