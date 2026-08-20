@@ -1,6 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading, caption) %}
+{% macro licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading, caption, actionHeaderLink) %}
 
   {% set showActionHeader = false %}
 
@@ -82,6 +82,12 @@
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
     {% endfor %}
 
+    {% if actionHeaderLink %}
+      {% set actionHeader = '<span class="govuk-!-display-block">Action</span><span class="govuk-!-display-block"><a href="'+ actionHeaderLink.link +'" class="govuk-link">' + actionHeaderLink.text + '</a></span>' %}
+    {% else %}
+      {% set actionHeader = 'Action' %}
+    {% endif %}
+
     <div>
       {{ govukTable({
         firstCellIsHeader: false,
@@ -105,7 +111,7 @@
             colspan: 2
           },
           {
-            text: "Action"
+            html: actionHeader
           } if showActionHeader
         ],
         rows: tableRows

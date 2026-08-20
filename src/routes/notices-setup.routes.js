@@ -2,6 +2,7 @@ import {
   processAddRecipient,
   processDownloadRecipients,
   processPreviewPaperReturn,
+  processRemoveFilteredThresholds,
   processRemoveThreshold,
   setup,
   submitAlertEmailAddress,
@@ -168,6 +169,18 @@ export default [
     path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
     options: {
       handler: submitCheckLicenceMatches,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/remove-filtered-thresholds/{absPeriodFilter}',
+    options: {
+      handler: processRemoveFilteredThresholds,
       auth: {
         access: {
           scope: ['hof_notifications']
