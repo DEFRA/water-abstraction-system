@@ -183,6 +183,16 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
           yarStub.get.mockReturnValue({ periods: ['1-2-1-1', '1-1-31-3'] })
         })
 
+        it('saves the "licenceRefs" matching any of the selected periods to the session', async () => {
+          await SubmitCheckLicenceMatchesService(session.id, yarStub)
+
+          expect(session.licenceRefs).toEqual([
+            licenceMonitoringStations.one.licence.licenceRef,
+            licenceMonitoringStations.two.licence.licenceRef,
+            licenceMonitoringStations.three.licence.licenceRef
+          ])
+        })
+
         it('saves the "relevantLicenceMonitoringStations" matching any of the selected periods to the session', async () => {
           await SubmitCheckLicenceMatchesService(session.id, yarStub)
 
@@ -203,6 +213,12 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
           vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
           yarStub.get.mockReturnValue({ periods: ['1-1-31-3'] })
+        })
+
+        it('saves only the "licenceRefs" left after both are applied to the session', async () => {
+          await SubmitCheckLicenceMatchesService(session.id, yarStub)
+
+          expect(session.licenceRefs).toEqual([licenceMonitoringStations.three.licence.licenceRef])
         })
 
         it('saves only the "relevantLicenceMonitoringStations" left after both are applied to the session', async () => {
