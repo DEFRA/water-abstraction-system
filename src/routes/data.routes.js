@@ -1,18 +1,6 @@
-import { dates, load, seed, tearDown } from '../controllers/data.controller.js'
+import { load, seed, tearDown } from '../controllers/data.controller.js'
 
 export default [
-  {
-    method: 'GET',
-    path: '/data/dates',
-    options: {
-      handler: dates,
-      app: {
-        excludeFromProd: true,
-        plainOutput: true
-      },
-      auth: false
-    }
-  },
   {
     method: 'POST',
     path: '/data/load',
