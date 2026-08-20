@@ -7,7 +7,6 @@ import http2 from 'node:http2'
 import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
 
 // Things we need to stub
-import * as LoadService from '../../src/services/data/load/load.service.js'
 import * as SeedService from '../../src/services/data/seed/seed.service.js'
 
 // For running our service
@@ -37,44 +36,6 @@ describe('Data controller', () => {
 
   afterAll(async () => {
     await server.stop()
-  })
-
-  describe('/data/load', () => {
-    describe('POST', () => {
-      const options = {
-        method: 'POST',
-        url: '/data/load'
-      }
-
-      describe('when the request succeeds', () => {
-        beforeEach(async () => {
-          vi.spyOn(LoadService, 'default').mockResolvedValue({
-            regions: ['d0a4123d-1e19-480d-9dd4-f70f3387c4b9']
-          })
-        })
-
-        it('returns a 200 status and the results', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
-          expect(response.payload).toEqual('{"regions":["d0a4123d-1e19-480d-9dd4-f70f3387c4b9"]}')
-        })
-      })
-
-      describe('when the request fails', () => {
-        describe('because the LoadService errors', () => {
-          beforeEach(async () => {
-            vi.spyOn(LoadService, 'default').mockRejectedValue(Error('LoadService error'))
-          })
-
-          it('returns a 500 status', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).toEqual(HTTP_STATUS_INTERNAL_SERVER_ERROR)
-          })
-        })
-      })
-    })
   })
 
   describe('/data/seed', () => {
