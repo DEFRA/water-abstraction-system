@@ -68,20 +68,18 @@ function _filterItems(selectedPeriods, relevantLicenceMonitoringStations) {
   for (const relevantLicenceMonitoringStation of relevantLicenceMonitoringStations) {
     const value = _periodValue(relevantLicenceMonitoringStation)
 
-    if (!periodMap.has(value)) {
-      const text = formatAbstractionPeriod(
-        relevantLicenceMonitoringStation.abstractionPeriodStartDay,
-        relevantLicenceMonitoringStation.abstractionPeriodStartMonth,
-        relevantLicenceMonitoringStation.abstractionPeriodEndDay,
-        relevantLicenceMonitoringStation.abstractionPeriodEndMonth
-      )
+    const text = formatAbstractionPeriod(
+      relevantLicenceMonitoringStation.abstractionPeriodStartDay,
+      relevantLicenceMonitoringStation.abstractionPeriodStartMonth,
+      relevantLicenceMonitoringStation.abstractionPeriodEndDay,
+      relevantLicenceMonitoringStation.abstractionPeriodEndMonth
+    )
 
-      periodMap.set(value, {
-        checked: selectedPeriods.includes(value),
-        text,
-        value
-      })
-    }
+    periodMap.set(value, {
+      checked: selectedPeriods.includes(value),
+      text,
+      value
+    })
   }
 
   return Array.from(periodMap.values()).sort((firstItem, secondItem) => {
