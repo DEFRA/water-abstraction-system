@@ -1,4 +1,4 @@
-import { load, seed, tearDown } from '../controllers/data.controller.js'
+import { load, seed } from '../controllers/data.controller.js'
 
 export default [
   {
@@ -21,21 +21,6 @@ export default [
     path: '/data/seed',
     options: {
       handler: seed,
-      app: {
-        excludeFromProd: true,
-        plainOutput: true
-      },
-      auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/data/tear-down',
-    options: {
-      handler: tearDown,
       app: {
         excludeFromProd: true,
         plainOutput: true

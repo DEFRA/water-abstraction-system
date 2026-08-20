@@ -9,7 +9,6 @@ import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
 // Things we need to stub
 import * as LoadService from '../../src/services/data/load/load.service.js'
 import * as SeedService from '../../src/services/data/seed/seed.service.js'
-import * as TearDownService from '../../src/services/data/tear-down/tear-down.service.js'
 
 // For running our service
 import { init } from '../../src/server.js'
@@ -101,41 +100,6 @@ describe('Data controller', () => {
         describe('because the SeedService errors', () => {
           beforeEach(async () => {
             vi.spyOn(SeedService, 'default').mockRejectedValue(Error('SeedService error'))
-          })
-
-          it('returns a 500 status', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).toEqual(HTTP_STATUS_INTERNAL_SERVER_ERROR)
-          })
-        })
-      })
-    })
-  })
-
-  describe('/data/tear-down', () => {
-    describe('POST', () => {
-      const options = {
-        method: 'POST',
-        url: '/data/tear-down'
-      }
-
-      describe('when the request succeeds', () => {
-        beforeEach(async () => {
-          vi.spyOn(TearDownService, 'default').mockResolvedValue()
-        })
-
-        it('returns a 204 status', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
-        })
-      })
-
-      describe('when the request fails', () => {
-        describe('because the TearDownService errors', () => {
-          beforeEach(async () => {
-            vi.spyOn(TearDownService, 'default').mockRejectedValue(Error('TearDownService error'))
           })
 
           it('returns a 500 status', async () => {
