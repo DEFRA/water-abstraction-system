@@ -9,8 +9,8 @@ import AlertTypeValidator from '../../../../src/validators/notices/setup/alert-t
 
 describe('Notices - Setup - Alert Type validator', () => {
   let licenceMonitoringStations
-  let licenceMonitoringStationsData
   let payload
+  let session
 
   beforeEach(() => {
     payload = {
@@ -19,12 +19,15 @@ describe('Notices - Setup - Alert Type validator', () => {
 
     licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
-    licenceMonitoringStationsData = [...Object.values(licenceMonitoringStations)]
+    session = {
+      licenceMonitoringStations: [...Object.values(licenceMonitoringStations)],
+      removedThresholds: []
+    }
   })
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+      const result = AlertTypeValidator(payload, session)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -37,11 +40,11 @@ describe('Notices - Setup - Alert Type validator', () => {
             alertType: 'stop'
           }
 
-          licenceMonitoringStationsData = [{ ...licenceMonitoringStations.one, restrictionType: 'stop_or_reduce' }]
+          session.licenceMonitoringStations = [{ ...licenceMonitoringStations.one, restrictionType: 'stop_or_reduce' }]
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, session)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -53,11 +56,11 @@ describe('Notices - Setup - Alert Type validator', () => {
 
       describe('and the alert type is not "stop"', () => {
         beforeEach(() => {
-          licenceMonitoringStationsData = [{ ...licenceMonitoringStations.one, restrictionType: 'stop_or_reduce' }]
+          session.licenceMonitoringStations = [{ ...licenceMonitoringStations.one, restrictionType: 'stop_or_reduce' }]
         })
 
         it('returns with no errors', () => {
-          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, session)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeUndefined()
@@ -73,7 +76,7 @@ describe('Notices - Setup - Alert Type validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+        const result = AlertTypeValidator(payload, session)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -91,7 +94,7 @@ describe('Notices - Setup - Alert Type validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+        const result = AlertTypeValidator(payload, session)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -101,7 +104,7 @@ describe('Notices - Setup - Alert Type validator', () => {
     describe('when called with invalid data', () => {
       describe('and the "alertType" is not available', () => {
         beforeEach(() => {
-          licenceMonitoringStationsData = [
+          session.licenceMonitoringStations = [
             {
               ...licenceMonitoringStations.one,
               restrictionType: 'warning'
@@ -110,7 +113,7 @@ describe('Notices - Setup - Alert Type validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, session)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -122,11 +125,27 @@ describe('Notices - Setup - Alert Type validator', () => {
 
       describe('and there are no licence monitoring stations', () => {
         beforeEach(() => {
-          licenceMonitoringStationsData = []
+          session.licenceMonitoringStations = []
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, session)
+
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
+            'There are no thresholds with the stop restriction type, Select the type of alert you need to send'
+          )
+        })
+      })
+
+      describe('and the only licence monitoring station with a matching restriction type has been removed', () => {
+        beforeEach(() => {
+          session.removedThresholds = [licenceMonitoringStations.two.id]
+        })
+
+        it('returns with errors', () => {
+          const result = AlertTypeValidator(payload, session)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -147,7 +166,7 @@ describe('Notices - Setup - Alert Type validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+        const result = AlertTypeValidator(payload, session)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -157,7 +176,7 @@ describe('Notices - Setup - Alert Type validator', () => {
     describe('when called with invalid data', () => {
       describe('and the "alertType" is not available', () => {
         beforeEach(() => {
-          licenceMonitoringStationsData = [
+          session.licenceMonitoringStations = [
             {
               ...licenceMonitoringStations.one,
               restrictionType: 'warning'
@@ -166,7 +185,7 @@ describe('Notices - Setup - Alert Type validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, session)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -178,11 +197,27 @@ describe('Notices - Setup - Alert Type validator', () => {
 
       describe('and there are no licence monitoring stations', () => {
         beforeEach(() => {
-          licenceMonitoringStationsData = []
+          session.licenceMonitoringStations = []
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, session)
+
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
+            'There are no thresholds with the reduce restriction type, Select the type of alert you need to send'
+          )
+        })
+      })
+
+      describe('and every licence monitoring station with a matching restriction type has been removed', () => {
+        beforeEach(() => {
+          session.removedThresholds = [licenceMonitoringStations.one.id, licenceMonitoringStations.three.id]
+        })
+
+        it('returns with errors', () => {
+          const result = AlertTypeValidator(payload, session)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -203,7 +238,7 @@ describe('Notices - Setup - Alert Type validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+        const result = AlertTypeValidator(payload, session)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -213,11 +248,29 @@ describe('Notices - Setup - Alert Type validator', () => {
     describe('when called with invalid data', () => {
       describe('and there are no licence monitoring stations', () => {
         beforeEach(() => {
-          licenceMonitoringStationsData = []
+          session.licenceMonitoringStations = []
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, session)
+
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
+            'There are no thresholds with the warning restriction type, Select the type of alert you need to send'
+          )
+        })
+      })
+
+      describe('and every licence monitoring station has been removed', () => {
+        beforeEach(() => {
+          session.removedThresholds = session.licenceMonitoringStations.map((licenceMonitoringStation) => {
+            return licenceMonitoringStation.id
+          })
+        })
+
+        it('returns with errors', () => {
+          const result = AlertTypeValidator(payload, session)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -238,7 +291,7 @@ describe('Notices - Setup - Alert Type validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+        const result = AlertTypeValidator(payload, session)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -248,11 +301,11 @@ describe('Notices - Setup - Alert Type validator', () => {
     describe('when called with invalid data', () => {
       describe('and there are no licence monitoring stations', () => {
         beforeEach(() => {
-          licenceMonitoringStationsData = []
+          session.licenceMonitoringStations = []
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, session)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()

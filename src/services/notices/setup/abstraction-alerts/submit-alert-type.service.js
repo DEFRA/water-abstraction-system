@@ -21,7 +21,7 @@ import AlertTypeValidator from '../../../../validators/notices/setup/alert-type.
 export default async function submitAlertTypeService(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
-  const validationResult = _validate(payload, session.licenceMonitoringStations)
+  const validationResult = _validate(payload, session)
 
   if (!validationResult) {
     await _save(session, payload)
@@ -51,8 +51,8 @@ async function _save(session, payload) {
   return session.$update()
 }
 
-function _validate(payload, licenceMonitoringStations) {
-  const validationResult = AlertTypeValidator(payload, licenceMonitoringStations)
+function _validate(payload, session) {
+  const validationResult = AlertTypeValidator(payload, session)
 
   return formatValidationResult(validationResult)
 }

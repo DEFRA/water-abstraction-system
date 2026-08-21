@@ -14,16 +14,18 @@ const errorMessage = 'Select the type of alert you need to send'
  * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
  * @param {object} payload - The payload from the request to be validated
- * @param {object[]} licenceMonitoringStations - used to check if the user has selected an unavailable type
+ * @param {module:SessionModel} session - The session instance
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function alertTypeValidator(payload, licenceMonitoringStations) {
+export default function alertTypeValidator(payload, session) {
+  const { licenceMonitoringStations, removedThresholds } = session
+
   const schema = Joi.object({
     alertType: Joi.required()
       .custom((value, helpers) => {
-        return _availableRestrictionTypeCustomError(value, helpers, licenceMonitoringStations)
+        return _availableRestrictionTypeCustomError(value, helpers, licenceMonitoringStations, removedThresholds)
       }, 'Custom Alert Type Validation')
       .messages({
         'any.required': errorMessage,
@@ -43,8 +45,8 @@ export default function alertTypeValidator(payload, licenceMonitoringStations) {
  *
  * @private
  */
-function _availableRestrictionTypeCustomError(value, helpers, licenceMonitoringStations) {
-  const availableTypes = _availableRestrictionType(licenceMonitoringStations, value)
+function _availableRestrictionTypeCustomError(value, helpers, licenceMonitoringStations, removedThresholds) {
+  const availableTypes = _availableRestrictionType(licenceMonitoringStations, removedThresholds, value)
 
   const errorMsg = `There are no thresholds with the ${value} restriction type, ${errorMessage}`
 
@@ -72,10 +74,11 @@ function _availableRestrictionTypeCustomError(value, helpers, licenceMonitoringS
  *
  * @private
  */
-function _availableRestrictionType(licenceMonitoringStations, alertType) {
+function _availableRestrictionType(licenceMonitoringStations, removedThresholds, alertType) {
   const relevantLicenceMonitoringStation = DetermineRelevantLicenceMonitoringStationsByAlertTypeService(
+    alertType,
     licenceMonitoringStations,
-    alertType
+    removedThresholds
   )
 
   const restrictionTypes = relevantLicenceMonitoringStation.map((licenceMonitoringStation) => {
