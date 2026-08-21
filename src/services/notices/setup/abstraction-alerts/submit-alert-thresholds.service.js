@@ -48,8 +48,9 @@ export default async function submitAlertThresholdsService(sessionId, payload, y
 /**
  * Clear the licence match filter when the user changes their previously selected alert thresholds
  *
- * The filter is only relevant to the thresholds it was applied against, so once they change we drop it to avoid
- * filtering the licence matches by a threshold that is no longer selected.
+ * The filter is on abstraction periods, and those periods are derived from the licence monitoring stations that match
+ * the selected thresholds. Change the thresholds and the periods change with them, which would leave the saved filter
+ * pointing at options no longer available on the page.
  *
  * The `session.alertThresholds` array will always have a length of zero upon the first visit to the "Which thresholds
  * do you need to send an alert for?" page. In this case a filter will not have been set yet.
@@ -66,13 +67,13 @@ function _clearFilterIfRequired(session, payload, yar) {
     return
   }
 
-  const unchanged =
+  const thresholdsMatch =
     alertThresholds.length === payload.alertThresholds.length &&
     alertThresholds.every((alertThreshold) => {
       return payload.alertThresholds.includes(alertThreshold)
     })
 
-  if (!unchanged) {
+  if (!thresholdsMatch) {
     yar.clear(`checkLicenceMatchesFilter-${session.id}`)
   }
 }
