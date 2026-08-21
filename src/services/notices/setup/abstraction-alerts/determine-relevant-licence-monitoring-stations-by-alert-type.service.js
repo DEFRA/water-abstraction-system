@@ -20,25 +20,32 @@
  *
  * This function ensures the correct set of stations is selected based on alert type.
  *
- * @param {object[]} licenceMonitoringStations - An array of licence monitoring stations
+ * A user can remove 'licenceMonitoringStations' for a licence. When this happens we need to return the
+ * 'licenceMonitoringStations' with those choices removed.
+ *
  * @param {string} alertType - The type of alert selected by the user. Possible types are:
+ * @param {object[]} licenceMonitoringStations - An array of licence monitoring stations
+ * @param {object[]} removedLicenceMonitoringStations - An array of licence monitoring station IDs to remove
  * "Warning", "Reduce", "Stop", and "Resume".
  *
  * @returns {object[]} - The filtered list of licence monitoring stations
  */
 export default function determineRelevantLicenceMonitoringStationsByAlertTypeService(
+  alertType,
   licenceMonitoringStations,
-  alertType
+  removedLicenceMonitoringStations
 ) {
+  const remainingLicenceMonitoringStations = _remaining(licenceMonitoringStations, removedLicenceMonitoringStations)
+
   if (alertType === 'stop') {
-    return _stop(licenceMonitoringStations, alertType)
+    return _stop(remainingLicenceMonitoringStations, alertType)
   }
 
   if (alertType === 'reduce') {
-    return _reduce(licenceMonitoringStations, alertType)
+    return _reduce(remainingLicenceMonitoringStations, alertType)
   }
 
-  return licenceMonitoringStations
+  return remainingLicenceMonitoringStations
 }
 
 function _reduce(licenceMonitoringStations, alertType) {
@@ -47,6 +54,16 @@ function _reduce(licenceMonitoringStations, alertType) {
       licenceMonitoringStation.restrictionType === alertType ||
       licenceMonitoringStation.restrictionType === 'stop_or_reduce'
     )
+  })
+}
+
+function _remaining(licenceMonitoringStations, removedLicenceMonitoringStations) {
+  if (!removedLicenceMonitoringStations) {
+    return licenceMonitoringStations
+  }
+
+  return licenceMonitoringStations.filter((licenceMonitoringStation) => {
+    return !removedLicenceMonitoringStations.includes(licenceMonitoringStation.id)
   })
 }
 
