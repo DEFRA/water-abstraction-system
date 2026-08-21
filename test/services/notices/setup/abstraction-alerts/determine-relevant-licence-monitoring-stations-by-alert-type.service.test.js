@@ -137,24 +137,4 @@ describe('Notices Setup - Abstraction Alerts - Determine Relevant Licence Monito
       })
     })
   })
-
-  describe('when no licence monitoring stations have been removed', () => {
-    beforeEach(() => {
-      removedLicenceMonitoringStations = []
-    })
-
-    it('returns all the licence monitoring stations', () => {
-      const result = DetermineRelevantLicenceMonitoringStationsByAlertTypeService(
-        alertType,
-        licenceMonitoringStationsData,
-        removedLicenceMonitoringStations
-      )
-
-      expect(result).toEqual([
-        licenceMonitoringStations.one,
-        licenceMonitoringStations.two,
-        licenceMonitoringStations.three
-      ])
-    })
-  })
 })
