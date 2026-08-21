@@ -16,11 +16,20 @@ import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from '../../
  * @returns {object} - The data formatted for the view template
  */
 export default function alertThresholdsPresenter(session) {
+  const {
+    alertThresholds,
+    alertType,
+    id: sessionId,
+    licenceMonitoringStations,
+    monitoringStationName,
+    removedThresholds
+  } = session
+
   return {
-    backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
+    backLink: { href: `/system/notices/setup/${sessionId}/abstraction-alerts/alert-type`, text: 'Back' },
     pageTitle: 'Which thresholds do you need to send an alert for?',
-    pageTitleCaption: session.monitoringStationName,
-    thresholdOptions: _thresholdOptions(session.licenceMonitoringStations, session.alertType, session.alertThresholds)
+    pageTitleCaption: monitoringStationName,
+    thresholdOptions: _thresholdOptions(alertThresholds, alertType, licenceMonitoringStations, removedThresholds)
   }
 }
 
@@ -93,10 +102,11 @@ function _sortedThresholds(relevantThresholds) {
  *
  * @private
  */
-function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds = []) {
+function _thresholdOptions(alertThresholds, alertType, licenceMonitoringStations, removedThresholds) {
   const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsByAlertTypeService(
+    alertType,
     licenceMonitoringStations,
-    alertType
+    removedThresholds
   )
 
   const relevantThresholds = _relevantThresholds(relevantLicenceMonitoringStations)
@@ -107,7 +117,7 @@ function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds
     const [measureType, thresholdValue, thresholdUnit] = thresholdGroup.split('-')
 
     return {
-      checked: alertThresholds.includes(thresholdGroup),
+      checked: alertThresholds ? alertThresholds.includes(thresholdGroup) : false,
       value: thresholdGroup,
       text: formatValueUnit(thresholdValue, thresholdUnit),
       hint: {
