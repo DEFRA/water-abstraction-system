@@ -20,8 +20,7 @@
  *
  * This function ensures the correct set of stations is selected based on alert type.
  *
- * A user can remove 'licenceMonitoringStations' for a licence. When this happens we need to return the
- * 'licenceMonitoringStations' with those choices removed.
+ * A user can also remove individual 'licenceMonitoringStations' (alerts) for a licence.
  *
  * @param {string} alertType - The type of alert selected by the user. Possible types are:
  * @param {object[]} licenceMonitoringStations - An array of licence monitoring stations
