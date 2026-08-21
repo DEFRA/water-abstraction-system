@@ -121,10 +121,11 @@ export async function submitAlertEmailAddress(request, h) {
 export async function submitAlertThresholds(request, h) {
   const {
     payload,
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  const pageData = await SubmitAlertThresholdsService(sessionId, payload)
+  const pageData = await SubmitAlertThresholdsService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/alert-thresholds.njk`, pageData)
