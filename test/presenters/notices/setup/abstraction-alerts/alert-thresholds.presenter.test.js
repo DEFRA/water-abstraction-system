@@ -197,6 +197,34 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
         })
       })
 
+      describe('and thresholds have been removed', () => {
+        beforeEach(() => {
+          // This could be 'resume' or 'warning'
+          delete session.alertType
+
+          session.removedThresholds = [licenceMonitoringStations.one.id]
+        })
+
+        it('returns page data for the view, without the removed thresholds', () => {
+          const result = AlertThresholdsPresenter(session)
+
+          expect(result.thresholdOptions).toEqual([
+            {
+              checked: false,
+              hint: { text: 'Flow threshold' },
+              text: '100m3/s',
+              value: licenceMonitoringStations.two.thresholdGroup
+            },
+            {
+              checked: false,
+              hint: { text: 'Level threshold' },
+              text: '100m',
+              value: licenceMonitoringStations.three.thresholdGroup
+            }
+          ])
+        })
+      })
+
       describe('when there are multiple different thresholds all with different types and measurement quantities', () => {
         beforeEach(() => {
           licenceMonitoringStations = AbstractionAlertSessionData.unsortedLicenceMonitoringStations()
