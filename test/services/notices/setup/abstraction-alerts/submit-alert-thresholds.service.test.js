@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
+import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Things we need to stub
@@ -16,6 +17,11 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
   let payload
   let session
   let sessionData
+  let yarStub
+
+  beforeEach(() => {
+    yarStub = YarStub()
+  })
 
   afterEach(() => {
     vi.restoreAllMocks()
@@ -27,6 +33,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
 
       sessionData = {
         ...AbstractionAlertSessionData.get(licenceMonitoringStations),
+        alertThresholds: [],
         alertType: 'stop'
       }
 
@@ -40,7 +47,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitAlertThresholdsService(session.id, payload)
+      const result = await SubmitAlertThresholdsService(session.id, payload, yarStub)
 
       expect(result).toEqual({})
     })
@@ -54,7 +61,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
         })
 
         it('saves the submitted value as an array', async () => {
-          await SubmitAlertThresholdsService(session.id, payload)
+          await SubmitAlertThresholdsService(session.id, payload, yarStub)
 
           expect(session.alertThresholds).toEqual([licenceMonitoringStations.one.thresholdGroup])
           expect(session.$update).toHaveBeenCalled()
@@ -63,7 +70,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
 
       describe('and more than one threshold has been selected ', () => {
         it('saves the submitted values as an array', async () => {
-          await SubmitAlertThresholdsService(session.id, payload)
+          await SubmitAlertThresholdsService(session.id, payload, yarStub)
 
           expect(session.alertThresholds).toEqual([
             licenceMonitoringStations.one.thresholdGroup,
@@ -71,6 +78,51 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
           ])
 
           expect(session.$update).toHaveBeenCalled()
+        })
+      })
+    })
+
+    describe('and no thresholds have been selected previously', () => {
+      it('does not clear the check licence matches filter', async () => {
+        await SubmitAlertThresholdsService(session.id, payload, yarStub)
+
+        expect(yarStub.clear).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('and thresholds have been selected previously', () => {
+      describe('and the thresholds submitted are different', () => {
+        beforeEach(() => {
+          sessionData.alertThresholds = [licenceMonitoringStations.one.thresholdGroup]
+
+          session = SessionModelStub(sessionData)
+
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+        })
+
+        it('clears the check licence matches filter', async () => {
+          await SubmitAlertThresholdsService(session.id, payload, yarStub)
+
+          expect(yarStub.clear).toHaveBeenCalledWith(`checkLicenceMatchesFilter-${session.id}`)
+        })
+      })
+
+      describe('and the thresholds submitted are the same', () => {
+        beforeEach(() => {
+          sessionData.alertThresholds = [
+            licenceMonitoringStations.one.thresholdGroup,
+            licenceMonitoringStations.two.thresholdGroup
+          ]
+
+          session = SessionModelStub(sessionData)
+
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+        })
+
+        it('does not clear the check licence matches filter', async () => {
+          await SubmitAlertThresholdsService(session.id, payload, yarStub)
+
+          expect(yarStub.clear).not.toHaveBeenCalled()
         })
       })
     })
@@ -83,7 +135,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
 
         sessionData = {
           ...abstractionAlertSessionData,
-          alertThresholds: [licenceMonitoringStations.one.thresholdGroup],
+          alertThresholds: [],
           alertType: 'stop'
         }
 
@@ -95,7 +147,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitAlertThresholdsService(session.id, payload)
+        const result = await SubmitAlertThresholdsService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           error: {
@@ -123,6 +175,12 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
             }
           ]
         })
+      })
+
+      it('does not clear the check licence matches filter', async () => {
+        await SubmitAlertThresholdsService(session.id, payload, yarStub)
+
+        expect(yarStub.clear).not.toHaveBeenCalled()
       })
     })
 
@@ -144,7 +202,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
       })
 
       it('returns page data for the view, with errors, and all the thresholds unselected', async () => {
-        const result = await SubmitAlertThresholdsService(session.id, payload)
+        const result = await SubmitAlertThresholdsService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           error: {
@@ -172,6 +230,12 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
             }
           ]
         })
+      })
+
+      it('does not clear the check licence matches filter', async () => {
+        await SubmitAlertThresholdsService(session.id, payload, yarStub)
+
+        expect(yarStub.clear).not.toHaveBeenCalled()
       })
     })
   })

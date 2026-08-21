@@ -54,10 +54,25 @@ export default async function submitAlertThresholdsService(sessionId, payload, y
  * The `session.alertThresholds` array will always have a length of zero upon the first visit to the "Which thresholds
  * do you need to send an alert for?" page. In this case a filter will not have been set yet.
  *
+ * We also leave the filter alone when nothing has been selected. Validation will fail, so the user's previously
+ * selected thresholds are never changed.
+ *
  * @private
  */
 function _clearFilterIfRequired(session, payload, yar) {
-  if (session.alertThresholds.length > 0 && session.alertThresholds !== payload.alertThresholds) {
+  const { alertThresholds } = session
+
+  if (alertThresholds.length === 0 || payload.alertThresholds.length === 0) {
+    return
+  }
+
+  const unchanged =
+    alertThresholds.length === payload.alertThresholds.length &&
+    alertThresholds.every((alertThreshold) => {
+      return payload.alertThresholds.includes(alertThreshold)
+    })
+
+  if (!unchanged) {
     yar.clear(`checkLicenceMatchesFilter-${session.id}`)
   }
 }
