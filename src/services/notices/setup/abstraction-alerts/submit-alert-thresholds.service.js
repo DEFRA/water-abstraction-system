@@ -67,15 +67,16 @@ function _clearFilterIfRequired(session, payload, yar) {
     return
   }
 
-  const thresholdsMatch =
-    alertThresholds.length === payload.alertThresholds.length &&
-    alertThresholds.every((alertThreshold) => {
-      return payload.alertThresholds.includes(alertThreshold)
-    })
+  const matchingCount = alertThresholds.length === payload.alertThresholds.length
+  const matchingContent = alertThresholds.every((alertThreshold) => {
+    return payload.alertThresholds.includes(alertThreshold)
+  })
 
-  if (!thresholdsMatch) {
-    yar.clear(`checkLicenceMatchesFilter-${session.id}`)
+  if (matchingCount && matchingContent) {
+    return
   }
+
+  yar.clear(`checkLicenceMatchesFilter-${session.id}`)
 }
 
 async function _save(session) {
