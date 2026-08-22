@@ -10,8 +10,8 @@ export default {
       exclude: ['src/config/**', 'src/controllers/check.controller.js', 'test/**'],
       // Use V8's built-in coverage instrumentation
       provider: 'v8',
-      // In CI emit an lcov report for upload to SonarQube; locally print a text summary to the terminal
-      reporter: ci ? ['lcov'] : ['text'],
+      // In CI emit lcov for SonarQube and cobertura for GitHub coverage; locally print a text summary to the terminal
+      reporter: ci ? ['lcov', 'cobertura'] : ['text'],
       // Directory where lcov coverage reports are written
       reportsDirectory: 'coverage'
     },
