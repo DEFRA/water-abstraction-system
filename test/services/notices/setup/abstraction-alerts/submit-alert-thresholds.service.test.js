@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
+
 import AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Things we need to stub
