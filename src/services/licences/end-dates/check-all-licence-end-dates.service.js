@@ -3,6 +3,7 @@
  * @module CheckAllLicenceEndDatesService
  */
 
+import pMap from 'water-abstraction-engine/wrappers/p-map.wrapper.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstraction-engine/lib/general.lib.js'
 
 import CheckLicenceEndDatesService from './check-licence-end-dates.service.js'
@@ -66,10 +67,5 @@ export default async function checkAllLicenceEndDatesService() {
  * @private
  */
 async function _checkLicences(licences) {
-  // The pMap dependency does not support CJS modules. This causes us a problem as we are locked into
-  // using these for the time being. We've used the same workaround we used for Got (built by the same person) in
-  // src/requests/base.request.js
-  const pMap = (await import('p-map')).default
-
   await pMap(licences, CheckLicenceEndDatesService, { concurrency: LicencesConfig.endDates.batchSize })
 }
