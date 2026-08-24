@@ -3,11 +3,11 @@
  * @module CreateUserDal
  */
 
+import BCryptJs from 'water-abstraction-engine/wrappers/bcryptjs.wrapper.js'
 import EventModel from 'water-abstraction-engine/models/event.model.js'
 import GroupModel from 'water-abstraction-engine/models/group.model.js'
 import RoleModel from 'water-abstraction-engine/models/role.model.js'
 import UserModel from 'water-abstraction-engine/models/user.model.js'
-import { hashSync } from 'bcryptjs'
 import { userPermissions } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { generateUUID, timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 
@@ -68,7 +68,7 @@ async function _insertUser(email, trx) {
   const userData = {
     application: 'water_admin',
     badLogins: 0,
-    password: hashSync(generateUUID(), 10), // Sets a random password
+    password: BCryptJs.hashSync(generateUUID(), 10), // Sets a random password
     resetGuid: generateUUID(),
     resetGuidCreatedAt: timestampForPostgres(),
     resetRequired: 1,
