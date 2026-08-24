@@ -3,7 +3,7 @@
  * @module AllocateReturnsToChargeElementService
  */
 
-import Big from 'big.js'
+import Big from 'water-abstraction-engine/wrappers/big.wrapper.js'
 import { periodsOverlap } from 'water-abstraction-engine/lib/general.lib.js'
 
 /**

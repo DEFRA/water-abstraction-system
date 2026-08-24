@@ -3,7 +3,7 @@
  * @module CheckPresenter
  */
 
-import Big from 'big.js'
+import Big from 'water-abstraction-engine/wrappers/big.wrapper.js'
 import { returnRequirementFrequencies } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import {
   formatAbstractionPeriod,

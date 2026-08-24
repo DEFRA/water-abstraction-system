@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import Big from 'big.js'
+import Big from 'water-abstraction-engine/wrappers/big.wrapper.js'
 
 // Thing under test
 import AllocateSingleVolumeToLinesService from '../../../../src/services/return-logs/setup/allocate-single-volume-to-lines.service.js'
