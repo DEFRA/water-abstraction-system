@@ -5,9 +5,9 @@
 
 import { NodeHttpHandler } from '@smithy/node-http-handler'
 import { promises as fsPromises } from 'node:fs'
+import hpagent from 'water-abstraction-engine/wrappers/hpagent.wrapper.js'
 import path from 'node:path'
 import serverConfig from 'water-abstraction-engine/config/server.config.js'
-import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
 import S3Config from '../../../config/s3.config.js'
@@ -45,8 +45,8 @@ function _customConfig() {
       // operator to bring the result back into the top level of the `customConfig` object.
       ...(serverConfig.httpProxy
         ? {
-            httpsAgent: new HttpsProxyAgent({ proxy: serverConfig.httpProxy }),
-            httpAgent: new HttpProxyAgent({ proxy: serverConfig.httpProxy })
+            httpsAgent: new hpagent.HttpsProxyAgent({ proxy: serverConfig.httpProxy }),
+            httpAgent: new hpagent.HttpProxyAgent({ proxy: serverConfig.httpProxy })
           }
         : {}),
       connectionTimeout: 10000
