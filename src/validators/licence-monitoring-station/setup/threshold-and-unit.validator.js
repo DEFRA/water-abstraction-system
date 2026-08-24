@@ -3,7 +3,7 @@
  * @module ThresholdAndUnitValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { thresholdUnits } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 const MAX_VALUE = 10000000

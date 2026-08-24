@@ -4,7 +4,7 @@
  * @module EmailValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { isFalse } from 'water-abstraction-engine/validators/helpers/is-false.validator.js'
 
 /**

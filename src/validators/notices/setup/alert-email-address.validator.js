@@ -4,7 +4,7 @@
  * @module AlertEmailAddressValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const ERROR_MESSAGES = {
   invalidEmail: 'Enter an email address in the correct format, like name@example.com',

@@ -3,7 +3,7 @@
  * @module LicenceRenewalValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { renewalNoticeDate } from 'water-abstraction-engine/lib/dates.lib.js'
 import { today } from 'water-abstraction-engine/lib/general.lib.js'
 

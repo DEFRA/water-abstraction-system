@@ -4,7 +4,7 @@
  * @module ContactEmailValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 /**
  * Validates data submitted for the '/company-contacts/setup/{sessionId}/contact-email' page

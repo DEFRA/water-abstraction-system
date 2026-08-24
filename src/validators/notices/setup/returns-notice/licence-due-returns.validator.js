@@ -3,7 +3,7 @@
  * @module LicenceDueReturnsValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 import { licenceRefSchema } from '../../../schemas/licence-ref.schema.js'
 

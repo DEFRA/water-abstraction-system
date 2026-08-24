@@ -3,7 +3,7 @@
  * @module NoReturnsRequiredValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const VALID_VALUES = [
   'abstraction-below-100-cubic-metres-per-day',

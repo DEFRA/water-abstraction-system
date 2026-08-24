@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { invalidStartCharacters } from 'water-abstraction-engine/validators/helpers/notify-address-line.validator.js'
 
 /**

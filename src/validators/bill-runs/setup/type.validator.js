@@ -3,7 +3,7 @@
  * @module TypeValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const VALID_VALUES = ['annual', 'supplementary', 'two_part_supplementary', 'two_part_tariff']
 

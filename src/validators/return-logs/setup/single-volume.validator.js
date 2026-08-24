@@ -3,7 +3,7 @@
  * @module SingleVolumeValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { maxDecimalPlaces } from 'water-abstraction-engine/validators/helpers/max-decimal-places.validator.js'
 
 const MAX_DECIMALS = 6

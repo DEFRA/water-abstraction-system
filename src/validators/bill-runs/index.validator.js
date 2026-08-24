@@ -3,11 +3,9 @@
  * @module IndexValidator
  */
 
-import base from 'joi'
-import joiDate from '@joi/date'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { billRunStatuses, billRunTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
-const Joi = base.extend(joiDate)
 const MAX_BILL_RUN_NUMBER = 999999
 const MIN_YEAR_CREATED = 2014 // Based on the minimum year a bill run has been created in the system
 

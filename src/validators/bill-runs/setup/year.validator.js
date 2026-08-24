@@ -3,7 +3,7 @@
  * @module YearValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const VALID_VALUES = ['2026', '2025', '2024', '2023', '2022', '2021']
 

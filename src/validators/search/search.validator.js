@@ -3,7 +3,7 @@
  * @module SearchValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const ERROR_MESSAGE =
   'Enter a licence number, customer name, returns ID, registered email address or monitoring station'

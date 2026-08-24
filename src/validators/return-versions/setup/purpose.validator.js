@@ -3,7 +3,7 @@
  * @module PurposeValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/purpose` page

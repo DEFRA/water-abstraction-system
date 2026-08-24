@@ -3,7 +3,7 @@
  * @module LicenceRefSchemaValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const errorMessage = 'Enter a licence number'
 

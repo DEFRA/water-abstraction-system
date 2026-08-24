@@ -3,7 +3,7 @@
  * @module LicencesValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 /**
  * Validates data submitted for the `/users/external/setup/{sessionId}/licences` page

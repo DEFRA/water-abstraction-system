@@ -3,7 +3,7 @@
  * @module ReadingsValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const MAX_ALLOWED_READING = 99999999999
 

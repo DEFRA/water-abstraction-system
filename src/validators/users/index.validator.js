@@ -3,11 +3,9 @@
  * @module IndexValidator
  */
 
-import base from 'joi'
-import joiDate from '@joi/date'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { userPermissions } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
-const Joi = base.extend(joiDate)
 const MAX_EMAIL_LENGTH = 255
 const VALID_STATUSES = ['awaiting', 'disabled', 'enabled', 'locked']
 const VALID_TYPES = ['water_admin', 'water_vml']

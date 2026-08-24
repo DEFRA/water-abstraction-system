@@ -3,7 +3,7 @@
  * @module SupplementaryYearValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const ERROR_MESSAGE = 'Select at least one financial year'
 
