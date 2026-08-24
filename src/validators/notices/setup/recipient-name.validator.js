@@ -4,7 +4,7 @@
  * @module RecipientNameValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const errorMessage = `Enter the recipient's name`
 

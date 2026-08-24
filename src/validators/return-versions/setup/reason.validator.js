@@ -3,7 +3,7 @@
  * @module ReasonValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { returnRequirementReasons } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 const errorMessage = 'Select the reason for the requirements for returns'

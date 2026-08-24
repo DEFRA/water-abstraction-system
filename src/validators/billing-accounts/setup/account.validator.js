@@ -4,7 +4,7 @@
  * @module AccountValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const MAX_LENGTH = 100
 

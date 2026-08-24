@@ -4,7 +4,7 @@
  * @module AlertTypeValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from '../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js'
 

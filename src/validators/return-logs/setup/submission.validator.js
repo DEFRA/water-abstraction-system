@@ -3,7 +3,7 @@
  * @module SubmissionValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const VALID_VALUES = ['enterReturn', 'nilReturn', 'recordReceipt']
 

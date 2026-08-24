@@ -3,7 +3,7 @@
  * @module StopOrReduceValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 /**
  * Validates data submitted for the `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page

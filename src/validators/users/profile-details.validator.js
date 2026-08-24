@@ -3,7 +3,7 @@
  * @module ProfileDetailsValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const EMAIL_DOMAIN_PATTERN = /^.+@environment-agency.gov.uk$/
 const MAX_ADDRESS_LENGTH = 300

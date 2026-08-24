@@ -3,11 +3,8 @@
  * @module AbstractionPeriodValidator
  */
 
-import base from 'joi'
-import joiDate from '@joi/date'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { leftPadZeroes } from 'water-abstraction-engine/presenters/base.presenter.js'
-
-const Joi = base.extend(joiDate)
 
 /**
  * Validates data submitted for abstraction periods

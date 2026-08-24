@@ -3,7 +3,7 @@
  * @module RemoveLicencesValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { transformStringOfLicencesToArray } from 'water-abstraction-engine/lib/general.lib.js'
 
 /**

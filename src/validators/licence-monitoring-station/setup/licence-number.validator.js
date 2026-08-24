@@ -4,7 +4,7 @@
  * @module LicenceNumberValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { isFalse } from 'water-abstraction-engine/validators/helpers/is-false.validator.js'
 
 const ENTER_A_LICENCE_NUMBER_ERROR = 'Enter a licence number'

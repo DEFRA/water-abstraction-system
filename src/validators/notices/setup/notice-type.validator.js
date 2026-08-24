@@ -4,7 +4,7 @@
  * @module NoticeTypeValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const errorMessage = 'Select the notice type'
 

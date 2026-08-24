@@ -1,7 +1,8 @@
 // Test framework
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import Joi from 'joi'
+// Test helpers
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 // Thing under test
 import { licenceRefSchema } from '../../../src/validators/schemas/licence-ref.schema.js'

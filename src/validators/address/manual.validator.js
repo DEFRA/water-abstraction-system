@@ -4,7 +4,7 @@
  * @module ManualAddressValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { postcodeValidator } from 'postcode-validator'
 
 import { addressLineValidator } from './addressLine.validator.js'

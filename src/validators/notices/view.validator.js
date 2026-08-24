@@ -3,10 +3,7 @@
  * @module ViewValidator
  */
 
-import base from 'joi'
-import joiDate from '@joi/date'
-
-const Joi = base.extend(joiDate)
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 
 const STATUSES = ['cancelled', 'error', 'pending', 'returned', 'sent']
 

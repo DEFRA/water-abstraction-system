@@ -4,7 +4,7 @@
  * @module PermissionsValidator
  */
 
-import Joi from 'joi'
+import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { userPermissions } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 /**
