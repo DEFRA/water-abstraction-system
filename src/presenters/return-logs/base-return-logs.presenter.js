@@ -1,4 +1,4 @@
-import Big from 'big.js'
+import Big from 'water-abstraction-engine/wrappers/big.wrapper.js'
 import { convertFromCubicMetres } from 'water-abstraction-engine/lib/general.lib.js'
 import { formatNumber, sentenceCase } from 'water-abstraction-engine/presenters/base.presenter.js'
 import {
