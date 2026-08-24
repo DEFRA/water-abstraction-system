@@ -24,6 +24,7 @@
     "rollback:all": "water-knex migrate:rollback --all",
     "rollback:all:test": "NODE_ENV=test water-knex migrate:rollback --all",
     "scaffold": "scaffold",
+    "seed": "water-knex seed:run",
     "start": "node index.js",
     "test": "NODE_ENV=test TZ=UTC vitest run",
     "test:coverage": "NODE_ENV=test TZ=UTC vitest run --coverage",
