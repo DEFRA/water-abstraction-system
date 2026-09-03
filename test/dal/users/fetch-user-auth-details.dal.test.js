@@ -13,7 +13,7 @@ import FetchUserAuthDetailsService from '../../../src/dal/users/fetch-user-auth-
 
 const GROUP_ENV_OFFICER_INDEX = 0
 const ROLE_RETURNS_INDEX = 0
-const ROLE_HOF_NOTIFICATIONS_INDEX = 0
+const ROLE_HOF_NOTIFICATIONS_INDEX = 1
 
 describe('Users - Fetch User Auth Details DAL', () => {
   let duplicateRoleForUser
