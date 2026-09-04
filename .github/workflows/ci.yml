@@ -119,7 +119,7 @@ jobs:
 
       # Run editorconfig check first. No point running the tests if there are issues with the format of the files
       - name: Run editorconfig check
-        uses: editorconfig-checker/action-editorconfig-checker@840e866d93b8e032123c23bac69dece044d4d84c #v2.2.0
+        uses: editorconfig-checker/action-editorconfig-checker@51f63319f592f97930c73d9c46184d20bd206393 #v3.0.0
 
       - run: editorconfig-checker
 
