@@ -17,8 +17,10 @@ import { flashNotification, timestampForPostgres } from 'water-abstraction-engin
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 export default async function submitRemoveService(licenceMonitoringStationId, licenceRef, yar) {
+  const timestamp = timestampForPostgres()
+
   await LicenceMonitoringStationModel.query()
-    .update({ deletedAt: timestampForPostgres() })
+    .update({ deletedAt: timestamp, updatedAt: timestamp })
     .where('id', licenceMonitoringStationId)
 
   flashNotification(yar, 'Updated', `Tag removed for ${licenceRef}`)
