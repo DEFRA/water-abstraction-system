@@ -99,7 +99,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
       describe('and the licence is already flagged for SROC supplementary', () => {
         beforeEach(async () => {
-          licence = await LicenceHelper.add({includeInPresrocBilling: 'no', includeInSrocBilling: true})
+          licence = await LicenceHelper.add({ includeInPresrocBilling: 'no', includeInSrocBilling: true })
         })
 
         describe('and there is an existing bill run for the selected year', () => {
@@ -167,7 +167,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
       describe('and the licence is already flagged for PRESROC supplementary', () => {
         beforeEach(async () => {
-          licence = await LicenceHelper.add({includeInPresrocBilling: 'yes', includeInSrocBilling: false})
+          licence = await LicenceHelper.add({ includeInPresrocBilling: 'yes', includeInSrocBilling: false })
         })
 
         describe('and there is an existing bill run for the selected year', () => {
@@ -350,7 +350,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
       describe('and the licence is already flagged for SROC supplementary', () => {
         beforeEach(async () => {
-          licence = await LicenceHelper.add({includeInPresrocBilling: 'no', includeInSrocBilling: true})
+          licence = await LicenceHelper.add({ includeInPresrocBilling: 'no', includeInSrocBilling: true })
         })
 
         describe('and there is an existing bill run for both selected years', () => {
@@ -457,7 +457,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
       describe('and the licence is already flagged for PRESROC supplementary', () => {
         beforeEach(async () => {
-          licence = await LicenceHelper.add({includeInPresrocBilling: 'yes', includeInSrocBilling: false})
+          licence = await LicenceHelper.add({ includeInPresrocBilling: 'yes', includeInSrocBilling: false })
         })
 
         describe('and there is an existing bill run for both selected years', () => {
@@ -638,7 +638,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
       describe('and the licence is already flagged for SROC supplementary', () => {
         beforeEach(async () => {
-          licence = await LicenceHelper.add({includeInPresrocBilling: 'no', includeInSrocBilling: true})
+          licence = await LicenceHelper.add({ includeInPresrocBilling: 'no', includeInSrocBilling: true })
         })
 
         describe('and there is an existing bill run for the selected year', () => {
@@ -704,7 +704,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
       describe('and the licence is already flagged for PRESROC supplementary', () => {
         beforeEach(async () => {
-          licence = await LicenceHelper.add({includeInPresrocBilling: 'yes', includeInSrocBilling: false})
+          licence = await LicenceHelper.add({ includeInPresrocBilling: 'yes', includeInSrocBilling: false })
         })
 
         describe('and there is an existing bill run for the selected year', () => {
@@ -850,5 +850,7 @@ async function _fetchLicence(licenceId) {
 }
 
 async function _fetchLicenceSupplementaryYears(licenceId) {
-  return LicenceSupplementaryYearModel.query().select(['billRunId', 'financialYearEnd', 'licenceId', 'twoPartTariff']).where('licenceId', licenceId)
+  return LicenceSupplementaryYearModel.query()
+    .select(['billRunId', 'financialYearEnd', 'licenceId', 'twoPartTariff'])
+    .where('licenceId', licenceId)
 }
