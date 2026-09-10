@@ -58,7 +58,7 @@ export default async function submitMarkForSupplementaryBillingService(licenceId
  */
 async function _determineLicenceFlags(licence, supplementaryYears) {
   // Set the existing sroc supplementary flag, this flag does not get changed
-  const flagForSrocSupplementary = licence.includeInPresrocBilling
+  const flagForSrocSupplementary = licence.includeInSrocBilling
   // Set the existing pre-sroc supplementary flag
   let flagForPreSrocSupplementary = licence.includeInPresrocBilling === 'yes'
 
