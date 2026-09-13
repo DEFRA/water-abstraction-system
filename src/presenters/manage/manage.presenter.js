@@ -15,7 +15,6 @@
  */
 export default function managePresenter(userScopes) {
   return {
-    manageUsers: _manageUsers(userScopes),
     pageTitle: 'Manage',
     viewReports: _viewReports(userScopes),
     viewWorkflow: _viewWorkflow(userScopes)
@@ -46,14 +45,6 @@ function _hasPermission(userScopes, linkScopes) {
   return linkScopes.some((scope) => {
     return userScopes.includes(scope)
   })
-}
-
-function _manageUsers(userScopes) {
-  const links = {
-    createAccount: _hasPermission(userScopes, ['manage_accounts'])
-  }
-
-  return { show: links.createAccount, links }
 }
 
 function _viewReports(userScopes) {

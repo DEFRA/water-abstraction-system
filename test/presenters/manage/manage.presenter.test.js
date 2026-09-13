@@ -22,7 +22,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).toEqual({
         pageTitle: 'Manage',
-        manageUsers: { links: { createAccount: true }, show: true },
         viewReports: {
           links: { digitise: true, invalidAddresses: true, kpis: true, returnsCycles: true },
           show: true
@@ -42,7 +41,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).toEqual({
         pageTitle: 'Manage',
-        manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
           links: { digitise: false, invalidAddresses: false, kpis: false, returnsCycles: false },
           show: false
@@ -62,7 +60,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).toEqual({
         pageTitle: 'Manage',
-        manageUsers: { links: { createAccount: true }, show: true },
         viewReports: {
           links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: true },
           show: true
@@ -82,7 +79,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).toEqual({
         pageTitle: 'Manage',
-        manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
           links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
@@ -102,7 +98,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).toEqual({
         pageTitle: 'Manage',
-        manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
           links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
@@ -122,7 +117,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).toEqual({
         pageTitle: 'Manage',
-        manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
           links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
@@ -142,7 +136,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).toEqual({
         pageTitle: 'Manage',
-        manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
           links: { digitise: true, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
@@ -162,7 +155,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).toEqual({
         pageTitle: 'Manage',
-        manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
           links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
@@ -182,7 +174,6 @@ describe('Manage - Manage presenter', () => {
 
       expect(result).toEqual({
         pageTitle: 'Manage',
-        manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
           links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: true },
           show: true
