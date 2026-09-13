@@ -17,7 +17,6 @@ describe('Manage - View Manage service', () => {
 
       expect(result).toEqual({
         activeNavBar: 'manage',
-        manageUsers: { show: false, links: { createAccount: false } },
         pageTitle: 'Manage',
         viewReports: {
           show: true,
