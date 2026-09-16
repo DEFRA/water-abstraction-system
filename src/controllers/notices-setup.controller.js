@@ -18,6 +18,7 @@ import SubmitCheckLicenceMatchesService from '../services/notices/setup/abstract
 import SubmitCheckNoticeTypeService from '../services/notices/setup/submit-check-notice-type.service.js'
 import SubmitCheckService from '../services/notices/setup/submit-check.service.js'
 import SubmitContactTypeService from '../services/notices/setup/submit-contact-type.service.js'
+import SubmitInvitationPeriodService from '../services/notices/setup/submit-invitation-period.service.js'
 import SubmitLicenceService from '../services/notices/setup/submit-licence.service.js'
 import SubmitNoticeTypeService from '../services/notices/setup/submit-notice-type.service.js'
 import SubmitPaperReturnService from '../services/notices/setup/submit-paper-return.service.js'
@@ -35,6 +36,7 @@ import ViewCheckNoticeTypeService from '../services/notices/setup/view-check-not
 import ViewCheckService from '../services/notices/setup/view-check.service.js'
 import ViewConfirmationService from '../services/notices/setup/view-confirmation.service.js'
 import ViewContactTypeService from '../services/notices/setup/view-contact-type.service.js'
+import ViewInvitationPeriodService from '../services/notices/setup/view-invitation-period.service.js'
 import ViewLicenceService from '../services/notices/setup/view-licence.service.js'
 import ViewNoticeTypeService from '../services/notices/setup/view-notice-type.service.js'
 import ViewPaperReturnService from '../services/notices/setup/view-paper-return.service.js'
@@ -229,6 +231,22 @@ export async function submitContactType(request, h) {
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
+}
+
+export async function submitInvitationPeriod(request, h) {
+  const {
+    payload,
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await SubmitInvitationPeriodService(sessionId, payload, yar)
+
+  if (pageData.error) {
+    return h.view(`notices/setup/invitation-period.njk`, pageData)
+  }
+
+  return h.redirect(pageData.redirect)
 }
 
 export async function submitLicence(request, h) {
@@ -434,6 +452,16 @@ export async function viewContactType(request, h) {
   const pageData = await ViewContactTypeService(sessionId)
 
   return h.view(`notices/setup/contact-type.njk`, pageData)
+}
+
+export async function viewInvitationPeriod(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await ViewInvitationPeriodService(sessionId)
+
+  return h.view(`notices/setup/invitation-period.njk`, pageData)
 }
 
 export async function viewLicence(request, h) {

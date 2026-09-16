@@ -6,11 +6,12 @@
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
-import { NoticeJourney, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+import { NoticeJourney, NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { flashNotification, generateNoticeReferenceCode } from 'water-abstraction-engine/lib/general.lib.js'
 
 import NoticeTypePresenter from '../../../presenters/notices/setup/notice-type.presenter.js'
 import NoticeTypeValidator from '../../../validators/notices/setup/notice-type.validator.js'
+import featureFlagsConfig from '../../../config/feature-flags.config.js'
 
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/notice-type` page
@@ -39,7 +40,7 @@ export default async function submitNoticeTypeService(sessionId, payload, yar, a
 
     await _save(session, payload)
 
-    return _redirect(session.journey, hasBeenVisited, noticeTypeChanged)
+    return _redirect(session.journey, payload.noticeType, hasBeenVisited, noticeTypeChanged)
   }
 
   const pageData = NoticeTypePresenter(session, auth)
@@ -59,8 +60,14 @@ export default async function submitNoticeTypeService(sessionId, payload, yar, a
  *
  * @private
  */
-function _redirect(journey, hasBeenVisited, noticeTypeChanged) {
+function _redirect(journey, noticeType, hasBeenVisited, noticeTypeChanged) {
   if (journey === NoticeJourney.STANDARD && !hasBeenVisited) {
+    if (noticeType === NoticeType.INVITATIONS && featureFlagsConfig.alternateReturnInvitationPeriods) {
+      return {
+        redirectUrl: 'invitation-period'
+      }
+    }
+
     return {
       redirectUrl: 'returns-period'
     }

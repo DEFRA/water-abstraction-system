@@ -6,6 +6,7 @@
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
 import { NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
+import featureFlagsConfig from '../../../config/feature-flags.config.js'
 import { returnsPeriodText } from '../base.presenter.js'
 
 const NOTICE_TYPE_TEXT = {
@@ -33,13 +34,13 @@ export default function checkNoticeTypePresenter(session) {
   } = session
 
   return {
-    links: _links(sessionId),
+    links: _links(sessionId, noticeType),
     pageTitle: 'Check the notice type',
     noticeType: NOTICE_TYPE_TEXT[noticeType],
     sessionId,
-    ..._returns(selectedReturns, dueReturns, noticeType),
     ..._licence(licenceRef),
-    ..._returnsPeriod(determinedReturnsPeriod)
+    ..._returnsPeriod(determinedReturnsPeriod),
+    ..._returns(selectedReturns, dueReturns, noticeType)
   }
 }
 
@@ -47,12 +48,18 @@ function _licence(licenceRef) {
   return licenceRef ? { licenceRef } : {}
 }
 
-function _links(sessionId) {
+function _links(sessionId, noticeType) {
+  let returnsPeriodPath = 'returns-period'
+
+  if (noticeType === NoticeType.INVITATIONS && featureFlagsConfig.alternateReturnInvitationPeriods) {
+    returnsPeriodPath = 'invitation-period'
+  }
+
   return {
     licenceNumber: `/system/notices/setup/${sessionId}/licence`,
-    returnsPeriod: `/system/notices/setup/${sessionId}/returns-period`,
     noticeType: `/system/notices/setup/${sessionId}/notice-type`,
-    returns: `/system/notices/setup/${sessionId}/paper-return`
+    returns: `/system/notices/setup/${sessionId}/paper-return`,
+    returnsPeriod: `/system/notices/setup/${sessionId}/${returnsPeriodPath}`
   }
 }
 
