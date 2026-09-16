@@ -18,7 +18,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
   beforeEach(() => {
     referenceCode = generateNoticeReferenceCode('RINV-')
-    session = { referenceCode, noticeType: 'invitations', id: generateUUID() }
+    session = { id: generateUUID(), noticeType: 'invitations', referenceCode }
   })
 
   afterEach(() => {
