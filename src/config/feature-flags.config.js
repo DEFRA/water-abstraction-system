@@ -7,4 +7,8 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-export default {}
+export default {
+  // Credit to https://stackoverflow.com/a/323546/6117745 for how to handle
+  // converting the env var to a boolean
+  alternateReturnInvitationPeriods: String(process.env.ENABLE_ALTERNATE_RETURN_INVITE_PERIODS) === 'true' || false
+}
