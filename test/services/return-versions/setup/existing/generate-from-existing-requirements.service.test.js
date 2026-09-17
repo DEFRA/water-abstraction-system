@@ -65,7 +65,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
                 id: fetchResult.returnRequirements[0].returnRequirementPurposes[0].purposeId
               }
             ],
-            returnsCycle: 'winter-and-all-year',
+            returnsCycle: 'winterAndAllYear',
             siteDescription: 'FIRST BOREHOLE AT AVALON',
             abstractionPeriod: {
               abstractionPeriodEndDay: 31,
@@ -128,7 +128,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
                 id: fetchResult.returnRequirements[0].returnRequirementPurposes[0].purposeId
               }
             ],
-            returnsCycle: 'winter-and-all-year',
+            returnsCycle: 'winterAndAllYear',
             siteDescription: 'FIRST BOREHOLE AT AVALON',
             abstractionPeriod: {
               abstractionPeriodEndDay: 31,
