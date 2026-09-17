@@ -1,9 +1,9 @@
 // Test framework
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
-import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
+import { generateNoticeReferenceCode, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Test helpers
 import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
@@ -21,34 +21,34 @@ describe('Notices - Setup - Submit Returns Period service', () => {
   let sessionData
   let yarStub
 
-  beforeAll(() => {
+  beforeEach(() => {
     referenceCode = generateNoticeReferenceCode('RINV-')
 
-    const testDate = new Date('2024-12-01')
-
-    vi.useFakeTimers({ now: testDate })
+    sessionData = { id: generateUUID(), noticeType: 'invitations', referenceCode }
 
     yarStub = YarStub()
+
+    vi.useFakeTimers({ now: new Date('2024-12-01') })
   })
 
-  beforeEach(() => {
-    sessionData = { referenceCode, noticeType: 'invitations' }
-
-    session = SessionModelStub(sessionData)
-
-    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
-  })
-
-  afterAll(() => {
+  afterEach(() => {
+    vi.restoreAllMocks()
     vi.useRealTimers()
   })
 
-  afterEach(() => {})
+  describe('when validation is successful', () => {
+    beforeEach(() => {
+      payload = { returnsPeriod: 'quarterFour' }
+    })
 
-  describe('when submitting as returns period ', () => {
-    describe('is successful', () => {
+    describe('and the check page has been visited', () => {
       beforeEach(() => {
-        payload = { returnsPeriod: 'quarterFour' }
+        sessionData.checkPageVisited = true
+        sessionData.returnsPeriod = 'quarterFour'
+
+        session = SessionModelStub(sessionData)
+
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -72,7 +72,87 @@ describe('Notices - Setup - Submit Returns Period service', () => {
         })
       })
 
-      it('returns the redirect route', async () => {
+      describe('and the selected "returnsPeriod" has changed', () => {
+        beforeEach(() => {
+          payload = { returnsPeriod: 'quarterThree' }
+        })
+
+        it('sets a flash message', async () => {
+          await SubmitReturnsPeriodService(session.id, payload, yarStub)
+
+          // Check we add the flash message
+          const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
+
+          expect(flashType).toEqual('notification')
+          expect(bannerMessage).toEqual({
+            text: 'Returns period updated',
+            titleText: 'Updated'
+          })
+        })
+
+        it('returns a redirect to the "/check-notice-type" page', async () => {
+          const result = await SubmitReturnsPeriodService(session.id, payload, yarStub)
+
+          expect(result).toEqual({
+            redirectUrl: `${session.id}/check-notice-type`
+          })
+        })
+      })
+
+      describe('and the selected "returnsPeriod" has not changed', () => {
+        it('does not set a flash message', async () => {
+          await SubmitReturnsPeriodService(session.id, payload, yarStub)
+
+          expect(yarStub.flash).not.toHaveBeenCalled()
+        })
+
+        it('returns a redirect to the "/check-notice-type" page', async () => {
+          const result = await SubmitReturnsPeriodService(session.id, payload, yarStub)
+
+          expect(result).toEqual({
+            redirectUrl: `${session.id}/check-notice-type`
+          })
+        })
+      })
+    })
+
+    describe('and the check page has not been visited', () => {
+      beforeEach(async () => {
+        sessionData.checkPageVisited = false
+
+        session = SessionModelStub(sessionData)
+
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitReturnsPeriodService(session.id, payload, yarStub)
+
+        expect(session.returnsPeriod).toEqual('quarterFour')
+        expect(session.$update).toHaveBeenCalled()
+      })
+
+      it('saves the determined returns period', async () => {
+        await SubmitReturnsPeriodService(session.id, payload, yarStub)
+
+        expect(session.determinedReturnsPeriod).toEqual({
+          // The dates would be strings and not date objects when saved to the database
+          dueDate: new Date('2025-04-28'),
+          endDate: new Date('2025-03-31'),
+          name: 'quarterFour',
+          startDate: new Date('2025-01-01'),
+          summer: 'false',
+          quarterly: true
+        })
+      })
+
+      it('does not set a flash message', async () => {
+        await SubmitReturnsPeriodService(session.id, payload, yarStub)
+
+        expect(yarStub.flash).not.toHaveBeenCalled()
+      })
+
+      it('still returns a redirect to the "/check-notice-type" page', async () => {
         const result = await SubmitReturnsPeriodService(session.id, payload, yarStub)
 
         expect(result).toEqual({
@@ -80,81 +160,56 @@ describe('Notices - Setup - Submit Returns Period service', () => {
         })
       })
     })
+  })
 
-    describe('and the user comes from the check page', () => {
-      beforeEach(() => {
-        sessionData = { referenceCode, noticeType: 'invitations', checkPageVisited: true }
+  describe('when validation fails', () => {
+    beforeEach(() => {
+      payload = {}
 
-        session = SessionModelStub(sessionData)
+      session = SessionModelStub(sessionData)
 
-        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
-      })
-
-      it('sets a flash message', async () => {
-        await SubmitReturnsPeriodService(session.id, payload, yarStub)
-
-        // Check we add the flash message
-        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
-
-        expect(flashType).toEqual('notification')
-        expect(bannerMessage).toEqual({
-          text: 'Returns period updated',
-          titleText: 'Updated'
-        })
-      })
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
-    describe('fails validation', () => {
-      beforeEach(() => {
-        sessionData = { referenceCode, journey: 'invitations', noticeType: 'invitations' }
+    it('returns page data for the view, with errors', async () => {
+      const result = await SubmitReturnsPeriodService(session.id, payload, yarStub)
 
-        session = SessionModelStub(sessionData)
-
-        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
-
-        payload = {}
-      })
-
-      it('correctly presents the data with the error', async () => {
-        const result = await SubmitReturnsPeriodService(session.id, payload, yarStub)
-
-        expect(result).toEqual({
-          activeNavBar: 'notices',
-          backLink: {
-            href: `/system/notices/setup/${session.id}/notice-type`,
-            text: 'Back'
-          },
-          error: {
-            errorList: [
-              {
-                href: '#returnsPeriod',
-                text: 'Select the returns periods for the invitations'
-              }
-            ],
-            returnsPeriod: {
+      expect(result).toEqual({
+        activeNavBar: 'notices',
+        backLink: {
+          href: `/system/notices/setup/${session.id}/notice-type`,
+          text: 'Back'
+        },
+        error: {
+          errorList: [
+            {
+              href: '#returnsPeriod',
               text: 'Select the returns periods for the invitations'
             }
-          },
-          pageTitle: 'Select the returns periods for the invitations',
-          returnsPeriod: [
-            {
-              checked: false,
-              hint: {
-                text: 'Due date 28 January 2025'
-              },
-              text: 'Quarterly 1 October 2024 to 31 December 2024',
-              value: 'quarterThree'
+          ],
+          returnsPeriod: {
+            text: 'Select the returns periods for the invitations'
+          }
+        },
+        pageTitle: 'Select the returns periods for the invitations',
+        returnsPeriod: [
+          {
+            checked: false,
+            hint: {
+              text: 'Due date 28 January 2025'
             },
-            {
-              checked: false,
-              hint: {
-                text: 'Due date 28 April 2025'
-              },
-              text: 'Quarterly 1 January 2025 to 31 March 2025',
-              value: 'quarterFour'
-            }
-          ]
-        })
+            text: 'Quarterly 1 October 2024 to 31 December 2024',
+            value: 'quarterThree'
+          },
+          {
+            checked: false,
+            hint: {
+              text: 'Due date 28 April 2025'
+            },
+            text: 'Quarterly 1 January 2025 to 31 March 2025',
+            value: 'quarterFour'
+          }
+        ]
       })
     })
   })

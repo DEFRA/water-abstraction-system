@@ -27,11 +27,7 @@ export default async function submitReturnsPeriodService(sessionId, payload, yar
   const validationResult = _validate(payload, session.noticeType)
 
   if (!validationResult) {
-    if (session.checkPageVisited) {
-      flashNotification(yar, 'Updated', 'Returns period updated')
-
-      session.checkPageVisited = false
-    }
+    _notification(session, payload, yar)
 
     await _save(session, payload)
 
@@ -46,6 +42,12 @@ export default async function submitReturnsPeriodService(sessionId, payload, yar
     activeNavBar: 'notices',
     error: validationResult,
     ...formattedData
+  }
+}
+
+function _notification(session, payload, yar) {
+  if (session.checkPageVisited && session.returnsPeriod !== payload.returnsPeriod) {
+    flashNotification(yar, 'Updated', 'Returns period updated')
   }
 }
 
