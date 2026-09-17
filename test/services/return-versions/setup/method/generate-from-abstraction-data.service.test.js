@@ -68,7 +68,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
                 id: '76c8c08c-4fef-421a-83d6-16d8000311a4'
               }
             ],
-            returnsCycle: 'winter-and-all-year',
+            returnsCycle: 'winterAndAllYear',
             siteDescription: 'MAIN INTAKE',
             abstractionPeriod: {
               abstractionPeriodEndDay: 31,
@@ -89,7 +89,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
                 id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f'
               }
             ],
-            returnsCycle: 'winter-and-all-year',
+            returnsCycle: 'winterAndAllYear',
             siteDescription: 'SOUTH BOREHOLE',
             abstractionPeriod: {
               abstractionPeriodEndDay: 31,

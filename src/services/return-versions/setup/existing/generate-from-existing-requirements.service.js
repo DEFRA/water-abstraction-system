@@ -106,7 +106,7 @@ function _transformForSetup(returnVersion) {
     return {
       points: _points(points),
       purposes: _purposes(returnRequirementPurposes),
-      returnsCycle: summer ? 'summer' : 'winter-and-all-year',
+      returnsCycle: summer ? 'summer' : 'winterAndAllYear',
       siteDescription: _siteDescription(siteDescription, points),
       abstractionPeriod: {
         abstractionPeriodEndDay,
