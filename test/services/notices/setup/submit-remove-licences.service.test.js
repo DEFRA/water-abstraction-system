@@ -64,7 +64,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
         const result = await SubmitRemoveLicencesService(session.id, payload)
 
         expect(result).toEqual({
-          redirect: `${session.id}/check`
+          redirectUrl: `${session.id}/check`
         })
       })
     })

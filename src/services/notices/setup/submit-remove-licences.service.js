@@ -39,7 +39,7 @@ export default async function submitRemoveLicencesService(sessionId, payload) {
   await _save(session, payload)
 
   return {
-    redirect: `${sessionId}/check`
+    redirectUrl: `${sessionId}/check`
   }
 }
 

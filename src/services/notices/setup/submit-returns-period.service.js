@@ -36,7 +36,7 @@ export default async function submitReturnsPeriodService(sessionId, payload, yar
     await _save(session, payload)
 
     return {
-      redirect: `${sessionId}/check-notice-type`
+      redirectUrl: `${sessionId}/check-notice-type`
     }
   }
 
