@@ -256,7 +256,7 @@ function _transactionResult(transaction, chargeReference, chargeElements, purpos
     season: 'all year',
     section126Factor: 1,
     section127Agreement: false,
-    section130Agreement: 'false',
+    section130Agreement: null,
     source: 'non-tidal',
     startDate: transaction.startDate,
     supportedSourceChargeValue: supportedSourceCharge ? Number(supportedSourceCharge) : null,
