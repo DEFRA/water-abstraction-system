@@ -76,7 +76,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
         const result = await SubmitReturnsPeriodService(session.id, payload, yarStub)
 
         expect(result).toEqual({
-          redirect: `${session.id}/check-notice-type`
+          redirectUrl: `${session.id}/check-notice-type`
         })
       })
     })

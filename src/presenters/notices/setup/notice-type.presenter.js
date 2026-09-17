@@ -18,7 +18,7 @@ export default function noticeTypePresenter(session, auth) {
 
   return {
     backLink: _backLink(sessionId, checkPageVisited),
-    options: _options(noticeType, journey, auth),
+    noticeTypes: _noticeTypes(noticeType, journey, auth),
     pageTitle: 'Select the notice type'
   }
 }
@@ -38,24 +38,24 @@ function _backLink(sessionId, checkPageVisited) {
 }
 
 /**
- * These options are for both adhoc and the standard journey.
+ * These are for both adhoc and the standard journey.
  *
- * The standard journey will only show the 'invitations' and 'reminders' options.
+ * The standard journey will only show 'invitations' and 'reminders'.
  *
- * The adhoc journey can show the 'invitations', 'reminders' and 'paper return' options (depending on scope / permissions).
+ * The adhoc journey can show 'invitations', 'reminders' and 'paper return' (depending on scope / permissions).
  *
  * @private
  */
-function _options(noticeType, journey, auth) {
+function _noticeTypes(noticeType, journey, auth) {
   const {
     credentials: { scope }
   } = auth
 
-  const options = []
+  const items = []
 
   if (journey === NoticeJourney.ADHOC) {
     if (scope.includes('bulk_return_notifications')) {
-      options.push({
+      items.push({
         checked: noticeType === NoticeType.PAPER_RETURN,
         value: NoticeType.PAPER_RETURN,
         text: 'Paper return'
@@ -63,7 +63,7 @@ function _options(noticeType, journey, auth) {
     }
 
     if (scope.includes('renewal_notifications')) {
-      options.push({
+      items.push({
         checked: noticeType === NoticeType.RENEWAL_INVITATIONS,
         value: NoticeType.RENEWAL_INVITATIONS,
         text: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType
@@ -72,7 +72,7 @@ function _options(noticeType, journey, auth) {
   }
 
   if (scope.includes('bulk_return_notifications')) {
-    options.push(
+    items.push(
       {
         checked: noticeType === NoticeType.INVITATIONS,
         value: NoticeType.INVITATIONS,
@@ -86,5 +86,5 @@ function _options(noticeType, journey, auth) {
     )
   }
 
-  return options
+  return items
 }

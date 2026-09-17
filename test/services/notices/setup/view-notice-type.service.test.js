@@ -43,7 +43,7 @@ describe('Notices - Setup - View Notice Type service', () => {
           href: `/system/notices`,
           text: 'Back'
         },
-        options: [
+        noticeTypes: [
           {
             checked: false,
             text: 'Paper return',
