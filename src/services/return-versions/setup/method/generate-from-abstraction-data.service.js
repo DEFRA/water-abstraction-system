@@ -9,7 +9,7 @@ import DetermineTwoPartTariffAgreementService from './determine-two-part-tariff-
 import FetchAbstractionDataService from './fetch-abstraction-data.service.js'
 
 const SUMMER_RETURN_CYCLE = 'summer'
-const WINTER_RETURN_CYCLE = 'winter-and-all-year'
+const WINTER_RETURN_CYCLE = 'winterAndAllYear'
 
 const DAILY_CUBIC_METRES_THRESHOLD = 2500
 
