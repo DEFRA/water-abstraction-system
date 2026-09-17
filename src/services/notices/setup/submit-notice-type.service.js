@@ -28,18 +28,13 @@ export default async function submitNoticeTypeService(sessionId, payload, yar, a
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    const hasBeenVisited = session.checkPageVisited
     const noticeTypeChanged = payload.noticeType !== session.noticeType
 
-    if (hasBeenVisited && noticeTypeChanged) {
-      flashNotification(yar, 'Updated', 'Notice type updated')
+    _notification(session, noticeTypeChanged, yar)
 
-      session.checkPageVisited = false
-    }
+    await _save(session, payload, noticeTypeChanged)
 
-    await _save(session, payload)
-
-    return _redirect(session.journey, hasBeenVisited, noticeTypeChanged)
+    return _redirect(session)
   }
 
   const pageData = NoticeTypePresenter(session, auth)
@@ -51,33 +46,48 @@ export default async function submitNoticeTypeService(sessionId, payload, yar, a
   }
 }
 
-/**
- * Determines where to redirect the user after submitting the notice type.
- *
- * If the notice type has changed, we always redirect to the licence page, even if the user came from the check page.
- * This is because the licence ref needs to be revalidated against the new notice type.
- *
- * @private
- */
-function _redirect(journey, hasBeenVisited, noticeTypeChanged) {
-  if (journey === NoticeJourney.STANDARD && !hasBeenVisited) {
-    return {
-      redirectUrl: 'returns-period'
-    }
-  }
-
-  if (hasBeenVisited && !noticeTypeChanged) {
-    return {
-      redirectUrl: 'check-notice-type'
-    }
-  }
-
-  return {
-    redirectUrl: 'licence'
+function _notification(session, noticeTypeChanged, yar) {
+  if (session.checkPageVisited && noticeTypeChanged) {
+    flashNotification(yar, 'Updated', 'Notice type updated')
   }
 }
 
-async function _save(session, payload) {
+/**
+ * Determines where to redirect the user after submitting the notice type.
+ *
+ * If the notice type has changed, we always redirect to the next page in the journey, even if the user came from the
+ * 'check-notice-type' page.
+ *
+ * This is because changing the notice type invalidates the subsequent choices, for example, in ad-hoc we need to
+ * re-validate the selected licence against the new notice type.
+ *
+ * We don't check explicitly for notice type changes here because if it has changed, we reset the `checkPageVisited`
+ * flag in the session to false in `_save()`.
+ *
+ * So, if `checkPageVisited` is true, it means the notice type was not changed and we can safely redirect to the
+ * 'check-notice-type' page.
+ *
+ * @private
+ */
+function _redirect(session) {
+  const { checkPageVisited, journey } = session
+
+  if (journey === NoticeJourney.STANDARD) {
+    if (checkPageVisited) {
+      return { redirectUrl: 'check-notice-type' }
+    }
+
+    return { redirectUrl: 'returns-period' }
+  }
+
+  if (checkPageVisited) {
+    return { redirectUrl: 'check-notice-type' }
+  }
+
+  return { redirectUrl: 'licence' }
+}
+
+async function _save(session, payload, noticeTypeChanged) {
   const { name, prefix, subType, notificationType } = NoticeTypes[payload.noticeType]
 
   session.name = name
@@ -85,6 +95,11 @@ async function _save(session, payload) {
   session.notificationType = notificationType
   session.referenceCode = generateNoticeReferenceCode(prefix)
   session.subType = subType
+
+  // Changing the notice type invalidates the current journey, so users need to complete it again
+  if (noticeTypeChanged) {
+    session.checkPageVisited = false
+  }
 
   return session.$update()
 }

@@ -1178,7 +1178,7 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            vi.spyOn(SubmitRemoveLicencesService, 'default').mockReturnValue({ redirect: 'check' })
+            vi.spyOn(SubmitRemoveLicencesService, 'default').mockReturnValue({ redirectUrl: 'check' })
             postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {}, [
               'bulk_return_notifications'
             ])
@@ -1248,7 +1248,7 @@ describe('Notices Setup controller', () => {
 
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
-            vi.spyOn(SubmitReturnsPeriodService, 'default').mockReturnValue({ redirect: 'send-notice' })
+            vi.spyOn(SubmitReturnsPeriodService, 'default').mockReturnValue({ redirectUrl: 'send-notice' })
             postOptions = postRequestOptions(basePath + `/${session.id}/returns-period`, {}, [
               'bulk_return_notifications'
             ])

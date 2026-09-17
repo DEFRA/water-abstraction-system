@@ -290,7 +290,7 @@ export async function submitRemoveLicences(request, h) {
     return h.view(`notices/setup/remove-licences.njk`, pageData)
   }
 
-  return h.redirect(`/system/notices/setup/${pageData.redirect}`)
+  return h.redirect(`/system/notices/setup/${pageData.redirectUrl}`)
 }
 
 export async function submitReturnsPeriod(request, h) {
@@ -306,7 +306,7 @@ export async function submitReturnsPeriod(request, h) {
     return h.view(`notices/setup/returns-period.njk`, pageData)
   }
 
-  return h.redirect(`/system/notices/setup/${pageData.redirect}`)
+  return h.redirect(`/system/notices/setup/${pageData.redirectUrl}`)
 }
 
 export async function submitPaperReturn(request, h) {

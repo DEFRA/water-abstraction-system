@@ -4,6 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+import { NoticeJourney, NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 // Things we need to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
@@ -16,7 +18,6 @@ describe('Notices - Setup - Submit Notice Type service', () => {
   let payload
   let session
   let sessionData
-  let noticeType
   let yarStub
 
   beforeEach(() => {
@@ -24,13 +25,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
       credentials: { scope: ['bulk_return_notifications'] }
     }
 
-    noticeType = 'invitations'
-    payload = { noticeType }
-    sessionData = {}
-
-    session = SessionModelStub(sessionData)
-
-    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+    sessionData = { id: generateUUID() }
 
     yarStub = YarStub()
   })
@@ -39,111 +34,91 @@ describe('Notices - Setup - Submit Notice Type service', () => {
     vi.restoreAllMocks()
   })
 
-  describe('when called', () => {
-    it('saves the notice type session data', async () => {
-      await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
-
-      expect(session).toEqual(session)
-      expect(session.$update).toHaveBeenCalled()
-    })
-
-    it('saves the submitted "noticeType"', async () => {
-      await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
-
-      expect(session.noticeType).toEqual('invitations')
-    })
-
-    it('returns a redirect to the "licence" page', async () => {
-      const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
-
-      expect(result).toEqual({ redirectUrl: 'licence' })
-    })
-
-    describe('and the user comes from the check page', () => {
-      describe('and the notice type has been updated', () => {
-        beforeEach(() => {
-          session = SessionModelStub({
-            checkPageVisited: true,
-            noticeType: 'test'
-          })
-
-          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
-        })
-
-        it('redirects to the licence page', async () => {
-          const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
-
-          expect(result).toEqual({ redirectUrl: 'licence' })
-        })
-
-        it('updates the sessions "checkPageVisited" flag', async () => {
-          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
-
-          expect(session.checkPageVisited).toBe(false)
-          expect(session.$update).toHaveBeenCalled()
-        })
-
-        it('sets a flash message', async () => {
-          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
-
-          // Check we add the flash message
-          const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
-
-          expect(flashType).toEqual('notification')
-          expect(bannerMessage).toEqual({
-            text: 'Notice type updated',
-            titleText: 'Updated'
-          })
-        })
-      })
-
-      describe('and the notice type has not been updated', () => {
-        beforeEach(() => {
-          session = SessionModelStub({
-            noticeType,
-            checkPageVisited: true
-          })
-
-          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
-        })
-
-        it('does not update the session "checkPageVisited" flag', async () => {
-          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
-
-          expect(session.checkPageVisited).toBe(true)
-          expect(session.$update).toHaveBeenCalled()
-        })
-
-        it('does not set a flash message', async () => {
-          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
-
-          expect(yarStub.flash.mock.calls[0]).toBeUndefined()
-        })
-      })
+  describe('when validation is successful', () => {
+    beforeEach(() => {
+      payload = { noticeType: 'invitations' }
     })
 
     describe('and the journey is for "standard"', () => {
+      beforeEach(() => {
+        sessionData.journey = NoticeJourney.STANDARD
+      })
+
       describe('and the check page has been visited', () => {
         beforeEach(() => {
-          sessionData.journey = 'standard'
           sessionData.checkPageVisited = true
-          sessionData.noticeType = noticeType
+          sessionData.noticeType = NoticeType.INVITATIONS
 
           session = SessionModelStub(sessionData)
 
           vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
-        it('returns a redirect to the "/check-notice-type" page', async () => {
-          const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+        it('saves the submitted value', async () => {
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
-          expect(result).toEqual({ redirectUrl: 'check-notice-type' })
+          expect(session.noticeType).toEqual(payload.noticeType)
+          expect(session.$update).toHaveBeenCalled()
+        })
+
+        it('saves the related notice data', async () => {
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+          const relatedData = NoticeTypes[payload.noticeType]
+
+          expect(session.name).toEqual(relatedData.name)
+          expect(session.notificationType).toEqual(relatedData.notificationType)
+          expect(session.referenceCode.startsWith(relatedData.prefix)).toBe(true)
+          expect(session.subType).toEqual(relatedData.subType)
+          expect(session.$update).toHaveBeenCalled()
+        })
+
+        describe('and the selected "noticeType" has changed', () => {
+          beforeEach(() => {
+            sessionData.noticeType = NoticeType.REMINDERS
+
+            session = SessionModelStub(sessionData)
+
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+          })
+
+          it('sets a flash message', async () => {
+            await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+            // Check we add the flash message
+            const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
+
+            expect(flashType).toEqual('notification')
+            expect(bannerMessage).toEqual({
+              text: 'Notice type updated',
+              titleText: 'Updated'
+            })
+          })
+
+          it('returns a redirect to the "returns-period" page', async () => {
+            const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+            expect(result).toEqual({ redirectUrl: 'returns-period' })
+          })
+        })
+
+        describe('and the selected "noticeType" has not changed', () => {
+          it('does not set a flash message', async () => {
+            await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+            expect(yarStub.flash).not.toHaveBeenCalled()
+          })
+
+          it('returns a redirect to the "check-notice-type" page', async () => {
+            const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+            expect(result).toEqual({ redirectUrl: 'check-notice-type' })
+          })
         })
       })
 
       describe('and the check page has not been visited', () => {
-        beforeEach(() => {
-          sessionData.journey = 'standard'
+        beforeEach(async () => {
           sessionData.checkPageVisited = false
 
           session = SessionModelStub(sessionData)
@@ -151,7 +126,32 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
-        it('returns a redirect to the "/returns-period" page', async () => {
+        it('saves the submitted value', async () => {
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+          expect(session.noticeType).toEqual(payload.noticeType)
+          expect(session.$update).toHaveBeenCalled()
+        })
+
+        it('saves the related notice data', async () => {
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+          const relatedData = NoticeTypes[payload.noticeType]
+
+          expect(session.name).toEqual(relatedData.name)
+          expect(session.notificationType).toEqual(relatedData.notificationType)
+          expect(session.referenceCode.startsWith(relatedData.prefix)).toBe(true)
+          expect(session.subType).toEqual(relatedData.subType)
+          expect(session.$update).toHaveBeenCalled()
+        })
+
+        it('does not set a flash message', async () => {
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+          expect(yarStub.flash).not.toHaveBeenCalled()
+        })
+
+        it('returns a redirect to the "returns-period" page', async () => {
           const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           expect(result).toEqual({ redirectUrl: 'returns-period' })
@@ -159,33 +159,123 @@ describe('Notices - Setup - Submit Notice Type service', () => {
       })
     })
 
-    describe('the "redirect" property', () => {
+    describe('and the journey is for "adhoc"', () => {
+      beforeEach(() => {
+        sessionData.journey = NoticeJourney.ADHOC
+      })
+
       describe('and the check page has been visited', () => {
         beforeEach(() => {
-          sessionData.journey = 'adhoc'
           sessionData.checkPageVisited = true
-          sessionData.noticeType = noticeType
+          sessionData.noticeType = NoticeType.INVITATIONS
 
           session = SessionModelStub(sessionData)
 
           vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
-        it('returns a redirect to the "/check-notice-type" page', async () => {
-          const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+        it('saves the submitted value', async () => {
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
-          expect(result).toEqual({ redirectUrl: 'check-notice-type' })
+          expect(session.noticeType).toEqual(payload.noticeType)
+          expect(session.$update).toHaveBeenCalled()
+        })
+
+        it('saves the related notice data', async () => {
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+          const relatedData = NoticeTypes[payload.noticeType]
+
+          expect(session.name).toEqual(relatedData.name)
+          expect(session.notificationType).toEqual(relatedData.notificationType)
+          expect(session.referenceCode.startsWith(relatedData.prefix)).toBe(true)
+          expect(session.subType).toEqual(relatedData.subType)
+          expect(session.$update).toHaveBeenCalled()
+        })
+
+        describe('and the selected "noticeType" has changed', () => {
+          beforeEach(() => {
+            sessionData.noticeType = NoticeType.REMINDERS
+
+            session = SessionModelStub(sessionData)
+
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+          })
+
+          it('sets a flash message', async () => {
+            await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+            // Check we add the flash message
+            const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
+
+            expect(flashType).toEqual('notification')
+            expect(bannerMessage).toEqual({
+              text: 'Notice type updated',
+              titleText: 'Updated'
+            })
+          })
+
+          it('resets the "checkPageVisited" flag', async () => {
+            await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+            expect(session.checkPageVisited).toBe(false)
+            expect(session.$update).toHaveBeenCalled()
+          })
+
+          it('returns a redirect to the "licence" page, not the "check-notice-type" page', async () => {
+            const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+            expect(result).toEqual({ redirectUrl: 'licence' })
+          })
+        })
+
+        describe('and the selected "noticeType" has not changed', () => {
+          it('does not set a flash message', async () => {
+            await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+            expect(yarStub.flash).not.toHaveBeenCalled()
+          })
+
+          it('returns a redirect to the "check-notice-type" page', async () => {
+            const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+            expect(result).toEqual({ redirectUrl: 'check-notice-type' })
+          })
         })
       })
 
       describe('and the check page has not been visited', () => {
         beforeEach(async () => {
-          sessionData.journey = 'adhoc'
           sessionData.checkPageVisited = false
 
           session = SessionModelStub(sessionData)
 
           vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+        })
+
+        it('saves the submitted value', async () => {
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+          expect(session.noticeType).toEqual(payload.noticeType)
+          expect(session.$update).toHaveBeenCalled()
+        })
+
+        it('saves the related notice data', async () => {
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+          const relatedData = NoticeTypes[payload.noticeType]
+
+          expect(session.name).toEqual(relatedData.name)
+          expect(session.notificationType).toEqual(relatedData.notificationType)
+          expect(session.referenceCode.startsWith(relatedData.prefix)).toBe(true)
+          expect(session.subType).toEqual(relatedData.subType)
+          expect(session.$update).toHaveBeenCalled()
+        })
+
+        it('does not set a flash message', async () => {
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+          expect(yarStub.flash).not.toHaveBeenCalled()
         })
 
         it('returns a redirect to the "licence" page', async () => {
@@ -200,6 +290,10 @@ describe('Notices - Setup - Submit Notice Type service', () => {
   describe('when validation fails', () => {
     beforeEach(() => {
       payload = {}
+
+      session = SessionModelStub(sessionData)
+
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns page data for the view, with errors', async () => {
@@ -222,7 +316,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
             text: 'Select the notice type'
           }
         },
-        options: [
+        noticeTypes: [
           {
             checked: false,
             text: 'Returns invitation',

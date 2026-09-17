@@ -9,7 +9,7 @@
       {{ govukRadios({
         name: "noticeType",
         errorMessage: error.noticeType,
-        items: options
+        items: noticeTypes
       }) }}
 
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
