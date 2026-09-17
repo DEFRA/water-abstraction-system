@@ -10,5 +10,6 @@ import 'dotenv/config'
 export default {
   // Credit to https://stackoverflow.com/a/323546/6117745 for how to handle
   // converting the env var to a boolean
+  alternateReturnInvitationPeriods: String(process.env.ENABLE_ALTERNATE_RETURN_INVITE_PERIODS) === 'true' || false,
   setOldReturnsDueDate: String(process.env.ENABLE_SET_OLD_RETURNS_DUE_DATE) === 'true' || false
 }
