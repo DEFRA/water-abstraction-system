@@ -90,13 +90,6 @@ describe('Notices - Setup - Submit Returns Period service', () => {
           })
         })
 
-        it('resets the "checkPageVisited" flag', async () => {
-          await SubmitReturnsPeriodService(session.id, payload, yarStub)
-
-          expect(session.checkPageVisited).toBe(false)
-          expect(session.$update).toHaveBeenCalled()
-        })
-
         it('returns a redirect to the "/check-notice-type" page', async () => {
           const result = await SubmitReturnsPeriodService(session.id, payload, yarStub)
 

@@ -29,8 +29,6 @@ export default async function submitReturnsPeriodService(sessionId, payload, yar
   if (!validationResult) {
     if (session.checkPageVisited) {
       flashNotification(yar, 'Updated', 'Returns period updated')
-
-      session.checkPageVisited = false
     }
 
     await _save(session, payload)
