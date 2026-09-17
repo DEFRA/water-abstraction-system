@@ -316,7 +316,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
             text: 'Select the notice type'
           }
         },
-        options: [
+        noticeTypes: [
           {
             checked: false,
             text: 'Returns invitation',

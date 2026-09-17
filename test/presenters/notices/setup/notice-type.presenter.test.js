@@ -28,7 +28,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
           href: '/system/notices',
           text: 'Back'
         },
-        options: [
+        noticeTypes: [
           {
             checked: false,
             text: 'Paper return',
@@ -86,7 +86,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
       })
     })
 
-    describe('the "options" property', () => {
+    describe('the "noticeTypes" property', () => {
       describe('when a previous "noticeType" has been selected', () => {
         describe('and the selected notice type was "invitations"', () => {
           beforeEach(() => {
@@ -96,7 +96,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
           it('returns the invitations checked', () => {
             const result = NoticeTypePresenter(session, auth)
 
-            expect(result.options).toEqual([
+            expect(result.noticeTypes).toEqual([
               {
                 checked: false,
                 text: 'Paper return',
@@ -126,10 +126,10 @@ describe('Notice - Setup - Notice Type Presenter', () => {
             session.noticeType = 'reminders'
           })
 
-          it('returns the invitations checked', () => {
+          it('returns the reminders checked', () => {
             const result = NoticeTypePresenter(session, auth)
 
-            expect(result.options).toEqual([
+            expect(result.noticeTypes).toEqual([
               {
                 checked: false,
                 text: 'Paper return',
@@ -162,7 +162,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
           it('returns the Return forms checked', () => {
             const result = NoticeTypePresenter(session, auth)
 
-            expect(result.options).toEqual([
+            expect(result.noticeTypes).toEqual([
               {
                 checked: true,
                 text: 'Paper return',
@@ -200,7 +200,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 href: '/system/notices',
                 text: 'Back'
               },
-              options: [
+              noticeTypes: [
                 {
                   checked: false,
                   text: 'Returns invitation',
@@ -229,7 +229,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                   href: '/system/notices',
                   text: 'Back'
                 },
-                options: [
+                noticeTypes: [
                   {
                     checked: false,
                     text: 'Returns invitation',
@@ -257,7 +257,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                   href: '/system/notices',
                   text: 'Back'
                 },
-                options: [
+                noticeTypes: [
                   {
                     checked: false,
                     text: 'Paper return',
@@ -297,7 +297,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                   href: '/system/notices',
                   text: 'Back'
                 },
-                options: [
+                noticeTypes: [
                   {
                     checked: false,
                     text: 'Paper return',
@@ -332,7 +332,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                   href: '/system/notices',
                   text: 'Back'
                 },
-                options: [
+                noticeTypes: [
                   {
                     checked: false,
                     text: 'Renewals invitation',
@@ -352,7 +352,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
             it('returns no options', () => {
               const result = NoticeTypePresenter(session, auth)
 
-              expect(result.options).toEqual([])
+              expect(result.noticeTypes).toEqual([])
             })
           })
         })
