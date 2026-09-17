@@ -54,13 +54,22 @@ export default async function submitNoticeTypeService(sessionId, payload, yar, a
 /**
  * Determines where to redirect the user after submitting the notice type.
  *
- * If the notice type has changed, we always redirect to the licence page, even if the user came from the check page.
- * This is because the licence ref needs to be revalidated against the new notice type.
+ * If the notice type has changed, we always redirect to the next page in the journey, even if the user came from the
+ * 'check-notice-type' page.
+ *
+ * This is because changing the notice type invalidates the subsequent choices, for example, in ad-hoc we need to
+ * re-validate the selected licence against the new notice type.
  *
  * @private
  */
 function _redirect(journey, hasBeenVisited, noticeTypeChanged) {
-  if (journey === NoticeJourney.STANDARD && !hasBeenVisited) {
+  if (journey === NoticeJourney.STANDARD) {
+    if (hasBeenVisited && !noticeTypeChanged) {
+      return {
+        redirectUrl: 'check-notice-type'
+      }
+    }
+
     return {
       redirectUrl: 'returns-period'
     }
