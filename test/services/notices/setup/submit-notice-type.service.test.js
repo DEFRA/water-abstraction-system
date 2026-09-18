@@ -75,11 +75,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
         describe('and the selected "noticeType" has changed', () => {
           beforeEach(() => {
-            sessionData.noticeType = NoticeType.REMINDERS
-
-            session = SessionModelStub(sessionData)
-
-            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+            payload = { noticeType: NoticeType.REMINDERS }
           })
 
           it('sets a flash message', async () => {
@@ -195,11 +191,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
         describe('and the selected "noticeType" has changed', () => {
           beforeEach(() => {
-            sessionData.noticeType = NoticeType.REMINDERS
-
-            session = SessionModelStub(sessionData)
-
-            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+            payload = { noticeType: NoticeType.REMINDERS }
           })
 
           it('sets a flash message', async () => {
