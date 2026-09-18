@@ -5,6 +5,8 @@
 
 import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
+import featureFlagsConfig from '../../../../config/feature-flags.config.js'
+
 /**
  * Generates the query and bindings for selecting the return logs by period that determine which recipients to fetch
  *
@@ -16,13 +18,13 @@ import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
  */
 export default function generateReturnLogsByPeriodQueryService(noticeType, licencesToExclude, returnsPeriod) {
   const { endDate, startDate, quarterly, summer } = returnsPeriod
-  const bindings = [startDate, endDate, summer, quarterly, licencesToExclude]
+  const bindings = [startDate, endDate, summer, licencesToExclude]
 
   const dueDateCondition = _dueDateCondition(noticeType)
 
   return {
     bindings,
-    query: _query(dueDateCondition)
+    query: _query(dueDateCondition, noticeType, quarterly)
   }
 }
 
@@ -34,8 +36,8 @@ function _dueDateCondition(noticeType) {
   return 'IS NULL'
 }
 
-function _query(dueDateCondition) {
-  return `
+function _query(dueDateCondition, noticeType, quarterly) {
+  let query = `
   SELECT
     rl.due_date,
     rl.end_date,
@@ -52,8 +54,14 @@ function _query(dueDateCondition) {
     AND rl.start_date >= ?
     AND rl.end_date <= ?
     AND rl.metadata->>'isSummer' = ?
-    AND rl.quarterly = ?
     AND NOT (rl.licence_ref = ANY (?))
     AND rl.due_date ${dueDateCondition}
   `
+
+  if (noticeType === NoticeType.REMINDERS || !featureFlagsConfig.alternateReturnInvitationPeriods) {
+    query += `  AND rl.quarterly = ${quarterly}
+  `
+  }
+
+  return query
 }
