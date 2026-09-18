@@ -9,6 +9,7 @@ import { NoticeJourney, NoticeType, NoticeTypes } from 'water-abstraction-engine
 
 // Things we need to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as featureFlagsConfig from '../../../../src/config/feature-flags.config.js'
 
 // Thing under test
 import SubmitNoticeTypeService from '../../../../src/services/notices/setup/submit-notice-type.service.js'
@@ -28,6 +29,8 @@ describe('Notices - Setup - Submit Notice Type service', () => {
     sessionData = { id: generateUUID() }
 
     yarStub = YarStub()
+
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
   })
 
   afterEach(() => {
@@ -74,27 +77,47 @@ describe('Notices - Setup - Submit Notice Type service', () => {
         })
 
         describe('and the selected "noticeType" has changed', () => {
-          beforeEach(() => {
-            payload = { noticeType: NoticeType.REMINDERS }
-          })
+          describe('from "invitations" to "reminders"', () => {
+            beforeEach(() => {
+              payload = { noticeType: NoticeType.REMINDERS }
+            })
 
-          it('sets a flash message', async () => {
-            await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+            it('sets a flash message', async () => {
+              await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
-            // Check we add the flash message
-            const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
+              // Check we add the flash message
+              const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
-            expect(flashType).toEqual('notification')
-            expect(bannerMessage).toEqual({
-              text: 'Notice type updated',
-              titleText: 'Updated'
+              expect(flashType).toEqual('notification')
+              expect(bannerMessage).toEqual({
+                text: 'Notice type updated',
+                titleText: 'Updated'
+              })
+            })
+
+            it('returns a redirect to the "returns-period" page', async () => {
+              const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+              expect(result).toEqual({ redirectUrl: 'returns-period' })
             })
           })
 
-          it('returns a redirect to the "returns-period" page', async () => {
-            const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+          describe('from "reminders" to "invitations"', () => {
+            beforeEach(() => {
+              payload = { noticeType: NoticeType.INVITATIONS }
 
-            expect(result).toEqual({ redirectUrl: 'returns-period' })
+              sessionData.noticeType = NoticeType.REMINDERS
+
+              session = SessionModelStub(sessionData)
+
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+            })
+
+            it('returns a redirect to the "invitation-period" page', async () => {
+              const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+              expect(result).toEqual({ redirectUrl: 'invitation-period' })
+            })
           })
         })
 
@@ -147,10 +170,24 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           expect(yarStub.flash).not.toHaveBeenCalled()
         })
 
-        it('returns a redirect to the "returns-period" page', async () => {
-          const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+        describe('and the notice type is "invitations"', () => {
+          it('returns a redirect to the "invitation-period" page', async () => {
+            const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
-          expect(result).toEqual({ redirectUrl: 'returns-period' })
+            expect(result).toEqual({ redirectUrl: 'invitation-period' })
+          })
+        })
+
+        describe('and the notice type is "reminders"', () => {
+          beforeEach(() => {
+            payload = { noticeType: NoticeType.REMINDERS }
+          })
+
+          it('returns a redirect to the "returns-period" page', async () => {
+            const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
+
+            expect(result).toEqual({ redirectUrl: 'returns-period' })
+          })
         })
       })
     })
