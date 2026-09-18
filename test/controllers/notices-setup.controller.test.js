@@ -370,6 +370,7 @@ describe('Notices Setup controller', () => {
           }
         }
       })
+
       describe('when a request is valid', () => {
         beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
@@ -767,6 +768,7 @@ describe('Notices Setup controller', () => {
           }
         }
       })
+
       describe('when a request is valid', () => {
         beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
@@ -1306,6 +1308,7 @@ describe('Notices Setup controller', () => {
           }
         }
       })
+
       describe('when a request is valid', () => {
         beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
