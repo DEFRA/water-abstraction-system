@@ -23,6 +23,7 @@ import * as SubmitCheckLicenceMatchesService from '../../src/services/notices/se
 import * as SubmitCheckNoticeTypeService from '../../src/services/notices/setup/submit-check-notice-type.service.js'
 import * as SubmitCheckService from '../../src/services/notices/setup/submit-check.service.js'
 import * as SubmitContactTypeService from '../../src/services/notices/setup/submit-contact-type.service.js'
+import * as SubmitInvitationPeriodService from '../../src/services/notices/setup/submit-invitation-period.service.js'
 import * as SubmitLicenceService from '../../src/services/notices/setup/submit-licence.service.js'
 import * as SubmitNoticeTypeService from '../../src/services/notices/setup/submit-notice-type.service.js'
 import * as SubmitPaperReturnService from '../../src/services/notices/setup/submit-paper-return.service.js'
@@ -40,6 +41,7 @@ import * as ViewCheckNoticeTypeService from '../../src/services/notices/setup/vi
 import * as ViewCheckService from '../../src/services/notices/setup/view-check.service.js'
 import * as ViewConfirmationService from '../../src/services/notices/setup/view-confirmation.service.js'
 import * as ViewContactTypeService from '../../src/services/notices/setup/view-contact-type.service.js'
+import * as ViewInvitationPeriodService from '../../src/services/notices/setup/view-invitation-period.service.js'
 import * as ViewLicenceService from '../../src/services/notices/setup/view-licence.service.js'
 import * as ViewNoticeTypeService from '../../src/services/notices/setup/view-notice-type.service.js'
 import * as ViewPaperReturnService from '../../src/services/notices/setup/view-paper-return.service.js'
@@ -746,6 +748,78 @@ describe('Notices Setup controller', () => {
             expect(response.headers.location).toEqual(
               `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`
             )
+          })
+        })
+      })
+    })
+  })
+
+  describe('notices/setup/invitation-period', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/invitation-period`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['bulk_return_notifications'] }
+          }
+        }
+      })
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+          vi.spyOn(ViewInvitationPeriodService, 'default').mockReturnValue(_viewInvitationPeriod())
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          const pageData = _viewInvitationPeriod()
+
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain(pageData.pageTitle)
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+            vi.spyOn(SubmitInvitationPeriodService, 'default').mockReturnValue({
+              ..._viewInvitationPeriod(),
+              error: 'Something went wrong'
+            })
+            postOptions = postRequestOptions(`${basePath}/${session.id}/invitation-period`, {}, [
+              'bulk_return_notifications'
+            ])
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds', () => {
+          beforeEach(async () => {
+            vi.spyOn(SubmitInvitationPeriodService, 'default').mockReturnValue({
+              redirectUrl: `${basePath}/${session.id}/check-notice-type`
+            })
+            postOptions = postRequestOptions(`${basePath}/${session.id}/invitation-period`, {}, [
+              'bulk_return_notifications'
+            ])
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`${basePath}/${session.id}/check-notice-type`)
           })
         })
       })
@@ -1535,6 +1609,15 @@ function _viewCancel() {
       text: 'Licence number',
       value: '67856'
     }
+  }
+}
+
+function _viewInvitationPeriod() {
+  return {
+    pageTitle: 'Select the returns period for the invitations',
+    backLink: '/system/manage',
+    activeNavBar: 'notices',
+    invitationPeriods: []
   }
 }
 

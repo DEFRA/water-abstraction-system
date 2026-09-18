@@ -14,6 +14,7 @@ import {
   submitCheckLicenceMatchesFilter,
   submitCheckNoticeType,
   submitContactType,
+  submitInvitationPeriod,
   submitLicence,
   submitNoticeType,
   submitPaperReturn,
@@ -31,6 +32,7 @@ import {
   viewCheckNoticeType,
   viewConfirmation,
   viewContactType,
+  viewInvitationPeriod,
   viewLicence,
   viewNoticeType,
   viewPaperReturn,
@@ -328,6 +330,30 @@ export default [
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/invitation-period',
+    options: {
+      handler: viewInvitationPeriod,
+      auth: {
+        access: {
+          scope: ['bulk_return_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/invitation-period',
+    options: {
+      handler: submitInvitationPeriod,
+      auth: {
+        access: {
+          scope: ['bulk_return_notifications']
         }
       }
     }
