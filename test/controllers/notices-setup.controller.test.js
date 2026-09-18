@@ -5,6 +5,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import http2 from 'node:http2'
 
 import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { generateUUID } from 'water-abstraction-engine/lib/general.lib.js'
 import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
@@ -769,16 +770,40 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
-          vi.spyOn(ViewInvitationPeriodService, 'default').mockReturnValue(_viewInvitationPeriod())
         })
 
-        it('returns the page successfully', async () => {
-          const response = await server.inject(getOptions)
+        describe('and there are returns periods with outstanding invitations', () => {
+          beforeEach(() => {
+            vi.spyOn(ViewInvitationPeriodService, 'default').mockReturnValue(_viewInvitationPeriod())
+          })
 
-          const pageData = _viewInvitationPeriod()
+          it('returns the page successfully', async () => {
+            const response = await server.inject(getOptions)
 
-          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
-          expect(response.payload).toContain(pageData.pageTitle)
+            const pageData = _viewInvitationPeriod()
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain(pageData.pageTitle)
+          })
+        })
+
+        describe('and there are no returns periods with outstanding invitations', () => {
+          beforeEach(() => {
+            vi.spyOn(ViewInvitationPeriodService, 'default').mockReturnValue({
+              ..._viewInvitationPeriod(),
+              invitationPeriods: []
+            })
+          })
+
+          it('returns the page with the "No periods" message successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            const pageData = _viewInvitationPeriod()
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain(pageData.pageTitle)
+            expect(response.payload).toContain('There are no returns periods with unsent invitations.')
+          })
         })
       })
     })
@@ -1617,7 +1642,13 @@ function _viewInvitationPeriod() {
     pageTitle: 'Select the returns period for the invitations',
     backLink: '/system/manage',
     activeNavBar: 'notices',
-    invitationPeriods: []
+    invitationPeriods: [
+      {
+        checked: false,
+        text: 'Summer 1 November 2025 to 31 October 2026',
+        value: generateUUID()
+      }
+    ]
   }
 }
 

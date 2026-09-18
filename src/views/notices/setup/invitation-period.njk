@@ -4,7 +4,12 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block pageContent %}
-  <form method="post">
+  {% if invitationPeriods.length === 0 %}
+    <div class="govuk-body">
+      <p>There are no returns periods with unsent invitations.</p>
+    </div>
+  {% else %}
+    <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
 
       {{ govukRadios({
@@ -15,4 +20,5 @@
 
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
     </form>
+  {% endif %}
 {% endblock %}
