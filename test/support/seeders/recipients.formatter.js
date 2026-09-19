@@ -223,6 +223,7 @@ export function transformToDownloadingResult(recipient, returnLog) {
     latest_due_date: returnLog.dueDate,
     licence_ref: returnLog.licenceRef,
     message_type: recipient.messageType,
+    quarterly: returnLog.quarterly,
     return_log_id: returnLog.id,
     return_reference: returnLog.returnReference,
     start_date: returnLog.startDate

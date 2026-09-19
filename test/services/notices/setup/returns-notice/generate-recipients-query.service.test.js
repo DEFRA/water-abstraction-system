@@ -18,7 +18,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
     rl.licence_ref,
     rl.id as return_log_id,
     rl.return_reference,
-    rl.start_date
+    rl.start_date,
+    rl.quarterly
   FROM
     public.return_logs rl
   WHERE
@@ -66,7 +67,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       ('Letter') AS message_type,
       drl.return_log_id AS return_log_id,
       drl.return_reference AS return_reference,
-      drl.start_date AS start_date
+      drl.start_date AS start_date,
+      drl.quarterly AS quarterly
     FROM
       public.licences l
     INNER JOIN (
@@ -139,7 +141,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         ('Letter') AS message_type,
         drl.return_log_id AS return_log_id,
         drl.return_reference AS return_reference,
-        drl.start_date AS start_date
+        drl.start_date AS start_date,
+        drl.quarterly AS quarterly
       FROM public.licence_document_roles ldr
         INNER JOIN public.licence_roles lr
           ON lr.id = ldr.licence_role_id
