@@ -57,7 +57,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
     rl.licence_ref,
     rl.id AS return_log_id,
     rl.return_reference,
-    rl.start_date
+    rl.start_date,
+    rl.quarterly
   FROM
     public.return_logs rl
   WHERE
@@ -80,7 +81,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
           licence_ref: returnLogs[0].licenceRef,
           return_log_id: returnLogs[0].id,
           return_reference: returnLogs[0].returnReference,
-          start_date: returnLogs[0].startDate
+          start_date: returnLogs[0].startDate,
+          quarterly: returnLogs[0].quarterly
         }
       ])
     })

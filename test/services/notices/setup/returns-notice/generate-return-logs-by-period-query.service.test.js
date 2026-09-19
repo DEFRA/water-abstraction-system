@@ -82,7 +82,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     rl.licence_ref,
     rl.id AS return_log_id,
     rl.return_reference,
-    rl.start_date
+    rl.start_date,
+    rl.quarterly
   FROM
     public.return_logs rl
   WHERE
@@ -123,7 +124,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     rl.licence_ref,
     rl.id AS return_log_id,
     rl.return_reference,
-    rl.start_date
+    rl.start_date,
+    rl.quarterly
   FROM
     public.return_logs rl
   WHERE
@@ -297,6 +299,7 @@ function _transformToResult(returnLog) {
     licence_ref: returnLog.licenceRef,
     return_log_id: returnLog.id,
     return_reference: returnLog.returnReference,
-    start_date: returnLog.startDate
+    start_date: returnLog.startDate,
+    quarterly: returnLog.quarterly
   }
 }

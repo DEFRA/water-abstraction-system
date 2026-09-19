@@ -125,7 +125,8 @@ WITH
       ldh.metadata,
       drl.return_log_id,
       drl.return_reference,
-      drl.start_date
+      drl.start_date,
+      drl.quarterly
     FROM public.licence_document_headers ldh
     INNER JOIN due_return_logs drl
       ON drl.licence_ref = ldh.licence_ref
@@ -233,7 +234,8 @@ function _licenceHolderQuery() {
       ('Letter') AS message_type,
       drl.return_log_id AS return_log_id,
       drl.return_reference AS return_reference,
-      drl.start_date AS start_date
+      drl.start_date AS start_date,
+      drl.quarterly AS quarterly
     FROM
       public.licences l
     INNER JOIN (
@@ -277,7 +279,8 @@ function _primaryUserQuery(noticeType) {
       ('Email') as message_type,
       a.return_log_id,
       a.return_reference,
-      a.start_date
+      a.start_date,
+      a.quarterly
     FROM
       ldh_all a
     INNER JOIN public.licence_entity_roles ler
@@ -310,7 +313,8 @@ function _processForDownloading() {
       ac.message_type,
       ac.return_log_id,
       ac.return_reference,
-      ac.start_date
+      ac.start_date,
+      ac.quarterly
     FROM
       all_contacts ac
     LEFT JOIN latest_due_date ldd
@@ -381,7 +385,8 @@ function _noRecipientsQuery() {
       ('none') as message_type,
       NULL::uuid AS return_log_id,
       NULL::text AS return_reference,
-      NULL::date AS start_date
+      NULL::date AS start_date,
+      NULL::boolean AS quarterly
     WHERE FALSE
   `
 }
@@ -401,7 +406,8 @@ function _returnsUserQuery(noticeType) {
       ('Email') as message_type,
       a.return_log_id,
       a.return_reference,
-      a.start_date
+      a.start_date,
+      a.quarterly
     FROM
       ldh_all a
     INNER JOIN public.licence_entity_roles ler
@@ -449,7 +455,8 @@ function _returnsToQuery(noticeType) {
         ('Letter') AS message_type,
         drl.return_log_id AS return_log_id,
         drl.return_reference AS return_reference,
-        drl.start_date AS start_date
+        drl.start_date AS start_date,
+        drl.quarterly AS quarterly
       FROM public.licence_document_roles ldr
         INNER JOIN public.licence_roles lr
           ON lr.id = ldr.licence_role_id

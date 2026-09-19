@@ -67,7 +67,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       expect(result).toEqual({
         data:
           // Headers
-          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Quarterly,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           recipientRow,
         type: 'text/csv',
         filename: `${session.notificationType} - ${session.referenceCode}.csv`
@@ -93,7 +93,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       expect(result).toEqual({
         data:
           // Headers
-          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Quarterly,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           recipientRow,
         type: 'text/csv',
         filename: `${session.notificationType} - ${session.referenceCode}.csv`
@@ -119,7 +119,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       expect(result).toEqual({
         data:
           // Headers
-          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Quarterly,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           recipientRow,
         type: 'text/csv',
         filename: `${session.notificationType} - ${session.referenceCode}.csv`
@@ -189,6 +189,7 @@ function _transformRecipientToRow(recipient, notificationType) {
     recipient.start_date,
     recipient.end_date,
     recipient.due_date,
+    recipient.quarterly,
     notificationType,
     recipient.notificationDueDate,
     recipient.message_type,

@@ -27,7 +27,8 @@ function _query() {
     rl.licence_ref,
     rl.id AS return_log_id,
     rl.return_reference,
-    rl.start_date
+    rl.start_date,
+    rl.quarterly
   FROM
     public.return_logs rl
   WHERE
