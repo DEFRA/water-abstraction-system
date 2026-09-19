@@ -75,7 +75,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
     rl.licence_ref,
     rl.id AS return_log_id,
     rl.return_reference,
-    rl.start_date
+    rl.start_date,
+    rl.quarterly
   FROM
     public.return_logs rl
   WHERE
@@ -107,7 +108,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
     rl.licence_ref,
     rl.id AS return_log_id,
     rl.return_reference,
-    rl.start_date
+    rl.start_date,
+    rl.quarterly
   FROM
     public.return_logs rl
   WHERE
@@ -136,7 +138,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
             licence_ref: returnLogs[4].licenceRef,
             return_log_id: returnLogs[4].id,
             return_reference: returnLogs[4].returnReference,
-            start_date: returnLogs[4].startDate
+            start_date: returnLogs[4].startDate,
+            quarterly: returnLogs[4].quarterly
           }
         ])
       })
@@ -158,7 +161,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
             licence_ref: returnLogs[0].licenceRef,
             return_log_id: returnLogs[0].id,
             return_reference: returnLogs[0].returnReference,
-            start_date: returnLogs[0].startDate
+            start_date: returnLogs[0].startDate,
+            quarterly: returnLogs[0].quarterly
           },
           {
             due_date: returnLogs[4].dueDate,
@@ -166,7 +170,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
             licence_ref: returnLogs[4].licenceRef,
             return_log_id: returnLogs[4].id,
             return_reference: returnLogs[4].returnReference,
-            start_date: returnLogs[4].startDate
+            start_date: returnLogs[4].startDate,
+            quarterly: returnLogs[4].quarterly
           }
         ])
       })
