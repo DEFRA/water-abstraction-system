@@ -6,6 +6,9 @@ import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import { db } from 'water-abstraction-engine/db/db.js'
 
+// Things we need to stub
+import * as featureFlagsConfig from '../../../../../src/config/feature-flags.config.js'
+
 // Thing under test
 import GenerateReturnLogsByPeriodQueryService from '../../../../../src/services/notices/setup/returns-notice/generate-return-logs-by-period-query.service.js'
 
@@ -16,6 +19,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
   let returnsPeriod
 
   beforeAll(async () => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
+
     returnsPeriod = {
       dueDate: null,
       endDate: new Date('2025-03-31'),
