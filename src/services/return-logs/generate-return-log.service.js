@@ -9,6 +9,8 @@ import {
   formatDateObjectToISO
 } from 'water-abstraction-engine/lib/dates.lib.js'
 
+const START_OF_QUARTERLY_RETURNS = new Date('2025-04-01')
+
 /**
  * Generate return log data from a return requirement and return cycle
  *
@@ -35,7 +37,7 @@ export default function generateReturnLogService(returnRequirement, returnCycle)
   }
 
   return {
-    dueDate: null,
+    dueDate: _dueDate(endDate, returnCycle),
     endDate,
     licenceRef: returnVersion.licence.licenceRef,
     metadata: _metadata(returnRequirement, endDate, returnCycleEndDate),
@@ -68,6 +70,14 @@ export default function generateReturnLogService(returnRequirement, returnCycle)
 
 function _abstractionPeriodValue(value) {
   return value ? value.toString() : 'null'
+}
+
+function _dueDate(endDate, returnCycle) {
+  if (endDate < START_OF_QUARTERLY_RETURNS) {
+    return returnCycle.dueDate
+  }
+
+  return null
 }
 
 function _endDate(returnVersion, returnCycleEndDate) {
