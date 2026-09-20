@@ -1,9 +1,12 @@
 // Test framework
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
 import ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
+
+// Things we need to stub
+import * as featureFlagsConfig from '../../../src/config/feature-flags.config.js'
 
 // Thing under test
 import GenerateReturnLogService from '../../../src/services/return-logs/generate-return-log.service.js'
@@ -13,8 +16,14 @@ describe('Return Logs - Generate Return Log service', () => {
   let returnRequirement
 
   beforeEach(() => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ setOldReturnsDueDate: true })
+
     returnCycle = ReturnCyclesFixture.winterCycle()
     returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

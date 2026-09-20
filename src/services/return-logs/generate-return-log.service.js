@@ -9,6 +9,8 @@ import {
   formatDateObjectToISO
 } from 'water-abstraction-engine/lib/dates.lib.js'
 
+import featureFlagsConfig from '../../config/feature-flags.config.js'
+
 const START_OF_QUARTERLY_RETURNS = new Date('2025-04-01')
 
 /**
@@ -73,8 +75,10 @@ function _abstractionPeriodValue(value) {
 }
 
 function _dueDate(endDate, returnCycle) {
-  if (endDate < START_OF_QUARTERLY_RETURNS) {
-    return returnCycle.dueDate
+  if (featureFlagsConfig.setOldReturnsDueDate) {
+    if (endDate < START_OF_QUARTERLY_RETURNS) {
+      return returnCycle.dueDate
+    }
   }
 
   return null
