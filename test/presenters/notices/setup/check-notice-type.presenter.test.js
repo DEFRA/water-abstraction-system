@@ -1,8 +1,11 @@
 // Test framework
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
+
+// Things we need to stub
+import * as featureFlagsConfig from '../../../../src/config/feature-flags.config.js'
 
 // Thing under test
 import CheckNoticeTypePresenter from '../../../../src/presenters/notices/setup/check-notice-type.presenter.js'
@@ -12,9 +15,15 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
   let session
 
   beforeEach(() => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
+
     licenceRef = generateLicenceRef()
 
     session = { id: generateUUID(), noticeType: 'invitations' }
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -22,7 +31,14 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
       const result = CheckNoticeTypePresenter(session)
 
       expect(result).toEqual({
-        ..._expectedPageData(session),
+        links: {
+          licenceNumber: `/system/notices/setup/${session.id}/licence`,
+          noticeType: `/system/notices/setup/${session.id}/notice-type`,
+          returns: `/system/notices/setup/${session.id}/paper-return`,
+          returnsPeriod: `/system/notices/setup/${session.id}/invitation-period`
+        },
+        pageTitle: 'Check the notice type',
+        sessionId: session.id,
         noticeType: 'Returns invitation'
       })
     })
@@ -36,7 +52,14 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
         const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
-          ..._expectedPageData(session),
+          links: {
+            licenceNumber: `/system/notices/setup/${session.id}/licence`,
+            noticeType: `/system/notices/setup/${session.id}/notice-type`,
+            returns: `/system/notices/setup/${session.id}/paper-return`,
+            returnsPeriod: `/system/notices/setup/${session.id}/invitation-period`
+          },
+          pageTitle: 'Check the notice type',
+          sessionId: session.id,
           licenceRef,
           noticeType: 'Returns invitation'
         })
@@ -58,7 +81,14 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
         const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
-          ..._expectedPageData(session),
+          links: {
+            licenceNumber: `/system/notices/setup/${session.id}/licence`,
+            noticeType: `/system/notices/setup/${session.id}/notice-type`,
+            returns: `/system/notices/setup/${session.id}/paper-return`,
+            returnsPeriod: `/system/notices/setup/${session.id}/invitation-period`
+          },
+          pageTitle: 'Check the notice type',
+          sessionId: session.id,
           noticeType: 'Returns invitation',
           returnsPeriodText: 'Summer annual 1 November 2024 to 31 October 2025'
         })
@@ -74,7 +104,14 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
         const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
-          ..._expectedPageData(session),
+          links: {
+            licenceNumber: `/system/notices/setup/${session.id}/licence`,
+            noticeType: `/system/notices/setup/${session.id}/notice-type`,
+            returns: `/system/notices/setup/${session.id}/paper-return`,
+            returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+          },
+          pageTitle: 'Check the notice type',
+          sessionId: session.id,
           noticeType: 'Returns reminder'
         })
       })
@@ -111,7 +148,14 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
         const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
-          ..._expectedPageData(session),
+          links: {
+            licenceNumber: `/system/notices/setup/${session.id}/licence`,
+            noticeType: `/system/notices/setup/${session.id}/notice-type`,
+            returns: `/system/notices/setup/${session.id}/paper-return`,
+            returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+          },
+          pageTitle: 'Check the notice type',
+          sessionId: session.id,
           licenceRef,
           noticeType: 'Paper return',
           returns: ['3135 - 1 April 2002 to 31 March 2003']
@@ -143,23 +187,17 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
         const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
-          ..._expectedPageData(session),
+          links: {
+            licenceNumber: `/system/notices/setup/${session.id}/licence`,
+            noticeType: `/system/notices/setup/${session.id}/notice-type`,
+            returns: `/system/notices/setup/${session.id}/paper-return`,
+            returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+          },
+          pageTitle: 'Check the notice type',
+          sessionId: session.id,
           noticeType: 'Renewals invitation'
         })
       })
     })
   })
 })
-
-function _expectedPageData(session) {
-  return {
-    links: {
-      licenceNumber: `/system/notices/setup/${session.id}/licence`,
-      noticeType: `/system/notices/setup/${session.id}/notice-type`,
-      returns: `/system/notices/setup/${session.id}/paper-return`,
-      returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
-    },
-    pageTitle: 'Check the notice type',
-    sessionId: session.id
-  }
-}

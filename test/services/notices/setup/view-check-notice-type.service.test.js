@@ -10,6 +10,7 @@ import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as featureFlagsConfig from '../../../../src/config/feature-flags.config.js'
 
 // Thing under test
 import ViewCheckNoticeTypeService from '../../../../src/services/notices/setup/view-check-notice-type.service.js'
@@ -21,6 +22,8 @@ describe('Notices - Setup - View Check Notice Type service', () => {
   let yarStub
 
   beforeEach(() => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
+
     licenceRef = generateLicenceRef()
     sessionData = { licenceRef, noticeType: 'invitations' }
 
@@ -47,7 +50,7 @@ describe('Notices - Setup - View Check Notice Type service', () => {
           licenceNumber: `/system/notices/setup/${session.id}/licence`,
           noticeType: `/system/notices/setup/${session.id}/notice-type`,
           returns: `/system/notices/setup/${session.id}/paper-return`,
-          returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+          returnsPeriod: `/system/notices/setup/${session.id}/invitation-period`
         },
         notification: undefined,
         pageTitle: 'Check the notice type',

@@ -5,6 +5,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import http2 from 'node:http2'
 
 import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
+import { generateUUID } from 'water-abstraction-engine/lib/general.lib.js'
 import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
@@ -23,6 +24,7 @@ import * as SubmitCheckLicenceMatchesService from '../../src/services/notices/se
 import * as SubmitCheckNoticeTypeService from '../../src/services/notices/setup/submit-check-notice-type.service.js'
 import * as SubmitCheckService from '../../src/services/notices/setup/submit-check.service.js'
 import * as SubmitContactTypeService from '../../src/services/notices/setup/submit-contact-type.service.js'
+import * as SubmitInvitationPeriodService from '../../src/services/notices/setup/submit-invitation-period.service.js'
 import * as SubmitLicenceService from '../../src/services/notices/setup/submit-licence.service.js'
 import * as SubmitNoticeTypeService from '../../src/services/notices/setup/submit-notice-type.service.js'
 import * as SubmitPaperReturnService from '../../src/services/notices/setup/submit-paper-return.service.js'
@@ -40,6 +42,7 @@ import * as ViewCheckNoticeTypeService from '../../src/services/notices/setup/vi
 import * as ViewCheckService from '../../src/services/notices/setup/view-check.service.js'
 import * as ViewConfirmationService from '../../src/services/notices/setup/view-confirmation.service.js'
 import * as ViewContactTypeService from '../../src/services/notices/setup/view-contact-type.service.js'
+import * as ViewInvitationPeriodService from '../../src/services/notices/setup/view-invitation-period.service.js'
 import * as ViewLicenceService from '../../src/services/notices/setup/view-licence.service.js'
 import * as ViewNoticeTypeService from '../../src/services/notices/setup/view-notice-type.service.js'
 import * as ViewPaperReturnService from '../../src/services/notices/setup/view-paper-return.service.js'
@@ -69,7 +72,7 @@ describe('Notices Setup controller', () => {
     server = await init()
   })
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
     LoggerStub(server.logger)
 
@@ -90,7 +93,7 @@ describe('Notices Setup controller', () => {
       let response
 
       describe('when the journey is "alerts"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           getOptions = {
             method: 'GET',
             url: '/notices/setup/alerts?monitoringStationId=24d8ed70-e474-45bc-83db-90e34d5c34cf',
@@ -104,7 +107,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('and a request is valid', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(response)
           })
 
@@ -120,7 +123,7 @@ describe('Notices Setup controller', () => {
       })
 
       describe('when the journey is "standard"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           getOptions = {
             method: 'GET',
             url: '/notices/setup/standard',
@@ -134,7 +137,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('and a request is valid', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(response)
           })
 
@@ -148,7 +151,7 @@ describe('Notices Setup controller', () => {
       })
 
       describe('when the journey is "adhoc"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           getOptions = {
             method: 'GET',
             url: '/notices/setup/adhoc',
@@ -162,7 +165,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('and a request is valid', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(response)
           })
 
@@ -179,7 +182,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/cancel', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/cancel`,
@@ -191,7 +194,7 @@ describe('Notices Setup controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
           vi.spyOn(ViewCancelService, 'default').mockReturnValue(_viewCancel())
         })
@@ -209,7 +212,7 @@ describe('Notices Setup controller', () => {
 
     describe('POST', () => {
       describe('when the request succeeds', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(SubmitCancelService, 'default').mockReturnValue('/system/notices')
           postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {}, ['bulk_return_notifications'])
         })
@@ -226,7 +229,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/check', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/check`,
@@ -237,7 +240,7 @@ describe('Notices Setup controller', () => {
         }
       })
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
           vi.spyOn(ViewCheckService, 'default').mockReturnValue(_viewCheck())
         })
@@ -257,7 +260,7 @@ describe('Notices Setup controller', () => {
       describe('when the request succeeds', () => {
         let eventId
 
-        beforeEach(async () => {
+        beforeEach(() => {
           eventId = '1233'
 
           vi.spyOn(SubmitCheckService, 'default').mockReturnValue(eventId)
@@ -276,7 +279,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/check-notice-type', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/check-notice-type`,
@@ -287,7 +290,7 @@ describe('Notices Setup controller', () => {
         }
       })
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
           vi.spyOn(ViewCheckNoticeTypeService, 'default').mockReturnValue({
             pageTitle: 'Check the notice type'
@@ -304,7 +307,7 @@ describe('Notices Setup controller', () => {
     })
 
     describe('POST', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         postOptions = postRequestOptions(basePath + `/${session.id}/check-notice-type`, {}, [
           'bulk_return_notifications'
         ])
@@ -325,7 +328,7 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       let eventId
 
-      beforeEach(async () => {
+      beforeEach(() => {
         eventId = '123'
 
         getOptions = {
@@ -338,7 +341,7 @@ describe('Notices Setup controller', () => {
         }
       })
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
           vi.spyOn(ViewConfirmationService, 'default').mockReturnValue(_viewConfirmation())
         })
@@ -357,7 +360,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/download', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/download`,
@@ -367,8 +370,9 @@ describe('Notices Setup controller', () => {
           }
         }
       })
+
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
           vi.spyOn(ProcessDownloadRecipientsService, 'default').mockReturnValue({
             data: 'test',
@@ -392,7 +396,7 @@ describe('Notices Setup controller', () => {
   describe('/notices/setup/{sessionId}/abstraction-alerts', () => {
     describe('/alert-email-address', () => {
       describe('GET', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           getOptions = {
             method: 'GET',
             url: basePath + `/${session.id}/abstraction-alerts/alert-email-address`,
@@ -419,7 +423,7 @@ describe('Notices Setup controller', () => {
 
       describe('POST', () => {
         describe('when a request is valid', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-email-address`, {}, [
               'hof_notifications'
             ])
@@ -436,7 +440,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('when a request is invalid', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-email-address`, {}, [
               'hof_notifications'
             ])
@@ -460,7 +464,7 @@ describe('Notices Setup controller', () => {
 
     describe('/alert-thresholds', () => {
       describe('GET', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           getOptions = {
             method: 'GET',
             url: basePath + `/${session.id}/abstraction-alerts/alert-thresholds`,
@@ -487,7 +491,7 @@ describe('Notices Setup controller', () => {
 
       describe('POST', () => {
         describe('when a request is valid', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-thresholds`, {}, [
               'hof_notifications'
             ])
@@ -506,7 +510,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('when a request is invalid', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {}, [
               'hof_notifications'
             ])
@@ -530,7 +534,7 @@ describe('Notices Setup controller', () => {
 
     describe('/alert-type', () => {
       describe('GET', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           getOptions = {
             method: 'GET',
             url: basePath + `/${session.id}/abstraction-alerts/alert-type`,
@@ -557,7 +561,7 @@ describe('Notices Setup controller', () => {
 
       describe('POST', () => {
         describe('when a request is valid', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {}, [
               'hof_notifications'
             ])
@@ -576,7 +580,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('when a request is invalid', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/alert-type`, {}, [
               'hof_notifications'
             ])
@@ -600,7 +604,7 @@ describe('Notices Setup controller', () => {
 
     describe('/cancel', () => {
       describe('GET', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           getOptions = {
             method: 'GET',
             url: basePath + `/${session.id}/abstraction-alerts/cancel`,
@@ -629,7 +633,7 @@ describe('Notices Setup controller', () => {
         describe('when a request is valid', () => {
           const monitoringStationId = '123'
 
-          beforeEach(async () => {
+          beforeEach(() => {
             postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/cancel`, {}, [
               'hof_notifications'
             ])
@@ -649,7 +653,7 @@ describe('Notices Setup controller', () => {
 
     describe('/check-licence-matches', () => {
       describe('GET', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           getOptions = {
             method: 'GET',
             url: basePath + `/${session.id}/abstraction-alerts/check-licence-matches`,
@@ -676,7 +680,7 @@ describe('Notices Setup controller', () => {
 
       describe('POST', () => {
         describe('when a request is valid', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             postOptions = postRequestOptions(basePath + `/${session.id}/abstraction-alerts/check-licence-matches`, {}, [
               'hof_notifications'
             ])
@@ -699,7 +703,7 @@ describe('Notices Setup controller', () => {
     describe('/check-licence-matches/filter', () => {
       describe('POST', () => {
         describe('when a request is valid', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             postOptions = postRequestOptions(
               basePath + `/${session.id}/abstraction-alerts/check-licence-matches/filter`,
               { periods: '1-1-31-3' },
@@ -725,7 +729,7 @@ describe('Notices Setup controller', () => {
       describe('GET', () => {
         const licenceMonitoringStationId = '123'
 
-        beforeEach(async () => {
+        beforeEach(() => {
           getOptions = {
             method: 'GET',
             url: basePath + `/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationId}`,
@@ -752,9 +756,106 @@ describe('Notices Setup controller', () => {
     })
   })
 
+  describe('notices/setup/invitation-period', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/invitation-period`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['bulk_return_notifications'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+        })
+
+        describe('and there are returns periods with outstanding invitations', () => {
+          beforeEach(() => {
+            vi.spyOn(ViewInvitationPeriodService, 'default').mockReturnValue(_viewInvitationPeriod())
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            const pageData = _viewInvitationPeriod()
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain(pageData.pageTitle)
+          })
+        })
+
+        describe('and there are no returns periods with outstanding invitations', () => {
+          beforeEach(() => {
+            vi.spyOn(ViewInvitationPeriodService, 'default').mockReturnValue({
+              ..._viewInvitationPeriod(),
+              invitationPeriods: []
+            })
+          })
+
+          it('returns the page with the "No periods" message successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            const pageData = _viewInvitationPeriod()
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain(pageData.pageTitle)
+            expect(response.payload).toContain('There are no returns periods with unsent invitations.')
+          })
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+            vi.spyOn(SubmitInvitationPeriodService, 'default').mockReturnValue({
+              ..._viewInvitationPeriod(),
+              error: 'Something went wrong'
+            })
+            postOptions = postRequestOptions(`${basePath}/${session.id}/invitation-period`, {}, [
+              'bulk_return_notifications'
+            ])
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds', () => {
+          beforeEach(() => {
+            vi.spyOn(SubmitInvitationPeriodService, 'default').mockReturnValue({
+              redirectUrl: `${basePath}/${session.id}/check-notice-type`
+            })
+            postOptions = postRequestOptions(`${basePath}/${session.id}/invitation-period`, {}, [
+              'bulk_return_notifications'
+            ])
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`${basePath}/${session.id}/check-notice-type`)
+          })
+        })
+      })
+    })
+  })
+
   describe('notices/setup/{sessionId}/licence', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/licence`,
@@ -781,7 +882,7 @@ describe('Notices Setup controller', () => {
 
     describe('POST', () => {
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           postOptions = postRequestOptions(basePath + `/${session.id}/licence`, { licenceRef: '01/115' }, [
             'bulk_return_notifications'
           ])
@@ -798,7 +899,7 @@ describe('Notices Setup controller', () => {
       })
 
       describe('when a request is invalid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           postOptions = postRequestOptions(basePath + `/${session.id}/licence`, { licenceRef: '' }, [
             'bulk_return_notifications'
           ])
@@ -834,7 +935,7 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
 
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/preview/${contactHashId}`,
@@ -865,7 +966,7 @@ describe('Notices Setup controller', () => {
       const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
       const licenceMonitoringStationId = '551087bc-68b4-42a8-9e04-ac173eaec3f8'
 
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`,
@@ -895,7 +996,7 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
 
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/preview/${contactHashId}/check-alert`,
@@ -925,7 +1026,7 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       const contactHashId = '28da6d3a09af3794959b6906de5ec81a'
 
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/preview/${contactHashId}/check-paper-return`,
@@ -989,7 +1090,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/{sessionId}/notice-type', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/notice-type`,
@@ -1016,7 +1117,7 @@ describe('Notices Setup controller', () => {
 
     describe('POST', () => {
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           postOptions = postRequestOptions(basePath + `/${session.id}/notice-type`, { noticeType: 'returns' }, [
             'bulk_return_notifications'
           ])
@@ -1033,7 +1134,7 @@ describe('Notices Setup controller', () => {
       })
 
       describe('when a request is invalid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           postOptions = postRequestOptions(basePath + `/${session.id}/notice-type`, { noticeType: '' }, [
             'bulk_return_notifications'
           ])
@@ -1057,7 +1158,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/recipient-name', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/recipient-name`,
@@ -1069,7 +1170,7 @@ describe('Notices Setup controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(ViewRecipientNameService, 'default').mockReturnValue({ pageTitle: 'Recipients name' })
         })
 
@@ -1085,7 +1186,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(SubmitRecipientNameService, 'default').mockReturnValue({
               error: 'Something went wrong'
             })
@@ -1104,7 +1205,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('and the validation succeeds', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(SubmitRecipientNameService, 'default').mockReturnValue({
               pageTile: 'Select recipients'
             })
@@ -1126,7 +1227,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/remove-licences', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/remove-licences`,
@@ -1138,7 +1239,7 @@ describe('Notices Setup controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
           vi.spyOn(ViewRemoveLicencesService, 'default').mockReturnValue(_viewRemoveLicence())
         })
@@ -1157,7 +1258,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
             vi.spyOn(SubmitRemoveLicencesService, 'default').mockReturnValue({
               ..._viewRemoveLicence(),
@@ -1177,7 +1278,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('and the validation succeeds', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(SubmitRemoveLicencesService, 'default').mockReturnValue({ redirectUrl: 'check' })
             postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {}, [
               'bulk_return_notifications'
@@ -1197,7 +1298,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/returns-period', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/returns-period`,
@@ -1207,8 +1308,9 @@ describe('Notices Setup controller', () => {
           }
         }
       })
+
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
           vi.spyOn(ViewReturnsPeriodService, 'default').mockReturnValue(_viewReturnsPeriod())
         })
@@ -1227,7 +1329,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
             vi.spyOn(SubmitReturnsPeriodService, 'default').mockReturnValue({
               ..._viewReturnsPeriod(),
@@ -1247,7 +1349,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('and the validation succeeds', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(SubmitReturnsPeriodService, 'default').mockReturnValue({ redirectUrl: 'send-notice' })
             postOptions = postRequestOptions(basePath + `/${session.id}/returns-period`, {}, [
               'bulk_return_notifications'
@@ -1267,7 +1369,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/paper-return', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/paper-return`,
@@ -1279,7 +1381,7 @@ describe('Notices Setup controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
           vi.spyOn(ViewPaperReturnService, 'default').mockReturnValue({
             pageTitle: 'Select the returns for the paper forms'
@@ -1298,7 +1400,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
             vi.spyOn(SubmitPaperReturnService, 'default').mockReturnValue({
               error: 'Something went wrong'
@@ -1317,7 +1419,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('and the validation succeeds', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(SubmitPaperReturnService, 'default').mockReturnValue({
               pageTile: 'Select the returns for the paper forms'
             })
@@ -1339,7 +1441,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/select-recipients', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/select-recipients`,
@@ -1351,7 +1453,7 @@ describe('Notices Setup controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(ViewSelectRecipientsService, 'default').mockReturnValue({ pageTitle: 'Select recipients' })
         })
 
@@ -1367,7 +1469,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(SubmitSelectRecipientsService, 'default').mockReturnValue({
               error: 'Something went wrong'
             })
@@ -1385,7 +1487,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('and the validation succeeds', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(SubmitSelectRecipientsService, 'default').mockReturnValue({
               pageTile: 'Select recipients'
             })
@@ -1407,7 +1509,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/contact-type', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/contact-type`,
@@ -1419,7 +1521,7 @@ describe('Notices Setup controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
           vi.spyOn(ViewContactTypeService, 'default').mockReturnValue({
             pageTitle: 'Select how to contact the recipient'
@@ -1438,7 +1540,7 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         describe('and the validation fails', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
             vi.spyOn(SubmitContactTypeService, 'default').mockReturnValue({
               error: 'Something went wrong'
@@ -1457,7 +1559,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('and the validation succeeds and they chose the post option', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(SubmitContactTypeService, 'default').mockReturnValue({
               contactType: 'post',
               pageTile: 'Select how to contact the recipient'
@@ -1476,7 +1578,7 @@ describe('Notices Setup controller', () => {
         })
 
         describe('and the validation succeeds and they chose the email option', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             vi.spyOn(SubmitContactTypeService, 'default').mockReturnValue({
               contactType: 'email',
               pageTile: 'Select how to contact the recipient'
@@ -1499,7 +1601,7 @@ describe('Notices Setup controller', () => {
 
   describe('notices/setup/add-recipient', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
           url: basePath + `/${session.id}/add-recipient`,
@@ -1511,7 +1613,7 @@ describe('Notices Setup controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           vi.spyOn(ProcessAddRecipientService, 'default').mockResolvedValue()
         })
 
@@ -1535,6 +1637,21 @@ function _viewCancel() {
       text: 'Licence number',
       value: '67856'
     }
+  }
+}
+
+function _viewInvitationPeriod() {
+  return {
+    pageTitle: 'Select the returns period for the invitations',
+    backLink: '/system/manage',
+    activeNavBar: 'notices',
+    invitationPeriods: [
+      {
+        checked: false,
+        text: 'Summer 1 November 2025 to 31 October 2026',
+        value: generateUUID()
+      }
+    ]
   }
 }
 

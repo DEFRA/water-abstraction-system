@@ -1,10 +1,13 @@
 // Test framework
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import { db } from 'water-abstraction-engine/db/db.js'
+
+// Things we need to stub
+import * as featureFlagsConfig from '../../../../../src/config/feature-flags.config.js'
 
 // Thing under test
 import GenerateReturnLogsByPeriodQueryService from '../../../../../src/services/notices/setup/returns-notice/generate-return-logs-by-period-query.service.js'
@@ -16,6 +19,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
   let returnsPeriod
 
   beforeAll(async () => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
+
     returnsPeriod = {
       dueDate: null,
       endDate: new Date('2025-03-31'),
@@ -38,15 +43,17 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     // 4th return log has a status of 'due' and is in the period - should be included unless we exclude the licence
     await _addReturnLog(returnLogs, returnsPeriod, { dueDate: new Date('2025-04-28') })
 
-    // GENERAL - these would be excluded irrespective of notice type, so we stick with null due date for simplicity
-    // 5th return log has a status of 'completed' - should NOT be included in results
-    await _addReturnLog(returnLogs, returnsPeriod, { status: 'completed' })
-    // 6th return log is not current - should NOT be included in results
-    await _addReturnLog(returnLogs, returnsPeriod, { isCurrent: false })
-    // 7th return log is for the summer cycle - should NOT be included in results
-    await _addReturnLog(returnLogs, { ...returnsPeriod, summer: 'true' })
-    // 8th return log is quarterly - should NOT be included in results
+    // MIXED - quarterly is true
+    // 5th return log is quarterly - should be included in invitations but not reminders
     await _addReturnLog(returnLogs, { ...returnsPeriod, quarterly: true })
+
+    // GENERAL - these would be excluded irrespective of notice type, so we stick with null due date for simplicity
+    // 6th return log has a status of 'completed' - should NOT be included in results
+    await _addReturnLog(returnLogs, returnsPeriod, { status: 'completed' })
+    // 7th return log is not current - should NOT be included in results
+    await _addReturnLog(returnLogs, returnsPeriod, { isCurrent: false })
+    // 8th return log is for the summer cycle - should NOT be included in results
+    await _addReturnLog(returnLogs, { ...returnsPeriod, summer: 'true' })
     // 9th return log is not in the period - should NOT be included in results
     await _addReturnLog(returnLogs, { ...returnsPeriod, startDate: new Date('2023-04-01') })
   })
@@ -55,6 +62,8 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     for (const returnLog of returnLogs) {
       await returnLog.$query().delete()
     }
+
+    vi.resetAllMocks()
   })
 
   describe('when called', () => {
@@ -68,13 +77,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
         const result = GenerateReturnLogsByPeriodQueryService(noticeType, licencesToExclude, returnsPeriod)
 
         expect(result).toEqual({
-          bindings: [
-            returnsPeriod.startDate,
-            returnsPeriod.endDate,
-            returnsPeriod.summer,
-            returnsPeriod.quarterly,
-            licencesToExclude
-          ],
+          bindings: [returnsPeriod.startDate, returnsPeriod.endDate, returnsPeriod.summer, licencesToExclude],
           query: `
   SELECT
     rl.due_date,
@@ -92,7 +95,6 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     AND rl.start_date >= ?
     AND rl.end_date <= ?
     AND rl.metadata->>'isSummer' = ?
-    AND rl.quarterly = ?
     AND NOT (rl.licence_ref = ANY (?))
     AND rl.due_date IS NULL
   `
@@ -110,13 +112,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
         const result = GenerateReturnLogsByPeriodQueryService(noticeType, licencesToExclude, returnsPeriod)
 
         expect(result).toEqual({
-          bindings: [
-            returnsPeriod.startDate,
-            returnsPeriod.endDate,
-            returnsPeriod.summer,
-            returnsPeriod.quarterly,
-            licencesToExclude
-          ],
+          bindings: [returnsPeriod.startDate, returnsPeriod.endDate, returnsPeriod.summer, licencesToExclude],
           query: `
   SELECT
     rl.due_date,
@@ -134,9 +130,9 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     AND rl.start_date >= ?
     AND rl.end_date <= ?
     AND rl.metadata->>'isSummer' = ?
-    AND rl.quarterly = ?
     AND NOT (rl.licence_ref = ANY (?))
     AND rl.due_date IS NOT NULL
+    AND rl.quarterly = false
   `
         })
       })
@@ -163,13 +159,13 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toContainEqual(_transformToResult(returnLogs[0]))
+          expect(rows).toContainEqual(_transformToResult(returnLogs[4]))
 
           // This matches on all other parameters but the licence is excluded
           expect(rows).not.toContainEqual(_transformToResult(returnLogs[1]))
 
           expect(rows).not.toContainEqual(_transformToResult(returnLogs[2]))
           expect(rows).not.toContainEqual(_transformToResult(returnLogs[3]))
-          expect(rows).not.toContainEqual(_transformToResult(returnLogs[4]))
           expect(rows).not.toContainEqual(_transformToResult(returnLogs[5]))
           expect(rows).not.toContainEqual(_transformToResult(returnLogs[6]))
           expect(rows).not.toContainEqual(_transformToResult(returnLogs[7]))
@@ -192,10 +188,10 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
 
           expect(rows).toContainEqual(_transformToResult(returnLogs[0]))
           expect(rows).toContainEqual(_transformToResult(returnLogs[1]))
+          expect(rows).toContainEqual(_transformToResult(returnLogs[4]))
 
           expect(rows).not.toContainEqual(_transformToResult(returnLogs[2]))
           expect(rows).not.toContainEqual(_transformToResult(returnLogs[3]))
-          expect(rows).not.toContainEqual(_transformToResult(returnLogs[4]))
           expect(rows).not.toContainEqual(_transformToResult(returnLogs[5]))
           expect(rows).not.toContainEqual(_transformToResult(returnLogs[6]))
           expect(rows).not.toContainEqual(_transformToResult(returnLogs[7]))
