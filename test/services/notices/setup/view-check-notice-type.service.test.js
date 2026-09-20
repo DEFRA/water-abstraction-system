@@ -22,6 +22,8 @@ describe('Notices - Setup - View Check Notice Type service', () => {
   let yarStub
 
   beforeEach(() => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
+
     licenceRef = generateLicenceRef()
     sessionData = { licenceRef, noticeType: 'invitations' }
 
@@ -31,8 +33,6 @@ describe('Notices - Setup - View Check Notice Type service', () => {
 
     yarStub = YarStub()
     yarStub.flash.mockResolvedValue()
-
-    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
   })
 
   afterEach(() => {

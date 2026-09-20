@@ -22,6 +22,8 @@ describe('Notices - Setup - Submit Notice Type service', () => {
   let yarStub
 
   beforeEach(() => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
+
     auth = {
       credentials: { scope: ['bulk_return_notifications'] }
     }
@@ -29,8 +31,6 @@ describe('Notices - Setup - Submit Notice Type service', () => {
     sessionData = { id: generateUUID() }
 
     yarStub = YarStub()
-
-    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
   })
 
   afterEach(() => {

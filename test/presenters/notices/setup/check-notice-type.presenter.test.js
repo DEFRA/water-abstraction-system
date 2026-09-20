@@ -15,11 +15,11 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
   let session
 
   beforeEach(() => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
+
     licenceRef = generateLicenceRef()
 
     session = { id: generateUUID(), noticeType: 'invitations' }
-
-    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
   })
 
   afterEach(() => {
