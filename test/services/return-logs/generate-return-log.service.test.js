@@ -79,6 +79,29 @@ describe('Return Logs - Generate Return Log service', () => {
         })
       })
 
+      describe('the "dueDate" property', () => {
+        describe('when the "end date" is determined to be before 1 April 2025', () => {
+          beforeEach(() => {
+            // Select the fourth return cycle from the fixture: 2024-04-01 to 31-03-2025
+            returnCycle = ReturnCyclesFixture.returnCycles(4)[3]
+          })
+
+          it("sets the due date to the return cycle's 'due date'", () => {
+            const result = GenerateReturnLogService(returnRequirement, returnCycle)
+
+            expect(result.dueDate).toEqual(returnCycle.dueDate)
+          })
+        })
+
+        describe('when the "end date" is determined to be on or after 1 April 2025', () => {
+          it("leaves the 'due date' as NULL", () => {
+            const result = GenerateReturnLogService(returnRequirement, returnCycle)
+
+            expect(result.dueDate).toBeNull()
+          })
+        })
+      })
+
       describe('the "endDate" property', () => {
         beforeEach(() => {
           returnRequirement.returnVersion.endDate = new Date('2025-08-31')
