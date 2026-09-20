@@ -1,9 +1,12 @@
 // Test framework
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
 import ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
+
+// Things we need to stub
+import * as featureFlagsConfig from '../../../src/config/feature-flags.config.js'
 
 // Thing under test
 import GenerateReturnLogService from '../../../src/services/return-logs/generate-return-log.service.js'
@@ -13,8 +16,14 @@ describe('Return Logs - Generate Return Log service', () => {
   let returnRequirement
 
   beforeEach(() => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ setOldReturnsDueDate: true })
+
     returnCycle = ReturnCyclesFixture.winterCycle()
     returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -76,6 +85,29 @@ describe('Return Logs - Generate Return Log service', () => {
           source: 'WRLS',
           startDate: new Date('2025-04-01'),
           status: 'due'
+        })
+      })
+
+      describe('the "dueDate" property', () => {
+        describe('when the "end date" is determined to be before 1 April 2025', () => {
+          beforeEach(() => {
+            // Select the fourth return cycle from the fixture: 2024-04-01 to 31-03-2025
+            returnCycle = ReturnCyclesFixture.returnCycles(4)[3]
+          })
+
+          it("sets the due date to the return cycle's 'due date'", () => {
+            const result = GenerateReturnLogService(returnRequirement, returnCycle)
+
+            expect(result.dueDate).toEqual(returnCycle.dueDate)
+          })
+        })
+
+        describe('when the "end date" is determined to be on or after 1 April 2025', () => {
+          it("leaves the 'due date' as NULL", () => {
+            const result = GenerateReturnLogService(returnRequirement, returnCycle)
+
+            expect(result.dueDate).toBeNull()
+          })
         })
       })
 
