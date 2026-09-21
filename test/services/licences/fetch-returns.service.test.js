@@ -6,7 +6,7 @@ import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 
 // Thing under test
-import FetchReturnsService from '../../../src/services/licences/fetch-returns.service.js'
+import FetchReturnsDal from '../../../src/dal/licences/fetch-returns.dal.js'
 
 describe('Licences - Fetch Returns service', () => {
   let licence
@@ -72,7 +72,7 @@ describe('Licences - Fetch Returns service', () => {
 
   describe('when the licence has return logs', () => {
     it('returns results', async () => {
-      const result = await FetchReturnsService(licence.id)
+      const result = await FetchReturnsDal(licence.id)
 
       expect(result).toEqual({
         //  This should be ordered first by start date, then by return reference, then by end date

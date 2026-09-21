@@ -7,7 +7,7 @@ import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.pr
 
 import DetermineLicenceHasReturnVersionsService from './determine-licence-has-return-versions.service.js'
 import FetchLicenceDal from '../../dal/licences/fetch-licence.dal.js'
-import FetchReturnsService from './fetch-returns.service.js'
+import FetchReturnsDal from '../../dal/licences/fetch-returns.dal.js'
 import ReturnsPresenter from '../../presenters/licences/returns.presenter.js'
 import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
@@ -25,7 +25,7 @@ export default async function viewReturnsService(licenceId, auth, page) {
 
   const hasRequirements = await DetermineLicenceHasReturnVersionsService(licenceId)
 
-  const { returns, totalNumber } = await FetchReturnsService(licenceId, page)
+  const { returns, totalNumber } = await FetchReturnsDal(licenceId, page)
 
   const pageData = ReturnsPresenter(returns, hasRequirements, licence)
 

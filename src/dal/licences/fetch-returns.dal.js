@@ -1,6 +1,6 @@
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
- * @module FetchReturnsService
+ * @module FetchReturnsDal
  */
 
 import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
