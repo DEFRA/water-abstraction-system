@@ -7,7 +7,7 @@ import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
-import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import * as FetchLicenceDal from '../../../src/dal/licences/fetch-licence.dal.js'
 import * as FetchNotificationsDal from '../../../src/dal/licences/fetch-notifications.dal.js'
 
 // Thing under test
@@ -51,7 +51,7 @@ describe('Licences - View Communications service', () => {
       }
     }
 
-    vi.spyOn(FetchLicenceService, 'default').mockResolvedValue({
+    vi.spyOn(FetchLicenceDal, 'default').mockResolvedValue({
       id: licenceId,
       licenceRef
     })

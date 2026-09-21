@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import * as FetchLicenceDal from '../../../src/dal/licences/fetch-licence.dal.js'
 import * as FetchPointsService from '../../../src/services/licences/fetch-points.service.js'
 
 // Thing under test
@@ -28,7 +28,7 @@ describe('Licences - View Points service', () => {
 
     licence = ViewLicencesFixture.licence()
 
-    vi.spyOn(FetchLicenceService, 'default').mockReturnValue(licence)
+    vi.spyOn(FetchLicenceDal, 'default').mockReturnValue(licence)
 
     vi.spyOn(FetchPointsService, 'default').mockReturnValue([
       {

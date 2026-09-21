@@ -6,7 +6,7 @@
 import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.presenter.js'
 
 import CommunicationsPresenter from '../../presenters/licences/communications.presenter.js'
-import FetchLicenceService from './fetch-licence.service.js'
+import FetchLicenceDal from '../../dal/licences/fetch-licence.dal.js'
 import FetchNotificationsDal from '../../dal/licences/fetch-notifications.dal.js'
 import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
@@ -20,7 +20,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence communication template.
  */
 export default async function viewCommunicationsService(licenceId, auth, page) {
-  const licence = await FetchLicenceService(licenceId)
+  const licence = await FetchLicenceDal(licenceId)
 
   const { notifications, totalNumber } = await FetchNotificationsDal(licence.licenceRef, page)
 

@@ -5,7 +5,7 @@
 
 import FetchAgreementsService from './fetch-agreements.service.js'
 import FetchChargeVersionsService from './fetch-charge-versions.service.js'
-import FetchLicenceService from './fetch-licence.service.js'
+import FetchLicenceDal from '../../dal/licences/fetch-licence.dal.js'
 import FetchReturnVersionsService from './fetch-return-versions.service.js'
 import FetchWorkflowsService from './fetch-workflows.service.js'
 import SetUpPresenter from '../../presenters/licences/set-up.presenter.js'
@@ -20,7 +20,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence set up template.
  */
 export default async function viewSetUpService(licenceId, auth) {
-  const licence = await FetchLicenceService(licenceId)
+  const licence = await FetchLicenceDal(licenceId)
 
   const agreements = await FetchAgreementsService(licence.licenceRef)
   const chargeVersions = await FetchChargeVersionsService(licenceId)

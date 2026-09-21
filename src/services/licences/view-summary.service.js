@@ -3,7 +3,7 @@
  * @module ViewSummaryService
  */
 
-import FetchLicenceService from './fetch-licence.service.js'
+import FetchLicenceDal from '../../dal/licences/fetch-licence.dal.js'
 import FetchSummaryService from './fetch-summary.service.js'
 import SummaryHeadingPresenter from '../../presenters/licences/summary-heading.presenter.js'
 import SummaryPresenter from '../../presenters/licences/summary.presenter.js'
@@ -18,7 +18,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
 export default async function viewSummaryService(licenceId, auth) {
-  const licence = await FetchLicenceService(licenceId)
+  const licence = await FetchLicenceDal(licenceId)
   const summary = await FetchSummaryService(licenceId)
 
   const summaryHeadingData = SummaryHeadingPresenter(licence, summary)

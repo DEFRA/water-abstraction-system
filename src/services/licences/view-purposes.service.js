@@ -3,7 +3,7 @@
  * @module ViewPurposesService
  */
 
-import FetchLicenceService from './fetch-licence.service.js'
+import FetchLicenceDal from '../../dal/licences/fetch-licence.dal.js'
 import FetchPurposesService from '../licences/fetch-purposes.service.js'
 import PurposesPresenter from '../../presenters/licences/purposes.presenter.js'
 import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
@@ -17,7 +17,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence purposes template
  */
 export default async function viewPurposesService(licenceId, auth) {
-  const licence = await FetchLicenceService(licenceId)
+  const licence = await FetchLicenceDal(licenceId)
   const purposes = await FetchPurposesService(licenceId)
 
   const pageData = PurposesPresenter(purposes, licence)

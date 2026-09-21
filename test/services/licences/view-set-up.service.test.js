@@ -9,7 +9,7 @@ import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js
 // Things we need to stub
 import * as FetchAgreementsService from '../../../src/services/licences/fetch-agreements.service.js'
 import * as FetchChargeVersionsService from '../../../src/services/licences/fetch-charge-versions.service.js'
-import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import * as FetchLicenceDal from '../../../src/dal/licences/fetch-licence.dal.js'
 import * as FetchReturnVersionsService from '../../../src/services/licences/fetch-return-versions.service.js'
 import * as FetchWorkflowsService from '../../../src/services/licences/fetch-workflows.service.js'
 
@@ -92,7 +92,7 @@ describe('Licences - View Set Up service', () => {
 
     vi.spyOn(FetchWorkflowsService, 'default').mockReturnValue([workflow])
 
-    vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licence)
+    vi.spyOn(FetchLicenceDal, 'default').mockResolvedValue(licence)
   })
 
   afterEach(() => {

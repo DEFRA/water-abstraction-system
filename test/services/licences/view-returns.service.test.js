@@ -6,7 +6,7 @@ import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
 import * as DetermineLicenceHasReturnVersionsService from '../../../src/services/licences/determine-licence-has-return-versions.service.js'
-import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import * as FetchLicenceDal from '../../../src/dal/licences/fetch-licence.dal.js'
 import * as FetchReturnsService from '../../../src/services/licences/fetch-returns.service.js'
 
 // Thing under test
@@ -40,7 +40,7 @@ describe('Licences - View Returns service', () => {
 
     vi.spyOn(DetermineLicenceHasReturnVersionsService, 'default').mockReturnValue(true)
 
-    vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licence)
+    vi.spyOn(FetchLicenceDal, 'default').mockResolvedValue(licence)
 
     vi.spyOn(FetchReturnsService, 'default').mockResolvedValue({
       totalNumber: 1,

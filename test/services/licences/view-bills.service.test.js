@@ -6,7 +6,7 @@ import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/
 
 // Things we need to stub
 import * as FetchBillsService from '../../../src/services/licences/fetch-bills.service.js'
-import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import * as FetchLicenceDal from '../../../src/dal/licences/fetch-licence.dal.js'
 
 // Thing under test
 import ViewBillsService from '../../../src/services/licences/view-bills.service.js'
@@ -30,7 +30,7 @@ describe('Licences - View Bills service', () => {
     licenceId = generateUUID()
     licenceRef = generateLicenceRef()
 
-    vi.spyOn(FetchLicenceService, 'default').mockReturnValue({
+    vi.spyOn(FetchLicenceDal, 'default').mockReturnValue({
       id: licenceId,
       licenceRef
     })

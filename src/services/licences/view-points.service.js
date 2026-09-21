@@ -3,7 +3,7 @@
  * @module ViewPointsService
  */
 
-import FetchLicenceService from './fetch-licence.service.js'
+import FetchLicenceDal from '../../dal/licences/fetch-licence.dal.js'
 import FetchPointsService from '../licences/fetch-points.service.js'
 import PointsPresenter from '../../presenters/licences/points.presenter.js'
 import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
@@ -17,7 +17,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence points template
  */
 export default async function viewPointsService(licenceId, auth) {
-  const licence = await FetchLicenceService(licenceId)
+  const licence = await FetchLicenceDal(licenceId)
   const points = await FetchPointsService(licenceId)
 
   const pageData = PointsPresenter(points, licence)
