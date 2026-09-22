@@ -8,7 +8,7 @@ import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.he
 // Thing under test
 import FetchReturnsDal from '../../../src/dal/licences/fetch-returns.dal.js'
 
-describe('Licences - Fetch Returns service', () => {
+describe('Licences - Fetch Returns dal', () => {
   let licence
   let returnLogs
 
