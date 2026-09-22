@@ -51,7 +51,7 @@ function _returns(returns) {
 
     return {
       dates: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
-      description: siteDescription === null ? '' : siteDescription,
+      description: siteDescription ?? '',
       dueDate: dueDate ? formatLongDate(new Date(dueDate)) : '',
       link: `/system/return-logs/${returnLogId}/details`,
       purpose: purposes,
