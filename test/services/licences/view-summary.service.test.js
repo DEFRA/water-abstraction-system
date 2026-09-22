@@ -6,7 +6,7 @@ import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
 import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import * as FetchLicenceDal from '../../../src/dal/licences/fetch-licence.dal.js'
 import * as FetchSummaryService from '../../../src/services/licences/fetch-summary.service.js'
 
 // Thing under test
@@ -41,7 +41,7 @@ describe('Licences - View Summary service', () => {
   describe('when a licence with a matching ID exists', () => {
     describe('and it has no optional fields', () => {
       beforeEach(() => {
-        vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licence)
+        vi.spyOn(FetchLicenceDal, 'default').mockResolvedValue(licence)
         vi.spyOn(FetchSummaryService, 'default').mockResolvedValue(summary)
       })
 

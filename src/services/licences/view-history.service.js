@@ -4,7 +4,7 @@
  */
 
 import FetchHistoryService from './fetch-history.service.js'
-import FetchLicenceService from './fetch-licence.service.js'
+import FetchLicenceDal from '../../dal/licences/fetch-licence.dal.js'
 import HistoryPresenter from '../../presenters/licences/history.presenter.js'
 import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
@@ -17,7 +17,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence history template.
  */
 export default async function viewHistoryService(licenceId, auth) {
-  const licence = await FetchLicenceService(licenceId)
+  const licence = await FetchLicenceDal(licenceId)
 
   const licenceHistory = await FetchHistoryService(licenceId)
 

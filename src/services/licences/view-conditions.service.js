@@ -5,7 +5,7 @@
 
 import ConditionsPresenter from '../../presenters/licences/conditions.presenter.js'
 import FetchConditionsService from './fetch-conditions.service.js'
-import FetchLicenceService from './fetch-licence.service.js'
+import FetchLicenceDal from '../../dal/licences/fetch-licence.dal.js'
 import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
@@ -17,7 +17,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence conditions template
  */
 export default async function viewConditionsService(licenceId, auth) {
-  const licence = await FetchLicenceService(licenceId)
+  const licence = await FetchLicenceDal(licenceId)
 
   const currentLicenceVersion = licence.$currentVersion()
 

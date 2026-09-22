@@ -1,6 +1,6 @@
 /**
  * Fetches the matching licence for the view '/licences/{id}/*' pages
- * @module FetchLicenceService
+ * @module FetchLicenceDal
  */
 
 import LicenceModel from 'water-abstraction-engine/models/licence.model.js'

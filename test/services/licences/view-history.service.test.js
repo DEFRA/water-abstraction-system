@@ -7,7 +7,7 @@ import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/
 
 // Things we need to stub
 import * as FetchHistoryService from '../../../src/services/licences/fetch-history.service.js'
-import * as FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import * as FetchLicenceDal from '../../../src/dal/licences/fetch-licence.dal.js'
 
 // Thing under test
 import ViewHistoryService from '../../../src/services/licences/view-history.service.js'
@@ -42,7 +42,7 @@ describe('Licences - View History service', () => {
       })
     ]
 
-    vi.spyOn(FetchLicenceService, 'default').mockReturnValue(licence)
+    vi.spyOn(FetchLicenceDal, 'default').mockReturnValue(licence)
     vi.spyOn(FetchHistoryService, 'default').mockReturnValue(licenceHistory)
   })
 

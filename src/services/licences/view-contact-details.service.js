@@ -7,7 +7,7 @@ import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.pr
 
 import ContactDetailsPresenter from '../../presenters/licences/contact-details.presenter.js'
 import FetchLicenceCRMDataService from './fetch-licence-crm-data.service.js'
-import FetchLicenceService from './fetch-licence.service.js'
+import FetchLicenceDal from '../../dal/licences/fetch-licence.dal.js'
 import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
@@ -20,7 +20,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence contact details template.
  */
 export default async function viewContactDetailsService(licenceId, auth, page) {
-  const licence = await FetchLicenceService(licenceId)
+  const licence = await FetchLicenceDal(licenceId)
   const roles = userRoles(auth)
 
   const { contacts, totalNumber } = await FetchLicenceCRMDataService(licenceId, roles, page)

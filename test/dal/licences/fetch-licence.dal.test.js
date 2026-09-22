@@ -9,9 +9,9 @@ import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchLicenceService from '../../../src/services/licences/fetch-licence.service.js'
+import FetchLicenceDal from '../../../src/dal/licences/fetch-licence.dal.js'
 
-describe('Licences - Fetch Licence service', () => {
+describe('Licences - Fetch Licence dal', () => {
   let licence
   let licenceVersion
   let licenceSupplementaryYear
@@ -25,7 +25,7 @@ describe('Licences - Fetch Licence service', () => {
       twoPartTariff: true
     })
 
-    // Create 2 licence versions so we can test the service only gets the 'current' version
+    // Create 2 licence versions so we can test the dal only gets the 'current' version
     additionalLicenceVersion = await LicenceVersionHelper.add({
       endDate: new Date('2022-04-30'),
       increment: 0,
@@ -52,7 +52,7 @@ describe('Licences - Fetch Licence service', () => {
 
   describe('when there is a matching licence', () => {
     it('returns the matching licence', async () => {
-      const result = await FetchLicenceService(licence.id)
+      const result = await FetchLicenceDal(licence.id)
 
       expect(result).toBeInstanceOf(LicenceModel)
       expect(result).toEqual({
@@ -79,7 +79,7 @@ describe('Licences - Fetch Licence service', () => {
 
   describe('when there is not a matching licence', () => {
     it('returns undefined', async () => {
-      const result = await FetchLicenceService(generateUUID())
+      const result = await FetchLicenceDal(generateUUID())
 
       expect(result).toBeUndefined()
     })
