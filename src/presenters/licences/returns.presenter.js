@@ -3,11 +3,7 @@
  * @module ReturnsPresenter
  */
 
-import {
-  formatLongDate,
-  formatPurposes,
-  formatReturnLogStatus
-} from 'water-abstraction-engine/presenters/base.presenter.js'
+import { formatLongDate, formatReturnLogStatus } from 'water-abstraction-engine/presenters/base.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/returns` view licence returns page
@@ -51,14 +47,14 @@ function _noReturnsMessage(hasReturns, hasRequirements) {
 
 function _returns(returns) {
   return returns.map((returnLog) => {
-    const { endDate, dueDate, id: returnLogId, metadata, returnReference, startDate } = returnLog
+    const { endDate, dueDate, id: returnLogId, purposes, returnReference, siteDescription, startDate } = returnLog
 
     return {
       dates: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
-      description: metadata.description === 'null' ? '' : metadata.description,
+      description: siteDescription === null ? '' : siteDescription,
       dueDate: dueDate ? formatLongDate(new Date(dueDate)) : '',
       link: `/system/return-logs/${returnLogId}/details`,
-      purpose: formatPurposes(metadata.purposes),
+      purpose: purposes,
       reference: returnReference,
       status: formatReturnLogStatus(returnLog)
     }
