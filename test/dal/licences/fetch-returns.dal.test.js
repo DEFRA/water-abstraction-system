@@ -208,4 +208,45 @@ describe('Licences - Fetch Returns dal', () => {
       })
     })
   })
+
+  describe('when a return log has no return requirement', () => {
+    let voidLicence
+    let voidReturnLog
+
+    beforeAll(async () => {
+      voidLicence = await LicenceHelper.add()
+
+      voidReturnLog = await ReturnLogHelper.add({
+        licenceRef: voidLicence.licenceRef,
+        returnRequirementId: null,
+        status: 'void'
+      })
+    })
+
+    afterAll(async () => {
+      await voidLicence.$query().delete()
+      await voidReturnLog.$query().delete()
+    })
+
+    it('returns the return log with no site description and an empty array of purposes', async () => {
+      const result = await FetchReturnsDal(voidLicence.id)
+
+      expect(result).toEqual({
+        returns: [
+          {
+            dueDate: voidReturnLog.dueDate,
+            endDate: voidReturnLog.endDate,
+            id: voidReturnLog.id,
+            purposes: [],
+            returnId: voidReturnLog.returnId,
+            returnReference: voidReturnLog.returnReference,
+            siteDescription: null,
+            startDate: voidReturnLog.startDate,
+            status: voidReturnLog.status
+          }
+        ],
+        totalNumber: 1
+      })
+    })
+  })
 })

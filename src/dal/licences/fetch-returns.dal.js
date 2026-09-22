@@ -27,7 +27,7 @@ async function _fetch(licenceId, page) {
   //
   // NOTE: The purposes are aggregated in a correlated sub-query to keep the result to one row per return log. As the
   // sub-query has no GROUP BY it always returns a single row, and JSON_AGG() returns null when nothing matched, hence
-  // the COALESCE() so a return requirement with no purposes gives us an empty array
+  // the COALESCE() so a return log with no return requirement, or one with no purposes, gives us an empty array
   return ReturnLogModel.query()
     .select([
       'returnLogs.id',
@@ -47,7 +47,7 @@ async function _fetch(licenceId, page) {
         .as('purposes')
     )
     .innerJoinRelated('licence')
-    .innerJoinRelated('returnRequirement')
+    .leftJoinRelated('returnRequirement')
     .where('licence.id', licenceId)
     .orderByRaw('return_logs.start_date desc, return_logs.return_reference::integer desc, return_logs.end_date desc')
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
