@@ -18,8 +18,27 @@ export default async function fetchLicenceService(licenceId) {
     LicenceModel.query()
       .findById(licenceId)
       .select(['id', 'expiredDate', 'lapsedDate', 'licenceRef', 'revokedDate', 'startDate', 'waterUndertaker'])
-      // See licence.model.js `static get modifiers` if you are unsure about what this is doing
-      .modify('licenceHolder')
+      // NOTE: This replicates the `licenceHolder` modifier in licence.model.js, minus its restriction to licence
+      // versions that have started. A licence can be set up before it begins, in which case its only licence version
+      // has a start date in the future and the modifier would return nothing for us to determine the licence holder or
+      // current version start date from.
+      .withGraphFetched('licenceVersions')
+      .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
+        licenceVersionsBuilder
+          .select(['id', 'issueDate', 'licenceId', 'startDate', 'status'])
+          // Limits the result to the single 'current' licence version, as ordered below
+          .distinctOn('licenceId')
+          .orderBy([
+            { column: 'licenceId', order: 'asc' },
+            { column: 'issue', order: 'desc' },
+            { column: 'increment', order: 'desc' },
+            { column: 'endDate', order: 'desc', nulls: 'first' }
+          ])
+      })
+      .withGraphFetched('licenceVersions.company')
+      .modifyGraph('licenceVersions.company', (companyBuilder) => {
+        companyBuilder.select(['id', 'name', 'type'])
+      })
       .withGraphFetched('returnVersions')
       .modifyGraph('returnVersions', (returnVersionsBuilder) => {
         returnVersionsBuilder
