@@ -25,9 +25,11 @@ export const currentLicenceVersionsJoin = `
 /**
  * SQL query fragment for fetching additional contact recipients
  *
- * A company contact becomes an additional contact recipient when `abstraction_alerts = true` on the
- * `company_contacts` record. Whether they receive alerts for a specific licence depends on
- * `abstraction_alert_licences`:
+ * A company contact becomes an additional contact recipient when it holds the `additionalContact` licence role and has
+ * `abstraction_alerts = true` on the `company_contacts` record. The role check matters because the NALD import creates
+ * `licenceHolder` company contacts, and the legacy service allowed abstraction alerts to be enabled on them.
+ *
+ * Whether they receive alerts for a specific licence depends on `abstraction_alert_licences`:
  *
  * - `abstraction_alert_licences IS NULL`: the contact receives alerts for all licences held by their company
  * - `abstraction_alert_licences` contains the licence ID: the contact receives alerts only for those licences
@@ -50,12 +52,14 @@ export const additionalContactRecipientQuery = `
     INNER JOIN public.companies c ON c.id = llv.company_id
     INNER JOIN public.company_contacts cct ON cct.company_id = llv.company_id
     INNER JOIN public.contacts con ON con.id = cct.contact_id
+    INNER JOIN public.licence_roles lr ON lr.id = cct.licence_role_id
   WHERE
     l.licence_ref = ANY (?)
     AND (
       llv.end_date IS NULL
       OR llv.end_date >= CURRENT_DATE
     )
+    AND lr."name" = 'additionalContact'
     AND cct.abstraction_alerts = true
     AND cct.deleted_at IS NULL
     AND ( cct.abstraction_alert_licences IS NULL OR cct.abstraction_alert_licences @> jsonb_build_array(l.id::text))
