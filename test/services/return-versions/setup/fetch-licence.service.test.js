@@ -165,6 +165,45 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
     })
   })
 
+  describe('when the matching licence exists but its only licence version starts in the future', () => {
+    let futureLicence
+    let futureLicenceVersion
+
+    beforeAll(async () => {
+      futureLicence = await LicenceHelper.add()
+
+      futureLicenceVersion = await LicenceVersionHelper.add({
+        companyId: company.id,
+        licenceId: futureLicence.id,
+        startDate: new Date('2099-01-01')
+      })
+    })
+
+    afterAll(async () => {
+      await futureLicenceVersion.$query().delete()
+      await futureLicence.$query().delete()
+    })
+
+    it('returns the licence version and its company', async () => {
+      const result = await FetchLicenceService(futureLicence.id)
+
+      expect(result.licenceVersions).toEqual([
+        {
+          id: futureLicenceVersion.id,
+          licenceId: futureLicence.id,
+          issueDate: futureLicenceVersion.issueDate,
+          startDate: futureLicenceVersion.startDate,
+          status: futureLicenceVersion.status,
+          company: {
+            id: company.id,
+            name: 'Example Trading Ltd',
+            type: 'organisation'
+          }
+        }
+      ])
+    })
+  })
+
   describe('when the matching licence does not exist', () => {
     it('returns undefined', async () => {
       const result = await FetchLicenceService('7f665e1b-a2cf-4241-9dc9-9351edc16533')
