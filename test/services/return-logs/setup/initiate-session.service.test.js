@@ -271,6 +271,10 @@ describe('Return Logs - Setup - Initiate Session service', () => {
           {
             endDate: '2022-05-31T00:00:00.000Z',
             startDate: '2022-05-01T00:00:00.000Z'
+          },
+          {
+            endDate: '2022-06-30T00:00:00.000Z',
+            startDate: '2022-06-01T00:00:00.000Z'
           }
         ])
       })
@@ -314,6 +318,10 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         {
           endDate: '2022-05-31T00:00:00.000Z',
           startDate: '2022-05-01T00:00:00.000Z'
+        },
+        {
+          endDate: '2022-06-30T00:00:00.000Z',
+          startDate: '2022-06-01T00:00:00.000Z'
         }
       ])
     })
