@@ -2,6 +2,9 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import CompanyContactHelper from 'water-abstraction-engine/test/helpers/company-contact.helper.js'
+import ContactHelper from 'water-abstraction-engine/test/helpers/contact.helper.js'
+import LicenceRoleHelper from 'water-abstraction-engine/test/helpers/licence-role.helper.js'
 import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-version.helper.js'
 import { db } from 'water-abstraction-engine/db/db.js'
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
@@ -163,6 +166,9 @@ describe('Notices - Recipient Queries DAL', () => {
 
       // 6) Additional contact where there are no matching licences. The contact should NOT appear in results.
       scenarios.additionalContactWithNoMatchingLicences = await _additionalContactAbstractionAlertsLicences(false)
+
+      // 7) Company contact with the 'licenceHolder' role and alerts enabled. The contact should NOT appear in results.
+      scenarios.licenceHolderRoleCompanyContact = await _licenceHolderRoleCompanyContact()
     })
 
     afterAll(async () => {
@@ -241,6 +247,16 @@ describe('Notices - Recipient Queries DAL', () => {
         const { rows } = await db.raw(query, [licenceRefs])
 
         expect(rows).toEqual([])
+      })
+
+      describe('and the company contact does not hold the "additionalContact" role (Scenario 7)', () => {
+        it('does not return the company contact', async () => {
+          const licenceRefs = scenarios.licenceHolderRoleCompanyContact.licenceHolderRecipient.licenceRefs
+
+          const { rows } = await db.raw(query, [licenceRefs])
+
+          expect(rows).toEqual([])
+        })
       })
     })
   })
@@ -375,6 +391,44 @@ async function _additionalContactAbstractionAlertsLicences(licences = true) {
   const additionalContactRecipient = await RecipientsFormatter.additionalContact(licence, additionalContact)
 
   return { licenceHolderRecipient, additionalContactRecipient }
+}
+
+/**
+ * Seeds a licence with a company contact that holds the 'licenceHolder' role and has abstraction alerts enabled.
+ *
+ * NALD-imported 'licenceHolder' and 'returnsTo' company contacts can have `abstraction_alerts = true`. They are not
+ * additional contacts, so they must never be returned as recipients.
+ *
+ * @private
+ */
+async function _licenceHolderRoleCompanyContact() {
+  const licence = await EmptyLicence.seed()
+  const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'LicenceHolderWithAbstractionAlerts')
+
+  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
+
+  const licenceRole = await LicenceRoleHelper.select('licenceHolder')
+
+  const companyContact = await CompanyContactHelper.add({
+    abstractionAlerts: true,
+    companyId: licenceHolder.company.id,
+    licenceRoleId: licenceRole.id
+  })
+
+  const contact = await ContactHelper.add({
+    id: companyContact.contactId,
+    email: 'brian.fantana@news.com'
+  })
+
+  return {
+    licenceHolderRecipient,
+    companyContact: {
+      clean: async () => {
+        await companyContact.$query().delete()
+        await contact.$query().delete()
+      }
+    }
+  }
 }
 
 function _transformToRecipient(recipient, priority = null) {
