@@ -18,22 +18,14 @@ describe('Return Logs - View Details service', () => {
     returnLog = ReturnLogsFixture.returnLog('month', true)
     returnLog.returnSubmissions = []
 
-    const metadata = {
-      ...ReturnLogHelper.defaults().metadata,
-      purposes: [
-        {
-          alias: 'PURPOSE_ALIAS',
-          tertiary: { code: '330', description: 'PURPOSE_DESCRIPTION' }
-        }
-      ]
-    }
+    const metadata = ReturnLogHelper.defaults().metadata
 
     returnLog.siteDescription = metadata.description
     returnLog.periodStartDay = metadata.periodStartDay
     returnLog.periodStartMonth = metadata.periodStartMonth
     returnLog.periodEndDay = metadata.periodEndDay
     returnLog.periodEndMonth = metadata.periodEndMonth
-    returnLog.purposes = metadata.purposes
+    returnLog.purposes = ['PURPOSE_DESCRIPTION']
     returnLog.current = metadata.isCurrent
     returnLog.twoPartTariff = metadata.isTwoPartTariff
 
@@ -69,7 +61,7 @@ describe('Return Logs - View Details service', () => {
       notification: null,
       pageTitle: 'Return details',
       pageTitleCaption: `Licence ${returnLog.licence.licenceRef}`,
-      purpose: ['PURPOSE_DESCRIPTION (PURPOSE_ALIAS)'],
+      purpose: ['PURPOSE_DESCRIPTION'],
       receivedDate: null,
       returnReference: returnLog.returnReference,
       returnPeriod: '1 April 2022 to 31 March 2023',
