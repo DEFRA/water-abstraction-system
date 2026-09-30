@@ -3,7 +3,10 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 
 // Test helpers
 import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
+import ReturnRequirementPurposeHelper from 'water-abstraction-engine/test/helpers/return-requirement-purpose.helper.js'
 import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
 import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
 import ReturnSubmissionModel from 'water-abstraction-engine/models/return-submission.model.js'
@@ -12,14 +15,39 @@ import ReturnSubmissionModel from 'water-abstraction-engine/models/return-submis
 import FetchReturnLogDetailsService from '../../../src/services/return-logs/fetch-return-log-details.service.js'
 
 describe('Return Logs - Fetch Return Log Details service', () => {
+  const returnRequirementPurposes = []
+
+  let firstAddedPurpose
   let licence
   let returnLog
+  let returnRequirement
   let returnSubmissions = []
+  let secondAddedPurpose
   let version
 
   beforeAll(async () => {
     licence = await LicenceHelper.add()
-    returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
+
+    returnRequirement = await ReturnRequirementHelper.add({ siteDescription: 'BOREHOLE AT AVALON' })
+
+    // NOTE: We deliberately add (2) 'Conveying Materials' before (1) 'Boiler Feed' so the results demonstrate the
+    // purposes are returned in alphabetical order rather than the order they were added
+    firstAddedPurpose = PurposeHelper.select(2)
+    secondAddedPurpose = PurposeHelper.select(1)
+
+    for (const purpose of [firstAddedPurpose, secondAddedPurpose]) {
+      const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id
+      })
+
+      returnRequirementPurposes.push(returnRequirementPurpose)
+    }
+
+    returnLog = await ReturnLogHelper.add({
+      licenceRef: licence.licenceRef,
+      returnRequirementId: returnRequirement.id
+    })
   })
 
   beforeEach(async () => {
@@ -42,6 +70,12 @@ describe('Return Logs - Fetch Return Log Details service', () => {
     }
 
     await returnLog.$query().delete()
+
+    for (const returnRequirementPurpose of returnRequirementPurposes) {
+      await returnRequirementPurpose.$query().delete()
+    }
+
+    await returnRequirement.$query().delete()
     await licence.$query().delete()
   })
 
@@ -61,12 +95,12 @@ describe('Return Logs - Fetch Return Log Details service', () => {
           startDate: returnLog.startDate,
           status: returnLog.status,
           underQuery: returnLog.underQuery,
-          siteDescription: returnLog.metadata.description,
+          siteDescription: returnRequirement.siteDescription,
           periodStartDay: returnLog.metadata.nald.periodStartDay,
           periodStartMonth: returnLog.metadata.nald.periodStartMonth,
           periodEndDay: returnLog.metadata.nald.periodEndDay,
           periodEndMonth: returnLog.metadata.nald.periodEndMonth,
-          purposes: returnLog.metadata.purposes,
+          purposes: [secondAddedPurpose.description, firstAddedPurpose.description],
           current: returnLog.metadata.isCurrent,
           twoPartTariff: returnLog.metadata.isTwoPartTariff,
           licence: {
@@ -129,12 +163,12 @@ describe('Return Logs - Fetch Return Log Details service', () => {
           startDate: returnLog.startDate,
           status: returnLog.status,
           underQuery: returnLog.underQuery,
-          siteDescription: returnLog.metadata.description,
+          siteDescription: returnRequirement.siteDescription,
           periodStartDay: returnLog.metadata.nald.periodStartDay,
           periodStartMonth: returnLog.metadata.nald.periodStartMonth,
           periodEndDay: returnLog.metadata.nald.periodEndDay,
           periodEndMonth: returnLog.metadata.nald.periodEndMonth,
-          purposes: returnLog.metadata.purposes,
+          purposes: [secondAddedPurpose.description, firstAddedPurpose.description],
           current: returnLog.metadata.isCurrent,
           twoPartTariff: returnLog.metadata.isTwoPartTariff,
           licence: {
