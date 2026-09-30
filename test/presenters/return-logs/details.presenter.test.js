@@ -29,6 +29,9 @@ describe('Return Logs - Details presenter', () => {
     returnLog.versions = [...returnLog.returnSubmissions]
 
     ReturnLogsFixture.applyFetchReturnLogFields(returnLog)
+
+    // The fetch service aggregates the descriptions of the linked purposes rather than reading them from `metadata`
+    returnLog.purposes = ['Mineral Washing']
   })
 
   it('correctly presents the data', () => {
@@ -60,7 +63,7 @@ describe('Return Logs - Details presenter', () => {
       notification: null,
       pageTitle: 'Return details',
       pageTitleCaption: `Licence ${returnLog.licenceRef}`,
-      purpose: ['Mineral Washing (Mineral Washing alias)'],
+      purpose: ['Mineral Washing'],
       receivedDate: '12 April 2023',
       returnReference: returnLog.returnReference,
       returnPeriod: '1 April 2022 to 31 March 2023',
