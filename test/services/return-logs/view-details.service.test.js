@@ -25,7 +25,7 @@ describe('Return Logs - View Details service', () => {
     returnLog.periodStartMonth = metadata.periodStartMonth
     returnLog.periodEndDay = metadata.periodEndDay
     returnLog.periodEndMonth = metadata.periodEndMonth
-    returnLog.purposes = ['PURPOSE_DESCRIPTION']
+    returnLog.purposes = ['Mineral Washing']
     returnLog.current = metadata.isCurrent
     returnLog.twoPartTariff = metadata.isTwoPartTariff
 
@@ -61,7 +61,7 @@ describe('Return Logs - View Details service', () => {
       notification: null,
       pageTitle: 'Return details',
       pageTitleCaption: `Licence ${returnLog.licence.licenceRef}`,
-      purpose: ['PURPOSE_DESCRIPTION'],
+      purpose: ['Mineral Washing'],
       receivedDate: null,
       returnReference: returnLog.returnReference,
       returnPeriod: '1 April 2022 to 31 March 2023',
