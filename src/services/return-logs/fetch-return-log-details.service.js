@@ -36,25 +36,32 @@ async function _fetch(returnLogId, selectedReturnSubmission) {
   const query = ReturnLogModel.query()
     .findById(returnLogId)
     .select([
-      'dueDate',
-      'endDate',
-      'id',
-      'receivedDate',
-      'returnId',
-      'returnsFrequency',
-      'returnReference',
-      'startDate',
-      'status',
-      'underQuery',
-      Objection.ref('metadata:description').castText().as('siteDescription'),
+      'returnLogs.dueDate',
+      'returnLogs.endDate',
+      'returnLogs.id',
+      'returnLogs.receivedDate',
+      'returnLogs.returnId',
+      'returnLogs.returnsFrequency',
+      'returnLogs.returnReference',
+      'returnLogs.startDate',
+      'returnLogs.status',
+      'returnLogs.underQuery',
+      'returnRequirement.siteDescription',
       Objection.ref('metadata:nald.periodStartDay').as('periodStartDay'),
       Objection.ref('metadata:nald.periodStartMonth').as('periodStartMonth'),
       Objection.ref('metadata:nald.periodEndDay').as('periodEndDay'),
       Objection.ref('metadata:nald.periodEndMonth').as('periodEndMonth'),
-      Objection.ref('metadata:purposes').as('purposes'),
       Objection.ref('metadata:isCurrent').castBool().as('current'),
       Objection.ref('metadata:isTwoPartTariff').castBool().as('twoPartTariff')
     ])
+    .select(
+      ReturnLogModel.relatedQuery('returnRequirement')
+        .innerJoinRelated('returnRequirementPurposes')
+        .innerJoin('purposes', 'purposes.id', 'returnRequirementPurposes.purposeId')
+        .select(Objection.raw("COALESCE(JSON_AGG(purposes.description ORDER BY purposes.description), '[]'::json)"))
+        .as('purposes')
+    )
+    .leftJoinRelated('returnRequirement')
     .withGraphFetched('licence')
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])

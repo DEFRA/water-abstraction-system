@@ -7,7 +7,6 @@ import {
   formatAbstractionPeriod,
   formatLongDate,
   formatNumber,
-  formatPurposes,
   formatReturnLogStatus
 } from 'water-abstraction-engine/presenters/base.presenter.js'
 import { returnRequirementFrequencies, unitNames } from 'water-abstraction-engine/lib/static-lookups.lib.js'
@@ -67,7 +66,7 @@ export default function detailsPresenter(returnLog, auth) {
     notification: underQuery ? { text: 'This return has been marked under query' } : null,
     pageTitle: 'Return details',
     pageTitleCaption: `Licence ${licence.licenceRef}`,
-    purpose: formatPurposes(purposes),
+    purpose: purposes,
     receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
     returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
