@@ -33,12 +33,12 @@ async function _fetch(licenceId, page) {
       'returnLogs.returnId',
       'returnLogs.startDate',
       'returnLogs.status',
+      'returnRequirement.siteDescription',
       // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast
       // so both sides of the COALESCE() match, and so the result sorts numerically rather than alphabetically
       Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
         'returnReference'
-      ),
-      'returnRequirement.siteDescription'
+      )
     ])
     .select(
       ReturnLogModel.relatedQuery('returnRequirement')
