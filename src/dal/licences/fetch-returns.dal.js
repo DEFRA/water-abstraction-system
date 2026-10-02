@@ -22,9 +22,6 @@ export default async function fetchReturnsService(licenceId, page = '1') {
 }
 
 async function _fetch(licenceId, page) {
-  // NOTE: Because the return references are held in a varchar field, we have to convert them to an integer in our
-  // order by for the results to be ordered as expected. Hence, we need to use orderByRaw()
-  //
   // NOTE: The purposes are aggregated in a correlated sub-query to keep the result to one row per return log. As the
   // sub-query has no GROUP BY it always returns a single row, and JSON_AGG() returns null when nothing matched, hence
   // the COALESCE() so a return log with no return requirement, or one with no purposes, gives us an empty array
@@ -34,10 +31,14 @@ async function _fetch(licenceId, page) {
       'returnLogs.dueDate',
       'returnLogs.endDate',
       'returnLogs.returnId',
-      'returnLogs.returnReference',
       'returnLogs.startDate',
       'returnLogs.status',
-      'returnRequirement.siteDescription'
+      'returnRequirement.siteDescription',
+      // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast
+      // so both sides of the COALESCE() match, and so the result sorts numerically rather than alphabetically
+      Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
+        'returnReference'
+      )
     ])
     .select(
       ReturnLogModel.relatedQuery('returnRequirement')
@@ -49,6 +50,10 @@ async function _fetch(licenceId, page) {
     .innerJoinRelated('licence')
     .leftJoinRelated('returnRequirement')
     .where('licence.id', licenceId)
-    .orderByRaw('return_logs.start_date desc, return_logs.return_reference::integer desc, return_logs.end_date desc')
+    .orderBy([
+      { column: 'returnLogs.startDate', order: 'desc' },
+      { column: 'returnReference', order: 'desc' },
+      { column: 'returnLogs.endDate', order: 'desc' }
+    ])
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
