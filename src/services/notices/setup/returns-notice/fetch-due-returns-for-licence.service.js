@@ -25,7 +25,7 @@ async function _fetch(licenceRef) {
       rl.id as "returnLogId",
       rl.due_date AS "dueDate",
       rl.end_date AS "endDate",
-      rl.return_reference AS "returnReference",
+      COALESCE(rr.reference, rl.return_reference::integer) AS "returnReference",
       rl.returns_frequency AS "returnsFrequency",
       rl.start_date AS "startDate",
       rl.metadata->'purposes'->0->'tertiary'->>'description' AS purpose,
@@ -38,13 +38,15 @@ async function _fetch(licenceRef) {
       return_logs as rl
     INNER JOIN regions as r
       ON r.nald_region_id = (rl.metadata->'nald'->>'regionCode')::integer
+    LEFT JOIN return_requirements as rr
+      ON rl.return_requirement_id = rr.id
     WHERE
       rl.licence_ref = ?
       AND rl.status = 'due'
       AND rl.end_date <= ?
     ORDER BY
       rl.start_date DESC,
-      rl.return_reference ASC;
+      "returnReference" ASC;
   `
 
   return db.raw(query, [licenceRef, timestampForPostgres()])
