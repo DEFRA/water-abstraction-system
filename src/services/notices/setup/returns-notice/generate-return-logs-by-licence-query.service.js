@@ -35,7 +35,7 @@ function _query(noticeType) {
     rl.quarterly
   FROM
     public.return_logs rl
-  LEFT JOIN return_requirements as rr
+  LEFT JOIN return_requirements rr
     ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'

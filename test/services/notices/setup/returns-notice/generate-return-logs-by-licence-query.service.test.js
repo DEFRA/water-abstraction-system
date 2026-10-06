@@ -95,7 +95,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
     rl.quarterly
   FROM
     public.return_logs rl
-  LEFT JOIN return_requirements as rr
+  LEFT JOIN return_requirements rr
     ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
@@ -130,7 +130,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
     rl.quarterly
   FROM
     public.return_logs rl
-  LEFT JOIN return_requirements as rr
+  LEFT JOIN return_requirements rr
     ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'

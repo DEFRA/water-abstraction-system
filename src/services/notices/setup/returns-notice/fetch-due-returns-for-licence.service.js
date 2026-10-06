@@ -35,10 +35,10 @@ async function _fetch(licenceRef) {
       r.display_name AS "regionName",
       r.nald_region_id AS "regionCode"
     FROM
-      return_logs as rl
-    INNER JOIN regions as r
+      return_logs rl
+    INNER JOIN regions r
       ON r.nald_region_id = (rl.metadata->'nald'->>'regionCode')::integer
-    LEFT JOIN return_requirements as rr
+    LEFT JOIN return_requirements rr
       ON rl.return_requirement_id = rr.id
     WHERE
       rl.licence_ref = ?
