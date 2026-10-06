@@ -84,11 +84,13 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     rl.end_date,
     rl.licence_ref,
     rl.id AS return_log_id,
-    rl.return_reference,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements as rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.metadata->>'isCurrent' = 'true'
@@ -119,11 +121,13 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     rl.end_date,
     rl.licence_ref,
     rl.id AS return_log_id,
-    rl.return_reference,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements as rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.metadata->>'isCurrent' = 'true'
@@ -294,7 +298,7 @@ function _transformToResult(returnLog) {
     end_date: returnLog.endDate,
     licence_ref: returnLog.licenceRef,
     return_log_id: returnLog.id,
-    return_reference: returnLog.returnReference,
+    return_reference: Number(returnLog.returnReference),
     start_date: returnLog.startDate,
     quarterly: returnLog.quarterly
   }

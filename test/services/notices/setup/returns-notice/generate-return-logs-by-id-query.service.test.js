@@ -56,11 +56,13 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
     rl.end_date,
     rl.licence_ref,
     rl.id AS return_log_id,
-    rl.return_reference,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements as rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.id = ANY (?)
@@ -80,7 +82,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
           end_date: returnLogs[0].endDate,
           licence_ref: returnLogs[0].licenceRef,
           return_log_id: returnLogs[0].id,
-          return_reference: returnLogs[0].returnReference,
+          return_reference: Number(returnLogs[0].returnReference),
           start_date: returnLogs[0].startDate,
           quarterly: returnLogs[0].quarterly
         }

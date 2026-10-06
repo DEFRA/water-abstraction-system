@@ -74,11 +74,13 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
     rl.end_date,
     rl.licence_ref,
     rl.id AS return_log_id,
-    rl.return_reference,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements as rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.end_date < ?
@@ -107,11 +109,13 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
     rl.end_date,
     rl.licence_ref,
     rl.id AS return_log_id,
-    rl.return_reference,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements as rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.end_date < ?
@@ -137,7 +141,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
             end_date: returnLogs[4].endDate,
             licence_ref: returnLogs[4].licenceRef,
             return_log_id: returnLogs[4].id,
-            return_reference: returnLogs[4].returnReference,
+            return_reference: Number(returnLogs[4].returnReference),
             start_date: returnLogs[4].startDate,
             quarterly: returnLogs[4].quarterly
           }
@@ -154,26 +158,28 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
         const { bindings, query } = GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
         const { rows } = await db.raw(query, bindings)
 
-        expect(rows).toEqual([
-          {
-            due_date: returnLogs[0].dueDate,
-            end_date: returnLogs[0].endDate,
-            licence_ref: returnLogs[0].licenceRef,
-            return_log_id: returnLogs[0].id,
-            return_reference: returnLogs[0].returnReference,
-            start_date: returnLogs[0].startDate,
-            quarterly: returnLogs[0].quarterly
-          },
-          {
-            due_date: returnLogs[4].dueDate,
-            end_date: returnLogs[4].endDate,
-            licence_ref: returnLogs[4].licenceRef,
-            return_log_id: returnLogs[4].id,
-            return_reference: returnLogs[4].returnReference,
-            start_date: returnLogs[4].startDate,
-            quarterly: returnLogs[4].quarterly
-          }
-        ])
+        // NOTE: The query has no 'order by' so we cannot assert the order the records come out in
+        expect(rows).toHaveLength(2)
+
+        expect(rows).toContainEqual({
+          due_date: returnLogs[0].dueDate,
+          end_date: returnLogs[0].endDate,
+          licence_ref: returnLogs[0].licenceRef,
+          return_log_id: returnLogs[0].id,
+          return_reference: Number(returnLogs[0].returnReference),
+          start_date: returnLogs[0].startDate,
+          quarterly: returnLogs[0].quarterly
+        })
+
+        expect(rows).toContainEqual({
+          due_date: returnLogs[4].dueDate,
+          end_date: returnLogs[4].endDate,
+          licence_ref: returnLogs[4].licenceRef,
+          return_log_id: returnLogs[4].id,
+          return_reference: Number(returnLogs[4].returnReference),
+          start_date: returnLogs[4].startDate,
+          quarterly: returnLogs[4].quarterly
+        })
       })
     })
   })
