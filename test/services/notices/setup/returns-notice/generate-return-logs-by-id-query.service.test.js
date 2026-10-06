@@ -10,9 +10,9 @@ import { db } from 'water-abstraction-engine/db/db.js'
 import GenerateReturnLogsByIdQueryService from '../../../../../src/services/notices/setup/returns-notice/generate-return-logs-by-id-query.service.js'
 
 describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Service', () => {
-  let linkedReturnLog
   let returnLogIds
   let returnLogs
+  let returnLogWithRequirement
   let returnRequirement
 
   beforeAll(async () => {
@@ -42,7 +42,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
 
     // Held separately so it is not included in the IDs the other tests pass to the service
     returnRequirement = await ReturnRequirementHelper.add()
-    linkedReturnLog = await ReturnLogHelper.add({ returnRequirementId: returnRequirement.id, status: 'due' })
+    returnLogWithRequirement = await ReturnLogHelper.add({ returnRequirementId: returnRequirement.id, status: 'due' })
   })
 
   afterAll(async () => {
@@ -50,7 +50,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
       await returnLog.$query().delete()
     }
 
-    await linkedReturnLog.$query().delete()
+    await returnLogWithRequirement.$query().delete()
     await returnRequirement.$query().delete()
   })
 
@@ -101,18 +101,18 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
 
     describe('and the return log is linked to a return requirement', () => {
       it('returns the return reference from the return requirement', async () => {
-        const { bindings, query } = GenerateReturnLogsByIdQueryService([linkedReturnLog.id])
+        const { bindings, query } = GenerateReturnLogsByIdQueryService([returnLogWithRequirement.id])
         const { rows } = await db.raw(query, bindings)
 
         expect(rows).toEqual([
           {
-            due_date: linkedReturnLog.dueDate,
-            end_date: linkedReturnLog.endDate,
-            licence_ref: linkedReturnLog.licenceRef,
-            return_log_id: linkedReturnLog.id,
+            due_date: returnLogWithRequirement.dueDate,
+            end_date: returnLogWithRequirement.endDate,
+            licence_ref: returnLogWithRequirement.licenceRef,
+            return_log_id: returnLogWithRequirement.id,
             return_reference: returnRequirement.reference,
-            start_date: linkedReturnLog.startDate,
-            quarterly: linkedReturnLog.quarterly
+            start_date: returnLogWithRequirement.startDate,
+            quarterly: returnLogWithRequirement.quarterly
           }
         ])
       })
