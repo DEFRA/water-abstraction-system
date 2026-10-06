@@ -16,12 +16,14 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
     rl.due_date,
     rl.end_date,
     rl.licence_ref,
-    rl.id as return_log_id,
-    rl.return_reference,
+    rl.id AS return_log_id,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements as rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.id = ANY (?)
