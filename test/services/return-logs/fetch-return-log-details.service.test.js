@@ -28,7 +28,10 @@ describe('Return Logs - Fetch Return Log Details service', () => {
   beforeAll(async () => {
     licence = await LicenceHelper.add()
 
-    returnRequirement = await ReturnRequirementHelper.add({ siteDescription: 'BOREHOLE AT AVALON' })
+    returnRequirement = await ReturnRequirementHelper.add({
+      reference: 9999980,
+      siteDescription: 'BOREHOLE AT AVALON'
+    })
 
     // NOTE: We deliberately add (2) 'Conveying Materials' before (1) 'Boiler Feed' so the results demonstrate the
     // purposes are returned in alphabetical order rather than the order they were added
@@ -85,28 +88,28 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         const result = await FetchReturnLogDetailsService(returnLog.id)
 
         expect(result).toEqual({
-          dueDate: returnLog.dueDate,
-          endDate: returnLog.endDate,
+          current: true,
+          dueDate: null,
+          endDate: new Date('2023-03-31'),
           id: returnLog.id,
-          receivedDate: returnLog.receivedDate,
-          returnId: returnLog.returnId,
-          returnsFrequency: returnLog.returnsFrequency,
-          returnReference: returnLog.returnReference,
-          startDate: returnLog.startDate,
-          status: returnLog.status,
-          underQuery: returnLog.underQuery,
-          siteDescription: returnRequirement.siteDescription,
-          periodStartDay: returnLog.metadata.nald.periodStartDay,
-          periodStartMonth: returnLog.metadata.nald.periodStartMonth,
-          periodEndDay: returnLog.metadata.nald.periodEndDay,
-          periodEndMonth: returnLog.metadata.nald.periodEndMonth,
-          purposes: [secondAddedPurpose.description, firstAddedPurpose.description],
-          current: returnLog.metadata.isCurrent,
-          twoPartTariff: returnLog.metadata.isTwoPartTariff,
           licence: {
             id: licence.id,
             licenceRef: licence.licenceRef
           },
+          periodEndDay: 28,
+          periodEndMonth: 4,
+          periodStartDay: 1,
+          periodStartMonth: 4,
+          purposes: [secondAddedPurpose.description, firstAddedPurpose.description],
+          receivedDate: null,
+          returnId: returnLog.returnId,
+          returnReference: 9999980,
+          returnsFrequency: 'month',
+          siteDescription: 'BOREHOLE AT AVALON',
+          startDate: new Date('2022-04-01'),
+          status: 'due',
+          twoPartTariff: false,
+          underQuery: false,
           versions: []
         })
       })
@@ -153,28 +156,28 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         const result = await FetchReturnLogDetailsService(returnLog.id)
 
         expect(result).toMatchObject({
-          dueDate: returnLog.dueDate,
-          endDate: returnLog.endDate,
+          current: true,
+          dueDate: null,
+          endDate: new Date('2023-03-31'),
           id: returnLog.id,
-          receivedDate: returnLog.receivedDate,
-          returnId: returnLog.returnId,
-          returnsFrequency: returnLog.returnsFrequency,
-          returnReference: returnLog.returnReference,
-          startDate: returnLog.startDate,
-          status: returnLog.status,
-          underQuery: returnLog.underQuery,
-          siteDescription: returnRequirement.siteDescription,
-          periodStartDay: returnLog.metadata.nald.periodStartDay,
-          periodStartMonth: returnLog.metadata.nald.periodStartMonth,
-          periodEndDay: returnLog.metadata.nald.periodEndDay,
-          periodEndMonth: returnLog.metadata.nald.periodEndMonth,
-          purposes: [secondAddedPurpose.description, firstAddedPurpose.description],
-          current: returnLog.metadata.isCurrent,
-          twoPartTariff: returnLog.metadata.isTwoPartTariff,
           licence: {
             id: licence.id,
             licenceRef: licence.licenceRef
           },
+          periodEndDay: 28,
+          periodEndMonth: 4,
+          periodStartDay: 1,
+          periodStartMonth: 4,
+          purposes: [secondAddedPurpose.description, firstAddedPurpose.description],
+          receivedDate: null,
+          returnId: returnLog.returnId,
+          returnReference: 9999980,
+          returnsFrequency: 'month',
+          siteDescription: 'BOREHOLE AT AVALON',
+          startDate: new Date('2022-04-01'),
+          status: 'due',
+          twoPartTariff: false,
+          underQuery: false,
           versions: [
             {
               createdAt: returnSubmissions[2].createdAt,

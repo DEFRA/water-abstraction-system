@@ -42,11 +42,15 @@ async function _fetch(returnLogId, selectedReturnSubmission) {
       'returnLogs.receivedDate',
       'returnLogs.returnId',
       'returnLogs.returnsFrequency',
-      'returnLogs.returnReference',
       'returnLogs.startDate',
       'returnLogs.status',
       'returnLogs.underQuery',
       'returnRequirement.siteDescription',
+      // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast
+      // so both sides of the COALESCE() match
+      Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
+        'returnReference'
+      ),
       Objection.ref('metadata:nald.periodStartDay').as('periodStartDay'),
       Objection.ref('metadata:nald.periodStartMonth').as('periodStartMonth'),
       Objection.ref('metadata:nald.periodEndDay').as('periodEndDay'),

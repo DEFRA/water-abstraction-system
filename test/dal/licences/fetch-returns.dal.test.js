@@ -15,38 +15,44 @@ describe('Licences - Fetch Returns dal', () => {
   let firstAddedPurpose
   let licence
   let returnLogs
-  let returnRequirement
   let returnRequirementPurposes
+  let returnRequirements
   let secondAddedPurpose
 
   beforeAll(async () => {
     returnLogs = []
     returnRequirementPurposes = []
+    returnRequirements = []
 
     licence = await LicenceHelper.add()
-
-    returnRequirement = await ReturnRequirementHelper.add({ siteDescription: 'BOREHOLE AT AVALON' })
 
     // NOTE: We deliberately add 'Conveying Materials' before 'Boiler Feed' so the results demonstrate the purposes are
     // returned in alphabetical order rather than the order they were added
     firstAddedPurpose = PurposeHelper.select(2)
     secondAddedPurpose = PurposeHelper.select(1)
 
-    for (const purpose of [firstAddedPurpose, secondAddedPurpose]) {
-      const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-        purposeId: purpose.id,
-        returnRequirementId: returnRequirement.id
-      })
+    // NOTE: '10334004' sorts before '9999990' as text but after it as a number, so these references demonstrate the
+    // results are ordered numerically
+    for (const reference of [9999990, 10334004, 123]) {
+      const returnRequirement = await ReturnRequirementHelper.add({ reference, siteDescription: 'BOREHOLE AT AVALON' })
 
-      returnRequirementPurposes.push(returnRequirementPurpose)
+      returnRequirements.push(returnRequirement)
+
+      for (const purpose of [firstAddedPurpose, secondAddedPurpose]) {
+        const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+          purposeId: purpose.id,
+          returnRequirementId: returnRequirement.id
+        })
+
+        returnRequirementPurposes.push(returnRequirementPurpose)
+      }
     }
 
     let returnLog = await ReturnLogHelper.add({
       dueDate: new Date('2020-06-28'),
       endDate: new Date('2020-07-01'),
       licenceRef: licence.licenceRef,
-      returnReference: '9999990',
-      returnRequirementId: returnRequirement.id,
+      returnRequirementId: returnRequirements[0].id,
       startDate: new Date('2020-02-01'),
       status: 'due'
     })
@@ -56,8 +62,7 @@ describe('Licences - Fetch Returns dal', () => {
       dueDate: new Date('2020-06-28'),
       endDate: new Date('2020-06-01'),
       licenceRef: licence.licenceRef,
-      returnReference: '9999990',
-      returnRequirementId: returnRequirement.id,
+      returnRequirementId: returnRequirements[0].id,
       startDate: new Date('2020-02-01'),
       status: 'due'
     })
@@ -67,8 +72,7 @@ describe('Licences - Fetch Returns dal', () => {
       dueDate: new Date('2020-06-28'),
       endDate: new Date('2020-06-01'),
       licenceRef: licence.licenceRef,
-      returnReference: '10334004',
-      returnRequirementId: returnRequirement.id,
+      returnRequirementId: returnRequirements[1].id,
       startDate: new Date('2020-02-01'),
       status: 'due'
     })
@@ -78,8 +82,7 @@ describe('Licences - Fetch Returns dal', () => {
       dueDate: null,
       endDate: new Date('2020-06-01'),
       licenceRef: licence.licenceRef,
-      returnReference: '123',
-      returnRequirementId: returnRequirement.id,
+      returnRequirementId: returnRequirements[2].id,
       startDate: new Date('2020-05-01'),
       status: 'due'
     })
@@ -97,7 +100,9 @@ describe('Licences - Fetch Returns dal', () => {
       await returnRequirementPurpose.$query().delete()
     }
 
-    await returnRequirement.$query().delete()
+    for (const returnRequirement of returnRequirements) {
+      await returnRequirement.$query().delete()
+    }
   })
 
   describe('when the licence has return logs', () => {
@@ -107,57 +112,57 @@ describe('Licences - Fetch Returns dal', () => {
       const expectedPurposes = [secondAddedPurpose.description, firstAddedPurpose.description]
 
       expect(result).toEqual({
-        //  This should be ordered first by start date, then by return reference, then by end date
+        //  This should be ordered by start date descending, then return reference descending, then end date descending
         //
         // - 2020-05-01 - 123      - 2020-06-01
         // - 2020-02-01 - 10334004 - 2020-06-01
-        // - 2020-02-01 - 9999990  - 2020-06-01
         // - 2020-02-01 - 9999990  - 2020-07-01
+        // - 2020-02-01 - 9999990  - 2020-06-01
         //
         returns: [
           {
-            dueDate: returnLogs[3].dueDate,
-            endDate: returnLogs[3].endDate,
+            dueDate: null,
+            endDate: new Date('2020-06-01'),
             id: returnLogs[3].id,
             purposes: expectedPurposes,
             returnId: returnLogs[3].returnId,
-            returnReference: returnLogs[3].returnReference,
-            siteDescription: returnRequirement.siteDescription,
-            startDate: returnLogs[3].startDate,
-            status: returnLogs[3].status
+            returnReference: 123,
+            siteDescription: 'BOREHOLE AT AVALON',
+            startDate: new Date('2020-05-01'),
+            status: 'due'
           },
           {
-            dueDate: returnLogs[2].dueDate,
-            endDate: returnLogs[2].endDate,
+            dueDate: new Date('2020-06-28'),
+            endDate: new Date('2020-06-01'),
             id: returnLogs[2].id,
             purposes: expectedPurposes,
             returnId: returnLogs[2].returnId,
-            returnReference: returnLogs[2].returnReference,
-            siteDescription: returnRequirement.siteDescription,
-            startDate: returnLogs[2].startDate,
-            status: returnLogs[2].status
+            returnReference: 10334004,
+            siteDescription: 'BOREHOLE AT AVALON',
+            startDate: new Date('2020-02-01'),
+            status: 'due'
           },
           {
-            dueDate: returnLogs[0].dueDate,
-            endDate: returnLogs[0].endDate,
+            dueDate: new Date('2020-06-28'),
+            endDate: new Date('2020-07-01'),
             id: returnLogs[0].id,
             purposes: expectedPurposes,
             returnId: returnLogs[0].returnId,
-            returnReference: returnLogs[0].returnReference,
-            siteDescription: returnRequirement.siteDescription,
-            startDate: returnLogs[0].startDate,
-            status: returnLogs[0].status
+            returnReference: 9999990,
+            siteDescription: 'BOREHOLE AT AVALON',
+            startDate: new Date('2020-02-01'),
+            status: 'due'
           },
           {
-            dueDate: returnLogs[1].dueDate,
-            endDate: returnLogs[1].endDate,
+            dueDate: new Date('2020-06-28'),
+            endDate: new Date('2020-06-01'),
             id: returnLogs[1].id,
             purposes: expectedPurposes,
             returnId: returnLogs[1].returnId,
-            returnReference: returnLogs[1].returnReference,
-            siteDescription: returnRequirement.siteDescription,
-            startDate: returnLogs[1].startDate,
-            status: returnLogs[1].status
+            returnReference: 9999990,
+            siteDescription: 'BOREHOLE AT AVALON',
+            startDate: new Date('2020-02-01'),
+            status: 'due'
           }
         ],
         totalNumber: 4
@@ -173,11 +178,18 @@ describe('Licences - Fetch Returns dal', () => {
     beforeAll(async () => {
       purposelessLicence = await LicenceHelper.add()
 
-      purposelessReturnRequirement = await ReturnRequirementHelper.add({ siteDescription: 'WELL AT LYONESSE' })
+      purposelessReturnRequirement = await ReturnRequirementHelper.add({
+        reference: 9999991,
+        siteDescription: 'WELL AT LYONESSE'
+      })
 
       purposelessReturnLog = await ReturnLogHelper.add({
+        dueDate: new Date('2023-04-28'),
+        endDate: new Date('2023-03-31'),
         licenceRef: purposelessLicence.licenceRef,
-        returnRequirementId: purposelessReturnRequirement.id
+        returnRequirementId: purposelessReturnRequirement.id,
+        startDate: new Date('2022-04-01'),
+        status: 'due'
       })
     })
 
@@ -193,15 +205,15 @@ describe('Licences - Fetch Returns dal', () => {
       expect(result).toEqual({
         returns: [
           {
-            dueDate: purposelessReturnLog.dueDate,
-            endDate: purposelessReturnLog.endDate,
+            dueDate: new Date('2023-04-28'),
+            endDate: new Date('2023-03-31'),
             id: purposelessReturnLog.id,
             purposes: [],
             returnId: purposelessReturnLog.returnId,
-            returnReference: purposelessReturnLog.returnReference,
-            siteDescription: purposelessReturnRequirement.siteDescription,
-            startDate: purposelessReturnLog.startDate,
-            status: purposelessReturnLog.status
+            returnReference: 9999991,
+            siteDescription: 'WELL AT LYONESSE',
+            startDate: new Date('2022-04-01'),
+            status: 'due'
           }
         ],
         totalNumber: 1
@@ -217,8 +229,12 @@ describe('Licences - Fetch Returns dal', () => {
       voidLicence = await LicenceHelper.add()
 
       voidReturnLog = await ReturnLogHelper.add({
+        dueDate: new Date('2023-04-28'),
+        endDate: new Date('2023-03-31'),
         licenceRef: voidLicence.licenceRef,
+        returnReference: '65109211',
         returnRequirementId: null,
+        startDate: new Date('2022-04-01'),
         status: 'void'
       })
     })
@@ -228,21 +244,21 @@ describe('Licences - Fetch Returns dal', () => {
       await voidReturnLog.$query().delete()
     })
 
-    it('returns the return log with no site description and an empty array of purposes', async () => {
+    it('returns the return log with no site description, an empty array of purposes and the return logs returnReference', async () => {
       const result = await FetchReturnsDal(voidLicence.id)
 
       expect(result).toEqual({
         returns: [
           {
-            dueDate: voidReturnLog.dueDate,
-            endDate: voidReturnLog.endDate,
+            dueDate: new Date('2023-04-28'),
+            endDate: new Date('2023-03-31'),
             id: voidReturnLog.id,
             purposes: [],
             returnId: voidReturnLog.returnId,
-            returnReference: voidReturnLog.returnReference,
+            returnReference: 65109211,
             siteDescription: null,
-            startDate: voidReturnLog.startDate,
-            status: voidReturnLog.status
+            startDate: new Date('2022-04-01'),
+            status: 'void'
           }
         ],
         totalNumber: 1
