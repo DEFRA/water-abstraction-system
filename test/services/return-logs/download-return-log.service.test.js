@@ -18,6 +18,9 @@ describe('Return Logs - Download Return Log Service', () => {
     returnLog = ReturnLogsFixture.returnLog('month')
     returnLog.returnSubmissions = [ReturnLogsFixture.returnSubmission(returnLog, 'estimated')]
 
+    // The fixture mirrors the varchar column, whereas `FetchDownloadReturnLogService` casts the reference to an integer
+    returnLog.returnReference = Number(returnLog.returnReference)
+
     vi.spyOn(FetchDownloadReturnLogService, 'default').mockResolvedValue(returnLog)
   })
 

@@ -3,6 +3,7 @@
  * @module FetchDownloadReturnLogService
  */
 
+import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 
 /**
@@ -24,7 +25,17 @@ export default async function fetchDownloadReturnLogService(returnLogId, version
 async function _fetch(returnLogId, version) {
   return ReturnLogModel.query()
     .findById(returnLogId)
-    .select(['id', 'returnReference', 'startDate', 'endDate'])
+    .select([
+      'returnLogs.id',
+      'returnLogs.startDate',
+      'returnLogs.endDate',
+      // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast
+      // so both sides of the COALESCE() match, and so the result sorts numerically rather than alphabetically
+      Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
+        'returnReference'
+      )
+    ])
+    .leftJoinRelated('returnRequirement')
     .withGraphFetched('returnSubmissions')
     .modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
       returnSubmissionsBuilder
