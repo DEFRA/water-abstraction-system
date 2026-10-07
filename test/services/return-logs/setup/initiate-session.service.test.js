@@ -4,6 +4,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 // Test helpers
 import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
 import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
 import SessionModel from 'water-abstraction-engine/models/session.model.js'
@@ -100,7 +101,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         reported: 'abstractionVolumes',
         returnId: returnLog.returnId,
         returnLogId: returnLog.id,
-        returnReference: returnLog.returnReference,
+        returnReference: Number(returnLog.returnReference),
         returnsFrequency: 'month',
         siteDescription: returnLog.metadata.description,
         startDate: '2022-04-01T00:00:00.000Z',
@@ -371,6 +372,31 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         'startReading',
         'units'
       ])
+    })
+  })
+
+  describe('when the return log is linked to a return requirement', () => {
+    let returnLog
+    let returnRequirement
+
+    beforeAll(async () => {
+      returnRequirement = await ReturnRequirementHelper.add({ reference: 9999982 })
+
+      returnLog = await ReturnLogHelper.add({
+        licenceRef: licence.licenceRef,
+        metadata,
+        returnRequirementId: returnRequirement.id
+      })
+    })
+
+    it('saves the reference taken from the return requirement', async () => {
+      const result = await InitiateSessionService(returnLog.id)
+
+      const sessionId = _getSessionId(result)
+
+      const matchingSession = await SessionModel.query().findById(sessionId)
+
+      expect(matchingSession.data.returnReference).toEqual(returnRequirement.reference)
     })
   })
 })

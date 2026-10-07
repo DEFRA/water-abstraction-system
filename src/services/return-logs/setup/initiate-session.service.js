@@ -4,6 +4,7 @@
  */
 
 import CreateSessionDal from 'water-abstraction-engine/dal/create-session.dal.js'
+import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 import { convertFromCubicMetres } from 'water-abstraction-engine/lib/general.lib.js'
 import { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } from 'water-abstraction-engine/lib/dates.lib.js'
@@ -43,18 +44,23 @@ async function _fetchReturnLog(returnLogId) {
   return ReturnLogModel.query()
     .findById(returnLogId)
     .select(
-      'id',
-      'dueDate',
-      'endDate',
-      'metadata',
-      'receivedDate',
-      'returnId',
-      'returnReference',
-      'returnsFrequency',
-      'startDate',
-      'status',
-      'underQuery'
+      'returnLogs.id',
+      'returnLogs.dueDate',
+      'returnLogs.endDate',
+      'returnLogs.metadata',
+      'returnLogs.receivedDate',
+      'returnLogs.returnId',
+      'returnLogs.returnsFrequency',
+      'returnLogs.startDate',
+      'returnLogs.status',
+      'returnLogs.underQuery',
+      // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast
+      // so both sides of the COALESCE() match, and so the result sorts numerically rather than alphabetically
+      Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
+        'returnReference'
+      )
     )
+    .leftJoinRelated('returnRequirement')
     .withGraphFetched('licence')
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
