@@ -17,16 +17,26 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
   let returnRequirement
   let returnSubmission
   let returnSubmissionLines
+  let supersededReturnSubmission
 
   beforeAll(async () => {
     returnSubmissionLines = []
 
     licence = await LicenceHelper.add()
 
-    returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
+    returnRequirement = await ReturnRequirementHelper.add({ reference: 9999983 })
+
+    returnLog = await ReturnLogHelper.add({
+      licenceRef: licence.licenceRef,
+      returnRequirementId: returnRequirement.id
+    })
 
     // NOTE: We add a superseded return submission to demonstrate only the current one is returned
-    await ReturnSubmissionHelper.add({ returnLogId: returnLog.id, current: false, version: 1 })
+    supersededReturnSubmission = await ReturnSubmissionHelper.add({
+      returnLogId: returnLog.id,
+      current: false,
+      version: 1
+    })
 
     returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 2 })
 
@@ -45,6 +55,13 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
   afterAll(async () => {
     await licence.$query().delete()
     await returnLog.$query().delete()
+    await returnRequirement.$query().delete()
+    await returnSubmission.$query().delete()
+    await supersededReturnSubmission.$query().delete()
+
+    for (const returnSubmissionLine of returnSubmissionLines) {
+      await returnSubmissionLine.$query().delete()
+    }
   })
 
   describe('when a matching return log exists', () => {
@@ -62,7 +79,7 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
         metadata: returnLog.metadata,
         receivedDate: returnLog.receivedDate,
         returnId: returnLog.returnId,
-        returnReference: Number(returnLog.returnReference),
+        returnReference: returnRequirement.reference,
         returnsFrequency: returnLog.returnsFrequency,
         returnSubmissions: [
           {
@@ -92,27 +109,24 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
       })
     })
 
-    describe('and it is linked to a return requirement', () => {
-      let linkedReturnLog
+    describe('and it is not linked to a return requirement', () => {
+      let unlinkedReturnLog
 
       beforeAll(async () => {
-        returnRequirement = await ReturnRequirementHelper.add({ reference: 9999983 })
-
-        linkedReturnLog = await ReturnLogHelper.add({
+        unlinkedReturnLog = await ReturnLogHelper.add({
           licenceRef: licence.licenceRef,
-          returnRequirementId: returnRequirement.id
+          returnRequirementId: null
         })
       })
 
       afterAll(async () => {
-        await linkedReturnLog.$query().delete()
-        await returnRequirement.$query().delete()
+        await unlinkedReturnLog.$query().delete()
       })
 
-      it('returns the return reference taken from the return requirement', async () => {
-        const result = await FetchReturnLogDal(linkedReturnLog.id)
+      it('returns the return reference taken from the return log', async () => {
+        const result = await FetchReturnLogDal(unlinkedReturnLog.id)
 
-        expect(result.returnReference).toEqual(returnRequirement.reference)
+        expect(result.returnReference).toEqual(Number(unlinkedReturnLog.returnReference))
       })
     })
   })
