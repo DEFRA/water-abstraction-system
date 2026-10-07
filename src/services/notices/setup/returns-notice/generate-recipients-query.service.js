@@ -384,7 +384,7 @@ function _noRecipientsQuery() {
       NULL::text AS licence_ref,
       ('none') as message_type,
       NULL::uuid AS return_log_id,
-      NULL::text AS return_reference,
+      NULL::integer AS return_reference,
       NULL::date AS start_date,
       NULL::boolean AS quarterly
     WHERE FALSE
