@@ -18,6 +18,7 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
   let returnSubmission
   let returnSubmissionLines
   let supersededReturnSubmission
+  let unlinkedReturnLog
 
   beforeAll(async () => {
     returnSubmissionLines = []
@@ -50,6 +51,11 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
 
       returnSubmissionLines.push(returnSubmissionLine)
     }
+
+    unlinkedReturnLog = await ReturnLogHelper.add({
+      licenceRef: licence.licenceRef,
+      returnRequirementId: null
+    })
   })
 
   afterAll(async () => {
@@ -58,6 +64,7 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
     await returnRequirement.$query().delete()
     await returnSubmission.$query().delete()
     await supersededReturnSubmission.$query().delete()
+    await unlinkedReturnLog.$query().delete()
 
     for (const returnSubmissionLine of returnSubmissionLines) {
       await returnSubmissionLine.$query().delete()
@@ -110,19 +117,6 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
     })
 
     describe('and it is not linked to a return requirement', () => {
-      let unlinkedReturnLog
-
-      beforeAll(async () => {
-        unlinkedReturnLog = await ReturnLogHelper.add({
-          licenceRef: licence.licenceRef,
-          returnRequirementId: null
-        })
-      })
-
-      afterAll(async () => {
-        await unlinkedReturnLog.$query().delete()
-      })
-
       it('returns the return reference taken from the return log', async () => {
         const result = await FetchReturnLogDal(unlinkedReturnLog.id)
 
