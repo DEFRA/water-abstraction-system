@@ -3,6 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import { db } from 'water-abstraction-engine/db/db.js'
 
 // Thing under test
@@ -11,6 +12,8 @@ import GenerateReturnLogsByIdQueryService from '../../../../../src/services/noti
 describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Service', () => {
   let returnLogIds
   let returnLogs
+  let returnLogWithRequirement
+  let returnRequirement
 
   beforeAll(async () => {
     let returnLog
@@ -36,12 +39,19 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
     returnLogIds = returnLogs.map((returnLog) => {
       return returnLog.id
     })
+
+    // Held separately so it is not included in the IDs the other tests pass to the service
+    returnRequirement = await ReturnRequirementHelper.add()
+    returnLogWithRequirement = await ReturnLogHelper.add({ returnRequirementId: returnRequirement.id, status: 'due' })
   })
 
   afterAll(async () => {
     for (const returnLog of returnLogs) {
       await returnLog.$query().delete()
     }
+
+    await returnLogWithRequirement.$query().delete()
+    await returnRequirement.$query().delete()
   })
 
   describe('when called', () => {
@@ -56,11 +66,13 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
     rl.end_date,
     rl.licence_ref,
     rl.id AS return_log_id,
-    rl.return_reference,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.id = ANY (?)
@@ -80,11 +92,30 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
           end_date: returnLogs[0].endDate,
           licence_ref: returnLogs[0].licenceRef,
           return_log_id: returnLogs[0].id,
-          return_reference: returnLogs[0].returnReference,
+          return_reference: Number(returnLogs[0].returnReference),
           start_date: returnLogs[0].startDate,
           quarterly: returnLogs[0].quarterly
         }
       ])
+    })
+
+    describe('and the return log is linked to a return requirement', () => {
+      it('returns the return reference from the return requirement', async () => {
+        const { bindings, query } = GenerateReturnLogsByIdQueryService([returnLogWithRequirement.id])
+        const { rows } = await db.raw(query, bindings)
+
+        expect(rows).toEqual([
+          {
+            due_date: returnLogWithRequirement.dueDate,
+            end_date: returnLogWithRequirement.endDate,
+            licence_ref: returnLogWithRequirement.licenceRef,
+            return_log_id: returnLogWithRequirement.id,
+            return_reference: returnRequirement.reference,
+            start_date: returnLogWithRequirement.startDate,
+            quarterly: returnLogWithRequirement.quarterly
+          }
+        ])
+      })
     })
   })
 })

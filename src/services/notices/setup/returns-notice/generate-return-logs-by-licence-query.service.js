@@ -30,11 +30,13 @@ function _query(noticeType) {
     rl.end_date,
     rl.licence_ref,
     rl.id AS return_log_id,
-    rl.return_reference,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.end_date < ?

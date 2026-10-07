@@ -4,6 +4,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 // Test helpers
 import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import { db } from 'water-abstraction-engine/db/db.js'
 import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 import { tomorrow } from 'water-abstraction-engine/test/general.js'
@@ -13,8 +14,11 @@ import GenerateReturnLogsByLicenceQueryService from '../../../../../src/services
 
 describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Query Service', () => {
   let licenceRef
+  let linkedLicenceRef
+  let linkedReturnLog
   let noticeType
   let returnLogs
+  let returnRequirement
 
   beforeAll(async () => {
     let returnLog
@@ -45,12 +49,24 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
     // Fifth return log has a status of 'due' and a due date - should be included in ALL results
     returnLog = await ReturnLogHelper.add({ dueDate: new Date('2023-04-28'), licenceRef, status: 'due' })
     returnLogs.push(returnLog)
+
+    // Given its own licence ref so it does not affect the results asserted against `licenceRef`
+    linkedLicenceRef = generateLicenceRef()
+    returnRequirement = await ReturnRequirementHelper.add()
+    linkedReturnLog = await ReturnLogHelper.add({
+      licenceRef: linkedLicenceRef,
+      returnRequirementId: returnRequirement.id,
+      status: 'due'
+    })
   })
 
   afterAll(async () => {
     for (const returnLog of returnLogs) {
       await returnLog.$query().delete()
     }
+
+    await linkedReturnLog.$query().delete()
+    await returnRequirement.$query().delete()
   })
 
   describe('when called', () => {
@@ -74,11 +90,13 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
     rl.end_date,
     rl.licence_ref,
     rl.id AS return_log_id,
-    rl.return_reference,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.end_date < ?
@@ -107,11 +125,13 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
     rl.end_date,
     rl.licence_ref,
     rl.id AS return_log_id,
-    rl.return_reference,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.end_date < ?
@@ -137,7 +157,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
             end_date: returnLogs[4].endDate,
             licence_ref: returnLogs[4].licenceRef,
             return_log_id: returnLogs[4].id,
-            return_reference: returnLogs[4].returnReference,
+            return_reference: Number(returnLogs[4].returnReference),
             start_date: returnLogs[4].startDate,
             quarterly: returnLogs[4].quarterly
           }
@@ -154,24 +174,49 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
         const { bindings, query } = GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
         const { rows } = await db.raw(query, bindings)
 
+        // NOTE: The query has no 'order by' so we cannot assert the order the records come out in
+        expect(rows).toHaveLength(2)
+
+        expect(rows).toContainEqual({
+          due_date: returnLogs[0].dueDate,
+          end_date: returnLogs[0].endDate,
+          licence_ref: returnLogs[0].licenceRef,
+          return_log_id: returnLogs[0].id,
+          return_reference: Number(returnLogs[0].returnReference),
+          start_date: returnLogs[0].startDate,
+          quarterly: returnLogs[0].quarterly
+        })
+
+        expect(rows).toContainEqual({
+          due_date: returnLogs[4].dueDate,
+          end_date: returnLogs[4].endDate,
+          licence_ref: returnLogs[4].licenceRef,
+          return_log_id: returnLogs[4].id,
+          return_reference: Number(returnLogs[4].returnReference),
+          start_date: returnLogs[4].startDate,
+          quarterly: returnLogs[4].quarterly
+        })
+      })
+    })
+
+    describe('and the return log is linked to a return requirement', () => {
+      beforeEach(() => {
+        noticeType = NoticeType.INVITATIONS
+      })
+
+      it('returns the return reference from the return requirement', async () => {
+        const { bindings, query } = GenerateReturnLogsByLicenceQueryService(linkedLicenceRef, noticeType)
+        const { rows } = await db.raw(query, bindings)
+
         expect(rows).toEqual([
           {
-            due_date: returnLogs[0].dueDate,
-            end_date: returnLogs[0].endDate,
-            licence_ref: returnLogs[0].licenceRef,
-            return_log_id: returnLogs[0].id,
-            return_reference: returnLogs[0].returnReference,
-            start_date: returnLogs[0].startDate,
-            quarterly: returnLogs[0].quarterly
-          },
-          {
-            due_date: returnLogs[4].dueDate,
-            end_date: returnLogs[4].endDate,
-            licence_ref: returnLogs[4].licenceRef,
-            return_log_id: returnLogs[4].id,
-            return_reference: returnLogs[4].returnReference,
-            start_date: returnLogs[4].startDate,
-            quarterly: returnLogs[4].quarterly
+            due_date: linkedReturnLog.dueDate,
+            end_date: linkedReturnLog.endDate,
+            licence_ref: linkedReturnLog.licenceRef,
+            return_log_id: linkedReturnLog.id,
+            return_reference: returnRequirement.reference,
+            start_date: linkedReturnLog.startDate,
+            quarterly: linkedReturnLog.quarterly
           }
         ])
       })

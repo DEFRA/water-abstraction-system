@@ -4,6 +4,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import { db } from 'water-abstraction-engine/db/db.js'
 
 // Things we need to stub
@@ -16,6 +17,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
   let licencesToExclude
   let noticeType
   let returnLogs
+  let returnRequirement
   let returnsPeriod
 
   beforeAll(async () => {
@@ -56,12 +58,19 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     await _addReturnLog(returnLogs, { ...returnsPeriod, summer: 'true' })
     // 9th return log is not in the period - should NOT be included in results
     await _addReturnLog(returnLogs, { ...returnsPeriod, startDate: new Date('2023-04-01') })
+
+    // 10th return log is linked to a return requirement - should be included in invitations results, with its
+    // reference taken from the requirement
+    returnRequirement = await ReturnRequirementHelper.add()
+    await _addReturnLog(returnLogs, returnsPeriod, { returnRequirementId: returnRequirement.id })
   })
 
   afterAll(async () => {
     for (const returnLog of returnLogs) {
       await returnLog.$query().delete()
     }
+
+    await returnRequirement.$query().delete()
 
     vi.resetAllMocks()
   })
@@ -84,11 +93,13 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     rl.end_date,
     rl.licence_ref,
     rl.id AS return_log_id,
-    rl.return_reference,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.metadata->>'isCurrent' = 'true'
@@ -119,11 +130,13 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     rl.end_date,
     rl.licence_ref,
     rl.id AS return_log_id,
-    rl.return_reference,
+    COALESCE(rr.reference, rl.return_reference::integer) AS return_reference,
     rl.start_date,
     rl.quarterly
   FROM
     public.return_logs rl
+  LEFT JOIN return_requirements rr
+    ON rl.return_requirement_id = rr.id
   WHERE
     rl.status = 'due'
     AND rl.metadata->>'isCurrent' = 'true'
@@ -259,6 +272,25 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
         })
       })
     })
+
+    describe('and a return log is linked to a return requirement', () => {
+      beforeAll(() => {
+        noticeType = NoticeType.INVITATIONS
+        licencesToExclude = []
+      })
+
+      it('returns the return reference from the return requirement', async () => {
+        const { bindings, query } = GenerateReturnLogsByPeriodQueryService(noticeType, licencesToExclude, returnsPeriod)
+        const { rows } = await db.raw(query, bindings)
+
+        const expectedResult = {
+          ..._transformToResult(returnLogs[9]),
+          return_reference: returnRequirement.reference
+        }
+
+        expect(rows).toContainEqual(expectedResult)
+      })
+    })
   })
 })
 
@@ -294,7 +326,7 @@ function _transformToResult(returnLog) {
     end_date: returnLog.endDate,
     licence_ref: returnLog.licenceRef,
     return_log_id: returnLog.id,
-    return_reference: returnLog.returnReference,
+    return_reference: Number(returnLog.returnReference),
     start_date: returnLog.startDate,
     quarterly: returnLog.quarterly
   }

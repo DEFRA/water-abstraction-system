@@ -225,7 +225,7 @@ export function transformToDownloadingResult(recipient, returnLog) {
     message_type: recipient.messageType,
     quarterly: returnLog.quarterly,
     return_log_id: returnLog.id,
-    return_reference: returnLog.returnReference,
+    return_reference: Number(returnLog.returnReference),
     start_date: returnLog.startDate
   }
 }

@@ -4,6 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 // Test helpers
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
@@ -11,13 +12,16 @@ import FetchDueReturnsForLicence from '../../../../../src/services/notices/setup
 
 describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence service', () => {
   let licenceRef
-  let returnLogs
   let region
+  let returnLogs
+  let returnRequirement
 
   beforeAll(async () => {
     licenceRef = generateLicenceRef()
 
     region = RegionHelper.select()
+
+    returnRequirement = await ReturnRequirementHelper.add()
 
     returnLogs = []
 
@@ -41,17 +45,20 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
       status: 'due'
     }
 
-    // Add first return log which is flagged as transferred (isCurrent=false)
+    // Add first return log which is flagged as transferred (isCurrent=false). It is not linked to a return
+    // requirement, so its reference must come from the return log itself
     let returnLog = await ReturnLogHelper.add({
       ...returnLogData,
       metadata: { ...returnLogData.metadata, isCurrent: false }
     })
     returnLogs.push(returnLog)
 
-    // Add a second return log for the same licence which is not transferred (isCurrent=true)
+    // Add a second return log for the same licence which is not transferred (isCurrent=true). It is linked to a return
+    // requirement, so its reference must come from the requirement
     returnLog = await ReturnLogHelper.add({
       ...returnLogData,
       endDate: new Date('2025-03-31'),
+      returnRequirementId: returnRequirement.id,
       startDate: new Date('2024-04-01')
     })
     returnLogs.push(returnLog)
@@ -76,6 +83,8 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
     for (const returnLog of returnLogs) {
       await returnLog.$query().delete()
     }
+
+    await returnRequirement.$query().delete()
   })
 
   describe('when called', () => {
@@ -91,7 +100,7 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
           regionCode: region.naldRegionId,
           regionName: region.displayName,
           returnLogId: returnLogs[1].id,
-          returnReference: returnLogs[1].returnReference,
+          returnReference: returnRequirement.reference,
           returnsFrequency: 'month',
           siteDescription: 'Water park',
           startDate: returnLogs[1].startDate,
@@ -105,7 +114,7 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
           regionCode: region.naldRegionId,
           regionName: region.displayName,
           returnLogId: returnLogs[0].id,
-          returnReference: returnLogs[0].returnReference,
+          returnReference: Number(returnLogs[0].returnReference),
           returnsFrequency: 'month',
           siteDescription: 'Water park',
           startDate: returnLogs[0].startDate,
