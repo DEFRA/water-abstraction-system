@@ -17,7 +17,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '12345',
+      returnReference: 12345,
       startDate: '2023-04-01',
       endDate: '2024-03-31',
       periodStartDay: '01',

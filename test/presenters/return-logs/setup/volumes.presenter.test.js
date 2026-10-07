@@ -195,7 +195,7 @@ function _sessionData() {
       }
     ],
     returnsFrequency: 'month',
-    returnReference: '1234',
+    returnReference: 1234,
     units: 'cubicMetres'
   }
 }

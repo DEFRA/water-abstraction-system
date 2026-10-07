@@ -18,7 +18,7 @@ describe('Return Logs - Setup - Received service', () => {
     sessionData = {
       licenceId: '736144f1-203d-46bb-9968-5137ae06a7bd',
       returnLogId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
-      returnReference: '012345'
+      returnReference: 12345
     }
 
     session = SessionModelStub(sessionData)
@@ -46,7 +46,7 @@ describe('Return Logs - Setup - Received service', () => {
           text: 'Back'
         },
         pageTitle: 'When was the return received?',
-        pageTitleCaption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 12345',
         receivedDateOption: null,
         receivedDateDay: null,
         receivedDateMonth: null,

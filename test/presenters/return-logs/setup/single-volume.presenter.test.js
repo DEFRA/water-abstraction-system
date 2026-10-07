@@ -10,7 +10,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      returnReference: '012345',
+      returnReference: 12345,
       units: 'litres'
     }
   })
@@ -25,7 +25,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
           text: 'Back'
         },
         pageTitle: 'Is it a single volume?',
-        pageTitleCaption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 12345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         singleVolume: null,
         singleVolumeQuantity: null,

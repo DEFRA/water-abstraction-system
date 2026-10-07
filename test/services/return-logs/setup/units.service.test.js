@@ -16,7 +16,7 @@ describe('Return Logs Setup - Units service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '012345'
+      returnReference: 12345
     }
 
     session = SessionModelStub(sessionData)
@@ -41,7 +41,7 @@ describe('Return Logs Setup - Units service', () => {
       expect(result).toMatchObject({
         backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },
         pageTitle: 'Which units were used?',
-        pageTitleCaption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 12345',
         units: null
       })
     })

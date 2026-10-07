@@ -12,7 +12,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
       id: '1f4287ca-b8c5-4034-957f-5d642cdf19d5',
       licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
       licenceRef: '01/117',
-      returnReference: '10032788',
+      returnReference: 10032788,
       status: 'received',
       submissionCount: 0,
       purposes: [

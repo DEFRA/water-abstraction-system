@@ -10,7 +10,7 @@ describe('Return Logs Setup - Note presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      returnReference: '1234'
+      returnReference: 1234
     }
   })
 

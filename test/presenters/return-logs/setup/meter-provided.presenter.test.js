@@ -10,7 +10,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      returnReference: '012345'
+      returnReference: 12345
     }
   })
 
@@ -22,7 +22,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
         backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units', text: 'Back' },
         meterProvided: null,
         pageTitle: 'Have meter details been provided?',
-        pageTitleCaption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 12345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })

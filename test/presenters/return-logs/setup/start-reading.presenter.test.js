@@ -10,7 +10,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      returnReference: '012345'
+      returnReference: 12345
     }
   })
 
@@ -21,7 +21,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       expect(result).toEqual({
         backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported', text: 'Back' },
         pageTitle: 'Enter the start meter reading',
-        pageTitleCaption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 12345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startReading: null
       })

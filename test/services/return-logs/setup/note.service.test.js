@@ -15,7 +15,7 @@ describe('Return Logs Setup - Note service', () => {
   let sessionData
 
   beforeEach(() => {
-    sessionData = { returnReference: '1234' }
+    sessionData = { returnReference: 1234 }
 
     session = SessionModelStub(sessionData)
 

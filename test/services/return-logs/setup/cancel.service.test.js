@@ -24,7 +24,7 @@ describe('Return Logs Setup - Cancel service', () => {
       purposes: 'Evaporative Cooling',
       receivedDate: '2025-01-31T00:00:00.000Z',
       returnLogId: '1130dfa0-e8ed-43cb-91db-5f9d79bbef5f',
-      returnReference: '1234',
+      returnReference: 1234,
       siteDescription: 'POINT A, TEST SITE DESCRIPTION',
       startDate: '2004-04-01T00:00:00.000Z',
       twoPartTariff: false

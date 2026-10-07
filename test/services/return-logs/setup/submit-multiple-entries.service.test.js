@@ -19,7 +19,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '12345',
+      returnReference: 12345,
       lines: [
         { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
         { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
@@ -74,7 +74,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
       describe('and the user has previously selected "meterReadings" as the reported type', () => {
         beforeEach(() => {
           sessionData = {
-            returnReference: '12345',
+            returnReference: 12345,
             lines: [
               { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
               { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }

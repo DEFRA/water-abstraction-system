@@ -1,62 +1,34 @@
 // Test framework
-import { beforeAll, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
-import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
-import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
-import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
+import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 import SessionModel from 'water-abstraction-engine/models/session.model.js'
+import { generateLicenceRef, generateReference, generateUUID } from 'water-abstraction-engine/test/generators.js'
+
+// Things we need to stub
+import * as FetchReturnLogDal from '../../../../src/dal/return-logs/setup/fetch-return-log.dal.js'
 
 // Thing under test
 import InitiateSessionService from '../../../../src/services/return-logs/setup/initiate-session.service.js'
 
 describe('Return Logs - Setup - Initiate Session service', () => {
   let licence
-  let metadata
+  let returnLog
 
-  beforeAll(async () => {
-    metadata = {
-      description: 'BOREHOLE AT AVALON',
-      isCurrent: true,
-      isFinal: false,
-      isSummer: false,
-      isTwoPartTariff: false,
-      isUpload: false,
-      nald: {
-        regionCode: 9,
-        areaCode: 'ARCA',
-        formatId: '1234567',
-        periodStartDay: 1,
-        periodStartMonth: 4,
-        periodEndDay: 28,
-        periodEndMonth: 4
-      },
-      points: [],
-      purposes: [{ tertiary: { description: 'Test description' } }],
-      version: 1
-    }
+  beforeEach(() => {
+    licence = { id: generateUUID(), licenceRef: generateLicenceRef() }
+  })
 
-    licence = await LicenceHelper.add()
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   describe('when the return log has been received and submitted', () => {
-    let returnLog
-    let returnSubmission
+    beforeEach(() => {
+      returnLog = _returnLog(licence, [_returnSubmission({ method: 'abstractionVolumes' }, [_returnSubmissionLine()])])
 
-    beforeAll(async () => {
-      returnLog = await ReturnLogHelper.add({
-        licenceRef: licence.licenceRef,
-        metadata,
-        receivedDate: new Date('2025-03-06'),
-        endDate: new Date('2022-06-01')
-      })
-
-      returnSubmission = await ReturnSubmissionHelper.add({
-        returnLogId: returnLog.id,
-        metadata: { method: 'abstractionVolumes' }
-      })
-      await ReturnSubmissionLineHelper.add({ returnSubmissionId: returnSubmission.id })
+      vi.spyOn(FetchReturnLogDal, 'default').mockResolvedValue(returnLog)
     })
 
     it('creates a new session record containing details of the return log', async () => {
@@ -114,19 +86,12 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     describe('and a zero quantity is specified', () => {
-      beforeAll(async () => {
-        returnLog = await ReturnLogHelper.add({
-          licenceRef: licence.licenceRef,
-          metadata,
-          receivedDate: new Date('2025-03-06'),
-          endDate: new Date('2022-06-01')
-        })
+      beforeEach(() => {
+        returnLog = _returnLog(licence, [
+          _returnSubmission({ method: 'abstractionVolumes' }, [_returnSubmissionLine(0)])
+        ])
 
-        returnSubmission = await ReturnSubmissionHelper.add({
-          returnLogId: returnLog.id,
-          metadata: { method: 'abstractionVolumes' }
-        })
-        await ReturnSubmissionLineHelper.add({ quantity: 0, returnSubmissionId: returnSubmission.id })
+        vi.spyOn(FetchReturnLogDal, 'default').mockResolvedValue(returnLog)
       })
 
       it('returns the quantity as expected', async () => {
@@ -141,18 +106,10 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     describe('and a unit is specified', () => {
-      beforeAll(async () => {
-        returnLog = await ReturnLogHelper.add({
-          licenceRef: licence.licenceRef,
-          metadata,
-          receivedDate: new Date('2025-03-06'),
-          endDate: new Date('2022-06-01')
-        })
+      beforeEach(() => {
+        returnLog = _returnLog(licence, [_returnSubmission({ units: 'Ml' })])
 
-        await ReturnSubmissionHelper.add({
-          returnLogId: returnLog.id,
-          metadata: { units: 'Ml' }
-        })
+        vi.spyOn(FetchReturnLogDal, 'default').mockResolvedValue(returnLog)
       })
 
       it('formats the unit as expected', async () => {
@@ -167,15 +124,10 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     describe('and no unit is specified', () => {
-      beforeAll(async () => {
-        returnLog = await ReturnLogHelper.add({
-          licenceRef: licence.licenceRef,
-          metadata,
-          receivedDate: new Date('2025-03-06'),
-          endDate: new Date('2022-06-01')
-        })
+      beforeEach(() => {
+        returnLog = _returnLog(licence, [_returnSubmission({})])
 
-        returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
+        vi.spyOn(FetchReturnLogDal, 'default').mockResolvedValue(returnLog)
       })
 
       it('defaults the unit to cubicMetres', async () => {
@@ -190,17 +142,9 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     describe('and meter details are specified', () => {
-      beforeAll(async () => {
-        returnLog = await ReturnLogHelper.add({
-          licenceRef: licence.licenceRef,
-          metadata,
-          receivedDate: new Date('2025-03-06'),
-          endDate: new Date('2022-06-01')
-        })
-
-        await ReturnSubmissionHelper.add({
-          returnLogId: returnLog.id,
-          metadata: {
+      beforeEach(() => {
+        returnLog = _returnLog(licence, [
+          _returnSubmission({
             type: 'measured',
             total: null,
             units: 'm³',
@@ -212,8 +156,10 @@ describe('Return Logs - Setup - Initiate Session service', () => {
                 serialNumber: 'METER_SERIAL_NUMBER'
               }
             ]
-          }
-        })
+          })
+        ])
+
+        vi.spyOn(FetchReturnLogDal, 'default').mockResolvedValue(returnLog)
       })
 
       it('includes the meter details', async () => {
@@ -232,18 +178,10 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     describe('and it is a nil return', () => {
-      beforeAll(async () => {
-        returnLog = await ReturnLogHelper.add({
-          licenceRef: licence.licenceRef,
-          metadata,
-          receivedDate: new Date('2025-03-06'),
-          endDate: new Date('2022-06-01')
-        })
+      beforeEach(() => {
+        returnLog = _returnLog(licence, [_returnSubmission({}, [], true)])
 
-        returnSubmission = await ReturnSubmissionHelper.add({
-          returnLogId: returnLog.id,
-          nilReturn: true
-        })
+        vi.spyOn(FetchReturnLogDal, 'default').mockResolvedValue(returnLog)
       })
 
       it('sets the journey as expected', async () => {
@@ -282,15 +220,10 @@ describe('Return Logs - Setup - Initiate Session service', () => {
   })
 
   describe('when the return log has been received but not submitted', () => {
-    let returnLog
+    beforeEach(() => {
+      returnLog = _returnLog(licence)
 
-    beforeAll(async () => {
-      returnLog = await ReturnLogHelper.add({
-        licenceRef: licence.licenceRef,
-        metadata,
-        receivedDate: new Date('2025-03-06'),
-        endDate: new Date('2022-06-01')
-      })
+      vi.spyOn(FetchReturnLogDal, 'default').mockResolvedValue(returnLog)
     })
 
     it('sets beenReceived to true', async () => {
@@ -328,15 +261,11 @@ describe('Return Logs - Setup - Initiate Session service', () => {
   })
 
   describe('when the return log has not been received or submitted', () => {
-    let returnLog
+    beforeEach(() => {
+      returnLog = _returnLog(licence)
+      returnLog.receivedDate = null
 
-    beforeAll(async () => {
-      returnLog = await ReturnLogHelper.add({
-        licenceRef: licence.licenceRef,
-        metadata,
-        receivedDate: null,
-        endDate: new Date('2022-06-01')
-      })
+      vi.spyOn(FetchReturnLogDal, 'default').mockResolvedValue(returnLog)
     })
 
     it('sets beenReceived to false', async () => {
@@ -379,4 +308,55 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 // the session id by splitting by '/' and taking the next-to-last element
 function _getSessionId(url) {
   return url.split('/').at(-2)
+}
+
+function _returnLog(licence, returnSubmissions = []) {
+  return ReturnLogModel.fromJson({
+    id: generateUUID(),
+    dueDate: null,
+    endDate: new Date('2022-06-01'),
+    licence,
+    metadata: {
+      description: 'BOREHOLE AT AVALON',
+      isCurrent: true,
+      isFinal: false,
+      isSummer: false,
+      isTwoPartTariff: false,
+      isUpload: false,
+      nald: {
+        regionCode: 9,
+        areaCode: 'ARCA',
+        formatId: '1234567',
+        periodStartDay: 1,
+        periodStartMonth: 4,
+        periodEndDay: 28,
+        periodEndMonth: 4
+      },
+      points: [],
+      purposes: [{ tertiary: { description: 'Test description' } }],
+      version: 1
+    },
+    receivedDate: new Date('2025-03-06'),
+    returnId: `v1:9:${licence.licenceRef}:10021668:2022-04-01:2022-06-01`,
+    returnReference: generateReference(),
+    returnsFrequency: 'month',
+    returnSubmissions,
+    startDate: new Date('2022-04-01'),
+    status: 'due',
+    underQuery: false
+  })
+}
+
+function _returnSubmission(metadata, returnSubmissionLines = [], nilReturn = false) {
+  return { metadata, nilReturn, returnSubmissionLines }
+}
+
+function _returnSubmissionLine(quantity = 4380) {
+  return {
+    id: generateUUID(),
+    startDate: new Date('2021-12-26'),
+    endDate: new Date('2022-01-01'),
+    quantity,
+    userUnit: 'm³'
+  }
 }
