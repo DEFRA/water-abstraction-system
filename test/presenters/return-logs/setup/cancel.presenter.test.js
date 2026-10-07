@@ -18,7 +18,7 @@ describe('Return Logs Setup - Cancel presenter', () => {
       purposes: 'Evaporative Cooling',
       receivedDate: '2025-01-31T00:00:00.000Z',
       returnLogId: '799549be-5d03-4cae-ad7f-2fda6be9b10c',
-      returnReference: '1234',
+      returnReference: 1234,
       siteDescription: 'POINT A, TEST SITE DESCRIPTION',
       startDate: '2004-04-01T00:00:00.000Z',
       twoPartTariff: false

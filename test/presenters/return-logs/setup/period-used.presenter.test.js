@@ -10,7 +10,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      returnReference: '012345',
+      returnReference: 12345,
       periodStartDay: '01',
       periodStartMonth: '04',
       periodEndDay: '31',
@@ -29,7 +29,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
           text: 'Back'
         },
         pageTitle: 'What period was used for this volume?',
-        pageTitleCaption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 12345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         periodDateUsedOptions: null,
         periodUsedFromDay: null,

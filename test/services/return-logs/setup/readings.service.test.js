@@ -30,7 +30,7 @@ describe('Return Logs Setup - Readings service', () => {
         }
       ],
       returnsFrequency: 'month',
-      returnReference: '1234'
+      returnReference: 1234
     }
 
     session = SessionModelStub(sessionData)

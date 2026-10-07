@@ -16,7 +16,7 @@ describe('Return Logs Setup - Start Reading service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '012345'
+      returnReference: 12345
     }
 
     session = SessionModelStub(sessionData)
@@ -41,7 +41,7 @@ describe('Return Logs Setup - Start Reading service', () => {
       expect(result).toMatchObject({
         backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },
         pageTitle: 'Enter the start meter reading',
-        pageTitleCaption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 12345',
         startReading: null
       })
     })

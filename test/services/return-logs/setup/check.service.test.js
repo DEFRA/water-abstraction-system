@@ -126,7 +126,7 @@ function _sessionData() {
     purposes: ['Evaporative Cooling'],
     receivedDate: '2025-01-31T00:00:00.000Z',
     reported: 'meterReadings',
-    returnReference: '1234',
+    returnReference: 1234,
     returnsFrequency: 'month',
     siteDescription: 'POINT A, TEST SITE DESCRIPTION',
     startDate: '2004-04-01T00:00:00.000Z',

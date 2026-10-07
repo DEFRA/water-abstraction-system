@@ -19,7 +19,7 @@ describe('Return Logs Setup - Submit Units service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '12345'
+      returnReference: 12345
     }
 
     session = SessionModelStub(sessionData)

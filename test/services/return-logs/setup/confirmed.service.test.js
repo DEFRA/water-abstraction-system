@@ -15,7 +15,7 @@ describe('Return Logs - Setup - Confirmed service', () => {
       id: returnLogId,
       licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
       licenceRef: '01/117',
-      returnReference: '10032788',
+      returnReference: 10032788,
       purposes: [
         {
           alias: 'SPRAY IRRIGATION',

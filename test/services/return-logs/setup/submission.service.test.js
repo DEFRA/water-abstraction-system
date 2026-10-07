@@ -15,7 +15,7 @@ describe('Return Logs Setup - Submission service', () => {
   let sessionData
 
   beforeEach(() => {
-    sessionData = { beenReceived: false, returnReference: '1234' }
+    sessionData = { beenReceived: false, returnReference: 1234 }
 
     session = SessionModelStub(sessionData)
 

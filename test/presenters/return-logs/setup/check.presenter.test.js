@@ -1093,7 +1093,7 @@ function _sessionData() {
     purposes: ['Evaporative Cooling'],
     receivedDate: '2025-01-31T00:00:00.000Z',
     reported: 'abstractionVolumes',
-    returnReference: '1234',
+    returnReference: 1234,
     returnsFrequency: 'month',
     siteDescription: 'POINT A, TEST SITE DESCRIPTION',
     startDate: '2023-04-01T00:00:00.000Z',

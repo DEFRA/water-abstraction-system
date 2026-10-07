@@ -17,7 +17,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '12345',
+      returnReference: 12345,
       units: 'litres'
     }
 

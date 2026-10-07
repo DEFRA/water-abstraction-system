@@ -50,7 +50,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       purposes: ['test purpose'],
       reported: 'abstractionVolumes',
       returnId: returnLog.returnId,
-      returnReference: returnLog.returnReference,
+      returnReference: Number(returnLog.returnReference),
       returnLogId: returnLog.id,
       returnSubmissionId: initialReturnSubmission.id,
       startDate: '2023-01-01',

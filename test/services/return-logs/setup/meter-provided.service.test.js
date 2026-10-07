@@ -16,7 +16,7 @@ describe('Return Logs Setup - Meter Provided service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '012345'
+      returnReference: 12345
     }
 
     session = SessionModelStub(sessionData)
@@ -42,7 +42,7 @@ describe('Return Logs Setup - Meter Provided service', () => {
         backLink: { href: `/system/return-logs/setup/${session.id}/units`, text: 'Back' },
         meterProvided: null,
         pageTitle: 'Have meter details been provided?',
-        pageTitleCaption: 'Return reference 012345'
+        pageTitleCaption: 'Return reference 12345'
       })
     })
   })

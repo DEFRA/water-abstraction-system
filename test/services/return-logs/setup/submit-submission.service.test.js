@@ -104,7 +104,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         beforeEach(() => {
           payload = { journey: 'enterReturn' }
 
-          sessionData = { beenReceived: false, checkPageVisited: true, returnLogId, returnReference: '1234' }
+          sessionData = { beenReceived: false, checkPageVisited: true, returnLogId, returnReference: 1234 }
 
           session = SessionModelStub(sessionData)
 

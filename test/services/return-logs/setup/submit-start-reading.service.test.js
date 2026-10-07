@@ -19,7 +19,7 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '12345',
+      returnReference: 12345,
       lines: [
         {
           endDate: '2019-04-30T00:00:00.000Z',

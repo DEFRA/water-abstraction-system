@@ -16,7 +16,7 @@ describe('Return Logs Setup - Single Volume service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '012345',
+      returnReference: 12345,
       units: 'cubicMetres'
     }
 
@@ -42,7 +42,7 @@ describe('Return Logs Setup - Single Volume service', () => {
       expect(result).toMatchObject({
         backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
         pageTitle: 'Is it a single volume?',
-        pageTitleCaption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 12345',
         singleVolume: null,
         singleVolumeQuantity: null,
         units: 'cubic metres'

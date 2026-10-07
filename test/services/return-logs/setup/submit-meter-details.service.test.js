@@ -19,7 +19,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
   beforeEach(async () => {
     sessionData = {
-      returnReference: '12345',
+      returnReference: 12345,
       reported: 'meterReadings'
     }
 

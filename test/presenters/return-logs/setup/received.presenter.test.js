@@ -16,7 +16,7 @@ describe('Return Logs - Setup - Received presenter', () => {
       id: '61e07498-f309-4829-96a9-72084a54996d',
       licenceId: 'a96ce5c6-2c42-4b3f-946d-0428b5f07ce6',
       returnLogId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
-      returnReference: '012345'
+      returnReference: 12345
     }
   })
 
@@ -27,7 +27,7 @@ describe('Return Logs - Setup - Received presenter', () => {
       expect(result).toEqual({
         pageTitle: 'When was the return received?',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        pageTitleCaption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 12345',
         receivedDateOption: null,
         receivedDateDay: null,
         receivedDateMonth: null,

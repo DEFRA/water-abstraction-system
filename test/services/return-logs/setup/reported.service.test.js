@@ -16,7 +16,7 @@ describe('Return Logs Setup - Reported service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '012345'
+      returnReference: 12345
     }
 
     session = SessionModelStub(sessionData)
@@ -41,7 +41,7 @@ describe('Return Logs Setup - Reported service', () => {
       expect(result).toMatchObject({
         backLink: { href: `/system/return-logs/setup/${session.id}/submission`, text: 'Back' },
         pageTitle: 'How was this return reported?',
-        pageTitleCaption: 'Return reference 012345',
+        pageTitleCaption: 'Return reference 12345',
         reported: null
       })
     })

@@ -18,7 +18,7 @@ describe('Return Logs Setup - Delete Note service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '1234',
+      returnReference: 1234,
       note: {
         content: 'I am not long for this world',
         userEmail: 'carol.shaw@atari.com'

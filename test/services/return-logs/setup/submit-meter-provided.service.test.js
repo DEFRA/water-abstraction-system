@@ -19,7 +19,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: '12345',
+      returnReference: 12345,
       reported: 'abstractionVolumes'
     }
 
@@ -85,7 +85,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
                   meterMake: 'Test Meter Make',
                   meterSerialNumber: 'TEST-9876543',
                   meter10TimesDisplay: 'no',
-                  returnReference: '12345',
+                  returnReference: 12345,
                   reported: 'abstractionVolumes'
                 }
               }

@@ -19,7 +19,7 @@ describe('Return Logs Setup - Submit Note service', () => {
   let yarStub
 
   beforeEach(() => {
-    sessionData = { returnReference: '1234' }
+    sessionData = { returnReference: 1234 }
 
     session = SessionModelStub(sessionData)
 

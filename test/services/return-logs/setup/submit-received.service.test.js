@@ -25,7 +25,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
     sessionData = {
       licenceId: 'cd190dc7-912a-46a5-9421-2750fb1c7ac8',
       returnLogId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
-      returnReference: '12345',
+      returnReference: 12345,
       startDate: '2023-04-01T00:00:00.000Z'
     }
 
