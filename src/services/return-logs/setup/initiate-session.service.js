@@ -4,11 +4,11 @@
  */
 
 import CreateSessionDal from 'water-abstraction-engine/dal/create-session.dal.js'
-import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
-import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 import { convertFromCubicMetres } from 'water-abstraction-engine/lib/general.lib.js'
 import { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } from 'water-abstraction-engine/lib/dates.lib.js'
 import { returnUnits, unitNames } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+
+import FetchReturnLogDal from '../../../dal/return-logs/setup/fetch-return-log.dal.js'
 
 /**
  * Initiates the session record used for setting up a new return log edit journey
@@ -26,7 +26,7 @@ import { returnUnits, unitNames } from 'water-abstraction-engine/lib/static-look
  * @returns {Promise<string>} the url to redirect to
  */
 export default async function initiateSessionService(returnLogId) {
-  const returnLog = await _fetchReturnLog(returnLogId)
+  const returnLog = await FetchReturnLogDal(returnLogId)
 
   const referenceData = _referenceData(returnLog)
   const submissionData = _submissionData(referenceData.lines, returnLog)
@@ -38,45 +38,6 @@ export default async function initiateSessionService(returnLogId) {
   const redirect = data.submissionType === 'edit' ? 'check' : 'received'
 
   return `/system/return-logs/setup/${sessionId}/${redirect}`
-}
-
-async function _fetchReturnLog(returnLogId) {
-  return ReturnLogModel.query()
-    .findById(returnLogId)
-    .select(
-      'returnLogs.id',
-      'returnLogs.dueDate',
-      'returnLogs.endDate',
-      'returnLogs.metadata',
-      'returnLogs.receivedDate',
-      'returnLogs.returnId',
-      'returnLogs.returnsFrequency',
-      'returnLogs.startDate',
-      'returnLogs.status',
-      'returnLogs.underQuery',
-      // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast
-      // so both sides of the COALESCE() match, and so the result sorts numerically rather than alphabetically
-      Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
-        'returnReference'
-      )
-    )
-    .leftJoinRelated('returnRequirement')
-    .withGraphFetched('licence')
-    .modifyGraph('licence', (licenceBuilder) => {
-      licenceBuilder.select(['id', 'licenceRef'])
-    })
-    .withGraphFetched('returnSubmissions')
-    .modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
-      returnSubmissionsBuilder
-        .select(['metadata', 'nilReturn'])
-        .where('current', true)
-        .withGraphFetched('returnSubmissionLines')
-        .modifyGraph('returnSubmissionLines', (returnSubmissionLinesBuilder) => {
-          returnSubmissionLinesBuilder
-            .select(['id', 'startDate', 'endDate', 'quantity', 'userUnit'])
-            .orderBy('startDate', 'asc')
-        })
-    })
 }
 
 function _lines(returnsFrequency, startDate, endDate) {
