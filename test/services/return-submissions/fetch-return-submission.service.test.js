@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
 import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
 import ReturnSubmissionLineModel from 'water-abstraction-engine/models/return-submission-line.model.js'
@@ -13,8 +14,9 @@ import ReturnSubmissionModel from 'water-abstraction-engine/models/return-submis
 import FetchReturnSubmissionService from '../../../src/services/return-submissions/fetch-return-submission.service.js'
 
 describe('Fetch Return Submission service', () => {
-  let testReturnSubmission
   let testReturnLog
+  let testReturnRequirement
+  let testReturnSubmission
 
   beforeEach(async () => {
     testReturnSubmission = await ReturnSubmissionHelper.add({
@@ -22,7 +24,11 @@ describe('Fetch Return Submission service', () => {
         units: 'Ml'
       }
     })
-    testReturnLog = await ReturnLogHelper.add({ id: testReturnSubmission.returnLogId })
+    testReturnRequirement = await ReturnRequirementHelper.add()
+    testReturnLog = await ReturnLogHelper.add({
+      id: testReturnSubmission.returnLogId,
+      returnRequirementId: testReturnRequirement.id
+    })
 
     await Promise.all([
       ReturnSubmissionLineHelper.add({
@@ -80,8 +86,22 @@ describe('Fetch Return Submission service', () => {
       const { returnLog } = result
 
       expect(returnLog).toBeInstanceOf(ReturnLogModel)
-      expect(returnLog.returnReference).toEqual(testReturnLog.returnReference)
+      expect(returnLog.returnReference).toEqual(testReturnRequirement.reference)
       expect(returnLog.returnsFrequency).toEqual(testReturnLog.returnsFrequency)
+    })
+
+    describe('and the return log is not linked to a return requirement', () => {
+      beforeEach(async () => {
+        await testReturnLog.$query().patch({ returnRequirementId: null })
+      })
+
+      it('falls back to the reference held against the return log', async () => {
+        const result = await FetchReturnSubmissionService(testReturnSubmission.id)
+
+        const expectedReference = Number(testReturnLog.returnReference)
+
+        expect(result.returnLog.returnReference).toEqual(expectedReference)
+      })
     })
   })
 })
