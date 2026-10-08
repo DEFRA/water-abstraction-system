@@ -15,7 +15,7 @@ import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's returns tab
  */
-export default async function fetchReturnsService(licenceId, page = '1') {
+export default async function fetchReturnsDal(licenceId, page = '1') {
   const { results: returns, total: totalNumber } = await _fetch(licenceId, page)
 
   return { returns, totalNumber }
