@@ -67,6 +67,7 @@ describe('Search - Fetch Search Results Details service', () => {
     returnLogSpy = vi.fn().mockResolvedValue([])
     vi.spyOn(ReturnLogModel, 'query').mockReturnValue({
       findByIds: returnLogSpy,
+      leftJoinRelated: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis()
     })
 
