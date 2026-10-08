@@ -62,16 +62,20 @@ const MONITORING_STATION_SQL = `
   WHERE label ILIKE ?
 `
 
+// NOTE: return_requirements.reference is an integer whereas return_logs.return_reference is a varchar. We cast the
+// former to text so both sides of the COALESCE() match and can be compared with ILIKE
 const RETURN_LOG_SQL = `
   SELECT
     'returnLog' AS row_type,
-    id AS row_id,
-    return_reference ILIKE ? AS exact,
+    rl.id AS row_id,
+    COALESCE(rr.reference::text, rl.return_reference) ILIKE ? AS exact,
     4 AS table_order,
-    CONCAT(return_reference, ' ', licence_ref, ' ') AS row_order,
-    end_date AS date_order
-  FROM return_logs
-  WHERE return_reference ILIKE ?
+    CONCAT(COALESCE(rr.reference::text, rl.return_reference), ' ', rl.licence_ref, ' ') AS row_order,
+    rl.end_date AS date_order
+  FROM return_logs rl
+  LEFT JOIN return_requirements rr
+    ON rr.id = rl.return_requirement_id
+  WHERE COALESCE(rr.reference::text, rl.return_reference) ILIKE ?
 `
 
 const USER_SQL = `
@@ -231,7 +235,10 @@ function _returnLogSql(resultTypes, searchSqls, countSqls, exactQuery, partialQu
     searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
-      (SELECT COUNT(*) FROM return_logs WHERE return_reference ILIKE ?)
+      (SELECT COUNT(*) FROM return_logs rl
+      LEFT JOIN return_requirements rr
+        ON rr.id = rl.return_requirement_id
+      WHERE COALESCE(rr.reference::text, rl.return_reference) ILIKE ?)
     `)
     countSqls.params.push(partialQuery)
   }
