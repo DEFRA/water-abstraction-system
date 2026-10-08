@@ -3,6 +3,7 @@
  * @module FetchReturnSubmissionService
  */
 
+import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
 import ReturnSubmissionModel from 'water-abstraction-engine/models/return-submission.model.js'
 
 /**
@@ -33,6 +34,15 @@ async function _fetch(returnSubmissionId) {
     })
     .withGraphFetched('returnLog')
     .modifyGraph('returnLog', (returnLogBuilder) => {
-      returnLogBuilder.select(['returnReference', 'returnsFrequency'])
+      returnLogBuilder
+        .select([
+          'returnLogs.returnsFrequency',
+          // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We
+          // cast so both sides of the COALESCE() match
+          Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
+            'returnReference'
+          )
+        ])
+        .leftJoinRelated('returnRequirement')
     })
 }
