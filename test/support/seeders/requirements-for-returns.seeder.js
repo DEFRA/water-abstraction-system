@@ -63,13 +63,13 @@ export async function seed() {
 
 /**
  * Our tests for FetchReturnVersionsService include checks that the order of the return requirements is as expected. The
- * order is based on legacy ID (return reference), so we need to control what values we use for the tests to work. But
- * legacy ID is also a constrained value in the table: it has to be unique.
+ * order is based on reference, so we need to control what values we use for the tests to work. But reference is also a
+ * constrained value in the table: it has to be unique.
  *
  * So, rather than fixing the values, we still randomly generate them to avoid errors because of duplicated values. We
- * then use the higher ID for the first seeded return requirement (lower for the second).
+ * then use the higher value for the first seeded return requirement (lower for the second).
  *
- * In the test, we can then confirm the return requirement with the lower legacy ID comes first (we expect them ordered
+ * In the test, we can then confirm the return requirement with the lower reference comes first (we expect them ordered
  * in ascending order on the page).
  *
  * @private
