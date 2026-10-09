@@ -7,6 +7,7 @@ import BillingAccountModel from 'water-abstraction-engine/models/billing-account
 import CompanyModel from 'water-abstraction-engine/models/company.model.js'
 import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
 import MonitoringStationModel from 'water-abstraction-engine/models/monitoring-station.model.js'
+import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 import UserModel from 'water-abstraction-engine/models/user.model.js'
 import { db } from 'water-abstraction-engine/db/db.js'
@@ -116,7 +117,20 @@ async function _monitoringStation(ids) {
 }
 
 async function _returnLog(ids) {
-  return ReturnLogModel.query().select(['endDate', 'id', 'licenceRef', 'returnId', 'returnReference']).findByIds(ids)
+  return ReturnLogModel.query()
+    .select([
+      'returnLogs.endDate',
+      'returnLogs.id',
+      'returnLogs.licenceRef',
+      'returnLogs.returnId',
+      // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast
+      // so both sides of the COALESCE() match
+      Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
+        'returnReference'
+      )
+    ])
+    .leftJoinRelated('returnRequirement')
+    .findByIds(ids)
 }
 
 async function _user(ids) {

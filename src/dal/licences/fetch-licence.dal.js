@@ -13,7 +13,7 @@ import { db } from 'water-abstraction-engine/db/db.js'
  *
  * @returns {Promise<module:LicenceModel>} the matching `LicenceModel`
  */
-export default async function fetchLicenceService(licenceId) {
+export default async function fetchLicenceDal(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select([
