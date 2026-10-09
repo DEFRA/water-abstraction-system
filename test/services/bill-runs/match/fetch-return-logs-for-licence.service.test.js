@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
 import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
 
@@ -17,6 +18,8 @@ describe('Fetch Return Logs for Licence service', () => {
 
   let notifierStub
   let returnLogRecord
+  let returnRequirementRecord
+  let unlinkedReturnLogRecord
 
   beforeEach(() => {
     // This depends on the GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
@@ -33,7 +36,11 @@ describe('Fetch Return Logs for Licence service', () => {
 
   describe('when there are valid return logs that should be considered', () => {
     beforeEach(async () => {
-      returnLogRecord = await ReturnLogHelper.add({ metadata: _metadata(true) })
+      returnRequirementRecord = await ReturnRequirementHelper.add()
+      returnLogRecord = await ReturnLogHelper.add({
+        metadata: _metadata(true),
+        returnRequirementId: returnRequirementRecord.id
+      })
     })
 
     describe('which have return submission lines within the billing period', () => {
@@ -61,6 +68,7 @@ describe('Fetch Return Logs for Licence service', () => {
         expect(result).toHaveLength(1)
         expect(result[0].id).toEqual(returnLogRecord.id)
         expect(result[0].returnId).toEqual(returnLogRecord.returnId)
+        expect(result[0].returnReference).toEqual(returnRequirementRecord.reference)
         expect(result[0].description).toEqual('The Description')
         expect(result[0].startDate).toEqual(new Date('2022-04-01'))
         expect(result[0].endDate).toEqual(new Date('2023-03-31'))
@@ -83,6 +91,19 @@ describe('Fetch Return Logs for Licence service', () => {
         expect(result[0].returnSubmissions[0].returnSubmissionLines[1].startDate).toEqual(new Date('2022-05-08'))
         expect(result[0].returnSubmissions[0].returnSubmissionLines[1].endDate).toEqual(new Date('2022-05-14'))
         expect(result[0].returnSubmissions[0].returnSubmissionLines[1].quantity).toEqual(5678)
+      })
+    })
+
+    describe('and the return log is not linked to a return requirement', () => {
+      beforeEach(async () => {
+        unlinkedReturnLogRecord = await ReturnLogHelper.add({ metadata: _metadata(true), returnRequirementId: null })
+      })
+
+      it('falls back to the reference held against the return log', async () => {
+        const { licenceRef } = unlinkedReturnLogRecord
+        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
+
+        expect(result[0].returnReference).toEqual(Number(unlinkedReturnLogRecord.returnReference))
       })
     })
 

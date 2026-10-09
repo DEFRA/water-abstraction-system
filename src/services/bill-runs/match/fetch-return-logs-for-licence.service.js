@@ -38,24 +38,29 @@ export default async function fetchReturnLogsForLicenceService(licenceRef, billi
 }
 
 async function _fetch(licenceRef, billingPeriod) {
+  // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast so
+  // both sides of the COALESCE() match, and so the results sort numerically rather than alphabetically
+  const returnReferenceSql = 'COALESCE(return_requirement.reference, return_logs.return_reference::integer)'
+
   const returnLogs = await ReturnLogModel.query()
     .select([
-      'id',
-      'returnId',
-      'returnReference',
+      'returnLogs.id',
+      'returnLogs.returnId',
+      Objection.raw(returnReferenceSql).as('returnReference'),
       Objection.ref('metadata:description').castText().as('description'),
-      'startDate',
-      'endDate',
-      'receivedDate',
-      'dueDate',
-      'status',
-      'underQuery',
+      'returnLogs.startDate',
+      'returnLogs.endDate',
+      'returnLogs.receivedDate',
+      'returnLogs.dueDate',
+      'returnLogs.status',
+      'returnLogs.underQuery',
       Objection.ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
       Objection.ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
       Objection.ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
       Objection.ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth'),
       Objection.ref('metadata:purposes').as('purposes')
     ])
+    .leftJoinRelated('returnRequirement')
     .where('licenceRef', licenceRef)
     // water-abstraction-service filters out old return logs in this way: see
     // `src/lib/services/returns/api-connector.js`
@@ -65,7 +70,7 @@ async function _fetch(licenceRef, billingPeriod) {
     .where('endDate', '<=', billingPeriod.endDate)
     .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
     .orderBy('startDate', 'ASC')
-    .orderBy('returnReference', 'ASC')
+    .orderByRaw(`${returnReferenceSql} ASC`)
     .withGraphFetched('returnSubmissions')
     .modifyGraph('returnSubmissions', (builder) => {
       builder.select(['id', 'nilReturn']).where('returnSubmissions.current', true)
