@@ -107,7 +107,7 @@ function _mapRequirement(requirement) {
     frequencyReported: returnRequirementFrequencies[requirement.reportingFrequency],
     points: _points(requirement.points),
     purposes: _purposes(requirement.returnRequirementPurposes),
-    returnReference: requirement.legacyId,
+    returnReference: requirement.reference,
     returnsCycle: requirement.summer === true ? 'Summer' : 'Winter and all year',
     siteDescription: requirement.siteDescription ?? '',
     title: requirement.siteDescription ?? ''

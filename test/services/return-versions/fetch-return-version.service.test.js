@@ -69,7 +69,6 @@ describe('Return Versions - Fetch Return Version service', () => {
               fiftySixException: true,
               gravityFill: true,
               id: seededReturnRequirementTwo.id,
-              legacyId: seededReturnRequirementTwo.legacyId,
               points: [
                 {
                   description: 'WELL AT WELLINGTON',
@@ -80,6 +79,9 @@ describe('Return Versions - Fetch Return Version service', () => {
                   ngr4: null
                 }
               ],
+              reabstraction: true,
+              reference: seededReturnRequirementTwo.reference,
+              reportingFrequency: 'month',
               returnRequirementPurposes: [
                 {
                   alias: null,
@@ -90,8 +92,6 @@ describe('Return Versions - Fetch Return Version service', () => {
                   }
                 }
               ],
-              reabstraction: true,
-              reportingFrequency: 'month',
               siteDescription: 'SUMMER BOREHOLE AT AVALON',
               summer: true,
               twoPartTariff: true
@@ -105,7 +105,6 @@ describe('Return Versions - Fetch Return Version service', () => {
               fiftySixException: false,
               gravityFill: false,
               id: seededReturnRequirementOne.id,
-              legacyId: seededReturnRequirementOne.legacyId,
               points: [
                 {
                   description: 'WELL AT WELLINGTON',
@@ -116,6 +115,9 @@ describe('Return Versions - Fetch Return Version service', () => {
                   ngr4: null
                 }
               ],
+              reabstraction: false,
+              reference: seededReturnRequirementOne.reference,
+              reportingFrequency: 'week',
               returnRequirementPurposes: [
                 {
                   alias: 'I have an alias',
@@ -126,8 +128,6 @@ describe('Return Versions - Fetch Return Version service', () => {
                   }
                 }
               ],
-              reabstraction: false,
-              reportingFrequency: 'week',
               siteDescription: 'WINTER BOREHOLE AT AVALON',
               summer: false,
               twoPartTariff: false

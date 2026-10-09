@@ -41,14 +41,14 @@ async function _fetch(returnVersionId) {
           'fiftySixException',
           'gravityFill',
           'id',
-          'legacyId',
           'reabstraction',
+          'reference',
           'reportingFrequency',
           'siteDescription',
           'summer',
           'twoPartTariff'
         ])
-        .orderBy('legacyId', 'asc')
+        .orderBy('reference', 'asc')
         .withGraphFetched('points')
         .modifyGraph('points', (pointsBuilder) => {
           pointsBuilder.select([
