@@ -45,7 +45,11 @@ describe('Persist Allocated Licence to Results service', () => {
         expect(reviewReturns[0].reviewLicenceId).toEqual(result[0].id)
         expect(reviewReturns[0].returnId).toEqual(testLicence.returnLogs[0].returnId)
         expect(reviewReturns[0].returnLogId).toEqual(testLicence.returnLogs[0].id)
-        expect(reviewReturns[0].returnReference).toEqual(testLicence.returnLogs[0].returnReference)
+
+        // NOTE: review_returns.return_reference is a varchar, so the integer reference is stored and returned as text
+        const expectedReturnReference = String(testLicence.returnLogs[0].returnReference)
+
+        expect(reviewReturns[0].returnReference).toEqual(expectedReturnReference)
         expect(reviewReturns[0].quantity).toEqual(testLicence.returnLogs[0].quantity)
         expect(reviewReturns[0].allocated).toEqual(testLicence.returnLogs[0].allocatedQuantity)
         expect(reviewReturns[0].underQuery).toEqual(testLicence.returnLogs[0].underQuery)
@@ -275,7 +279,7 @@ function _generateData(returnMatched = true) {
       {
         id: returnLogId,
         returnId: generateReturnId(),
-        returnReference: '10021668',
+        returnReference: 10021668,
         description: 'DRAINS ETC-DEEPING FEN AND OTHER LINKED SITES',
         startDate: new Date('2022-04-01'),
         endDate: new Date('2023-03-31'),
