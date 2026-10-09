@@ -19,6 +19,7 @@ describe('Fetch Return Logs for Licence service', () => {
   let notifierStub
   let returnLogRecord
   let returnRequirementRecord
+  let unlinkedReturnLogRecord
 
   beforeEach(() => {
     // This depends on the GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
@@ -91,18 +92,18 @@ describe('Fetch Return Logs for Licence service', () => {
         expect(result[0].returnSubmissions[0].returnSubmissionLines[1].endDate).toEqual(new Date('2022-05-14'))
         expect(result[0].returnSubmissions[0].returnSubmissionLines[1].quantity).toEqual(5678)
       })
+    })
 
-      describe('and the return log is not linked to a return requirement', () => {
-        beforeEach(async () => {
-          await returnLogRecord.$query().patch({ returnRequirementId: null })
-        })
+    describe('and the return log is not linked to a return requirement', () => {
+      beforeEach(async () => {
+        unlinkedReturnLogRecord = await ReturnLogHelper.add({ metadata: _metadata(true), returnRequirementId: null })
+      })
 
-        it('falls back to the reference held against the return log', async () => {
-          const { licenceRef } = returnLogRecord
-          const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
+      it('falls back to the reference held against the return log', async () => {
+        const { licenceRef } = unlinkedReturnLogRecord
+        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
 
-          expect(result[0].returnReference).toEqual(Number(returnLogRecord.returnReference))
-        })
+        expect(result[0].returnReference).toEqual(Number(unlinkedReturnLogRecord.returnReference))
       })
     })
 
