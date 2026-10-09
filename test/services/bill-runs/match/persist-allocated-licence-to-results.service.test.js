@@ -47,9 +47,7 @@ describe('Persist Allocated Licence to Results service', () => {
         expect(reviewReturns[0].returnLogId).toEqual(testLicence.returnLogs[0].id)
 
         // NOTE: review_returns.return_reference is a varchar, so the integer reference is stored and returned as text
-        const expectedReturnReference = String(testLicence.returnLogs[0].returnReference)
-
-        expect(reviewReturns[0].returnReference).toEqual(expectedReturnReference)
+        expect(reviewReturns[0].returnReference).toEqual(String(testLicence.returnLogs[0].returnReference))
         expect(reviewReturns[0].quantity).toEqual(testLicence.returnLogs[0].quantity)
         expect(reviewReturns[0].allocated).toEqual(testLicence.returnLogs[0].allocatedQuantity)
         expect(reviewReturns[0].underQuery).toEqual(testLicence.returnLogs[0].underQuery)
