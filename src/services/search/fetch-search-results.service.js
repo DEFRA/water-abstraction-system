@@ -62,8 +62,6 @@ const MONITORING_STATION_SQL = `
   WHERE label ILIKE ?
 `
 
-// NOTE: return_requirements.reference is an integer whereas return_logs.return_reference is a varchar. We cast the
-// former to text so both sides of the COALESCE() match and can be compared with ILIKE
 const RETURN_LOG_SQL = `
   SELECT
     'returnLog' AS row_type,
