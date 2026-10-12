@@ -148,15 +148,12 @@ describe('Search - Fetch Search Results service', () => {
       })
     )
 
-    // NOTE: Some older return logs have no return requirement linked to them, so the reference falls back to the one
-    // held against the return log itself
     returnLogs.push(
       await ReturnLogHelper.add({
         dueDate: new Date('2024-04-28'),
         endDate: new Date('2024-03-31'),
-        licenceRef: licences[1].licence.licenceRef,
-        returnReference: 'TESTSEARCH9922334455',
-        returnRequirementId: null,
+        licenceRef: licences[0].licence.licenceRef,
+        returnRequirementId: returnRequirements[0].id,
         startDate: new Date('2023-04-01')
       })
     )
@@ -255,11 +252,6 @@ describe('Search - Fetch Search Results service', () => {
           },
           {
             exact: false,
-            id: returnLogs[4].id,
-            type: 'returnLog'
-          },
-          {
-            exact: false,
             id: billingAccounts[2].id,
             type: 'billingAccount'
           },
@@ -284,7 +276,7 @@ describe('Search - Fetch Search Results service', () => {
             type: 'user'
           }
         ],
-        total: 14
+        total: 13
       })
     })
   })
@@ -326,7 +318,7 @@ describe('Search - Fetch Search Results service', () => {
             type: 'licence'
           }
         ],
-        total: 14
+        total: 13
       })
     })
   })
@@ -822,6 +814,11 @@ describe('Search - Fetch Search Results service', () => {
             },
             {
               exact: false,
+              id: returnLogs[4].id,
+              type: 'returnLog'
+            },
+            {
+              exact: false,
               id: returnLogs[2].id,
               type: 'returnLog'
             },
@@ -836,7 +833,7 @@ describe('Search - Fetch Search Results service', () => {
               type: 'returnLog'
             }
           ],
-          total: 4
+          total: 5
         })
       })
     })
@@ -891,27 +888,6 @@ describe('Search - Fetch Search Results service', () => {
             {
               exact: true,
               id: returnLogs[3].id,
-              type: 'returnLog'
-            }
-          ],
-          total: 1
-        })
-      })
-    })
-
-    describe('when the return log is not linked to a return requirement', () => {
-      beforeEach(() => {
-        query = 'TESTSEARCH9922334455'
-      })
-
-      it('returns the return log matched on its own reference', async () => {
-        const result = await FetchSearchResultsService(query, resultTypes, page)
-
-        expect(result).toEqual({
-          results: [
-            {
-              exact: true,
-              id: returnLogs[4].id,
               type: 'returnLog'
             }
           ],
