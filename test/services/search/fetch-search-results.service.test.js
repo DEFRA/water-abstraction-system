@@ -103,8 +103,7 @@ describe('Search - Fetch Search Results service', () => {
     monitoringStations.push(await MonitoringStationHelper.add({ label: 'Somewhere TESTSEARCH Station 03' }))
     monitoringStations.push(await MonitoringStationHelper.add({ label: 'Somewhere TESTSEARCH Station 01' }))
 
-    // Add the return logs in non-numerical and non-date order to prove the ordering in the results. A return log is
-    // normally linked to a return requirement, which is where the reference is taken from
+    // Add the return logs in non-numerical and non-date order to prove the ordering in the results
     returnRequirements.push(await ReturnRequirementHelper.add({ reference: 880110001 }))
     returnRequirements.push(await ReturnRequirementHelper.add({ reference: 660110001 }))
 
