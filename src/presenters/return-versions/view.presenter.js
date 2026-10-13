@@ -163,11 +163,22 @@ function _pagination(returnVersionsForPagination, returnVersion) {
 
 function _purposes(returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
-    if (returnRequirementPurpose.alias) {
-      return `${returnRequirementPurpose.purpose.description} (${returnRequirementPurpose.alias})`
+    const { alias, purpose } = returnRequirementPurpose
+
+    // If no alias set just return the description
+    if (!alias) {
+      return purpose.description
     }
 
-    return returnRequirementPurpose.purpose.description
+    const duplication = alias.trim().toLowerCase() === purpose.description.trim().toLowerCase()
+
+    // If the alias is just a duplication of the purpose description, there is no point in overloading the display with
+    // the duplication. So, we just return the purpose's description.
+    if (duplication) {
+      return purpose.description
+    }
+
+    return `${purpose.description} (${alias})`
   })
 }
 
