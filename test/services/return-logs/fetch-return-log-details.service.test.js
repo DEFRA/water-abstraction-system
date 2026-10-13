@@ -38,8 +38,11 @@ describe('Return Logs - Fetch Return Log Details service', () => {
     firstAddedPurpose = PurposeHelper.select(2)
     secondAddedPurpose = PurposeHelper.select(1)
 
-    for (const purpose of [firstAddedPurpose, secondAddedPurpose]) {
+    for (let i = 0; i < 2; i++) {
+      const purpose = i === 0 ? firstAddedPurpose : secondAddedPurpose
+
       const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        alias: `The big one ${i + 1}`,
         purposeId: purpose.id,
         returnRequirementId: returnRequirement.id
       })
@@ -100,7 +103,10 @@ describe('Return Logs - Fetch Return Log Details service', () => {
           periodEndMonth: 4,
           periodStartDay: 1,
           periodStartMonth: 4,
-          purposes: [secondAddedPurpose.description, firstAddedPurpose.description],
+          purposes: [
+            { alias: 'The big one 2', description: secondAddedPurpose.description },
+            { alias: 'The big one 1', description: firstAddedPurpose.description }
+          ],
           receivedDate: null,
           returnId: returnLog.returnId,
           returnReference: 9999980,
@@ -168,7 +174,10 @@ describe('Return Logs - Fetch Return Log Details service', () => {
           periodEndMonth: 4,
           periodStartDay: 1,
           periodStartMonth: 4,
-          purposes: [secondAddedPurpose.description, firstAddedPurpose.description],
+          purposes: [
+            { alias: 'The big one 2', description: secondAddedPurpose.description },
+            { alias: 'The big one 1', description: firstAddedPurpose.description }
+          ],
           receivedDate: null,
           returnId: returnLog.returnId,
           returnReference: 9999980,
