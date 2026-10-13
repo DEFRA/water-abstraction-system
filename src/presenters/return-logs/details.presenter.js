@@ -13,6 +13,7 @@ import { returnRequirementFrequencies, unitNames } from 'water-abstraction-engin
 
 import {
   formatMeterDetails,
+  formatPurposes,
   generateSummaryTableHeaders,
   generateSummaryTableRows
 } from './base-return-logs.presenter.js'
@@ -66,7 +67,7 @@ export default function detailsPresenter(returnLog, auth) {
     notification: underQuery ? { text: 'This return has been marked under query' } : null,
     pageTitle: 'Return details',
     pageTitleCaption: `Licence ${licence.licenceRef}`,
-    purpose: purposes,
+    purpose: formatPurposes(purposes),
     receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
     returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
