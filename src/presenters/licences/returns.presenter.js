@@ -5,6 +5,8 @@
 
 import { formatLongDate, formatReturnLogStatus } from 'water-abstraction-engine/presenters/base.presenter.js'
 
+import { formatPurposes } from '../return-logs/base-return-logs.presenter.js'
+
 /**
  * Formats data for the `/licences/{id}/returns` view licence returns page
  *
@@ -33,27 +35,6 @@ export default function returnsPresenter(returnLogs, hasRequirements, licence) {
   }
 }
 
-function _formatPurposes(purposes) {
-  return purposes.map((purpose) => {
-    const { alias, description } = purpose
-
-    // If no alias set just return the description
-    if (!alias) {
-      return description
-    }
-
-    const duplication = alias.trim().toLowerCase() === description.trim().toLowerCase()
-
-    // If the alias is just a duplication of the purpose description, there is no point in overloading the display with
-    // the duplication. So, we just return the purpose's description.
-    if (duplication) {
-      return description
-    }
-
-    return `${description} (${alias})`
-  })
-}
-
 function _noReturnsMessage(hasReturns, hasRequirements) {
   if (!hasReturns && !hasRequirements) {
     return 'No requirements for returns have been set up for this licence.'
@@ -75,7 +56,7 @@ function _returns(returns) {
       description: siteDescription ?? '',
       dueDate: dueDate ? formatLongDate(new Date(dueDate)) : '',
       link: `/system/return-logs/${returnLogId}/details`,
-      purposes: _formatPurposes(purposes),
+      purposes: formatPurposes(purposes),
       reference: returnReference,
       status: formatReturnLogStatus(returnLog)
     }
