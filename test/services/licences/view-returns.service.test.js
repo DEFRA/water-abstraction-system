@@ -73,7 +73,7 @@ describe('Licences - View Returns service', () => {
               description: 'BOREHOLE AT AVALON',
               dueDate: '28 November 2020',
               link: '/system/return-logs/c4458436-4766-4271-b978-6af7a0e4fd95/details',
-              purpose: ['Spray Irrigation - Direct'],
+              purposes: ['Spray Irrigation - Direct'],
               reference: '10046821',
               status: 'complete'
             }
@@ -92,7 +92,7 @@ function _returnLogs() {
     status: 'completed',
     startDate: new Date('2020/01/02'),
     endDate: new Date('2020/02/01'),
-    purposes: ['Spray Irrigation - Direct'],
+    purposes: [{ alias: null, description: 'Spray Irrigation - Direct' }],
     returnId: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
     returnReference: '10046821',
     siteDescription: 'BOREHOLE AT AVALON'
