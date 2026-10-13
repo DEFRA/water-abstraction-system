@@ -21,49 +21,76 @@ describe('Licences - Returns presenter', () => {
     }
   })
 
-  describe('when provided with returns data', () => {
-    it('correctly presents the data', () => {
-      const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
+  it('returns page data for the view', () => {
+    const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
-      expect(result).toEqual({
-        backLink: {
-          text: 'Go back to search',
-          href: '/'
+    expect(result).toEqual({
+      backLink: {
+        text: 'Go back to search',
+        href: '/'
+      },
+      noReturnsMessage: null,
+      pageTitle: 'Returns',
+      pageTitleCaption: `Licence ${licence.licenceRef}`,
+      returns: [
+        {
+          dates: '2 January 2020 to 1 February 2020',
+          description: 'BOREHOLE AT AVALON',
+          dueDate: '28 November 2020',
+          link: '/system/return-logs/c4458436-4766-4271-b978-6af7a0e4fd95/details',
+          purposes: ['Spray Irrigation - Direct (The Big One)'],
+          reference: '10046821',
+          status: 'complete'
         },
-        noReturnsMessage: null,
-        pageTitle: 'Returns',
-        pageTitleCaption: `Licence ${licence.licenceRef}`,
-        returns: [
-          {
-            dates: '2 January 2020 to 1 February 2020',
-            description: 'BOREHOLE AT AVALON',
-            dueDate: '28 November 2020',
-            link: '/system/return-logs/c4458436-4766-4271-b978-6af7a0e4fd95/details',
-            purpose: ['Spray Irrigation - Direct'],
-            reference: '10046821',
-            status: 'complete'
-          },
-          {
-            dates: '2 January 2020 to 1 February 2020',
-            description: 'BOREHOLE AT AVALON',
-            dueDate: '28 November 2020',
-            link: '/system/return-logs/2e35c9c6-5017-46ea-8fa8-8960dc1a8ae7/details',
-            purpose: ['Spray Irrigation - Direct'],
-            reference: '10046820',
-            status: 'overdue'
-          }
-        ]
-      })
+        {
+          dates: '2 January 2020 to 1 February 2020',
+          description: 'BOREHOLE AT AVALON',
+          dueDate: '28 November 2020',
+          link: '/system/return-logs/2e35c9c6-5017-46ea-8fa8-8960dc1a8ae7/details',
+          purposes: ['Spray Irrigation - Direct (The Big One)'],
+          reference: '10046820',
+          status: 'overdue'
+        }
+      ]
     })
+  })
 
-    describe('the "dates" property', () => {
-      it('returns the start and end date in long format (2 January 2020 to 1 February 2020)', () => {
+  describe('the "noReturnsMessage" property', () => {
+    describe('when a licence has returns and requirements', () => {
+      it('returns null', () => {
         const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
-        expect(result.returns[0].dates).toEqual('2 January 2020 to 1 February 2020')
+        expect(result.noReturnsMessage).toBeNull()
       })
     })
 
+    describe('when a licence has NO requirements and NO returns', () => {
+      beforeEach(() => {
+        returnLogs = []
+        hasRequirements = false
+      })
+
+      it('returns the message "No requirements for returns have been set up for this licence."', () => {
+        const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
+
+        expect(result.noReturnsMessage).toEqual('No requirements for returns have been set up for this licence.')
+      })
+    })
+
+    describe('when a licence has requirements but NO returns', () => {
+      beforeEach(() => {
+        returnLogs = []
+      })
+
+      it('returns the message "No returns for this licence."', () => {
+        const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
+
+        expect(result.noReturnsMessage).toEqual('No returns for this licence.')
+      })
+    })
+  })
+
+  describe('the "returns" property', () => {
     describe('the "description" property', () => {
       describe('when the site description is set', () => {
         it('returns the site description', () => {
@@ -107,39 +134,71 @@ describe('Licences - Returns presenter', () => {
         })
       })
     })
-  })
 
-  describe('the "noReturnsMessage" property', () => {
-    describe('when a licence has returns and requirements', () => {
-      it('returns null', () => {
-        const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
+    describe('the "purposes" property', () => {
+      describe('when return log is linked to a purpose', () => {
+        describe('and the purpose has been given an "alias" in the return requirement purpose', () => {
+          describe('and the alias is different from the description', () => {
+            it('returns the purpose description and the alias', () => {
+              const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
-        expect(result.noReturnsMessage).toBeNull()
+              expect(result.returns[0].purposes).toEqual(['Spray Irrigation - Direct (The Big One)'])
+            })
+          })
+
+          describe('and the alias is the same as the description', () => {
+            beforeEach(() => {
+              returnLogs[0].purposes = [
+                { alias: 'Spray Irrigation - Direct', description: 'Spray Irrigation - Direct' }
+              ]
+            })
+
+            it('returns the purpose description and the alias', () => {
+              const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
+
+              expect(result.returns[0].purposes).toEqual(['Spray Irrigation - Direct'])
+            })
+          })
+        })
+
+        describe('and the purpose does not have an "alias" in the return requirement purpose', () => {
+          beforeEach(() => {
+            returnLogs[0].purposes = [{ alias: null, description: 'Spray Irrigation - Direct' }]
+          })
+
+          it('returns just the purpose description', () => {
+            const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
+
+            expect(result.returns[0].purposes).toEqual(['Spray Irrigation - Direct'])
+          })
+        })
       })
-    })
 
-    describe('when a licence has NO requirements and NO returns', () => {
-      beforeEach(() => {
-        returnLogs = []
-        hasRequirements = false
+      describe('when return log is linked to multiple purposes', () => {
+        beforeEach(() => {
+          returnLogs[0].purposes.push({ alias: null, description: 'Spray Irrigation - Indirect' })
+        })
+
+        it('returns all the formatted purposes', () => {
+          const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
+
+          expect(result.returns[0].purposes).toEqual([
+            'Spray Irrigation - Direct (The Big One)',
+            'Spray Irrigation - Indirect'
+          ])
+        })
       })
 
-      it('returns the message "No requirements for returns have been set up for this licence."', () => {
-        const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
+      describe('when return log is not linked to any purposes', () => {
+        beforeEach(() => {
+          returnLogs[0].purposes = []
+        })
 
-        expect(result.noReturnsMessage).toEqual('No requirements for returns have been set up for this licence.')
-      })
-    })
+        it('returns an empty array', () => {
+          const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
-    describe('when a licence has requirements but NO returns', () => {
-      beforeEach(() => {
-        returnLogs = []
-      })
-
-      it('returns the message "No returns for this licence."', () => {
-        const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
-
-        expect(result.noReturnsMessage).toEqual('No returns for this licence.')
+          expect(result.returns[0].purposes).toEqual([])
+        })
       })
     })
   })
@@ -152,7 +211,7 @@ function _returnLogs() {
     status: 'completed',
     startDate: new Date('2020/01/02'),
     endDate: new Date('2020/02/01'),
-    purposes: ['Spray Irrigation - Direct'],
+    purposes: [{ alias: 'The Big One', description: 'Spray Irrigation - Direct' }],
     returnId: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
     returnReference: '10046821',
     siteDescription: 'BOREHOLE AT AVALON'
