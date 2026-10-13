@@ -26,13 +26,12 @@
       {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
       {% set rowIndex = loop.index0 %}
 
-      {# Purpose sits above site description in the output. In the few cases it is missing in the return log, if we don't
-      set it &nbsp; then the site description sits where purpose normally is and it is no longer clear purpose is
-      missing #}
-      {% if returnItem.purpose %}
-        {% set purpose = returnItem.purpose %}
+      {# Purpose sits above site description in the output. In the few cases it is missing, if we don't set it &nbsp;
+      then the site description sits where purpose normally is, and it is no longer clear purpose is missing #}
+      {% if returnItem.purposes.length > 0 %}
+        {% set purposes = newLineArrayItems(returnItem.purposes) %}
       {% else %}
-        {% set purpose = '&nbsp;' %}
+        {% set purposes = '&nbsp;' %}
       {% endif %}
 
       {% set row = [
@@ -41,7 +40,7 @@
           attributes: { 'data-test': 'return-reference-' + rowIndex }
         },
         {
-          html:  newLineArrayItems(purpose) +  "<p class=\"govuk-body-s\">" + returnItem.description + "</p>",
+          html: purposes +  "<p class=\"govuk-body-s\">" + returnItem.description + "</p>",
           attributes: { 'data-test': 'return-purpose-' + rowIndex }
         },
         {
