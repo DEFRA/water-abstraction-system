@@ -48,7 +48,6 @@ export function formatPurposes(purposes) {
   return purposes.map((purpose) => {
     const { alias, description } = purpose
 
-    // If no alias set just return the description
     if (!alias) {
       return description
     }

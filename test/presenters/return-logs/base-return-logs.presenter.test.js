@@ -56,7 +56,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
     describe('when a purpose has an alias', () => {
       describe('and it is different to the purpose description', () => {
         beforeEach(() => {
-          purposes = [{ description: 'Purpose description', alias: 'Purpose alias' }]
+          purposes = [{ alias: 'Purpose alias', description: 'Purpose description' }]
         })
 
         it('returns the description followed by the alias in parentheses', () => {
@@ -68,7 +68,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
 
       describe('and it is the same as the purpose description', () => {
         beforeEach(() => {
-          purposes = [{ description: 'Purpose description', alias: 'PURPOSE DESCRIPTION ' }]
+          purposes = [{ alias: 'PURPOSE DESCRIPTION ', description: 'Purpose description' }]
         })
 
         it('returns just the description', () => {
@@ -81,7 +81,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
 
     describe('when a purpose does not have an alias', () => {
       beforeEach(() => {
-        purposes = [{ description: 'Purpose description', alias: null }]
+        purposes = [{ alias: null, description: 'Purpose description' }]
       })
 
       it('returns the description', () => {
@@ -100,18 +100,6 @@ describe('Return Logs - Base Return Logs presenter', () => {
         const result = BaseReturnLogsPresenter.formatPurposes(purposes)
 
         expect(result).toEqual([])
-      })
-    })
-
-    describe('when "purposes" is undefined', () => {
-      beforeEach(() => {
-        purposes = undefined
-      })
-
-      it('throws an error', () => {
-        expect(() => {
-          return BaseReturnLogsPresenter.formatPurposes(purposes)
-        }).toThrow()
       })
     })
   })

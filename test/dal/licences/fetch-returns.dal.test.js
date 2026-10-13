@@ -41,11 +41,9 @@ describe('Licences - Fetch Returns dal', () => {
 
       returnRequirements.push(returnRequirement)
 
-      for (let i = 0; i < 2; i++) {
-        const purpose = i === 0 ? firstAddedPurpose : secondAddedPurpose
-
+      for (const [index, purpose] of [firstAddedPurpose, secondAddedPurpose].entries()) {
         const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-          alias: `The big one ${i + 1}`,
+          alias: `The big one ${index + 1}`,
           purposeId: purpose.id,
           returnRequirementId: returnRequirement.id
         })
