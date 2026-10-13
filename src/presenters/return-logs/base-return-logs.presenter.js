@@ -29,6 +29,43 @@ export function formatMeterDetails(meter) {
 }
 
 /**
+ * Formats the purposes linked to a return log via its return requirement for display
+ *
+ * > If purposes is populated, then `description:` will always be set, because it comes from the purposes reference
+ * > table which we know contains no blank descriptions. The `alias:` however comes from the return requirement purpose
+ * > record, and is an optional value so maybe NULL.
+ *
+ * We have occurrences of return requirements with and without aliases. It is also common that the alias is simply a
+ * copy of the purpose description, only in a different case. This is typically found in return requirements imported
+ * from NALD. Repeating the description adds no value so we check for this and omit the alias if it is a duplicate.
+ *
+ * @param {object[]} purposes - list of objects containing the purpose description and alias for all purposes linked to
+ * a return log's return requirement
+ *
+ * @returns {string[]} The formatted purposes for display
+ */
+export function formatPurposes(purposes) {
+  return purposes.map((purpose) => {
+    const { alias, description } = purpose
+
+    // If no alias set just return the description
+    if (!alias) {
+      return description
+    }
+
+    const duplication = alias.trim().toLowerCase() === description.trim().toLowerCase()
+
+    // If the alias is just a duplication of the purpose description, there is no point in overloading the display with
+    // the duplication. So, we just return the purpose's description.
+    if (duplication) {
+      return description
+    }
+
+    return `${description} (${alias})`
+  })
+}
+
+/**
  * Generates the table headers for a return log monthly summary table
  *
  * @param {string} method - Whether the submission used abstraction volumes or readings
