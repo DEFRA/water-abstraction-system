@@ -12,6 +12,8 @@ import {
   formatVersionReason
 } from 'water-abstraction-engine/presenters/base.presenter.js'
 
+import { formatPurposes } from '../return-logs/base-return-logs.presenter.js'
+
 /**
  * Formats return version data ready for presenting in the view return version page
  *
@@ -162,24 +164,13 @@ function _pagination(returnVersionsForPagination, returnVersion) {
 }
 
 function _purposes(returnRequirementPurposes) {
-  return returnRequirementPurposes.map((returnRequirementPurpose) => {
+  const mappedPurposes = returnRequirementPurposes.map((returnRequirementPurpose) => {
     const { alias, purpose } = returnRequirementPurpose
 
-    // If no alias set just return the description
-    if (!alias) {
-      return purpose.description
-    }
-
-    const duplication = alias.trim().toLowerCase() === purpose.description.trim().toLowerCase()
-
-    // If the alias is just a duplication of the purpose description, there is no point in overloading the display with
-    // the duplication. So, we just return the purpose's description.
-    if (duplication) {
-      return purpose.description
-    }
-
-    return `${purpose.description} (${alias})`
+    return { alias, description: purpose.description }
   })
+
+  return formatPurposes(mappedPurposes)
 }
 
 function _points(points) {
