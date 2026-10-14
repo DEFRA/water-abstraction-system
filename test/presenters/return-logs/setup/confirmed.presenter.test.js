@@ -15,23 +15,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
       returnReference: 10032788,
       status: 'received',
       submissionCount: 0,
-      purposes: [
-        {
-          alias: 'SPRAY IRRIGATION',
-          primary: {
-            code: 'I',
-            description: 'Industrial, Commercial And Public Services'
-          },
-          tertiary: {
-            code: '400',
-            description: 'Spray Irrigation - Direct'
-          },
-          secondary: {
-            code: 'GOF',
-            description: 'Golf Courses'
-          }
-        }
-      ],
+      purposes: ['Spray Irrigation - Direct'],
       siteDescription: 'Addington Sandpits'
     }
   })
@@ -102,7 +86,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
 
     describe('when the return log session has multiple purposes', () => {
       beforeEach(() => {
-        returnLog.purposes.push({ tertiary: { code: '420', description: 'Spray Irrigation - Storage' } })
+        returnLog.purposes.push('Spray Irrigation - Storage')
       })
 
       it('returns an object with a label property set to "Purposes" and a value property containing the comma separated purposes as a string', () => {
