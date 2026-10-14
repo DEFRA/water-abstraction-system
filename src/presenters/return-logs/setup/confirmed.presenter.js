@@ -50,19 +50,15 @@ function _pageTitle(returnReference, status, submissionCount) {
 }
 
 function _purposeDetails(purposes) {
-  const formattedPurposes = purposes.map((purpose) => {
-    return purpose.tertiary.description
-  })
-
-  if (formattedPurposes.length === 1) {
+  if (purposes.length === 1) {
     return {
       label: 'Purpose',
-      value: formattedPurposes[0]
+      value: purposes[0]
     }
   }
 
   return {
     label: 'Purposes',
-    value: formattedPurposes.join(', ')
+    value: purposes.join(', ')
   }
 }

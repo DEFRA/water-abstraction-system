@@ -21,14 +21,20 @@ export default async function fetchReturnLogService(returnLogId) {
       'licence.licenceRef',
       'returnLogs.id',
       'returnLogs.status',
+      'returnRequirement.siteDescription',
       // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast
       // so both sides of the COALESCE() match, and so the result sorts numerically rather than alphabetically
       Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
         'returnReference'
       ),
-      Objection.ref('returnLogs.metadata:purposes').as('purposes'),
-      Objection.ref('returnLogs.metadata:description').as('siteDescription'),
       ReturnLogModel.relatedQuery('returnSubmissions').count().as('submissionCount')
+    )
+    .select(
+      ReturnLogModel.relatedQuery('returnRequirement')
+        .innerJoinRelated('returnRequirementPurposes')
+        .innerJoin('purposes', 'purposes.id', 'returnRequirementPurposes.purposeId')
+        .select(Objection.raw(`COALESCE(JSON_AGG(purposes.description ORDER BY purposes.description), '[]'::json)`))
+        .as('purposes')
     )
     .innerJoinRelated('licence')
     .leftJoinRelated('returnRequirement')
