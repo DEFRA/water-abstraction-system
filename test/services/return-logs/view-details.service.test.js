@@ -25,7 +25,7 @@ describe('Return Logs - View Details service', () => {
     returnLog.periodStartMonth = metadata.periodStartMonth
     returnLog.periodEndDay = metadata.periodEndDay
     returnLog.periodEndMonth = metadata.periodEndMonth
-    returnLog.purposes = ['Mineral Washing']
+    returnLog.purposes = [{ alias: null, description: 'Mineral Washing' }]
     returnLog.current = metadata.isCurrent
     returnLog.twoPartTariff = metadata.isTwoPartTariff
 

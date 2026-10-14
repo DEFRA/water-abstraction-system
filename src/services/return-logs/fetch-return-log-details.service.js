@@ -62,7 +62,17 @@ async function _fetch(returnLogId, selectedReturnSubmission) {
       ReturnLogModel.relatedQuery('returnRequirement')
         .innerJoinRelated('returnRequirementPurposes')
         .innerJoin('purposes', 'purposes.id', 'returnRequirementPurposes.purposeId')
-        .select(Objection.raw("COALESCE(JSON_AGG(purposes.description ORDER BY purposes.description), '[]'::json)"))
+        .select(
+          Objection.raw(
+            `COALESCE(
+              JSON_AGG(
+                JSON_BUILD_OBJECT('description', purposes.description, 'alias', return_requirement_purposes.alias)
+                ORDER BY purposes.description
+              ),
+              '[]'::json
+            )`
+          )
+        )
         .as('purposes')
     )
     .leftJoinRelated('returnRequirement')

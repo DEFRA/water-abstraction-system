@@ -12,6 +12,8 @@ import {
   formatVersionReason
 } from 'water-abstraction-engine/presenters/base.presenter.js'
 
+import { formatPurposes } from '../return-logs/base-return-logs.presenter.js'
+
 /**
  * Formats return version data ready for presenting in the view return version page
  *
@@ -162,13 +164,13 @@ function _pagination(returnVersionsForPagination, returnVersion) {
 }
 
 function _purposes(returnRequirementPurposes) {
-  return returnRequirementPurposes.map((returnRequirementPurpose) => {
-    if (returnRequirementPurpose.alias) {
-      return `${returnRequirementPurpose.purpose.description} (${returnRequirementPurpose.alias})`
-    }
+  const mappedPurposes = returnRequirementPurposes.map((returnRequirementPurpose) => {
+    const { alias, purpose } = returnRequirementPurpose
 
-    return returnRequirementPurpose.purpose.description
+    return { alias, description: purpose.description }
   })
+
+  return formatPurposes(mappedPurposes)
 }
 
 function _points(points) {

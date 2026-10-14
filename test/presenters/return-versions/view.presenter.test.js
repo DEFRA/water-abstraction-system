@@ -383,16 +383,32 @@ describe('Return Versions - View presenter', () => {
 
     describe('the requirements "purposes" property', () => {
       describe('when a purpose description (alias) was added to the purpose', () => {
-        beforeEach(() => {
-          returnVersion.returnRequirements[0].returnRequirementPurposes[0].alias = 'spray indiscreetly'
+        describe('and it differs from the purpose description', () => {
+          beforeEach(() => {
+            returnVersion.returnRequirements[0].returnRequirementPurposes[0].alias = 'spray indiscreetly'
+          })
+
+          it('formats the purposes for display with the purpose description in brackets', () => {
+            const result = ViewPresenter(returnVersionData)
+
+            const { purposes } = result.requirements[0]
+
+            expect(purposes).toEqual(['Spray Irrigation - Direct (spray indiscreetly)'])
+          })
         })
 
-        it('formats the purposes for display with the purpose description in brackets', () => {
-          const result = ViewPresenter(returnVersionData)
+        describe('and it is the same as the purpose description', () => {
+          beforeEach(() => {
+            returnVersion.returnRequirements[0].returnRequirementPurposes[0].alias = 'SPRAY IRRIGATION - DIRECT'
+          })
 
-          const { purposes } = result.requirements[0]
+          it('formats the purposes for display with just the default description', () => {
+            const result = ViewPresenter(returnVersionData)
 
-          expect(purposes).toEqual(['Spray Irrigation - Direct (spray indiscreetly)'])
+            const { purposes } = result.requirements[0]
+
+            expect(purposes).toEqual(['Spray Irrigation - Direct'])
+          })
         })
       })
 

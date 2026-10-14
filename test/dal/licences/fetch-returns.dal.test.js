@@ -34,12 +34,16 @@ describe('Licences - Fetch Returns dal', () => {
     // NOTE: '10334004' sorts before '9999990' as text but after it as a number, so these references demonstrate the
     // results are ordered numerically
     for (const reference of [9999990, 10334004, 123]) {
-      const returnRequirement = await ReturnRequirementHelper.add({ reference, siteDescription: 'BOREHOLE AT AVALON' })
+      const returnRequirement = await ReturnRequirementHelper.add({
+        reference,
+        siteDescription: 'BOREHOLE AT AVALON'
+      })
 
       returnRequirements.push(returnRequirement)
 
-      for (const purpose of [firstAddedPurpose, secondAddedPurpose]) {
+      for (const [index, purpose] of [firstAddedPurpose, secondAddedPurpose].entries()) {
         const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+          alias: `The big one ${index + 1}`,
           purposeId: purpose.id,
           returnRequirementId: returnRequirement.id
         })
@@ -109,7 +113,10 @@ describe('Licences - Fetch Returns dal', () => {
     it('returns results', async () => {
       const result = await FetchReturnsDal(licence.id)
 
-      const expectedPurposes = [secondAddedPurpose.description, firstAddedPurpose.description]
+      const expectedPurposes = [
+        { alias: 'The big one 2', description: secondAddedPurpose.description },
+        { alias: 'The big one 1', description: firstAddedPurpose.description }
+      ]
 
       expect(result).toEqual({
         //  This should be ordered by start date descending, then return reference descending, then end date descending

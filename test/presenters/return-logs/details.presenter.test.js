@@ -31,7 +31,7 @@ describe('Return Logs - Details presenter', () => {
     ReturnLogsFixture.applyFetchReturnLogFields(returnLog)
 
     // The fetch service aggregates the descriptions of the linked purposes rather than reading them from `metadata`
-    returnLog.purposes = ['Mineral Washing']
+    returnLog.purposes = [{ alias: null, description: 'Mineral Washing' }]
   })
 
   it('correctly presents the data', () => {

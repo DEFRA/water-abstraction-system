@@ -50,6 +50,60 @@ describe('Return Logs - Base Return Logs presenter', () => {
     })
   })
 
+  describe('#formatPurposes()', () => {
+    let purposes
+
+    describe('when a purpose has an alias', () => {
+      describe('and it is different to the purpose description', () => {
+        beforeEach(() => {
+          purposes = [{ alias: 'Purpose alias', description: 'Purpose description' }]
+        })
+
+        it('returns the description followed by the alias in parentheses', () => {
+          const result = BaseReturnLogsPresenter.formatPurposes(purposes)
+
+          expect(result).toEqual(['Purpose description (Purpose alias)'])
+        })
+      })
+
+      describe('and it is the same as the purpose description', () => {
+        beforeEach(() => {
+          purposes = [{ alias: 'PURPOSE DESCRIPTION ', description: 'Purpose description' }]
+        })
+
+        it('returns just the description', () => {
+          const result = BaseReturnLogsPresenter.formatPurposes(purposes)
+
+          expect(result).toEqual(['Purpose description'])
+        })
+      })
+    })
+
+    describe('when a purpose does not have an alias', () => {
+      beforeEach(() => {
+        purposes = [{ alias: null, description: 'Purpose description' }]
+      })
+
+      it('returns the description', () => {
+        const result = BaseReturnLogsPresenter.formatPurposes(purposes)
+
+        expect(result).toEqual(['Purpose description'])
+      })
+    })
+
+    describe('when "purposes" is empty', () => {
+      beforeEach(() => {
+        purposes = []
+      })
+
+      it('returns an empty array', () => {
+        const result = BaseReturnLogsPresenter.formatPurposes(purposes)
+
+        expect(result).toEqual([])
+      })
+    })
+  })
+
   describe('#generateSummaryTableHeaders()', () => {
     describe('when the method is abstractionVolumes', () => {
       it('does not include a Reading or End reading column', () => {

@@ -5,6 +5,8 @@
 
 import { formatLongDate, formatReturnLogStatus } from 'water-abstraction-engine/presenters/base.presenter.js'
 
+import { formatPurposes } from '../return-logs/base-return-logs.presenter.js'
+
 /**
  * Formats data for the `/licences/{id}/returns` view licence returns page
  *
@@ -54,7 +56,7 @@ function _returns(returns) {
       description: siteDescription ?? '',
       dueDate: dueDate ? formatLongDate(new Date(dueDate)) : '',
       link: `/system/return-logs/${returnLogId}/details`,
-      purpose: purposes,
+      purposes: formatPurposes(purposes),
       reference: returnReference,
       status: formatReturnLogStatus(returnLog)
     }
