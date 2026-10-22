@@ -21,23 +21,36 @@ export default async function fetchReturnLogDal(returnLogId) {
       'returnLogs.id',
       'returnLogs.dueDate',
       'returnLogs.endDate',
-      'returnLogs.metadata',
       'returnLogs.receivedDate',
       'returnLogs.returnId',
       'returnLogs.returnsFrequency',
       'returnLogs.startDate',
       'returnLogs.status',
-      'returnLogs.underQuery',
-      // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast
-      // so both sides of the COALESCE() match, and so the result sorts numerically rather than alphabetically
-      Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
-        'returnReference'
-      )
+      'returnLogs.underQuery'
     )
-    .leftJoinRelated('returnRequirement')
+    .select(
+      ReturnLogModel.relatedQuery('returnRequirement')
+        .innerJoinRelated('returnRequirementPurposes')
+        .innerJoin('purposes', 'purposes.id', 'returnRequirementPurposes.purposeId')
+        .select(Objection.raw("COALESCE(JSON_AGG(purposes.description ORDER BY purposes.description), '[]'::json)"))
+        .as('purposes')
+    )
     .withGraphFetched('licence')
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
+    })
+    .withGraphFetched('returnRequirement')
+    .modifyGraph('returnRequirement', (returnRequirementBuilder) => {
+      returnRequirementBuilder.select([
+        'id',
+        'abstractionPeriodEndDay',
+        'abstractionPeriodEndMonth',
+        'abstractionPeriodStartDay',
+        'abstractionPeriodStartMonth',
+        'reference',
+        'siteDescription',
+        'twoPartTariff'
+      ])
     })
     .withGraphFetched('returnSubmissions')
     .modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
