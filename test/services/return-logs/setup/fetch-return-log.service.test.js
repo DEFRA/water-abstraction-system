@@ -72,27 +72,6 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
         expect(result.submissionCount).toEqual(2)
       })
     })
-
-    describe('and it is not linked to a return requirement', () => {
-      beforeAll(async () => {
-        returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
-      })
-
-      it('returns the return log instance, with the reference taken from the return log and no purposes or site description', async () => {
-        const result = await FetchReturnLogService(returnLog.id)
-
-        expect(result).toEqual({
-          id: returnLog.id,
-          licenceId: licence.id,
-          licenceRef: licence.licenceRef,
-          returnReference: Number(returnLog.returnReference),
-          purposes: [],
-          siteDescription: null,
-          status: returnLog.status,
-          submissionCount: 0
-        })
-      })
-    })
   })
 
   describe('when a matching return log does not exist', () => {

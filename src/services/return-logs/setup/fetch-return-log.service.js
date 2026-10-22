@@ -1,5 +1,5 @@
 /**
- * Fetches return log data needed for the /return-logs/setup/{sessionId}/check page
+ * Fetches return log data needed for the `/return-logs/setup/confirmed/{returnLogId}` page
  * @module FetchReturnLogService
  */
 
@@ -7,7 +7,7 @@ import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 
 /**
- * Fetches return log data needed for the /return-logs/setup/{sessionId}/check page
+ * Fetches return log data needed for the `/return-logs/setup/confirmed/{returnLogId}` page
  *
  * @param {string} returnLogId - The UUID of the return log to be fetched
  *
@@ -22,11 +22,7 @@ export default async function fetchReturnLogService(returnLogId) {
       'returnLogs.id',
       'returnLogs.status',
       'returnRequirement.siteDescription',
-      // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast
-      // so both sides of the COALESCE() match, and so the result sorts numerically rather than alphabetically
-      Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
-        'returnReference'
-      ),
+      'returnRequirement.reference as returnReference',
       ReturnLogModel.relatedQuery('returnSubmissions').count().as('submissionCount')
     )
     .select(
@@ -37,5 +33,5 @@ export default async function fetchReturnLogService(returnLogId) {
         .as('purposes')
     )
     .innerJoinRelated('licence')
-    .leftJoinRelated('returnRequirement')
+    .innerJoinRelated('returnRequirement')
 }
