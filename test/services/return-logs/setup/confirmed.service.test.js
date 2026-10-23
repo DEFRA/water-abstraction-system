@@ -16,23 +16,7 @@ describe('Return Logs - Setup - Confirmed service', () => {
       licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
       licenceRef: '01/117',
       returnReference: 10032788,
-      purposes: [
-        {
-          alias: 'SPRAY IRRIGATION',
-          primary: {
-            code: 'I',
-            description: 'Industrial, Commercial And Public Services'
-          },
-          tertiary: {
-            code: '400',
-            description: 'Spray Irrigation - Direct'
-          },
-          secondary: {
-            code: 'GOF',
-            description: 'Golf Courses'
-          }
-        }
-      ],
+      purposes: ['Spray Irrigation - Direct'],
       siteDescription: 'Addington Sandpits',
       status: 'received'
     })

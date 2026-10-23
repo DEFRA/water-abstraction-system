@@ -3,7 +3,6 @@
  * @module FetchReturnLogDal
  */
 
-import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 
 /**
@@ -21,23 +20,37 @@ export default async function fetchReturnLogDal(returnLogId) {
       'returnLogs.id',
       'returnLogs.dueDate',
       'returnLogs.endDate',
-      'returnLogs.metadata',
       'returnLogs.receivedDate',
       'returnLogs.returnId',
       'returnLogs.returnsFrequency',
       'returnLogs.startDate',
       'returnLogs.status',
-      'returnLogs.underQuery',
-      // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast
-      // so both sides of the COALESCE() match, and so the result sorts numerically rather than alphabetically
-      Objection.raw('COALESCE(return_requirement.reference, return_logs.return_reference::integer)').as(
-        'returnReference'
-      )
+      'returnLogs.underQuery'
     )
-    .leftJoinRelated('returnRequirement')
     .withGraphFetched('licence')
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
+    })
+    .withGraphFetched('returnRequirement')
+    .modifyGraph('returnRequirement', (returnRequirementBuilder) => {
+      returnRequirementBuilder
+        .select([
+          'id',
+          'abstractionPeriodEndDay',
+          'abstractionPeriodEndMonth',
+          'abstractionPeriodStartDay',
+          'abstractionPeriodStartMonth',
+          'reference',
+          'siteDescription',
+          'twoPartTariff'
+        ])
+        .withGraphFetched('returnRequirementPurposes')
+        .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
+          returnRequirementPurposesBuilder
+            .select(['purpose.description'])
+            .innerJoinRelated('purpose')
+            .orderBy('purpose.description', 'asc')
+        })
     })
     .withGraphFetched('returnSubmissions')
     .modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
