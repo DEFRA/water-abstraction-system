@@ -47,12 +47,8 @@ export default async function fetchReturnLogDal(returnLogId) {
         .withGraphFetched('returnRequirementPurposes')
         .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
           returnRequirementPurposesBuilder
-            .select(['returnRequirementPurposes.purposeId'])
+            .select(['purpose.description'])
             .innerJoinRelated('purpose')
-            .withGraphFetched('purpose')
-            .modifyGraph('purpose', (purposeBuilder) => {
-              purposeBuilder.select(['description'])
-            })
             .orderBy('purpose.description', 'asc')
         })
     })

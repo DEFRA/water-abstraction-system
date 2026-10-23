@@ -84,7 +84,7 @@ function _meter(meter) {
 
 function _purposes(returnRequirementPurposes) {
   return returnRequirementPurposes.map((returnRequirementPurpose) => {
-    return returnRequirementPurpose.purpose.description
+    return returnRequirementPurpose.description
   })
 }
 

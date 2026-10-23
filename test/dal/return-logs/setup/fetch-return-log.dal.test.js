@@ -107,8 +107,8 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
           id: returnRequirement.id,
           reference: returnRequirement.reference,
           returnRequirementPurposes: [
-            { purpose: { description: purposes[0].description }, purposeId: purposes[0].id },
-            { purpose: { description: purposes[1].description }, purposeId: purposes[1].id }
+            { description: purposes[0].description },
+            { description: purposes[1].description }
           ],
           siteDescription: returnRequirement.siteDescription,
           twoPartTariff: returnRequirement.twoPartTariff
