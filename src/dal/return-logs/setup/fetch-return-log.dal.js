@@ -5,6 +5,7 @@
 
 import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import ReturnRequirementModel from 'water-abstraction-engine/models/return-requirement.model.js'
 
 /**
  * Fetches the return log needed to start the return log edit journey
@@ -28,29 +29,29 @@ export default async function fetchReturnLogDal(returnLogId) {
       'returnLogs.status',
       'returnLogs.underQuery'
     )
-    .select(
-      ReturnLogModel.relatedQuery('returnRequirement')
-        .innerJoinRelated('returnRequirementPurposes')
-        .innerJoin('purposes', 'purposes.id', 'returnRequirementPurposes.purposeId')
-        .select(Objection.raw("COALESCE(JSON_AGG(purposes.description ORDER BY purposes.description), '[]'::json)"))
-        .as('purposes')
-    )
     .withGraphFetched('licence')
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
     })
     .withGraphFetched('returnRequirement')
     .modifyGraph('returnRequirement', (returnRequirementBuilder) => {
-      returnRequirementBuilder.select([
-        'id',
-        'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth',
-        'abstractionPeriodStartDay',
-        'abstractionPeriodStartMonth',
-        'reference',
-        'siteDescription',
-        'twoPartTariff'
-      ])
+      returnRequirementBuilder
+        .select([
+          'id',
+          'abstractionPeriodEndDay',
+          'abstractionPeriodEndMonth',
+          'abstractionPeriodStartDay',
+          'abstractionPeriodStartMonth',
+          'reference',
+          'siteDescription',
+          'twoPartTariff'
+        ])
+        .select(
+          ReturnRequirementModel.relatedQuery('returnRequirementPurposes')
+            .innerJoinRelated('purpose')
+            .select(Objection.raw("COALESCE(JSON_AGG(purpose.description ORDER BY purpose.description), '[]'::json)"))
+            .as('purposes')
+        )
     })
     .withGraphFetched('returnSubmissions')
     .modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {

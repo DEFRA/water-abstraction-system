@@ -99,7 +99,6 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
           id: licence.id,
           licenceRef: licence.licenceRef
         },
-        purposes,
         receivedDate: returnLog.receivedDate,
         returnId: returnLog.returnId,
         returnRequirement: {
@@ -108,6 +107,7 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
           abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
           abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
           id: returnRequirement.id,
+          purposes,
           reference: returnRequirement.reference,
           siteDescription: returnRequirement.siteDescription,
           twoPartTariff: returnRequirement.twoPartTariff

@@ -316,7 +316,6 @@ function _returnLog(licence, returnSubmissions = []) {
     dueDate: null,
     endDate: new Date('2022-06-01'),
     licence,
-    purposes: ['Test description'],
     receivedDate: new Date('2025-03-06'),
     returnId: `v1:9:${licence.licenceRef}:10021668:2022-04-01:2022-06-01`,
     returnRequirement: {
@@ -325,6 +324,7 @@ function _returnLog(licence, returnSubmissions = []) {
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 4,
       id: generateUUID(),
+      purposes: ['Test description'],
       reference: generateReference(),
       siteDescription: 'BOREHOLE AT AVALON',
       twoPartTariff: false
