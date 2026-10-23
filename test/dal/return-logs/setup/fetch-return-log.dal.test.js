@@ -31,10 +31,10 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
 
     returnRequirement = await ReturnRequirementHelper.add({ reference: 9999983 })
 
-    const firstPurpose = PurposeHelper.select(0)
-    const secondPurpose = PurposeHelper.select(1)
+    purposes = [PurposeHelper.select(0), PurposeHelper.select(1)]
 
-    for (const purpose of [firstPurpose, secondPurpose]) {
+    // NOTE: We deliberately add the purposes in reverse order so the results demonstrate they are sorted by description
+    for (const purpose of purposes.toReversed()) {
       const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
         purposeId: purpose.id,
         returnRequirementId: returnRequirement.id
@@ -42,8 +42,6 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
 
       returnRequirementPurposes.push(returnRequirementPurpose)
     }
-
-    purposes = [firstPurpose.description, secondPurpose.description].sort()
 
     returnLog = await ReturnLogHelper.add({
       licenceRef: licence.licenceRef,
@@ -107,8 +105,11 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
           abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
           abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
           id: returnRequirement.id,
-          purposes,
           reference: returnRequirement.reference,
+          returnRequirementPurposes: [
+            { purpose: { description: purposes[0].description }, purposeId: purposes[0].id },
+            { purpose: { description: purposes[1].description }, purposeId: purposes[1].id }
+          ],
           siteDescription: returnRequirement.siteDescription,
           twoPartTariff: returnRequirement.twoPartTariff
         },

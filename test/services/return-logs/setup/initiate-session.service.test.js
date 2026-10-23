@@ -324,8 +324,8 @@ function _returnLog(licence, returnSubmissions = []) {
       abstractionPeriodStartDay: 1,
       abstractionPeriodStartMonth: 4,
       id: generateUUID(),
-      purposes: ['Test description'],
       reference: generateReference(),
+      returnRequirementPurposes: [{ purpose: { description: 'Test description' }, purposeId: generateUUID() }],
       siteDescription: 'BOREHOLE AT AVALON',
       twoPartTariff: false
     },

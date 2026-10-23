@@ -3,9 +3,7 @@
  * @module FetchReturnLogDal
  */
 
-import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
-import ReturnRequirementModel from 'water-abstraction-engine/models/return-requirement.model.js'
 
 /**
  * Fetches the return log needed to start the return log edit journey
@@ -46,12 +44,17 @@ export default async function fetchReturnLogDal(returnLogId) {
           'siteDescription',
           'twoPartTariff'
         ])
-        .select(
-          ReturnRequirementModel.relatedQuery('returnRequirementPurposes')
+        .withGraphFetched('returnRequirementPurposes')
+        .modifyGraph('returnRequirementPurposes', (returnRequirementPurposesBuilder) => {
+          returnRequirementPurposesBuilder
+            .select(['returnRequirementPurposes.purposeId'])
             .innerJoinRelated('purpose')
-            .select(Objection.raw("COALESCE(JSON_AGG(purpose.description ORDER BY purpose.description), '[]'::json)"))
-            .as('purposes')
-        )
+            .withGraphFetched('purpose')
+            .modifyGraph('purpose', (purposeBuilder) => {
+              purposeBuilder.select(['description'])
+            })
+            .orderBy('purpose.description', 'asc')
+        })
     })
     .withGraphFetched('returnSubmissions')
     .modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {

@@ -82,6 +82,12 @@ function _meter(meter) {
   }
 }
 
+function _purposes(returnRequirementPurposes) {
+  return returnRequirementPurposes.map((returnRequirementPurpose) => {
+    return returnRequirementPurpose.purpose.description
+  })
+}
+
 function _referenceData(returnLog) {
   const {
     dueDate,
@@ -109,7 +115,7 @@ function _referenceData(returnLog) {
     periodEndMonth: returnRequirement.abstractionPeriodEndMonth,
     periodStartDay: returnRequirement.abstractionPeriodStartDay,
     periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
-    purposes: returnRequirement.purposes,
+    purposes: _purposes(returnRequirement.returnRequirementPurposes),
     receivedDate,
     returnId,
     returnLogId,
