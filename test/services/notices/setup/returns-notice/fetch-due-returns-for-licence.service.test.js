@@ -43,24 +43,22 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
           }
         ]
       },
+      returnRequirementId: returnRequirement.id,
       startDate: new Date('2023-04-01'),
       status: 'due'
     }
 
-    // Add first return log which is flagged as transferred (isCurrent=false). It is not linked to a return
-    // requirement, so its reference must come from the return log itself
+    // Add first return log which is flagged as transferred (isCurrent=false).
     let returnLog = await ReturnLogHelper.add({
       ...returnLogData,
       metadata: { ...returnLogData.metadata, isCurrent: false }
     })
     returnLogs.push(returnLog)
 
-    // Add a second return log for the same licence which is not transferred (isCurrent=true). It is linked to a return
-    // requirement, so its reference must come from the requirement
+    // Add a second return log for the same licence which is not transferred (isCurrent=true).
     returnLog = await ReturnLogHelper.add({
       ...returnLogData,
       endDate: new Date('2025-03-31'),
-      returnRequirementId: returnRequirement.id,
       startDate: new Date('2024-04-01')
     })
     returnLogs.push(returnLog)
@@ -116,7 +114,7 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
           regionCode: region.naldRegionId,
           regionName: region.displayName,
           returnLogId: returnLogs[0].id,
-          returnReference: Number(returnLogs[0].returnReference),
+          returnReference: returnRequirement.reference,
           returnsFrequency: 'month',
           siteDescription: 'Water park',
           startDate: returnLogs[0].startDate,
