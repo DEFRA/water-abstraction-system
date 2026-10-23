@@ -25,7 +25,7 @@ async function _fetch(licenceRef) {
       rl.id as "returnLogId",
       rl.due_date AS "dueDate",
       rl.end_date AS "endDate",
-      COALESCE(rr.reference, rl.return_reference::integer) AS "returnReference",
+      rr.reference AS "returnReference",
       rl.returns_frequency AS "returnsFrequency",
       rl.start_date AS "startDate",
       rl.metadata->'purposes'->0->'tertiary'->>'description' AS purpose,
@@ -37,8 +37,8 @@ async function _fetch(licenceRef) {
     FROM
       return_logs rl
     INNER JOIN regions r
-      ON r.nald_region_id = (rl.metadata->'nald'->>'regionCode')::integer
-    LEFT JOIN return_requirements rr
+      ON r.nald_region_id = (SUBSTRING(rl.return_id, 4, 1))::integer
+    INNER JOIN return_requirements rr
       ON rl.return_requirement_id = rr.id
     WHERE
       rl.licence_ref = ?
