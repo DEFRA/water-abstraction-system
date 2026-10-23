@@ -19,7 +19,9 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
   beforeAll(async () => {
     licenceRef = generateLicenceRef()
 
-    region = RegionHelper.select()
+    // Select the region that corresponds to NALD region 1. This is the region hardcoded into the return logs returnID
+    // by the ReturnLogHelper
+    region = RegionHelper.select(0)
 
     returnRequirement = await ReturnRequirementHelper.add()
 

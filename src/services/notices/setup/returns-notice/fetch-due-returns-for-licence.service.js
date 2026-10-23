@@ -37,7 +37,7 @@ async function _fetch(licenceRef) {
     FROM
       return_logs rl
     INNER JOIN regions r
-      ON r.nald_region_id = (rl.metadata->'nald'->>'regionCode')::integer
+      ON r.nald_region_id = (SUBSTRING(rl.return_id, 4, 1))::integer
     LEFT JOIN return_requirements rr
       ON rl.return_requirement_id = rr.id
     WHERE
