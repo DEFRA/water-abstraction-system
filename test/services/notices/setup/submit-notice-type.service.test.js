@@ -22,7 +22,10 @@ describe('Notices - Setup - Submit Notice Type service', () => {
   let yarStub
 
   beforeEach(() => {
-    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({
+      alternateReturnInvitationPeriods: true,
+      alternateReturnReminderPeriods: true
+    })
 
     auth = {
       credentials: { scope: ['bulk_return_notifications'] }
@@ -95,10 +98,10 @@ describe('Notices - Setup - Submit Notice Type service', () => {
               })
             })
 
-            it('returns a redirect to the "returns-period" page', async () => {
+            it('returns a redirect to the "reminder-period" page', async () => {
               const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
-              expect(result).toEqual({ redirectUrl: 'returns-period' })
+              expect(result).toEqual({ redirectUrl: 'reminder-period' })
             })
           })
 
@@ -183,10 +186,10 @@ describe('Notices - Setup - Submit Notice Type service', () => {
             payload = { noticeType: NoticeType.REMINDERS }
           })
 
-          it('returns a redirect to the "returns-period" page', async () => {
+          it('returns a redirect to the "reminder-period" page', async () => {
             const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
-            expect(result).toEqual({ redirectUrl: 'returns-period' })
+            expect(result).toEqual({ redirectUrl: 'reminder-period' })
           })
         })
       })

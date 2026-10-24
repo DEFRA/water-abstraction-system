@@ -15,7 +15,10 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
   let session
 
   beforeEach(() => {
-    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({
+      alternateReturnInvitationPeriods: true,
+      alternateReturnReminderPeriods: true
+    })
 
     licenceRef = generateLicenceRef()
 
@@ -108,7 +111,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
             licenceNumber: `/system/notices/setup/${session.id}/licence`,
             noticeType: `/system/notices/setup/${session.id}/notice-type`,
             returns: `/system/notices/setup/${session.id}/paper-return`,
-            returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+            returnsPeriod: `/system/notices/setup/${session.id}/reminder-period`
           },
           pageTitle: 'Check the notice type',
           sessionId: session.id,
