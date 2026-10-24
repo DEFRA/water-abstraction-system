@@ -3,8 +3,10 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
 import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
+import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
+import ReturnRequirementPurposeHelper from 'water-abstraction-engine/test/helpers/return-requirement-purpose.helper.js'
 import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
 import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
 
@@ -13,19 +15,33 @@ import FetchReturnLogDal from '../../../../src/dal/return-logs/setup/fetch-retur
 
 describe('Return Logs - Setup - Fetch Return Log DAL', () => {
   let licence
+  let purposes
   let returnLog
   let returnRequirement
+  let returnRequirementPurposes
   let returnSubmission
   let returnSubmissionLines
   let supersededReturnSubmission
-  let unlinkedReturnLog
 
   beforeAll(async () => {
+    returnRequirementPurposes = []
     returnSubmissionLines = []
 
     licence = await LicenceHelper.add()
 
     returnRequirement = await ReturnRequirementHelper.add({ reference: 9999983 })
+
+    purposes = [PurposeHelper.select(0), PurposeHelper.select(1)]
+
+    // NOTE: We deliberately add the purposes in reverse order so the results demonstrate they are sorted by description
+    for (const purpose of purposes.toReversed()) {
+      const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        purposeId: purpose.id,
+        returnRequirementId: returnRequirement.id
+      })
+
+      returnRequirementPurposes.push(returnRequirementPurpose)
+    }
 
     returnLog = await ReturnLogHelper.add({
       licenceRef: licence.licenceRef,
@@ -51,11 +67,6 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
 
       returnSubmissionLines.push(returnSubmissionLine)
     }
-
-    unlinkedReturnLog = await ReturnLogHelper.add({
-      licenceRef: licence.licenceRef,
-      returnRequirementId: null
-    })
   })
 
   afterAll(async () => {
@@ -64,7 +75,10 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
     await returnRequirement.$query().delete()
     await returnSubmission.$query().delete()
     await supersededReturnSubmission.$query().delete()
-    await unlinkedReturnLog.$query().delete()
+
+    for (const returnRequirementPurpose of returnRequirementPurposes) {
+      await returnRequirementPurpose.$query().delete()
+    }
 
     for (const returnSubmissionLine of returnSubmissionLines) {
       await returnSubmissionLine.$query().delete()
@@ -72,7 +86,7 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
   })
 
   describe('when a matching return log exists', () => {
-    it('returns the return log, its licence and its current return submission', async () => {
+    it('returns the return log, its licence, return requirement, purposes and current return submission', async () => {
       const result = await FetchReturnLogDal(returnLog.id)
 
       expect(result).toEqual({
@@ -83,10 +97,22 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
           id: licence.id,
           licenceRef: licence.licenceRef
         },
-        metadata: returnLog.metadata,
         receivedDate: returnLog.receivedDate,
         returnId: returnLog.returnId,
-        returnReference: returnRequirement.reference,
+        returnRequirement: {
+          abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
+          abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
+          abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
+          abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
+          id: returnRequirement.id,
+          reference: returnRequirement.reference,
+          returnRequirementPurposes: [
+            { description: purposes[0].description },
+            { description: purposes[1].description }
+          ],
+          siteDescription: returnRequirement.siteDescription,
+          twoPartTariff: returnRequirement.twoPartTariff
+        },
         returnsFrequency: returnLog.returnsFrequency,
         returnSubmissions: [
           {
@@ -113,14 +139,6 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
         startDate: returnLog.startDate,
         status: returnLog.status,
         underQuery: returnLog.underQuery
-      })
-    })
-
-    describe('and it is not linked to a return requirement', () => {
-      it('returns the return reference taken from the return log', async () => {
-        const result = await FetchReturnLogDal(unlinkedReturnLog.id)
-
-        expect(result.returnReference).toEqual(Number(unlinkedReturnLog.returnReference))
       })
     })
   })

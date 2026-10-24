@@ -82,9 +82,9 @@ function _meter(meter) {
   }
 }
 
-function _purposes(purposes) {
-  return purposes.map((purpose) => {
-    return purpose.tertiary.description
+function _purposes(returnRequirementPurposes) {
+  return returnRequirementPurposes.map((returnRequirementPurpose) => {
+    return returnRequirementPurpose.description
   })
 }
 
@@ -94,10 +94,9 @@ function _referenceData(returnLog) {
     endDate,
     id: returnLogId,
     licence,
-    metadata,
     receivedDate,
     returnId,
-    returnReference,
+    returnRequirement,
     returnsFrequency,
     returnSubmissions,
     startDate,
@@ -112,21 +111,21 @@ function _referenceData(returnLog) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     lines: _lines(returnsFrequency, startDate, endDate),
-    periodEndDay: Number.parseInt(metadata.nald.periodEndDay),
-    periodEndMonth: Number.parseInt(metadata.nald.periodEndMonth),
-    periodStartDay: Number.parseInt(metadata.nald.periodStartDay),
-    periodStartMonth: Number.parseInt(metadata.nald.periodStartMonth),
-    purposes: _purposes(metadata.purposes),
+    periodEndDay: returnRequirement.abstractionPeriodEndDay,
+    periodEndMonth: returnRequirement.abstractionPeriodEndMonth,
+    periodStartDay: returnRequirement.abstractionPeriodStartDay,
+    periodStartMonth: returnRequirement.abstractionPeriodStartMonth,
+    purposes: _purposes(returnRequirement.returnRequirementPurposes),
     receivedDate,
     returnId,
     returnLogId,
-    returnReference,
+    returnReference: returnRequirement.reference,
     returnsFrequency,
-    siteDescription: metadata.description,
+    siteDescription: returnRequirement.siteDescription,
     startDate,
     status,
     submissionType: returnSubmissions.length > 0 ? 'edit' : 'submit',
-    twoPartTariff: metadata.isTwoPartTariff,
+    twoPartTariff: returnRequirement.twoPartTariff,
     underQuery
   }
 }
