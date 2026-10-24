@@ -19,6 +19,7 @@ import {
   submitNoticeType,
   submitPaperReturn,
   submitRecipientName,
+  submitReminderPeriod,
   submitRemoveLicences,
   submitReturnsPeriod,
   submitSelectRecipients,
@@ -40,6 +41,7 @@ import {
   viewPreviewCheckAlert,
   viewPreviewCheckPaperReturn,
   viewRecipientName,
+  viewReminderPeriod,
   viewRemoveLicences,
   viewReturnsPeriod,
   viewSelectRecipients
@@ -507,6 +509,30 @@ export default [
     path: '/notices/setup/{sessionId}/recipient-name',
     options: {
       handler: submitRecipientName,
+      auth: {
+        access: {
+          scope: ['bulk_return_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/reminder-period',
+    options: {
+      handler: viewReminderPeriod,
+      auth: {
+        access: {
+          scope: ['bulk_return_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/reminder-period',
+    options: {
+      handler: submitReminderPeriod,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
