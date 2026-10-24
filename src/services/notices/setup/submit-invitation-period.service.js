@@ -19,8 +19,8 @@ import InvitationPeriodValidator from '../../../validators/notices/setup/invitat
  * @param {object} payload - The submitted form data
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<object>} An object containing where to redirect to if there are no errors else the page data for the view
- * including the validation error details
+ * @returns {Promise<object>} An object containing where to redirect to if there are no errors else the page data for
+ * the view including the validation error details
  */
 export default async function submitInvitationPeriodService(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)

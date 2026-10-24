@@ -60,7 +60,10 @@ function _query(dueDateCondition, noticeType, quarterly) {
     AND rl.due_date ${dueDateCondition}
   `
 
-  if (noticeType === NoticeType.REMINDERS || !featureFlagsConfig.alternateReturnInvitationPeriods) {
+  if (noticeType === NoticeType.INVITATIONS && !featureFlagsConfig.alternateReturnInvitationPeriods) {
+    query += `  AND rl.quarterly = ${quarterly}
+  `
+  } else if (noticeType === NoticeType.REMINDERS && !featureFlagsConfig.alternateReturnReminderPeriods) {
     query += `  AND rl.quarterly = ${quarterly}
   `
   }

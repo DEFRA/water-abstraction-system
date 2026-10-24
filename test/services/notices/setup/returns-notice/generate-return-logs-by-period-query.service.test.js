@@ -21,7 +21,10 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
   let returnsPeriod
 
   beforeAll(async () => {
-    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ alternateReturnInvitationPeriods: true })
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({
+      alternateReturnInvitationPeriods: true,
+      alternateReturnReminderPeriods: true
+    })
 
     returnsPeriod = {
       dueDate: null,
@@ -145,7 +148,6 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     AND rl.metadata->>'isSummer' = ?
     AND NOT (rl.licence_ref = ANY (?))
     AND rl.due_date IS NOT NULL
-    AND rl.quarterly = false
   `
         })
       })

@@ -82,6 +82,10 @@ function _redirect(session, noticeType) {
       return { redirectUrl: 'invitation-period' }
     }
 
+    if (noticeType === NoticeType.REMINDERS && featureFlagsConfig.alternateReturnReminderPeriods) {
+      return { redirectUrl: 'reminder-period' }
+    }
+
     return { redirectUrl: 'returns-period' }
   }
 

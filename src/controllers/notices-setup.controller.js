@@ -23,6 +23,7 @@ import SubmitLicenceService from '../services/notices/setup/submit-licence.servi
 import SubmitNoticeTypeService from '../services/notices/setup/submit-notice-type.service.js'
 import SubmitPaperReturnService from '../services/notices/setup/submit-paper-return.service.js'
 import SubmitRecipientNameService from '../services/notices/setup/submit-recipient-name.service.js'
+import SubmitReminderPeriodService from '../services/notices/setup/submit-reminder-period.service.js'
 import SubmitRemoveLicencesService from '../services/notices/setup/submit-remove-licences.service.js'
 import SubmitReturnsPeriodService from '../services/notices/setup/submit-returns-period.service.js'
 import SubmitSelectRecipientsService from '../services/notices/setup/submit-select-recipients.service.js'
@@ -44,6 +45,7 @@ import ViewPreviewCheckAlertService from '../services/notices/setup/preview/view
 import ViewPreviewCheckPaperReturnService from '../services/notices/setup/preview/view-preview-check-paper-return.service.js'
 import ViewPreviewService from '../services/notices/setup/preview/view-preview.service.js'
 import ViewRecipientNameService from '../services/notices/setup/view-recipient-name.service.js'
+import ViewReminderPeriodService from '../services/notices/setup/view-reminder-period.service.js'
 import ViewRemoveLicencesService from '../services/notices/setup/view-remove-licences.service.js'
 import ViewReturnsPeriodService from '../services/notices/setup/view-returns-period.service.js'
 import ViewSelectRecipientsService from '../services/notices/setup/view-select-recipients.service.js'
@@ -296,6 +298,22 @@ export async function submitRecipientName(request, h) {
   return h.redirect(`/system/address/${sessionId}/postcode`)
 }
 
+export async function submitReminderPeriod(request, h) {
+  const {
+    payload,
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await SubmitReminderPeriodService(sessionId, payload, yar)
+
+  if (pageData.error) {
+    return h.view(`notices/setup/reminder-period.njk`, pageData)
+  }
+
+  return h.redirect(pageData.redirectUrl)
+}
+
 export async function submitRemoveLicences(request, h) {
   const {
     payload,
@@ -521,6 +539,16 @@ export async function viewRecipientName(request, h) {
   const pageData = await ViewRecipientNameService(sessionId)
 
   return h.view(`notices/setup/recipient-name.njk`, pageData)
+}
+
+export async function viewReminderPeriod(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await ViewReminderPeriodService(sessionId)
+
+  return h.view(`notices/setup/reminder-period.njk`, pageData)
 }
 
 export async function viewRemoveLicences(request, h) {

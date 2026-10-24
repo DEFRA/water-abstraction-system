@@ -29,6 +29,7 @@ import * as SubmitLicenceService from '../../src/services/notices/setup/submit-l
 import * as SubmitNoticeTypeService from '../../src/services/notices/setup/submit-notice-type.service.js'
 import * as SubmitPaperReturnService from '../../src/services/notices/setup/submit-paper-return.service.js'
 import * as SubmitRecipientNameService from '../../src/services/notices/setup/submit-recipient-name.service.js'
+import * as SubmitReminderPeriodService from '../../src/services/notices/setup/submit-reminder-period.service.js'
 import * as SubmitRemoveLicencesService from '../../src/services/notices/setup/submit-remove-licences.service.js'
 import * as SubmitReturnsPeriodService from '../../src/services/notices/setup/submit-returns-period.service.js'
 import * as SubmitSelectRecipientsService from '../../src/services/notices/setup/submit-select-recipients.service.js'
@@ -50,6 +51,7 @@ import * as ViewPreviewCheckAlert from '../../src/services/notices/setup/preview
 import * as ViewPreviewCheckPaperReturnService from '../../src/services/notices/setup/preview/view-preview-check-paper-return.service.js'
 import * as ViewPreviewService from '../../src/services/notices/setup/preview/view-preview.service.js'
 import * as ViewRecipientNameService from '../../src/services/notices/setup/view-recipient-name.service.js'
+import * as ViewReminderPeriodService from '../../src/services/notices/setup/view-reminder-period.service.js'
 import * as ViewRemoveLicencesService from '../../src/services/notices/setup/view-remove-licences.service.js'
 import * as ViewReturnsPeriodService from '../../src/services/notices/setup/view-returns-period.service.js'
 import * as ViewSelectRecipientsService from '../../src/services/notices/setup/view-select-recipients.service.js'
@@ -1225,6 +1227,103 @@ describe('Notices Setup controller', () => {
     })
   })
 
+  describe('notices/setup/reminder-period', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        getOptions = {
+          method: 'GET',
+          url: basePath + `/${session.id}/reminder-period`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['bulk_return_notifications'] }
+          }
+        }
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+        })
+
+        describe('and there are returns periods with outstanding reminders', () => {
+          beforeEach(() => {
+            vi.spyOn(ViewReminderPeriodService, 'default').mockReturnValue(_viewReminderPeriod())
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            const pageData = _viewReminderPeriod()
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain(pageData.pageTitle)
+          })
+        })
+
+        describe('and there are no returns periods with outstanding reminders', () => {
+          beforeEach(() => {
+            vi.spyOn(ViewReminderPeriodService, 'default').mockReturnValue({
+              ..._viewReminderPeriod(),
+              invitationPeriods: []
+            })
+          })
+
+          it('returns the page with the "No periods" message successfully', async () => {
+            const response = await server.inject(getOptions)
+
+            const pageData = _viewReminderPeriod()
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain(pageData.pageTitle)
+            expect(response.payload).toContain('There are no returns periods with unsent reminders.')
+          })
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
+            vi.spyOn(SubmitReminderPeriodService, 'default').mockReturnValue({
+              ..._viewReminderPeriod(),
+              error: 'Something went wrong'
+            })
+            postOptions = postRequestOptions(`${basePath}/${session.id}/reminder-period`, {}, [
+              'bulk_return_notifications'
+            ])
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds', () => {
+          beforeEach(() => {
+            vi.spyOn(SubmitReminderPeriodService, 'default').mockReturnValue({
+              redirectUrl: `${basePath}/${session.id}/check-notice-type`
+            })
+            postOptions = postRequestOptions(`${basePath}/${session.id}/reminder-period`, {}, [
+              'bulk_return_notifications'
+            ])
+          })
+
+          it('redirects the to the next page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`${basePath}/${session.id}/check-notice-type`)
+          })
+        })
+      })
+    })
+  })
+
   describe('notices/setup/remove-licences', () => {
     describe('GET', () => {
       beforeEach(() => {
@@ -1646,6 +1745,21 @@ function _viewInvitationPeriod() {
     backLink: '/system/manage',
     activeNavBar: 'notices',
     invitationPeriods: [
+      {
+        checked: false,
+        text: 'Summer 1 November 2025 to 31 October 2026',
+        value: generateUUID()
+      }
+    ]
+  }
+}
+
+function _viewReminderPeriod() {
+  return {
+    pageTitle: 'Select the returns period for the reminders',
+    backLink: '/system/manage',
+    activeNavBar: 'notices',
+    reminderPeriods: [
       {
         checked: false,
         text: 'Summer 1 November 2025 to 31 October 2026',
