@@ -53,6 +53,8 @@ function _links(sessionId, noticeType) {
 
   if (noticeType === NoticeType.INVITATIONS && featureFlagsConfig.alternateReturnInvitationPeriods) {
     returnsPeriodPath = 'invitation-period'
+  } else if (noticeType === NoticeType.REMINDERS && featureFlagsConfig.alternateReturnReminderPeriods) {
+    returnsPeriodPath = 'reminder-period'
   }
 
   return {
