@@ -29,15 +29,17 @@ async function _fetch(licenceRef) {
       rl.returns_frequency AS "returnsFrequency",
       rl.start_date AS "startDate",
       rl.metadata->'purposes'->0->'tertiary'->>'description' AS purpose,
-      rl.metadata->'isTwoPartTariff' AS "twoPartTariff",
-      rl.metadata->'description' AS "siteDescription",
-      rl.metadata->'nald'->>'areaCode' AS "naldAreaCode",
+      rr.two_part_tariff AS "twoPartTariff",
+      rr.site_description AS "siteDescription",
+      l.regions->>'historicalAreaCode' AS "naldAreaCode",
       r.display_name AS "regionName",
       r.nald_region_id AS "regionCode"
     FROM
       return_logs rl
+    INNER JOIN licences l
+      ON rl.licence_ref = l.licence_ref
     INNER JOIN regions r
-      ON r.nald_region_id = (SUBSTRING(rl.return_id, 4, 1))::integer
+      ON l.region_id = r.id
     INNER JOIN return_requirements rr
       ON rl.return_requirement_id = rr.id
     WHERE

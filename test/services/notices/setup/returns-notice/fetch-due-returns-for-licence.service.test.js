@@ -2,26 +2,24 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
+import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
-import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
 import FetchDueReturnsForLicence from '../../../../../src/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence service', () => {
-  let licenceRef
+  let licence
   let region
   let returnLogs
   let returnRequirement
 
   beforeAll(async () => {
-    licenceRef = generateLicenceRef()
+    region = RegionHelper.select()
 
-    // Select the region that corresponds to NALD region 1. This is the region hardcoded into the return logs returnID
-    // by the ReturnLogHelper
-    region = RegionHelper.select(0)
+    licence = await LicenceHelper.add({ regionId: region.id })
 
     returnRequirement = await ReturnRequirementHelper.add()
 
@@ -29,14 +27,9 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
 
     const returnLogData = {
       endDate: new Date('2024-03-31'),
-      licenceRef,
+      licenceRef: licence.licenceRef,
       metadata: {
-        description: 'Water park',
         isCurrent: true,
-        nald: {
-          areaCode: 'SE',
-          regionCode: `${region.naldRegionId}`
-        },
         purposes: [
           {
             tertiary: { description: 'Potable Water Supply - Direct' }
@@ -85,40 +78,41 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
     }
 
     await returnRequirement.$query().delete()
+    await licence.$query().delete()
   })
 
   describe('when called', () => {
     it('returns the "due" returns for the licence', async () => {
-      const result = await FetchDueReturnsForLicence(licenceRef)
+      const result = await FetchDueReturnsForLicence(licence.licenceRef)
 
       expect(result).toEqual([
         {
           dueDate: null,
           endDate: returnLogs[1].endDate,
-          naldAreaCode: 'SE',
+          naldAreaCode: licence.regions.historicalAreaCode,
           purpose: 'Potable Water Supply - Direct',
           regionCode: region.naldRegionId,
           regionName: region.displayName,
           returnLogId: returnLogs[1].id,
           returnReference: returnRequirement.reference,
           returnsFrequency: 'month',
-          siteDescription: 'Water park',
+          siteDescription: returnRequirement.siteDescription,
           startDate: returnLogs[1].startDate,
-          twoPartTariff: null
+          twoPartTariff: returnRequirement.twoPartTariff
         },
         {
           dueDate: null,
           endDate: returnLogs[0].endDate,
-          naldAreaCode: 'SE',
+          naldAreaCode: licence.regions.historicalAreaCode,
           purpose: 'Potable Water Supply - Direct',
           regionCode: region.naldRegionId,
           regionName: region.displayName,
           returnLogId: returnLogs[0].id,
           returnReference: returnRequirement.reference,
           returnsFrequency: 'month',
-          siteDescription: 'Water park',
+          siteDescription: returnRequirement.siteDescription,
           startDate: returnLogs[0].startDate,
-          twoPartTariff: null
+          twoPartTariff: returnRequirement.twoPartTariff
         }
       ])
     })
