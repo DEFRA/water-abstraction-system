@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchBillLicenceSummaryService from '../../../src/services/bill-licences/fetch-bill-licence-summary.service.js'
+import * as FetchBillLicenceSummaryDal from '../../../src/dal/bill-licences/fetch-bill-licence-summary.dal.js'
 
 // Thing under test
 import RemoveBillLicenceService from '../../../src/services/bill-licences/remove-bill-licence.service.js'
@@ -11,7 +11,7 @@ describe('Remove Bill Licence service', () => {
   const testId = 'a4fbaa27-a91c-4328-a1b8-774ade11027b'
 
   beforeEach(() => {
-    vi.spyOn(FetchBillLicenceSummaryService, 'default').mockResolvedValue(_billLicenceSummary())
+    vi.spyOn(FetchBillLicenceSummaryDal, 'default').mockResolvedValue(_billLicenceSummary())
   })
 
   afterEach(() => {

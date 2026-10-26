@@ -3,7 +3,7 @@
  * @module RemoveBillLicenceService
  */
 
-import FetchBillLicenceSummaryService from './fetch-bill-licence-summary.service.js'
+import FetchBillLicenceSummaryDal from '../../dal/bill-licences/fetch-bill-licence-summary.dal.js'
 import RemoveBillLicencePresenter from '../../presenters/bill-licences/remove-bill-licence.presenter.js'
 
 /**
@@ -15,7 +15,7 @@ import RemoveBillLicencePresenter from '../../presenters/bill-licences/remove-bi
  * it is linked to for the remove bill licence page
  */
 export default async function removeBillLicenceService(billLicenceId) {
-  const billLicence = await FetchBillLicenceSummaryService(billLicenceId)
+  const billLicence = await FetchBillLicenceSummaryDal(billLicenceId)
 
   const formattedData = RemoveBillLicencePresenter(billLicence)
 
