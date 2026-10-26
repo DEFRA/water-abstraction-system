@@ -28,7 +28,14 @@ async function _fetch(licenceRef) {
       rr.reference AS "returnReference",
       rl.returns_frequency AS "returnsFrequency",
       rl.start_date AS "startDate",
-      rl.metadata->'purposes'->0->'tertiary'->>'description' AS purpose,
+      (
+        SELECT p.description
+        FROM return_requirement_purposes rrp
+        INNER JOIN purposes p
+          ON p.id = rrp.purpose_id
+        WHERE rrp.return_requirement_id = rr.id
+        LIMIT 1
+      ) AS purpose,
       rr.two_part_tariff AS "twoPartTariff",
       rr.site_description AS "siteDescription",
       l.regions->>'historicalAreaCode' AS "naldAreaCode",
