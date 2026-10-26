@@ -5,7 +5,7 @@
 
 import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 
-import FetchBillLicence from '../bill-licences/fetch-bill-licence.service.js'
+import FetchBillLicenceTransactionsDal from '../../dal/bill-licences/fetch-bill-licence-transactions.dal.js'
 import FetchBillService from './fetch-bill-service.js'
 import ViewBillLicencePresenter from '../../presenters/bill-licences/view-bill-licence.presenter.js'
 import ViewBillPresenter from '../../presenters/bills/view-bill.presenter.js'
@@ -44,7 +44,7 @@ export default async function viewBillService(id) {
   } else {
     // Else we need to provide bill licence data for the single licence bill templates (ViewBillLicencePresenter handles
     // both PRESROC and SROC)
-    const billLicence = await FetchBillLicence(licenceSummaries[0].id)
+    const billLicence = await FetchBillLicenceTransactionsDal(licenceSummaries[0].id)
 
     additionalData = ViewBillLicencePresenter(billLicence)
   }

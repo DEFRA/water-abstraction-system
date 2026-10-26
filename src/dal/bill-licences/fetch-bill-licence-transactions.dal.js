@@ -1,6 +1,6 @@
 /**
  * Fetches data needed for the bill licence page which lists all transactions in a bill licence
- * @module FetchBillLicenceService
+ * @module FetchBillLicenceTransactionsDal
  */
 
 import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model.js'
@@ -16,7 +16,7 @@ import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
  * @returns {Promise<object>} the matching instance of BillLicenceModel plus the linked bill and bill run. Also all
  * transactions linked to the bill licence and their linked charge reference details
  */
-export default async function fetchBillLicenceService(id) {
+export default async function fetchBillLicenceTransactionsDal(id) {
   return _fetchBillLicence(id)
 }
 

@@ -11,9 +11,9 @@ import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.
 import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
 
 // Thing under test
-import FetchBillLicenceService from '../../../src/services/bill-licences/fetch-bill-licence.service.js'
+import FetchBillLicenceTransactionsDal from '../../../src/dal/bill-licences/fetch-bill-licence-transactions.dal.js'
 
-describe('Bill Licences - Fetch Bill Licence service', () => {
+describe('Bill Licences - Fetch Bill Licence Transactions service', () => {
   let bill
   let billLicence
   let billRun
@@ -113,7 +113,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
     })
 
     it('returns the matching bill licence and associated data', async () => {
-      const result = await FetchBillLicenceService(billLicence.id)
+      const result = await FetchBillLicenceTransactionsDal(billLicence.id)
 
       expect(result).toEqual({
         id: billLicence.id,
@@ -193,7 +193,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
     })
 
     it('returns the matching bill licence and associated data', async () => {
-      const result = await FetchBillLicenceService(billLicence.id)
+      const result = await FetchBillLicenceTransactionsDal(billLicence.id)
 
       expect(result).toEqual({
         id: billLicence.id,
@@ -222,7 +222,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
 
   describe('when a bill licence with a matching ID does not exist', () => {
     it('returns a result with no values set', async () => {
-      const result = await FetchBillLicenceService('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillLicenceTransactionsDal('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeUndefined()
     })
