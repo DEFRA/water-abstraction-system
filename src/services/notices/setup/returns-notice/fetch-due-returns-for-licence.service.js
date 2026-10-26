@@ -22,7 +22,7 @@ export default async function fetchDueReturnsForLicenceService(licenceRef) {
 async function _fetch(licenceRef) {
   const query = `
     SELECT
-      rl.id as "returnLogId",
+      rl.id AS "returnLogId",
       rl.due_date AS "dueDate",
       rl.end_date AS "endDate",
       rr.reference AS "returnReference",
