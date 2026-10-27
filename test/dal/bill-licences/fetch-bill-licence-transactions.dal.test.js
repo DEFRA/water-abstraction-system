@@ -23,19 +23,19 @@ describe('Bill Licences - Fetch Bill Licence Transactions dal', () => {
   let purpose
 
   afterEach(async () => {
-    for (const transaction of transactions) {
-      transaction.$query().delete()
-    }
-
-    for (const chargeElement of chargeElements) {
-      chargeElement.$query().delete()
-    }
-
     if (billRun) {
-      chargeReference.$query().delete()
-      billLicence.$query().delete()
-      bill.$query().delete()
-      billRun.$query().delete()
+      for (const transaction of transactions) {
+        await transaction.$query().delete()
+      }
+
+      for (const chargeElement of chargeElements) {
+        await chargeElement.$query().delete()
+      }
+
+      await chargeReference.$query().delete()
+      await billLicence.$query().delete()
+      await bill.$query().delete()
+      await billRun.$query().delete()
     }
   })
 
@@ -55,6 +55,7 @@ describe('Bill Licences - Fetch Bill Licence Transactions dal', () => {
           chargeReferenceId: chargeReference.id,
           purposeId: purpose.id
         })
+
         chargeElements.push(chargeElement)
       }
 
@@ -108,6 +109,7 @@ describe('Bill Licences - Fetch Bill Licence Transactions dal', () => {
           description: transactionData.description,
           grossValuesCalculated: transactionData.grossValuesCalculated
         })
+
         transactions.push(transaction)
       }
     })
@@ -116,20 +118,20 @@ describe('Bill Licences - Fetch Bill Licence Transactions dal', () => {
       const result = await FetchBillLicenceTransactionsDal(billLicence.id)
 
       expect(result).toEqual({
-        id: billLicence.id,
-        licenceId: billLicence.licenceId,
-        licenceRef: billLicence.licenceRef,
         bill: {
-          id: bill.id,
           accountNumber: bill.accountNumber,
           billRun: {
-            id: billRun.id,
             batchType: 'supplementary',
+            id: billRun.id,
             scheme: 'sroc',
             source: 'wrls',
             status: 'ready'
-          }
+          },
+          id: bill.id
         },
+        id: billLicence.id,
+        licenceId: billLicence.licenceId,
+        licenceRef: billLicence.licenceRef,
         transactions: [
           _transactionResult(transactions[3], chargeReference, chargeElements, purpose),
           _transactionResult(transactions[1], chargeReference, chargeElements, purpose),
@@ -188,6 +190,7 @@ describe('Bill Licences - Fetch Bill Licence Transactions dal', () => {
           description: transactionData.description,
           grossValuesCalculated: transactionData.grossValuesCalculated
         })
+
         transactions.push(transaction)
       }
     })
@@ -196,20 +199,20 @@ describe('Bill Licences - Fetch Bill Licence Transactions dal', () => {
       const result = await FetchBillLicenceTransactionsDal(billLicence.id)
 
       expect(result).toEqual({
-        id: billLicence.id,
-        licenceId: billLicence.licenceId,
-        licenceRef: billLicence.licenceRef,
         bill: {
-          id: bill.id,
           accountNumber: bill.accountNumber,
           billRun: {
-            id: billRun.id,
             batchType: 'supplementary',
+            id: billRun.id,
             scheme: 'alcs',
             source: 'wrls',
             status: 'ready'
-          }
+          },
+          id: bill.id
         },
+        id: billLicence.id,
+        licenceId: billLicence.licenceId,
+        licenceRef: billLicence.licenceRef,
         transactions: [
           _transactionResult(transactions[3], chargeReference, null, purpose),
           _transactionResult(transactions[1], chargeReference, null, purpose),
@@ -270,10 +273,10 @@ function _transactionResult(transaction, chargeReference, chargeElements, purpos
   if (chargeElements) {
     transactionResult.chargeReference.chargeElements = [
       {
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 3,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
         authorisedAnnualQuantity: 200,
         id: chargeElements[0].id,
         purpose: {
@@ -282,10 +285,10 @@ function _transactionResult(transaction, chargeReference, chargeElements, purpos
         }
       },
       {
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 3,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
         authorisedAnnualQuantity: 200,
         id: chargeElements[1].id,
         purpose: {

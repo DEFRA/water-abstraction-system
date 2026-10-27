@@ -19,12 +19,12 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
 
   beforeEach(async () => {
     billLicence = {
-      id: '59f2510d-4b2f-4b09-a972-e0b2370d191d',
-      licenceId: '5d358719-86b8-454e-a862-7a18a8a25103',
       bill: {
-        id: '44c459a6-3610-4b84-b515-d4d8785ff87c',
-        billRunId: 'c96106fa-b9a3-4f91-b35d-ec1d3108c390'
-      }
+        billRunId: 'c96106fa-b9a3-4f91-b35d-ec1d3108c390',
+        id: '44c459a6-3610-4b84-b515-d4d8785ff87c'
+      },
+      id: '59f2510d-4b2f-4b09-a972-e0b2370d191d',
+      licenceId: '5d358719-86b8-454e-a862-7a18a8a25103'
     }
 
     fetchBillLicenceDalStub = vi.spyOn(FetchBillLicenceDal, 'default').mockResolvedValue(billLicence)

@@ -26,18 +26,16 @@ describe('Bill Licences - Fetch Bill Licence dal', () => {
     await billRun.$query().delete()
   })
 
-  describe('when a bill licence with a matching ID exists', () => {
-    it('returns the bill licence and its linked bill', async () => {
-      const result = await FetchBillLicenceDal(billLicence.id)
+  it('returns the bill licence and its linked bill', async () => {
+    const result = await FetchBillLicenceDal(billLicence.id)
 
-      expect(result).toEqual({
-        id: billLicence.id,
-        licenceId: billLicence.licenceId,
-        bill: {
-          id: bill.id,
-          billRunId: billRun.id
-        }
-      })
+    expect(result).toEqual({
+      bill: {
+        billRunId: billRun.id,
+        id: bill.id
+      },
+      id: billLicence.id,
+      licenceId: billLicence.licenceId
     })
   })
 })
