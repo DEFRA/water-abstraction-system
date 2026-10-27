@@ -225,7 +225,7 @@ describe('Bill Licences - Fetch Bill Licence Transactions dal', () => {
   })
 
   describe('when a bill licence with a matching ID does not exist', () => {
-    it('returns a result with no values set', async () => {
+    it('returns no result', async () => {
       const result = await FetchBillLicenceTransactionsDal(generateUUID())
 
       expect(result).toBeUndefined()

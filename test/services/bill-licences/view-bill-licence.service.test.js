@@ -43,7 +43,7 @@ describe('Bill Licences - View Bill Licence service', () => {
     })
   })
 
-  describe('when a bill with a matching ID does not exist', () => {
+  describe('when a bill licence with a matching ID does not exist', () => {
     it('throws an exception', async () => {
       await expect(ViewBillLicenceService('testId')).rejects.toThrow()
     })

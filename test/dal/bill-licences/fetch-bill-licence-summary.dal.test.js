@@ -75,7 +75,7 @@ describe('Bill Licences - Fetch Bill Licence Summary dal', () => {
   })
 
   describe('when a bill licence with a matching ID exists', () => {
-    it('will fetch the data use in the remove bill licence page', async () => {
+    it('will fetch the data used in the remove bill licence page', async () => {
       const result = await FetchBillLicenceSummaryDal(billLicence.id)
 
       expect(result).toEqual({

@@ -51,13 +51,16 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
     it('calls the "UnassignLicencesToBillRunService" to unassign any licence supplementary year records from the bill run', async () => {
       await SubmitRemoveBillLicenceService(billLicence.id, user)
 
-      expect(UnassignLicencesToBillRunService.default).toHaveBeenCalled()
+      expect(UnassignLicencesToBillRunService.default).toHaveBeenCalledWith(
+        [billLicence.licenceId],
+        billLicence.bill.billRunId
+      )
     })
 
     it('calls the "ProcessBillingFlagService" to check if the licence needs a supplementary billing flag', async () => {
       await SubmitRemoveBillLicenceService(billLicence.id, user)
 
-      expect(ProcessBillingFlagService.default).toHaveBeenCalled()
+      expect(ProcessBillingFlagService.default).toHaveBeenCalledWith({ billLicenceId: billLicence.id })
     })
 
     it('sends a request to the legacy service to delete the bill licence', async () => {
