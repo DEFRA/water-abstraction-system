@@ -9,11 +9,12 @@ import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-el
 import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
 import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
 import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchBillLicenceService from '../../../src/services/bill-licences/fetch-bill-licence.service.js'
+import FetchBillLicenceTransactionsDal from '../../../src/dal/bill-licences/fetch-bill-licence-transactions.dal.js'
 
-describe('Bill Licences - Fetch Bill Licence service', () => {
+describe('Bill Licences - Fetch Bill Licence Transactions dal', () => {
   let bill
   let billLicence
   let billRun
@@ -23,19 +24,19 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
   let purpose
 
   afterEach(async () => {
-    for (const transaction of transactions) {
-      transaction.$query().delete()
-    }
-
-    for (const chargeElement of chargeElements) {
-      chargeElement.$query().delete()
-    }
-
     if (billRun) {
-      chargeReference.$query().delete()
-      billLicence.$query().delete()
-      bill.$query().delete()
-      billRun.$query().delete()
+      for (const transaction of transactions) {
+        await transaction.$query().delete()
+      }
+
+      for (const chargeElement of chargeElements) {
+        await chargeElement.$query().delete()
+      }
+
+      await chargeReference.$query().delete()
+      await billLicence.$query().delete()
+      await bill.$query().delete()
+      await billRun.$query().delete()
     }
   })
 
@@ -55,6 +56,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
           chargeReferenceId: chargeReference.id,
           purposeId: purpose.id
         })
+
         chargeElements.push(chargeElement)
       }
 
@@ -108,28 +110,29 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
           description: transactionData.description,
           grossValuesCalculated: transactionData.grossValuesCalculated
         })
+
         transactions.push(transaction)
       }
     })
 
     it('returns the matching bill licence and associated data', async () => {
-      const result = await FetchBillLicenceService(billLicence.id)
+      const result = await FetchBillLicenceTransactionsDal(billLicence.id)
 
       expect(result).toEqual({
-        id: billLicence.id,
-        licenceId: billLicence.licenceId,
-        licenceRef: billLicence.licenceRef,
         bill: {
-          id: bill.id,
           accountNumber: bill.accountNumber,
           billRun: {
-            id: billRun.id,
             batchType: 'supplementary',
+            id: billRun.id,
             scheme: 'sroc',
             source: 'wrls',
             status: 'ready'
-          }
+          },
+          id: bill.id
         },
+        id: billLicence.id,
+        licenceId: billLicence.licenceId,
+        licenceRef: billLicence.licenceRef,
         transactions: [
           _transactionResult(transactions[3], chargeReference, chargeElements, purpose),
           _transactionResult(transactions[1], chargeReference, chargeElements, purpose),
@@ -188,28 +191,29 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
           description: transactionData.description,
           grossValuesCalculated: transactionData.grossValuesCalculated
         })
+
         transactions.push(transaction)
       }
     })
 
     it('returns the matching bill licence and associated data', async () => {
-      const result = await FetchBillLicenceService(billLicence.id)
+      const result = await FetchBillLicenceTransactionsDal(billLicence.id)
 
       expect(result).toEqual({
-        id: billLicence.id,
-        licenceId: billLicence.licenceId,
-        licenceRef: billLicence.licenceRef,
         bill: {
-          id: bill.id,
           accountNumber: bill.accountNumber,
           billRun: {
-            id: billRun.id,
             batchType: 'supplementary',
+            id: billRun.id,
             scheme: 'alcs',
             source: 'wrls',
             status: 'ready'
-          }
+          },
+          id: bill.id
         },
+        id: billLicence.id,
+        licenceId: billLicence.licenceId,
+        licenceRef: billLicence.licenceRef,
         transactions: [
           _transactionResult(transactions[3], chargeReference, null, purpose),
           _transactionResult(transactions[1], chargeReference, null, purpose),
@@ -221,8 +225,8 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
   })
 
   describe('when a bill licence with a matching ID does not exist', () => {
-    it('returns a result with no values set', async () => {
-      const result = await FetchBillLicenceService('93112100-152b-4860-abea-2adee11dcd69')
+    it('returns no result', async () => {
+      const result = await FetchBillLicenceTransactionsDal(generateUUID())
 
       expect(result).toBeUndefined()
     })
@@ -270,10 +274,10 @@ function _transactionResult(transaction, chargeReference, chargeElements, purpos
   if (chargeElements) {
     transactionResult.chargeReference.chargeElements = [
       {
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 3,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
         authorisedAnnualQuantity: 200,
         id: chargeElements[0].id,
         purpose: {
@@ -282,10 +286,10 @@ function _transactionResult(transaction, chargeReference, chargeElements, purpos
         }
       },
       {
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 3,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
         authorisedAnnualQuantity: 200,
         id: chargeElements[1].id,
         purpose: {
