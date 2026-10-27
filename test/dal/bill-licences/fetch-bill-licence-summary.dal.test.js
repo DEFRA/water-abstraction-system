@@ -16,7 +16,7 @@ import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 // Thing under test
 import FetchBillLicenceSummaryDal from '../../../src/dal/bill-licences/fetch-bill-licence-summary.dal.js'
 
-describe('Fetch Bill Licence Summary service', () => {
+describe('Fetch Bill Licence Summary dal', () => {
   let accountNumber
   let agentCompanyId
   let billId

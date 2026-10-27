@@ -13,7 +13,7 @@ import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction
 // Thing under test
 import FetchBillLicenceTransactionsDal from '../../../src/dal/bill-licences/fetch-bill-licence-transactions.dal.js'
 
-describe('Bill Licences - Fetch Bill Licence Transactions service', () => {
+describe('Bill Licences - Fetch Bill Licence Transactions dal', () => {
   let bill
   let billLicence
   let billRun
