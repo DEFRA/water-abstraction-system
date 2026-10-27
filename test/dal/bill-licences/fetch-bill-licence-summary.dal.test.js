@@ -11,7 +11,7 @@ import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.
 import ContactHelper from 'water-abstraction-engine/test/helpers/contact.helper.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
-import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
 import FetchBillLicenceSummaryDal from '../../../src/dal/bill-licences/fetch-bill-licence-summary.dal.js'
@@ -144,7 +144,7 @@ describe('Bill Licences - Fetch Bill Licence Summary dal', () => {
 
   describe('when a bill licence with a matching ID does not exist', () => {
     it('returns no result', async () => {
-      const result = await FetchBillLicenceSummaryDal('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillLicenceSummaryDal(generateUUID())
 
       expect(result).toBeUndefined()
     })

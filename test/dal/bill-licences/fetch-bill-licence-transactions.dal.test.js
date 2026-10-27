@@ -9,6 +9,7 @@ import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-el
 import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
 import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
 import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
 import FetchBillLicenceTransactionsDal from '../../../src/dal/bill-licences/fetch-bill-licence-transactions.dal.js'
@@ -225,7 +226,7 @@ describe('Bill Licences - Fetch Bill Licence Transactions dal', () => {
 
   describe('when a bill licence with a matching ID does not exist', () => {
     it('returns a result with no values set', async () => {
-      const result = await FetchBillLicenceTransactionsDal('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillLicenceTransactionsDal(generateUUID())
 
       expect(result).toBeUndefined()
     })

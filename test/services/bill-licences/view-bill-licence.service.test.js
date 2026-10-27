@@ -1,6 +1,9 @@
 // Test framework
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+// Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+
 // Things we need to stub
 import * as FetchBillLicenceTransactionsDal from '../../../src/dal/bill-licences/fetch-bill-licence-transactions.dal.js'
 import * as ViewBillLicencePresenter from '../../../src/presenters/bill-licences/view-bill-licence.presenter.js'
@@ -8,8 +11,15 @@ import * as ViewBillLicencePresenter from '../../../src/presenters/bill-licences
 // Thing under test
 import ViewBillLicenceService from '../../../src/services/bill-licences/view-bill-licence.service.js'
 
-describe('View Bill Licence service', () => {
-  const testId = '1ac20440-fddc-4835-97ea-95c702cb9430'
+describe('Bill Licences - View Bill Licence service', () => {
+  let billId
+  let billLicenceId
+
+  beforeEach(() => {
+    billId = generateUUID()
+    billLicenceId = generateUUID()
+  })
+
   afterEach(() => {
     vi.restoreAllMocks()
   })
@@ -18,20 +28,18 @@ describe('View Bill Licence service', () => {
     beforeEach(() => {
       vi.spyOn(FetchBillLicenceTransactionsDal, 'default').mockResolvedValue()
 
-      vi.spyOn(ViewBillLicencePresenter, 'default').mockReturnValue({
-        billId: '4fc6536e-1970-47f0-a4b3-d4c6360ad389'
-      })
+      vi.spyOn(ViewBillLicencePresenter, 'default').mockReturnValue({ billId })
     })
 
     it('will fetch the data and format it using the bill licence services', async () => {
-      const result = await ViewBillLicenceService(testId)
+      const result = await ViewBillLicenceService(billLicenceId)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
-        billId: '4fc6536e-1970-47f0-a4b3-d4c6360ad389'
+        billId
       })
 
-      expect(FetchBillLicenceTransactionsDal.default).toHaveBeenCalledExactlyOnceWith(testId)
+      expect(FetchBillLicenceTransactionsDal.default).toHaveBeenCalledExactlyOnceWith(billLicenceId)
     })
   })
 
