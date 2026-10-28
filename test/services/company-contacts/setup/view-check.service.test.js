@@ -9,7 +9,7 @@ import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
 // Things we need to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import * as FetchCompanyContactsDal from '../../../../src/dal/company-contacts/setup/fetch-company-contacts.dal.js'
-import * as FetchNotificationService from '../../../../src/services/company-contacts/fetch-notification.service.js'
+import * as FetchNotificationDal from '../../../../src/dal/company-contacts/fetch-notification.dal.js'
 
 // Thing under test
 import ViewCheckService from '../../../../src/services/company-contacts/setup/view-check.service.js'
@@ -26,7 +26,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     notification = undefined
 
-    vi.spyOn(FetchNotificationService, 'default').mockResolvedValue(notification)
+    vi.spyOn(FetchNotificationDal, 'default').mockResolvedValue(notification)
 
     vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 

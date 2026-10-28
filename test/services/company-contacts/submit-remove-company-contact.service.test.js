@@ -9,7 +9,7 @@ import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import * as DeleteCompanyContactDal from '../../../src/dal/company-contacts/delete-company-contact.dal.js'
 import * as FetchCompanyContactDal from '../../../src/dal/company-contacts/fetch-company-contact.dal.js'
-import * as FetchNotificationService from '../../../src/services/company-contacts/fetch-notification.service.js'
+import * as FetchNotificationDal from '../../../src/dal/company-contacts/fetch-notification.dal.js'
 
 // Thing under test
 import SubmitRemoveCompanyContactService from '../../../src/services/company-contacts/submit-remove-company-contact.service.js'
@@ -36,7 +36,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
     describe('and there are notifications', () => {
       beforeEach(() => {
         notification = { id: generateUUID() }
-        vi.spyOn(FetchNotificationService, 'default').mockResolvedValue(notification)
+        vi.spyOn(FetchNotificationDal, 'default').mockResolvedValue(notification)
       })
 
       it('returns page data for the view', async () => {
@@ -70,7 +70,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
     describe('and there are no notifications', () => {
       beforeEach(() => {
         notification = undefined
-        vi.spyOn(FetchNotificationService, 'default').mockResolvedValue(notification)
+        vi.spyOn(FetchNotificationDal, 'default').mockResolvedValue(notification)
       })
 
       it('returns page data for the view', async () => {

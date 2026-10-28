@@ -10,7 +10,7 @@ import { readFlashNotification } from 'water-abstraction-engine/lib/general.lib.
 
 import CheckPresenter from '../../../presenters/company-contacts/setup/check.presenter.js'
 import FetchCompanyContactsDal from '../../../dal/company-contacts/setup/fetch-company-contacts.dal.js'
-import FetchNotificationService from '../fetch-notification.service.js'
+import FetchNotificationDal from '../../../dal/company-contacts/fetch-notification.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/check' page
@@ -25,7 +25,7 @@ export default async function viewCheckService(sessionId, yar) {
 
   const companyContacts = await FetchCompanyContactsDal(session.company.id, session.companyContact)
 
-  const sentNotification = await FetchNotificationService(session.email)
+  const sentNotification = await FetchNotificationDal(session.email)
 
   await markCheckPageVisited(session)
 

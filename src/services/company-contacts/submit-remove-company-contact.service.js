@@ -8,7 +8,7 @@ import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 
 import DeleteCompanyContactDal from '../../dal/company-contacts/delete-company-contact.dal.js'
 import FetchCompanyContactDal from '../../dal/company-contacts/fetch-company-contact.dal.js'
-import FetchNotificationService from './fetch-notification.service.js'
+import FetchNotificationDal from '../../dal/company-contacts/fetch-notification.dal.js'
 
 /**
  * Orchestrates validating the data for the '/company-contacts/{id}/remove' page
@@ -21,7 +21,7 @@ import FetchNotificationService from './fetch-notification.service.js'
 export default async function submitRemoveCompanyContactService(id, yar) {
   const companyContact = await FetchCompanyContactDal(id)
 
-  const notification = await FetchNotificationService(companyContact.contact.email)
+  const notification = await FetchNotificationDal(companyContact.contact.email)
 
   const notified = !!notification
 
