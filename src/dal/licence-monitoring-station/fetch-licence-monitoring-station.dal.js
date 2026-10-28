@@ -1,6 +1,6 @@
 /**
  * Fetches the matching licence monitoring station record needed for the remove licence tag page
- * @module FetchLicenceMonitoringStationService
+ * @module FetchLicenceMonitoringStationDal
  */
 
 import LicenceMonitoringStationModel from 'water-abstraction-engine/models/licence-monitoring-station.model.js'
@@ -13,13 +13,7 @@ import LicenceMonitoringStationModel from 'water-abstraction-engine/models/licen
  * @returns {Promise<object>} the matching instance of the `LicenceMonitoringStationModel` populated with the data
  * needed for the remove licence tag page
  */
-export default async function fetchLicenceMonitoringStationService(licenceMonitoringStationId) {
-  const monitoringStationLicenceTags = await _fetchMonitoringStationLicenceTags(licenceMonitoringStationId)
-
-  return monitoringStationLicenceTags
-}
-
-async function _fetchMonitoringStationLicenceTags(licenceMonitoringStationId) {
+export default async function fetchLicenceMonitoringStationDal(licenceMonitoringStationId) {
   return LicenceMonitoringStationModel.query()
     .findById(licenceMonitoringStationId)
     .select(['id', 'measureType', 'restrictionType', 'thresholdUnit', 'thresholdValue'])

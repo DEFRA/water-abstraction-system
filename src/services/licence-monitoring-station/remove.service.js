@@ -4,7 +4,7 @@
  * @module RemoveService
  */
 
-import FetchLicenceMonitoringStationService from './fetch-licence-monitoring-station.service.js'
+import FetchLicenceMonitoringStationDal from '../../dal/licence-monitoring-station/fetch-licence-monitoring-station.dal.js'
 import RemovePresenter from '../../presenters/licence-monitoring-station/remove.presenter.js'
 
 /**
@@ -18,7 +18,7 @@ import RemovePresenter from '../../presenters/licence-monitoring-station/remove.
  * @returns {Promise<object>} The view data for the remove licence tag page
  */
 export default async function removeService(licenceMonitoringStationId) {
-  const licenceMonitoringStation = await FetchLicenceMonitoringStationService(licenceMonitoringStationId)
+  const licenceMonitoringStation = await FetchLicenceMonitoringStationDal(licenceMonitoringStationId)
 
   const formattedData = RemovePresenter(licenceMonitoringStation)
 
