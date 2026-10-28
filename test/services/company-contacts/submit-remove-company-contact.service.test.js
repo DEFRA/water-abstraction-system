@@ -7,7 +7,7 @@ import CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
-import * as DeleteCompanyContactService from '../../../src/services/company-contacts/delete-company-contact.service.js'
+import * as DeleteCompanyContactDal from '../../../src/dal/company-contacts/delete-company-contact.dal.js'
 import * as FetchCompanyContactDal from '../../../src/dal/company-contacts/fetch-company-contact.dal.js'
 import * as FetchNotificationService from '../../../src/services/company-contacts/fetch-notification.service.js'
 
@@ -22,7 +22,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
   beforeEach(() => {
     companyContact = CustomersFixtures.companyContact()
 
-    vi.spyOn(DeleteCompanyContactService, 'default').mockResolvedValue()
+    vi.spyOn(DeleteCompanyContactDal, 'default').mockResolvedValue()
     vi.spyOn(FetchCompanyContactDal, 'default').mockResolvedValue(companyContact)
 
     yarStub = YarStub()
@@ -63,7 +63,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       it('calls the delete company contact service with the id and true', async () => {
         await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
-        expect(DeleteCompanyContactService.default).toHaveBeenCalledWith(companyContact.id, true)
+        expect(DeleteCompanyContactDal.default).toHaveBeenCalledWith(companyContact.id, true)
       })
     })
 
@@ -97,7 +97,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       it('calls the delete company contact service with the id and false', async () => {
         await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
-        expect(DeleteCompanyContactService.default).toHaveBeenCalledWith(companyContact.id, false)
+        expect(DeleteCompanyContactDal.default).toHaveBeenCalledWith(companyContact.id, false)
       })
     })
   })

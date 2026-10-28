@@ -1,6 +1,6 @@
 /**
  * Deletes the company contact
- * @module DeleteCompanyContactService
+ * @module DeleteCompanyContactDal
  */
 
 import CompanyContactModel from 'water-abstraction-engine/models/company-contact.model.js'
@@ -17,7 +17,7 @@ import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.j
  * @param {string} id - The id of the company contact
  * @param {object} notified - true if the company contacts have been notified
  */
-export default async function deleteCompanyContactService(id, notified) {
+export default async function deleteCompanyContactDal(id, notified) {
   if (notified) {
     await CompanyContactModel.query().update({ deletedAt: timestampForPostgres() }).where('id', id)
   } else {
