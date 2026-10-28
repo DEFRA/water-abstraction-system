@@ -6,7 +6,7 @@
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
-import FetchLicenceDal from '../../../dal/licence-monitoring-station/fetch-licence.dal.js'
+import FetchLicenceDal from '../../../dal/licence-monitoring-station/setup/fetch-licence.dal.js'
 import LicenceNumberPresenter from '../../../presenters/licence-monitoring-station/setup/licence-number.presenter.js'
 import LicenceNumberValidator from '../../../validators/licence-monitoring-station/setup/licence-number.validator.js'
 

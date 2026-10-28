@@ -6,9 +6,9 @@ import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import FetchLicenceDal from '../../../src/dal/licence-monitoring-station/fetch-licence.dal.js'
+import FetchLicenceDal from '../../../../src/dal/licence-monitoring-station/setup/fetch-licence.dal.js'
 
-describe('Licence Monitoring Station - Fetch Licence DAL', () => {
+describe('Licence Monitoring Station Setup - Fetch Licence DAL', () => {
   let licence
 
   beforeAll(async () => {
