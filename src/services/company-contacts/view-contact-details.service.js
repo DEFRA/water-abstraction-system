@@ -8,7 +8,7 @@ import { readFlashNotification } from 'water-abstraction-engine/lib/general.lib.
 
 import ContactDetailsPresenter from '../../presenters/company-contacts/contact-details.presenter.js'
 import FetchAbstractionAlertLicencesDal from '../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
-import FetchCompanyContactDetailsService from './fetch-company-contact-details.service.js'
+import FetchCompanyContactDetailsDal from '../../dal/company-contacts/fetch-company-contact-details.dal.js'
 import FetchCompanyService from '../../dal/companies/fetch-company.dal.js'
 import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
@@ -22,7 +22,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  * @returns {Promise<object>} The data formatted for the view template
  */
 export default async function viewContactDetailsService(id, auth, yar) {
-  const companyContact = await FetchCompanyContactDetailsService(id)
+  const companyContact = await FetchCompanyContactDetailsDal(id)
 
   const company = await FetchCompanyService(companyContact.companyId)
 
