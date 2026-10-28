@@ -1,6 +1,6 @@
 /**
  * Fetches the company contact data needed for the view '/company-contacts/{id}/contact-details' page
- * @module FetchCompanyContactDetailsService
+ * @module FetchCompanyContactDetailsDal
  */
 
 import CompanyContactModel from 'water-abstraction-engine/models/company-contact.model.js'
@@ -12,7 +12,7 @@ import CompanyContactModel from 'water-abstraction-engine/models/company-contact
  *
  * @returns {Promise<CompanyContactModel>} the company contact
  */
-export default async function fetchCompanyContactDetailsService(companyContactId) {
+export default async function fetchCompanyContactDetailsDal(companyContactId) {
   return _fetch(companyContactId)
 }
 

@@ -1,6 +1,6 @@
 /**
  * Fetches data needed to determine if an email address has been used to send notifications.
- * @module FetchNotificationService
+ * @module FetchNotificationDal
  */
 
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
@@ -17,7 +17,7 @@ import { ignoreMessageRef } from 'water-abstraction-engine/lib/static-lookups.li
  * @returns {Promise<module:NotificationModel>} a notification, or undefined if the email address has not been used to
  * send notifications
  */
-export default async function fetchNotificationService(email) {
+export default async function fetchNotificationDal(email) {
   return _fetch(email)
 }
 

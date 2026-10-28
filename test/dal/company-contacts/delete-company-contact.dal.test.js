@@ -6,9 +6,9 @@ import CompanyContactHelper from 'water-abstraction-engine/test/helpers/company-
 import CompanyContactModel from 'water-abstraction-engine/models/company-contact.model.js'
 
 // Thing under test
-import DeleteCompanyContactService from '../../../src/services/company-contacts/delete-company-contact.service.js'
+import DeleteCompanyContactDal from '../../../src/dal/company-contacts/delete-company-contact.dal.js'
 
-describe('Company contact - Delete company contact service', () => {
+describe('Company contact - Delete company contact dal', () => {
   let companyContact
   let notified
   let today
@@ -33,7 +33,7 @@ describe('Company contact - Delete company contact service', () => {
     })
 
     it('soft deletes the company contact', async () => {
-      await DeleteCompanyContactService(companyContact.id, notified)
+      await DeleteCompanyContactDal(companyContact.id, notified)
 
       const exists = await CompanyContactModel.query().findById(companyContact.id)
 
@@ -50,7 +50,7 @@ describe('Company contact - Delete company contact service', () => {
     })
 
     it('deletes the company contact', async () => {
-      await DeleteCompanyContactService(companyContact.id, notified)
+      await DeleteCompanyContactDal(companyContact.id, notified)
 
       const exists = await CompanyContactModel.query().findById(companyContact.id)
 
