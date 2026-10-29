@@ -9,12 +9,12 @@ import LicenceVersionPurposeConditionTypeHelper from 'water-abstraction-engine/t
 import LicenceVersionPurposeHelper from 'water-abstraction-engine/test/helpers/licence-version-purpose.helper.js'
 
 // Thing under test
-import FetchFullConditionService from '../../../../src/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import FetchFullConditionDal from '../../../../src/dal/licence-monitoring-station/setup/fetch-full-condition.dal.js'
 
 const CES_CONDITION_TYPE = LicenceVersionPurposeConditionTypeHelper.select(20)
 const NON_CES_CONDITION_TYPE = LicenceVersionPurposeConditionTypeHelper.select(19)
 
-describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () => {
+describe('Licence Monitoring Station Setup - Fetch Full Condition dal', () => {
   let licence
 
   beforeEach(async () => {
@@ -53,7 +53,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('returns current CES conditions for the specified licence', async () => {
-      const results = await FetchFullConditionService(licence.id)
+      const results = await FetchFullConditionDal(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id
@@ -63,7 +63,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('does not return conditions from other licences', async () => {
-      const results = await FetchFullConditionService(licence.id)
+      const results = await FetchFullConditionDal(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id
@@ -73,7 +73,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('does not return non-CES conditions', async () => {
-      const results = await FetchFullConditionService(licence.id)
+      const results = await FetchFullConditionDal(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id
@@ -83,7 +83,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('does not return superseded conditions', async () => {
-      const results = await FetchFullConditionService(licence.id)
+      const results = await FetchFullConditionDal(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id
