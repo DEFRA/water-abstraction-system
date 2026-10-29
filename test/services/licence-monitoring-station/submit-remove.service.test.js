@@ -6,22 +6,22 @@ import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import * as DeleteLicenceMonitoringStationDal from '../../../src/dal/licence-monitoring-station/delete-licence-monitoring-station.dal.js'
+import * as RemoveTagDal from '../../../src/dal/licence-monitoring-station/remove-tag.dal.js'
 
 // Thing under test
 import SubmitRemoveService from '../../../src/services/licence-monitoring-station/submit-remove.service.js'
 
 describe('Licence Monitoring Station - Submit Remove service', () => {
-  let deleteLicenceMonitoringStationDalStub
   let licenceMonitoringStationId
   let licenceRef
+  let removeTagDalStub
   let yarStub
 
   beforeEach(() => {
     licenceMonitoringStationId = generateUUID()
     licenceRef = generateLicenceRef()
 
-    deleteLicenceMonitoringStationDalStub = vi.spyOn(DeleteLicenceMonitoringStationDal, 'default').mockResolvedValue()
+    removeTagDalStub = vi.spyOn(RemoveTagDal, 'default').mockResolvedValue()
 
     yarStub = YarStub()
   })
@@ -31,10 +31,10 @@ describe('Licence Monitoring Station - Submit Remove service', () => {
   })
 
   describe('when a user submits the licence monitoring station to be removed', () => {
-    it('calls the "DeleteLicenceMonitoringStationDal" to soft delete the licence monitoring station', async () => {
+    it('calls the "RemoveTagDal" to soft delete the licence monitoring station', async () => {
       await SubmitRemoveService(licenceMonitoringStationId, licenceRef, yarStub)
 
-      expect(deleteLicenceMonitoringStationDalStub).toHaveBeenCalledExactlyOnceWith(licenceMonitoringStationId)
+      expect(removeTagDalStub).toHaveBeenCalledExactlyOnceWith(licenceMonitoringStationId)
     })
 
     it('sets the notification message title to "Updated" and the text to "Tag removed for [licence ref]"', async () => {

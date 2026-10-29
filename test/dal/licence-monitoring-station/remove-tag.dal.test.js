@@ -6,9 +6,9 @@ import LicenceMonitoringStationHelper from 'water-abstraction-engine/test/helper
 import LicenceMonitoringStationModel from 'water-abstraction-engine/models/licence-monitoring-station.model.js'
 
 // Thing under test
-import DeleteLicenceMonitoringStationDal from '../../../src/dal/licence-monitoring-station/delete-licence-monitoring-station.dal.js'
+import RemoveTagDal from '../../../src/dal/licence-monitoring-station/remove-tag.dal.js'
 
-describe('Licence Monitoring Station - Delete Licence Monitoring Station dal', () => {
+describe('Licence Monitoring Station - Remove Tag dal', () => {
   let licenceMonitoringStation
   let today
 
@@ -27,7 +27,7 @@ describe('Licence Monitoring Station - Delete Licence Monitoring Station dal', (
   })
 
   it('soft deletes the licence monitoring station', async () => {
-    await DeleteLicenceMonitoringStationDal(licenceMonitoringStation.id)
+    await RemoveTagDal(licenceMonitoringStation.id)
 
     const result = await LicenceMonitoringStationModel.query().findById(licenceMonitoringStation.id)
 

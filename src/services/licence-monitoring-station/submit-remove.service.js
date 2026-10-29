@@ -5,7 +5,7 @@
 
 import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 
-import DeleteLicenceMonitoringStationDal from '../../dal/licence-monitoring-station/delete-licence-monitoring-station.dal.js'
+import RemoveTagDal from '../../dal/licence-monitoring-station/remove-tag.dal.js'
 
 /**
  * Manages updating the licence monitoring station record as deleted when remove tag is confirmed
@@ -18,7 +18,7 @@ import DeleteLicenceMonitoringStationDal from '../../dal/licence-monitoring-stat
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 export default async function submitRemoveService(licenceMonitoringStationId, licenceRef, yar) {
-  await DeleteLicenceMonitoringStationDal(licenceMonitoringStationId)
+  await RemoveTagDal(licenceMonitoringStationId)
 
   flashNotification(yar, 'Updated', `Tag removed for ${licenceRef}`)
 }

@@ -1,17 +1,17 @@
 /**
- * Soft deletes the matching licence monitoring station record
- * @module DeleteLicenceMonitoringStationDal
+ * Removes a tagged licence from a monitoring station by soft deleting the matching licence monitoring station record
+ * @module RemoveTagDal
  */
 
 import LicenceMonitoringStationModel from 'water-abstraction-engine/models/licence-monitoring-station.model.js'
 import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 
 /**
- * Soft deletes the matching licence monitoring station record
+ * Removes a tagged licence from a monitoring station by soft deleting the matching licence monitoring station record
  *
  * @param {string} licenceMonitoringStationId - The UUID for the licence monitoring station record
  */
-export default async function deleteLicenceMonitoringStationDal(licenceMonitoringStationId) {
+export default async function removeTagDal(licenceMonitoringStationId) {
   const timestamp = timestampForPostgres()
 
   await LicenceMonitoringStationModel.query()
