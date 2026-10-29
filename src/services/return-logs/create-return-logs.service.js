@@ -23,8 +23,8 @@ export default async function createReturnLogsService(returnRequirement, returnC
   const returnLogs = GenerateReturnLogsService(
     returnRequirement,
     returnCycle,
-    licenceEndDate,
-    featureFlagsConfig.setOldReturnsDueDate
+    featureFlagsConfig.setOldReturnsDueDate,
+    licenceEndDate
   )
 
   return _persistReturnLogs(returnLogs, trx)
