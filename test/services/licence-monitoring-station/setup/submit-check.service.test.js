@@ -2,50 +2,52 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import LicenceMonitoringStationModel from 'water-abstraction-engine/models/licence-monitoring-station.model.js'
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
-
-// Test helpers
 import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
+import { generateLicenceRef, generateUserId, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
 import * as DeleteSessionDal from 'water-abstraction-engine/dal/delete-session.dal.js'
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import * as CreateTagDal from '../../../../src/dal/licence-monitoring-station/setup/create-tag.dal.js'
 
 // Thing under test
 import SubmitCheckService from '../../../../src/services/licence-monitoring-station/setup/submit-check.service.js'
 
-describe('Licence Monitoring Station Setup - Submit Check Service', () => {
-  const userId = 12345
+describe('Licence Monitoring Station - Setup - Submit Check service', () => {
+  let createTagDalStub
+  let deleteSessionDalStub
   let session
   let sessionData
+  let userId
   let yarStub
 
   beforeEach(() => {
     sessionData = {
-      unit: 'Ml/d',
-      label: 'LABEL',
-      licenceId: generateUUID(),
-      threshold: 100,
-      licenceRef: 'LICENCE_REF',
-      conditionId: 'no_condition',
-      stopOrReduce: 'stop',
-      checkPageVisited: true,
-      reduceAtThreshold: null,
-      monitoringStationId: generateUUID(),
-      conditionDisplayText: 'CONDITION_DISPLAY_TEXT',
       abstractionPeriodEndDay: 31,
       abstractionPeriodEndMonth: 12,
       abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 1
+      abstractionPeriodStartMonth: 1,
+      checkPageVisited: true,
+      conditionDisplayText: 'CONDITION_DISPLAY_TEXT',
+      conditionId: 'no_condition',
+      label: 'LABEL',
+      licenceId: generateUUID(),
+      licenceRef: generateLicenceRef(),
+      monitoringStationId: generateUUID(),
+      reduceAtThreshold: null,
+      stopOrReduce: 'stop',
+      threshold: 100,
+      unit: 'Ml/d'
     }
 
     session = SessionModelStub(sessionData)
 
-    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+    userId = generateUserId()
 
-    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
+    createTagDalStub = vi.spyOn(CreateTagDal, 'default').mockResolvedValue()
+    deleteSessionDalStub = vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
   })
@@ -55,195 +57,34 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
   })
 
   describe('when called', () => {
-    it('creates the monitoring station tag', async () => {
+    it('calls the "CreateTagDal" to create the monitoring station tag', async () => {
       await SubmitCheckService(session.id, userId, yarStub)
 
-      const result = await LicenceMonitoringStationModel.query()
-        .where('monitoringStationId', sessionData.monitoringStationId)
-        .first()
-
-      expect(result.monitoringStationId).toBeDefined()
-    })
-
-    it('persists the abstraction period', async () => {
-      await SubmitCheckService(session.id, userId, yarStub)
-
-      const result = await LicenceMonitoringStationModel.query()
-        .where('monitoringStationId', sessionData.monitoringStationId)
-        .first()
-
-      expect(result.abstractionPeriodStartDay).toEqual(sessionData.abstractionPeriodStartDay)
-      expect(result.abstractionPeriodStartMonth).toEqual(sessionData.abstractionPeriodStartMonth)
-      expect(result.abstractionPeriodEndDay).toEqual(sessionData.abstractionPeriodEndDay)
-      expect(result.abstractionPeriodEndMonth).toEqual(sessionData.abstractionPeriodEndMonth)
-    })
-
-    it('persists the user that created the tag', async () => {
-      await SubmitCheckService(session.id, userId, yarStub)
-
-      const result = await LicenceMonitoringStationModel.query()
-        .where('monitoringStationId', sessionData.monitoringStationId)
-        .first()
-
-      expect(result.createdBy).toEqual(userId)
+      expect(createTagDalStub).toHaveBeenCalledExactlyOnceWith(session, userId)
     })
 
     it('deletes the session', async () => {
       await SubmitCheckService(session.id, userId, yarStub)
 
-      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
+      expect(deleteSessionDalStub).toHaveBeenCalledExactlyOnceWith(session.id)
     })
 
-    it('continues the journey', async () => {
-      const result = await SubmitCheckService(session.id, userId, yarStub)
-
-      expect(result).toEqual(sessionData.monitoringStationId)
-    })
-
-    it('sets the notification message title to "Success" and the text to "Tag for licence ... added" ', async () => {
+    it('sets the notification message title to "Success" and the text to "Tag for licence ... added"', async () => {
       await SubmitCheckService(session.id, userId, yarStub)
 
       const [flashType, notification] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(notification).toEqual({
-        titleText: 'Success',
-        text: `Tag for licence ${session.licenceRef} added`
+        text: `Tag for licence ${session.licenceRef} added`,
+        titleText: 'Success'
       })
     })
 
-    describe('and the session unit is a flow unit', () => {
-      beforeEach(() => {
-        sessionData = { ...sessionData, unit: 'm3/s' }
+    it('returns the monitoring station ID to continue the journey', async () => {
+      const result = await SubmitCheckService(session.id, userId, yarStub)
 
-        session = SessionModelStub(sessionData)
-
-        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
-      })
-
-      it('sets "measureType" as "flow"', async () => {
-        await SubmitCheckService(session.id, userId, yarStub)
-
-        const result = await LicenceMonitoringStationModel.query()
-          .where('monitoringStationId', sessionData.monitoringStationId)
-          .first()
-
-        expect(result.measureType).toEqual('flow')
-      })
-    })
-
-    describe('and the session unit is a level unit', () => {
-      beforeEach(() => {
-        sessionData = { ...sessionData, unit: 'mAOD' }
-
-        session = SessionModelStub(sessionData)
-
-        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
-      })
-
-      it('sets "measureType" as "level"', async () => {
-        await SubmitCheckService(session.id, userId, yarStub)
-
-        const result = await LicenceMonitoringStationModel.query()
-          .where('monitoringStationId', sessionData.monitoringStationId)
-          .first()
-
-        expect(result.measureType).toEqual('level')
-      })
-    })
-
-    describe('and "stopOrReduce" is "stop"', () => {
-      beforeEach(() => {
-        sessionData = { ...sessionData, stopOrReduce: 'stop' }
-
-        session = SessionModelStub(sessionData)
-
-        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
-      })
-
-      it('sets "restrictionType" as "stop"', async () => {
-        await SubmitCheckService(session.id, userId, yarStub)
-
-        const result = await LicenceMonitoringStationModel.query()
-          .where('monitoringStationId', sessionData.monitoringStationId)
-          .first()
-
-        expect(result.restrictionType).toEqual('stop')
-      })
-    })
-
-    describe('and "stopOrReduce" is "reduce"', () => {
-      describe('and "reduceAtThreshold" is "no"', () => {
-        beforeEach(() => {
-          sessionData = { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'no' }
-
-          session = SessionModelStub(sessionData)
-
-          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
-        })
-
-        it('sets "restrictionType" as "reduce"', async () => {
-          await SubmitCheckService(session.id, userId, yarStub)
-
-          const result = await LicenceMonitoringStationModel.query()
-            .where('monitoringStationId', sessionData.monitoringStationId)
-            .first()
-
-          expect(result.restrictionType).toEqual('reduce')
-        })
-      })
-
-      describe('and "reduceAtThreshold" is "yes"', () => {
-        beforeEach(() => {
-          sessionData = { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'yes' }
-
-          session = SessionModelStub(sessionData)
-
-          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
-        })
-
-        it('sets "restrictionType" as "stop_or_reduce"', async () => {
-          await SubmitCheckService(session.id, userId, yarStub)
-
-          const result = await LicenceMonitoringStationModel.query()
-            .where('monitoringStationId', sessionData.monitoringStationId)
-            .first()
-
-          expect(result.restrictionType).toEqual('stop_or_reduce')
-        })
-      })
-    })
-
-    describe('and "conditionId" is a condition UUID', () => {
-      beforeEach(() => {
-        sessionData = { ...sessionData, conditionId: generateUUID() }
-
-        session = SessionModelStub(sessionData)
-
-        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
-      })
-
-      it('persists the licence version purpose condition id', async () => {
-        await SubmitCheckService(session.id, userId, yarStub)
-
-        const result = await LicenceMonitoringStationModel.query()
-          .where('monitoringStationId', sessionData.monitoringStationId)
-          .first()
-
-        expect(result.licenceVersionPurposeConditionId).toEqual(sessionData.conditionId)
-      })
-    })
-
-    describe('and "conditionId" is "no_condition"', () => {
-      it('sets the licence version purpose condition id to NULL', async () => {
-        await SubmitCheckService(session.id, userId, yarStub)
-
-        const result = await LicenceMonitoringStationModel.query()
-          .where('monitoringStationId', sessionData.monitoringStationId)
-          .first()
-
-        expect(result.licenceVersionPurposeConditionId).toBeNull()
-      })
+      expect(result).toEqual(session.monitoringStationId)
     })
   })
 })

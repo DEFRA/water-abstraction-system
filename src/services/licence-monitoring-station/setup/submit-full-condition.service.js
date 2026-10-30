@@ -6,7 +6,7 @@
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
-import FetchFullConditionService from '../../../services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import FetchFullConditionDal from '../../../dal/licence-monitoring-station/setup/fetch-full-condition.dal.js'
 import FullConditionService from '../../../services/licence-monitoring-station/setup/full-condition.service.js'
 import FullConditionValidator from '../../../validators/licence-monitoring-station/setup/full-condition.validator.js'
 
@@ -85,7 +85,7 @@ async function _fetchCondition(licenceId, conditionId) {
     return { condition: null, conditionIndex: null }
   }
 
-  const conditions = await FetchFullConditionService(licenceId)
+  const conditions = await FetchFullConditionDal(licenceId)
 
   const conditionIndex = conditions.findIndex((condition) => {
     return condition.id === conditionId

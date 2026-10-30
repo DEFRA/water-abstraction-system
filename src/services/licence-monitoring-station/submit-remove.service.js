@@ -3,8 +3,9 @@
  * @module SubmitRemoveService
  */
 
-import LicenceMonitoringStationModel from 'water-abstraction-engine/models/licence-monitoring-station.model.js'
-import { flashNotification, timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
+import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
+
+import RemoveTagDal from '../../dal/licence-monitoring-station/remove-tag.dal.js'
 
 /**
  * Manages updating the licence monitoring station record as deleted when remove tag is confirmed
@@ -17,11 +18,7 @@ import { flashNotification, timestampForPostgres } from 'water-abstraction-engin
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 export default async function submitRemoveService(licenceMonitoringStationId, licenceRef, yar) {
-  const timestamp = timestampForPostgres()
-
-  await LicenceMonitoringStationModel.query()
-    .update({ deletedAt: timestamp, updatedAt: timestamp })
-    .where('id', licenceMonitoringStationId)
+  await RemoveTagDal(licenceMonitoringStationId)
 
   flashNotification(yar, 'Updated', `Tag removed for ${licenceRef}`)
 }
