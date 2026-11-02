@@ -8,7 +8,7 @@ import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 // Thing under test
 import FetchLicenceDal from '../../../../src/dal/licence-monitoring-station/setup/fetch-licence.dal.js'
 
-describe('Licence Monitoring Station Setup - Fetch Licence DAL', () => {
+describe('Licence Monitoring Station - Setup - Fetch Licence DAL', () => {
   let licence
 
   beforeAll(async () => {
