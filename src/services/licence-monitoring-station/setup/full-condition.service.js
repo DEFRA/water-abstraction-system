@@ -6,7 +6,7 @@
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
-import FetchFullConditionService from './fetch-full-condition.service.js'
+import FetchFullConditionDal from '../../../dal/licence-monitoring-station/setup/fetch-full-condition.dal.js'
 import FullConditionPresenter from '../../../presenters/licence-monitoring-station/setup/full-condition.presenter.js'
 
 /**
@@ -19,7 +19,7 @@ import FullConditionPresenter from '../../../presenters/licence-monitoring-stati
 export default async function fullConditionService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const conditions = await FetchFullConditionService(session.licenceId)
+  const conditions = await FetchFullConditionDal(session.licenceId)
 
   const pageData = FullConditionPresenter(session, conditions)
 

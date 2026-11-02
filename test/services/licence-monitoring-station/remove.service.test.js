@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchLicenceMonitoringStationService from '../../../src/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js'
+import * as FetchLicenceMonitoringStationDal from '../../../src/dal/licence-monitoring-station/fetch-licence-monitoring-station.dal.js'
 
 // Thing under test
 import RemoveService from '../../../src/services/licence-monitoring-station/remove.service.js'
@@ -32,7 +32,7 @@ describe('Licence Monitoring Station - Remove service', () => {
       licenceVersionPurposeCondition: null
     }
 
-    vi.spyOn(FetchLicenceMonitoringStationService, 'default').mockResolvedValue(licenceMonitoringStation)
+    vi.spyOn(FetchLicenceMonitoringStationDal, 'default').mockResolvedValue(licenceMonitoringStation)
   })
 
   afterEach(() => {

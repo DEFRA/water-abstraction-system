@@ -9,9 +9,9 @@ import LicenceVersionPurposeConditionTypeHelper from 'water-abstraction-engine/t
 import MonitoringStationHelper from 'water-abstraction-engine/test/helpers/monitoring-station.helper.js'
 
 // Thing under test
-import FetchLicenceMonitoringStationService from '../../../src/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js'
+import FetchLicenceMonitoringStationDal from '../../../src/dal/licence-monitoring-station/fetch-licence-monitoring-station.dal.js'
 
-describe('Licence Monitoring Station - Fetch Licence Monitoring Station service', () => {
+describe('Licence Monitoring Station - Fetch Licence Monitoring Station dal', () => {
   let licence
   let monitoringStation
 
@@ -45,7 +45,7 @@ describe('Licence Monitoring Station - Fetch Licence Monitoring Station service'
     })
 
     it('returns the matching data', async () => {
-      const result = await FetchLicenceMonitoringStationService(licenceMonitoringStation.id)
+      const result = await FetchLicenceMonitoringStationDal(licenceMonitoringStation.id)
 
       expect(result).toEqual({
         id: licenceMonitoringStation.id,
@@ -86,7 +86,7 @@ describe('Licence Monitoring Station - Fetch Licence Monitoring Station service'
     })
 
     it('returns the matching data', async () => {
-      const result = await FetchLicenceMonitoringStationService(licenceMonitoringStation.id)
+      const result = await FetchLicenceMonitoringStationDal(licenceMonitoringStation.id)
 
       expect(result).toEqual({
         id: licenceMonitoringStation.id,

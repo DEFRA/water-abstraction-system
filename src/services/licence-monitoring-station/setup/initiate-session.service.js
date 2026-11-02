@@ -4,7 +4,8 @@
  */
 
 import CreateSessionDal from 'water-abstraction-engine/dal/create-session.dal.js'
-import MonitoringStationModel from 'water-abstraction-engine/models/monitoring-station.model.js'
+
+import FetchMonitoringStationDal from '../../../dal/licence-monitoring-station/setup/fetch-monitoring-station.dal.js'
 
 /**
  * Initiates the session record used for setting up a new licence monitoring station journey
@@ -22,14 +23,10 @@ import MonitoringStationModel from 'water-abstraction-engine/models/monitoring-s
  * @returns {Promise<string>} the sessionId used for the redirect
  */
 export default async function initiateSessionService(monitoringStationId) {
-  const monitoringStation = await _fetchMonitoringStation(monitoringStationId)
+  const monitoringStation = await FetchMonitoringStationDal(monitoringStationId)
   const data = { monitoringStationId, ...monitoringStation }
 
   const { id: sessionId } = await CreateSessionDal(data)
 
   return sessionId
-}
-
-async function _fetchMonitoringStation(monitoringStationId) {
-  return MonitoringStationModel.query().select('label').findById(monitoringStationId)
 }

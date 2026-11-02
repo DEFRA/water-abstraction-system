@@ -8,7 +8,7 @@ import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/
 
 // Things we need to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
-import * as FetchLicenceDal from '../../../../src/dal/licence-monitoring-station/fetch-licence.dal.js'
+import * as FetchLicenceDal from '../../../../src/dal/licence-monitoring-station/setup/fetch-licence.dal.js'
 
 // Thing under test
 import SubmitLicenceNumberService from '../../../../src/services/licence-monitoring-station/setup/submit-licence-number.service.js'
