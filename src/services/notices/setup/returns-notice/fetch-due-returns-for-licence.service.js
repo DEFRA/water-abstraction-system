@@ -22,23 +22,32 @@ export default async function fetchDueReturnsForLicenceService(licenceRef) {
 async function _fetch(licenceRef) {
   const query = `
     SELECT
-      rl.id as "returnLogId",
+      rl.id AS "returnLogId",
       rl.due_date AS "dueDate",
       rl.end_date AS "endDate",
-      COALESCE(rr.reference, rl.return_reference::integer) AS "returnReference",
+      rr.reference AS "returnReference",
       rl.returns_frequency AS "returnsFrequency",
       rl.start_date AS "startDate",
-      rl.metadata->'purposes'->0->'tertiary'->>'description' AS purpose,
-      rl.metadata->'isTwoPartTariff' AS "twoPartTariff",
-      rl.metadata->'description' AS "siteDescription",
-      rl.metadata->'nald'->>'areaCode' AS "naldAreaCode",
+      (
+        SELECT p.description
+        FROM return_requirement_purposes rrp
+        INNER JOIN purposes p
+          ON p.id = rrp.purpose_id
+        WHERE rrp.return_requirement_id = rr.id
+        LIMIT 1
+      ) AS purpose,
+      rr.two_part_tariff AS "twoPartTariff",
+      rr.site_description AS "siteDescription",
+      l.regions->>'historicalAreaCode' AS "naldAreaCode",
       r.display_name AS "regionName",
       r.nald_region_id AS "regionCode"
     FROM
       return_logs rl
+    INNER JOIN licences l
+      ON rl.licence_ref = l.licence_ref
     INNER JOIN regions r
-      ON r.nald_region_id = (rl.metadata->'nald'->>'regionCode')::integer
-    LEFT JOIN return_requirements rr
+      ON l.region_id = r.id
+    INNER JOIN return_requirements rr
       ON rl.return_requirement_id = rr.id
     WHERE
       rl.licence_ref = ?
