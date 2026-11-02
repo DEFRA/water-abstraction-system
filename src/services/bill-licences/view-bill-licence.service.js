@@ -3,7 +3,7 @@
  * @module ViewBillLicenceService
  */
 
-import FetchBillLicenceService from './fetch-bill-licence.service.js'
+import FetchBillLicenceTransactionsDal from '../../dal/bill-licences/fetch-bill-licence-transactions.dal.js'
 import ViewBillLicencePresenter from '../../presenters/bill-licences/view-bill-licence.presenter.js'
 
 /**
@@ -15,7 +15,7 @@ import ViewBillLicencePresenter from '../../presenters/bill-licences/view-bill-l
  * licence view page
  */
 export default async function viewBillLicenceService(id) {
-  const billLicence = await FetchBillLicenceService(id)
+  const billLicence = await FetchBillLicenceTransactionsDal(id)
 
   const formattedData = ViewBillLicencePresenter(billLicence)
 

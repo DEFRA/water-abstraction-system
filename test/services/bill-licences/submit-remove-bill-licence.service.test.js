@@ -1,8 +1,12 @@
 // Test framework
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+// Test helpers
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+import UsersFixture from '../../support/fixtures/users.fixture.js'
+
 // Things we need to stub
-import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model.js'
+import * as FetchBillLicenceDal from '../../../src/dal/bill-licences/fetch-bill-licence.dal.js'
 import * as LegacyDeleteBillLicenceRequest from '../../../src/requests/legacy/delete-bill-licence.request.js'
 import * as ProcessBillingFlagService from '../../../src/services/licences/supplementary/process-billing-flag.service.js'
 import * as UnassignLicencesToBillRunService from '../../../src/services/bill-runs/unassign-licences-to-bill-run.service.js'
@@ -11,29 +15,23 @@ import * as UnassignLicencesToBillRunService from '../../../src/services/bill-ru
 import SubmitRemoveBillLicenceService from '../../../src/services/bill-licences/submit-remove-bill-licence.service.js'
 
 describe('Bill Licences - Submit Remove Bill Licence service', () => {
-  const user = { id: '0aa9dcaa-9a26-4a77-97ab-c17db54d38a1', useremail: 'carol.shaw@atari.com' }
+  const user = UsersFixture.billingAndData()
 
   let billLicence
-  let billLicenceStub
+  let fetchBillLicenceDalStub
   let legacyDeleteBillLicenceRequestStub
-  beforeEach(async () => {
+
+  beforeEach(() => {
     billLicence = {
-      id: '59f2510d-4b2f-4b09-a972-e0b2370d191d',
-      licenceId: '5d358719-86b8-454e-a862-7a18a8a25103',
       bill: {
-        id: '44c459a6-3610-4b84-b515-d4d8785ff87c',
-        billRunId: 'c96106fa-b9a3-4f91-b35d-ec1d3108c390'
-      }
+        billRunId: generateUUID(),
+        id: generateUUID()
+      },
+      id: generateUUID(),
+      licenceId: generateUUID()
     }
 
-    billLicenceStub = vi.fn().mockResolvedValue(billLicence)
-    vi.spyOn(BillLicenceModel, 'query').mockReturnValue({
-      findById: vi.fn().mockReturnThis(),
-      select: vi.fn().mockReturnThis(),
-      withGraphFetched: vi.fn().mockReturnThis(),
-      modifyGraph: billLicenceStub
-    })
-
+    fetchBillLicenceDalStub = vi.spyOn(FetchBillLicenceDal, 'default').mockResolvedValue(billLicence)
     legacyDeleteBillLicenceRequestStub = vi.spyOn(LegacyDeleteBillLicenceRequest, 'default').mockResolvedValue()
     vi.spyOn(ProcessBillingFlagService, 'default').mockResolvedValue()
     vi.spyOn(UnassignLicencesToBillRunService, 'default').mockResolvedValue()
@@ -44,22 +42,31 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
   })
 
   describe('when called', () => {
+    it('calls the "FetchBillLicenceDal" to fetch the bill licence and its bill', async () => {
+      await SubmitRemoveBillLicenceService(billLicence.id, user)
+
+      expect(fetchBillLicenceDalStub).toHaveBeenCalledWith(billLicence.id)
+    })
+
     it('calls the "UnassignLicencesToBillRunService" to unassign any licence supplementary year records from the bill run', async () => {
       await SubmitRemoveBillLicenceService(billLicence.id, user)
 
-      expect(UnassignLicencesToBillRunService.default).toHaveBeenCalled()
+      expect(UnassignLicencesToBillRunService.default).toHaveBeenCalledWith(
+        [billLicence.licenceId],
+        billLicence.bill.billRunId
+      )
     })
 
     it('calls the "ProcessBillingFlagService" to check if the licence needs a supplementary billing flag', async () => {
       await SubmitRemoveBillLicenceService(billLicence.id, user)
 
-      expect(ProcessBillingFlagService.default).toHaveBeenCalled()
+      expect(ProcessBillingFlagService.default).toHaveBeenCalledWith({ billLicenceId: billLicence.id })
     })
 
     it('sends a request to the legacy service to delete the bill licence', async () => {
       await SubmitRemoveBillLicenceService(billLicence.id, user)
 
-      expect(legacyDeleteBillLicenceRequestStub).toHaveBeenCalled()
+      expect(legacyDeleteBillLicenceRequestStub).toHaveBeenCalledWith(billLicence.id, user)
     })
 
     it('returns the path to the legacy bill run processing page with invoice ID option', async () => {

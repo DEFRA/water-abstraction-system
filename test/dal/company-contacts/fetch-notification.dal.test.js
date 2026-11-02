@@ -9,9 +9,9 @@ import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 
 // Thing under test
-import FetchNotificationService from '../../../src/services/company-contacts/fetch-notification.service.js'
+import FetchNotificationDal from '../../../src/dal/company-contacts/fetch-notification.dal.js'
 
-describe('Company Contacts - Fetch Notification service', () => {
+describe('Company Contacts - Fetch Notification dal', () => {
   let email
   let notice
   let notification
@@ -41,7 +41,7 @@ describe('Company Contacts - Fetch Notification service', () => {
     })
 
     it('returns a notification', async () => {
-      const result = await FetchNotificationService(email)
+      const result = await FetchNotificationDal(email)
 
       expect(result).toEqual({
         id: notification.id
@@ -59,7 +59,7 @@ describe('Company Contacts - Fetch Notification service', () => {
       })
 
       it('returns undefined', async () => {
-        const result = await FetchNotificationService(email)
+        const result = await FetchNotificationDal(email)
 
         expect(result).toBeUndefined()
       })
@@ -75,7 +75,7 @@ describe('Company Contacts - Fetch Notification service', () => {
       })
 
       it('returns undefined', async () => {
-        const result = await FetchNotificationService(email)
+        const result = await FetchNotificationDal(email)
 
         expect(result).toBeUndefined()
       })
