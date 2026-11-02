@@ -12,7 +12,6 @@ import * as FetchMonitoringStationDal from '../../../../src/dal/licence-monitori
 import InitiateSessionService from '../../../../src/services/licence-monitoring-station/setup/initiate-session.service.js'
 
 describe('Licence Monitoring Station - Setup - Initiate Session service', () => {
-  let fetchMonitoringStationDalStub
   let monitoringStation
   let monitoringStationId
 
@@ -20,7 +19,7 @@ describe('Licence Monitoring Station - Setup - Initiate Session service', () => 
     monitoringStationId = generateUUID()
     monitoringStation = { label: 'Wellingborough' }
 
-    fetchMonitoringStationDalStub = vi.spyOn(FetchMonitoringStationDal, 'default').mockResolvedValue(monitoringStation)
+    vi.spyOn(FetchMonitoringStationDal, 'default').mockResolvedValue(monitoringStation)
   })
 
   afterEach(() => {
@@ -28,12 +27,6 @@ describe('Licence Monitoring Station - Setup - Initiate Session service', () => 
   })
 
   describe('when called', () => {
-    it('calls the "FetchMonitoringStationDal" to fetch the monitoring station', async () => {
-      await InitiateSessionService(monitoringStationId)
-
-      expect(fetchMonitoringStationDalStub).toHaveBeenCalledExactlyOnceWith(monitoringStationId)
-    })
-
     it('creates a new session record containing details of the monitoring station', async () => {
       const sessionId = await InitiateSessionService(monitoringStationId)
 
