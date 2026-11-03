@@ -6,7 +6,7 @@ import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.j
 
 // Things to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
-import * as FetchFullConditionService from '../../../../src/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import * as FetchFullConditionDal from '../../../../src/dal/licence-monitoring-station/setup/fetch-full-condition.dal.js'
 
 // Thing under test
 import FullConditionService from '../../../../src/services/licence-monitoring-station/setup/full-condition.service.js'
@@ -26,7 +26,7 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
       displayTitle: 'DISPLAY_TITLE'
     }
 
-    vi.spyOn(FetchFullConditionService, 'default').mockResolvedValue([condition])
+    vi.spyOn(FetchFullConditionDal, 'default').mockResolvedValue([condition])
 
     sessionData = {
       label: 'Monitoring Station',

@@ -1,7 +1,7 @@
 /**
  * Fetches the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
- * @module FetchFullConditionService
+ * @module FetchFullConditionDal
  */
 
 import LicenceVersionPurposeConditionModel from 'water-abstraction-engine/models/licence-version-purpose-condition.model.js'
@@ -14,7 +14,7 @@ import LicenceVersionPurposeConditionModel from 'water-abstraction-engine/models
  * @returns {Promise<object>} The matching instance of the `LicenceVersionPurposeConditionModel` populated with the
  * data needed for the "Select full condition" page
  */
-export default async function fetchFullConditionService(licenceId) {
+export default async function fetchFullConditionDal(licenceId) {
   return (
     LicenceVersionPurposeConditionModel.query()
       .distinctOn(

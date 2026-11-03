@@ -8,7 +8,7 @@ import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.j
 
 // Things to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
-import * as FetchFullConditionService from '../../../../src/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import * as FetchFullConditionDal from '../../../../src/dal/licence-monitoring-station/setup/fetch-full-condition.dal.js'
 import * as FullConditionService from '../../../../src/services/licence-monitoring-station/setup/full-condition.service.js'
 
 // Thing under test
@@ -42,7 +42,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
       condition: licenceVersionPurposeCondition.id
     }
 
-    vi.spyOn(FetchFullConditionService, 'default').mockResolvedValue([
+    vi.spyOn(FetchFullConditionDal, 'default').mockResolvedValue([
       {
         ...licenceVersionPurposeCondition,
         abstractionPeriodStartDay: licenceVersionPurpose.abstractionPeriodStartDay,
