@@ -42,6 +42,7 @@
     "water-abstraction-engine": "github:DEFRA/water-abstraction-engine#main"
   },
   "devDependencies": {
+    "@faker-js/faker": "10.6.0",
     "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
