@@ -37,7 +37,19 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
   })
 
   afterEach(async () => {
-    await _cleanUp()
+    if (billRun) {
+      await billRun.$query().delete()
+    }
+
+    if (workflow) {
+      await workflow.$query().delete()
+    }
+
+    await _cleanUpEntry(assignedSameRegionAndYear)
+    await _cleanUpEntry(unassignedSameRegionAndYear)
+    await _cleanUpEntry(unassignedSameRegionDifferentYear)
+    await _cleanUpEntry(unassignedDifferentRegionSameYear)
+    await _cleanUpEntry(unassignedSameRegionAndYearNonTpt)
   })
 
   describe('when the supplementary year records are unassigned', () => {
@@ -173,22 +185,6 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
     })
   })
 })
-
-async function _cleanUp() {
-  if (billRun) {
-    await billRun.$query().delete()
-  }
-
-  if (workflow) {
-    await workflow.$query().delete()
-  }
-
-  await _cleanUpEntry(assignedSameRegionAndYear)
-  await _cleanUpEntry(unassignedSameRegionAndYear)
-  await _cleanUpEntry(unassignedSameRegionDifferentYear)
-  await _cleanUpEntry(unassignedDifferentRegionSameYear)
-  await _cleanUpEntry(unassignedSameRegionAndYearNonTpt)
-}
 
 async function _cleanUpEntry(entry) {
   if (!entry) {
