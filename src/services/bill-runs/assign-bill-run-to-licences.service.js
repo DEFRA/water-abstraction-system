@@ -43,7 +43,7 @@ export default async function assignBillRunToLicencesService(billRunId) {
     UPDATE public.licence_supplementary_years lsy1 SET
       bill_run_id = ?,
       updated_at = ?
-    WHERE EXISTS(
+    WHERE EXISTS (
       SELECT
         1
       FROM
@@ -71,6 +71,15 @@ export default async function assignBillRunToLicencesService(billRunId) {
       WHERE
         lsy1.id = lsy2.id
         AND lsy2.bill_run_id IS NULL
+    )
+    AND NOT EXISTS (
+      SELECT
+        1
+      FROM
+        public.workflows w
+      WHERE
+        w.licence_id = lsy1.licence_id
+        AND w.deleted_at IS NULL
     );
   `
 
