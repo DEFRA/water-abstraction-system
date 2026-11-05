@@ -80,7 +80,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
 
           describe('but the licences are in workflow', () => {
             beforeEach(async () => {
-              await WorkflowHelper.add({ licenceId: unassignedSameRegionAndYear.licence.id })
+              workflow = await WorkflowHelper.add({ licenceId: unassignedSameRegionAndYear.licence.id })
             })
 
             it('does not assign the bill run to the supplementary year records', async () => {
