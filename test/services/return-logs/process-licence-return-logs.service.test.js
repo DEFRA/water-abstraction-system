@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
-import ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
+import ReturnCyclesFixture from 'water-abstraction-engine/test/fixtures/return-cycles.fixture.js'
+import ReturnRequirementsFixture from 'water-abstraction-engine/test/fixtures/return-requirements.fixture.js'
 
 // Things we need to stub
 import ReturnCycleModel from 'water-abstraction-engine/models/return-cycle.model.js'

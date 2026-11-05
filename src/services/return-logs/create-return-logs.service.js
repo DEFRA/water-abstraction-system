@@ -3,11 +3,11 @@
  * @module CreateReturnLogsService
  */
 
+import GenerateReturnLogsService from 'water-abstraction-engine/services/return-logs/generate-return-logs.service.js'
 import { db } from 'water-abstraction-engine/db/db.js'
-import { determineReturnsPeriods } from 'water-abstraction-engine/lib/return-periods.lib.js'
 import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 
-import GenerateReturnLogService from './generate-return-log.service.js'
+import featureFlagsConfig from '../../config/feature-flags.config.js'
 
 /**
  * Generates and persists return logs for the given return requirement and cycle
@@ -20,39 +20,14 @@ import GenerateReturnLogService from './generate-return-log.service.js'
  * @returns {Promise<string[]>} an array of the generated return log ids
  */
 export default async function createReturnLogsService(returnRequirement, returnCycle, licenceEndDate, trx = null) {
-  const returnLogs = _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate)
+  const returnLogs = GenerateReturnLogsService(
+    returnRequirement,
+    returnCycle,
+    featureFlagsConfig.setOldReturnsDueDate,
+    licenceEndDate
+  )
 
   return _persistReturnLogs(returnLogs, trx)
-}
-
-function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = null) {
-  const isQuarterlyReturn = returnRequirement.returnVersion.quarterlyReturns
-  const returnLogs = []
-
-  if (isQuarterlyReturn && returnCycle.startDate >= new Date('2025-04-01')) {
-    const quarterlyReturnPeriods = determineReturnsPeriods(returnCycle)
-
-    const periodsToProcess = quarterlyReturnPeriods.filter((period) => {
-      const startDateInPeriod = returnRequirement.returnVersion.startDate <= period.endDate
-      const endDateInPeriod = returnRequirement.returnVersion.endDate >= period.startDate
-      const endDateIsNull = returnRequirement.returnVersion.endDate === null
-      const licenceEndDateIsNull = licenceEndDate === null
-      const licenceEndDateInPeriod = licenceEndDate >= period.startDate
-
-      return startDateInPeriod && (endDateIsNull || endDateInPeriod) && (licenceEndDateIsNull || licenceEndDateInPeriod)
-    })
-
-    for (const quarterlyReturnPeriod of periodsToProcess) {
-      returnLogs.push(GenerateReturnLogService(returnRequirement, quarterlyReturnPeriod))
-    }
-  } else {
-    returnLogs.push(GenerateReturnLogService(returnRequirement, returnCycle))
-  }
-
-  // It is possible that a licence can be ended _before_ the return cycle starts. On the rare occasions this happens
-  // GenerateReturnLogService will return NULL instead of an object (else you'd get a return log that ends before it
-  // finishes!) So, we filter out any nulls from returnLogs before returning it.
-  return returnLogs.filter(Boolean)
 }
 
 async function _persistReturnLogs(returnLogs, trx) {

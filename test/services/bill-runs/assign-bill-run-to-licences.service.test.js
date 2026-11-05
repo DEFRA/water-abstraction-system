@@ -6,6 +6,7 @@ import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper
 import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
 import LicenceSupplementaryYearHelper from 'water-abstraction-engine/test/helpers/licence-supplementary-year.helper.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
+import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helper.js'
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
@@ -18,6 +19,7 @@ let unassignedSameRegionAndYear
 let unassignedSameRegionDifferentYear
 let unassignedDifferentRegionSameYear
 let unassignedSameRegionAndYearNonTpt
+let workflow
 
 describe('Bill Runs - Assign Bill Run To Licences service', () => {
   let region
@@ -35,7 +37,19 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
   })
 
   afterEach(async () => {
-    await _cleanUp()
+    if (billRun) {
+      await billRun.$query().delete()
+    }
+
+    if (workflow) {
+      await workflow.$query().delete()
+    }
+
+    await _cleanUpEntry(assignedSameRegionAndYear)
+    await _cleanUpEntry(unassignedSameRegionAndYear)
+    await _cleanUpEntry(unassignedSameRegionDifferentYear)
+    await _cleanUpEntry(unassignedDifferentRegionSameYear)
+    await _cleanUpEntry(unassignedSameRegionAndYearNonTpt)
   })
 
   describe('when the supplementary year records are unassigned', () => {
@@ -54,12 +68,28 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
             unassignedSameRegionAndYear = { licence, licenceSupplementaryYear }
           })
 
-          it('assigns the bill run to the supplementary year records', async () => {
-            await AssignBillRunToLicencesService(billRun.id)
+          describe('and the licences are not in workflow', () => {
+            it('assigns the bill run to the supplementary year records', async () => {
+              await AssignBillRunToLicencesService(billRun.id)
 
-            const result = await unassignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
+              const result = await unassignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
 
-            expect(result.billRunId).toEqual(billRun.id)
+              expect(result.billRunId).toEqual(billRun.id)
+            })
+          })
+
+          describe('but the licences are in workflow', () => {
+            beforeEach(async () => {
+              workflow = await WorkflowHelper.add({ licenceId: unassignedSameRegionAndYear.licence.id })
+            })
+
+            it('does not assign the bill run to the supplementary year records', async () => {
+              await AssignBillRunToLicencesService(billRun.id)
+
+              const result = await unassignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
+
+              expect(result.billRunId).not.toEqual(billRun.id)
+            })
           })
         })
 
@@ -155,16 +185,6 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
     })
   })
 })
-
-async function _cleanUp() {
-  if (billRun) await billRun.$query().delete()
-
-  await _cleanUpEntry(assignedSameRegionAndYear)
-  await _cleanUpEntry(unassignedSameRegionAndYear)
-  await _cleanUpEntry(unassignedSameRegionDifferentYear)
-  await _cleanUpEntry(unassignedDifferentRegionSameYear)
-  await _cleanUpEntry(unassignedSameRegionAndYearNonTpt)
-}
 
 async function _cleanUpEntry(entry) {
   if (!entry) {
