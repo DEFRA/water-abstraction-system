@@ -3,12 +3,12 @@
  * @module ViewPresenter
  */
 
+import NotifyAddressPresenter from 'water-abstraction-engine/presenters/notices/setup/notify-address.presenter.js'
 import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
 import PreviousAndNextPresenter from 'water-abstraction-engine/presenters/previous-and-next.presenter.js'
 import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 import { formatLongDate, formatVersionReason } from 'water-abstraction-engine/presenters/base.presenter.js'
 
-import NotifyAddressPresenter from '../notices/setup/notify-address.presenter.js'
 import { formatConditionTypes, formatLicencePoints, formatLicencePurposes } from '../licence.presenter.js'
 
 /**

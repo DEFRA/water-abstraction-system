@@ -2,9 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 
 // Things we need to stub

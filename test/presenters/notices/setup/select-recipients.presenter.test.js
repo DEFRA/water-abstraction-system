@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
 import SelectRecipientsPresenter from '../../../../src/presenters/notices/setup/select-recipients.presenter.js'

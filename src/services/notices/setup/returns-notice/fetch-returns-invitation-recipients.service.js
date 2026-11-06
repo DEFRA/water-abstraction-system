@@ -5,12 +5,12 @@
 
 import { NoticeJourney } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { db } from 'water-abstraction-engine/db/db.js'
+import { futureDueDate } from 'water-abstraction-engine/presenters/notices/base.presenter.js'
 import { transformStringOfLicencesToArray } from 'water-abstraction-engine/lib/general.lib.js'
 
 import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
 import GenerateReturnLogsByLicenceQueryService from './generate-return-logs-by-licence-query.service.js'
 import GenerateReturnLogsByPeriodQueryService from './generate-return-logs-by-period-query.service.js'
-import { futureDueDate } from '../../../../presenters/notices/base.presenter.js'
 
 /**
  * Fetches recipient data for a returns invitation notice

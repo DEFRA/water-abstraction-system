@@ -2,6 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import {
   generateLicenceRef,
@@ -10,7 +11,6 @@ import {
 } from 'water-abstraction-engine/test/generators.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Things we need to stub
 import * as DeleteSessionDal from 'water-abstraction-engine/dal/delete-session.dal.js'

@@ -5,10 +5,10 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import EventHelper from 'water-abstraction-engine/test/helpers/event.helper.js'
 import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
 import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
+import { futureDueDate } from 'water-abstraction-engine/presenters/notices/base.presenter.js'
 import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
-import { futureDueDate } from '../../../../../src/presenters/notices/base.presenter.js'
 
 // Thing under test
 import FetchFailedReturnsInvitationsService from '../../../../../src/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js'

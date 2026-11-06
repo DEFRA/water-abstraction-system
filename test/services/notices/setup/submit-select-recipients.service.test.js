@@ -2,9 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Test helpers
 import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'

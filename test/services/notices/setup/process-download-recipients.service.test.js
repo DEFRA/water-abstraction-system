@@ -2,9 +2,9 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import { formatAbstractionPeriod, formatValueUnit } from 'water-abstraction-engine/presenters/base.presenter.js'
 import NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import { addressToCSV } from '../../../../src/presenters/notices/base.presenter.js'
 import { transformArrayToCSVRow } from '../../../../src/lib/transform-to-csv.lib.js'
 

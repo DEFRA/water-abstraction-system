@@ -4,13 +4,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import http2 from 'node:http2'
 
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import {
   generateLicenceRef,
   generateNoticeReferenceCode,
   generateUUID
 } from 'water-abstraction-engine/test/generators.js'
-import RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
 
 // Things we need to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'

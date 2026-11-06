@@ -3,10 +3,10 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { futureDueDate } from 'water-abstraction-engine/presenters/notices/base.presenter.js'
 import { generateNoticeReferenceCode, generateUUID } from 'water-abstraction-engine/test/generators.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { futureDueDate } from '../../../../src/presenters/notices/base.presenter.js'
 
 // Thing under test
 import CreateNotificationsService from '../../../../src/services/notices/setup/create-notifications.service.js'

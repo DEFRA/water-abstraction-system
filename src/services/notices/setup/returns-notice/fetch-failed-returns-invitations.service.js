@@ -6,8 +6,7 @@
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
 import { compareDates } from 'water-abstraction-engine/lib/dates.lib.js'
 import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
-
-import { futureDueDate } from '../../../../presenters/notices/base.presenter.js'
+import { futureDueDate } from 'water-abstraction-engine/presenters/notices/base.presenter.js'
 
 /**
  * Fetches the licence refs and return logs IDs from failed returns invitation notifications to primary users
