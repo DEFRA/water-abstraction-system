@@ -3,8 +3,9 @@
  * @module FetchReturnLogsForLicenceService
  */
 
-import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
-import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
+
+import FetchReturnLogsForLicenceDal from '../../../dal/bill-runs/match/fetch-return-logs-for-licence.dal.js'
 
 /**
  * Fetch all SROC return logs to be processed as part of two-part-tariff billing
@@ -16,73 +17,39 @@ import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
  * `returnSubmissionLines` if they exist
  */
 export default async function fetchReturnLogsForLicenceService(licenceRef, billingPeriod) {
-  try {
-    return await _fetch(licenceRef, billingPeriod)
-  } catch (error) {
-    // NOTE: The try/catch was added after we found out that it is possible to set up return requirements in NALD with
-    // empty abstraction periods. This then causes the return log to also be missing abstraction period data. Our
-    // CAST() in the query then causes an error.
-    globalThis.GlobalNotifier.omfg(
-      'Bill run process fetch return logs for licence failed',
-      { billingPeriod, licenceRef },
-      error
-    )
-    // NOTE: We rethrow the error so that the bill run will be set to 'errored'. We know this will result in us
-    // having to investigate the issue, but with this additional logging we should be able to quickly see which licence
-    // caused the error and why.
-    //
-    // If we don't rethrow the error then the bill run will complete without the return log being picked up. This would
-    // result in an incorrect bill run because the submission would not have been picked up for allocation.
-    throw error
-  }
-}
+  const returnLogs = await FetchReturnLogsForLicenceDal(licenceRef, billingPeriod)
 
-async function _fetch(licenceRef, billingPeriod) {
-  // NOTE: return_logs.return_reference is a varchar whereas return_requirements.reference is an integer. We cast so
-  // both sides of the COALESCE() match, and so the results sort numerically rather than alphabetically
-  const returnReferenceSql = 'COALESCE(return_requirement.reference, return_logs.return_reference::integer)'
-
-  const returnLogs = await ReturnLogModel.query()
-    .select([
-      'returnLogs.id',
-      'returnLogs.returnId',
-      Objection.raw(returnReferenceSql).as('returnReference'),
-      Objection.ref('metadata:description').castText().as('description'),
-      'returnLogs.startDate',
-      'returnLogs.endDate',
-      'returnLogs.receivedDate',
-      'returnLogs.dueDate',
-      'returnLogs.status',
-      'returnLogs.underQuery',
-      Objection.ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
-      Objection.ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
-      Objection.ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
-      Objection.ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth'),
-      Objection.ref('metadata:purposes').as('purposes')
-    ])
-    .leftJoinRelated('returnRequirement')
-    .where('licenceRef', licenceRef)
-    // water-abstraction-service filters out old return logs in this way: see
-    // `src/lib/services/returns/api-connector.js`
-    .where('startDate', '>=', '2008-04-01')
-    .whereNot('status', 'void')
-    .where('endDate', '>=', billingPeriod.startDate)
-    .where('endDate', '<=', billingPeriod.endDate)
-    .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
-    .orderBy('startDate', 'ASC')
-    .orderByRaw(`${returnReferenceSql} ASC`)
-    .withGraphFetched('returnSubmissions')
-    .modifyGraph('returnSubmissions', (builder) => {
-      builder.select(['id', 'nilReturn']).where('returnSubmissions.current', true)
-    })
-    .withGraphFetched('returnSubmissions.returnSubmissionLines')
-    .modifyGraph('returnSubmissions.returnSubmissionLines', (builder) => {
-      builder
-        .select(['id', 'startDate', 'endDate', 'quantity'])
-        .where('returnSubmissionLines.quantity', '>', 0)
-        .where('returnSubmissionLines.startDate', '<=', billingPeriod.endDate)
-        .where('returnSubmissionLines.endDate', '>=', billingPeriod.startDate)
-    })
+  _checkAbstractionPeriodExists(licenceRef, returnLogs)
 
   return returnLogs
+}
+
+/**
+ * Checks whether the return log is missing the abstraction period data and logs and throws an error if it doesn't exist
+ *
+ * We found out that it is possible to set up return requirements in NALD with empty abstraction periods. This then
+ * causes the return log to also be missing abstraction period data.
+ *
+ * We throw the error so that the bill run will be set to 'errored'. We know this will result in us having to
+ * investigate the issue, but with this additional logging we should be able to quickly see which licence caused the
+ * error and why.
+ *
+ * If we don't throw the error then the bill run will complete without the return log being picked up. This would result
+ * in an incorrect bill run because the submission would not have been picked up for allocation.
+ *
+ * @private
+ */
+function _checkAbstractionPeriodExists(licenceRef, returnLogs) {
+  if (
+    returnLogs.some((returnLog) => {
+      return returnLog.periodStartDay === null
+    })
+  ) {
+    globalThis.GlobalNotifier.omg(
+      `Bill run fetch return logs for licence failed for licence ${licenceRef} due to missing abstraction period`,
+      { returnLogs }
+    )
+
+    throw new ExpandedError(`Return log is missing abstraction period data for licence ${licenceRef}`, { returnLogs })
+  }
 }

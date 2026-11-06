@@ -8,7 +8,7 @@ import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 
 /**
  * Fetch all SROC return logs to be processed as part of two-part-tariff billing
- * *
+ *
  * @param {string} licenceRef - The reference of the licence that the return log relates to
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
