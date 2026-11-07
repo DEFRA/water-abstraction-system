@@ -4,9 +4,8 @@
  */
 
 import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import NotifyAddressPresenter from 'water-abstraction-engine/presenters/notices/setup/notify-address.presenter.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
-
-import NotifyAddressPresenter from './notify-address.presenter.js'
 
 const MESSAGE_REFS = {
   adhoc: 'renewal invitation ad-hoc',

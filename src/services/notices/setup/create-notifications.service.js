@@ -3,14 +3,14 @@
  * @module CreateNotificationsService
  */
 
+import AbstractionAlertNotificationsPresenter from 'water-abstraction-engine/presenters/notices/setup/abstraction-alert-notifications.presenter.js'
 import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
+import ReturnsNoticeNotificationsPresenter from 'water-abstraction-engine/presenters/notices/setup/returns-notice-notifications.presenter.js'
 import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 
-import AbstractionAlertNotificationsPresenter from '../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js'
 import PaperReturnNotificationsPresenter from '../../../presenters/notices/setup/paper-return-notifications.presenter.js'
 import ReturnsInvitationNotificationsPresenter from '../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
-import ReturnsNoticeNotificationsPresenter from '../../../presenters/notices/setup/returns-notice-notifications.presenter.js'
 
 /**
  * Create notifications

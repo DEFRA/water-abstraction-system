@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import AbstractionAlertSessionData from 'water-abstraction-engine/test/fixtures/abstraction-alert-session-data.fixture.js'
 import SessionModel from 'water-abstraction-engine/models/session.model.js'
-import AbstractionAlertSessionData from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Things we need to stub
 import * as DetermineLicenceMonitoringStationsService from '../../../../src/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'

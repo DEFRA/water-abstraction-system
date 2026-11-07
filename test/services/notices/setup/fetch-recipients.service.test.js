@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import { NoticeJourney, NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Things we need to stub
 import * as FetchAbstractionAlertRecipientsDal from '../../../../src/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'

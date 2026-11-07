@@ -4,10 +4,10 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 // Test helpers
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
+import { futureDueDate } from 'water-abstraction-engine/presenters/notices/base.presenter.js'
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 import NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
-import { futureDueDate } from '../../../../../src/presenters/notices/base.presenter.js'
 
 // Thing under test
 import FetchReturnsInvitationRecipients from '../../../../../src/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js'

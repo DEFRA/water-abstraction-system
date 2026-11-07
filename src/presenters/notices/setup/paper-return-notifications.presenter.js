@@ -3,10 +3,9 @@
  * @module PaperReturnNotificationsPresenter
  */
 
+import NotifyAddressPresenter from 'water-abstraction-engine/presenters/notices/setup/notify-address.presenter.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
-
-import NotifyAddressPresenter from './notify-address.presenter.js'
-import { futureDueDate } from '../base.presenter.js'
+import { futureDueDate } from 'water-abstraction-engine/presenters/notices/base.presenter.js'
 
 /**
  * Formats recipients and return logs into notifications for a paper return

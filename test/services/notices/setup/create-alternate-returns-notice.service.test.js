@@ -5,10 +5,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import EventModel from 'water-abstraction-engine/models/event.model.js'
 import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { futureDueDate } from 'water-abstraction-engine/presenters/notices/base.presenter.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { futureDueDate } from '../../../../src/presenters/notices/base.presenter.js'
 
 // Things we need to stub
 import * as FetchAlternateReturnsRecipientsService from '../../../../src/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js'

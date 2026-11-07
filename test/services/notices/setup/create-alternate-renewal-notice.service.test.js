@@ -5,8 +5,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import EventModel from 'water-abstraction-engine/models/event.model.js'
 import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Things we need to stub
 import * as FetchAlternateRenewalRecipientsService from '../../../../src/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js'

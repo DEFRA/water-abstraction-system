@@ -3,10 +3,9 @@
  * @module CreateNoticeService
  */
 
+import CreateNoticePresenter from 'water-abstraction-engine/presenters/notices/setup/create-notice.presenter.js'
 import EventModel from 'water-abstraction-engine/models/event.model.js'
 import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
-
-import CreateNoticePresenter from '../../../presenters/notices/setup/create-notice.presenter.js'
 
 /**
  * Create a notice from the notice setup data

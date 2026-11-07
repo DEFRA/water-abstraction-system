@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
 import RenewalInvitationNotificationsPresenter from '../../../../src/presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'

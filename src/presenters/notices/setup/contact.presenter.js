@@ -3,7 +3,7 @@
  * @module ContactPresenter
  */
 
-import NotifyAddressPresenter from './notify-address.presenter.js'
+import NotifyAddressPresenter from 'water-abstraction-engine/presenters/notices/setup/notify-address.presenter.js'
 
 /**
  * Formats a recipient into a contact

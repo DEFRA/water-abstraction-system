@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import EventModel from 'water-abstraction-engine/models/event.model.js'
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
 import CreateNoticeService from '../../../../src/services/notices/setup/create-notice.service.js'

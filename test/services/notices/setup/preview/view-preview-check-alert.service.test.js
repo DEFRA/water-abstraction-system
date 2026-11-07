@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import AbstractionAlertSessionDataFixture from 'water-abstraction-engine/test/fixtures/abstraction-alert-session-data.fixture.js'
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
-import AbstractionAlertSessionDataFixture from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
-import RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
 
 // Things we need to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 
 // Thing under test
 import MergeRecipientsService from '../../../../src/services/notices/setup/merge-recipients.service.js'

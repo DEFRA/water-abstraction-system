@@ -3,14 +3,14 @@
  * @module ViewPreviewService
  */
 
+import AbstractionAlertNotificationsPresenter from 'water-abstraction-engine/presenters/notices/setup/abstraction-alert-notifications.presenter.js'
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+import ReturnsNoticeNotificationsPresenter from 'water-abstraction-engine/presenters/notices/setup/returns-notice-notifications.presenter.js'
 
-import AbstractionAlertNotificationsPresenter from '../../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js'
 import FetchRecipientsService from '../fetch-recipients.service.js'
 import PreviewPresenter from '../../../../presenters/notices/setup/preview/preview.presenter.js'
 import RenewalInvitationNotificationsPresenter from '../../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
-import ReturnsNoticeNotificationsPresenter from '../../../../presenters/notices/setup/returns-notice-notifications.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page

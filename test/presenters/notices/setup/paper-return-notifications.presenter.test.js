@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
+import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { futureDueDate } from 'water-abstraction-engine/presenters/notices/base.presenter.js'
 import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
-import RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
-import { futureDueDate } from '../../../../src/presenters/notices/base.presenter.js'
 
 // Thing under test
 import PaperReturnNotificationsPresenter from '../../../../src/presenters/notices/setup/paper-return-notifications.presenter.js'
