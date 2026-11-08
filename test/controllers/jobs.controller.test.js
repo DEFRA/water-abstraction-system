@@ -146,26 +146,6 @@ describe('Jobs controller', () => {
     })
   })
 
-  describe('/jobs/time-limited', () => {
-    describe('POST', () => {
-      beforeEach(() => {
-        options = { method: 'POST', url: '/jobs/time-limited' }
-      })
-
-      describe('when the request succeeds', () => {
-        beforeEach(() => {
-          vi.spyOn(ProcessTimeLimitedLicencesService, 'default').mockResolvedValue()
-        })
-
-        it('returns a 204 response', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
-        })
-      })
-    })
-  })
-
   describe('/jobs/renewal-invitations/{days}', () => {
     describe('POST', () => {
       beforeEach(() => {
@@ -243,6 +223,26 @@ describe('Jobs controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
+        })
+      })
+    })
+  })
+
+  describe('/jobs/time-limited', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/time-limited' }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          vi.spyOn(ProcessTimeLimitedLicencesService, 'default').mockResolvedValue()
+        })
+
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
