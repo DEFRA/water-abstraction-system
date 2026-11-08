@@ -5,9 +5,9 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import * as RecipientScenariosSeeder from '../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
-import FetchRenewalRecipients from '../../../../src/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js'
+import FetchRenewalRecipientsDal from '../../../../src/dal/jobs/renewal-notice/fetch-renewal-recipients.dal.js'
 
-describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => {
+describe('Jobs - Renewal Notice - Fetch Renewal Recipients DAL', () => {
   let expiredDate
   let scenarios
 
@@ -25,7 +25,7 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
 
   describe('when there are renewal invitations to send', () => {
     it('fetches the correct recipient data', async () => {
-      const result = await FetchRenewalRecipients(new Date('2027-02-09'))
+      const result = await FetchRenewalRecipientsDal(new Date('2027-02-09'))
 
       const expectedResults = _transformToResult(scenarios.licenceHolder)
 
