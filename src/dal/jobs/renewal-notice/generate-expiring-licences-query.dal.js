@@ -1,6 +1,6 @@
 /**
  * Generates the SQL query for expiring licences
- * @module GenerateExpiringLicencesQueryService
+ * @module GenerateExpiringLicencesQueryDal
  */
 
 /**
@@ -13,7 +13,7 @@
  * @returns {object} The query to use as the 'expiring_licences` CTE in the recipients query, and the associated
  * bindings
  */
-export default function generateExpiringLicencesQueryService(expiredDate) {
+export default function generateExpiringLicencesQueryDal(expiredDate) {
   const bindings = [expiredDate]
 
   return {
