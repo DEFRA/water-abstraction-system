@@ -229,6 +229,18 @@ describe('Notices - Setup - Check presenter', () => {
           expect(result.readyToSend).toEqual('Renewal invitations are ready to send.')
         })
       })
+
+      describe('and the notice type is "renewalReminders"', () => {
+        beforeEach(() => {
+          session.noticeType = 'renewalReminders'
+        })
+
+        it('returns the message that the notifications "are ready to send."', () => {
+          const result = CheckPresenter(recipients, page, session)
+
+          expect(result.readyToSend).toEqual('Renewal reminders are ready to send.')
+        })
+      })
     })
   })
 
