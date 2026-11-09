@@ -181,5 +181,49 @@ describe('Bill Runs Review - Review Licence presenter', () => {
         })
       })
     })
+
+    describe('the "matchedReturns" property', () => {
+      describe('the "purpose" property', () => {
+        describe('when the purpose has no alias', () => {
+          it('returns just the purpose description', () => {
+            const result = ReviewLicencePresenter(reviewLicence)
+
+            expect(result.matchedReturns[0].purpose).toEqual('Spray Irrigation - Direct')
+          })
+        })
+
+        describe('when the purpose has an alias', () => {
+          beforeEach(() => {
+            reviewLicence.reviewReturns[0].purposes[0].alias = 'Spray irrigation for potatoes'
+          })
+
+          it('returns the purpose description followed by the alias in brackets', () => {
+            const result = ReviewLicencePresenter(reviewLicence)
+
+            expect(result.matchedReturns[0].purpose).toEqual(
+              'Spray Irrigation - Direct (Spray irrigation for potatoes)'
+            )
+          })
+        })
+
+        describe('when there are multiple purposes', () => {
+          beforeEach(() => {
+            reviewLicence.reviewReturns[0].purposes.push({
+              alias: 'Top up for the reservoir',
+              code: '420',
+              description: 'Spray Irrigation - Storage'
+            })
+          })
+
+          it('returns the formatted purposes separated by a comma', () => {
+            const result = ReviewLicencePresenter(reviewLicence)
+
+            expect(result.matchedReturns[0].purpose).toEqual(
+              'Spray Irrigation - Direct, Spray Irrigation - Storage (Top up for the reservoir)'
+            )
+          })
+        })
+      })
+    })
   })
 })
