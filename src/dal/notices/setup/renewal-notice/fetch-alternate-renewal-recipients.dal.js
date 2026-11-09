@@ -1,6 +1,6 @@
 /**
  * Fetches recipient data for an alternate renewal notice
- * @module FetchAlternateRenewalRecipientsService
+ * @module FetchAlternateRenewalRecipientsDal
  */
 
 import { db } from 'water-abstraction-engine/db/db.js'
@@ -17,7 +17,7 @@ import { licenceHolderRecipientQuery } from '../../../../dal/notices/recipient-q
  *
  * @returns {Promise<object[]>} The recipient data for the alternate renewal notice
  */
-export default async function fetchAlternateRenewalRecipientsService(licenceRefs) {
+export default async function fetchAlternateRenewalRecipientsDal(licenceRefs) {
   const { rows } = await db.raw(_query(), [licenceRefs])
 
   return rows

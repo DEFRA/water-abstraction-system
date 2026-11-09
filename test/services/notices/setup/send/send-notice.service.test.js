@@ -83,6 +83,38 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
     })
 
+    describe('and the notice is a renewal final', () => {
+      beforeEach(() => {
+        notice = NoticesFixture.renewalFinal()
+        notifications = [NotificationsFixture.renewalFinalEmail(notice)]
+      })
+
+      it('sends the main notice', async () => {
+        await SendNoticeService(notice, notifications)
+
+        expect(SendMainNoticeService.default).toHaveBeenCalledOnce()
+        expect(SendMainNoticeService.default.mock.calls[0][0]).toEqual(notice)
+        expect(SendMainNoticeService.default.mock.calls[0][1]).toEqual(notifications)
+      })
+
+      it('checks the main notice for the need to send an alternate notice', async () => {
+        await SendNoticeService(notice, notifications)
+
+        expect(SendAlternateNoticeService.default).toHaveBeenCalledOnce()
+        expect(SendMainNoticeService.default.mock.calls[0][0]).toEqual(notice)
+      })
+
+      it('updates both the main and alternate notices', async () => {
+        await SendNoticeService(notice, notifications)
+
+        expect(UpdateNoticeService.default).toHaveBeenCalledOnce()
+        expect(UpdateNoticeService.default.mock.calls[0][0]).toEqual([
+          notice.id,
+          '270d3a69-4cf7-4c90-8459-fbc35d725bd6'
+        ])
+      })
+    })
+
     describe('and the notice is a renewal invitation', () => {
       beforeEach(() => {
         notice = NoticesFixture.renewalInvitation()
@@ -115,7 +147,39 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
     })
 
-    describe('and the notice is NOT a returns or renewal invitation', () => {
+    describe('and the notice is a renewal reminder', () => {
+      beforeEach(() => {
+        notice = NoticesFixture.renewalReminder()
+        notifications = [NotificationsFixture.renewalReminderEmail(notice)]
+      })
+
+      it('sends the main notice', async () => {
+        await SendNoticeService(notice, notifications)
+
+        expect(SendMainNoticeService.default).toHaveBeenCalledOnce()
+        expect(SendMainNoticeService.default.mock.calls[0][0]).toEqual(notice)
+        expect(SendMainNoticeService.default.mock.calls[0][1]).toEqual(notifications)
+      })
+
+      it('checks the main notice for the need to send an alternate notice', async () => {
+        await SendNoticeService(notice, notifications)
+
+        expect(SendAlternateNoticeService.default).toHaveBeenCalledOnce()
+        expect(SendMainNoticeService.default.mock.calls[0][0]).toEqual(notice)
+      })
+
+      it('updates both the main and alternate notices', async () => {
+        await SendNoticeService(notice, notifications)
+
+        expect(UpdateNoticeService.default).toHaveBeenCalledOnce()
+        expect(UpdateNoticeService.default.mock.calls[0][0]).toEqual([
+          notice.id,
+          '270d3a69-4cf7-4c90-8459-fbc35d725bd6'
+        ])
+      })
+    })
+
+    describe('and the notice is NOT a returns invitation or renewal final, invitation, or reminder', () => {
       beforeEach(() => {
         notice = NoticesFixture.returnsReminder()
         notifications = [NotificationsFixture.returnsReminderEmail(notice)]

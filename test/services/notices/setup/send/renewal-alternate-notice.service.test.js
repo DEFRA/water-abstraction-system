@@ -7,12 +7,12 @@ import NotificationsFixture from '../../../../support/fixtures/notifications.fix
 
 // Things we need to stub
 import * as CreateAlternateRenewalNoticeService from '../../../../../src/services/notices/setup/create-alternate-renewal-notice.service.js'
-import * as FetchFailedRenewalInvitationsService from '../../../../../src/services/notices/setup/renewal-notice/fetch-failed-renewal-invitations.service.js'
+import * as FetchFailedRenewalNotificationsDal from '../../../../../src/dal/notices/setup/renewal-notice/fetch-failed-renewal-notifications.dal.js'
 
 // Thing under test
-import RenewalInvitationAlternateNoticeService from '../../../../../src/services/notices/setup/send/renewal-invitation-alternate-notice.service.js'
+import RenewalAlternateNoticeService from '../../../../../src/services/notices/setup/send/renewal-alternate-notice.service.js'
 
-describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service', () => {
+describe('Notices - Setup - Send - Renewal Alternate Notice service', () => {
   let alternateNotice
   let alternateNotification
   let failedNotification
@@ -42,14 +42,14 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
 
   describe('when the main notice has failed primary user email notifications', () => {
     beforeEach(() => {
-      vi.spyOn(FetchFailedRenewalInvitationsService, 'default').mockResolvedValue({
+      vi.spyOn(FetchFailedRenewalNotificationsDal, 'default').mockResolvedValue({
         licenceRefs: failedNotification.licences,
         notificationIds: [failedNotification.id]
       })
     })
 
     it('creates the alternate notice and notifications', async () => {
-      await RenewalInvitationAlternateNoticeService(mainNotice)
+      await RenewalAlternateNoticeService(mainNotice)
 
       const expiryDate = new Date(mainNotice.metadata.expiryDate)
       const renewalDate = new Date(mainNotice.metadata.renewalDate)
@@ -64,7 +64,7 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
     })
 
     it('returns the notice, notification IDs, and notifications', async () => {
-      const result = await RenewalInvitationAlternateNoticeService(mainNotice)
+      const result = await RenewalAlternateNoticeService(mainNotice)
 
       expect(result).toEqual({
         notice: alternateNotice,
@@ -76,20 +76,20 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
 
   describe('when the main notice has no failed primary user email notifications', () => {
     beforeEach(() => {
-      vi.spyOn(FetchFailedRenewalInvitationsService, 'default').mockResolvedValue({
+      vi.spyOn(FetchFailedRenewalNotificationsDal, 'default').mockResolvedValue({
         licenceRefs: [],
         notificationIds: []
       })
     })
 
     it('does not create the alternate notice', async () => {
-      await RenewalInvitationAlternateNoticeService(mainNotice)
+      await RenewalAlternateNoticeService(mainNotice)
 
       expect(CreateAlternateRenewalNoticeService.default).not.toHaveBeenCalled()
     })
 
     it('returns null', async () => {
-      const result = await RenewalInvitationAlternateNoticeService(mainNotice)
+      const result = await RenewalAlternateNoticeService(mainNotice)
 
       expect(result).toBeNull()
     })

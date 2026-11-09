@@ -7,9 +7,15 @@ import NotificationModel from 'water-abstraction-engine/models/notification.mode
 import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 import { NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
-import RenewalInvitationAlternateNoticeService from './renewal-invitation-alternate-notice.service.js'
+import RenewalAlternateNoticeService from './renewal-alternate-notice.service.js'
 import ReturnsInvitationAlternateNoticeService from './returns-invitation-alternate-notice.service.js'
 import SendLetterNotificationService from './send-letter-notification.service.js'
+
+const RENEWAL_ALTERNATE_NOTICES = [
+  NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType,
+  NoticeTypes[NoticeType.RENEWAL_FINALS].subType,
+  NoticeTypes[NoticeType.RENEWAL_REMINDERS].subType
+]
 
 /**
  * Orchestrates sending a 'failed' notice to Notify, recording the results, and checking the status when finished
@@ -34,8 +40,8 @@ export default async function sendAlternateNoticeService(mainNotice) {
 }
 
 function _alternateNoticeService(mainNotice) {
-  if (mainNotice.subtype === NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType) {
-    return RenewalInvitationAlternateNoticeService(mainNotice)
+  if (RENEWAL_ALTERNATE_NOTICES.includes(mainNotice.subtype)) {
+    return RenewalAlternateNoticeService(mainNotice)
   }
 
   return ReturnsInvitationAlternateNoticeService(mainNotice)

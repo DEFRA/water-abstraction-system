@@ -333,6 +333,92 @@ function paperReturn(notice) {
 }
 
 /**
+ * Generates a renewal final email notification object associated to the provided notice
+ *
+ * @param {object} notice - The notice to associate with the renewal final email notification
+ *
+ * @returns {object} The generated renewal final email object
+ */
+function renewalFinalEmail(notice) {
+  const notification = {
+    contactType: 'primary user',
+    createdAt: new Date('2025-04-02'),
+    dueDate: null,
+    eventId: notice.id,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: notice.licences,
+    messageRef: 'renewal final',
+    messageType: 'email',
+    notifyId: generateUUID(),
+    notifyStatus: 'delivered',
+    pdf: null,
+    personalisation: {
+      expiryDate: '28 April 2026',
+      licenceRef: notice.licences[0],
+      renewalDate: '28 January 2026'
+    },
+    plaintext:
+      'Dear licence holder\n' +
+      '\n' +
+      '^ Your water abstraction licence will expire on 28 April 2026.\n' +
+      '\n' +
+      '^ You can apply to renew your licence from 28 January 2026.\n',
+    recipient: 'grace.hopper@acme.co.uk',
+    returnedAt: null,
+    returnLogIds: null,
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.renewalFinals.standard.email['single licence']
+  }
+
+  return notification
+}
+
+/**
+ * Generates a renewal final letter notification object associated to the provided notice
+ *
+ * @param {object} notice - The notice to associate with the renewal final letter notification
+ *
+ * @returns {object} The generated renewal final letter object
+ */
+function renewalFinalLetter(notice) {
+  const notification = {
+    contactType: 'licence holder',
+    createdAt: new Date('2025-04-02'),
+    dueDate: null,
+    eventId: notice.id,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: notice.licences,
+    messageRef: 'renewal final',
+    messageType: 'letter',
+    notifyId: generateUUID(),
+    notifyStatus: 'received',
+    pdf: null,
+    personalisation: {
+      ...ADDRESS,
+      expiryDate: '28 April 2026',
+      licenceRef: notice.licences[0],
+      name: 'ACME Services Ltd',
+      renewalDate: '28 January 2026'
+    },
+    plaintext:
+      'Dear ACME Services Ltd\n' +
+      '\n' +
+      '^ Your water abstraction licence will expire on 28 April 2026.\n' +
+      '\n' +
+      '^ You can apply to renew your licence from 28 January 2026.\n',
+    recipient: null,
+    returnedAt: null,
+    returnLogIds: null,
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.renewalFinals.standard.letter['single licence']
+  }
+
+  return notification
+}
+
+/**
  * Generates a renewal invitation email notification object associated to the provided notice
  *
  * @param {object} notice - The notice to associate with the renewal invitation email notification
@@ -413,6 +499,92 @@ function renewalInvitationLetter(notice) {
     returnLogIds: null,
     status: 'sent',
     templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.letter['single licence']
+  }
+
+  return notification
+}
+
+/**
+ * Generates a renewal reminder email notification object associated to the provided notice
+ *
+ * @param {object} notice - The notice to associate with the renewal reminder email notification
+ *
+ * @returns {object} The generated renewal reminder email object
+ */
+function renewalReminderEmail(notice) {
+  const notification = {
+    contactType: 'primary user',
+    createdAt: new Date('2025-04-02'),
+    dueDate: null,
+    eventId: notice.id,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: notice.licences,
+    messageRef: 'renewal reminder',
+    messageType: 'email',
+    notifyId: generateUUID(),
+    notifyStatus: 'delivered',
+    pdf: null,
+    personalisation: {
+      expiryDate: '28 April 2026',
+      licenceRef: notice.licences[0],
+      renewalDate: '28 January 2026'
+    },
+    plaintext:
+      'Dear licence holder\n' +
+      '\n' +
+      '^ Your water abstraction licence will expire on 28 April 2026.\n' +
+      '\n' +
+      '^ You can apply to renew your licence from 28 January 2026.\n',
+    recipient: 'grace.hopper@acme.co.uk',
+    returnedAt: null,
+    returnLogIds: null,
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.renewalReminders.standard.email['single licence']
+  }
+
+  return notification
+}
+
+/**
+ * Generates a renewal reminder letter notification object associated to the provided notice
+ *
+ * @param {object} notice - The notice to associate with the renewal reminder letter notification
+ *
+ * @returns {object} The generated renewal reminder letter object
+ */
+function renewalReminderLetter(notice) {
+  const notification = {
+    contactType: 'licence holder',
+    createdAt: new Date('2025-04-02'),
+    dueDate: null,
+    eventId: notice.id,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: notice.licences,
+    messageRef: 'renewal reminder',
+    messageType: 'letter',
+    notifyId: generateUUID(),
+    notifyStatus: 'received',
+    pdf: null,
+    personalisation: {
+      ...ADDRESS,
+      expiryDate: '28 April 2026',
+      licenceRef: notice.licences[0],
+      name: 'ACME Services Ltd',
+      renewalDate: '28 January 2026'
+    },
+    plaintext:
+      'Dear ACME Services Ltd\n' +
+      '\n' +
+      '^ Your water abstraction licence will expire on 28 April 2026.\n' +
+      '\n' +
+      '^ You can apply to renew your licence from 28 January 2026.\n',
+    recipient: null,
+    returnedAt: null,
+    returnLogIds: null,
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.renewalReminders.standard.letter['single licence']
   }
 
   return notification
@@ -842,8 +1014,12 @@ export default {
   legacyRenewal,
   notification,
   paperReturn,
+  renewalFinalEmail,
+  renewalFinalLetter,
   renewalInvitationEmail,
   renewalInvitationLetter,
+  renewalReminderEmail,
+  renewalReminderLetter,
   returnsInvitationAdHocEmail,
   returnsInvitationAdHocLetter,
   returnsInvitationAlternateLetter,

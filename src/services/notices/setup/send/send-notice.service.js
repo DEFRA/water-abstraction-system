@@ -10,6 +10,13 @@ import SendAlternateNoticeService from './send-alternate-notice.service.js'
 import SendMainNoticeService from './send-main-notice.service.js'
 import UpdateNoticeService from '../../update-notice.service.js'
 
+const SUPPORTED_ALTERNATE_NOTICES = [
+  NoticeTypes[NoticeType.INVITATIONS].subType,
+  NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType,
+  NoticeTypes[NoticeType.RENEWAL_FINALS].subType,
+  NoticeTypes[NoticeType.RENEWAL_REMINDERS].subType
+]
+
 /**
  * Orchestrates sending the first main notice to Notify, then checking if an alternate needs creating and sending
  *
@@ -27,10 +34,7 @@ export default async function sendNoticeService(notice, notifications) {
     const noticesToUpdate = [noticeId]
 
     // We only check if a failed notice is needed if the original notice was a returns or renewal invitation.
-    if (
-      subtype === NoticeTypes[NoticeType.INVITATIONS].subType ||
-      subtype === NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType
-    ) {
+    if (SUPPORTED_ALTERNATE_NOTICES.includes(subtype)) {
       const alternateNotice = await SendAlternateNoticeService(notice)
 
       if (alternateNotice) {

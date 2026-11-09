@@ -191,6 +191,28 @@ function notices() {
 }
 
 /**
+ * Represents a notice of type 'renewal final'
+ *
+ * @returns {object}
+ */
+function renewalFinal() {
+  const data = _defaults()
+
+  data.metadata = {
+    name: 'Renewals: final',
+    error: 0,
+    expiryDate: '2026-04-28',
+    options: { excludeLicences: [] },
+    recipients: generateRandomInteger(1, 5000),
+    renewalDate: '2026-01-28'
+  }
+  data.referenceCode = generateNoticeReferenceCode('REFN-')
+  data.subtype = 'renewalFinal'
+
+  return data
+}
+
+/**
  * Represents a notice of type 'renewal invitation'
  *
  * @returns {object}
@@ -208,6 +230,28 @@ function renewalInvitation() {
   }
   data.referenceCode = generateNoticeReferenceCode('REIN-')
   data.subtype = 'renewalInvitation'
+
+  return data
+}
+
+/**
+ * Represents a notice of type 'renewal reminder'
+ *
+ * @returns {object}
+ */
+function renewalReminder() {
+  const data = _defaults()
+
+  data.metadata = {
+    name: 'Renewals: reminder',
+    error: 0,
+    expiryDate: '2026-04-28',
+    options: { excludeLicences: [] },
+    recipients: generateRandomInteger(1, 5000),
+    renewalDate: '2026-01-28'
+  }
+  data.referenceCode = generateNoticeReferenceCode('RERM-')
+  data.subtype = 'renewalReminder'
 
   return data
 }
@@ -306,7 +350,9 @@ export default {
   legacyRenewal,
   mapToFetchNoticesResult,
   notices,
+  renewalFinal,
   renewalInvitation,
+  renewalReminder,
   returnsInvitation,
   returnsPaperForm,
   returnsReminder

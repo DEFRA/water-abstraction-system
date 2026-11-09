@@ -8,7 +8,7 @@ import NotificationsFixture from '../../../../support/fixtures/notifications.fix
 
 // Things we need to stub
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
-import * as RenewalInvitationAlternateNoticeService from '../../../../../src/services/notices/setup/send/renewal-invitation-alternate-notice.service.js'
+import * as RenewalAlternateNoticeService from '../../../../../src/services/notices/setup/send/renewal-alternate-notice.service.js'
 import * as ReturnsInvitationAlternateNoticeService from '../../../../../src/services/notices/setup/send/returns-invitation-alternate-notice.service.js'
 import * as SendLetterNotificationService from '../../../../../src/services/notices/setup/send/send-letter-notification.service.js'
 
@@ -28,24 +28,8 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
   let failedNotificationId
   let mainNotice
   let notificationPatchStub
+
   beforeEach(() => {
-    mainNotice = NoticesFixture.returnsInvitation()
-    failedNotificationId = generateUUID()
-
-    alternateNotice = NoticesFixture.returnsInvitation()
-    alternateNotice.licences = mainNotice.licences
-    alternateNotice.triggerNoticeId = mainNotice.id
-
-    alternateNotification = NotificationsFixture.returnsInvitationLetter(alternateNotice)
-
-    vi.spyOn(SendLetterNotificationService, 'default').mockResolvedValue({
-      id: alternateNotification.id,
-      notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
-      notifyStatus: 'created',
-      plaintext: letterPlaintext,
-      status: 'pending'
-    })
-
     notificationPatchStub = vi.fn().mockReturnThis()
     vi.spyOn(NotificationModel, 'query').mockReturnValue({
       findById: vi.fn().mockReturnThis(),
@@ -59,71 +43,208 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     vi.restoreAllMocks()
   })
 
-  describe('when the main notice has failed primary user email notifications', () => {
+  describe('when the main notice is a "returns invitation"', () => {
     beforeEach(() => {
-      vi.spyOn(ReturnsInvitationAlternateNoticeService, 'default').mockResolvedValue({
-        notice: alternateNotice,
-        notificationIds: [failedNotificationId],
-        notifications: [alternateNotification]
-      })
-    })
+      mainNotice = NoticesFixture.returnsInvitation()
+      failedNotificationId = generateUUID()
 
-    it('sends the alternate notifications to Notify and records the results', async () => {
-      await SendAlternateNoticeService(mainNotice)
+      alternateNotice = NoticesFixture.returnsInvitation()
+      alternateNotice.licences = mainNotice.licences
+      alternateNotice.triggerNoticeId = mainNotice.id
 
-      expect(SendLetterNotificationService.default).toHaveBeenCalledOnce()
-      expect(SendLetterNotificationService.default.mock.calls[0]).toEqual([
-        alternateNotification,
-        alternateNotice.referenceCode
-      ])
+      alternateNotification = NotificationsFixture.returnsInvitationLetter(alternateNotice)
 
-      // The first call is recording the result. The second is updating the failed notifications with the alternate
-      // notice ID (tested elsewhere)
-      expect(notificationPatchStub).toHaveBeenCalledTimes(2)
-      expect(notificationPatchStub.mock.calls[0][0]).toEqual({
-        notifyError: undefined,
+      vi.spyOn(SendLetterNotificationService, 'default').mockResolvedValue({
+        id: alternateNotification.id,
         notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
         notifyStatus: 'created',
         plaintext: letterPlaintext,
         status: 'pending'
       })
+
+      vi.spyOn(RenewalAlternateNoticeService, 'default')
     })
 
-    it('updates the failed notifications with the alternate notice ID', async () => {
-      await SendAlternateNoticeService(mainNotice)
+    describe('and it has failed primary user email notifications', () => {
+      beforeEach(() => {
+        vi.spyOn(ReturnsInvitationAlternateNoticeService, 'default').mockResolvedValue({
+          notice: alternateNotice,
+          notificationIds: [failedNotificationId],
+          notifications: [alternateNotification]
+        })
+      })
 
-      expect(notificationPatchStub).toHaveBeenCalledTimes(2)
-      expect(notificationPatchStub.mock.calls[1][0]).toMatchObject({ alternateNoticeId: alternateNotice.id })
+      it('attempts to create the appropriate alternate notice', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(ReturnsInvitationAlternateNoticeService.default).toHaveBeenCalledWith(mainNotice)
+        expect(RenewalAlternateNoticeService.default).not.toHaveBeenCalled()
+      })
+
+      it('sends the alternate notifications to Notify and records the results', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(SendLetterNotificationService.default).toHaveBeenCalledOnce()
+        expect(SendLetterNotificationService.default.mock.calls[0]).toEqual([
+          alternateNotification,
+          alternateNotice.referenceCode
+        ])
+
+        // The first call is recording the result. The second is updating the failed notifications with the alternate
+        // notice ID (tested elsewhere)
+        expect(notificationPatchStub).toHaveBeenCalledTimes(2)
+        expect(notificationPatchStub.mock.calls[0][0]).toEqual({
+          notifyError: undefined,
+          notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
+          notifyStatus: 'created',
+          plaintext: letterPlaintext,
+          status: 'pending'
+        })
+      })
+
+      it('updates the failed notifications with the alternate notice ID', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(notificationPatchStub).toHaveBeenCalledTimes(2)
+        expect(notificationPatchStub.mock.calls[1][0]).toMatchObject({ alternateNoticeId: alternateNotice.id })
+      })
+
+      it('returns the sent alternate notice', async () => {
+        const result = await SendAlternateNoticeService(mainNotice)
+
+        expect(result).toEqual(alternateNotice)
+      })
     })
 
-    it('returns the sent alternate notice', async () => {
-      const result = await SendAlternateNoticeService(mainNotice)
+    describe('but it has no failed primary user email notifications', () => {
+      beforeEach(() => {
+        vi.spyOn(ReturnsInvitationAlternateNoticeService, 'default').mockResolvedValue(null)
+      })
 
-      expect(result).toEqual(alternateNotice)
+      it('attempts to create the appropriate alternate notice', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(ReturnsInvitationAlternateNoticeService.default).toHaveBeenCalledWith(mainNotice)
+        expect(RenewalAlternateNoticeService.default).not.toHaveBeenCalled()
+      })
+
+      it('does not proceed with sending', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(SendLetterNotificationService.default).not.toHaveBeenCalled()
+      })
+
+      it('returns null', async () => {
+        const result = await SendAlternateNoticeService(mainNotice)
+
+        expect(result).toBeNull()
+      })
     })
   })
 
-  describe('when the main notice has no failed primary user email notifications', () => {
+  describe('when the main notice is a "renewal final"', () => {
     beforeEach(() => {
-      vi.spyOn(ReturnsInvitationAlternateNoticeService, 'default').mockResolvedValue(null)
+      mainNotice = NoticesFixture.renewalFinal()
+      failedNotificationId = generateUUID()
+
+      alternateNotice = NoticesFixture.renewalFinal()
+      alternateNotice.licences = mainNotice.licences
+      alternateNotice.triggerNoticeId = mainNotice.id
+
+      alternateNotification = NotificationsFixture.renewalFinalLetter(alternateNotice)
+
+      vi.spyOn(SendLetterNotificationService, 'default').mockResolvedValue({
+        id: alternateNotification.id,
+        notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
+        notifyStatus: 'created',
+        plaintext: letterPlaintext,
+        status: 'pending'
+      })
+
+      vi.spyOn(ReturnsInvitationAlternateNoticeService, 'default')
     })
 
-    it('does not proceed with sending', async () => {
-      await SendAlternateNoticeService(mainNotice)
+    describe('and it has failed primary user email notifications', () => {
+      beforeEach(() => {
+        vi.spyOn(RenewalAlternateNoticeService, 'default').mockResolvedValue({
+          notice: alternateNotice,
+          notificationIds: [failedNotificationId],
+          notifications: [alternateNotification]
+        })
+      })
 
-      expect(SendLetterNotificationService.default).not.toHaveBeenCalled()
+      it('attempts to create the appropriate alternate notice', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(RenewalAlternateNoticeService.default).toHaveBeenCalledWith(mainNotice)
+        expect(ReturnsInvitationAlternateNoticeService.default).not.toHaveBeenCalled()
+      })
+
+      it('sends the alternate notifications to Notify and records the results', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(SendLetterNotificationService.default).toHaveBeenCalledOnce()
+        expect(SendLetterNotificationService.default.mock.calls[0]).toEqual([
+          alternateNotification,
+          alternateNotice.referenceCode
+        ])
+
+        // The first call is recording the result. The second is updating the failed notifications with the alternate
+        // notice ID (tested elsewhere)
+        expect(notificationPatchStub).toHaveBeenCalledTimes(2)
+        expect(notificationPatchStub.mock.calls[0][0]).toEqual({
+          notifyError: undefined,
+          notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
+          notifyStatus: 'created',
+          plaintext: letterPlaintext,
+          status: 'pending'
+        })
+      })
+
+      it('updates the failed notifications with the alternate notice ID', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(notificationPatchStub).toHaveBeenCalledTimes(2)
+        expect(notificationPatchStub.mock.calls[1][0]).toMatchObject({ alternateNoticeId: alternateNotice.id })
+      })
+
+      it('returns the sent alternate notice', async () => {
+        const result = await SendAlternateNoticeService(mainNotice)
+
+        expect(result).toEqual(alternateNotice)
+      })
     })
 
-    it('returns null', async () => {
-      const result = await SendAlternateNoticeService(mainNotice)
+    describe('but it has no failed primary user email notifications', () => {
+      beforeEach(() => {
+        vi.spyOn(RenewalAlternateNoticeService, 'default').mockResolvedValue(null)
+      })
 
-      expect(result).toBeNull()
+      it('attempts to create the appropriate alternate notice', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(RenewalAlternateNoticeService.default).toHaveBeenCalledWith(mainNotice)
+        expect(ReturnsInvitationAlternateNoticeService.default).not.toHaveBeenCalled()
+      })
+
+      it('does not proceed with sending', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(SendLetterNotificationService.default).not.toHaveBeenCalled()
+      })
+
+      it('returns null', async () => {
+        const result = await SendAlternateNoticeService(mainNotice)
+
+        expect(result).toBeNull()
+      })
     })
   })
 
-  describe('when the main notice is a renewal invitation with failed primary user email notifications', () => {
+  describe('when the main notice is a "renewal invitation"', () => {
     beforeEach(() => {
       mainNotice = NoticesFixture.renewalInvitation()
+      failedNotificationId = generateUUID()
 
       alternateNotice = NoticesFixture.renewalInvitation()
       alternateNotice.licences = mainNotice.licences
@@ -131,23 +252,190 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
 
       alternateNotification = NotificationsFixture.renewalInvitationLetter(alternateNotice)
 
-      vi.spyOn(RenewalInvitationAlternateNoticeService, 'default').mockResolvedValue({
-        notice: alternateNotice,
-        notificationIds: [failedNotificationId],
-        notifications: [alternateNotification]
+      vi.spyOn(SendLetterNotificationService, 'default').mockResolvedValue({
+        id: alternateNotification.id,
+        notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
+        notifyStatus: 'created',
+        plaintext: letterPlaintext,
+        status: 'pending'
+      })
+
+      vi.spyOn(ReturnsInvitationAlternateNoticeService, 'default')
+    })
+
+    describe('and it has failed primary user email notifications', () => {
+      beforeEach(() => {
+        vi.spyOn(RenewalAlternateNoticeService, 'default').mockResolvedValue({
+          notice: alternateNotice,
+          notificationIds: [failedNotificationId],
+          notifications: [alternateNotification]
+        })
+      })
+
+      it('attempts to create the appropriate alternate notice', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(RenewalAlternateNoticeService.default).toHaveBeenCalledWith(mainNotice)
+        expect(ReturnsInvitationAlternateNoticeService.default).not.toHaveBeenCalled()
+      })
+
+      it('sends the alternate notifications to Notify and records the results', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(SendLetterNotificationService.default).toHaveBeenCalledOnce()
+        expect(SendLetterNotificationService.default.mock.calls[0]).toEqual([
+          alternateNotification,
+          alternateNotice.referenceCode
+        ])
+
+        // The first call is recording the result. The second is updating the failed notifications with the alternate
+        // notice ID (tested elsewhere)
+        expect(notificationPatchStub).toHaveBeenCalledTimes(2)
+        expect(notificationPatchStub.mock.calls[0][0]).toEqual({
+          notifyError: undefined,
+          notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
+          notifyStatus: 'created',
+          plaintext: letterPlaintext,
+          status: 'pending'
+        })
+      })
+
+      it('updates the failed notifications with the alternate notice ID', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(notificationPatchStub).toHaveBeenCalledTimes(2)
+        expect(notificationPatchStub.mock.calls[1][0]).toMatchObject({ alternateNoticeId: alternateNotice.id })
+      })
+
+      it('returns the sent alternate notice', async () => {
+        const result = await SendAlternateNoticeService(mainNotice)
+
+        expect(result).toEqual(alternateNotice)
       })
     })
 
-    it('delegates to RenewalInvitationAlternateNoticeService', async () => {
-      await SendAlternateNoticeService(mainNotice)
+    describe('but it has no failed primary user email notifications', () => {
+      beforeEach(() => {
+        vi.spyOn(RenewalAlternateNoticeService, 'default').mockResolvedValue(null)
+      })
 
-      expect(RenewalInvitationAlternateNoticeService.default).toHaveBeenCalledOnce()
+      it('attempts to create the appropriate alternate notice', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(RenewalAlternateNoticeService.default).toHaveBeenCalledWith(mainNotice)
+        expect(ReturnsInvitationAlternateNoticeService.default).not.toHaveBeenCalled()
+      })
+
+      it('does not proceed with sending', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(SendLetterNotificationService.default).not.toHaveBeenCalled()
+      })
+
+      it('returns null', async () => {
+        const result = await SendAlternateNoticeService(mainNotice)
+
+        expect(result).toBeNull()
+      })
+    })
+  })
+
+  describe('when the main notice is a "renewal reminder"', () => {
+    beforeEach(() => {
+      mainNotice = NoticesFixture.renewalReminder()
+      failedNotificationId = generateUUID()
+
+      alternateNotice = NoticesFixture.renewalReminder()
+      alternateNotice.licences = mainNotice.licences
+      alternateNotice.triggerNoticeId = mainNotice.id
+
+      alternateNotification = NotificationsFixture.renewalReminderLetter(alternateNotice)
+
+      vi.spyOn(SendLetterNotificationService, 'default').mockResolvedValue({
+        id: alternateNotification.id,
+        notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
+        notifyStatus: 'created',
+        plaintext: letterPlaintext,
+        status: 'pending'
+      })
+
+      vi.spyOn(ReturnsInvitationAlternateNoticeService, 'default')
     })
 
-    it('returns the sent alternate notice', async () => {
-      const result = await SendAlternateNoticeService(mainNotice)
+    describe('and it has failed primary user email notifications', () => {
+      beforeEach(() => {
+        vi.spyOn(RenewalAlternateNoticeService, 'default').mockResolvedValue({
+          notice: alternateNotice,
+          notificationIds: [failedNotificationId],
+          notifications: [alternateNotification]
+        })
+      })
 
-      expect(result).toEqual(alternateNotice)
+      it('attempts to create the appropriate alternate notice', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(RenewalAlternateNoticeService.default).toHaveBeenCalledWith(mainNotice)
+        expect(ReturnsInvitationAlternateNoticeService.default).not.toHaveBeenCalled()
+      })
+
+      it('sends the alternate notifications to Notify and records the results', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(SendLetterNotificationService.default).toHaveBeenCalledOnce()
+        expect(SendLetterNotificationService.default.mock.calls[0]).toEqual([
+          alternateNotification,
+          alternateNotice.referenceCode
+        ])
+
+        // The first call is recording the result. The second is updating the failed notifications with the alternate
+        // notice ID (tested elsewhere)
+        expect(notificationPatchStub).toHaveBeenCalledTimes(2)
+        expect(notificationPatchStub.mock.calls[0][0]).toEqual({
+          notifyError: undefined,
+          notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
+          notifyStatus: 'created',
+          plaintext: letterPlaintext,
+          status: 'pending'
+        })
+      })
+
+      it('updates the failed notifications with the alternate notice ID', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(notificationPatchStub).toHaveBeenCalledTimes(2)
+        expect(notificationPatchStub.mock.calls[1][0]).toMatchObject({ alternateNoticeId: alternateNotice.id })
+      })
+
+      it('returns the sent alternate notice', async () => {
+        const result = await SendAlternateNoticeService(mainNotice)
+
+        expect(result).toEqual(alternateNotice)
+      })
+    })
+
+    describe('but it has no failed primary user email notifications', () => {
+      beforeEach(() => {
+        vi.spyOn(RenewalAlternateNoticeService, 'default').mockResolvedValue(null)
+      })
+
+      it('attempts to create the appropriate alternate notice', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(RenewalAlternateNoticeService.default).toHaveBeenCalledWith(mainNotice)
+        expect(ReturnsInvitationAlternateNoticeService.default).not.toHaveBeenCalled()
+      })
+
+      it('does not proceed with sending', async () => {
+        await SendAlternateNoticeService(mainNotice)
+
+        expect(SendLetterNotificationService.default).not.toHaveBeenCalled()
+      })
+
+      it('returns null', async () => {
+        const result = await SendAlternateNoticeService(mainNotice)
+
+        expect(result).toBeNull()
+      })
     })
   })
 })
