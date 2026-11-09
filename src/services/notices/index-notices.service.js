@@ -6,7 +6,7 @@
 import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.presenter.js'
 import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
-import FetchNoticesService from './fetch-notices.service.js'
+import FetchNoticesDal from '../../dal/notices/fetch-notices.dal.js'
 import NoticesIndexPresenter from '../../presenters/notices/index-notices.presenter.js'
 
 /**
@@ -21,7 +21,7 @@ import NoticesIndexPresenter from '../../presenters/notices/index-notices.presen
 export default async function indexNoticesService(yar, auth, page) {
   const filters = _filters(yar)
 
-  const { results: notices, total: totalNumber } = await FetchNoticesService(filters, page)
+  const { results: notices, total: totalNumber } = await FetchNoticesDal(filters, page)
 
   const pagination = PaginatorPresenter(totalNumber, page, `/system/notices`, notices.length, 'notices')
 

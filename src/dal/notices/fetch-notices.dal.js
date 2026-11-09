@@ -1,6 +1,6 @@
 /**
  * Fetches the notices for the `/notices` page
- * @module FetchNoticesService
+ * @module FetchNoticesDal
  */
 
 import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
@@ -15,7 +15,7 @@ import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
  *
  * @returns {Promise<object>} an object containing the matching notices and the total count of notices
  */
-export default async function fetchNoticesService(filters, page = '1') {
+export default async function fetchNoticesDal(filters, page = '1') {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)

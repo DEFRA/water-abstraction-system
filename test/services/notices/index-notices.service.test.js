@@ -6,7 +6,7 @@ import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Things to stub
-import * as FetchNoticesService from '../../../src/services/notices/fetch-notices.service.js'
+import * as FetchNoticesDal from '../../../src/dal/notices/fetch-notices.dal.js'
 
 // Thing under test
 import IndexNoticesService from '../../../src/services/notices/index-notices.service.js'
@@ -36,7 +36,7 @@ describe('Notices - Index Notices service', () => {
       const results = NoticesFixture.mapToFetchNoticesResult([NoticesFixture.alertReduce()])
 
       fetchResults = { results, total: 1 }
-      vi.spyOn(FetchNoticesService, 'default').mockResolvedValue(fetchResults)
+      vi.spyOn(FetchNoticesDal, 'default').mockResolvedValue(fetchResults)
     })
 
     it('returns page data for the view', async () => {
@@ -86,7 +86,7 @@ describe('Notices - Index Notices service', () => {
     beforeEach(() => {
       // For the purposes of these tests the results don't matter
       fetchResults = { results: [], total: 0 }
-      vi.spyOn(FetchNoticesService, 'default').mockResolvedValue(fetchResults)
+      vi.spyOn(FetchNoticesDal, 'default').mockResolvedValue(fetchResults)
     })
 
     describe('and none were ever set or they were cleared', () => {

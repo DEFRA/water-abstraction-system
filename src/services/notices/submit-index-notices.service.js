@@ -7,7 +7,7 @@ import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.pr
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
 import { clearFilters, handleOneOptionSelected } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
-import FetchNoticesService from './fetch-notices.service.js'
+import FetchNoticesDal from '../../dal/notices/fetch-notices.dal.js'
 import IndexValidator from '../../validators/notices/index.validator.js'
 import NoticesIndexPresenter from '../../presenters/notices/index-notices.presenter.js'
 
@@ -48,7 +48,7 @@ export default async function submitIndexNoticesService(payload, yar, auth, page
 }
 
 async function _replayView(payload, error, page, savedFilters, auth) {
-  const { results: notices, total: totalNumber } = await FetchNoticesService(savedFilters, page)
+  const { results: notices, total: totalNumber } = await FetchNoticesDal(savedFilters, page)
 
   const pagination = PaginatorPresenter(totalNumber, page, `/system/notices`, notices.length, 'notices')
 
