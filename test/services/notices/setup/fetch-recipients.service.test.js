@@ -157,6 +157,38 @@ describe('Notices - Setup - Fetch Recipients service', () => {
     })
   })
 
+  describe('when setting up a renewal reminder', () => {
+    beforeEach(() => {
+      session = {
+        journey: NoticeJourney.ADHOC,
+        noticeType: NoticeType.RENEWAL_REMINDERS
+      }
+
+      download = false
+    })
+
+    describe('and fetching recipients for checking or sending', () => {
+      beforeEach(() => {
+        recipients = [RecipientsFixture.renewalNoticePrimaryUser()]
+
+        vi.spyOn(FetchRenewalNoticeRecipientsService, 'default').mockResolvedValue(recipients)
+      })
+
+      it('determines the appropriate fetch service to call and returns the recipient data', async () => {
+        const results = await FetchRecipientsService(session, download)
+
+        expect(FetchRenewalNoticeRecipientsService.default).toHaveBeenCalledExactlyOnceWith(session)
+
+        expect(FetchAbstractionAlertRecipientsDal.default).not.toHaveBeenCalled()
+        expect(FetchPaperReturnsRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsReminderRecipientsService.default).not.toHaveBeenCalled()
+
+        expect(results).toEqual(recipients)
+      })
+    })
+  })
+
   describe('when setting up a returns invitation', () => {
     beforeEach(() => {
       session = {
