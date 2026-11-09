@@ -1,20 +1,20 @@
 /**
- * Fetches failed renewal invitation notifications and creates an alternate notice for them
- * @module RenewalInvitationAlternateNoticeService
+ * Fetches failed renewal notifications and creates an alternate notice for them
+ * @module RenewalAlternateNoticeService
  */
 
 import CreateAlternateRenewalNoticeService from '../create-alternate-renewal-notice.service.js'
-import FetchFailedRenewalInvitationsService from '../renewal-notice/fetch-failed-renewal-invitations.service.js'
+import FetchFailedRenewalNotificationsDal from '../../../../dal/notices/setup/renewal-notice/fetch-failed-renewal-notifications.dal.js'
 
 /**
- * Fetches failed renewal invitation notifications and creates an alternate notice for them
+ * Fetches failed renewal notifications and creates an alternate notice for them
  *
- * @param {object} mainNotice - The main notice to check for failed renewal invitation emails
+ * @param {object} mainNotice - The main notice to check for failed renewal emails
  *
  * @returns {Promise<object|null>} The notice, notifications, and failed notification IDs, or null if none failed
  */
-export default async function renewalInvitationAlternateNoticeService(mainNotice) {
-  const { licenceRefs, notificationIds } = await FetchFailedRenewalInvitationsService(mainNotice.id)
+export default async function renewalAlternateNoticeService(mainNotice) {
+  const { licenceRefs, notificationIds } = await FetchFailedRenewalNotificationsDal(mainNotice.id)
 
   if (notificationIds.length === 0) {
     return null
