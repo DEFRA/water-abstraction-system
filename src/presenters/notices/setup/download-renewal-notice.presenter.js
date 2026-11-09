@@ -1,6 +1,6 @@
 /**
- * Formats data for the `/notices/setup/download` link when the journey is for renewal invitations
- * @module DownloadRenewalInvitationPresenter
+ * Formats data for the `/notices/setup/download` link when the journey is for renewal notices
+ * @module DownloadRenewalNoticePresenter
  */
 
 import { addressToCSV } from '../base.presenter.js'
@@ -24,7 +24,7 @@ const HEADERS = [
 ]
 
 /**
- * Formats data for the `/notices/setup/download` link when the journey is for renewal invitations
+ * Formats data for the `/notices/setup/download` link when the journey is for renewal notices
  *
  * The headers are fixed and in the correct order. If a value for a row does not match the header then it will default
  * to an empty string.
@@ -35,7 +35,7 @@ const HEADERS = [
  * @returns {string} - A CSV-formatted string that includes the recipients' data, with the first row as column headers
  * and subsequent rows corresponding to the recipient details.
  */
-export default function downloadRenewalInvitationPresenter(recipients, session) {
+export default function downloadRenewalNoticePresenter(recipients, session) {
   const rows = _transformToCsv(recipients, session)
 
   return [HEADERS + '\n', ...rows].join('')

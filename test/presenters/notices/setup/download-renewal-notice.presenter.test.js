@@ -9,9 +9,9 @@ import { addressToCSV } from '../../../../src/presenters/notices/base.presenter.
 import { transformArrayToCSVRow } from '../../../../src/lib/transform-to-csv.lib.js'
 
 // Thing under test
-import DownloadRenewalInvitationPresenter from '../../../../src/presenters/notices/setup/download-renewal-invitation.presenter.js'
+import DownloadRenewalNoticePresenter from '../../../../src/presenters/notices/setup/download-renewal-notice.presenter.js'
 
-describe('Notices - Setup - Download Renewal Invitation presenter', () => {
+describe('Notices - Setup - Download Renewal Notice presenter', () => {
   let recipient
   let session
 
@@ -25,7 +25,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
     })
 
     it('correctly formats the data to a csv string', () => {
-      const result = DownloadRenewalInvitationPresenter([recipient], session)
+      const result = DownloadRenewalNoticePresenter([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
       const expected =
@@ -43,7 +43,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
     })
 
     it('correctly formats the data to a csv string', () => {
-      const result = DownloadRenewalInvitationPresenter([recipient], session)
+      const result = DownloadRenewalNoticePresenter([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
       const expected =
@@ -62,7 +62,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
     })
 
     it('joins the licence refs with a comma', () => {
-      const result = DownloadRenewalInvitationPresenter([recipient], session)
+      const result = DownloadRenewalNoticePresenter([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
       const expected =
