@@ -10,7 +10,7 @@ import ReturnsNoticeNotificationsPresenter from 'water-abstraction-engine/presen
 
 import FetchRecipientsService from '../fetch-recipients.service.js'
 import PreviewPresenter from '../../../../presenters/notices/setup/preview/preview.presenter.js'
-import RenewalInvitationNotificationsPresenter from '../../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
+import RenewalInvitationNotificationsPresenter from '../../../../presenters/notices/setup/renewal-invitation-notifications.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page

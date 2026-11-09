@@ -10,7 +10,7 @@ import ReturnsNoticeNotificationsPresenter from 'water-abstraction-engine/presen
 import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 
 import PaperReturnNotificationsPresenter from '../../../presenters/notices/setup/paper-return-notifications.presenter.js'
-import ReturnsInvitationNotificationsPresenter from '../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
+import RenewalInvitationNotificationsPresenter from '../../../presenters/notices/setup/renewal-invitation-notifications.presenter.js'
 
 /**
  * Create notifications
@@ -69,7 +69,7 @@ function _notifications(session, recipients, noticeId) {
   }
 
   if (noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    return ReturnsInvitationNotificationsPresenter(session, recipients, noticeId)
+    return RenewalInvitationNotificationsPresenter(session, recipients, noticeId)
   }
 
   return ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)

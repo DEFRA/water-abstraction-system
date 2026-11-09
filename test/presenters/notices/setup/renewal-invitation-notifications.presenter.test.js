@@ -7,7 +7,7 @@ import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients
 import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import RenewalInvitationNotificationsPresenter from '../../../../src/presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
+import RenewalInvitationNotificationsPresenter from '../../../../src/presenters/notices/setup/renewal-invitation-notifications.presenter.js'
 
 describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
   const noticeId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
