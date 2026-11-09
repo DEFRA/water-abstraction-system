@@ -6,8 +6,7 @@
 import {
   formatAbstractionPeriod,
   formatFinancialYear,
-  formatLongDate,
-  formatPurposes
+  formatLongDate
 } from 'water-abstraction-engine/presenters/base.presenter.js'
 
 import {
@@ -172,6 +171,18 @@ function _elementsInReview(reviewChargeVersions) {
   })
 }
 
+function _formatPurposes(purposes) {
+  const purposeDescriptionArray = purposes.map((purpose) => {
+    if (purpose.alias) {
+      return `${purpose.description} (${purpose.alias})`
+    }
+
+    return purpose.description
+  })
+
+  return purposeDescriptionArray.join(', ')
+}
+
 function _formatReviewReturns(reviewReturns) {
   const matchedReturns = []
   const unmatchedReturns = []
@@ -184,7 +195,7 @@ function _formatReviewReturns(reviewReturns) {
       abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
       description,
       issues: formatIssues(issues),
-      purpose: formatPurposes(purposes).join(', '),
+      purpose: _formatPurposes(purposes),
       reference: returnReference,
       returnLink: `/system/return-logs/${returnLog.id}/details`,
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,

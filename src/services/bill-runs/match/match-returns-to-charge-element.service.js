@@ -51,7 +51,7 @@ function _matchReturns(chargeElement, returnLogs) {
     const returnPeriods = returnLog.abstractionPeriods
 
     const matchFound = returnLog.purposes.some((purpose) => {
-      return purpose.tertiary.code === elementCode
+      return purpose.code === elementCode
     })
 
     if (!matchFound) {
