@@ -10,9 +10,9 @@ import NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
 
 // Thing under test
-import FetchFailedRenewalInvitationsService from '../../../../../src/services/notices/setup/renewal-notice/fetch-failed-renewal-invitations.service.js'
+import FetchFailedRenewalNotificationsDal from '../../../../../src/dal/notices/setup/renewal-notice/fetch-failed-renewal-notifications.dal.js'
 
-describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations service', () => {
+describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Notifications DAL', () => {
   let licenceRefs
   let notice
   let notifications
@@ -44,7 +44,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
 
       describe('that do NOT include emails to primary users', () => {
         it('returns an object with empty properties', async () => {
-          const result = await FetchFailedRenewalInvitationsService(notice.id)
+          const result = await FetchFailedRenewalNotificationsDal(notice.id)
 
           expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
         })
@@ -81,7 +81,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
           })
 
           it('returns the failed notification IDs plus the unique licence refs from them', async () => {
-            const result = await FetchFailedRenewalInvitationsService(notice.id)
+            const result = await FetchFailedRenewalNotificationsDal(notice.id)
 
             const expectedNotificationIds = [notifications[1].id, notifications[2].id].sort(
               (referenceString, compareString) => {
@@ -117,7 +117,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
           })
 
           it('returns an object with empty properties', async () => {
-            const result = await FetchFailedRenewalInvitationsService(notice.id)
+            const result = await FetchFailedRenewalNotificationsDal(notice.id)
 
             expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
           })
@@ -131,7 +131,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
       })
 
       it('returns an object with empty properties', async () => {
-        const result = await FetchFailedRenewalInvitationsService(notice.id)
+        const result = await FetchFailedRenewalNotificationsDal(notice.id)
 
         expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
       })
@@ -144,7 +144,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
     })
 
     it('returns an object with empty properties', async () => {
-      const result = await FetchFailedRenewalInvitationsService(generateUUID())
+      const result = await FetchFailedRenewalNotificationsDal(generateUUID())
 
       expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
     })

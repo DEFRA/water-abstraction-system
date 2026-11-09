@@ -1,15 +1,15 @@
 /**
- * Fetches the licence refs from failed renewal invitation notifications to primary users
- * @module FetchFailedRenewalInvitationsService
+ * Fetches the licence refs from failed renewal final, invitation or reminder notifications to primary users
+ * @module FetchFailedRenewalNotificationsDal
  */
 
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
 import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 
 /**
- * Fetches the licence refs from failed renewal invitation notifications to primary users
+ * Fetches the licence refs from failed renewal final, invitation or reminder notifications to primary users
  *
- * The function checks a notice for failed renewal invitation emails to primary users.
+ * The function checks a notice for failed renewal emails to primary users.
  *
  * This could have been because of a temporary issue or an invalid email address.
  *
@@ -18,7 +18,7 @@ import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
  * @returns {Promise<object>} An object containing the IDs of the failed notifications, plus the combined licence
  * references from them
  */
-export default async function fetchFailedRenewalInvitationsService(noticeId) {
+export default async function fetchFailedRenewalNotificationsDal(noticeId) {
   const notifications = await _fetch(noticeId)
 
   const licences = []
@@ -40,7 +40,7 @@ export default async function fetchFailedRenewalInvitationsService(noticeId) {
 }
 
 /**
- * We are only interested in renewal invitation emails that have failed.
+ * We are only interested in renewal notification emails that have failed.
  *
  * The alternateNoticeId is set when we have successfully created a new notification to replace the failed one. Hence we
  * only look for ones that have not been set. This enables us to retry sending them if something has gone wrong.
@@ -52,7 +52,6 @@ async function _fetch(eventId) {
     .select(['id', 'licences'])
     .where('eventId', eventId)
     .where('status', 'error')
-    .where('messageRef', 'renewal invitation')
     .where('contactType', 'primary user')
     .where('messageType', 'email')
     .whereNull('alternateNoticeId')
