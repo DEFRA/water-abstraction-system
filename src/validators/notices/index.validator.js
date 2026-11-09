@@ -12,6 +12,7 @@ const NOTICE_TYPES = [
   'reduce',
   'resume',
   'renewalInvitation',
+  'renewalReminder',
   'returnReminder',
   'returnInvitation',
   'stop',
