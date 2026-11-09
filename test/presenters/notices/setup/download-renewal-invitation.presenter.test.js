@@ -21,7 +21,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
 
   describe('when the recipient is a "licence holder"', () => {
     beforeEach(() => {
-      recipient = RecipientsFixture.renewalInvitationLicenceHolder()
+      recipient = RecipientsFixture.renewalNoticeLicenceHolder()
     })
 
     it('correctly formats the data to a csv string', () => {
@@ -39,7 +39,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
 
   describe('when the recipient is a "primary user"', () => {
     beforeEach(() => {
-      recipient = RecipientsFixture.renewalInvitationPrimaryUser()
+      recipient = RecipientsFixture.renewalNoticePrimaryUser()
     })
 
     it('correctly formats the data to a csv string', () => {
@@ -57,7 +57,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
 
   describe('when the recipient has multiple licences', () => {
     beforeEach(() => {
-      recipient = RecipientsFixture.renewalInvitationPrimaryUser()
+      recipient = RecipientsFixture.renewalNoticePrimaryUser()
       recipient.licence_refs = [generateLicenceRef(), generateLicenceRef()]
     })
 

@@ -1,19 +1,30 @@
 /**
- * Formats recipients into notifications for a renewal invitation
- * @module RenewalInvitationNotificationsPresenter
+ * Formats recipients into notifications for a renewal final, invitation and reminder notice
+ * @module RenewalNotificationsPresenter
  */
 
 import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import NotifyAddressPresenter from 'water-abstraction-engine/presenters/notices/setup/notify-address.presenter.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
 
 const MESSAGE_REFS = {
-  adhoc: 'renewal invitation ad-hoc',
-  standard: 'renewal invitation'
+  [NoticeType.RENEWAL_FINALS]: {
+    adhoc: 'renewal final ad-hoc',
+    standard: 'renewal final'
+  },
+  [NoticeType.RENEWAL_INVITATIONS]: {
+    adhoc: 'renewal invitation ad-hoc',
+    standard: 'renewal invitation'
+  },
+  [NoticeType.RENEWAL_REMINDERS]: {
+    adhoc: 'renewal reminder ad-hoc',
+    standard: 'renewal reminder'
+  }
 }
 
 /**
- * Formats recipients into notifications for a renewal invitation
+ * Formats recipients into notifications for a renewal final, invitation and reminder notice
  *
  * @param {object} noticeData - The notice data
  * @param {object[]} recipients - List of recipients, each containing details like email or address of the recipient
@@ -21,7 +32,7 @@ const MESSAGE_REFS = {
  *
  * @returns {object[]} the recipients transformed into notifications
  */
-export default function renewalInvitationNotificationsPresenter(noticeData, recipients, noticeId) {
+export default function renewalNotificationsPresenter(noticeData, recipients, noticeId) {
   const notifications = []
 
   for (const recipient of recipients) {
@@ -49,7 +60,7 @@ function _email(recipient, noticeId, noticeData) {
     eventId: noticeId,
     licences: recipient.licence_refs,
     messageType,
-    messageRef: MESSAGE_REFS[journey],
+    messageRef: MESSAGE_REFS[noticeType][journey],
     personalisation: {
       ..._personalisation(recipient, noticeData)
     },
@@ -70,7 +81,7 @@ function _letter(recipient, noticeId, noticeData) {
     eventId: noticeId,
     licences: recipient.licence_refs,
     messageType,
-    messageRef: MESSAGE_REFS[journey],
+    messageRef: MESSAGE_REFS[noticeType][journey],
     personalisation: {
       ...address,
       // NOTE: Address line 1 is always set to the recipient's name

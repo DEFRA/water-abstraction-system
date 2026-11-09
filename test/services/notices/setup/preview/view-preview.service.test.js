@@ -222,9 +222,9 @@ describe('Notices - Setup - Preview - View Preview service', () => {
     })
   })
 
-  describe('when previewing a renewal invitation notification', () => {
+  describe('when previewing a renewal final, invitation, or reminder notification', () => {
     beforeEach(() => {
-      recipients = [RecipientsFixture.renewalInvitationPrimaryUser()]
+      recipients = [RecipientsFixture.renewalNoticePrimaryUser()]
 
       const referenceCode = generateNoticeReferenceCode('REIN-')
       const sessionId = generateUUID()

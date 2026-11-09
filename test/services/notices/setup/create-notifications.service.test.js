@@ -391,12 +391,9 @@ describe('Notices - Setup - Create Notifications service', () => {
     })
   })
 
-  describe('when the notice is renewal invitation', () => {
+  describe('when the notice is renewal final, invitation, or reminder', () => {
     beforeEach(() => {
-      recipients = [
-        RecipientsFixture.renewalInvitationLicenceHolder(),
-        RecipientsFixture.renewalInvitationPrimaryUser()
-      ]
+      recipients = [RecipientsFixture.renewalNoticeLicenceHolder(), RecipientsFixture.renewalNoticePrimaryUser()]
 
       const referenceCode = generateNoticeReferenceCode('REIN-')
 

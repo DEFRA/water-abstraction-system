@@ -28,7 +28,7 @@ describe('Notices - Setup - Create Alternate Renewal Notice service', () => {
 
     notice = NoticesFixture.renewalInvitation()
 
-    recipient = RecipientsFixture.renewalInvitationLicenceHolder()
+    recipient = RecipientsFixture.renewalNoticeLicenceHolder()
     recipient.licence_refs = notice.licences
 
     licenceRefs = notice.licences
