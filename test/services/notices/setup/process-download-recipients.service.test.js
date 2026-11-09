@@ -129,7 +129,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
 
   describe('when the notice type is a "renewal invitation"', () => {
     beforeAll(() => {
-      recipient = RecipientsFixture.renewalInvitationLicenceHolder()
+      recipient = RecipientsFixture.renewalNoticeLicenceHolder()
       session = NoticeSessionFixture.adHocRenewalInvitation(recipient.licence_refs[0])
 
       vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)

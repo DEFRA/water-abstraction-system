@@ -137,7 +137,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
 
     describe('and fetching recipients for checking or sending', () => {
       beforeEach(() => {
-        recipients = [RecipientsFixture.renewalInvitationPrimaryUser()]
+        recipients = [RecipientsFixture.renewalNoticePrimaryUser()]
 
         vi.spyOn(FetchRenewalNoticeRecipientsService, 'default').mockResolvedValue(recipients)
       })
