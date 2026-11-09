@@ -105,7 +105,7 @@ describe('Notices - Setup - Submit Licence service', () => {
         })
       })
 
-      describe('for a "renewal invitation" notice type', () => {
+      describe('for a "renewal" notice type', () => {
         beforeEach(() => {
           sessionData = { checkPageVisited: false, noticeType: 'renewalInvitations' }
 
