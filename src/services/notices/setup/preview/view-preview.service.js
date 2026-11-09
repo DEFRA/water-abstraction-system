@@ -6,7 +6,7 @@
 import AbstractionAlertNotificationsPresenter from 'water-abstraction-engine/presenters/notices/setup/abstraction-alert-notifications.presenter.js'
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
-import ReturnsNoticeNotificationsPresenter from 'water-abstraction-engine/presenters/notices/setup/returns-notice-notifications.presenter.js'
+import ReturnsNotificationsPresenter from 'water-abstraction-engine/presenters/notices/setup/returns-notifications.presenter.js'
 
 import FetchRecipientsService from '../fetch-recipients.service.js'
 import PreviewPresenter from '../../../../presenters/notices/setup/preview/preview.presenter.js'
@@ -55,7 +55,7 @@ function _notification(recipient, session, licenceMonitoringStationId) {
   } else if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
     notification = RenewalInvitationNotificationsPresenter(session, [recipient], null)[0]
   } else {
-    notification = ReturnsNoticeNotificationsPresenter(session, [recipient], null)[0]
+    notification = ReturnsNotificationsPresenter(session, [recipient], null)[0]
   }
 
   return notification
