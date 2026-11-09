@@ -125,6 +125,13 @@ function _fetchQuery() {
 }
 
 function _standardNoticeTypes(noticeTypes) {
+  const currentNoticeTypes = [
+    'paperReturnForms',
+    'returnInvitation',
+    'returnReminder',
+    'renewalInvitation',
+    'renewalReminder'
+  ]
   const standardTypes = []
 
   for (const noticeType of noticeTypes) {
@@ -134,7 +141,7 @@ function _standardNoticeTypes(noticeTypes) {
       continue
     }
 
-    if (['paperReturnForms', 'returnInvitation', 'returnReminder', 'renewalInvitation'].includes(noticeType)) {
+    if (currentNoticeTypes.includes(noticeType)) {
       standardTypes.push(noticeType)
     }
   }
