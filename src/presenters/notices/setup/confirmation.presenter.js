@@ -32,8 +32,8 @@ function _monitoringStationLink(metadata) {
 /**
  * An Event 'subType' is a legacy code concept we have needed to adapt to conform to existing patterns.
  *
- * We convert our 'journey' keys into 'supTypes' when we create an event. As we have no access to the session for the
- * confirmation page we need to remap these 'supTypes' into 'journey' keys to display to the user to keep conformity.
+ * We convert our 'journey' keys into 'subTypes' when we create an event. As we have no access to the session for the
+ * confirmation page we need to remap these 'subTypes' into 'journey' keys to display to the user to keep conformity.
  *
  * @private
  */
@@ -46,14 +46,21 @@ function _pageTitle(subType) {
     return 'Paper returns sent'
   }
 
+  if (subType === NoticeTypes[NoticeType.INVITATIONS].subType) {
+    return 'Returns invitations sent'
+  }
+
+  if (subType === NoticeTypes[NoticeType.REMINDERS].subType) {
+    return 'Returns reminders sent'
+  }
+
   if (subType === NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType) {
     return 'Renewal invitations sent'
   }
 
-  const subTypes = {
-    [NoticeTypes[NoticeType.INVITATIONS].subType]: 'invitations',
-    [NoticeTypes[NoticeType.REMINDERS].subType]: 'reminders'
+  if (subType === NoticeTypes[NoticeType.RENEWAL_REMINDERS].subType) {
+    return 'Renewal reminders sent'
   }
 
-  return `Returns ${subTypes[subType]} sent`
+  return `Notice sent`
 }
