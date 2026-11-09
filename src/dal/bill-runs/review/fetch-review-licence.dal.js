@@ -1,6 +1,6 @@
 /**
  * Fetches the selected review licence instance and related data for the two-part tariff review licence page
- * @module FetchReviewLicenceService
+ * @module FetchReviewLicenceDal
  */
 
 import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
@@ -14,7 +14,7 @@ import ReviewLicenceModel from 'water-abstraction-engine/models/review-licence.m
  * @returns {module:ReviewLicenceModel} the matching `ReviewLicenceModel` instance and related data needed for the
  * two-part tariff review licence page
  */
-export default async function fetchReviewLicenceService(reviewLicenceId) {
+export default async function fetchReviewLicenceDal(reviewLicenceId) {
   return _fetch(reviewLicenceId)
 }
 

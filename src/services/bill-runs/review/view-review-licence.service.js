@@ -3,7 +3,7 @@
  * @module ViewReviewLicenceService
  */
 
-import FetchReviewLicenceService from './fetch-review-licence.service.js'
+import FetchReviewLicenceDal from '../../../dal/bill-runs/review/fetch-review-licence.dal.js'
 import ReviewLicencePresenter from '../../../presenters/bill-runs/review/review-licence.presenter.js'
 
 /**
@@ -15,7 +15,7 @@ import ReviewLicencePresenter from '../../../presenters/bill-runs/review/review-
  * @returns {Promise<object>} The data formatted for the view template
  */
 export default async function viewReviewLicenceService(reviewLicenceId, yar) {
-  const reviewLicence = await FetchReviewLicenceService(reviewLicenceId)
+  const reviewLicence = await FetchReviewLicenceDal(reviewLicenceId)
 
   const [bannerMessage] = yar.flash('banner')
   const pageData = ReviewLicencePresenter(reviewLicence)

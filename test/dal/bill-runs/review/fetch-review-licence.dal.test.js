@@ -24,9 +24,9 @@ import ReviewLicenceHelper from 'water-abstraction-engine/test/helpers/review-li
 import ReviewReturnHelper from 'water-abstraction-engine/test/helpers/review-return.helper.js'
 
 // Thing under test
-import FetchReviewLicenceService from '../../../../src/services/bill-runs/review/fetch-review-licence.service.js'
+import FetchReviewLicenceDal from '../../../../src/dal/bill-runs/review/fetch-review-licence.dal.js'
 
-describe('Bill Runs Review - Fetch Review Licence service', () => {
+describe('Bill Runs - Review - Fetch Review Licence dal', () => {
   let address
   let billingAccount
   let billingAccountAddress
@@ -118,7 +118,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
 
   describe('when a matching review licence exists', () => {
     it('returns the match', async () => {
-      const result = await FetchReviewLicenceService(reviewLicence.id)
+      const result = await FetchReviewLicenceDal(reviewLicence.id)
 
       expect(result).toEqual({
         billRun: {
@@ -278,7 +278,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
 
   describe('when no matching review licence exists', () => {
     it('returns nothing', async () => {
-      const result = await FetchReviewLicenceService('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchReviewLicenceDal('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result).toBeUndefined()
     })
