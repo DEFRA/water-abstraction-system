@@ -6,6 +6,7 @@ import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper
 import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import ReviewChargeElementHelper from 'water-abstraction-engine/test/helpers/review-charge-element.helper.js'
 import ReviewChargeElementReturnHelper from 'water-abstraction-engine/test/helpers/review-charge-element-return.helper.js'
 import ReviewChargeReferenceHelper from 'water-abstraction-engine/test/helpers/review-charge-reference.helper.js'
@@ -20,6 +21,7 @@ describe('Bill Runs - Review - Fetch Review Charge Element dal', () => {
   let billRun
   let chargeElement
   let returnLog
+  let returnRequirement
   let reviewChargeElement
   let reviewChargeVersion
   let reviewChargeReference
@@ -31,7 +33,8 @@ describe('Bill Runs - Review - Fetch Review Charge Element dal', () => {
 
     billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, status: 'review' })
 
-    returnLog = await ReturnLogHelper.add()
+    returnRequirement = await ReturnRequirementHelper.add()
+    returnLog = await ReturnLogHelper.add({ returnRequirementId: returnRequirement.id })
     chargeElement = await ChargeElementHelper.add()
 
     reviewLicence = await ReviewLicenceHelper.add({ billRunId: billRun.id })
@@ -39,8 +42,8 @@ describe('Bill Runs - Review - Fetch Review Charge Element dal', () => {
       purposes: [
         {
           primary: { code: 'A', description: 'Agriculture' },
-          secondary: { code: 'AGR', description: 'General Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
+          secondary: { code: 'AGR', description: 'General Agriculture' }
         }
       ],
       returnId: returnLog.returnId,
@@ -67,72 +70,72 @@ describe('Bill Runs - Review - Fetch Review Charge Element dal', () => {
       const result = await FetchReviewChargeElementDal(reviewChargeElement.id)
 
       expect(result).toEqual({
+        id: reviewChargeElement.id,
         amendedAllocated: 0,
+        issues: '',
+        status: 'ready',
         chargeElement: {
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 3,
+          id: chargeElement.id,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 4,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 3,
           authorisedAnnualQuantity: 200,
-          description: 'Mineral washing',
-          id: chargeElement.id
+          description: 'Mineral washing'
         },
-        id: reviewChargeElement.id,
-        issues: '',
         reviewChargeReference: {
-          amendedAuthorisedVolume: 0,
           id: reviewChargeReference.id,
+          amendedAuthorisedVolume: 0,
           reviewChargeElements: [
             {
               id: reviewChargeElement.id
             }
           ],
           reviewChargeVersion: {
-            chargePeriodEndDate: new Date('2022-06-05'),
-            chargePeriodStartDate: new Date('2022-04-01'),
             id: reviewChargeVersion.id,
+            chargePeriodStartDate: new Date('2022-04-01'),
+            chargePeriodEndDate: new Date('2022-06-05'),
             reviewLicence: {
+              id: reviewLicence.id,
+              licenceId: reviewLicence.licenceId,
               billRun: {
                 id: billRun.id,
                 toFinancialYearEnding: 2023
-              },
-              id: reviewLicence.id,
-              licenceId: reviewLicence.licenceId
+              }
             }
           }
         },
         reviewReturns: [
           {
+            id: reviewReturn.id,
             allocated: 0,
             description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
             endDate: new Date('2022-05-06'),
-            id: reviewReturn.id,
             issues: '',
+            quantity: 0,
             purposes: [
               {
                 primary: { code: 'A', description: 'Agriculture' },
-                secondary: { code: 'AGR', description: 'General Agriculture' },
-                tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
+                tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
+                secondary: { code: 'AGR', description: 'General Agriculture' }
               }
             ],
-            quantity: 0,
             returnId: reviewReturn.returnId,
-            returnLog: {
-              id: returnLog.id,
-              periodEndDay: 28,
-              periodEndMonth: 4,
-              periodStartDay: 1,
-              periodStartMonth: 4,
-              returnId: returnLog.returnId
-            },
             returnLogId: reviewReturn.returnLogId,
             returnReference: reviewReturn.returnReference,
             returnStatus: 'completed',
             startDate: new Date('2022-04-01'),
-            underQuery: false
+            underQuery: false,
+            returnLog: {
+              id: returnLog.id,
+              periodStartDay: 1,
+              periodStartMonth: 4,
+              periodEndDay: 31,
+              periodEndMonth: 3,
+              returnId: returnLog.returnId
+            }
           }
-        ],
-        status: 'ready'
+        ]
       })
     })
   })

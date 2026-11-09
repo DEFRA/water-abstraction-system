@@ -3,7 +3,6 @@
  * @module FetchReviewChargeReferenceDal
  */
 
-import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
 import ReviewChargeElementModel from 'water-abstraction-engine/models/review-charge-element.model.js'
 
 /**
@@ -76,14 +75,16 @@ export default async function fetchReviewChargeElementDal(reviewChargeElementId)
         .orderBy('reviewReturns.startDate', 'asc')
         .withGraphFetched('returnLog')
         .modifyGraph('returnLog', (returnLogBuilder) => {
-          returnLogBuilder.select([
-            'id',
-            'returnId',
-            Objection.ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
-            Objection.ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
-            Objection.ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
-            Objection.ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth')
-          ])
+          returnLogBuilder
+            .select([
+              'returnLogs.id',
+              'returnLogs.returnId',
+              'returnRequirement.abstractionPeriodStartDay AS periodStartDay',
+              'returnRequirement.abstractionPeriodStartMonth AS periodStartMonth',
+              'returnRequirement.abstractionPeriodEndDay AS periodEndDay',
+              'returnRequirement.abstractionPeriodEndMonth AS periodEndMonth'
+            ])
+            .innerJoinRelated('returnRequirement')
         })
     })
 }
