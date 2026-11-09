@@ -391,7 +391,7 @@ describe('Notices - Setup - Create Notifications service', () => {
     })
   })
 
-  describe('when the notice is renewal invitation', () => {
+  describe('when the notice is renewal final, invitation, or reminder', () => {
     beforeEach(() => {
       recipients = [RecipientsFixture.renewalNoticeLicenceHolder(), RecipientsFixture.renewalNoticePrimaryUser()]
 

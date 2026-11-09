@@ -10,7 +10,7 @@ import ReturnsNotificationsPresenter from 'water-abstraction-engine/presenters/n
 
 import FetchRecipientsService from '../fetch-recipients.service.js'
 import PreviewPresenter from '../../../../presenters/notices/setup/preview/preview.presenter.js'
-import RenewalInvitationNotificationsPresenter from '../../../../presenters/notices/setup/renewal-invitation-notifications.presenter.js'
+import RenewalNotificationsPresenter from '../../../../presenters/notices/setup/renewal-notifications.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page
@@ -53,7 +53,7 @@ function _notification(recipient, session, licenceMonitoringStationId) {
       return unfilteredNotification.personalisation.licenceGaugingStationId === licenceMonitoringStationId
     })
   } else if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    notification = RenewalInvitationNotificationsPresenter(session, [recipient], null)[0]
+    notification = RenewalNotificationsPresenter(session, [recipient], null)[0]
   } else {
     notification = ReturnsNotificationsPresenter(session, [recipient], null)[0]
   }
