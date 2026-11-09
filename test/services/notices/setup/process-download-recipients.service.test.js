@@ -152,6 +152,32 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       })
     })
   })
+
+  describe('when the notice type is a "renewal reminder"', () => {
+    beforeAll(() => {
+      recipient = RecipientsFixture.renewalNoticeLicenceHolder()
+      session = NoticeSessionFixture.adHocRenewalReminder(recipient.licence_refs[0])
+
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
+    })
+
+    it('returns the correct csv string, filename and type', async () => {
+      const result = await ProcessDownloadRecipientsService(session.id)
+
+      const recipientRow = _transformRenewalRecipientToRow(recipient, session)
+
+      expect(result).toEqual({
+        data:
+          // Headers
+          'Licence,Renewal date,Expiry date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          recipientRow,
+        type: 'text/csv',
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`
+      })
+    })
+  })
 })
 
 function _transformAbstractionAlertRecipientToRow(recipient, session) {
