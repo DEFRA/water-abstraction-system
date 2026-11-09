@@ -3,9 +3,9 @@ import { beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
 import AddressHelper from 'water-abstraction-engine/test/helpers/address.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import BillingAccountAddressHelper from 'water-abstraction-engine/test/helpers/billing-account-address.helper.js'
 import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
-import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
 import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
 import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
@@ -16,6 +16,7 @@ import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.
 import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import ReviewChargeElementHelper from 'water-abstraction-engine/test/helpers/review-charge-element.helper.js'
 import ReviewChargeElementReturnHelper from 'water-abstraction-engine/test/helpers/review-charge-element-return.helper.js'
 import ReviewChargeReferenceHelper from 'water-abstraction-engine/test/helpers/review-charge-reference.helper.js'
@@ -41,6 +42,7 @@ describe('Bill Runs - Review - Fetch Review Licence dal', () => {
   let purpose
   let region
   let returnLog
+  let returnRequirement
   let reviewChargeElement
   let reviewChargeVersion
   let reviewChargeReference
@@ -64,7 +66,8 @@ describe('Bill Runs - Review - Fetch Review Licence dal', () => {
     billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, status: 'review' })
 
     licence = await LicenceHelper.add()
-    returnLog = await ReturnLogHelper.add()
+    returnRequirement = await ReturnRequirementHelper.add()
+    returnLog = await ReturnLogHelper.add({ returnRequirementId: returnRequirement.id })
 
     chargeVersion = await ChargeVersionHelper.add({
       billingAccountId: billingAccount.id,
@@ -88,8 +91,8 @@ describe('Bill Runs - Review - Fetch Review Licence dal', () => {
       purposes: [
         {
           primary: { code: 'A', description: 'Agriculture' },
-          secondary: { code: 'AGR', description: 'General Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
+          secondary: { code: 'AGR', description: 'General Agriculture' }
         }
       ],
       returnId: returnLog.returnId,
@@ -121,105 +124,98 @@ describe('Bill Runs - Review - Fetch Review Licence dal', () => {
       const result = await FetchReviewLicenceDal(reviewLicence.id)
 
       expect(result).toEqual({
-        billRun: {
-          batchType: 'two_part_tariff',
-          id: billRun.id,
-          region: {
-            displayName: region.displayName,
-            id: region.id
-          },
-          scheme: 'sroc',
-          summer: false,
-          toFinancialYearEnding: 2023
-        },
-        billRunId: reviewLicence.billRunId,
         id: reviewLicence.id,
-        licenceHolder: 'Licence Holder Ltd',
+        billRunId: reviewLicence.billRunId,
         licenceId: reviewLicence.licenceId,
         licenceRef: reviewLicence.licenceRef,
+        licenceHolder: 'Licence Holder Ltd',
+        status: 'ready',
         progress: false,
+        billRun: {
+          id: billRun.id,
+          batchType: 'two_part_tariff',
+          scheme: 'sroc',
+          summer: false,
+          toFinancialYearEnding: 2023,
+          region: {
+            id: region.id,
+            displayName: region.displayName
+          }
+        },
+        reviewReturns: [
+          {
+            id: reviewReturn.id,
+            allocated: 0,
+            description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
+            endDate: new Date('2022-05-06'),
+            issues: '',
+            quantity: 0,
+            purposes: [
+              {
+                primary: { code: 'A', description: 'Agriculture' },
+                tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
+                secondary: { code: 'AGR', description: 'General Agriculture' }
+              }
+            ],
+            returnId: reviewReturn.returnId,
+            returnLogId: reviewReturn.returnLogId,
+            returnReference: reviewReturn.returnReference,
+            returnStatus: 'completed',
+            startDate: new Date('2022-04-01'),
+            underQuery: false,
+            returnLog: {
+              id: returnLog.id,
+              periodStartDay: 1,
+              periodStartMonth: 4,
+              periodEndDay: 31,
+              periodEndMonth: 3,
+              returnId: returnLog.returnId
+            },
+            reviewChargeElements: [
+              {
+                id: reviewChargeElement.id
+              }
+            ]
+          }
+        ],
         reviewChargeVersions: [
           {
-            chargePeriodEndDate: new Date('2022-06-05'),
-            chargePeriodStartDate: new Date('2022-04-01'),
-            chargeVersion: {
-              billingAccount: {
-                accountNumber: billingAccount.accountNumber,
-                billingAccountAddresses: [
-                  {
-                    address: {
-                      address1: 'ENVIRONMENT AGENCY',
-                      address2: 'HORIZON HOUSE',
-                      address3: 'DEANERY ROAD',
-                      address4: 'BRISTOL',
-                      address5: null,
-                      address6: null,
-                      country: 'United Kingdom',
-                      id: address.id,
-                      postcode: 'BS1 5AH'
-                    },
-                    company: {
-                      id: company.id,
-                      name: 'Example Trading Ltd',
-                      type: 'organisation'
-                    },
-                    contact: {
-                      contactType: 'person',
-                      dataSource: 'wrls',
-                      department: null,
-                      firstName: 'Amara',
-                      id: contact.id,
-                      initials: null,
-                      lastName: 'Gupta',
-                      middleInitials: null,
-                      salutation: null,
-                      suffix: null
-                    },
-                    id: billingAccountAddress.id
-                  }
-                ],
-                company: {
-                  id: company.id,
-                  name: 'Example Trading Ltd',
-                  type: 'organisation'
-                },
-                id: billingAccount.id
-              },
-              id: chargeVersion.id
-            },
             id: reviewChargeVersion.id,
+            chargePeriodStartDate: new Date('2022-04-01'),
+            chargePeriodEndDate: new Date('2022-06-05'),
             reviewChargeReferences: [
               {
+                id: reviewChargeReference.id,
                 aggregate: 1,
                 amendedAuthorisedVolume: 0,
                 chargeAdjustment: 1,
                 chargeReference: {
+                  id: chargeReference.id,
                   chargeCategory: {
                     id: chargeCategory.id,
                     reference: chargeCategory.reference,
                     shortDescription: chargeCategory.shortDescription
-                  },
-                  id: chargeReference.id
+                  }
                 },
-                id: reviewChargeReference.id,
                 reviewChargeElements: [
                   {
+                    id: reviewChargeElement.id,
                     amendedAllocated: 0,
+                    issues: '',
+                    status: 'ready',
                     chargeElement: {
-                      abstractionPeriodEndDay: 31,
-                      abstractionPeriodEndMonth: 3,
+                      id: chargeElement.id,
                       abstractionPeriodStartDay: 1,
                       abstractionPeriodStartMonth: 4,
+                      abstractionPeriodEndDay: 31,
+                      abstractionPeriodEndMonth: 3,
                       authorisedAnnualQuantity: 200,
                       description: 'Mineral washing',
-                      id: chargeElement.id,
                       purpose: {
-                        description: purpose.description,
-                        id: purpose.id
+                        id: purpose.id,
+                        description: purpose.description
                       }
                     },
-                    id: reviewChargeElement.id,
-                    issues: '',
                     reviewReturns: [
                       {
                         id: reviewReturn.id,
@@ -227,51 +223,58 @@ describe('Bill Runs - Review - Fetch Review Licence dal', () => {
                         returnReference: reviewReturn.returnReference,
                         returnStatus: 'completed'
                       }
-                    ],
-                    status: 'ready'
+                    ]
                   }
                 ]
               }
-            ]
-          }
-        ],
-        reviewReturns: [
-          {
-            allocated: 0,
-            description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
-            endDate: new Date('2022-05-06'),
-            id: reviewReturn.id,
-            issues: '',
-            purposes: [
-              {
-                primary: { code: 'A', description: 'Agriculture' },
-                secondary: { code: 'AGR', description: 'General Agriculture' },
-                tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
-              }
             ],
-            quantity: 0,
-            returnId: reviewReturn.returnId,
-            returnLog: {
-              id: returnLog.id,
-              periodEndDay: 28,
-              periodEndMonth: 4,
-              periodStartDay: 1,
-              periodStartMonth: 4,
-              returnId: returnLog.returnId
-            },
-            returnLogId: reviewReturn.returnLogId,
-            returnReference: reviewReturn.returnReference,
-            returnStatus: 'completed',
-            reviewChargeElements: [
-              {
-                id: reviewChargeElement.id
+            chargeVersion: {
+              id: chargeVersion.id,
+              billingAccount: {
+                id: billingAccount.id,
+                accountNumber: billingAccount.accountNumber,
+                billingAccountAddresses: [
+                  {
+                    id: billingAccountAddress.id,
+                    address: {
+                      id: address.id,
+                      address1: 'ENVIRONMENT AGENCY',
+                      address2: 'HORIZON HOUSE',
+                      address3: 'DEANERY ROAD',
+                      address4: 'BRISTOL',
+                      address5: null,
+                      address6: null,
+                      postcode: 'BS1 5AH',
+                      country: 'United Kingdom'
+                    },
+                    company: {
+                      id: company.id,
+                      name: 'Example Trading Ltd',
+                      type: 'organisation'
+                    },
+                    contact: {
+                      id: contact.id,
+                      contactType: 'person',
+                      dataSource: 'wrls',
+                      department: null,
+                      firstName: 'Amara',
+                      initials: null,
+                      lastName: 'Gupta',
+                      middleInitials: null,
+                      salutation: null,
+                      suffix: null
+                    }
+                  }
+                ],
+                company: {
+                  id: company.id,
+                  name: 'Example Trading Ltd',
+                  type: 'organisation'
+                }
               }
-            ],
-            startDate: new Date('2022-04-01'),
-            underQuery: false
+            }
           }
-        ],
-        status: 'ready'
+        ]
       })
     })
   })
