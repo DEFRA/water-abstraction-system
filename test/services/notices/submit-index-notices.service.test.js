@@ -6,7 +6,7 @@ import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Things to stub
 import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
-import * as FetchNoticesService from '../../../src/services/notices/fetch-notices.service.js'
+import * as FetchNoticesDal from '../../../src/dal/notices/fetch-notices.dal.js'
 
 // Thing under test
 import SubmitIndexNoticesService from '../../../src/services/notices/submit-index-notices.service.js'
@@ -212,7 +212,7 @@ describe('Notices - Submit Index Notices service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          vi.spyOn(FetchNoticesService, 'default').mockResolvedValue({ results, total: 70 })
+          vi.spyOn(FetchNoticesDal, 'default').mockResolvedValue({ results, total: 70 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -302,7 +302,7 @@ describe('Notices - Submit Index Notices service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          vi.spyOn(FetchNoticesService, 'default').mockResolvedValue({ results, total: 1 })
+          vi.spyOn(FetchNoticesDal, 'default').mockResolvedValue({ results, total: 1 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
