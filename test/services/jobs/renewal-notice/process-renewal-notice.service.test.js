@@ -89,6 +89,14 @@ describe('Jobs - Renewal Notices - Process Renewal Notices service', () => {
       expect(args[2]).toBeInstanceOf(Error)
     })
 
+    it('notifies the team by calling "redAlert()"', async () => {
+      await ProcessRenewalNoticeService(requestedNoticeType)
+
+      const args = notifierStub.redAlert.mock.calls[0]
+
+      expect(args[0]).toEqual('Renewals notice job failed')
+    })
+
     it('does not throw an error', async () => {
       await ProcessRenewalNoticeService(requestedNoticeType)
     })
