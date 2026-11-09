@@ -5,9 +5,9 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
-import FetchAlternateRenewalRecipientsService from '../../../../../src/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js'
+import FetchAlternateRenewalRecipientsDal from '../../../../../src/dal/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.dal.js'
 
-describe('Notices - Setup - Renewal Notice - Fetch Alternate Renewal Recipients service', () => {
+describe('Notices - Setup - Renewal Notice - Fetch Alternate Renewal Recipients DAL', () => {
   let scenarios
 
   beforeAll(async () => {
@@ -24,7 +24,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Alternate Renewal Recipients 
   describe('when service is called for sending the "alternate notice"', () => {
     it('fetches the correct recipient data for sending the notice', async () => {
       const licenceRefs = scenarios.licenceHolder.licenceHolderRecipient.licenceRefs
-      const results = await FetchAlternateRenewalRecipientsService(licenceRefs)
+      const results = await FetchAlternateRenewalRecipientsDal(licenceRefs)
 
       const expectedResult = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 

@@ -9,7 +9,7 @@ import { NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-loo
 import { generateNoticeReferenceCode, timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 
 import CreateNotificationsService from './create-notifications.service.js'
-import FetchAlternateRenewalRecipientsService from './renewal-notice/fetch-alternate-renewal-recipients.service.js'
+import FetchAlternateRenewalRecipientsDal from '../../../dal/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.dal.js'
 
 /**
  * Orchestrates creating a new notice and notifications for renewal invitation emails that failed
@@ -22,7 +22,7 @@ import FetchAlternateRenewalRecipientsService from './renewal-notice/fetch-alter
  * @returns {Promise<object>} The created alternate notice and notifications
  */
 export default async function createAlternateRenewalNoticeService(notice, licenceRefs, expiryDate, renewalDate) {
-  const recipients = await FetchAlternateRenewalRecipientsService(licenceRefs)
+  const recipients = await FetchAlternateRenewalRecipientsDal(licenceRefs)
   const alternateNotice = await _notice(notice, recipients, licenceRefs)
   const notifications = await _notifications(alternateNotice, recipients, expiryDate, renewalDate)
 

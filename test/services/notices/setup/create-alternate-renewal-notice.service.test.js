@@ -9,7 +9,7 @@ import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 
 // Things we need to stub
-import * as FetchAlternateRenewalRecipientsService from '../../../../src/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js'
+import * as FetchAlternateRenewalRecipientsDal from '../../../../src/dal/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.dal.js'
 
 // Thing under test
 import CreateAlternateRenewalNoticeService from '../../../../src/services/notices/setup/create-alternate-renewal-notice.service.js'
@@ -33,7 +33,7 @@ describe('Notices - Setup - Create Alternate Renewal Notice service', () => {
 
     licenceRefs = notice.licences
 
-    vi.spyOn(FetchAlternateRenewalRecipientsService, 'default').mockResolvedValue([recipient])
+    vi.spyOn(FetchAlternateRenewalRecipientsDal, 'default').mockResolvedValue([recipient])
   })
 
   afterEach(async () => {
