@@ -12,7 +12,7 @@ import * as FetchTimeLimitedLicencesService from '../../../../src/services/jobs/
 // Thing under test
 import ProcessTimeLimitedLicencesService from '../../../../src/services/jobs/time-limited/process-time-limited-licences.service.js'
 
-describe('Process Time Limited Licences service', () => {
+describe('Jobs - Time Limited - Process Time Limited Licences service', () => {
   let fetchResults
   let notifierStub
 

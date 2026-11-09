@@ -81,11 +81,7 @@ describe('Jobs - Clean - Process Clean service', () => {
       vi.spyOn(CleanEmptyBillRunsService, 'default').mockRejectedValue(new Error())
     })
 
-    it('does not throw an error', async () => {
-      await ProcessCleanService()
-    })
-
-    it('logs the error', async () => {
+    it('records the error by calling "omfg()"', async () => {
       await ProcessCleanService()
 
       const errorLogArgs = notifierStub.omfg.mock.calls[0]
@@ -93,6 +89,18 @@ describe('Jobs - Clean - Process Clean service', () => {
       expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object), expect.any(Error))
       expect(errorLogArgs[1]).toEqual({})
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
+    })
+
+    it('notifies the team by calling "redAlert()"', async () => {
+      await ProcessCleanService()
+
+      const args = notifierStub.redAlert.mock.calls[0]
+
+      expect(args[0]).toEqual('Clean job failed')
+    })
+
+    it('does not throw an error', async () => {
+      await ProcessCleanService()
     })
   })
 })

@@ -38,6 +38,9 @@ export default async function processCleanService() {
       }
     })
   } catch (error) {
-    globalThis.GlobalNotifier.omfg('Clean job failed', {}, error)
+    const message = 'Clean job failed'
+
+    globalThis.GlobalNotifier.omfg(message, {}, error)
+    globalThis.GlobalNotifier.redAlert(message)
   }
 }

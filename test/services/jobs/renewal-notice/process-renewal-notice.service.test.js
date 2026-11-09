@@ -28,20 +28,77 @@ describe('Jobs - Renewal Notices - Process Renewal Notices service', () => {
     delete globalThis.GlobalNotifier
   })
 
-  it('calls the "SendRenewalNotice" for invitations', async () => {
-    await ProcessRenewalNoticeService(requestedNoticeType)
+  describe('when there are licences expiring', () => {
+    beforeEach(() => {
+      vi.spyOn(SendRenewalNotice, 'default').mockResolvedValue(['mock invitation'])
+    })
 
-    expect(SendRenewalNotice.default).toHaveBeenCalledWith(requestedNoticeType)
+    it('calls the "SendRenewalNotice" for the requested notice type', async () => {
+      await ProcessRenewalNoticeService(requestedNoticeType)
+
+      expect(SendRenewalNotice.default).toHaveBeenCalledWith(requestedNoticeType)
+    })
+
+    it('logs the time taken in milliseconds and seconds', async () => {
+      await ProcessRenewalNoticeService(requestedNoticeType)
+
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
+
+      expect(notifierStub.omg).toHaveBeenCalledWith('Renewals notice job complete', expect.any(Object))
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.count).toEqual(1)
+    })
   })
 
-  it('logs the time taken in milliseconds and seconds', async () => {
-    await ProcessRenewalNoticeService(requestedNoticeType)
+  describe('when there are no licences expiring', () => {
+    beforeEach(() => {
+      vi.spyOn(SendRenewalNotice, 'default').mockResolvedValue([])
+    })
 
-    const logDataArg = notifierStub.omg.mock.calls[0][1]
+    it('still calls the "SendRenewalNotice" for the requested notice type', async () => {
+      await ProcessRenewalNoticeService(requestedNoticeType)
 
-    expect(notifierStub.omg).toHaveBeenCalledWith('Renewals notice job complete', expect.any(Object))
-    expect(logDataArg.timeTakenMs).toBeDefined()
-    expect(logDataArg.timeTakenSs).toBeDefined()
-    expect(logDataArg.count).toEqual(1)
+      expect(SendRenewalNotice.default).toHaveBeenCalledWith(requestedNoticeType)
+    })
+
+    it('logs the time taken in milliseconds and seconds', async () => {
+      await ProcessRenewalNoticeService(requestedNoticeType)
+
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
+
+      expect(notifierStub.omg).toHaveBeenCalledWith('Renewals notice job complete', expect.any(Object))
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.count).toEqual(0)
+    })
+  })
+
+  describe('when there is an error', () => {
+    beforeEach(() => {
+      vi.spyOn(SendRenewalNotice, 'default').mockRejectedValue(new Error())
+    })
+
+    it('records the error by calling "omfg()"', async () => {
+      await ProcessRenewalNoticeService(requestedNoticeType)
+
+      const args = notifierStub.omfg.mock.calls[0]
+
+      expect(args[0]).toEqual('Renewals notice job failed')
+      expect(args[1]).toBeNull()
+      expect(args[2]).toBeInstanceOf(Error)
+    })
+
+    it('notifies the team by calling "redAlert()"', async () => {
+      await ProcessRenewalNoticeService(requestedNoticeType)
+
+      const args = notifierStub.redAlert.mock.calls[0]
+
+      expect(args[0]).toEqual('Renewals notice job failed')
+    })
+
+    it('does not throw an error', async () => {
+      await ProcessRenewalNoticeService(requestedNoticeType)
+    })
   })
 })

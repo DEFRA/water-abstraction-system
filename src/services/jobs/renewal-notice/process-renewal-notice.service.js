@@ -20,6 +20,9 @@ export default async function processRenewalNoticeService(requestedNoticeType) {
 
     calculateAndLogTimeTaken(startTime, 'Renewals notice job complete', { count: recipients.length })
   } catch (error) {
-    globalThis.GlobalNotifier.omfg('Renewals notice job failed', null, error)
+    const message = 'Renewals notice job failed'
+
+    globalThis.GlobalNotifier.omfg(message, null, error)
+    globalThis.GlobalNotifier.redAlert(message)
   }
 }
