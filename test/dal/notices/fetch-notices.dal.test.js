@@ -17,6 +17,7 @@ describe('Notices - Fetch Notices DAL', () => {
   let filters
   let legacyNotice
   let pageNumber
+  let renewalFinalNotice
   let renewalInvitationNotice
   let renewalReminderNotice
   let returnedInvitationNotice
@@ -48,6 +49,12 @@ describe('Notices - Fetch Notices DAL', () => {
       statusCounts: { cancelled: 0, error: 0, pending: 0, returned: 1, sent: 0 }
     })
 
+    renewalFinalNotice = await EventHelper.add({
+      ...NoticesFixture.renewalFinal(),
+      createdAt: new Date('2025-07-01T15:26:47.023Z'),
+      issuer: 'user@wrls.gov.uk'
+    })
+
     renewalInvitationNotice = await EventHelper.add({
       ...NoticesFixture.renewalInvitation(),
       createdAt: new Date('2025-07-01T16:01:47.023Z'),
@@ -74,8 +81,9 @@ describe('Notices - Fetch Notices DAL', () => {
     await legacyNotice.$query().delete()
     await returnsInvitationNotice.$query().delete()
     await returnedInvitationNotice.$query().delete()
-    await renewalInvitationNotice.$query().delete()
     await renewalReminderNotice.$query().delete()
+    await renewalInvitationNotice.$query().delete()
+    await renewalFinalNotice.$query().delete()
   })
 
   afterEach(() => {
@@ -102,6 +110,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
       expect(result.results).toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
       expect(result.results).toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
+      expect(result.results).toContainEqual(_transformNoticeToResult(renewalFinalNotice))
       expect(result.results).toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
       expect(result.results).toContainEqual(_transformNoticeToResult(renewalReminderNotice))
       expect(result.results).toContainEqual(_transformNoticeToResult(legacyNotice))
@@ -130,6 +139,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
         expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalReminderNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+        expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalFinalNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
@@ -145,6 +155,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
           expect(result.results).toContainEqual(_transformNoticeToResult(renewalReminderNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+          expect(result.results).toContainEqual(_transformNoticeToResult(renewalFinalNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
         })
@@ -170,6 +181,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
             expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalReminderNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+            expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalFinalNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
           })
@@ -191,6 +203,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
             expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalReminderNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+            expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalFinalNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
@@ -214,6 +227,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
           expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalReminderNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+          expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalFinalNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
@@ -239,6 +253,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
           expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalReminderNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+          expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalFinalNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
         })
       })
@@ -261,6 +276,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
         expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalReminderNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+        expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalFinalNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
@@ -284,6 +300,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
         expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalReminderNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+        expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalFinalNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
@@ -307,6 +324,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
           expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalReminderNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+          expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalFinalNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
@@ -330,6 +348,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
           expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalReminderNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+          expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalFinalNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
         })
@@ -352,6 +371,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
         expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalReminderNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+        expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalFinalNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
@@ -367,6 +387,7 @@ describe('Notices - Fetch Notices DAL', () => {
 
           expect(result.results).toContainEqual(_transformNoticeToResult(renewalReminderNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
+          expect(result.results).toContainEqual(_transformNoticeToResult(renewalFinalNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(legacyNotice))
