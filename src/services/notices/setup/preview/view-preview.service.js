@@ -44,6 +44,12 @@ export default async function viewPreviewService(sessionId, contactHashId, licen
 }
 
 function _notification(recipient, session, licenceMonitoringStationId) {
+  const renewalNoticeTypes = new Set([
+    NoticeType.RENEWAL_FINALS,
+    NoticeType.RENEWAL_INVITATIONS,
+    NoticeType.RENEWAL_REMINDERS
+  ])
+
   let notification
 
   if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
@@ -52,7 +58,7 @@ function _notification(recipient, session, licenceMonitoringStationId) {
     notification = unfilteredNotifications.find((unfilteredNotification) => {
       return unfilteredNotification.personalisation.licenceGaugingStationId === licenceMonitoringStationId
     })
-  } else if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
+  } else if (renewalNoticeTypes.has(session.noticeType)) {
     notification = RenewalNotificationsPresenter(session, [recipient], null)[0]
   } else {
     notification = ReturnsNotificationsPresenter(session, [recipient], null)[0]

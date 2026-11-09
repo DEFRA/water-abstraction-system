@@ -30,6 +30,12 @@ export default async function fetchRecipientsService(session, download) {
 }
 
 async function _recipientsData(session, download) {
+  const renewalNoticeTypes = new Set([
+    NoticeType.RENEWAL_FINALS,
+    NoticeType.RENEWAL_INVITATIONS,
+    NoticeType.RENEWAL_REMINDERS
+  ])
+
   if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
     return FetchAbstractionAlertRecipientsDal(session)
   }
@@ -42,7 +48,7 @@ async function _recipientsData(session, download) {
     return FetchReturnsInvitationRecipientsService(session, download)
   }
 
-  if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
+  if (renewalNoticeTypes.has(session.noticeType)) {
     return FetchRenewalNoticeRecipientsService(session)
   }
 

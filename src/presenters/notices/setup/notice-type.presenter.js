@@ -63,11 +63,18 @@ function _noticeTypes(noticeType, journey, auth) {
     }
 
     if (scope.includes('renewal_notifications')) {
-      items.push({
-        checked: noticeType === NoticeType.RENEWAL_INVITATIONS,
-        value: NoticeType.RENEWAL_INVITATIONS,
-        text: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType
-      })
+      items.push(
+        {
+          checked: noticeType === NoticeType.RENEWAL_INVITATIONS,
+          value: NoticeType.RENEWAL_INVITATIONS,
+          text: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType
+        },
+        {
+          checked: noticeType === NoticeType.RENEWAL_REMINDERS,
+          value: NoticeType.RENEWAL_REMINDERS,
+          text: NoticeTypes[NoticeType.RENEWAL_REMINDERS].notificationType
+        }
+      )
     }
   }
 

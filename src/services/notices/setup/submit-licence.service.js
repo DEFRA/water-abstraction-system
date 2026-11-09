@@ -57,7 +57,13 @@ export default async function submitLicenceService(sessionId, payload, yar) {
 }
 
 async function _processedLicenceSubmission(noticeType, payload) {
-  if (noticeType === NoticeType.RENEWAL_INVITATIONS) {
+  const renewalNoticeTypes = new Set([
+    NoticeType.RENEWAL_FINALS,
+    NoticeType.RENEWAL_INVITATIONS,
+    NoticeType.RENEWAL_REMINDERS
+  ])
+
+  if (renewalNoticeTypes.has(noticeType)) {
     return ProcessRenewalsNoticeLicenceSubmission(payload)
   }
 

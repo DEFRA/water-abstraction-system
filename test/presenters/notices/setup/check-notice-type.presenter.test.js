@@ -202,5 +202,27 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
         })
       })
     })
+
+    describe('and the notice type is "renewalReminders"', () => {
+      beforeEach(() => {
+        session.noticeType = 'renewalReminders'
+      })
+
+      it('returns page data', () => {
+        const result = CheckNoticeTypePresenter(session)
+
+        expect(result).toEqual({
+          links: {
+            licenceNumber: `/system/notices/setup/${session.id}/licence`,
+            noticeType: `/system/notices/setup/${session.id}/notice-type`,
+            returns: `/system/notices/setup/${session.id}/paper-return`,
+            returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
+          },
+          pageTitle: 'Check the notice type',
+          sessionId: session.id,
+          noticeType: 'Renewals reminder'
+        })
+      })
+    })
   })
 })

@@ -118,4 +118,21 @@ describe('Notices - Setup - Confirmation presenter', () => {
       })
     })
   })
+
+  describe('and the notice type is "renewalReminder"', () => {
+    beforeEach(() => {
+      event.subtype = 'renewalReminder'
+    })
+
+    it('correctly presents the data', () => {
+      const result = ConfirmationPresenter(event)
+
+      expect(result).toEqual({
+        forwardLink: `/system/notices/${event.id}`,
+        monitoringStationLink: null,
+        pageTitle: 'Renewal reminders sent',
+        referenceCode
+      })
+    })
+  })
 })

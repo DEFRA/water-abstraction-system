@@ -7,7 +7,7 @@ import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import { NoticeJourney, NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import DownloadAbstractionAlertPresenter from '../../../presenters/notices/setup/download-abstraction-alert.presenter.js'
-import DownloadRenewalInvitationPresenter from '../../../presenters/notices/setup/download-renewal-invitation.presenter.js'
+import DownloadRenewalNoticePresenter from '../../../presenters/notices/setup/download-renewal-notice.presenter.js'
 import DownloadReturnsNoticePresenter from '../../../presenters/notices/setup/download-returns-notice.presenter.js'
 import FetchRecipientsService from './fetch-recipients.service.js'
 
@@ -38,12 +38,18 @@ export default async function processDownloadRecipientsService(sessionId) {
 }
 
 async function _formattedData(recipients, session) {
+  const renewalNoticeTypes = new Set([
+    NoticeType.RENEWAL_FINALS,
+    NoticeType.RENEWAL_INVITATIONS,
+    NoticeType.RENEWAL_REMINDERS
+  ])
+
   if (session.journey === NoticeJourney.ALERTS) {
     return DownloadAbstractionAlertPresenter(recipients, session)
   }
 
-  if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    return DownloadRenewalInvitationPresenter(recipients, session)
+  if (renewalNoticeTypes.has(session.noticeType)) {
+    return DownloadRenewalNoticePresenter(recipients, session)
   }
 
   return DownloadReturnsNoticePresenter(recipients, session)

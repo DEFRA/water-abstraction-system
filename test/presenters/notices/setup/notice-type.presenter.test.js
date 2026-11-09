@@ -41,6 +41,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
           },
           {
             checked: false,
+            text: 'Renewals reminder',
+            value: 'renewalReminders'
+          },
+          {
+            checked: false,
             text: 'Returns invitation',
             value: 'invitations'
           },
@@ -108,6 +113,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 value: 'renewalInvitations'
               },
               {
+                checked: false,
+                text: 'Renewals reminder',
+                value: 'renewalReminders'
+              },
+              {
                 checked: true,
                 text: 'Returns invitation',
                 value: 'invitations'
@@ -142,6 +152,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
               },
               {
                 checked: false,
+                text: 'Renewals reminder',
+                value: 'renewalReminders'
+              },
+              {
+                checked: false,
                 text: 'Returns invitation',
                 value: 'invitations'
               },
@@ -172,6 +187,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 checked: false,
                 text: 'Renewals invitation',
                 value: 'renewalInvitations'
+              },
+              {
+                checked: false,
+                text: 'Renewals reminder',
+                value: 'renewalReminders'
               },
               {
                 checked: false,
@@ -270,6 +290,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                   },
                   {
                     checked: false,
+                    text: 'Renewals reminder',
+                    value: 'renewalReminders'
+                  },
+                  {
+                    checked: false,
                     text: 'Returns invitation',
                     value: 'invitations'
                   },
@@ -337,6 +362,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                     checked: false,
                     text: 'Renewals invitation',
                     value: 'renewalInvitations'
+                  },
+                  {
+                    checked: false,
+                    text: 'Renewals reminder',
+                    value: 'renewalReminders'
                   }
                 ],
                 pageTitle: 'Select the notice type'
