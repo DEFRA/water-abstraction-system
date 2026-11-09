@@ -4,7 +4,7 @@
  */
 
 import EditPresenter from '../../../presenters/bill-runs/review/edit.presenter.js'
-import FetchReviewChargeElementService from './fetch-review-charge-element.service.js'
+import FetchReviewChargeElementDal from '../../../dal/bill-runs/review/fetch-review-charge-element.dal.js'
 
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}/edit' page
@@ -16,7 +16,7 @@ import FetchReviewChargeElementService from './fetch-review-charge-element.servi
  * @returns {Promise<object>} the 'pageData' needed to view the edit billable return volumes page
  */
 export default async function viewEditService(reviewChargeElementId, elementIndex) {
-  const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
+  const reviewChargeElement = await FetchReviewChargeElementDal(reviewChargeElementId)
 
   const pageData = EditPresenter(reviewChargeElement, elementIndex)
 

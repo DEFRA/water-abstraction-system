@@ -7,12 +7,12 @@ import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fi
 
 // Things we need to stub
 import ReviewChargeElementModel from 'water-abstraction-engine/models/review-charge-element.model.js'
-import * as FetchReviewChargeElementService from '../../../../src/services/bill-runs/review/fetch-review-charge-element.service.js'
+import * as FetchReviewChargeElementDal from '../../../../src/dal/bill-runs/review/fetch-review-charge-element.dal.js'
 
 // Thing under test
 import SubmitEditService from '../../../../src/services/bill-runs/review/submit-edit.service.js'
 
-describe('Bill Runs Review - Submit Edit Service', () => {
+describe('Bill Runs - Review - Submit Edit Service', () => {
   const elementIndex = 1
 
   let payload
@@ -23,7 +23,7 @@ describe('Bill Runs Review - Submit Edit Service', () => {
   beforeEach(() => {
     reviewChargeElement = BillRunsReviewFixture.reviewChargeElement()
 
-    vi.spyOn(FetchReviewChargeElementService, 'default').mockResolvedValue(reviewChargeElement)
+    vi.spyOn(FetchReviewChargeElementDal, 'default').mockResolvedValue(reviewChargeElement)
 
     patchStub = vi.fn().mockResolvedValue()
     vi.spyOn(ReviewChargeElementModel, 'query').mockReturnValue({

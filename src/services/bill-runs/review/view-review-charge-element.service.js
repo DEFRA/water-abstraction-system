@@ -3,7 +3,7 @@
  * @module ViewReviewChargeElementService
  */
 
-import FetchReviewChargeElementService from './fetch-review-charge-element.service.js'
+import FetchReviewChargeElementDal from '../../../dal/bill-runs/review/fetch-review-charge-element.dal.js'
 import ReviewChargeElementPresenter from '../../../presenters/bill-runs/review/review-charge-element.presenter.js'
 
 /**
@@ -17,7 +17,7 @@ import ReviewChargeElementPresenter from '../../../presenters/bill-runs/review/r
  * @returns {Promise<object>} the 'pageData' needed for the review charge element page
  */
 export default async function viewReviewChargeElementService(reviewChargeElementId, elementIndex, yar) {
-  const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
+  const reviewChargeElement = await FetchReviewChargeElementDal(reviewChargeElementId)
 
   const [bannerMessage] = yar.flash('banner')
 

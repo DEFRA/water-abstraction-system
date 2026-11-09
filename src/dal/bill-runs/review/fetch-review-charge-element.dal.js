@@ -1,6 +1,6 @@
 /**
  * Fetches the selected review charge element instance and related data for the 2PT review charge element pages
- * @module FetchReviewChargeReferenceService
+ * @module FetchReviewChargeReferenceDal
  */
 
 import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
@@ -16,11 +16,7 @@ import ReviewChargeElementModel from 'water-abstraction-engine/models/review-cha
  * @returns {Promise<object>} the matching `ReviewChargeElementModel` instance and related data needed for the
  * two-part tariff review charge element page
  */
-export default async function fetchReviewChargeElementService(reviewChargeElementId) {
-  return _fetch(reviewChargeElementId)
-}
-
-async function _fetch(reviewChargeElementId) {
+export default async function fetchReviewChargeElementDal(reviewChargeElementId) {
   return ReviewChargeElementModel.query()
     .findById(reviewChargeElementId)
     .select(['id', 'amendedAllocated', 'issues', 'status'])

@@ -7,7 +7,7 @@ import ReviewChargeElementModel from 'water-abstraction-engine/models/review-cha
 
 import EditPresenter from '../../../presenters/bill-runs/review/edit.presenter.js'
 import EditValidator from '../../../validators/bill-runs/review/edit.validator.js'
-import FetchReviewChargeElementService from './fetch-review-charge-element.service.js'
+import FetchReviewChargeElementDal from '../../../dal/bill-runs/review/fetch-review-charge-element.dal.js'
 
 /**
  * Orchestrates validating the data for the amend billable returns page and patching the db value
@@ -30,7 +30,7 @@ export default async function submitEditService(reviewChargeElementId, elementIn
     return {}
   }
 
-  const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
+  const reviewChargeElement = await FetchReviewChargeElementDal(reviewChargeElementId)
   const pageData = EditPresenter(reviewChargeElement, elementIndex)
 
   return {

@@ -14,9 +14,9 @@ import ReviewLicenceHelper from 'water-abstraction-engine/test/helpers/review-li
 import ReviewReturnHelper from 'water-abstraction-engine/test/helpers/review-return.helper.js'
 
 // Thing under test
-import FetchReviewChargeElementService from '../../../../src/services/bill-runs/review/fetch-review-charge-element.service.js'
+import FetchReviewChargeElementDal from '../../../../src/dal/bill-runs/review/fetch-review-charge-element.dal.js'
 
-describe('Bill Runs Review - Fetch Review Charge Element service', () => {
+describe('Bill Runs - Review - Fetch Review Charge Element dal', () => {
   let billRun
   let chargeElement
   let returnLog
@@ -64,7 +64,7 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
 
   describe('when a matching review charge element exists', () => {
     it('returns the match', async () => {
-      const result = await FetchReviewChargeElementService(reviewChargeElement.id)
+      const result = await FetchReviewChargeElementDal(reviewChargeElement.id)
 
       expect(result).toEqual({
         amendedAllocated: 0,
@@ -139,7 +139,7 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
 
   describe('when no matching review charge element exists', () => {
     it('returns nothing', async () => {
-      const result = await FetchReviewChargeElementService('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchReviewChargeElementDal('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result).toBeUndefined()
     })
