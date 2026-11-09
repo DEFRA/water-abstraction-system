@@ -129,6 +129,7 @@ function _standardNoticeTypes(noticeTypes) {
     'paperReturnForms',
     'returnInvitation',
     'returnReminder',
+    'renewalFinal',
     'renewalInvitation',
     'renewalReminder'
   ])
