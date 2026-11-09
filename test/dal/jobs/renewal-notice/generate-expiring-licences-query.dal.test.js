@@ -7,9 +7,9 @@ import { db } from 'water-abstraction-engine/db/db.js'
 import { tomorrow, yesterday } from 'water-abstraction-engine/test/general.js'
 
 // Thing under test
-import GenerateExpiringLicencesQueryService from '../../../../src/services/jobs/renewal-invitations/generate-expiring-licences-query.service.js'
+import GenerateExpiringLicencesQueryDal from '../../../../src/dal/jobs/renewal-notice/generate-expiring-licences-query.dal.js'
 
-describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service', () => {
+describe('Jobs - Renewal Notice - Generate Expiring Licences Query DAL', () => {
   let afterExpiredDate
   let expiredDate
   let licence
@@ -27,7 +27,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
 
   describe('when called', () => {
     it('returns the expected query', () => {
-      const result = GenerateExpiringLicencesQueryService(expiredDate)
+      const result = GenerateExpiringLicencesQueryDal(expiredDate)
 
       expect(result).toEqual({
         bindings: [expiredDate],
@@ -57,7 +57,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns no results', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryDal(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([])
@@ -70,7 +70,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns no results', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryDal(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([])
@@ -83,7 +83,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns no results', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryDal(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([])
@@ -97,7 +97,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
           })
 
           it('returns no results', async () => {
-            const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
+            const { bindings, query } = GenerateExpiringLicencesQueryDal(expiredDate)
             const { rows } = await db.raw(query, bindings)
 
             expect(rows).toEqual([])
@@ -110,7 +110,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
           })
 
           it('returns no results', async () => {
-            const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
+            const { bindings, query } = GenerateExpiringLicencesQueryDal(expiredDate)
             const { rows } = await db.raw(query, bindings)
 
             expect(rows).toEqual([])
@@ -126,7 +126,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns the expected licences', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryDal(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([{ licence_ref: licence.licenceRef }])
@@ -139,7 +139,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns the expected licences', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryDal(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([{ licence_ref: licence.licenceRef }])
@@ -152,7 +152,7 @@ describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service'
         })
 
         it('returns the expected licences', async () => {
-          const { bindings, query } = GenerateExpiringLicencesQueryService(expiredDate)
+          const { bindings, query } = GenerateExpiringLicencesQueryDal(expiredDate)
           const { rows } = await db.raw(query, bindings)
 
           expect(rows).toEqual([{ licence_ref: licence.licenceRef }])

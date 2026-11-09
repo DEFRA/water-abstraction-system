@@ -1,6 +1,6 @@
 /**
- * Orchestrates fetching, sending, and updating renewal invitations notifications
- * @module SendRenewalInvitations
+ * Generates and sends the requested renewal notice
+ * @module SendRenewalNotice
  */
 
 import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
@@ -10,24 +10,32 @@ import { renewalExpiryDate, renewalNoticeDate } from 'water-abstraction-engine/l
 
 import CreateNoticeService from '../../notices/setup/create-notice.service.js'
 import CreateNotificationsService from '../../notices/setup/create-notifications.service.js'
-import FetchRenewalRecipients from './fetch-renewal-recipients.service.js'
+import FetchRenewalRecipients from '../../../dal/jobs/renewal-notice/fetch-renewal-recipients.dal.js'
 import SendNoticeService from '../../notices/setup/send/send-notice.service.js'
 
+const RENEWAL_NOTICES = {
+  finals: { days: 90, noticeType: NoticeType.RENEWAL_FINALS },
+  invitations: { days: 300, noticeType: NoticeType.RENEWAL_INVITATIONS },
+  reminders: { days: 120, noticeType: NoticeType.RENEWAL_REMINDERS }
+}
+
 /**
- * Orchestrates fetching, sending, and updating renewal invitations notifications
+ * Generates and sends the requested renewal notice
  *
- * @param {number} days - The number of ahead of today
+ * @param {object} requestedNoticeType - The type of renewal notice (invitations, reminders, finals) requested
  *
- * @returns {Promise<object[]>} An array of renewal invitation recipients
+ * @returns {Promise<object[]>} An array of renewal notice recipients
  */
-export default async function sendRenewalInvitationsService(days) {
-  const expiryDate = renewalExpiryDate(days)
+export default async function sendRenewalNoticeService(requestedNoticeType) {
+  const renewalNoticeType = RENEWAL_NOTICES[requestedNoticeType]
+
+  const expiryDate = renewalExpiryDate(renewalNoticeType.days)
   const renewalDate = renewalNoticeDate(expiryDate)
 
   const recipients = await FetchRenewalRecipients(expiryDate)
 
   if (recipients.length > 0) {
-    const noticeData = _noticeData(expiryDate, renewalDate)
+    const noticeData = _noticeData(expiryDate, renewalDate, renewalNoticeType)
 
     const notice = await _notice(noticeData, recipients)
 
@@ -39,14 +47,14 @@ export default async function sendRenewalInvitationsService(days) {
   return recipients
 }
 
-function _noticeData(expiryDate, renewalDate) {
-  const { name, prefix, subType } = NoticeTypes[NoticeType.RENEWAL_INVITATIONS]
+function _noticeData(expiryDate, renewalDate, renewalNoticeType) {
+  const { name, prefix, subType } = NoticeTypes[renewalNoticeType.noticeType]
 
   return {
     expiryDate,
     journey: 'standard',
     name,
-    noticeType: NoticeType.RENEWAL_INVITATIONS,
+    noticeType: renewalNoticeType.noticeType,
     referenceCode: generateNoticeReferenceCode(prefix),
     renewalDate,
     subType

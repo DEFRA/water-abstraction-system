@@ -6,9 +6,9 @@ import { db } from 'water-abstraction-engine/db/db.js'
 import * as RecipientScenariosSeeder from '../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
-import GenerateRenewalRecipientsQueryService from '../../../../src/services/jobs/renewal-invitations/generate-renewal-recipients-query.service.js'
+import GenerateRenewalRecipientsQueryDal from '../../../../src/dal/jobs/renewal-notice/generate-renewal-recipients-query.dal.js'
 
-describe('Jobs - Renewal Invitations - Generate Renewal Recipients Query Service', () => {
+describe('Jobs - Renewal Notice - Generate Renewal Recipients Query DAL', () => {
   const expiringLicencesQuery = `SELECT
   l.licence_ref
 FROM
@@ -56,7 +56,7 @@ WHERE
   // NOTE: Because the query is very large we don't assert the full `query` string here
   describe('when called', () => {
     it('returns the expected query', () => {
-      const query = GenerateRenewalRecipientsQueryService(expiringLicencesQuery)
+      const query = GenerateRenewalRecipientsQueryDal(expiringLicencesQuery)
 
       expect(
         query.startsWith(`
@@ -70,7 +70,7 @@ WHERE
   describe('when executed', () => {
     describe('and only the licence holder is present for a single licence (Scenario 1)', () => {
       it('returns the expected recipients', async () => {
-        const query = GenerateRenewalRecipientsQueryService(expiringLicencesQuery)
+        const query = GenerateRenewalRecipientsQueryDal(expiringLicencesQuery)
 
         const { rows } = await db.raw(query, [new Date('2027-02-09')])
 
@@ -82,7 +82,7 @@ WHERE
 
     describe('and only the licence holder is present for multiple licences (Scenario 2)', () => {
       it('returns the expected recipients', async () => {
-        const query = GenerateRenewalRecipientsQueryService(expiringLicencesQuery)
+        const query = GenerateRenewalRecipientsQueryDal(expiringLicencesQuery)
 
         const { rows } = await db.raw(query, [new Date('2027-02-10')])
 
@@ -99,7 +99,7 @@ WHERE
 
     describe('and a primary user is present for a single licence (Scenario 3)', () => {
       it('returns the expected recipients', async () => {
-        const query = GenerateRenewalRecipientsQueryService(expiringLicencesQuery)
+        const query = GenerateRenewalRecipientsQueryDal(expiringLicencesQuery)
 
         const { rows } = await db.raw(query, [new Date('2027-02-11')])
 
@@ -114,7 +114,7 @@ WHERE
 
     describe('and a primary user is present for multiple licences (Scenario 4)', () => {
       it('returns the expected recipients', async () => {
-        const query = GenerateRenewalRecipientsQueryService(expiringLicencesQuery)
+        const query = GenerateRenewalRecipientsQueryDal(expiringLicencesQuery)
 
         const { rows } = await db.raw(query, [new Date('2027-02-12')])
 

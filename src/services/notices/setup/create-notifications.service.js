@@ -6,11 +6,11 @@
 import AbstractionAlertNotificationsPresenter from 'water-abstraction-engine/presenters/notices/setup/abstraction-alert-notifications.presenter.js'
 import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
-import ReturnsNoticeNotificationsPresenter from 'water-abstraction-engine/presenters/notices/setup/returns-notice-notifications.presenter.js'
+import ReturnsNotificationsPresenter from 'water-abstraction-engine/presenters/notices/setup/returns-notifications.presenter.js'
 import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 
 import PaperReturnNotificationsPresenter from '../../../presenters/notices/setup/paper-return-notifications.presenter.js'
-import ReturnsInvitationNotificationsPresenter from '../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
+import RenewalInvitationNotificationsPresenter from '../../../presenters/notices/setup/renewal-invitation-notifications.presenter.js'
 
 /**
  * Create notifications
@@ -69,8 +69,8 @@ function _notifications(session, recipients, noticeId) {
   }
 
   if (noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    return ReturnsInvitationNotificationsPresenter(session, recipients, noticeId)
+    return RenewalInvitationNotificationsPresenter(session, recipients, noticeId)
   }
 
-  return ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
+  return ReturnsNotificationsPresenter(session, recipients, noticeId)
 }

@@ -1,6 +1,6 @@
 /**
  * Generates the SQL query for renewal invitations
- * @module GenerateRenewalRecipientsQueryService
+ * @module GenerateRenewalRecipientsQueryDal
  */
 
 import { licenceHolderRecipientQuery, primaryUserRecipientQuery } from '../../../dal/notices/recipient-queries.dal.js'
@@ -19,7 +19,7 @@ import { licenceHolderRecipientQuery, primaryUserRecipientQuery } from '../../..
  *
  * @returns {string} the SQL query for all renewal recipients with expired licences
  */
-export default function generateRenewalRecipientsQueryService(expiredLicencesQuery) {
+export default function generateRenewalRecipientsQueryDal(expiredLicencesQuery) {
   const licenceHolderQuery = _licenceHolderQuery()
   const primaryUserQuery = _primaryUserQuery()
   const processQuery = _processForSending()

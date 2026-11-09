@@ -7,7 +7,7 @@ import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import FetchAbstractionAlertRecipientsDal from '../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
 import FetchPaperReturnsRecipientsService from './returns-notice/fetch-paper-returns-recipients.service.js'
-import FetchRenewalInvitationRecipientsService from './renewal-notice/fetch-renewal-invitation-recipients.service.js'
+import FetchRenewalNoticeRecipientsService from './renewal-notice/fetch-renewal-notice-recipients.service.js'
 import FetchReturnsInvitationRecipientsService from './returns-notice/fetch-returns-invitation-recipients.service.js'
 import FetchReturnsReminderRecipientsService from './returns-notice/fetch-returns-reminder-recipients.service.js'
 import MergeRecipientsService from './merge-recipients.service.js'
@@ -43,7 +43,7 @@ async function _recipientsData(session, download) {
   }
 
   if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    return FetchRenewalInvitationRecipientsService(session)
+    return FetchRenewalNoticeRecipientsService(session)
   }
 
   return FetchReturnsReminderRecipientsService(session, download)

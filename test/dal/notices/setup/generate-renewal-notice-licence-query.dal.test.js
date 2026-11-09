@@ -6,9 +6,9 @@ import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.
 import { db } from 'water-abstraction-engine/db/db.js'
 
 // Thing under test
-import GenerateRenewalInvitationLicenceQueryDal from '../../../../src/dal/notices/setup/generate-renewal-invitation-licence-query.dal.js'
+import GenerateRenewalNoticeLicenceQueryDal from '../../../../src/dal/notices/setup/generate-renewal-notice-licence-query.dal.js'
 
-describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () => {
+describe('Notices - Setup - Generate Renewal Notice Licence Query DAL', () => {
   let licence
 
   beforeAll(async () => {
@@ -21,7 +21,7 @@ describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () =
 
   describe('when called', () => {
     it('returns the expected query and bindings', () => {
-      const result = GenerateRenewalInvitationLicenceQueryDal(licence.licenceRef)
+      const result = GenerateRenewalNoticeLicenceQueryDal(licence.licenceRef)
 
       expect(result).toEqual({
         bindings: [licence.licenceRef],
@@ -32,7 +32,7 @@ describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () =
 
   describe('when executed', () => {
     it('returns the expected licence', async () => {
-      const { bindings, query } = GenerateRenewalInvitationLicenceQueryDal(licence.licenceRef)
+      const { bindings, query } = GenerateRenewalNoticeLicenceQueryDal(licence.licenceRef)
       const { rows } = await db.raw(query, bindings)
 
       expect(rows).toEqual([{ licence_ref: licence.licenceRef }])
