@@ -157,6 +157,12 @@
             value: "renewalInvitation"
           },
           {
+            attributes: { 'data-test': 'renewal-reminders' },
+            checked: filters.noticeTypes.includes('renewalReminder'),
+            text: "Renewals reminder",
+            value: "renewalReminder"
+          },
+          {
             attributes: { 'data-test': 'returns-reminders' },
             checked: filters.noticeTypes.includes('returnReminder'),
             text: "Returns reminder",
