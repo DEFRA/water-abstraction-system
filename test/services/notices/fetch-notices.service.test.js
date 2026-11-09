@@ -42,7 +42,7 @@ describe('Notices - Fetch Notices service', () => {
 
     returnedInvitationNotice = await EventHelper.add({
       ...NoticesFixture.returnsInvitation(),
-      createdAt: new Date('2025-07-01T15:01:47.023Z'),
+      createdAt: new Date('2025-05-07T09:01:47.023Z'),
       overallStatus: 'returned',
       statusCounts: { cancelled: 0, error: 0, pending: 0, returned: 1, sent: 0 }
     })
@@ -119,6 +119,7 @@ describe('Notices - Fetch Notices service', () => {
       it('excludes those that do not match', async () => {
         const result = await FetchNoticesService(filters, pageNumber)
 
+        expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
@@ -132,8 +133,8 @@ describe('Notices - Fetch Notices service', () => {
         it('returns the matching notice', async () => {
           const result = await FetchNoticesService(filters, pageNumber)
 
+          expect(result.results).toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
-          expect(result.results).toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
         })
       })
@@ -156,6 +157,7 @@ describe('Notices - Fetch Notices service', () => {
           it('excludes those that do not match', async () => {
             const result = await FetchNoticesService(filters, pageNumber)
 
+            expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
           })
@@ -175,6 +177,7 @@ describe('Notices - Fetch Notices service', () => {
           it('excludes those that do not match', async () => {
             const result = await FetchNoticesService(filters, pageNumber)
 
+            expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
             expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
@@ -196,6 +199,7 @@ describe('Notices - Fetch Notices service', () => {
         it('excludes those that do not match', async () => {
           const result = await FetchNoticesService(filters, pageNumber)
 
+          expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
@@ -219,6 +223,7 @@ describe('Notices - Fetch Notices service', () => {
         it('excludes those that do not match', async () => {
           const result = await FetchNoticesService(filters, pageNumber)
 
+          expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
         })
       })
@@ -239,6 +244,7 @@ describe('Notices - Fetch Notices service', () => {
       it('excludes those that do not match', async () => {
         const result = await FetchNoticesService(filters, pageNumber)
 
+        expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
@@ -260,6 +266,7 @@ describe('Notices - Fetch Notices service', () => {
       it('excludes those that do not match', async () => {
         const result = await FetchNoticesService(filters, pageNumber)
 
+        expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
@@ -281,6 +288,7 @@ describe('Notices - Fetch Notices service', () => {
         it('excludes those that do not match', async () => {
           const result = await FetchNoticesService(filters, pageNumber)
 
+          expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(legacyNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
@@ -302,6 +310,7 @@ describe('Notices - Fetch Notices service', () => {
         it('excludes those that do not match', async () => {
           const result = await FetchNoticesService(filters, pageNumber)
 
+          expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
         })
@@ -322,6 +331,7 @@ describe('Notices - Fetch Notices service', () => {
       it('excludes those that do not match', async () => {
         const result = await FetchNoticesService(filters, pageNumber)
 
+        expect(result.results).not.toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
         expect(result.results).not.toContainEqual(_transformNoticeToResult(abstractionAlertNotice))
@@ -335,6 +345,7 @@ describe('Notices - Fetch Notices service', () => {
         it('returns the matching notice', async () => {
           const result = await FetchNoticesService(filters, pageNumber)
 
+          expect(result.results).toContainEqual(_transformNoticeToResult(renewalInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(returnsInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(returnedInvitationNotice))
           expect(result.results).toContainEqual(_transformNoticeToResult(legacyNotice))
