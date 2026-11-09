@@ -12,7 +12,7 @@ import * as ProcessCleanService from '../../src/services/jobs/clean/process-clea
 import * as ProcessCustomerFilesService from '../../src/services/jobs/customer-files/process-customer-files.service.js'
 import * as ProcessLicenceUpdatesService from '../../src/services/jobs/licence-updates/process-licence-updates.service.js'
 import * as ProcessNotificationStatusService from '../../src/services/jobs/notification-status/process-notification-status.service.js'
-import * as ProcessRenewalInvitationsService from '../../src/services/jobs/renewal-invitations/process-renewal-invitations.service.js'
+import * as ProcessRenewalNoticeService from '../../src/services/jobs/renewal-notice/process-renewal-notice.service.js'
 import * as ProcessReturnLogsService from '../../src/services/jobs/return-logs/process-return-logs.service.js'
 import * as ProcessTimeLimitedLicencesService from '../../src/services/jobs/time-limited/process-time-limited-licences.service.js'
 
@@ -154,7 +154,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.spyOn(ProcessRenewalInvitationsService, 'default').mockResolvedValue()
+          vi.spyOn(ProcessRenewalNoticeService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -163,10 +163,36 @@ describe('Jobs controller', () => {
           expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
 
-        it('calls the "ProcessRenewalInvitationsService"', async () => {
+        it('calls the "ProcessRenewalNoticeService"', async () => {
           await server.inject(options)
 
-          expect(ProcessRenewalInvitationsService.default).toHaveBeenCalled()
+          expect(ProcessRenewalNoticeService.default).toHaveBeenCalled()
+        })
+      })
+    })
+  })
+
+  describe('/jobs/renewal-notice/{requestNoticeType}', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/renewal-notice/invitations' }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          vi.spyOn(ProcessRenewalNoticeService, 'default').mockResolvedValue()
+        })
+
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
+        })
+
+        it('calls the "ProcessRenewalNoticeService"', async () => {
+          await server.inject(options)
+
+          expect(ProcessRenewalNoticeService.default).toHaveBeenCalled()
         })
       })
     })

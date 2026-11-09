@@ -5,6 +5,7 @@ import {
   licenceUpdates,
   notificationStatus,
   renewalInvitations,
+  renewalNotice,
   returnLogs,
   timeLimited
 } from '../controllers/jobs.controller.js'
@@ -99,6 +100,20 @@ export default [
     path: '/jobs/renewal-invitations/{days}',
     options: {
       handler: renewalInvitations,
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/jobs/renewal-notice/{requestedNoticeType}',
+    options: {
+      handler: renewalNotice,
       app: {
         plainOutput: true
       },

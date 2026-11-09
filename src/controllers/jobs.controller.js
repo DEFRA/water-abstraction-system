@@ -10,7 +10,7 @@ import ProcessCleanService from '../services/jobs/clean/process-clean.service.js
 import ProcessCustomerFilesService from '../services/jobs/customer-files/process-customer-files.service.js'
 import ProcessLicenceUpdatesService from '../services/jobs/licence-updates/process-licence-updates.service.js'
 import ProcessNotificationStatusService from '../services/jobs/notification-status/process-notification-status.service.js'
-import ProcessRenewalInvitationsService from '../services/jobs/renewal-invitations/process-renewal-invitations.service.js'
+import ProcessRenewalNoticeService from '../services/jobs/renewal-notice/process-renewal-notice.service.js'
 import ProcessReturnLogsService from '../services/jobs/return-logs/process-return-logs.service.js'
 import ProcessTimeLimitedLicencesService from '../services/jobs/time-limited/process-time-limited-licences.service.js'
 
@@ -57,10 +57,16 @@ export async function notificationStatus(_request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-export async function renewalInvitations(request, h) {
-  const { days } = request.params
+export async function renewalInvitations(_request, h) {
+  ProcessRenewalNoticeService('invitations')
 
-  ProcessRenewalInvitationsService(days)
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
+}
+
+export async function renewalNotice(request, h) {
+  const { requestedNoticeType } = request.params
+
+  ProcessRenewalNoticeService(requestedNoticeType)
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
