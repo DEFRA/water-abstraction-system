@@ -56,6 +56,11 @@ describe('Notices - Setup - View Notice Type service', () => {
           },
           {
             checked: false,
+            text: 'Renewals reminder',
+            value: 'renewalReminders'
+          },
+          {
+            checked: false,
             text: 'Returns invitation',
             value: 'invitations'
           },
