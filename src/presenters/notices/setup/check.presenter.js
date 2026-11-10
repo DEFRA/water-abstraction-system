@@ -14,6 +14,7 @@ const NOTIFICATION_TYPES = {
   [NoticeType.INVITATIONS]: 'Returns invitations',
   [NoticeType.PAPER_RETURN]: 'Return forms',
   [NoticeType.REMINDERS]: 'Returns reminders',
+  [NoticeType.RENEWAL_FINALS]: 'Renewal finals',
   [NoticeType.RENEWAL_INVITATIONS]: 'Renewal invitations',
   [NoticeType.RENEWAL_REMINDERS]: 'Renewal reminders'
 }
