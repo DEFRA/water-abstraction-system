@@ -117,7 +117,10 @@ describe('Notices - Setup - Submit Licence service', () => {
         it('calls the "ProcessRenewalsNoticeLicenceSubmission"', async () => {
           await SubmitLicenceService(session.id, payload, yarStub)
 
-          expect(ProcessRenewalsNoticeLicenceSubmission.default).toHaveBeenCalledExactlyOnceWith(payload)
+          expect(ProcessRenewalsNoticeLicenceSubmission.default).toHaveBeenCalledExactlyOnceWith(
+            payload,
+            session.noticeType
+          )
         })
 
         describe('and the check page has not been visited', () => {

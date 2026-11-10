@@ -13,6 +13,7 @@ const NOTICE_TYPE_TEXT = {
   [NoticeType.INVITATIONS]: NoticeTypes[NoticeType.INVITATIONS].notificationType,
   [NoticeType.PAPER_RETURN]: 'Paper return',
   [NoticeType.REMINDERS]: NoticeTypes[NoticeType.REMINDERS].notificationType,
+  [NoticeType.RENEWAL_FINALS]: NoticeTypes[NoticeType.RENEWAL_FINALS].notificationType,
   [NoticeType.RENEWAL_INVITATIONS]: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType,
   [NoticeType.RENEWAL_REMINDERS]: NoticeTypes[NoticeType.RENEWAL_REMINDERS].notificationType
 }

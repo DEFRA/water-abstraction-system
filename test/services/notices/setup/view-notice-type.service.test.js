@@ -51,6 +51,11 @@ describe('Notices - Setup - View Notice Type service', () => {
           },
           {
             checked: false,
+            text: 'Renewals final',
+            value: 'renewalFinals'
+          },
+          {
+            checked: false,
             text: 'Renewals invitation',
             value: 'renewalInvitations'
           },

@@ -64,7 +64,7 @@ async function _processedLicenceSubmission(noticeType, payload) {
   ])
 
   if (renewalNoticeTypes.has(noticeType)) {
-    return ProcessRenewalsNoticeLicenceSubmission(payload)
+    return ProcessRenewalsNoticeLicenceSubmission(payload, noticeType)
   }
 
   return ProcessReturnsNoticeLicenceSubmission(payload)

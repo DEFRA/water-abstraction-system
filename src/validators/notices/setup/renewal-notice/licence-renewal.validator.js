@@ -4,6 +4,7 @@
  */
 
 import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { renewalNoticeDate } from 'water-abstraction-engine/lib/dates.lib.js'
 import { today } from 'water-abstraction-engine/lib/general.lib.js'
 
@@ -14,11 +15,12 @@ import { licenceRefSchema } from '../../../schemas/licence-ref.schema.js'
  *
  * @param {object} payload - The payload from the request to be validated
  * @param {object|undefined} licenceRenewal - the licence with renewal date fields fetched from the database (undefined if not found)
+ * @param {string} noticeType - The type of renewal notice
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found, the `error:` property will also exist detailing what the issues were
  */
-export default function licenceRenewalValidator(payload, licenceRenewal) {
+export default function licenceRenewalValidator(payload, licenceRenewal, noticeType) {
   const schema = Joi.object({
     licenceRef: licenceRefSchema(!!licenceRenewal)
       .custom((value, helpers) => {
@@ -34,7 +36,7 @@ export default function licenceRenewalValidator(payload, licenceRenewal) {
         'no-expiry-date': 'The licence does not have an expiry date'
       })
       .custom((value, helpers) => {
-        return _licenceExpiryDateInRange(value, helpers, licenceRenewal)
+        return _licenceExpiryDateInRange(value, helpers, licenceRenewal, noticeType)
       }, 'Custom Licence expiry date in range Validation')
       .messages({
         'expiry-date-too-soon': 'The licence expires in less than 90 days'
@@ -67,8 +69,8 @@ function _licenceHasExpiryDate(value, helpers, licenceRenewal) {
   return helpers.error('no-expiry-date', { licenceRef: value })
 }
 
-function _licenceExpiryDateInRange(value, helpers, licenceRenewal) {
-  if (!licenceRenewal.expiredDate) {
+function _licenceExpiryDateInRange(value, helpers, licenceRenewal, noticeType) {
+  if (noticeType === NoticeType.RENEWAL_FINALS || !licenceRenewal.expiredDate) {
     return value
   }
 

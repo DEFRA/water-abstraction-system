@@ -36,6 +36,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
           },
           {
             checked: false,
+            text: 'Renewals final',
+            value: 'renewalFinals'
+          },
+          {
+            checked: false,
             text: 'Renewals invitation',
             value: 'renewalInvitations'
           },
@@ -109,6 +114,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
               },
               {
                 checked: false,
+                text: 'Renewals final',
+                value: 'renewalFinals'
+              },
+              {
+                checked: false,
                 text: 'Renewals invitation',
                 value: 'renewalInvitations'
               },
@@ -147,6 +157,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
               },
               {
                 checked: false,
+                text: 'Renewals final',
+                value: 'renewalFinals'
+              },
+              {
+                checked: false,
                 text: 'Renewals invitation',
                 value: 'renewalInvitations'
               },
@@ -182,6 +197,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 checked: true,
                 text: 'Paper return',
                 value: 'paperReturn'
+              },
+              {
+                checked: false,
+                text: 'Renewals final',
+                value: 'renewalFinals'
               },
               {
                 checked: false,
@@ -285,6 +305,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                   },
                   {
                     checked: false,
+                    text: 'Renewals final',
+                    value: 'renewalFinals'
+                  },
+                  {
+                    checked: false,
                     text: 'Renewals invitation',
                     value: 'renewalInvitations'
                   },
@@ -358,6 +383,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                   text: 'Back'
                 },
                 noticeTypes: [
+                  {
+                    checked: false,
+                    text: 'Renewals final',
+                    value: 'renewalFinals'
+                  },
                   {
                     checked: false,
                     text: 'Renewals invitation',

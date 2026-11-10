@@ -65,6 +65,11 @@ function _noticeTypes(noticeType, journey, auth) {
     if (scope.includes('renewal_notifications')) {
       items.push(
         {
+          checked: noticeType === NoticeType.RENEWAL_FINALS,
+          value: NoticeType.RENEWAL_FINALS,
+          text: NoticeTypes[NoticeType.RENEWAL_FINALS].notificationType
+        },
+        {
           checked: noticeType === NoticeType.RENEWAL_INVITATIONS,
           value: NoticeType.RENEWAL_INVITATIONS,
           text: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType
