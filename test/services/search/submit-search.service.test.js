@@ -63,6 +63,11 @@ describe('Search - Submit Search service', () => {
         filterItems: [
           {
             checked: false,
+            text: 'Bills',
+            value: 'bill'
+          },
+          {
+            checked: false,
             text: 'Billing accounts',
             value: 'billingAccount'
           },

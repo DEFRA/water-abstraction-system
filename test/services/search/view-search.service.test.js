@@ -75,6 +75,11 @@ describe('Search - View Search service', () => {
         filterItems: [
           {
             checked: false,
+            text: 'Bills',
+            value: 'bill'
+          },
+          {
+            checked: false,
             text: 'Billing accounts',
             value: 'billingAccount'
           },
@@ -154,6 +159,11 @@ describe('Search - View Search service', () => {
         filterItems: [
           {
             checked: false,
+            text: 'Bills',
+            value: 'bill'
+          },
+          {
+            checked: false,
             text: 'Billing accounts',
             value: 'billingAccount'
           },
@@ -201,6 +211,11 @@ describe('Search - View Search service', () => {
 
       expect(result).toEqual({
         filterItems: [
+          {
+            checked: false,
+            text: 'Bills',
+            value: 'bill'
+          },
           {
             checked: false,
             text: 'Billing accounts',
@@ -251,6 +266,11 @@ describe('Search - View Search service', () => {
 
       expect(result).toEqual({
         filterItems: [
+          {
+            checked: false,
+            text: 'Bills',
+            value: 'bill'
+          },
           {
             checked: false,
             text: 'Billing accounts',
