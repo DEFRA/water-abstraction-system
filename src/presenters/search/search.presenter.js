@@ -40,6 +40,23 @@ export default function searchPresenter(userScopes, query, resultType, page, all
   }
 }
 
+function _bill(bill) {
+  const { exact, model } = bill
+  const { accountNumber, createdAt, id, invoiceNumber } = model
+
+  return {
+    col2Title: 'Account number',
+    col2Value: accountNumber,
+    col3Title: 'Created date',
+    col3Value: formatLongDate(createdAt),
+    exact,
+    link: `/system/bills/${id}`,
+    reference: invoiceNumber,
+    statusTag: null,
+    type: 'Bill'
+  }
+}
+
 function _billingAccount(billingAccount) {
   const { exact, model } = billingAccount
   const { accountNumber, company, createdAt, id } = model
@@ -72,6 +89,7 @@ function _filterItems(userScopes, resultType) {
   const items = []
 
   if (userScopes.includes('billing')) {
+    items.push({ checked: resultType === 'bill', value: 'bill', text: 'Bills' })
     items.push({ checked: resultType === 'billingAccount', value: 'billingAccount', text: 'Billing accounts' })
   }
 
@@ -182,6 +200,8 @@ function _monitoringStation(monitoringStation) {
 
 function _result(result) {
   switch (result.type) {
+    case 'bill':
+      return _bill(result)
     case 'billingAccount':
       return _billingAccount(result)
     case 'licence':
