@@ -3,6 +3,7 @@
  * @module FetchSearchResultsDetailsService
  */
 
+import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 import CompanyModel from 'water-abstraction-engine/models/company.model.js'
 import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
@@ -36,6 +37,10 @@ export default async function fetchSearchResultsDetailsService(idsByType) {
   return modelsByType
 }
 
+async function _bill(ids) {
+  return BillModel.query().select(['accountNumber', 'createdAt', 'id', 'invoiceNumber']).findByIds(ids)
+}
+
 async function _billingAccount(ids) {
   return BillingAccountModel.query()
     .select(['accountNumber', 'createdAt', 'id'])
@@ -48,6 +53,8 @@ async function _billingAccount(ids) {
 
 async function _findByType(type, ids) {
   switch (type) {
+    case 'bill':
+      return _bill(ids)
     case 'billingAccount':
       return _billingAccount(ids)
     case 'licenceHolder':

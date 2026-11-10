@@ -2,6 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things to stub
+import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 import CompanyModel from 'water-abstraction-engine/models/company.model.js'
 import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
@@ -15,6 +16,7 @@ import FetchSearchResultsDetailsService from '../../../src/services/search/fetch
 describe('Search - Fetch Search Results Details service', () => {
   let idsByType
 
+  let billSpy
   let billingAccountSpy
   let licenceHolderSpy
   let licenceSpy
@@ -24,13 +26,20 @@ describe('Search - Fetch Search Results Details service', () => {
 
   beforeEach(() => {
     idsByType = {
-      billingAccount: [1, 2],
-      licenceHolder: [3, 4],
-      licence: [5, 6],
-      monitoringStation: [7, 8],
-      returnLog: [9, 10],
-      user: [11, 12]
+      bill: [1, 2],
+      billingAccount: [3, 4],
+      licenceHolder: [5, 6],
+      licence: [7, 8],
+      monitoringStation: [9, 10],
+      returnLog: [11, 12],
+      user: [13, 14]
     }
+
+    billSpy = vi.fn().mockResolvedValue([])
+    vi.spyOn(BillModel, 'query').mockReturnValue({
+      findByIds: billSpy,
+      select: vi.fn().mockReturnThis()
+    })
 
     billingAccountSpy = vi.fn().mockResolvedValue([])
     vi.spyOn(BillingAccountModel, 'query').mockReturnValue({
@@ -88,6 +97,7 @@ describe('Search - Fetch Search Results Details service', () => {
       const result = await FetchSearchResultsDetailsService(idsByType)
 
       expect(result).toEqual({
+        bill: [],
         billingAccount: [],
         licenceHolder: [],
         licence: [],
@@ -100,7 +110,7 @@ describe('Search - Fetch Search Results Details service', () => {
 
   describe('when an unknown type is requested', () => {
     beforeEach(() => {
-      idsByType = { UNKNOWN_TYPE: [13, 14] }
+      idsByType = { UNKNOWN_TYPE: [16, 17] }
     })
 
     it('returns no matches', async () => {
@@ -112,9 +122,30 @@ describe('Search - Fetch Search Results Details service', () => {
     })
   })
 
+  describe('when bills are requested', () => {
+    beforeEach(() => {
+      idsByType = { bill: [1, 2] }
+    })
+
+    it('finds the correct bills', async () => {
+      const result = await FetchSearchResultsDetailsService(idsByType)
+
+      expect(result).toEqual({ bill: [] })
+
+      expect(billSpy).toHaveBeenCalled()
+      expect(billSpy.mock.calls[0][0]).toEqual([1, 2])
+      expect(billingAccountSpy).not.toHaveBeenCalled()
+      expect(licenceHolderSpy).not.toHaveBeenCalled()
+      expect(licenceSpy).not.toHaveBeenCalled()
+      expect(monitoringStationSpy).not.toHaveBeenCalled()
+      expect(returnLogSpy).not.toHaveBeenCalled()
+      expect(userSpy).not.toHaveBeenCalled()
+    })
+  })
+
   describe('when billing accounts are requested', () => {
     beforeEach(() => {
-      idsByType = { billingAccount: [1, 2] }
+      idsByType = { billingAccount: [3, 4] }
     })
 
     it('finds the correct billing accounts', async () => {
@@ -122,8 +153,9 @@ describe('Search - Fetch Search Results Details service', () => {
 
       expect(result).toEqual({ billingAccount: [] })
 
+      expect(billSpy).not.toHaveBeenCalled()
       expect(billingAccountSpy).toHaveBeenCalledOnce()
-      expect(billingAccountSpy.mock.calls[0][0]).toEqual([1, 2])
+      expect(billingAccountSpy.mock.calls[0][0]).toEqual([3, 4])
       expect(licenceHolderSpy).not.toHaveBeenCalled()
       expect(licenceSpy).not.toHaveBeenCalled()
       expect(monitoringStationSpy).not.toHaveBeenCalled()
@@ -134,7 +166,7 @@ describe('Search - Fetch Search Results Details service', () => {
 
   describe('when licence holders are requested', () => {
     beforeEach(() => {
-      idsByType = { licenceHolder: [3, 4] }
+      idsByType = { licenceHolder: [5, 6] }
     })
 
     it('finds the correct licence holders', async () => {
@@ -142,9 +174,10 @@ describe('Search - Fetch Search Results Details service', () => {
 
       expect(result).toEqual({ licenceHolder: [] })
 
+      expect(billSpy).not.toHaveBeenCalled()
       expect(billingAccountSpy).not.toHaveBeenCalled()
       expect(licenceHolderSpy).toHaveBeenCalledOnce()
-      expect(licenceHolderSpy.mock.calls[0][0]).toEqual([3, 4])
+      expect(licenceHolderSpy.mock.calls[0][0]).toEqual([5, 6])
       expect(licenceSpy).not.toHaveBeenCalled()
       expect(monitoringStationSpy).not.toHaveBeenCalled()
       expect(returnLogSpy).not.toHaveBeenCalled()
@@ -154,7 +187,7 @@ describe('Search - Fetch Search Results Details service', () => {
 
   describe('when licences are requested', () => {
     beforeEach(() => {
-      idsByType = { licence: [5, 6] }
+      idsByType = { licence: [7, 8] }
     })
 
     it('finds the correct licences', async () => {
@@ -162,10 +195,11 @@ describe('Search - Fetch Search Results Details service', () => {
 
       expect(result).toEqual({ licence: [] })
 
+      expect(billSpy).not.toHaveBeenCalled()
       expect(billingAccountSpy).not.toHaveBeenCalled()
       expect(licenceHolderSpy).not.toHaveBeenCalled()
       expect(licenceSpy).toHaveBeenCalledOnce()
-      expect(licenceSpy.mock.calls[0][0]).toEqual([5, 6])
+      expect(licenceSpy.mock.calls[0][0]).toEqual([7, 8])
       expect(monitoringStationSpy).not.toHaveBeenCalled()
       expect(returnLogSpy).not.toHaveBeenCalled()
       expect(userSpy).not.toHaveBeenCalled()
@@ -174,7 +208,7 @@ describe('Search - Fetch Search Results Details service', () => {
 
   describe('when monitoring stations are requested', () => {
     beforeEach(() => {
-      idsByType = { monitoringStation: [7, 8] }
+      idsByType = { monitoringStation: [9, 10] }
     })
 
     it('finds the correct monitoring stations', async () => {
@@ -182,11 +216,12 @@ describe('Search - Fetch Search Results Details service', () => {
 
       expect(result).toEqual({ monitoringStation: [] })
 
+      expect(billSpy).not.toHaveBeenCalled()
       expect(billingAccountSpy).not.toHaveBeenCalled()
       expect(licenceHolderSpy).not.toHaveBeenCalled()
       expect(licenceSpy).not.toHaveBeenCalled()
       expect(monitoringStationSpy).toHaveBeenCalledOnce()
-      expect(monitoringStationSpy.mock.calls[0][0]).toEqual([7, 8])
+      expect(monitoringStationSpy.mock.calls[0][0]).toEqual([9, 10])
       expect(returnLogSpy).not.toHaveBeenCalled()
       expect(userSpy).not.toHaveBeenCalled()
     })
@@ -194,7 +229,7 @@ describe('Search - Fetch Search Results Details service', () => {
 
   describe('when return logs are requested', () => {
     beforeEach(() => {
-      idsByType = { returnLog: [9, 10] }
+      idsByType = { returnLog: [11, 12] }
     })
 
     it('finds the correct return logs', async () => {
@@ -202,19 +237,20 @@ describe('Search - Fetch Search Results Details service', () => {
 
       expect(result).toEqual({ returnLog: [] })
 
+      expect(billSpy).not.toHaveBeenCalled()
       expect(billingAccountSpy).not.toHaveBeenCalled()
       expect(licenceHolderSpy).not.toHaveBeenCalled()
       expect(licenceSpy).not.toHaveBeenCalled()
       expect(monitoringStationSpy).not.toHaveBeenCalled()
       expect(returnLogSpy).toHaveBeenCalledOnce()
-      expect(returnLogSpy.mock.calls[0][0]).toEqual([9, 10])
+      expect(returnLogSpy.mock.calls[0][0]).toEqual([11, 12])
       expect(userSpy).not.toHaveBeenCalled()
     })
   })
 
   describe('when users are requested', () => {
     beforeEach(() => {
-      idsByType = { user: [11, 12] }
+      idsByType = { user: [13, 14] }
     })
 
     it('finds the correct users', async () => {
@@ -222,6 +258,7 @@ describe('Search - Fetch Search Results Details service', () => {
 
       expect(result).toEqual({ user: [] })
 
+      expect(billSpy).not.toHaveBeenCalled()
       expect(billingAccountSpy).not.toHaveBeenCalled()
       expect(licenceHolderSpy).not.toHaveBeenCalled()
       expect(licenceSpy).not.toHaveBeenCalled()

@@ -99,6 +99,16 @@ describe('Search - Search presenter', () => {
           exact: false,
           model: {
             accountNumber: 'A12345678A',
+            createdAt: new Date('2000-01-01T00:00:00.000Z'),
+            id: 'bill-1',
+            invoiceNumber: 'WAI0000641T'
+          },
+          type: 'bill'
+        },
+        {
+          exact: false,
+          model: {
+            accountNumber: 'A12345678A',
             company: { name: 'Company 1' },
             createdAt: new Date('2000-01-01T00:00:00.000Z'),
             id: 'billing-account-1'
@@ -188,6 +198,11 @@ describe('Search - Search presenter', () => {
           checked: false,
           text: 'Billing accounts',
           value: 'billingAccount'
+        },
+        {
+          checked: false,
+          text: 'Bills',
+          value: 'bill'
         },
         {
           checked: false,
@@ -286,6 +301,17 @@ describe('Search - Search presenter', () => {
           type: 'User'
         },
         {
+          col2Title: 'Account number',
+          col2Value: 'A12345678A',
+          col3Title: 'Created date',
+          col3Value: '1 January 2000',
+          exact: false,
+          link: '/system/bills/bill-1',
+          reference: 'WAI0000641T',
+          statusTag: null,
+          type: 'Bill'
+        },
+        {
           col2Title: 'Holder',
           col2Value: 'Company 1',
           col3Title: 'Created date',
@@ -374,6 +400,59 @@ describe('Search - Search presenter', () => {
           },
           {
             checked: false,
+            text: 'Bills',
+            value: 'bill'
+          },
+          {
+            checked: false,
+            text: 'Licence holders',
+            value: 'licenceHolder'
+          },
+          {
+            checked: false,
+            text: 'Licences',
+            value: 'licence'
+          },
+          {
+            checked: false,
+            text: 'Monitoring stations',
+            value: 'monitoringStation'
+          },
+          {
+            checked: false,
+            text: 'Return logs',
+            value: 'returnLog'
+          },
+          {
+            checked: false,
+            text: 'Users',
+            value: 'user'
+          }
+        ])
+      })
+    })
+
+    describe('when the result type is "bill"', () => {
+      beforeEach(() => {
+        resultType = 'bill'
+      })
+
+      it('returns the selected item', () => {
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
+
+        expect(result.filterItems).toEqual([
+          {
+            checked: false,
+            text: 'Billing accounts',
+            value: 'billingAccount'
+          },
+          {
+            checked: true,
+            text: 'Bills',
+            value: 'bill'
+          },
+          {
+            checked: false,
             text: 'Licence holders',
             value: 'licenceHolder'
           },
@@ -417,6 +496,11 @@ describe('Search - Search presenter', () => {
           },
           {
             checked: false,
+            text: 'Bills',
+            value: 'bill'
+          },
+          {
+            checked: false,
             text: 'Licence holders',
             value: 'licenceHolder'
           },
@@ -457,6 +541,11 @@ describe('Search - Search presenter', () => {
             checked: false,
             text: 'Billing accounts',
             value: 'billingAccount'
+          },
+          {
+            checked: false,
+            text: 'Bills',
+            value: 'bill'
           },
           {
             checked: false,

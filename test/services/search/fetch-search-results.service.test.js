@@ -2,6 +2,7 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
 import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
 import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
 import MonitoringStationHelper from 'water-abstraction-engine/test/helpers/monitoring-station.helper.js'
@@ -20,6 +21,7 @@ import FetchSearchResultsService from '../../../src/services/search/fetch-search
 
 describe('Search - Fetch Search Results service', () => {
   const billingAccounts = []
+  const bills = []
   const licenceHolders = []
   const licences = []
   const monitoringStations = []
@@ -48,6 +50,29 @@ describe('Search - Fetch Search Results service', () => {
     )
     billingAccounts.push(
       await BillingAccountHelper.add({ accountNumber: 'TESTSEARCH-Y97327241A', companyId: company.id })
+    )
+
+    // Add the bills in non-alphabetical order to prove the ordering in the results
+    bills.push(
+      await BillHelper.add({
+        accountNumber: billingAccounts[0].accountNumber,
+        billingAccountId: billingAccounts[0].id,
+        invoiceNumber: 'TESTSEARCH-AAC0009042'
+      })
+    )
+    bills.push(
+      await BillHelper.add({
+        accountNumber: billingAccounts[1].accountNumber,
+        billingAccountId: billingAccounts[1].id,
+        invoiceNumber: 'TESTSEARCH-AAC0009043'
+      })
+    )
+    bills.push(
+      await BillHelper.add({
+        accountNumber: billingAccounts[2].accountNumber,
+        billingAccountId: billingAccounts[2].id,
+        invoiceNumber: 'TESTSEARCH-AAC0009041'
+      })
     )
 
     // Add the Licences and licence holders in non-alphabetical order, including region, and ID to prove the ordering in
@@ -189,13 +214,17 @@ describe('Search - Fetch Search Results service', () => {
       await licenceHolder.clean()
     }
 
+    for (const bill of bills) {
+      await bill.$query().delete()
+    }
+
     for (const billingAccount of billingAccounts) {
       await billingAccount.$query().delete()
     }
   })
 
   beforeEach(() => {
-    resultTypes = ['billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user']
+    resultTypes = ['bill', 'billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user']
     page = '1'
   })
 
@@ -266,6 +295,21 @@ describe('Search - Fetch Search Results service', () => {
           },
           {
             exact: false,
+            id: bills[2].id,
+            type: 'bill'
+          },
+          {
+            exact: false,
+            id: bills[0].id,
+            type: 'bill'
+          },
+          {
+            exact: false,
+            id: bills[1].id,
+            type: 'bill'
+          },
+          {
+            exact: false,
             id: users[2].id,
             type: 'user'
           },
@@ -275,7 +319,7 @@ describe('Search - Fetch Search Results service', () => {
             type: 'user'
           }
         ],
-        total: 13
+        total: 16
       })
     })
   })
@@ -317,7 +361,7 @@ describe('Search - Fetch Search Results service', () => {
             type: 'licence'
           }
         ],
-        total: 13
+        total: 16
       })
     })
   })
@@ -439,6 +483,131 @@ describe('Search - Fetch Search Results service', () => {
               exact: true,
               id: billingAccounts[1].id,
               type: 'billingAccount'
+            }
+          ],
+          total: 1
+        })
+      })
+    })
+  })
+
+  describe('when searching for bills', () => {
+    beforeEach(() => {
+      resultTypes = ['bill']
+    })
+
+    describe('when matching bills exist', () => {
+      beforeEach(() => {
+        query = 'AAC000904'
+      })
+
+      it('returns the correctly ordered matching bills', async () => {
+        const result = await FetchSearchResultsService(query, resultTypes, page)
+
+        expect(result).toEqual({
+          results: [
+            {
+              exact: false,
+              id: bills[2].id,
+              type: 'bill'
+            },
+            {
+              exact: false,
+              id: bills[0].id,
+              type: 'bill'
+            },
+            {
+              exact: false,
+              id: bills[1].id,
+              type: 'bill'
+            }
+          ],
+          total: 3
+        })
+      })
+    })
+
+    describe('when only one matching bill exists', () => {
+      beforeEach(() => {
+        query = 'AC0009042'
+      })
+
+      it('returns the correct bill', async () => {
+        const result = await FetchSearchResultsService(query, resultTypes, page)
+
+        expect(result).toEqual({
+          results: [
+            {
+              exact: false,
+              id: bills[0].id,
+              type: 'bill'
+            }
+          ],
+          total: 1
+        })
+      })
+    })
+
+    describe('when the case of the search text does not match that of the bill reference', () => {
+      beforeEach(() => {
+        query = 'aac000904'
+      })
+
+      it('still returns the correct bills', async () => {
+        const result = await FetchSearchResultsService(query, resultTypes, page)
+
+        expect(result).toEqual({
+          results: [
+            {
+              exact: false,
+              id: bills[2].id,
+              type: 'bill'
+            },
+            {
+              exact: false,
+              id: bills[0].id,
+              type: 'bill'
+            },
+            {
+              exact: false,
+              id: bills[1].id,
+              type: 'bill'
+            }
+          ],
+          total: 3
+        })
+      })
+    })
+
+    describe('when no matching bills exist', () => {
+      beforeEach(() => {
+        query = 'AAC0009044'
+      })
+
+      it('returns empty query results', async () => {
+        const result = await FetchSearchResultsService(query, resultTypes, page)
+
+        expect(result).toEqual({
+          results: [],
+          total: 0
+        })
+      })
+    })
+
+    describe('when searching for an exact match', () => {
+      beforeEach(() => {
+        query = 'TESTSEARCH-AAC0009042'
+      })
+
+      it('returns the correct bill', async () => {
+        const result = await FetchSearchResultsService(query, resultTypes, page)
+
+        expect(result).toEqual({
+          results: [
+            {
+              exact: true,
+              id: bills[0].id,
+              type: 'bill'
             }
           ],
           total: 1

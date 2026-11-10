@@ -18,6 +18,18 @@ const BILLING_ACCOUNT_SQL = `
   WHERE account_number ILIKE ?
 `
 
+const BILL_SQL = `
+  SELECT
+    'bill' AS row_type,
+    id AS row_id,
+    invoice_number ILIKE ? AS exact,
+    6 AS table_order,
+    invoice_number AS row_order,
+    CAST (NULL AS DATE) AS date_order
+  FROM bills
+  WHERE invoice_number ILIKE ?
+`
+
 const LICENCE_HOLDER_SQL = `
   SELECT
     'licenceHolder' AS row_type,
@@ -81,7 +93,7 @@ const USER_SQL = `
     'user' AS row_type,
     id AS row_id,
     username ILIKE ? AS exact,
-    6 AS table_order,
+    7 AS table_order,
     username AS row_order,
     CAST (NULL AS DATE) AS date_order
   FROM users
@@ -136,6 +148,7 @@ function _allSql(exactQuery, partialQuery, resultTypes, page) {
   const searchSqls = { statements: [], params: [] }
 
   _billingAccountSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
+  _billSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
   _licenceHolderSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
   _licenceSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
   _monitoringStationSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
@@ -160,6 +173,18 @@ function _billingAccountSql(resultTypes, searchSqls, countSqls, exactQuery, part
 
     countSqls.statements.push(`
       (SELECT COUNT(*) FROM billing_accounts WHERE account_number ILIKE ?)
+    `)
+    countSqls.params.push(partialQuery)
+  }
+}
+
+function _billSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
+  if (resultTypes.includes('bill')) {
+    searchSqls.statements.push(BILL_SQL)
+    searchSqls.params.push(exactQuery, partialQuery)
+
+    countSqls.statements.push(`
+      (SELECT COUNT(*) FROM bills WHERE invoice_number ILIKE ?)
     `)
     countSqls.params.push(partialQuery)
   }

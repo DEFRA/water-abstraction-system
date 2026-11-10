@@ -68,6 +68,11 @@ describe('Search - Submit Search service', () => {
           },
           {
             checked: false,
+            text: 'Bills',
+            value: 'bill'
+          },
+          {
+            checked: false,
             text: 'Licence holders',
             value: 'licenceHolder'
           },

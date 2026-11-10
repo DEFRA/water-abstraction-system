@@ -80,6 +80,11 @@ describe('Search - View Search service', () => {
           },
           {
             checked: false,
+            text: 'Bills',
+            value: 'bill'
+          },
+          {
+            checked: false,
             text: 'Licence holders',
             value: 'licenceHolder'
           },
@@ -159,6 +164,11 @@ describe('Search - View Search service', () => {
           },
           {
             checked: false,
+            text: 'Bills',
+            value: 'bill'
+          },
+          {
+            checked: false,
             text: 'Licence holders',
             value: 'licenceHolder'
           },
@@ -205,6 +215,11 @@ describe('Search - View Search service', () => {
             checked: false,
             text: 'Billing accounts',
             value: 'billingAccount'
+          },
+          {
+            checked: false,
+            text: 'Bills',
+            value: 'bill'
           },
           {
             checked: false,
@@ -255,6 +270,11 @@ describe('Search - View Search service', () => {
             checked: false,
             text: 'Billing accounts',
             value: 'billingAccount'
+          },
+          {
+            checked: false,
+            text: 'Bills',
+            value: 'bill'
           },
           {
             checked: false,
