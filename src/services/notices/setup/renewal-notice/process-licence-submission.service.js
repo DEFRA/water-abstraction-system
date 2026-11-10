@@ -16,13 +16,14 @@ import LicenceRenewalValidator from '../../../../validators/notices/setup/renewa
  * error. If they have we check if it exists in the database. If it doesn't exist we return the same error.
  *
  * @param {object} payload - The submitted form data
+ * @param {string} noticeType - The type of renewal notice
  *
  * @returns {Promise<object>} The validation result (null if valid)
  */
-export default async function processLicenceSubmissionService(payload) {
+export default async function processLicenceSubmissionService(payload, noticeType) {
   const licenceRenewal = await _licenceRenewal(payload)
 
-  const validationResult = _validate(payload, licenceRenewal)
+  const validationResult = _validate(payload, licenceRenewal, noticeType)
 
   return {
     additionalSessionData: _additionalSessionData(licenceRenewal),
@@ -49,8 +50,8 @@ async function _licenceRenewal(payload) {
   return FetchRenewalLicenceDal(payload.licenceRef)
 }
 
-function _validate(payload, licenceRenewal) {
-  const validationResult = LicenceRenewalValidator(payload, licenceRenewal)
+function _validate(payload, licenceRenewal, noticeType) {
+  const validationResult = LicenceRenewalValidator(payload, licenceRenewal, noticeType)
 
   return formatValidationResult(validationResult)
 }
