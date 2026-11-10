@@ -63,13 +63,13 @@ describe('Search - Submit Search service', () => {
         filterItems: [
           {
             checked: false,
-            text: 'Bills',
-            value: 'bill'
+            text: 'Billing accounts',
+            value: 'billingAccount'
           },
           {
             checked: false,
-            text: 'Billing accounts',
-            value: 'billingAccount'
+            text: 'Bills',
+            value: 'bill'
           },
           {
             checked: false,

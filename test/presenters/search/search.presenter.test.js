@@ -196,13 +196,13 @@ describe('Search - Search presenter', () => {
       filterItems: [
         {
           checked: false,
-          text: 'Bills',
-          value: 'bill'
+          text: 'Billing accounts',
+          value: 'billingAccount'
         },
         {
           checked: false,
-          text: 'Billing accounts',
-          value: 'billingAccount'
+          text: 'Bills',
+          value: 'bill'
         },
         {
           checked: false,
@@ -395,13 +395,13 @@ describe('Search - Search presenter', () => {
         expect(result.filterItems).toEqual([
           {
             checked: false,
-            text: 'Bills',
-            value: 'bill'
+            text: 'Billing accounts',
+            value: 'billingAccount'
           },
           {
             checked: false,
-            text: 'Billing accounts',
-            value: 'billingAccount'
+            text: 'Bills',
+            value: 'bill'
           },
           {
             checked: false,
@@ -442,14 +442,14 @@ describe('Search - Search presenter', () => {
 
         expect(result.filterItems).toEqual([
           {
-            checked: true,
-            text: 'Bills',
-            value: 'bill'
-          },
-          {
             checked: false,
             text: 'Billing accounts',
             value: 'billingAccount'
+          },
+          {
+            checked: true,
+            text: 'Bills',
+            value: 'bill'
           },
           {
             checked: false,
@@ -490,14 +490,14 @@ describe('Search - Search presenter', () => {
 
         expect(result.filterItems).toEqual([
           {
-            checked: false,
-            text: 'Bills',
-            value: 'bill'
-          },
-          {
             checked: true,
             text: 'Billing accounts',
             value: 'billingAccount'
+          },
+          {
+            checked: false,
+            text: 'Bills',
+            value: 'bill'
           },
           {
             checked: false,
@@ -539,13 +539,13 @@ describe('Search - Search presenter', () => {
         expect(result.filterItems).toEqual([
           {
             checked: false,
-            text: 'Bills',
-            value: 'bill'
+            text: 'Billing accounts',
+            value: 'billingAccount'
           },
           {
             checked: false,
-            text: 'Billing accounts',
-            value: 'billingAccount'
+            text: 'Bills',
+            value: 'bill'
           },
           {
             checked: false,

@@ -89,8 +89,8 @@ function _filterItems(userScopes, resultType) {
   const items = []
 
   if (userScopes.includes('billing')) {
-    items.push({ checked: resultType === 'bill', value: 'bill', text: 'Bills' })
     items.push({ checked: resultType === 'billingAccount', value: 'billingAccount', text: 'Billing accounts' })
+    items.push({ checked: resultType === 'bill', value: 'bill', text: 'Bills' })
   }
 
   items.push(
