@@ -54,6 +54,10 @@ function _pageTitle(subType) {
     return 'Returns reminders sent'
   }
 
+  if (subType === NoticeTypes[NoticeType.RENEWAL_FINALS].subType) {
+    return 'Renewal finals sent'
+  }
+
   if (subType === NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType) {
     return 'Renewal invitations sent'
   }
