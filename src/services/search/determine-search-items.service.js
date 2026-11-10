@@ -3,7 +3,7 @@
  * @module DetermineSearchItemsService
  */
 
-const RESULT_TYPES = ['billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user']
+const RESULT_TYPES = ['bill', 'billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user']
 
 const MAX_LICENCE_LENGTH = 20
 
@@ -30,6 +30,7 @@ export default function determineSearchItemsService(query, selectedResultType, u
 
   const resultTypes = []
 
+  _bills(resultTypes, query, resultTypeToUse, userScopes)
   _billingAccounts(resultTypes, query, resultTypeToUse, userScopes)
   _licenceHolders(resultTypes, query, resultTypeToUse)
   _licences(resultTypes, query, resultTypeToUse)
@@ -61,6 +62,64 @@ function _billingAccounts(resultTypes, query, selectedResultType, userScopes) {
   }
 
   resultTypes.push('billingAccount')
+}
+
+function _bills(resultTypes, query, selectedResultType, userScopes) {
+  if (selectedResultType && selectedResultType !== 'bill') {
+    return
+  }
+
+  // Bills can only be searched by users with the appropriate security scope
+  if (!userScopes.includes('billing')) {
+    return
+  }
+
+  // Bill numbers are no longer than 11 characters and only contains numbers and certain letters
+  if (!query.match(/^[ABCEINSTWY0-9]{1,11}$/i)) {
+    return
+  }
+
+  // Bill numbers are either 10 or 11 characters and only contain numbers and certain letters. They are made up of a
+  // 3 character prefix, 7 digits, and an optional 'T' suffix.
+  //
+  // Examples:
+  // AAC0009030
+  // AAC0005103T
+  // WAI0000641T
+  // SAI0000109T
+  // NAC0001861T
+  // TAI1001193
+  //
+  // They also always start with the following prefixes:
+  // AAC
+  // AAI
+  // BAC
+  // BAI
+  // EAC
+  // EAI
+  // NAC
+  // NAI
+  // SAC
+  // SAI
+  // TAC
+  // TAI
+  // WAC
+  // WAI
+  // YAC
+  // YAI
+  //
+  // The regex matches the whole query (case-insensitive) against this format:
+  // - ^ and $ - the query must be only a bill number, not contain one
+  // - [ABENSTWY] - the first character is one of the letters used in the prefixes
+  // - A - the second character is always 'A'
+  // - [CI] - the third character is either 'C' (credit) or 'I' (invoice)
+  // - \d{7} - followed by exactly 7 digits
+  // - T? - with an optional trailing 'T' (we don't know what this means!)
+  if (query.length >= 10 && !query.match(/^[ABENSTWY]A[CI]\d{7}T?$/i)) {
+    return
+  }
+
+  resultTypes.push('bill')
 }
 
 function _licenceHolders(resultTypes, _query, selectedResultType) {

@@ -19,7 +19,15 @@ describe('Search - Determine Search Items service', () => {
     it('returns the correct list', () => {
       const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
 
-      expect(result).toEqual(['billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user'])
+      expect(result).toEqual([
+        'bill',
+        'billingAccount',
+        'licenceHolder',
+        'licence',
+        'monitoringStation',
+        'returnLog',
+        'user'
+      ])
     })
   })
 
@@ -32,7 +40,22 @@ describe('Search - Determine Search Items service', () => {
 
     it('returns only the billing account type', () => {
       const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
       expect(result).toEqual(['billingAccount'])
+    })
+  })
+
+  describe('when bills are requested', () => {
+    beforeEach(() => {
+      selectedResultType = 'bill'
+      query = 'WAI0000641T'
+      userScopes = ['billing']
+    })
+
+    it('returns only the bill type', () => {
+      const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+      expect(result).toEqual(['bill'])
     })
   })
 
@@ -45,6 +68,7 @@ describe('Search - Determine Search Items service', () => {
 
     it('returns only the licence holder type', () => {
       const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
       expect(result).toEqual(['licenceHolder'])
     })
   })
@@ -58,6 +82,7 @@ describe('Search - Determine Search Items service', () => {
 
     it('returns only the licence type', () => {
       const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
       expect(result).toEqual(['licence'])
     })
   })
@@ -71,6 +96,7 @@ describe('Search - Determine Search Items service', () => {
 
     it('returns only the monitoring station type', () => {
       const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
       expect(result).toEqual(['monitoringStation'])
     })
   })
@@ -84,6 +110,7 @@ describe('Search - Determine Search Items service', () => {
 
     it('returns only the return log type', () => {
       const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
       expect(result).toEqual(['returnLog'])
     })
   })
@@ -102,7 +129,7 @@ describe('Search - Determine Search Items service', () => {
     })
   })
 
-  describe('when the user does not have scope for billing account searches', () => {
+  describe('when the user does not have scope for bill or billing account searches', () => {
     beforeEach(() => {
       query = 'A12345678A'
       userScopes = ['not-billing']
@@ -128,15 +155,28 @@ describe('Search - Determine Search Items service', () => {
       it('returns search types that do not include billing accounts', () => {
         const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
 
+        expect(result).not.toContain('bill')
         expect(result).not.toContain('billingAccount')
       })
     })
   })
 
-  describe('when the user has scope for billing account searches', () => {
+  describe('when the user has scope for bill and billing account searches', () => {
     beforeEach(() => {
-      query = 'A12345678A'
+      query = 'A123'
       userScopes = ['billing']
+    })
+
+    describe('and bills are requested', () => {
+      beforeEach(() => {
+        selectedResultType = 'bill'
+      })
+
+      it('returns the bill type', () => {
+        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+        expect(result).toEqual(['bill'])
+      })
     })
 
     describe('and billing accounts are requested', () => {
@@ -176,224 +216,306 @@ describe('Search - Determine Search Items service', () => {
     })
   })
 
-  describe('when the search is valid for a billing account reference', () => {
-    beforeEach(() => {
-      selectedResultType = 'billingAccount'
-      userScopes = ['billing']
+  describe('when searching by billing account reference', () => {
+    describe('and the query value is valid for a billing account reference', () => {
+      beforeEach(() => {
+        selectedResultType = 'billingAccount'
+        userScopes = ['billing']
+      })
+
+      describe('because it can be part of a billing account reference', () => {
+        beforeEach(() => {
+          query = 'A1'
+        })
+
+        it('returns the billing account type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).toContain('billingAccount')
+        })
+      })
+
+      describe('because it matches the full billing account reference', () => {
+        beforeEach(() => {
+          query = 'A12345678A'
+        })
+
+        it('returns the billing account type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).toContain('billingAccount')
+        })
+      })
     })
 
-    describe('because it can be part of a billing account reference', () => {
+    describe('and the query value is not valid for a billing account reference', () => {
       beforeEach(() => {
-        query = 'A1'
+        selectedResultType = 'billingAccount'
+        userScopes = ['billing']
       })
 
-      it('returns the billing account type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+      describe('because it includes characters that are not allowed', () => {
+        beforeEach(() => {
+          query = 'X'
+        })
 
-        expect(result).toContain('billingAccount')
+        it('does not return the billing account type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).not.toContain('billingAccount')
+        })
       })
-    })
 
-    describe('because it matches the full billing account reference', () => {
-      beforeEach(() => {
-        query = 'A12345678A'
+      describe('because it is too long', () => {
+        beforeEach(() => {
+          query = 'A1234567890A'
+        })
+
+        it('does not return the billing account type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).not.toContain('billingAccount')
+        })
       })
 
-      it('returns the billing account type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+      describe('because it does not match the full format', () => {
+        beforeEach(() => {
+          query = 'A12345678B'
+        })
 
-        expect(result).toContain('billingAccount')
+        it('does not return the billing account type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).not.toContain('billingAccount')
+        })
       })
     })
   })
 
-  describe('when the search is not valid for a billing account reference', () => {
-    beforeEach(() => {
-      selectedResultType = 'billingAccount'
-      userScopes = ['billing']
+  describe('when searching by bill reference', () => {
+    describe('and the query value is valid for a bill reference', () => {
+      beforeEach(() => {
+        selectedResultType = 'bill'
+        userScopes = ['billing']
+      })
+
+      describe('because it can be part of a bill reference', () => {
+        beforeEach(() => {
+          query = 'WAI'
+        })
+
+        it('returns the bill type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).toContain('bill')
+        })
+      })
+
+      describe('because it matches the full bill reference', () => {
+        beforeEach(() => {
+          query = 'WAI0000641T'
+        })
+
+        it('returns the bill type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).toContain('bill')
+        })
+      })
     })
 
-    describe('because it includes characters that are not allowed', () => {
+    describe('and the query value is not valid for a bill reference', () => {
       beforeEach(() => {
-        query = 'X'
+        selectedResultType = 'bill'
+        userScopes = ['billing']
       })
 
-      it('does not return the billing account type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+      describe('because it includes characters that are not allowed', () => {
+        beforeEach(() => {
+          query = 'X'
+        })
 
-        expect(result).not.toContain('billingAccount')
-      })
-    })
+        it('does not return the bill type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
 
-    describe('because it is too long', () => {
-      beforeEach(() => {
-        query = 'A1234567890A'
-      })
-
-      it('does not return the billing account type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
-
-        expect(result).not.toContain('billingAccount')
-      })
-    })
-
-    describe('because it does not match the full format', () => {
-      beforeEach(() => {
-        query = 'A12345678B'
+          expect(result).not.toContain('bill')
+        })
       })
 
-      it('does not return the billing account type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+      describe('because it is too long', () => {
+        beforeEach(() => {
+          query = 'WAI00000641T'
+        })
 
-        expect(result).not.toContain('billingAccount')
+        it('does not return the bill type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).not.toContain('bill')
+        })
+      })
+
+      describe('because it does not match the full format', () => {
+        beforeEach(() => {
+          query = 'WAI0000641X'
+        })
+
+        it('does not return the bill type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).not.toContain('bill')
+        })
       })
     })
   })
 
-  describe('when the search is valid for a licence reference', () => {
-    beforeEach(() => {
-      selectedResultType = 'licence'
-      userScopes = []
+  describe('when searching by licence reference', () => {
+    describe('and the query value is valid for a licence reference', () => {
+      beforeEach(() => {
+        selectedResultType = 'licence'
+        userScopes = []
+      })
+
+      describe('because it can be part of a licence reference', () => {
+        beforeEach(() => {
+          query = '12/34'
+        })
+
+        it('returns the licence type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).toContain('licence')
+        })
+      })
+
+      describe('because it is a full numeric licence reference', () => {
+        beforeEach(() => {
+          query = '1234567890'
+        })
+
+        it('returns the licence type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).toContain('licence')
+        })
+      })
+
+      describe('because it contains brackets', () => {
+        beforeEach(() => {
+          query = '9/99/99/9999/SR(A)'
+        })
+
+        it('returns the licence type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).toContain('licence')
+        })
+      })
+
+      describe('because it contains an ampersand', () => {
+        beforeEach(() => {
+          query = '99/99/99/9999/S&G'
+        })
+
+        it('returns the licence type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).toContain('licence')
+        })
+      })
     })
 
-    describe('because it can be part of a licence reference', () => {
+    describe('and the query value is not valid for a licence reference', () => {
       beforeEach(() => {
-        query = '12/34'
+        selectedResultType = 'licence'
+        userScopes = []
       })
 
-      it('returns the licence type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+      describe('because it is too long', () => {
+        beforeEach(() => {
+          query = '1'.repeat(21)
+        })
 
-        expect(result).toContain('licence')
-      })
-    })
+        it('does not return the licence type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
 
-    describe('because it is a full numeric licence reference', () => {
-      beforeEach(() => {
-        query = '1234567890'
-      })
-
-      it('returns the licence type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
-
-        expect(result).toContain('licence')
-      })
-    })
-
-    describe('because it contains brackets', () => {
-      beforeEach(() => {
-        query = '9/99/99/9999/SR(A)'
+          expect(result).not.toContain('licence')
+        })
       })
 
-      it('returns the licence type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+      describe('because it contain an invalid character', () => {
+        beforeEach(() => {
+          query = '#'
+        })
 
-        expect(result).toContain('licence')
+        it('does not return the licence type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).not.toContain('licence')
+        })
       })
-    })
 
-    describe('because it contains an ampersand', () => {
-      beforeEach(() => {
-        query = '99/99/99/9999/S&G'
-      })
+      describe('because it contains too many consecutive letters', () => {
+        beforeEach(() => {
+          query = 'X'.repeat(4)
+        })
 
-      it('returns the licence type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+        it('does not return the licence type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
 
-        expect(result).toContain('licence')
+          expect(result).not.toContain('licence')
+        })
       })
     })
   })
 
-  describe('when the search is not valid for a licence reference', () => {
-    beforeEach(() => {
-      selectedResultType = 'licence'
-      userScopes = []
-    })
-
-    describe('because it is too long', () => {
+  describe('when searching by return reference', () => {
+    describe('and the query value is valid for a return reference', () => {
       beforeEach(() => {
-        query = '1'.repeat(21)
+        selectedResultType = 'returnLog'
+        userScopes = []
       })
 
-      it('does not return the licence type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+      describe('because it is a number', () => {
+        beforeEach(() => {
+          query = '123'
+        })
 
-        expect(result).not.toContain('licence')
+        it('returns the return log type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+
+          expect(result).toContain('returnLog')
+        })
       })
     })
 
-    describe('because it contain an invalid character', () => {
+    describe('and the query value is not valid for a return reference', () => {
       beforeEach(() => {
-        query = '#'
+        selectedResultType = 'returnLog'
+        userScopes = []
       })
 
-      it('does not return the licence type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+      describe('because it is too long', () => {
+        beforeEach(() => {
+          query = '1'.repeat(9)
+        })
 
-        expect(result).not.toContain('licence')
-      })
-    })
+        it('does not return the return log type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
 
-    describe('because it contains too many consecutive letters', () => {
-      beforeEach(() => {
-        query = 'X'.repeat(4)
-      })
-
-      it('does not return the licence type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
-
-        expect(result).not.toContain('licence')
-      })
-    })
-  })
-
-  describe('when the search is valid for a return reference', () => {
-    beforeEach(() => {
-      selectedResultType = 'returnLog'
-      userScopes = []
-    })
-
-    describe('because it is a number', () => {
-      beforeEach(() => {
-        query = '123'
+          expect(result).not.toContain('returnLog')
+        })
       })
 
-      it('returns the return log type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
+      describe('because it is non-numeric', () => {
+        beforeEach(() => {
+          query = 'A'
+        })
 
-        expect(result).toContain('returnLog')
-      })
-    })
-  })
+        it('does not return the return log type', () => {
+          const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
 
-  describe('when the search is not valid for a return reference', () => {
-    beforeEach(() => {
-      selectedResultType = 'returnLog'
-      userScopes = []
-    })
-
-    describe('because it is too long', () => {
-      beforeEach(() => {
-        query = '1'.repeat(9)
-      })
-
-      it('does not return the return log type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
-
-        expect(result).not.toContain('returnLog')
-      })
-    })
-
-    describe('because it is non-numeric', () => {
-      beforeEach(() => {
-        query = 'A'
-      })
-
-      it('does not return the return log type', () => {
-        const result = DetermineSearchItemsService(query, selectedResultType, userScopes)
-
-        expect(result).not.toContain('returnLog')
+          expect(result).not.toContain('returnLog')
+        })
       })
     })
   })
