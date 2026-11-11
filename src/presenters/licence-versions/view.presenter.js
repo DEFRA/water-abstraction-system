@@ -34,6 +34,7 @@ export default function viewPresenter(licenceVersionData, auth, conditions) {
     },
     changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued',
     conditionTypes: formatConditionTypes(conditions),
+    criticality: licenceVersion.criticalityDescription || 'No Criticality class assigned',
     errorInDataEmail: _errorInDataEmail(billingAndDataRole),
     licenceDetails: _licenceDetails(licenceVersion),
     notes: _notes(licenceVersion, billingAndDataRole),

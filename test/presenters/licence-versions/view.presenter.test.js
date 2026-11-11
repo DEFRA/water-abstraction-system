@@ -51,6 +51,7 @@ describe('Licence Versions - View presenter', () => {
         },
         changeType: 'licence issued',
         conditionTypes: [],
+        criticality: 'Less Critical',
         errorInDataEmail: 'notify@test.gov.uk',
         licenceDetails: {
           address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
@@ -128,6 +129,28 @@ describe('Licence Versions - View presenter', () => {
           displayTitle: 'Political cessation condition'
         }
       ])
+    })
+  })
+
+  describe('the "criticality" property', () => {
+    describe('when the licence version has a criticality description', () => {
+      it('returns the criticality description', () => {
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
+
+        expect(result.criticality).toEqual('Less Critical')
+      })
+    })
+
+    describe('when the licence version does NOT have a criticality description', () => {
+      beforeEach(() => {
+        licenceVersion.criticalityDescription = null
+      })
+
+      it('returns "No Criticality class assigned"', () => {
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
+
+        expect(result.criticality).toEqual('No Criticality class assigned')
+      })
     })
   })
 
