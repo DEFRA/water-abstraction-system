@@ -33,7 +33,7 @@ async function _fetch(licenceId) {
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
       licenceVersionsBuilder
-        .select(['id', 'licenceId'])
+        .select(['criticalityDescription', 'id', 'licenceId'])
         .withGraphFetched('licenceVersionPurposes')
         .modifyGraph('licenceVersionPurposes', (licenceVersionPurposesBuilder) => {
           licenceVersionPurposesBuilder
