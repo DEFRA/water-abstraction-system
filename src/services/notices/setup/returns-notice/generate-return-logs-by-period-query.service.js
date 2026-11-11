@@ -60,6 +60,11 @@ function _query(dueDateCondition, noticeType, quarterly) {
     AND rl.due_date ${dueDateCondition}
   `
 
+  if (featureFlagsConfig.alternateReturnInvitationPeriods) {
+    query += `  AND rl.end_date < CURRENT_DATE
+  `
+  }
+
   if (noticeType === NoticeType.INVITATIONS && !featureFlagsConfig.alternateReturnInvitationPeriods) {
     query += `  AND rl.quarterly = ${quarterly}
   `
