@@ -35,6 +35,7 @@ async function _fetch(licenceVersionId) {
     .findById(licenceVersionId)
     .select([
       'application_number',
+      'criticalityDescription',
       'id',
       'issue_date',
       'startDate',

@@ -97,6 +97,7 @@ describe('Licence Versions - Fetch licence version dal', () => {
             name: 'Example Trading Ltd'
           },
           createdAt: licenceVersion.createdAt,
+          criticalityDescription: 'Less Critical',
           endDate: null,
           id: licenceVersion.id,
           issueDate: null,

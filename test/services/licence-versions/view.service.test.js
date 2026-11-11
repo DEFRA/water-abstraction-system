@@ -54,6 +54,7 @@ describe('Licence Versions - View service', () => {
         },
         changeType: 'licence issued',
         conditionTypes: [],
+        criticality: 'Less Critical',
         errorInDataEmail: 'notify@test.gov.uk',
         licenceDetails: {
           address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
