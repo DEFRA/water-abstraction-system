@@ -97,6 +97,8 @@ export async function licenceHolder(licenceSeedData, name, existingRegionId = nu
   const licenceVersion = await LicenceVersionHelper.add({
     addressId: address.id,
     companyId: company.id,
+    criticalityCode: 'LC',
+    criticalityDescription: 'Less Critical',
     endDate: licenceVersionEndDate,
     licenceId: licenceSeedData.licence.id
   })
