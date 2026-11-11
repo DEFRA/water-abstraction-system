@@ -51,6 +51,9 @@
     <li>
       <a class="govuk-link" href="#conditions">Conditions</a>
     </li>
+    <li>
+      <a class="govuk-link" href="#risk-class">Risk class</a>
+    </li>
   </ul>
 
   <section id="licence-details">
@@ -131,6 +134,24 @@
     </h2>
 
     {{ conditionsSummaryCards(conditionTypes, 'No conditions for this licence version.') }}
+  </section>
+
+  <section id="risk-class"></section>
+    <h2 class="govuk-heading-m govuk-!-margin-top-3">
+      Risk class
+    </h2>
+    {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      attributes: {
+        'data-test': 'risk-class'
+      },
+      rows: [
+        {
+          key: { text: 'Criticality' },
+          value: { html: '<span data-test="risk-class-criticality">' + criticality + '</span>', classes: "meta-data__value" }
+        }
+      ]
+    }) }}
   </section>
 
 {% endblock %}
