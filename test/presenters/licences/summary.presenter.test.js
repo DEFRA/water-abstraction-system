@@ -32,6 +32,7 @@ describe('Licences - Summary Presenter', () => {
       abstractionPoints: ['At National Grid Reference TL 23198 88603'],
       abstractionPointsCaption: 'Point of abstraction',
       activeSecondaryNav: 'summary',
+      criticality: 'Less Critical',
       endDate: null,
       issueDate: null,
       licenceEnded: false,
@@ -558,6 +559,44 @@ describe('Licences - Summary Presenter', () => {
   })
 
   describe('the "endDate" property', () => {
+    describe('when the current version is not null', () => {
+      describe('and the current version has a criticality description', () => {
+        it('returns the current version criticality description', () => {
+          const result = SummaryPresenter(licence, summary)
+
+          expect(result.criticality).toEqual('Less Critical')
+        })
+      })
+
+      describe('but the current version does not have a criticality description', () => {
+        beforeEach(() => {
+          summary.licenceVersions[0].criticalityDescription = null
+        })
+
+        it('returns "No Criticality class assigned"', () => {
+          const result = SummaryPresenter(licence, summary)
+
+          expect(result.criticality).toEqual('No Criticality class assigned')
+        })
+      })
+    })
+
+    describe('when the current version is null', () => {
+      beforeEach(() => {
+        summary.$currentVersion = () => {
+          return null
+        }
+      })
+
+      it('returns "No Criticality class assigned"', () => {
+        const result = SummaryPresenter(licence, summary)
+
+        expect(result.criticality).toEqual('No Criticality class assigned')
+      })
+    })
+  })
+
+  describe('the "endDate" property', () => {
     describe('when the licence expired date is null', () => {
       it('returns null', () => {
         const result = SummaryPresenter(licence, summary)
@@ -901,6 +940,7 @@ function _summary() {
     licenceVersions: [
       {
         id: generateUUID(),
+        criticalityDescription: 'Less Critical',
         startDate: new Date('2022-04-01'),
         status: 'current',
         company,

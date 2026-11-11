@@ -32,6 +32,7 @@ export default function summaryPresenter(licence, summary) {
     abstractionPoints,
     abstractionPointsCaption: _abstractionPointsCaption(abstractionPoints),
     activeSecondaryNav: 'summary',
+    criticality: _criticality(summary),
     endDate: _endDate(expiredDate),
     issueDate: _issueDate(summary, issueDate),
     licenceEnded: licence.$ended(),
@@ -121,6 +122,16 @@ function _abstractionPoints(licenceVersionPurposes) {
 
 function _abstractionPointsCaption(abstractionPoints) {
   return abstractionPoints.length > 1 ? 'Points of abstraction' : 'Point of abstraction'
+}
+
+function _criticality(summary) {
+  const currentVersion = summary.$currentVersion()
+
+  if (currentVersion?.criticalityDescription) {
+    return currentVersion.criticalityDescription
+  }
+
+  return 'No Criticality class assigned'
 }
 
 function _endDate(expiredDate) {

@@ -71,6 +71,8 @@ describe('Licences - Fetch Summary service', () => {
     })
 
     licenceVersion = await LicenceVersionHelper.add({
+      criticalityCode: 'LC',
+      criticalityDescription: 'Less Critical',
       companyId: company.id,
       increment: 0,
       issue: 101,
@@ -191,6 +193,7 @@ describe('Licences - Fetch Summary service', () => {
         licenceVersions: [
           {
             id: licenceVersion.id,
+            criticalityDescription: 'Less Critical',
             issueDate: null,
             licenceId: licence.id,
             startDate: new Date('2022-05-01'),

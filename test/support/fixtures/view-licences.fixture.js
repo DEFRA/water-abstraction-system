@@ -90,6 +90,8 @@ function licenceVersion() {
       id: generateUUID(),
       name: 'ORDER OF THE PHOENIX'
     },
+    criticalityCode: 'LC',
+    criticalityDescription: 'Less Critical',
     createdAt: new Date('2022-01-01'),
     endDate: null,
     id: generateUUID(),
