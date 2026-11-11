@@ -27,7 +27,6 @@ The project is a single web service using server-side rendering.
 ## Project paths quick reference
 
 ```text
-.agents/              # Agent configuration
 .github/
 ├── workflows         # GitHub workflows
 .vscode/              # VSCode settings and tasks. Ignored by git
@@ -92,37 +91,6 @@ docker compose exec dev /bin/bash
 
 ## Agentic configuration
 
-### Agents
+Agents, personas and skills are shared with the engine. Read `node_modules/water-abstraction-engine/AGENTS.md` from "Agentic configuration" onwards. All `.agents/` paths in it, and in the files it points to, are relative to `node_modules/water-abstraction-engine/`.
 
-Our agents are defined in `.agents`. They are model-agnostic and intended to work well with any LLM. When updating these files:
-
-- Use plain language, not prompt patterns specific to one provider
-- Do not rely on system-prompt features that only some models support
-- Assume the consumer pastes the content directly into any chat interface
-
-You may use whichever model you have access to for any given task. Stronger models are better for complex reasoning (architecture, debugging); faster/cheaper models are fine for mechanical tasks (sorting, formatting, renaming).
-
-### Personas
-
-- Our personas define _how_ an agent should behave (tone, role, personality)
-- They are intended to be used in conjunction with agents and skills, for example, "review as Alan"
-
-### Skills
-
-- Our skills are intended to give our agents defined capabilities and expertise
-- They can provide specialised knowledge and instructions on how to carry out certain tasks
-- They are defined using [Agent Skills open standard](https://agentskills.io/specification)
-
-## Instruction precedence
-
-- `AGENTS.md` defines global project rules and execution constraints
-- Files in `.agents/` define task-specific behaviour for agents, personas, and skills
-- If guidance overlaps, follow both where possible; if there is conflict, prefer `AGENTS.md`
-
-## Invocation examples
-
-- Use the reviewer agent: "Use `.agents/code-reviewer.agent.md` to review my current changes"
-- Run an Alan review: "Read `.agents/personas/alan.md` and review as Alan"
-- Apply commit guidance: "Read `.agents/skills/commits/SKILL.md` before committing"
-- Apply standards guidance: "Read `.agents/skills/standards/SKILL.md` before editing"
-- Get ticket context: "Read `.agents/skills/tools/jira/SKILL.md` and get context for WATER-<number>"
+If guidance conflicts, this `AGENTS.md` wins.
