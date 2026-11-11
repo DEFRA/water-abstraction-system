@@ -60,6 +60,7 @@ describe('Licences - View Summary service', () => {
             href: '/',
             text: 'Go back to search'
           },
+          criticality: 'No Criticality class assigned',
           currentVersion: 'The current version of the licence starting 1 April 2019',
           endDate: null,
           issueDate: null,
