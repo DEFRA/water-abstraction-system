@@ -2,9 +2,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 
 // Thing under test
 import RenewalNotificationsPresenter from '../../../../src/presenters/notices/setup/renewal-notifications.presenter.js'
@@ -58,9 +58,9 @@ describe('Notices - Setup - Renewal Notifications presenter', () => {
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          name: 'Renewal licence holder',
           expiryDate: '1 January 2022',
           licenceRef: recipients[1].licence_refs[0],
+          name: 'Renewal licence holder',
           renewalDate: '3 November 2021'
         },
         status: 'pending',

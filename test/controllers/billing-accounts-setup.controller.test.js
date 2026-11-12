@@ -5,8 +5,8 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import http2 from 'node:http2'
 
 import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
 import * as InitiateSessionService from '../../src/services/billing-accounts/setup/initiate-session.service.js'
@@ -684,12 +684,12 @@ describe('Billing Accounts Setup controller', () => {
 
 function _getRequestOptions(path) {
   return {
-    method: 'GET',
-    url: path,
     auth: {
-      strategy: 'session',
-      credentials: { scope: ['manage_billing_accounts'] }
-    }
+      credentials: { scope: ['manage_billing_accounts'] },
+      strategy: 'session'
+    },
+    method: 'GET',
+    url: path
   }
 }
 

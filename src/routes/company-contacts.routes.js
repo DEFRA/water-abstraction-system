@@ -1,3 +1,9 @@
+/**
+ * Routes for the /company-contacts endpoints
+ *
+ * @module CompanyContactsRoutes
+ */
+
 import {
   submitRemoveCompanyContact,
   viewCommunications,
@@ -8,40 +14,40 @@ import {
 export default [
   {
     method: 'GET',
-    path: '/company-contacts/{id}/communications',
     options: {
       handler: viewCommunications
-    }
+    },
+    path: '/company-contacts/{id}/communications'
   },
   {
     method: 'GET',
-    path: '/company-contacts/{id}/contact-details',
     options: {
       handler: viewContactDetails
-    }
+    },
+    path: '/company-contacts/{id}/contact-details'
   },
   {
     method: 'GET',
-    path: '/company-contacts/{id}/remove',
     options: {
-      handler: viewRemoveCompanyContact,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewRemoveCompanyContact
+    },
+    path: '/company-contacts/{id}/remove'
   },
   {
     method: 'POST',
-    path: '/company-contacts/{id}/remove',
     options: {
-      handler: submitRemoveCompanyContact,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitRemoveCompanyContact
+    },
+    path: '/company-contacts/{id}/remove'
   }
 ]

@@ -17,8 +17,8 @@ import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 export default function selectValidator(payload) {
   const schema = Joi.object({
     addresses: Joi.string().required().invalid('select').messages({
-      'any.required': 'Select an address',
-      'any.invalid': 'Select an address'
+      'any.invalid': 'Select an address',
+      'any.required': 'Select an address'
     })
   })
 

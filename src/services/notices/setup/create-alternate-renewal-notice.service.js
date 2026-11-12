@@ -5,8 +5,8 @@
  */
 
 import EventModel from 'water-abstraction-engine/models/event.model.js'
-import { NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { generateNoticeReferenceCode, timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
+import { NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import CreateNotificationsService from './create-notifications.service.js'
 import FetchAlternateRenewalRecipientsDal from '../../../dal/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.dal.js'

@@ -5,8 +5,8 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import http2 from 'node:http2'
 
 import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
-import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
 import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
+import { generateNoticeReferenceCode } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
 import * as IndexNoticesService from '../../src/services/notices/index-notices.service.js'
@@ -50,12 +50,12 @@ describe('Notices controller', () => {
       describe('with no pagination', () => {
         beforeEach(() => {
           options = {
-            method: 'GET',
-            url: '/notices',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['returns'] }
-            }
+              credentials: { scope: ['returns'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/notices'
           }
 
           const pageData = _noticesPageData()
@@ -75,12 +75,12 @@ describe('Notices controller', () => {
       describe('with pagination', () => {
         beforeEach(() => {
           options = {
-            method: 'GET',
-            url: '/notices?page=2',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['returns'] }
-            }
+              credentials: { scope: ['returns'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/notices?page=2'
           }
 
           const pageData = _noticesPageData()
@@ -167,12 +167,12 @@ describe('Notices controller', () => {
       describe('with no pagination', () => {
         beforeEach(() => {
           options = {
-            method: 'GET',
-            url: '/notices/ed9e8145-8f2b-4561-b200-d3ee95d30938',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['returns'] }
-            }
+              credentials: { scope: ['returns'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/notices/ed9e8145-8f2b-4561-b200-d3ee95d30938'
           }
 
           const pageData = _noticePageData()
@@ -192,12 +192,12 @@ describe('Notices controller', () => {
       describe('with pagination', () => {
         beforeEach(() => {
           options = {
-            method: 'GET',
-            url: '/notices/ed9e8145-8f2b-4561-b200-d3ee95d30938?page=2',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['returns'] }
-            }
+              credentials: { scope: ['returns'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/notices/ed9e8145-8f2b-4561-b200-d3ee95d30938?page=2'
           }
 
           const pageData = _noticePageData()
@@ -296,22 +296,22 @@ function _noticePageData(error = false) {
     },
     notifications: [
       {
-        recipient: ['shaw.carol@atari.com'],
         licenceRefs: ['01/124'],
         messageType: 'email',
+        recipient: ['shaw.carol@atari.com'],
         status: 'error'
       }
     ],
     numberShowing: 2,
     pageTitle: 'Warning alert',
     pageTitleCaption: `Notice ${reference}`,
-    reference,
-    status: 'error',
     pagination: {
       currentPageNumber: 1,
       numberOfPages: 1,
       showingMessage: 'Showing all 1 notifications'
     },
+    reference,
+    status: 'error',
     totalNumber: 1
   }
 

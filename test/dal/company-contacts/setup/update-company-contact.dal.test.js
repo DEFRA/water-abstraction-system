@@ -46,10 +46,10 @@ describe('Company Contacts - Update Company Contact dal', () => {
     user = UserHelper.select()
 
     updatedCompanyContact = {
-      id: companyContact.id,
       abstractionAlerts: true,
       contactId: contact.id,
       email: 'rachael.tyrell@tyrellcorp.com',
+      id: companyContact.id,
       name: 'Rachael Tyrell',
       updatedBy: user.id
     }
@@ -72,15 +72,15 @@ describe('Company Contacts - Update Company Contact dal', () => {
         .withGraphFetched('contact')
 
       expect(updatedCompanyContactResult).toMatchObject({
-        id: companyContact.id,
-        abstractionAlerts: true,
         abstractionAlertLicences: null,
+        abstractionAlerts: true,
         companyId: companyContact.companyId,
         contactId: contact.id,
         createdAt: seedDate,
         createdBy: null,
         default: false,
         deletedAt: null,
+        id: companyContact.id,
         licenceRoleId: licenceRole.id,
         startDate: new Date('2022-04-01'),
         updatedAt: today,

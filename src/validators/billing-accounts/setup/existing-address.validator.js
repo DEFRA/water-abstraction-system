@@ -20,8 +20,8 @@ export default function existingAddressValidator(payload, name) {
 
   const schema = Joi.object({
     addressSelected: Joi.alternatives().try(Joi.string().valid('new'), Joi.string().uuid()).required().messages({
-      'any.required': errorMessage,
       'any.only': errorMessage,
+      'any.required': errorMessage,
       'string.empty': errorMessage
     })
   })

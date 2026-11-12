@@ -104,10 +104,10 @@ async function _fetch(billingAccountId, licenceId, financialYearEnding, twoPartT
     .innerJoin('billRuns', 'bills.billRunId', 'billRuns.id')
     .where({
       'billLicences.licenceId': licenceId,
-      'bills.billingAccountId': billingAccountId,
-      'bills.financialYearEnding': financialYearEnding,
+      'billRuns.scheme': 'sroc',
       'billRuns.status': 'sent',
-      'billRuns.scheme': 'sroc'
+      'bills.billingAccountId': billingAccountId,
+      'bills.financialYearEnding': financialYearEnding
     })
     .whereIn('billRuns.batchType', batchTypes)
 }

@@ -33,8 +33,8 @@ describe('Bill Runs - Setup - Type service', () => {
         activeNavBar: 'bill-runs',
         backlink: '/system/bill-runs',
         pageTitle: 'Select the bill run type',
-        sessionId: session.id,
-        selectedType: 'annual'
+        selectedType: 'annual',
+        sessionId: session.id
       })
     })
   })

@@ -36,7 +36,7 @@ describe('View Return Submissions presenter', () => {
 
     describe('when the return submission is a previous version', () => {
       beforeEach(() => {
-        testReturnSubmission = _createSubmission({ version: 2, current: false })
+        testReturnSubmission = _createSubmission({ current: false, version: 2 })
       })
 
       it('returns the expected result', () => {
@@ -60,7 +60,7 @@ describe('View Return Submissions presenter', () => {
 
     describe('when the return submission is a previous version', () => {
       beforeEach(() => {
-        testReturnSubmission = _createSubmission({ version: 2, current: false })
+        testReturnSubmission = _createSubmission({ current: false, version: 2 })
       })
 
       it('returns the expected result', () => {
@@ -241,8 +241,8 @@ describe('View Return Submissions presenter', () => {
         expect(result.tableData.rows).toHaveLength(28)
         // We use include() as a row can also include a reading key which we don't care about for volumes
         expect(result.tableData.rows[0]).toMatchObject({
-          reading: 1001,
-          date: '1 February 2025'
+          date: '1 February 2025',
+          reading: 1001
         })
       })
 
@@ -342,7 +342,7 @@ function _createSubmission({
   version = 1,
   current = true
 } = {}) {
-  const testReturnSubmission = _createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, { version, current })
+  const testReturnSubmission = _createInstance(ReturnSubmissionModel, ReturnSubmissionHelper, { current, version })
 
   testReturnSubmission.returnLog = _createInstance(ReturnLogModel, ReturnLogHelper, { returnsFrequency })
 
@@ -351,17 +351,17 @@ function _createSubmission({
   // Create daily lines for February 2025 (which we are using for testing) and January & March 2025 (which are there to
   // ensure we are only picking up the lines for February)
   const months = {
-    January: {
-      monthNumber: 1,
-      days: 31
-    },
     February: {
-      monthNumber: 2,
-      days: 28
+      days: 28,
+      monthNumber: 2
+    },
+    January: {
+      days: 31,
+      monthNumber: 1
     },
     March: {
-      monthNumber: 3,
-      days: 31
+      days: 31,
+      monthNumber: 3
     }
   }
 
@@ -369,17 +369,18 @@ function _createSubmission({
 
   for (const month in months) {
     const { monthNumber, days } = months[month]
+
     for (let day = 1; day <= days; day++) {
       testReturnSubmission.returnSubmissionLines.push(
         _createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
+          endDate: new Date(`2025-${monthNumber}-${day}`),
+          quantity: 1000,
+          // Add an incrementing meter reading if specified
+          reading: readings ? BASE_READING + day : null,
           returnSubmissionId: testReturnSubmission.id,
           startDate: new Date(`2025-${monthNumber}-${day}`),
-          endDate: new Date(`2025-${monthNumber}-${day}`),
           timePeriod: 'day',
-          quantity: 1000,
-          userUnit,
-          // Add an incrementing meter reading if specified
-          reading: readings ? BASE_READING + day : null
+          userUnit
         })
       )
     }
@@ -387,21 +388,21 @@ function _createSubmission({
 
   // Create weekly lines for April 2025 (which we use for testing weekly returns)
   const weeks = [
-    { startDate: new Date('2025-03-30'), endDate: new Date('2025-04-05') },
-    { startDate: new Date('2025-04-06'), endDate: new Date('2025-04-12') },
-    { startDate: new Date('2025-04-13'), endDate: new Date('2025-04-19') },
-    { startDate: new Date('2025-04-20'), endDate: new Date('2025-04-26') },
-    { startDate: new Date('2025-04-27'), endDate: new Date('2025-05-03') }
+    { endDate: new Date('2025-04-05'), startDate: new Date('2025-03-30') },
+    { endDate: new Date('2025-04-12'), startDate: new Date('2025-04-06') },
+    { endDate: new Date('2025-04-19'), startDate: new Date('2025-04-13') },
+    { endDate: new Date('2025-04-26'), startDate: new Date('2025-04-20') },
+    { endDate: new Date('2025-05-03'), startDate: new Date('2025-04-27') }
   ]
 
   weeks.forEach(({ startDate, endDate }) => {
     testReturnSubmission.returnSubmissionLines.push(
       _createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
+        endDate,
+        quantity: 1000,
         returnSubmissionId: testReturnSubmission.id,
         startDate,
-        endDate,
         timePeriod: 'week',
-        quantity: 1000,
         userUnit
       })
     )

@@ -61,8 +61,8 @@ describe('Notifications - View Notification service', () => {
           paperForm: null,
           reference: notice.referenceCode,
           returnedDate: null,
-          sentDate: '2 April 2025',
           sentBy: notice.issuer,
+          sentDate: '2 April 2025',
           sentTo: notification.recipient,
           status: notification.status
         })
@@ -93,8 +93,8 @@ describe('Notifications - View Notification service', () => {
           paperForm: null,
           reference: null,
           returnedDate: null,
-          sentDate: '2 April 2025',
           sentBy: notice.issuer,
+          sentDate: '2 April 2025',
           sentTo: notification.recipient,
           status: notification.status
         })
@@ -126,8 +126,8 @@ describe('Notifications - View Notification service', () => {
           paperForm: null,
           reference: null,
           returnedDate: null,
-          sentDate: '2 April 2025',
           sentBy: notice.issuer,
+          sentDate: '2 April 2025',
           sentTo: notification.recipient,
           status: notification.status
         })
@@ -159,8 +159,8 @@ describe('Notifications - View Notification service', () => {
           paperForm: null,
           reference: null,
           returnedDate: null,
-          sentDate: '2 April 2025',
           sentBy: notice.issuer,
+          sentDate: '2 April 2025',
           sentTo: notification.recipient,
           status: notification.status
         })

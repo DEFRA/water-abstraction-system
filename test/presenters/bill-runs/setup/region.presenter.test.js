@@ -6,9 +6,9 @@ import RegionPresenter from '../../../../src/presenters/bill-runs/setup/region.p
 
 describe('Bill Runs - Setup - Region presenter', () => {
   const regions = [
-    { id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28', displayName: 'Riverlands' },
-    { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'Stormlands' },
-    { id: '3334054e-03b6-4696-9d74-62b8b76a3c64', displayName: 'Westerlands' }
+    { displayName: 'Riverlands', id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28' },
+    { displayName: 'Stormlands', id: '19a027c6-4aad-47d3-80e3-3917a4579a5b' },
+    { displayName: 'Westerlands', id: '3334054e-03b6-4696-9d74-62b8b76a3c64' }
   ]
 
   let session
@@ -16,8 +16,8 @@ describe('Bill Runs - Setup - Region presenter', () => {
   describe('when provided with a bill run setup session record', () => {
     beforeEach(() => {
       session = {
-        id: '98ad3a1f-8e4f-490a-be05-0aece6755466',
-        data: {}
+        data: {},
+        id: '98ad3a1f-8e4f-490a-be05-0aece6755466'
       }
     })
 
@@ -29,8 +29,8 @@ describe('Bill Runs - Setup - Region presenter', () => {
           backlink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/type',
           pageTitle: 'Select the region',
           regions,
-          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
-          selectedRegion: null
+          selectedRegion: null,
+          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466'
         })
       })
     })
@@ -47,8 +47,8 @@ describe('Bill Runs - Setup - Region presenter', () => {
           backlink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/type',
           pageTitle: 'Select the region',
           regions,
-          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
-          selectedRegion: 'Stormlands'
+          selectedRegion: 'Stormlands',
+          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466'
         })
       })
     })

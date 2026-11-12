@@ -55,9 +55,9 @@ describe('Determine Return Log Flags Service', () => {
       describe('and the return started before the 1st of April 2022 (sroc)', () => {
         beforeAll(async () => {
           returnLog = await ReturnLogHelper.add({
+            endDate: new Date('2022-03-31'),
             licenceRef: licence.licenceRef,
-            startDate: new Date('2021-04-01'),
-            endDate: new Date('2022-03-31')
+            startDate: new Date('2021-04-01')
           })
         })
 
@@ -113,9 +113,9 @@ describe('Determine Return Log Flags Service', () => {
       describe('and the return started before the 1st of April 2022 (sroc)', () => {
         beforeAll(async () => {
           returnLog = await ReturnLogHelper.add({
+            endDate: new Date('2022-03-31'),
             licenceRef: licence.licenceRef,
-            startDate: new Date('2021-04-01'),
-            endDate: new Date('2022-03-31')
+            startDate: new Date('2021-04-01')
           })
         })
 

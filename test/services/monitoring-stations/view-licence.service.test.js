@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateUUID, generateUserId } from 'water-abstraction-engine/test/generators.js'
+import { generateUserId, generateUUID } from 'water-abstraction-engine/test/generators.js'
 import LicenceFixture from '../../support/fixtures/licence.fixture.js'
 
 // Things we need to stub
@@ -30,9 +30,6 @@ describe('Monitoring Stations - View Licence service', () => {
       {
         createdAt: new Date('2025-08-07T13:49:42.953Z'),
         id: generateUUID(),
-        restrictionType: 'reduce',
-        thresholdUnit: 'm3/s',
-        thresholdValue: 500,
         latestNotification: {
           addressLine1: null,
           createdAt: '2025-08-26T21:22:05',
@@ -42,6 +39,9 @@ describe('Monitoring Stations - View Licence service', () => {
           sendingAlertType: 'resume'
         },
         licenceVersionPurposeCondition: null,
+        restrictionType: 'reduce',
+        thresholdUnit: 'm3/s',
+        thresholdValue: 500,
         user: {
           id: generateUserId(),
           username: 'environment.officer@wrls.gov.uk'
@@ -50,14 +50,10 @@ describe('Monitoring Stations - View Licence service', () => {
       {
         createdAt: new Date('2025-08-06T13:49:42.951Z'),
         id: generateUUID(),
-        restrictionType: 'stop',
-        thresholdUnit: 'm3/s',
-        thresholdValue: 100,
         latestNotification: null,
         licenceVersionPurposeCondition: {
           externalId: '9:99305:1:1234',
           id: generateUUID(),
-          notes: 'This is the effect of restriction',
           licenceVersionPurpose: {
             id: generateUUID(),
             licenceVersion: {
@@ -66,10 +62,14 @@ describe('Monitoring Stations - View Licence service', () => {
             }
           },
           licenceVersionPurposeConditionType: {
-            id: generateUUID(),
-            displayTitle: 'Rates m3 per day'
-          }
+            displayTitle: 'Rates m3 per day',
+            id: generateUUID()
+          },
+          notes: 'This is the effect of restriction'
         },
+        restrictionType: 'stop',
+        thresholdUnit: 'm3/s',
+        thresholdValue: 100,
         user: {
           id: generateUserId(),
           username: 'environment.officer@wrls.gov.uk'

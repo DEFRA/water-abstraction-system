@@ -51,12 +51,12 @@ describe('Return Versions controller', () => {
       describe('when the request succeeds', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject({
-            method: 'GET',
-            url: `/return-versions/${id}/`,
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['view_charge_versions'] }
-            }
+              credentials: { scope: ['view_charge_versions'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: `/return-versions/${id}/`
           })
 
           expect(response.statusCode).toEqual(HTTP_STATUS_OK)

@@ -80,7 +80,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ titleText: 'Updated', text: 'Reporting details changed' })
+          expect(notification).toEqual({ text: 'Reporting details changed', titleText: 'Updated' })
         })
       })
     })
@@ -95,9 +95,9 @@ describe('Return Logs Setup - Submit Reported service', () => {
 
         expect(result).toMatchObject({
           backLink: { href: `/system/return-logs/setup/${session.id}/submission`, text: 'Back' },
-          reported: null,
           pageTitle: 'How was this return reported?',
-          pageTitleCaption: 'Return reference 12345'
+          pageTitleCaption: 'Return reference 12345',
+          reported: null
         })
       })
 

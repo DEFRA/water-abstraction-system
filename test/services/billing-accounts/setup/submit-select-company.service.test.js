@@ -3,8 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
-import * as FetchCompaniesService from '../../../../src/services/billing-accounts/setup/fetch-companies.service.js'
 import BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import * as FetchCompaniesService from '../../../../src/services/billing-accounts/setup/fetch-companies.service.js'
 
 // Things we need to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
@@ -22,6 +22,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       title: 'ENVIRONMENT AGENCY'
     }
   ]
+
   let payload
   let session
   let sessionData
@@ -69,8 +70,8 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     describe('and the user has returned to the page and made the same choice', () => {
       beforeEach(() => {
         sessionData = {
-          companiesHouseNumber,
-          billingAccount
+          billingAccount,
+          companiesHouseNumber
         }
 
         session = SessionModelStub(sessionData)
@@ -99,9 +100,9 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     describe('and the user has returned to the page from the check page and made the same choice', () => {
       beforeEach(() => {
         sessionData = {
-          companiesHouseNumber,
           billingAccount,
-          checkPageVisited: true
+          checkPageVisited: true,
+          companiesHouseNumber
         }
 
         session = SessionModelStub(sessionData)
@@ -113,8 +114,8 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
         await SubmitSelectCompanyService(session.id, payload)
 
         expect(session).toMatchObject({
-          companiesHouseNumber: payload.companiesHouseNumber,
-          checkPageVisited: true
+          checkPageVisited: true,
+          companiesHouseNumber: payload.companiesHouseNumber
         })
       })
 
@@ -130,8 +131,8 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     describe('and the user selects a different company', () => {
       beforeEach(() => {
         sessionData = {
-          billingAccount,
           addressSelected: 'another',
+          billingAccount,
           contactName: 'Contact Name',
           contactSelected: 'new',
           fao: 'yes'
@@ -177,13 +178,13 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       const result = await SubmitSelectCompanyService(session.id, payload)
 
       expect(result.error).toEqual({
+        companiesHouseNumber: { text: 'Select a company from the list' },
         errorList: [
           {
             href: '#companiesHouseNumber',
             text: 'Select a company from the list'
           }
-        ],
-        companiesHouseNumber: { text: 'Select a company from the list' }
+        ]
       })
     })
   })

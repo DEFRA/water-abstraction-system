@@ -85,6 +85,7 @@ function _submittedSessionData(session, payload) {
   session.receivedDateOptions = payload.receivedDateOptions ?? null
 
   const data = ReceivedPresenter(session)
+
   return data
 }
 

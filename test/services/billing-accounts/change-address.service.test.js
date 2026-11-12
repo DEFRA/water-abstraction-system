@@ -39,7 +39,7 @@ describe('Change address service', () => {
 
     describe('and only an address is provided', () => {
       beforeEach(() => {
-        address = { addressLine1: '1 Matrix Rd', town: 'Testington', postcode: 'JC1 1BC' }
+        address = { addressLine1: '1 Matrix Rd', postcode: 'JC1 1BC', town: 'Testington' }
       })
 
       it('creates the billing account address and address records and handles the null agent and contact', async () => {
@@ -61,8 +61,8 @@ describe('Change address service', () => {
           address = {
             addressLine1: 'NATURAL ENGLAND',
             addressLine2: 'HORIZON HOUSE',
-            town: 'BRISTOL',
             postcode: 'BS1 5AH',
+            town: 'BRISTOL',
             uprn: generateUprn()
           }
         })
@@ -116,7 +116,7 @@ describe('Change address service', () => {
 
       describe('was entered manually (does not have a UPRN)', () => {
         beforeEach(() => {
-          address = { addressLine1: '2 Matrix Rd', town: 'Testington', postcode: 'JC2 2BC' }
+          address = { addressLine1: '2 Matrix Rd', postcode: 'JC2 2BC', town: 'Testington' }
         })
 
         it('creates a new address record', async () => {
@@ -167,12 +167,12 @@ describe('Change address service', () => {
 
     describe('and the company provided', () => {
       beforeEach(() => {
-        address = { addressLine1: '3 Matrix Rd', town: 'Testington', postcode: 'JC3 3BC' }
+        address = { addressLine1: '3 Matrix Rd', postcode: 'JC3 3BC', town: 'Testington' }
         agentCompany = {
-          type: 'organisation',
-          name: 'SCP Foundation',
           companyNumber: generateCompanyNumber(),
-          organisationType: 'limitedCompany'
+          name: 'SCP Foundation',
+          organisationType: 'limitedCompany',
+          type: 'organisation'
         }
       })
 
@@ -251,14 +251,14 @@ describe('Change address service', () => {
 
     describe('and the contact is provided', () => {
       beforeEach(() => {
-        address = { addressLine1: '4 Matrix Rd', town: 'Testington', postcode: 'JC4 4BC' }
+        address = { addressLine1: '4 Matrix Rd', postcode: 'JC4 4BC', town: 'Testington' }
       })
 
       describe('is a department', () => {
         beforeEach(() => {
           contact = {
-            type: 'department',
-            department: 'Humanoid Risk Assessment'
+            department: 'Humanoid Risk Assessment',
+            type: 'department'
           }
         })
 
@@ -282,9 +282,9 @@ describe('Change address service', () => {
       describe('is an individual', () => {
         beforeEach(() => {
           contact = {
-            type: 'person',
             firstName: 'Margarita',
-            lastName: 'Villa'
+            lastName: 'Villa',
+            type: 'person'
           }
         })
 
@@ -312,7 +312,7 @@ describe('Change address service', () => {
       let existingBillingAccountAddress
 
       beforeEach(() => {
-        address = { addressLine1: '5 Matrix Rd', town: 'Testington', postcode: 'JC5 5BC' }
+        address = { addressLine1: '5 Matrix Rd', postcode: 'JC5 5BC', town: 'Testington' }
 
         const testDate = new Date(2023, 8, 4, 10, 31, 57, 2)
 
@@ -330,8 +330,8 @@ describe('Change address service', () => {
 
           existingBillingAccountAddress = await BillingAccountAddressHelper.add({
             billingAccountId: billingAccount.id,
-            startDate,
             createdAt: timestamp,
+            startDate,
             updatedAt: timestamp
           })
         })
@@ -360,8 +360,8 @@ describe('Change address service', () => {
 
           existingBillingAccountAddress = await BillingAccountAddressHelper.add({
             billingAccountId: billingAccount.id,
-            startDate,
             createdAt: timestamp,
+            startDate,
             updatedAt: timestamp
           })
         })
@@ -411,16 +411,16 @@ describe('Change address service', () => {
 
   describe('when persisting the changes fails', () => {
     beforeEach(() => {
-      address = { addressLine1: '1 Worlds End', town: 'Testington', postcode: 'ZZ9 9JC' }
+      address = { addressLine1: '1 Worlds End', postcode: 'ZZ9 9JC', town: 'Testington' }
       agentCompany = {
-        type: 'organisation',
-        name: 'WRLS Team',
         companyNumber: generateCompanyNumber(),
-        organisationType: 'limitedCompany'
+        name: 'WRLS Team',
+        organisationType: 'limitedCompany',
+        type: 'organisation'
       }
       contact = {
-        type: 'department',
-        department: 'Bean Counting'
+        department: 'Bean Counting',
+        type: 'department'
       }
 
       // We just need something within the transaction to go bang. `fromJson() is ideal because a) we can stub it!, and

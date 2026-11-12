@@ -1,3 +1,9 @@
+/**
+ * Routes for the /notices/setup endpoints
+ *
+ * @module NoticesSetupRoutes
+ */
+
 import {
   processAddRecipient,
   processDownloadRecipients,
@@ -50,566 +56,566 @@ import {
 export default [
   {
     method: 'GET',
-    path: '/notices/setup/{journey}',
     options: {
-      handler: setup,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: setup
+    },
+    path: '/notices/setup/{journey}'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-email-address',
     options: {
-      handler: viewAlertEmailAddress,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewAlertEmailAddress
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-email-address'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-email-address',
     options: {
-      handler: submitAlertEmailAddress,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitAlertEmailAddress
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-email-address'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds',
     options: {
-      handler: viewAlertThresholds,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewAlertThresholds
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds',
     options: {
-      handler: submitAlertThresholds,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitAlertThresholds
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type',
     options: {
-      handler: viewAlertType,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewAlertType
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type',
     options: {
-      handler: submitAlertType,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitAlertType
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/cancel',
     options: {
-      handler: viewCancelAlerts,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewCancelAlerts
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/cancel'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/cancel',
     options: {
-      handler: submitCancelAlerts,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitCancelAlerts
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/cancel'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
     options: {
-      handler: viewCheckLicenceMatches,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewCheckLicenceMatches
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
     options: {
-      handler: submitCheckLicenceMatches,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitCheckLicenceMatches
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches/filter',
     options: {
-      handler: submitCheckLicenceMatchesFilter,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitCheckLicenceMatchesFilter
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches/filter'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}',
     options: {
-      handler: processRemoveThreshold,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: processRemoveThreshold
+    },
+    path: '/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/add-recipient',
     options: {
-      handler: processAddRecipient,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: processAddRecipient
+    },
+    path: '/notices/setup/{sessionId}/add-recipient'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/cancel',
     options: {
-      handler: viewCancel,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: viewCancel
+    },
+    path: '/notices/setup/{sessionId}/cancel'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/cancel',
     options: {
-      handler: submitCancel,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: submitCancel
+    },
+    path: '/notices/setup/{sessionId}/cancel'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/check',
     options: {
-      handler: viewCheck,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: viewCheck
+    },
+    path: '/notices/setup/{sessionId}/check'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/check',
     options: {
-      handler: submitCheck,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: submitCheck
+    },
+    path: '/notices/setup/{sessionId}/check'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/check-notice-type',
     options: {
-      handler: viewCheckNoticeType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: viewCheckNoticeType
+    },
+    path: '/notices/setup/{sessionId}/check-notice-type'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/check-notice-type',
     options: {
-      handler: submitCheckNoticeType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: submitCheckNoticeType
+    },
+    path: '/notices/setup/{sessionId}/check-notice-type'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{eventId}/confirmation',
     options: {
-      handler: viewConfirmation,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications', 'hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewConfirmation
+    },
+    path: '/notices/setup/{eventId}/confirmation'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/contact-type',
     options: {
-      handler: viewContactType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: viewContactType
+    },
+    path: '/notices/setup/{sessionId}/contact-type'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/contact-type',
     options: {
-      handler: submitContactType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: submitContactType
+    },
+    path: '/notices/setup/{sessionId}/contact-type'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/download',
     options: {
-      handler: processDownloadRecipients,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: processDownloadRecipients
+    },
+    path: '/notices/setup/{sessionId}/download'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/invitation-period',
     options: {
-      handler: viewInvitationPeriod,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: viewInvitationPeriod
+    },
+    path: '/notices/setup/{sessionId}/invitation-period'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/invitation-period',
     options: {
-      handler: submitInvitationPeriod,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: submitInvitationPeriod
+    },
+    path: '/notices/setup/{sessionId}/invitation-period'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/licence',
     options: {
-      handler: viewLicence,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: viewLicence
+    },
+    path: '/notices/setup/{sessionId}/licence'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/licence',
     options: {
-      handler: submitLicence,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: submitLicence
+    },
+    path: '/notices/setup/{sessionId}/licence'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/notice-type',
     options: {
-      handler: viewNoticeType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: viewNoticeType
+    },
+    path: '/notices/setup/{sessionId}/notice-type'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/notice-type',
     options: {
-      handler: submitNoticeType,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: submitNoticeType
+    },
+    path: '/notices/setup/{sessionId}/notice-type'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/paper-return',
     options: {
-      handler: viewPaperReturn,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: viewPaperReturn
+    },
+    path: '/notices/setup/{sessionId}/paper-return'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/paper-return',
     options: {
-      handler: submitPaperReturn,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: submitPaperReturn
+    },
+    path: '/notices/setup/{sessionId}/paper-return'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}',
     options: {
-      handler: viewPreview,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: viewPreview
+    },
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/alert/{licenceMonitoringStationId}',
     options: {
-      handler: viewPreview,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewPreview
+    },
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/alert/{licenceMonitoringStationId}'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-alert',
     options: {
-      handler: viewPreviewCheckAlert,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewPreviewCheckAlert
+    },
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-alert'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return',
     options: {
-      handler: viewPreviewCheckPaperReturn,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: viewPreviewCheckPaperReturn
+    },
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnLogId}',
     options: {
-      handler: processPreviewPaperReturn,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: processPreviewPaperReturn
+    },
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnLogId}'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/recipient-name',
     options: {
-      handler: viewRecipientName,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: viewRecipientName
+    },
+    path: '/notices/setup/{sessionId}/recipient-name'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/recipient-name',
     options: {
-      handler: submitRecipientName,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: submitRecipientName
+    },
+    path: '/notices/setup/{sessionId}/recipient-name'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/reminder-period',
     options: {
-      handler: viewReminderPeriod,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: viewReminderPeriod
+    },
+    path: '/notices/setup/{sessionId}/reminder-period'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/reminder-period',
     options: {
-      handler: submitReminderPeriod,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: submitReminderPeriod
+    },
+    path: '/notices/setup/{sessionId}/reminder-period'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/remove-licences',
     options: {
-      handler: viewRemoveLicences,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: viewRemoveLicences
+    },
+    path: '/notices/setup/{sessionId}/remove-licences'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/remove-licences',
     options: {
-      handler: submitRemoveLicences,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: submitRemoveLicences
+    },
+    path: '/notices/setup/{sessionId}/remove-licences'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/returns-period',
     options: {
-      handler: viewReturnsPeriod,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: viewReturnsPeriod
+    },
+    path: '/notices/setup/{sessionId}/returns-period'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/returns-period',
     options: {
-      handler: submitReturnsPeriod,
       auth: {
         access: {
           scope: ['bulk_return_notifications']
         }
-      }
-    }
+      },
+      handler: submitReturnsPeriod
+    },
+    path: '/notices/setup/{sessionId}/returns-period'
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/select-recipients',
     options: {
-      handler: viewSelectRecipients,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: viewSelectRecipients
+    },
+    path: '/notices/setup/{sessionId}/select-recipients'
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/select-recipients',
     options: {
-      handler: submitSelectRecipients,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: submitSelectRecipients
+    },
+    path: '/notices/setup/{sessionId}/select-recipients'
   }
 ]

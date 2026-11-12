@@ -20,6 +20,7 @@ describe('Bill Runs - Setup - Create service', () => {
   let legacyCreateBillRunRequestStub
   let session
   let sessionData
+
   beforeEach(() => {
     legacyCreateBillRunRequestStub = vi.spyOn(LegacyCreateBillRunRequest, 'default').mockImplementation(() => {})
     vi.spyOn(StartBillRunProcessService, 'default').mockResolvedValue()
@@ -70,7 +71,7 @@ describe('Bill Runs - Setup - Create service', () => {
 
   describe('when the "blockingResults" determines only the "old" bill run should be triggered', () => {
     beforeEach(() => {
-      sessionData = { region: regionId, type: 'two_part_tariff', season: 'summer' }
+      sessionData = { region: regionId, season: 'summer', type: 'two_part_tariff' }
 
       session = SessionModelStub(sessionData)
 

@@ -69,8 +69,8 @@ describe('Bill Runs - Review - Submit Remove service', () => {
 
           expect(flashType).toEqual('notification')
           expect(bannerMessage).toEqual({
-            titleText: 'Licence removed',
-            text: 'Licence 1/11/11/*11/1111 removed from the bill run.'
+            text: 'Licence 1/11/11/*11/1111 removed from the bill run.',
+            titleText: 'Licence removed'
           })
         })
 
@@ -160,8 +160,8 @@ describe('Bill Runs - Review - Submit Remove service', () => {
 
           expect(flashType).toEqual('notification')
           expect(bannerMessage).toEqual({
-            titleText: 'Licence removed',
-            text: 'Licence 1/11/11/*11/1111 removed from the bill run.'
+            text: 'Licence 1/11/11/*11/1111 removed from the bill run.',
+            titleText: 'Licence removed'
           })
         })
 

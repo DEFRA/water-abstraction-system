@@ -32,6 +32,7 @@ export default async function createReturnLogsService(returnRequirement, returnC
 
 async function _persistReturnLogs(returnLogs, trx) {
   const createdIds = []
+
   for (const returnLog of returnLogs) {
     const timestamp = timestampForPostgres()
 

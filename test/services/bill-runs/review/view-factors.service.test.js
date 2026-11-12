@@ -29,13 +29,13 @@ describe('Bill Runs - Review - View Factors Service', () => {
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
-        pageTitle: 'Set the adjustment factors',
         amendedAggregate: 0.333333333,
         amendedChargeAdjustment: 1,
         chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
         chargePeriod: '1 April 2023 to 31 March 2024',
         financialPeriod: '2023 to 2024',
         otherAdjustments: ['Two part tariff agreement'],
+        pageTitle: 'Set the adjustment factors',
         reviewChargeReferenceId: '6b3d11f2-d361-4eaa-bce2-5561283bd023'
       })
     })

@@ -22,12 +22,12 @@ export default async function tokenRequest() {
 
 function _options() {
   return {
+    headers: {
+      authorization: `Basic ${_encodeAuthorisation()}`,
+      'content-type': 'application/x-www-form-urlencoded'
+    },
     searchParams: {
       grant_type: 'client_credentials'
-    },
-    headers: {
-      'content-type': 'application/x-www-form-urlencoded',
-      authorization: `Basic ${_encodeAuthorisation()}`
     }
   }
 }

@@ -15,8 +15,8 @@ import redisConfig from '../../config/redis.config.js'
 export default async function createRedisClientService() {
   return new Redis({
     host: redisConfig.host,
-    port: redisConfig.port,
     password: redisConfig.password,
+    port: redisConfig.port,
     ...(redisConfig.disableTls ? {} : { tls: {} }),
     // When a new Redis instance is created, it will connect to Redis server automatically. If you want to keep
     // disconnected until a command is called, you pass the lazyConnect option

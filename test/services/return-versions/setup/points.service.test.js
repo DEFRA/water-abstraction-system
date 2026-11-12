@@ -23,42 +23,42 @@ describe('Return Versions - Setup - Points service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z',
         waterUndertaker: false
       },
-      multipleUpload: false,
-      journey: 'returns-required',
-      requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
       licenceVersion: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        endDate: null,
-        startDate: '2022-04-01T00:00:00.000Z',
         copyableReturnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
-        ]
+        ],
+        endDate: null,
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        startDate: '2022-04-01T00:00:00.000Z'
       },
-      reason: 'major-change'
+      multipleUpload: false,
+      reason: 'major-change',
+      requirements: [{}],
+      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
+      startDateOptions: 'licenceStartDate'
     }
 
     session = SessionModelStub(sessionData)
@@ -92,8 +92,6 @@ describe('Return Versions - Setup - Points service', () => {
       const result = await SelectPointsService(session.id, requirementIndex)
 
       expect(result).toMatchObject({
-        pageTitle: 'Select the points for the requirements for returns',
-        pageTitleCaption: 'Licence 01/ABC',
         backLink: {
           href: `/system/return-versions/setup/${session.id}/purpose/0`,
           text: 'Back'
@@ -101,11 +99,13 @@ describe('Return Versions - Setup - Points service', () => {
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licencePoints: [
           {
-            id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
-            description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+            description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)',
+            id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'
           }
         ],
         licenceRef: '01/ABC',
+        pageTitle: 'Select the points for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
         selectedPointIds: ''
       })
     })

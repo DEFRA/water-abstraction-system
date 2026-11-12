@@ -20,10 +20,12 @@ describe('Job - Notifications - Process Notification Status service', () => {
   let noticeB
   let notifications
   let notifierStub
+
   beforeEach(async () => {
     notifications = []
 
     let notification
+
     // NOTE: We create multiple notifications a cross two notices so we can demonstrate that we are providing
     // UpdateEventService with a distinct list of notices to update, rather than passing it _every_ notice ID on _every_
     // notification being processed
@@ -134,9 +136,9 @@ function _transformNotificationToResult(notification) {
     licenceMonitoringStationId: notification.licenceMonitoringStationId,
     messageRef: notification.messageRef,
     messageType: notification.messageType,
+    notifyError: notification.notifyError,
     notifyId: notification.notifyId,
     notifyStatus: notification.notifyStatus,
-    notifyError: notification.notifyError,
     personalisation: notification.personalisation,
     returnLogIds: notification.returnLogIds,
     status: notification.status

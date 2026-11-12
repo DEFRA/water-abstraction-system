@@ -5,8 +5,8 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import http2 from 'node:http2'
 
 import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
-import { generateUUID } from 'water-abstraction-engine/lib/general.lib.js'
 import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
+import { generateUUID } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Things we need to stub
 import * as InitiateSessionService from '../../src/services/notices/setup/initiate-session.service.js'
@@ -63,7 +63,7 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Notices Setup controller', () => {
   const basePath = '/notices/setup'
-  const session = { id: 'e0c77b74-7326-493d-be5e-0d1ad41594b5', data: {} }
+  const session = { data: {}, id: 'e0c77b74-7326-493d-be5e-0d1ad41594b5' }
 
   let getOptions
   let postOptions
@@ -97,12 +97,12 @@ describe('Notices Setup controller', () => {
       describe('when the journey is "alerts"', () => {
         beforeEach(() => {
           getOptions = {
-            method: 'GET',
-            url: '/notices/setup/alerts?monitoringStationId=24d8ed70-e474-45bc-83db-90e34d5c34cf',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['hof_notifications'] }
-            }
+              credentials: { scope: ['hof_notifications'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/notices/setup/alerts?monitoringStationId=24d8ed70-e474-45bc-83db-90e34d5c34cf'
           }
 
           response = { path: 'abstraction-alerts/alert-type', sessionId: session.id }
@@ -127,12 +127,12 @@ describe('Notices Setup controller', () => {
       describe('when the journey is "standard"', () => {
         beforeEach(() => {
           getOptions = {
-            method: 'GET',
-            url: '/notices/setup/standard',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['bulk_return_notifications'] }
-            }
+              credentials: { scope: ['bulk_return_notifications'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/notices/setup/standard'
           }
 
           response = { path: 'returns-period', sessionId: session.id }
@@ -155,12 +155,12 @@ describe('Notices Setup controller', () => {
       describe('when the journey is "adhoc"', () => {
         beforeEach(() => {
           getOptions = {
-            method: 'GET',
-            url: '/notices/setup/adhoc',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['bulk_return_notifications'] }
-            }
+              credentials: { scope: ['bulk_return_notifications'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/notices/setup/adhoc'
           }
 
           response = { path: 'licence', sessionId: session.id }
@@ -186,12 +186,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/cancel`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/cancel`
         }
       })
 
@@ -205,6 +205,7 @@ describe('Notices Setup controller', () => {
           const response = await server.inject(getOptions)
 
           const pageData = _viewCancel()
+
           expect(response.statusCode).toEqual(HTTP_STATUS_OK)
           expect(response.payload).toContain(pageData.pageTitle)
           expect(response.payload).toContain(pageData.referenceCode)
@@ -233,12 +234,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/check`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/check`
         }
       })
       describe('when a request is valid', () => {
@@ -283,12 +284,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/check-notice-type`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/check-notice-type`
         }
       })
       describe('when a request is valid', () => {
@@ -334,12 +335,12 @@ describe('Notices Setup controller', () => {
         eventId = '123'
 
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${eventId}/confirmation`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${eventId}/confirmation`
         }
       })
       describe('when a request is valid', () => {
@@ -364,12 +365,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/download`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/download`
         }
       })
 
@@ -378,8 +379,8 @@ describe('Notices Setup controller', () => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
           vi.spyOn(ProcessDownloadRecipientsService, 'default').mockReturnValue({
             data: 'test',
-            type: 'type/csv',
-            filename: 'test.csv'
+            filename: 'test.csv',
+            type: 'type/csv'
           })
         })
 
@@ -400,12 +401,12 @@ describe('Notices Setup controller', () => {
       describe('GET', () => {
         beforeEach(() => {
           getOptions = {
-            method: 'GET',
-            url: basePath + `/${session.id}/abstraction-alerts/alert-email-address`,
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['hof_notifications'] }
-            }
+              credentials: { scope: ['hof_notifications'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/alert-email-address`
           }
 
           vi.spyOn(ViewAlertEmailAddressService, 'default').mockResolvedValue({
@@ -468,12 +469,12 @@ describe('Notices Setup controller', () => {
       describe('GET', () => {
         beforeEach(() => {
           getOptions = {
-            method: 'GET',
-            url: basePath + `/${session.id}/abstraction-alerts/alert-thresholds`,
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['hof_notifications'] }
-            }
+              credentials: { scope: ['hof_notifications'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/alert-thresholds`
           }
 
           vi.spyOn(ViewAlertThresholdsService, 'default').mockResolvedValue({
@@ -538,12 +539,12 @@ describe('Notices Setup controller', () => {
       describe('GET', () => {
         beforeEach(() => {
           getOptions = {
-            method: 'GET',
-            url: basePath + `/${session.id}/abstraction-alerts/alert-type`,
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['hof_notifications'] }
-            }
+              credentials: { scope: ['hof_notifications'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/alert-type`
           }
 
           vi.spyOn(ViewAlertTypeService, 'default').mockResolvedValue({
@@ -608,12 +609,12 @@ describe('Notices Setup controller', () => {
       describe('GET', () => {
         beforeEach(() => {
           getOptions = {
-            method: 'GET',
-            url: basePath + `/${session.id}/abstraction-alerts/cancel`,
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['hof_notifications'] }
-            }
+              credentials: { scope: ['hof_notifications'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/cancel`
           }
 
           vi.spyOn(ViewCancelAlertsService, 'default').mockResolvedValue({
@@ -657,12 +658,12 @@ describe('Notices Setup controller', () => {
       describe('GET', () => {
         beforeEach(() => {
           getOptions = {
-            method: 'GET',
-            url: basePath + `/${session.id}/abstraction-alerts/check-licence-matches`,
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['hof_notifications'] }
-            }
+              credentials: { scope: ['hof_notifications'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/check-licence-matches`
           }
 
           vi.spyOn(ViewCheckLicenceMatchesService, 'default').mockResolvedValue({
@@ -733,12 +734,12 @@ describe('Notices Setup controller', () => {
 
         beforeEach(() => {
           getOptions = {
-            method: 'GET',
-            url: basePath + `/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationId}`,
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['hof_notifications'] }
-            }
+              credentials: { scope: ['hof_notifications'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: basePath + `/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStationId}`
           }
 
           vi.spyOn(ProcessRemoveThresholdService, 'default').mockResolvedValue({})
@@ -762,12 +763,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/invitation-period`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/invitation-period`
         }
       })
 
@@ -859,12 +860,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/licence`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/licence`
         }
 
         vi.spyOn(ViewLicenceService, 'default').mockResolvedValue({
@@ -907,7 +908,6 @@ describe('Notices Setup controller', () => {
           ])
 
           vi.spyOn(SubmitLicenceService, 'default').mockResolvedValue({
-            licenceRef: null,
             error: {
               errorList: [
                 {
@@ -918,7 +918,8 @@ describe('Notices Setup controller', () => {
               licenceRef: {
                 text: 'Enter a licence number'
               }
-            }
+            },
+            licenceRef: null
           })
         })
 
@@ -939,12 +940,12 @@ describe('Notices Setup controller', () => {
 
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/preview/${contactHashId}`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/preview/${contactHashId}`
         }
 
         vi.spyOn(ViewPreviewService, 'default').mockResolvedValue({
@@ -970,12 +971,12 @@ describe('Notices Setup controller', () => {
 
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`
         }
 
         vi.spyOn(ViewPreviewService, 'default').mockResolvedValue({
@@ -1000,12 +1001,12 @@ describe('Notices Setup controller', () => {
 
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/preview/${contactHashId}/check-alert`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/preview/${contactHashId}/check-alert`
         }
 
         vi.spyOn(ViewPreviewCheckAlert, 'default').mockResolvedValue({
@@ -1030,12 +1031,12 @@ describe('Notices Setup controller', () => {
 
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/preview/${contactHashId}/check-paper-return`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/preview/${contactHashId}/check-paper-return`
         }
 
         vi.spyOn(ViewPreviewCheckPaperReturnService, 'default').mockResolvedValue({
@@ -1060,14 +1061,14 @@ describe('Notices Setup controller', () => {
 
       beforeEach(() => {
         getOptions = {
+          auth: {
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
           method: 'GET',
           url:
             basePath +
-            `/${session.id}/preview/938c2cc0dcc05f2b68c4287040cfcf71/paper-return/95b54f97-fefb-46e7-aae8-ebf40ecb8b50`,
-          auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            `/${session.id}/preview/938c2cc0dcc05f2b68c4287040cfcf71/paper-return/95b54f97-fefb-46e7-aae8-ebf40ecb8b50`
         }
 
         buffer = Buffer.from('mock file')
@@ -1094,12 +1095,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/notice-type`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/notice-type`
         }
 
         vi.spyOn(ViewNoticeTypeService, 'default').mockResolvedValue({
@@ -1162,12 +1163,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/recipient-name`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/recipient-name`
         }
       })
 
@@ -1231,12 +1232,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/reminder-period`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/reminder-period`
         }
       })
 
@@ -1328,12 +1329,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/remove-licences`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/remove-licences`
         }
       })
 
@@ -1399,12 +1400,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/returns-period`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/returns-period`
         }
       })
 
@@ -1470,12 +1471,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/paper-return`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/paper-return`
         }
       })
 
@@ -1542,12 +1543,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/select-recipients`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/select-recipients`
         }
       })
 
@@ -1610,12 +1611,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/contact-type`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/contact-type`
         }
       })
 
@@ -1702,12 +1703,12 @@ describe('Notices Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: basePath + `/${session.id}/add-recipient`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['bulk_return_notifications'] }
-          }
+            credentials: { scope: ['bulk_return_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: basePath + `/${session.id}/add-recipient`
         }
       })
 
@@ -1741,24 +1742,24 @@ function _viewCancel() {
 
 function _viewInvitationPeriod() {
   return {
-    pageTitle: 'Select the returns period for the invitations',
-    backLink: '/system/manage',
     activeNavBar: 'notices',
+    backLink: '/system/manage',
     invitationPeriods: [
       {
         checked: false,
         text: 'Summer 1 November 2025 to 31 October 2026',
         value: generateUUID()
       }
-    ]
+    ],
+    pageTitle: 'Select the returns period for the invitations'
   }
 }
 
 function _viewReminderPeriod() {
   return {
-    pageTitle: 'Select the returns period for the reminders',
-    backLink: '/system/manage',
     activeNavBar: 'notices',
+    backLink: '/system/manage',
+    pageTitle: 'Select the returns period for the reminders',
     reminderPeriods: [
       {
         checked: false,
@@ -1771,25 +1772,25 @@ function _viewReminderPeriod() {
 
 function _viewReturnsPeriod() {
   return {
-    pageTitle: 'Select the returns periods for the invitations',
-    backLink: '/system/manage',
     activeNavBar: 'notices',
+    backLink: '/system/manage',
+    pageTitle: 'Select the returns periods for the invitations',
     returnsPeriod: []
   }
 }
 
 function _viewRemoveLicence() {
   return {
-    pageTitle: 'Remove licences',
+    activeNavBar: 'notices',
     hint: 'hint to remove',
-    activeNavBar: 'notices'
+    pageTitle: 'Remove licences'
   }
 }
 
 function _viewCheck() {
   return {
-    pageTitle: 'Check the recipients',
-    activeNavBar: 'notices'
+    activeNavBar: 'notices',
+    pageTitle: 'Check the recipients'
   }
 }
 

@@ -8,9 +8,9 @@ import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 // Things we need to stub
 import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import BillRunError from '../../../../src/errors/bill-run.error.js'
 import * as ChargingModuleCreateTransactionRequest from '../../../../src/requests/charging-module/create-transaction.request.js'
 import * as GenerateTransactionsService from '../../../../src/services/bill-runs/generate-transactions.service.js'
-import BillRunError from '../../../../src/errors/bill-run.error.js'
 
 // Thing under test
 import ProcessBillingPeriodService from '../../../../src/services/bill-runs/annual/process-billing-period.service.js'
@@ -24,8 +24,8 @@ describe('Annual Process billing period service', () => {
 
   beforeEach(async () => {
     billRun = {
-      id: generateUUID(),
-      externalId: generateUUID()
+      externalId: generateUUID(),
+      id: generateUUID()
     }
 
     chargingModuleCreateTransactionRequestStub = vi
@@ -171,63 +171,38 @@ describe('Annual Process billing period service', () => {
 
 function _chargingModuleResponse(transactionId) {
   return {
-    succeeded: true,
     response: {
       body: { transaction: { id: transactionId } }
-    }
+    },
+    succeeded: true
   }
 }
 
 function _testBillingAccount() {
   return {
-    id: '973a5852-9c06-4c14-b1e2-d32b88d3e878',
-    accountNumber: 'T71117364A'
+    accountNumber: 'T71117364A',
+    id: '973a5852-9c06-4c14-b1e2-d32b88d3e878'
   }
 }
 
 function _testChargeVersion(billingAccountId) {
   return {
-    id: generateUUID(),
-    scheme: 'sroc',
-    startDate: new Date('2022-04-01'),
-    endDate: null,
     billingAccountId,
-    status: 'current',
-    licence: {
-      id: '1b605a4e-a065-4b17-80eb-47179b99a4e8',
-      licenceRef: '01/684',
-      waterUndertaker: true,
-      historicalAreaCode: 'SAAR',
-      regionalChargeArea: 'Southern',
-      startDate: new Date('2022-01-01'),
-      expiredDate: null,
-      lapsedDate: null,
-      revokedDate: null,
-      region: {
-        id: '03d3a38b-0213-43eb-9ab4-d83f26d3b111',
-        chargeRegionId: 'A'
-      }
-    },
     changeReason: {
       id: '9107791e-b4b2-481c-b768-fb66d0b5d22e',
       triggersMinimumCharge: false
     },
     chargeReferences: [
       {
-        id: generateUUID(),
-        source: 'non-tidal',
-        loss: 'low',
-        volume: '6.819',
+        additionalCharges: { isSupplyPublicWater: true },
         adjustments: {
+          aggregate: '0.562114443',
+          charge: null,
           s126: null,
           s127: false,
           s130: false,
-          charge: null,
-          winter: false,
-          aggregate: '0.562114443'
+          winter: false
         },
-        additionalCharges: { isSupplyPublicWater: true },
-        description: 'Mineral washing',
         chargeCategory: {
           id: 'cc4a66da-efdb-4882-b18a-daf000131349',
           reference: '4.4.1',
@@ -235,19 +210,44 @@ function _testChargeVersion(billingAccountId) {
         },
         chargeElements: [
           {
-            id: generateUUID(),
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 10,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            id: generateUUID(),
             // NOTE: We are faking an Objection model which comes with a toJSON() method that gets called as part
             // of processing the billing account.
             toJSON: () => {
               return '{}'
             }
           }
-        ]
+        ],
+        description: 'Mineral washing',
+        id: generateUUID(),
+        loss: 'low',
+        source: 'non-tidal',
+        volume: '6.819'
       }
-    ]
+    ],
+    endDate: null,
+    id: generateUUID(),
+    licence: {
+      expiredDate: null,
+      historicalAreaCode: 'SAAR',
+      id: '1b605a4e-a065-4b17-80eb-47179b99a4e8',
+      lapsedDate: null,
+      licenceRef: '01/684',
+      region: {
+        chargeRegionId: 'A',
+        id: '03d3a38b-0213-43eb-9ab4-d83f26d3b111'
+      },
+      regionalChargeArea: 'Southern',
+      revokedDate: null,
+      startDate: new Date('2022-01-01'),
+      waterUndertaker: true
+    },
+    scheme: 'sroc',
+    startDate: new Date('2022-04-01'),
+    status: 'current'
   }
 }

@@ -7,18 +7,18 @@ import ReverseSupplementaryTransactionsService from '../../../src/services/bill-
 describe('Bill Runs - Reverse Supplementary Transactions service', () => {
   const transactions = [
     {
-      name: 'DEBIT',
       credit: false,
-      status: 'TO_BE_OVERWRITTEN',
+      name: 'DEBIT',
       purposes: [
         {
-          id: '04cbede8-45cf-433e-b4f5-f33dc911ced0',
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 3,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 3
+          id: '04cbede8-45cf-433e-b4f5-f33dc911ced0'
         }
-      ]
+      ],
+      status: 'TO_BE_OVERWRITTEN'
     }
   ]
 
@@ -41,11 +41,11 @@ describe('Bill Runs - Reverse Supplementary Transactions service', () => {
       expect(result[0].id).toBeTypeOf('string')
       expect(result[0].purposes).toEqual([
         {
-          id: '04cbede8-45cf-433e-b4f5-f33dc911ced0',
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 3,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 3
+          id: '04cbede8-45cf-433e-b4f5-f33dc911ced0'
         }
       ])
     })

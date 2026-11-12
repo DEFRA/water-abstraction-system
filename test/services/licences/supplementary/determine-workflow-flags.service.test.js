@@ -25,14 +25,14 @@ describe('Determine Workflow Flags Service', () => {
     describe('for a licence that is already flagged', () => {
       beforeAll(() => {
         licenceData = {
-          id: 'fee406be-d710-4c14-a4a4-9fd43dc9c5bc',
-          region_id: '06661d63-a70e-4cc2-bb6f-7b2a7e9607cc',
           created_at: new Date('2024-01-01'),
+          ended: false,
+          id: 'fee406be-d710-4c14-a4a4-9fd43dc9c5bc',
           include_in_presroc_billing: 'yes',
           include_in_sroc_billing: true,
-          ended: false,
-          two_part_tariff_charge_versions: false,
-          sroc_charge_versions: false
+          region_id: '06661d63-a70e-4cc2-bb6f-7b2a7e9607cc',
+          sroc_charge_versions: false,
+          two_part_tariff_charge_versions: false
         }
 
         vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
@@ -80,9 +80,9 @@ describe('Determine Workflow Flags Service', () => {
         describe('and an annual bill run has been sent while the licence was in workflow', () => {
           beforeAll(async () => {
             await BillRunHelper.add({
+              batchType: 'annual',
               regionId: '06661d63-a70e-4cc2-bb6f-7b2a7e9607cc',
-              status: 'sent',
-              batchType: 'annual'
+              status: 'sent'
             })
 
             vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
@@ -117,14 +117,14 @@ describe('Determine Workflow Flags Service', () => {
     describe('for a licence that is not already flagged', () => {
       beforeAll(() => {
         licenceData = {
-          id: 'fee406be-d710-4c14-a4a4-9fd43dc9c5bc',
-          region_id: '27fc9c25-2031-454b-bdae-0aa4ce566eac',
           created_at: new Date('2024-01-01'),
+          ended: false,
+          id: 'fee406be-d710-4c14-a4a4-9fd43dc9c5bc',
           include_in_presroc_billing: 'no',
           include_in_sroc_billing: false,
-          ended: false,
-          two_part_tariff_charge_versions: false,
-          sroc_charge_versions: false
+          region_id: '27fc9c25-2031-454b-bdae-0aa4ce566eac',
+          sroc_charge_versions: false,
+          two_part_tariff_charge_versions: false
         }
 
         vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
@@ -172,9 +172,9 @@ describe('Determine Workflow Flags Service', () => {
         describe('and an annual bill run has been sent while the licence was in workflow', () => {
           beforeAll(async () => {
             await BillRunHelper.add({
+              batchType: 'annual',
               regionId: '27fc9c25-2031-454b-bdae-0aa4ce566eac',
-              status: 'sent',
-              batchType: 'annual'
+              status: 'sent'
             })
 
             vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)

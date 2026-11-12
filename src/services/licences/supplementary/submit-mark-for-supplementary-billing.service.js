@@ -41,8 +41,8 @@ export default async function submitMarkForSupplementaryBillingService(licenceId
   const pageData = await _getPageData(licenceId)
 
   return {
-    pageTitle: 'Mark for the supplementary bill run',
     error: validationResult,
+    pageTitle: 'Mark for the supplementary bill run',
     ...pageData
   }
 }
@@ -59,6 +59,7 @@ export default async function submitMarkForSupplementaryBillingService(licenceId
 async function _determineLicenceFlags(licence, supplementaryYears) {
   // Set the existing sroc supplementary flag, this flag does not get changed
   const flagForSrocSupplementary = licence.includeInSrocBilling
+
   // Set the existing pre-sroc supplementary flag
   let flagForPreSrocSupplementary = licence.includeInPresrocBilling === 'yes'
 
@@ -85,7 +86,7 @@ async function _determineLicenceFlags(licence, supplementaryYears) {
     )
   }
 
-  return { twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary }
+  return { flagForPreSrocSupplementary, flagForSrocSupplementary, twoPartTariffBillingYears }
 }
 
 async function _fetchLicenceData(licenceId) {

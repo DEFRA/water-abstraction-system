@@ -33,14 +33,14 @@ describe('Jobs - Time Limited - Process Time Limited Licences service', () => {
     beforeEach(() => {
       fetchResults = [
         {
+          chargeVersionId: generateUUID(),
           id: generateUUID(),
-          licenceVersionId: generateUUID(),
-          chargeVersionId: generateUUID()
+          licenceVersionId: generateUUID()
         },
         {
+          chargeVersionId: generateUUID(),
           id: generateUUID(),
-          licenceVersionId: generateUUID(),
-          chargeVersionId: generateUUID()
+          licenceVersionId: generateUUID()
         }
       ]
 

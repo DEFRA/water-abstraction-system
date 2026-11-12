@@ -52,12 +52,12 @@ describe('Bill Runs controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: '/bill-runs?page=2',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/bill-runs?page=2'
         }
       })
 
@@ -66,8 +66,8 @@ describe('Bill Runs controller', () => {
           vi.spyOn(IndexBillRunsService, 'default').mockResolvedValue({
             billRuns: [
               {
-                id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
                 createdAt: '1 January 2024',
+                id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
                 link: '/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b',
                 number: 1002,
                 numberOfBills: 7,
@@ -81,16 +81,16 @@ describe('Bill Runs controller', () => {
             busy: 'none',
             pageTitle: 'Bill runs (page 2 of 30)',
             pagination: {
-              numberOfPages: 30,
               component: {
-                previous: { href: '/system/bill-runs?page=1' },
-                next: { href: '/system/bill-runs?page=3' },
                 items: [
-                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
-                  { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: true },
-                  { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false }
-                ]
-              }
+                  { current: false, href: '/system/bill-runs?page=1', number: 1, visuallyHiddenText: 'Page 1' },
+                  { current: true, href: '/system/bill-runs?page=2', number: 2, visuallyHiddenText: 'Page 2' },
+                  { current: false, href: '/system/bill-runs?page=3', number: 3, visuallyHiddenText: 'Page 3' }
+                ],
+                next: { href: '/system/bill-runs?page=3' },
+                previous: { href: '/system/bill-runs?page=1' }
+              },
+              numberOfPages: 30
             }
           })
         })
@@ -194,8 +194,8 @@ describe('Bill Runs controller', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
           vi.spyOn(ViewCancelBillRunService, 'default').mockResolvedValue({
-            id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
             billRunType: 'Two-part tariff',
+            id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
             pageTitle: "You're about to cancel this bill run"
           })
         })
@@ -257,8 +257,8 @@ describe('Bill Runs controller', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
           vi.spyOn(ViewSendBillRunService, 'default').mockResolvedValue({
-            id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
             billRunType: 'Two-part tariff',
+            id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
             pageTitle: "You're about to send this bill run"
           })
         })
@@ -358,12 +358,12 @@ function _getRequestOptions(path) {
   const url = path ? `${root}/${path}` : root
 
   return {
-    method: 'GET',
-    url,
     auth: {
-      strategy: 'session',
-      credentials: { scope: ['billing'] }
-    }
+      credentials: { scope: ['billing'] },
+      strategy: 'session'
+    },
+    method: 'GET',
+    url
   }
 }
 
@@ -376,12 +376,45 @@ function _postRequestOptions(path) {
 
 function _multiGroupBillRun() {
   return {
-    billsCount: '2 Annual bills',
+    billGroups: [
+      {
+        bills: [
+          {
+            accountNumber: 'E22288888A',
+            billingContact: 'Acme Water Services Ltd',
+            financialYear: 2023,
+            id: '64924759-8142-4a08-9d1e-1e902cd9d316',
+            licences: ['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'],
+            licencesCount: 3,
+            total: '£213,178.00'
+          }
+        ],
+        caption: '1 water company',
+        type: 'water-companies'
+      },
+      {
+        bills: [
+          {
+            accountNumber: 'E11101999A',
+            billingContact: 'Geordie Leforge',
+            financialYear: 2023,
+            id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+            licences: ['17/53/001/G/782'],
+            licencesCount: 1,
+            total: '£97.00'
+          }
+        ],
+        caption: '1 other abstractor',
+        type: 'other-abstractors'
+      }
+    ],
+    billGroupsCount: 2,
     billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
     billRunNumber: 10003,
     billRunStatus: 'sent',
     billRunTotal: '£213,275.00',
     billRunType: 'Annual',
+    billsCount: '2 Annual bills',
     chargeScheme: 'Current',
     creditsCount: '0 credit notes',
     creditsTotal: '£0.00',
@@ -393,51 +426,36 @@ function _multiGroupBillRun() {
     pageTitle: 'South West annual',
     region: 'South West',
     transactionFile: 'nalei90002t',
-    billGroupsCount: 2,
-    billGroups: [
-      {
-        type: 'water-companies',
-        caption: '1 water company',
-        bills: [
-          {
-            id: '64924759-8142-4a08-9d1e-1e902cd9d316',
-            accountNumber: 'E22288888A',
-            billingContact: 'Acme Water Services Ltd',
-            licences: ['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'],
-            licencesCount: 3,
-            financialYear: 2023,
-            total: '£213,178.00'
-          }
-        ]
-      },
-      {
-        type: 'other-abstractors',
-        caption: '1 other abstractor',
-        bills: [
-          {
-            id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-            accountNumber: 'E11101999A',
-            billingContact: 'Geordie Leforge',
-            licences: ['17/53/001/G/782'],
-            licencesCount: 1,
-            financialYear: 2023,
-            total: '£97.00'
-          }
-        ]
-      }
-    ],
     view: 'bill-runs/view.njk'
   }
 }
 
 function _singleGroupBillRun() {
   return {
-    billsCount: '1 Annual bill',
+    billGroups: [
+      {
+        bills: [
+          {
+            accountNumber: 'E11101999A',
+            billingContact: 'Geordie Leforge',
+            financialYear: 2023,
+            id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+            licences: ['17/53/001/G/782'],
+            licencesCount: 1,
+            total: '£97.00'
+          }
+        ],
+        caption: '1 other abstractor',
+        type: 'other-abstractors'
+      }
+    ],
+    billGroupsCount: 1,
     billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
     billRunNumber: 10003,
     billRunStatus: 'sent',
     billRunTotal: '£97.00',
     billRunType: 'Annual',
+    billsCount: '1 Annual bill',
     chargeScheme: 'Current',
     creditsCount: '0 credit notes',
     creditsTotal: '£0.00',
@@ -449,24 +467,6 @@ function _singleGroupBillRun() {
     pageTitle: 'South West annual',
     region: 'South West',
     transactionFile: 'nalei90002t',
-    billGroupsCount: 1,
-    billGroups: [
-      {
-        type: 'other-abstractors',
-        caption: '1 other abstractor',
-        bills: [
-          {
-            id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-            accountNumber: 'E11101999A',
-            billingContact: 'Geordie Leforge',
-            licences: ['17/53/001/G/782'],
-            licencesCount: 1,
-            financialYear: 2023,
-            total: '£97.00'
-          }
-        ]
-      }
-    ],
     view: 'bill-runs/view.njk'
   }
 }

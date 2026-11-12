@@ -24,11 +24,11 @@ describe('Legacy Request', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'deleteRequest').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: HTTP_STATUS_NO_CONTENT,
-            body: {}
-          }
+            body: {},
+            statusCode: HTTP_STATUS_NO_CONTENT
+          },
+          succeeded: true
         })
       })
 
@@ -81,12 +81,12 @@ describe('Legacy Request', () => {
     describe('when the request fails', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'deleteRequest').mockResolvedValue({
-          succeeded: false,
           response: {
+            body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
             statusCode: HTTP_STATUS_NOT_FOUND,
-            statusMessage: 'Not Found',
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
-          }
+            statusMessage: 'Not Found'
+          },
+          succeeded: false
         })
       })
 
@@ -122,11 +122,11 @@ describe('Legacy Request', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: HTTP_STATUS_OK,
-            body: { version: '3.1.2', commit: '70708cff586cc410c11af25cf8fd296f987d7f36' }
-          }
+            body: { commit: '70708cff586cc410c11af25cf8fd296f987d7f36', version: '3.1.2' },
+            statusCode: HTTP_STATUS_OK
+          },
+          succeeded: true
         })
       })
 
@@ -181,12 +181,12 @@ describe('Legacy Request', () => {
     describe('when the request fails', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
           response: {
+            body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
             statusCode: HTTP_STATUS_NOT_FOUND,
-            statusMessage: 'Not Found',
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
-          }
+            statusMessage: 'Not Found'
+          },
+          succeeded: false
         })
       })
 
@@ -224,11 +224,11 @@ describe('Legacy Request', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: HTTP_STATUS_OK,
-            body: { version: '3.1.2', commit: '70708cff586cc410c11af25cf8fd296f987d7f36' }
-          }
+            body: { commit: '70708cff586cc410c11af25cf8fd296f987d7f36', version: '3.1.2' },
+            statusCode: HTTP_STATUS_OK
+          },
+          succeeded: true
         })
       })
 
@@ -283,12 +283,12 @@ describe('Legacy Request', () => {
     describe('when the request fails', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
-          succeeded: false,
           response: {
+            body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
             statusCode: HTTP_STATUS_NOT_FOUND,
-            statusMessage: 'Not Found',
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
-          }
+            statusMessage: 'Not Found'
+          },
+          succeeded: false
         })
       })
 

@@ -7,7 +7,7 @@ import IndexValidator from '../../../src/validators/bill-runs/index.validator.js
 describe('Bill Runs - Index validator', () => {
   let payload
 
-  const regions = [{ id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }]
+  const regions = [{ displayName: 'Anglian', id: '1d562e9a-2104-41d9-aa75-c008a7ec9059' }]
 
   describe('when valid data is provided', () => {
     describe('that is fully populated', () => {

@@ -33,7 +33,6 @@ describe('Company Contacts - Fetch Company Contact dal', () => {
         abstractionAlertLicences: null,
         abstractionAlerts: false,
         companyId,
-        id: companyContact.id,
         contact: {
           contactType: 'person',
           department: null,
@@ -45,7 +44,8 @@ describe('Company Contacts - Fetch Company Contact dal', () => {
           middleInitials: null,
           salutation: null,
           suffix: null
-        }
+        },
+        id: companyContact.id
       })
     })
   })

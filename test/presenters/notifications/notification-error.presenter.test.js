@@ -40,8 +40,8 @@ describe('Notifications - Notification error presenter', () => {
         const result = NotificationErrorPresenter(notification)
 
         expect(result).toEqual({
-          status: 'permanent-failure',
-          description: 'The provider could not deliver the message because the email address was wrong.'
+          description: 'The provider could not deliver the message because the email address was wrong.',
+          status: 'permanent-failure'
         })
       })
     })
@@ -61,8 +61,9 @@ describe('Notifications - Notification error presenter', () => {
           const result = NotificationErrorPresenter(notification)
 
           expect(result).toEqual({
-            status: 'Failed to send to Notify',
-            description: 'Address lines must not start with any of the following characters: @ ( ) = [ ] ” \\\\ / , < >'
+            description:
+              'Address lines must not start with any of the following characters: @ ( ) = [ ] ” \\\\ / , < >',
+            status: 'Failed to send to Notify'
           })
         })
       })
@@ -77,8 +78,8 @@ describe('Notifications - Notification error presenter', () => {
           const result = NotificationErrorPresenter(notification)
 
           expect(result).toEqual({
-            status: 'Failed to send to Notify',
-            description: 'The last line of address must be a real UK postcode or another country'
+            description: 'The last line of address must be a real UK postcode or another country',
+            status: 'Failed to send to Notify'
           })
         })
       })
@@ -93,8 +94,8 @@ describe('Notifications - Notification error presenter', () => {
           const result = NotificationErrorPresenter(notification)
 
           expect(result).toEqual({
-            status: 'Failed to send to Notify',
-            description: 'Internal system error'
+            description: 'Internal system error',
+            status: 'Failed to send to Notify'
           })
         })
       })
@@ -108,8 +109,8 @@ describe('Notifications - Notification error presenter', () => {
           const result = NotificationErrorPresenter(notification)
 
           expect(result).toEqual({
-            status: 'Failed to send to Notify',
-            description: 'No error logged'
+            description: 'No error logged',
+            status: 'Failed to send to Notify'
           })
         })
       })
@@ -123,8 +124,8 @@ describe('Notifications - Notification error presenter', () => {
           const result = NotificationErrorPresenter(notification)
 
           expect(result).toEqual({
-            status: 'Failed to send to Notify',
-            description: 'No error logged'
+            description: 'No error logged',
+            status: 'Failed to send to Notify'
           })
         })
       })

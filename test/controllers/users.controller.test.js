@@ -5,9 +5,9 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import http2 from 'node:http2'
 
 import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
 import * as FetchLegacyIdDal from '../../src/dal/users/fetch-legacy-id.dal.js'
@@ -74,8 +74,8 @@ describe('Users controller', () => {
           }
         },
         pageTitle: 'Users',
-        users: [],
-        pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 0 users' }
+        pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 0 users' },
+        users: []
       }
     })
 
@@ -267,11 +267,6 @@ describe('Users controller', () => {
         pageData = {
           activeNavBar: 'users',
           activeSecondaryNav: 'communications',
-          pagination: {
-            currentPageNumber: 1,
-            numberOfPages: 0,
-            showingMessage: 'Showing all 0 communications'
-          },
           backLink: {
             href: '/system/users',
             text: 'Go back to users'
@@ -279,7 +274,12 @@ describe('Users controller', () => {
           backQueryString: '?back=users',
           notifications: [],
           pageTitle: 'Communications',
-          pageTitleCaption: 'external@example.co.uk'
+          pageTitleCaption: 'external@example.co.uk',
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 0,
+            showingMessage: 'Showing all 0 communications'
+          }
         }
       })
 
@@ -390,20 +390,20 @@ describe('Users controller', () => {
         pageData = {
           activeNavBar: 'users',
           activeSecondaryNav: 'licences',
-          pagination: {
-            currentPageNumber: 1,
-            numberOfPages: 0,
-            showingMessage: 'Showing all 0 licences'
-          },
           backLink: {
             href: '/system/users',
             text: 'Go back to users'
           },
           backQueryString: '?back=users',
           displayLicenceEndedMessage: false,
+          licences: [],
           pageTitle: 'Licences',
           pageTitleCaption: 'external@example.co.uk',
-          licences: [],
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 0,
+            showingMessage: 'Showing all 0 licences'
+          },
           showUnlinkButton: false
         }
       })
@@ -429,18 +429,17 @@ describe('Users controller', () => {
               expiredDate: null,
               id: generateUUID(),
               lapsedDate: null,
-              licenceRef: '01/123',
-              revokedDate: null,
               licenceDocumentHeader: {
                 id: generateUUID(),
-                licenceRef: '01/123',
                 licenceEntityRoles: [
                   {
                     id: generateUUID(),
                     role: 'primary_user'
                   }
-                ]
+                ],
+                licenceRef: '01/123'
               },
+              licenceRef: '01/123',
               licenceVersions: [
                 {
                   id: generateUUID(),
@@ -451,7 +450,8 @@ describe('Users controller', () => {
                     licenceVersionId: generateUUID()
                   }
                 }
-              ]
+              ],
+              revokedDate: null
             }
           ]
         })
@@ -504,11 +504,6 @@ describe('Users controller', () => {
         pageData = {
           activeNavBar: 'users',
           activeSecondaryNav: 'verifications',
-          pagination: {
-            currentPageNumber: 1,
-            numberOfPages: 0,
-            showingMessage: 'Showing all 0 verifications'
-          },
           backLink: {
             href: '/system/users',
             text: 'Go back to users'
@@ -516,6 +511,11 @@ describe('Users controller', () => {
           backQueryString: '?back=users',
           pageTitle: 'Verifications',
           pageTitleCaption: 'external@example.co.uk',
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 0,
+            showingMessage: 'Showing all 0 verifications'
+          },
           verifications: []
         }
       })
@@ -540,32 +540,32 @@ describe('Users controller', () => {
             {
               createdAt: new Date('2025-07-02T19:22:46.000Z'),
               id: generateUUID(),
-              verifiedAt: new Date('2025-07-02T19:22:51.000Z'),
-              verificationCode: 'A7vdJ',
               licenceDocumentHeaders: [
                 {
                   id: generateUUID(),
-                  licenceRef: 'AN/033/0053/130',
                   licence: {
                     id: generateUUID(),
                     licenceRef: 'AN/033/0053/130',
                     licenceVersions: [
                       {
-                        id: generateUUID(),
-                        issueDate: new Date('2013-04-01'),
-                        licenceId: generateUUID(),
-                        startDate: new Date('2025-04-01'),
-                        status: 'current',
                         company: {
                           id: generateUUID(),
                           name: 'Rochester Farm Limited',
                           type: 'organisation'
-                        }
+                        },
+                        id: generateUUID(),
+                        issueDate: new Date('2013-04-01'),
+                        licenceId: generateUUID(),
+                        startDate: new Date('2025-04-01'),
+                        status: 'current'
                       }
                     ]
-                  }
+                  },
+                  licenceRef: 'AN/033/0053/130'
                 }
-              ]
+              ],
+              verificationCode: 'A7vdJ',
+              verifiedAt: new Date('2025-07-02T19:22:51.000Z')
             }
           ]
         })
@@ -618,18 +618,18 @@ describe('Users controller', () => {
         pageData = {
           activeNavBar: 'users',
           activeSecondaryNav: 'communications',
-          pagination: {
-            currentPageNumber: 1,
-            numberOfPages: 0,
-            showingMessage: 'Showing all 0 communications'
-          },
           backLink: {
             href: `/system/users`,
             text: 'Go back to users'
           },
           notifications: [],
           pageTitle: 'Communications',
-          pageTitleCaption: 'carol.shaw@wrls.gov.uk'
+          pageTitleCaption: 'carol.shaw@wrls.gov.uk',
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 0,
+            showingMessage: 'Showing all 0 communications'
+          }
         }
       })
 
@@ -846,11 +846,11 @@ describe('Users controller', () => {
 
 function _getOptions(url, credentials) {
   return {
-    method: 'GET',
-    url,
     auth: {
-      strategy: 'session',
-      credentials
-    }
+      credentials,
+      strategy: 'session'
+    },
+    method: 'GET',
+    url
   }
 }

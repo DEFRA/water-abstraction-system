@@ -163,11 +163,10 @@ describe('Licences - Summary Heading presenter', () => {
 
 function _summary() {
   return LicenceModel.fromJson({
-    id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     expiredDate: null,
+    id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     licenceDocumentHeader: {
       id: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
-      licenceName: 'Between two ferns',
       licenceEntityRoles: [
         {
           id: 'd7eecfc1-7afa-49f7-8bef-5dc477696a2d',
@@ -179,7 +178,8 @@ function _summary() {
             }
           }
         }
-      ]
+      ],
+      licenceName: 'Between two ferns'
     },
     startDate: new Date('2019-04-01'),
     workflows: [{ id: 'b6f44c94-25e4-4ca8-a7db-364534157ba7', status: 'to_setup' }]

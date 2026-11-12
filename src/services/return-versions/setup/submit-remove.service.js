@@ -19,8 +19,8 @@ export default async function submitRemoveService(sessionId, requirementIndex, y
   const session = await FetchSessionDal(sessionId)
 
   const notification = {
-    title: 'Removed',
-    text: 'Requirement removed'
+    text: 'Requirement removed',
+    title: 'Removed'
   }
 
   yar.flash('notification', notification)

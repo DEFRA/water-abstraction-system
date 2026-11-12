@@ -33,14 +33,14 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     beforeEach(() => {
       fetchResults = [
         {
+          chargeVersionExists: false,
           id: generateUUID(),
-          licenceId: generateUUID(),
-          chargeVersionExists: false
+          licenceId: generateUUID()
         },
         {
+          chargeVersionExists: true,
           id: generateUUID(),
-          licenceId: generateUUID(),
-          chargeVersionExists: true
+          licenceId: generateUUID()
         }
       ]
 

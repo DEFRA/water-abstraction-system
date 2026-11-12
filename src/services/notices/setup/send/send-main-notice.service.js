@@ -43,7 +43,7 @@ async function _checkNotifications(notifications) {
 async function _recordResult(sendResult) {
   const { id, pdf, plaintext, notifyError, notifyId, notifyStatus, status } = sendResult
 
-  await NotificationModel.query().patch({ pdf, plaintext, notifyError, notifyId, notifyStatus, status }).findById(id)
+  await NotificationModel.query().patch({ notifyError, notifyId, notifyStatus, pdf, plaintext, status }).findById(id)
 }
 
 async function _sendNotification(notification, referenceCode) {

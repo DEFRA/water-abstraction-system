@@ -68,9 +68,9 @@ describe('Return Logs Setup - Check service', () => {
         pageTitle: 'Check details and enter new volumes or readings',
         pageTitleCaption: 'Return reference 1234',
         purposes: 'Evaporative Cooling',
-        returnReceivedDate: '31 January 2025',
         reportingFigures: 'Meter readings',
         returnPeriod: '1 April 2004 to 31 March 2005',
+        returnReceivedDate: '31 January 2025',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         startReading: 0,
         summaryTableData: {

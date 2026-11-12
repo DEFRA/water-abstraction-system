@@ -16,11 +16,11 @@ export default function restorePresenter(session) {
   const { company, email, name, abstractionAlerts } = session
 
   return {
+    abstractionAlerts: titleCase(abstractionAlerts),
     backLink: {
       href: `/system/company-contacts/setup/${session.id}/check`,
       text: 'Back'
     },
-    abstractionAlerts: titleCase(abstractionAlerts),
     email,
     name,
     pageTitle: 'You are about to restore this contact',

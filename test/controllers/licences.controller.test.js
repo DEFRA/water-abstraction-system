@@ -3,8 +3,8 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 
 // Test helpers
 import Boom from 'water-abstraction-engine/wrappers/boom.wrapper.js'
-import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
 import http2 from 'node:http2'
+import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
 import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
 
 // Things we need to stub
@@ -16,8 +16,8 @@ import * as ViewCommunicationsService from '../../src/services/licences/view-com
 import * as ViewConditionsService from '../../src/services/licences/view-conditions.service.js'
 import * as ViewContactDetailsService from '../../src/services/licences/view-contact-details.service.js'
 import * as ViewHistoryService from '../../src/services/licences/view-history.service.js'
-import * as ViewMarkForSupplementaryBillingService from '../../src/services/licences/supplementary/view-mark-for-supplementary-billing.service.js'
 import * as ViewMarkedForSupplementaryBillingService from '../../src/services/licences/supplementary/view-marked-for-supplementary-billing.service.js'
+import * as ViewMarkForSupplementaryBillingService from '../../src/services/licences/supplementary/view-mark-for-supplementary-billing.service.js'
 import * as ViewPointsService from '../../src/services/licences/view-points.service.js'
 import * as ViewPurposesService from '../../src/services/licences/view-purposes.service.js'
 import * as ViewReturnsService from '../../src/services/licences/view-returns.service.js'
@@ -58,12 +58,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/bills',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/bills'
         }
       })
 
@@ -86,12 +86,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/conditions',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/conditions'
         }
       })
 
@@ -114,12 +114,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/communications',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/communications'
         }
       })
 
@@ -142,12 +142,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/contact-details',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/contact-details'
         }
       })
 
@@ -170,12 +170,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/history',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/history'
         }
       })
 
@@ -200,12 +200,12 @@ describe('Licences controller', () => {
 
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/64924759-8142-4a08-9d1e-1e902cd9d316/no-returns-required',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/64924759-8142-4a08-9d1e-1e902cd9d316/no-returns-required'
         }
       })
 
@@ -256,12 +256,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/points',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/points'
         }
       })
 
@@ -284,12 +284,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/purposes',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/purposes'
         }
       })
 
@@ -314,12 +314,12 @@ describe('Licences controller', () => {
 
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/64924759-8142-4a08-9d1e-1e902cd9d316/returns-required',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/64924759-8142-4a08-9d1e-1e902cd9d316/returns-required'
         }
       })
 
@@ -370,12 +370,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/returns',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/returns'
         }
       })
 
@@ -398,12 +398,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/set-up',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['view_charge_versions'] }
-          }
+            credentials: { scope: ['view_charge_versions'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/set-up'
         }
       })
 
@@ -426,12 +426,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/summary',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/summary'
         }
       })
 
@@ -474,12 +474,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/mark-for-supplementary-billing',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/mark-for-supplementary-billing'
         }
       })
 
@@ -520,7 +520,6 @@ describe('Licences controller', () => {
       describe('when a request is invalid', () => {
         beforeEach(async () => {
           vi.spyOn(SubmitMarkForSupplementaryBillingService, 'default').mockResolvedValue({
-            pageTitle: 'Mark for the supplementary bill run',
             error: {
               errorList: [
                 {
@@ -532,14 +531,15 @@ describe('Licences controller', () => {
                 text: 'Select at least one financial year'
               }
             },
-            licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
-            licenceRef: '01/Test',
             financialYears: [
               { text: '2024 to 2025', value: 2025 },
               { text: '2023 to 2024', value: 2024 },
               { text: '2022 to 2023', value: 2023 },
-              { text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' } }
-            ]
+              { hint: { text: 'Old charge scheme' }, text: 'Before 2022', value: 'preSroc' }
+            ],
+            licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
+            licenceRef: '01/Test',
+            pageTitle: 'Mark for the supplementary bill run'
           })
         })
 
@@ -558,12 +558,12 @@ describe('Licences controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/marked-for-supplementary-billing',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/marked-for-supplementary-billing'
         }
       })
 
@@ -607,14 +607,14 @@ function _commonData() {
 
 function _markForSupplementaryBilling() {
   return {
-    licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
-    licenceRef: '01/test',
     financialYears: [
       { text: '2024 to 2025', value: 2025 },
       { text: '2023 to 2024', value: 2024 },
       { text: '2022 to 2023', value: 2023 },
-      { text: 'Before 2022', value: 'preSroc', hint: { text: 'Old charge scheme' } }
+      { hint: { text: 'Old charge scheme' }, text: 'Before 2022', value: 'preSroc' }
     ],
+    licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
+    licenceRef: '01/test',
     pageTitle: 'Mark for the supplementary bill run'
   }
 }
@@ -640,10 +640,10 @@ function _viewConditions() {
         conditions: [
           {
             abstractionPoints: {
-              label: 'Abstraction point',
               descriptions: [
                 'Within the area formed by the straight lines running between National Grid References TQ 78157 78848, TQ 79800 76896, TQ 77808 75242 and TQ 75736 76766 (INLAND WATER DITCHES AND DRAINS KNOWN AS THE LIPWELL STREAM)'
-              ]
+              ],
+              label: 'Abstraction point'
             },
             conditionType: 'Aggregate',
             otherInformation:
@@ -674,7 +674,7 @@ function _viewCommunications() {
   return {
     ...commonLicenceData,
     activeSecondaryNav: 'communications',
-    communications: [{ type: 'paper return', sent: 'date', sender: 'admin@email.com', method: 'letter' }]
+    communications: [{ method: 'letter', sender: 'admin@email.com', sent: 'date', type: 'paper return' }]
   }
 }
 
@@ -684,8 +684,8 @@ function _viewContactDetails() {
   return {
     ...commonLicenceData,
     activeSecondaryNav: 'contact-details',
-    licenceContacts: [{ name: 'jobo', communicationType: 'Licence Holder' }],
-    customerContacts: [{ name: 'jimbo', communicationType: 'customer' }]
+    customerContacts: [{ communicationType: 'customer', name: 'jimbo' }],
+    licenceContacts: [{ communicationType: 'Licence Holder', name: 'jobo' }]
   }
 }
 
@@ -734,7 +734,6 @@ function _viewPurposes() {
   return {
     ...commonLicenceData,
     id: '5ca7bf18-d433-491c-ac83-483f67ee7d93',
-    licenceRef: '01/140/R01',
     licencePurposes: [
       {
         abstractionAmounts: [
@@ -747,6 +746,7 @@ function _viewPurposes() {
         purposeDescription: 'Transfer Between Sources (Pre Water Act 2003)'
       }
     ],
+    licenceRef: '01/140/R01',
     pageTitle: 'Purposes, periods and amounts'
   }
 }
@@ -757,8 +757,8 @@ function _viewReturns() {
   return {
     ...commonLicenceData,
     activeSecondaryNav: 'returns',
-    returns: [{ id: 'returns-id' }],
-    noReturnsMessage: null
+    noReturnsMessage: null,
+    returns: [{ id: 'returns-id' }]
   }
 }
 
@@ -775,12 +775,12 @@ function _viewSetUp() {
         setUpAgreement: '/'
       },
       chargeInformation: {
-        setupNewCharge: '/',
-        makeLicenceNonChargeable: '/'
+        makeLicenceNonChargeable: '/',
+        setupNewCharge: '/'
       },
       returnVersions: {
-        returnsRequired: '/',
-        noReturnsRequired: '/'
+        noReturnsRequired: '/',
+        returnsRequired: '/'
       }
     },
     returnVersions: [{}]
@@ -792,10 +792,10 @@ function _viewSummary() {
 
   return {
     ...commonLicenceData,
+    activeSecondaryNav: 'summary',
+    endDate: '1 November 2032',
     id: '7861814c-ca19-43f2-be11-3c612f0d744b',
     region: 'Southern',
-    startDate: '1 November 2022',
-    endDate: '1 November 2032',
-    activeSecondaryNav: 'summary'
+    startDate: '1 November 2022'
   }
 }

@@ -28,9 +28,9 @@ describe('Return Versions Setup - Start Date validator', () => {
     describe('because the user entered a valid other date', () => {
       beforeEach(() => {
         payload = {
-          startDateOptions: 'anotherStartDate',
           startDateDay: '26',
           startDateMonth: '11',
+          startDateOptions: 'anotherStartDate',
           startDateYear: '2023'
         }
       })

@@ -48,8 +48,8 @@ describe('Licences presenter', () => {
                 depth: 989,
                 description: 'RIVER BY THE SEA',
                 hydroInterceptDistance: 99.01,
-                hydroReference: 'TL 34534/133',
                 hydroOffsetDistance: 88.56,
+                hydroReference: 'TL 34534/133',
                 id: '3c316dcf-c16c-4532-805d-2be32c694571',
                 locationNote: 'Castle BY THE SEA, Brighton',
                 ngr1: 'SD 123 345',
@@ -59,9 +59,9 @@ describe('Licences presenter', () => {
                 note: 'WELL IS RIVER-FED',
                 primaryType: 'Groundwater',
                 secondaryType: 'Borehole',
-                wellReference: '123123',
                 sourceDescription: 'SURFACE WATER SOURCE OF SUPPLY',
-                sourceType: 'Borehole'
+                sourceType: 'Borehole',
+                wellReference: '123123'
               })
             })
           })
@@ -692,15 +692,15 @@ describe('Licences presenter', () => {
       describe('when the licence has more than one value in the abstractionPoints array', () => {
         beforeEach(() => {
           const point = PointModel.fromJson({
-            id: generateUUID(),
             description: null,
+            id: generateUUID(),
             ngr1: 'TL 22198 84603',
             ngr2: null,
             ngr3: null,
             ngr4: null,
             source: {
-              id: generateUUID(),
-              description: 'Tidal Water Midlands Region'
+              description: 'Tidal Water Midlands Region',
+              id: generateUUID()
             }
           })
 

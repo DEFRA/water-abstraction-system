@@ -26,10 +26,10 @@ describe('Notices - Setup - Submit Paper Return service', () => {
     licenceRef = generateLicenceRef()
 
     dueReturn = {
-      siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
       returnLogId: generateUUID(),
       returnReference: '3135',
+      siteDescription: 'Potable Water Supply - Direct',
       startDate: '2002-04-01'
     }
 
@@ -125,7 +125,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
     beforeEach(() => {
       payload = {}
 
-      sessionData = { licenceRef, dueReturns: [dueReturn] }
+      sessionData = { dueReturns: [dueReturn], licenceRef }
 
       session = SessionModelStub(sessionData)
 
@@ -168,7 +168,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
     describe('and there are already "selectedReturns"', () => {
       beforeEach(() => {
-        sessionData = { licenceRef, dueReturns: [dueReturn], selectedReturns: [dueReturn.returnLogId] }
+        sessionData = { dueReturns: [dueReturn], licenceRef, selectedReturns: [dueReturn.returnLogId] }
 
         session = SessionModelStub(sessionData)
 

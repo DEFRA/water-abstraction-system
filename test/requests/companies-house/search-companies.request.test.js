@@ -28,14 +28,14 @@ describe('Companies House - Search Companies request', () => {
   describe('when the request succeeds', () => {
     beforeEach(async () => {
       vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
-        succeeded: true,
+        matches,
         response: {
-          statusCode: HTTP_STATUS_OK,
           body: {
             items: matches
-          }
+          },
+          statusCode: HTTP_STATUS_OK
         },
-        matches
+        succeeded: true
       })
     })
 
@@ -64,12 +64,12 @@ describe('Companies House - Search Companies request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
+          matches: [],
           response: {
-            statusCode: HTTP_STATUS_NOT_FOUND,
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
+            body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
+            statusCode: HTTP_STATUS_NOT_FOUND
           },
-          matches: []
+          succeeded: false
         })
       })
 
@@ -83,9 +83,9 @@ describe('Companies House - Search Companies request', () => {
         const result = await SearchCompaniesRequest(queryString)
 
         expect(result.response.body).toEqual({
-          statusCode: HTTP_STATUS_NOT_FOUND,
           error: 'Not Found',
-          message: 'Not Found'
+          message: 'Not Found',
+          statusCode: HTTP_STATUS_NOT_FOUND
         })
       })
 
@@ -101,9 +101,9 @@ describe('Companies House - Search Companies request', () => {
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
         vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
+          matches: [],
           response: new Error("Timeout awaiting 'request' for 5000ms"),
-          matches: []
+          succeeded: false
         })
       })
 

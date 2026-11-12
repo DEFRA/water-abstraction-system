@@ -22,17 +22,17 @@ export default function viewBillSummariesPresenter(billSummaries) {
 
   if (waterCompanies.length > 0) {
     billGroups.push({
-      type: 'water-companies',
+      bills: waterCompanies,
       caption: _caption(waterCompanies, true),
-      bills: waterCompanies
+      type: 'water-companies'
     })
   }
 
   if (otherAbstractors.length > 0) {
     billGroups.push({
-      type: 'other-abstractors',
+      bills: otherAbstractors,
       caption: _caption(otherAbstractors, false),
-      bills: otherAbstractors
+      type: 'other-abstractors'
     })
   }
 
@@ -46,12 +46,12 @@ function _bills(summaries) {
     const licences = allLicences.split(',')
 
     return {
-      id,
       accountNumber,
       billingContact: _billingContact(agentName, companyName),
+      financialYear: financialYearEnding,
+      id,
       licences,
       licencesCount: licences.length,
-      financialYear: financialYearEnding,
       total: formatMoney(netAmount, true)
     }
   })

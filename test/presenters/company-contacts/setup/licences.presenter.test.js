@@ -21,7 +21,7 @@ describe('Company Contacts - Setup - Licences Presenter', () => {
       licenceRef: generateLicenceRef()
     }
 
-    session = { id: generateUUID(), company, licences: [licence] }
+    session = { company, id: generateUUID(), licences: [licence] }
   })
 
   describe('when called', () => {

@@ -21,9 +21,9 @@ export default function historyPresenter(company, licences) {
       href: '/',
       text: 'Go back to search'
     },
-    pageTitleCaption: company.name,
+    licenceVersions: _licenceVersions(licences),
     pageTitle: 'History',
-    licenceVersions: _licenceVersions(licences)
+    pageTitleCaption: company.name
   }
 }
 

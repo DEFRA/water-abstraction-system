@@ -13,7 +13,9 @@ import SubmitSendBillRunService from '../../../../src/services/bill-runs/send/su
 
 describe('Bill Runs - Submit Cancel Bill Run service', () => {
   const billRunId = '800b8ff7-80e6-4855-a394-c79550115265'
+
   let updateDoneFake
+
   beforeEach(async () => {
     updateDoneFake = vi.fn()
     vi.spyOn(UpdateInvoiceNumbersService, 'default').mockImplementation(async () => {

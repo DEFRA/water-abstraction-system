@@ -23,12 +23,12 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
     returningStub = vi.fn()
 
     vi.spyOn(ReturnCycleModel, 'query').mockReturnValue({
-      select: vi.fn().mockReturnThis(),
-      where: vi.fn().mockReturnThis(),
-      limit: vi.fn().mockReturnThis(),
       first: firstStub,
+      insert: insertStub,
+      limit: vi.fn().mockReturnThis(),
       returning: returningStub,
-      insert: insertStub
+      select: vi.fn().mockReturnThis(),
+      where: vi.fn().mockReturnThis()
     })
 
     vi.useFakeTimers({ now: currentDate })
@@ -42,9 +42,9 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
   describe('when summer is true', () => {
     beforeEach(() => {
       cycleData = {
-        id,
         dueDate: null,
         endDate: new Date('2024-10-31'),
+        id,
         startDate: new Date('2023-11-01'),
         summer: true
       }
@@ -67,8 +67,8 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
           dueDate: null,
           endDate: cycleData.endDate,
           startDate: cycleData.startDate,
-          summer: true,
-          submittedInWrls: true
+          submittedInWrls: true,
+          summer: true
         })
         expect(result).toEqual(cycleData)
       })
@@ -90,9 +90,9 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
   describe('when summer is false', () => {
     beforeEach(() => {
       cycleData = {
-        id,
         dueDate: null,
         endDate: new Date('2025-03-31'),
+        id,
         startDate: new Date('2024-04-01'),
         summer: false
       }
@@ -115,8 +115,8 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
           dueDate: null,
           endDate: cycleData.endDate,
           startDate: cycleData.startDate,
-          summer: false,
-          submittedInWrls: true
+          submittedInWrls: true,
+          summer: false
         })
         expect(result).toEqual(cycleData)
       })

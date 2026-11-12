@@ -20,7 +20,7 @@ describe('Licences - Fetch History service', () => {
 
     licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
 
-    licenceVersionTwo = await LicenceVersionHelper.add({ licenceId: licence.id, issue: 1, increment: 1 })
+    licenceVersionTwo = await LicenceVersionHelper.add({ increment: 1, issue: 1, licenceId: licence.id })
 
     modLog = await ModLogHelper.add({
       licenceVersionId: licenceVersion.id,

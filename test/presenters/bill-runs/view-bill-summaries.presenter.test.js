@@ -17,43 +17,43 @@ describe('View Bill Summaries presenter', () => {
 
       expect(result).toEqual([
         {
-          type: 'water-companies',
-          caption: '1 water company',
           bills: [
             {
-              id: '64924759-8142-4a08-9d1e-1e902cd9d316',
               accountNumber: 'E22288888A',
               billingContact: 'Acme Water Services Ltd',
+              financialYear: 2023,
+              id: '64924759-8142-4a08-9d1e-1e902cd9d316',
               licences: ['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'],
               licencesCount: 3,
-              financialYear: 2023,
               total: '£213,178.00'
             }
-          ]
+          ],
+          caption: '1 water company',
+          type: 'water-companies'
         },
         {
-          type: 'other-abstractors',
-          caption: '2 other abstractors',
           bills: [
             {
-              id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
               accountNumber: 'E11101999A',
               billingContact: 'Geordie Leforge',
+              financialYear: 2023,
+              id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
               licences: ['17/53/001/G/782'],
               licencesCount: 1,
-              financialYear: 2023,
               total: '-£97.00'
             },
             {
-              id: '88f85abd-129d-4fb6-b82e-b92224992b1d',
               accountNumber: 'E33397999A',
               billingContact: 'Flint & Michigan Squash Club Ltd',
+              financialYear: 2023,
+              id: '88f85abd-129d-4fb6-b82e-b92224992b1d',
               licences: ['17/53/001/Z/459'],
               licencesCount: 1,
-              financialYear: 2023,
               total: '£79.09'
             }
-          ]
+          ],
+          caption: '2 other abstractors',
+          type: 'other-abstractors'
         }
       ])
     })
@@ -173,36 +173,36 @@ describe('View Bill Summaries presenter', () => {
 function _testBillSummaries() {
   return [
     {
-      id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-      billingAccountId: 'e8bd9fe1-47eb-42f2-a507-786bccd35aee',
       accountNumber: 'E11101999A',
-      netAmount: -9700,
-      financialYearEnding: 2023,
-      companyName: 'H M Scotty & Daughter',
       agentName: 'Geordie Leforge',
       allLicences: '17/53/001/G/782',
+      billingAccountId: 'e8bd9fe1-47eb-42f2-a507-786bccd35aee',
+      companyName: 'H M Scotty & Daughter',
+      financialYearEnding: 2023,
+      id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+      netAmount: -9700,
       waterCompany: false
     },
     {
-      id: '64924759-8142-4a08-9d1e-1e902cd9d316',
-      billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
       accountNumber: 'E22288888A',
-      netAmount: 21317800,
-      financialYearEnding: 2023,
-      companyName: 'Acme Water Services Ltd',
       agentName: null,
       allLicences: '17/53/001/A/101,17/53/002/B/205,17/53/002/C/308',
+      billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+      companyName: 'Acme Water Services Ltd',
+      financialYearEnding: 2023,
+      id: '64924759-8142-4a08-9d1e-1e902cd9d316',
+      netAmount: 21317800,
       waterCompany: true
     },
     {
-      id: '88f85abd-129d-4fb6-b82e-b92224992b1d',
-      billingAccountId: '5313ce61-0f35-4e37-b8b9-a1b4f408f32e',
       accountNumber: 'E33397999A',
-      netAmount: 7909,
-      financialYearEnding: 2023,
-      companyName: 'Flint & Michigan Squash Club Ltd',
       agentName: null,
       allLicences: '17/53/001/Z/459',
+      billingAccountId: '5313ce61-0f35-4e37-b8b9-a1b4f408f32e',
+      companyName: 'Flint & Michigan Squash Club Ltd',
+      financialYearEnding: 2023,
+      id: '88f85abd-129d-4fb6-b82e-b92224992b1d',
+      netAmount: 7909,
       waterCompany: false
     }
   ]

@@ -30,9 +30,9 @@ describe('Users - View profile details service', () => {
     // sufficiently simple running it would just be testing Objection.js and not our logic.
     selectStub = vi.fn().mockResolvedValue(profileDetails)
     whereStub = vi.fn().mockReturnValue({
-      select: selectStub,
       first: vi.fn().mockReturnThis(),
-      limit: vi.fn().mockReturnThis()
+      limit: vi.fn().mockReturnThis(),
+      select: selectStub
     })
 
     vi.spyOn(UserModel, 'query').mockReturnValue({ where: whereStub })

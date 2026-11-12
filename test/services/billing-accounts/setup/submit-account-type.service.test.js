@@ -88,8 +88,8 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       beforeEach(() => {
         sessionData = {
           accountType: 'company',
-          checkPageVisited: true,
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          checkPageVisited: true
         }
 
         session = SessionModelStub(sessionData)
@@ -314,13 +314,13 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
         const result = await SubmitAccountTypeService(session.id, payload)
 
         expect(result.error).toEqual({
+          accountType: { text: 'Select the account type' },
           errorList: [
             {
               href: '#accountType',
               text: 'Select the account type'
             }
-          ],
-          accountType: { text: 'Select the account type' }
+          ]
         })
       })
     })

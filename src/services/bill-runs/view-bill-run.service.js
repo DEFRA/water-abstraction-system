@@ -50,7 +50,7 @@ function _pageData(fetchResult) {
   return {
     view: 'bill-runs/view.njk',
     ...ViewBillRunPresenter(billRun, billSummaries),
-    billGroupsCount: billGroups.length,
-    billGroups
+    billGroups,
+    billGroupsCount: billGroups.length
   }
 }

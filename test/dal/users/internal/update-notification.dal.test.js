@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
-import { generateUUID, generateUserName } from 'water-abstraction-engine/test/generators.js'
+import { generateUserName, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
 import UpdateNotificationDal from '../../../../src/dal/users/internal/update-notification.dal.js'

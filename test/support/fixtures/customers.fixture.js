@@ -74,9 +74,7 @@ function companies() {
  */
 function companyAddress() {
   return {
-    id: generateUUID(),
     address: {
-      id: generateUUID(),
       address1: 'The Tyrell Spire',
       address2: 'Floor 667 (Above the Smog)',
       address3: 'Southbank Industrial Sector',
@@ -84,8 +82,10 @@ function companyAddress() {
       address5: 'Greater London',
       address6: 'United Kingdom',
       country: 'UK',
+      id: generateUUID(),
       postcode: 'SE1 7TY'
-    }
+    },
+    id: generateUUID()
   }
 }
 
@@ -96,7 +96,6 @@ function companyAddress() {
  */
 function companyContact() {
   return CompanyContactModel.fromJson({
-    id: generateUUID(),
     abstractionAlertLicences: null,
     abstractionAlerts: false,
     companyId: generateUUID(),
@@ -107,6 +106,7 @@ function companyContact() {
       username: 'nexus6.hunter@offworld.net'
     },
     deletedAt: null,
+    id: generateUUID(),
     licenceRole: {
       id: generateUUID(),
       name: 'additionalContact'
@@ -142,17 +142,17 @@ function companyContacts() {
  */
 function contact() {
   return ContactModel.fromJson({
-    id: generateUUID(),
-    salutation: null,
-    firstName: 'Rachael',
-    middleInitials: null,
-    lastName: 'Tyrell',
-    initials: null,
     contactType: 'person',
-    suffix: null,
     department: 'Tyrell Corporation',
     // The upper case T is used to catch any code where we do not lowercase the email address. This will be legacy data
-    email: 'rachael.Tyrell@tyrellcorp.com'
+    email: 'rachael.Tyrell@tyrellcorp.com',
+    firstName: 'Rachael',
+    id: generateUUID(),
+    initials: null,
+    lastName: 'Tyrell',
+    middleInitials: null,
+    salutation: null,
+    suffix: null
   })
 }
 
@@ -183,8 +183,8 @@ function licences() {
 
 export default {
   billingAccounts,
-  company,
   companies,
+  company,
   companyAddress,
   companyContact,
   companyContacts,

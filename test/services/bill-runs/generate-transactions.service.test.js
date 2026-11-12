@@ -23,8 +23,8 @@ describe('Generate Transactions service', () => {
   let waterUndertaker
 
   const billingPeriod = {
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2023-03-31')
+    endDate: new Date('2023-03-31'),
+    startDate: new Date('2022-04-01')
   }
 
   beforeEach(async () => {
@@ -33,11 +33,11 @@ describe('Generate Transactions service', () => {
     const { id: chargeCategoryId } = chargeCategory
 
     const baseChargeReference = await ChargeReferenceHelper.add({
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 4,
       abstractionPeriodEndDay: 31,
       abstractionPeriodEndMonth: 3,
-      adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null },
+      abstractionPeriodStartDay: 1,
+      abstractionPeriodStartMonth: 4,
+      adjustments: { aggregate: null, charge: null, s126: null, s127: false, s130: false, winter: false },
       chargeCategoryId,
       description: 'Charge reference 1 - Mineral washing',
       scheme: 'sroc'
@@ -59,41 +59,41 @@ describe('Generate Transactions service', () => {
 
     beforeEach(() => {
       chargePeriod = {
-        startDate: new Date('2022-04-01'),
-        endDate: new Date('2022-10-31')
+        endDate: new Date('2022-10-31'),
+        startDate: new Date('2022-04-01')
       }
       waterUndertaker = false
       newLicence = false
 
       expectedStandardChargeResult = {
-        billLicenceId,
-        chargeReferenceId: chargeReference.id,
-        startDate: chargePeriod.startDate,
-        endDate: chargePeriod.endDate,
-        source: 'non-tidal',
-        season: 'all year',
-        loss: 'low',
-        credit: false,
-        chargeType: 'standard',
-        authorisedQuantity: 200,
-        billableQuantity: 200,
+        adjustmentFactor: 1,
+        aggregateFactor: 1,
         authorisedDays: 365,
+        authorisedQuantity: 200,
         billableDays: 214,
-        status: 'candidate',
+        billableQuantity: 200,
+        billLicenceId,
+        chargeCategoryCode: chargeCategory.reference,
+        chargeCategoryDescription: chargeCategory.shortDescription,
+        chargeReferenceId: chargeReference.id,
+        chargeType: 'standard',
+        credit: false,
         description: 'Water abstraction charge: Charge reference 1 - Mineral washing',
-        volume: 200,
+        endDate: chargePeriod.endDate,
+        loss: 'low',
+        newLicence: false,
+        scheme: 'sroc',
+        season: 'all year',
+        secondPartCharge: false,
         section126Factor: 1,
         section127Agreement: false,
         section130Agreement: false,
-        newLicence: false,
-        secondPartCharge: false,
-        scheme: 'sroc',
-        aggregateFactor: 1,
-        adjustmentFactor: 1,
-        chargeCategoryCode: chargeCategory.reference,
-        chargeCategoryDescription: chargeCategory.shortDescription,
+        source: 'non-tidal',
+        startDate: chargePeriod.startDate,
+        status: 'candidate',
         supportedSource: false,
         supportedSourceName: null,
+        volume: 200,
         waterCompanyCharge: false,
         winterOnly: false
       }
@@ -176,10 +176,10 @@ describe('Generate Transactions service', () => {
 
         expect(results[1]).toMatchObject({
           ...expectedStandardChargeResult,
-          waterUndertaker,
           chargeType: 'compensation',
           description:
-            'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
+            'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement',
+          waterUndertaker
         })
       })
 
@@ -280,8 +280,8 @@ describe('Generate Transactions service', () => {
   describe('when a charge reference does not have billable days', () => {
     beforeEach(() => {
       chargePeriod = {
-        startDate: new Date('2022-04-01'),
-        endDate: new Date('2022-10-31')
+        endDate: new Date('2022-10-31'),
+        startDate: new Date('2022-04-01')
       }
 
       vi.spyOn(CalculateAuthorisedAndBillableDaysService, 'default').mockReturnValue({

@@ -10,13 +10,14 @@ import TransactionModel from 'water-abstraction-engine/models/transaction.model.
 import { generateUUID } from 'water-abstraction-engine/lib/general.lib.js'
 
 import BillRunError from '../../../errors/bill-run.error.js'
-import BillingConfig from '../../../config/billing.config.js'
 import DetermineChargePeriodService from '../determine-charge-period.service.js'
 import DetermineMinimumChargeService from '../determine-minimum-charge.service.js'
 import FetchPreviousTransactionsService from '../fetch-previous-transactions.service.js'
 import GenerateTwoPartTariffTransactionService from '../generate-two-part-tariff-transaction.service.js'
 import ProcessSupplementaryTransactionsService from '../process-supplementary-transactions.service.js'
 import SendTransactionsService from '../send-transactions.service.js'
+
+import BillingConfig from '../../../config/billing.config.js'
 
 /**
  * Process the billing accounts for a given billing period and creates their supplementary two-part tariff bills
@@ -100,8 +101,8 @@ function _findOrCreateBillLicence(billLicences, licence, billId) {
 
   if (!billLicence) {
     billLicence = {
-      id: generateUUID(),
       billId,
+      id: generateUUID(),
       licence,
       transactions: []
     }
@@ -220,13 +221,13 @@ async function _processBillingAccount(billingAccount, billRun, billingPeriod) {
   const { id: billRunId, externalId: billRunExternalId } = billRun
 
   const bill = {
-    id: generateUUID(),
     accountNumber,
     address: {}, // Address is set to an empty object for SROC billing invoices
     billingAccountId,
     billRunId,
     credit: false,
-    financialYearEnding: billingPeriod.endDate.getFullYear()
+    financialYearEnding: billingPeriod.endDate.getFullYear(),
+    id: generateUUID()
   }
 
   const allBillLicences = await _generateBillLicencesAndTransactions(bill.id, billingAccount, billingPeriod)

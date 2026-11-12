@@ -24,8 +24,8 @@ export default function reasonValidator(payload) {
       .required()
       .valid(...validValues)
       .messages({
-        'any.required': errorMessage,
         'any.only': errorMessage,
+        'any.required': errorMessage,
         'string.empty': errorMessage
       })
   })

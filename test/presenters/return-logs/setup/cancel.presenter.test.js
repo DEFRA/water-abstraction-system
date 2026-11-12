@@ -33,11 +33,11 @@ describe('Return Logs Setup - Cancel presenter', () => {
         abstractionPeriod: '1 January to 31 December',
         backLink: { href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/check', text: 'Back' },
         pageTitle: 'You are about to cancel this return submission',
+        pageTitleCaption: 'Return reference 1234',
         purposes: 'Evaporative Cooling',
         returnLogId: '799549be-5d03-4cae-ad7f-2fda6be9b10c',
         returnPeriod: '1 April 2004 to 31 March 2005',
         returnReceivedDate: '31 January 2025',
-        pageTitleCaption: 'Return reference 1234',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         tariff: 'Standard'
       })

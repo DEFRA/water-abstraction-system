@@ -22,6 +22,7 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
   let billRun
   let billRunPatchStub
   let billRunSelectStub
+
   beforeEach(async () => {
     billRunPatchStub = vi.fn().mockResolvedValue()
     billRunSelectStub = vi.fn()

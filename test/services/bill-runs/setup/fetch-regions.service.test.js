@@ -16,8 +16,8 @@ describe('Bill Runs Setup - Setup - Fetch Regions service', () => {
       //  of their tests. (Remove when cleans have been removed)
       const expectedRegions = RegionHelper.data.map((region) => {
         return {
-          id: region.id,
-          displayName: region.displayName
+          displayName: region.displayName,
+          id: region.id
         }
       })
 

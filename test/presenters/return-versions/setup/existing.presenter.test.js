@@ -9,42 +9,42 @@ describe('Return Versions - Setup - Existing presenter', () => {
 
   beforeEach(() => {
     session = {
-      id: '61e07498-f309-4829-96a9-72084a54996d',
       checkPageVisited: false,
+      id: '61e07498-f309-4829-96a9-72084a54996d',
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
-      requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
       licenceVersion: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        endDate: null,
-        startDate: '2022-04-01T00:00:00.000Z',
         copyableReturnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
-        ]
+        ],
+        endDate: null,
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        startDate: '2022-04-01T00:00:00.000Z'
       },
-      reason: 'major-change'
+      reason: 'major-change',
+      requirements: [{}],
+      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
+      startDateOptions: 'licenceStartDate'
     }
   })
 
@@ -57,7 +57,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
           text: 'Back'
         },
-        existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
+        existingOptions: [{ text: '1 January 2023', value: '60b5d10d-1372-4fb2-b222-bfac81da69ab' }],
         licenceRef: '01/ABC',
         pageTitle: 'Use previous requirements for returns',
         pageTitleCaption: 'Licence 01/ABC',
@@ -84,7 +84,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
           const result = ExistingPresenter(session)
 
           expect(result.existingOptions).toEqual([
-            { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
+            { text: '1 January 2023', value: '60b5d10d-1372-4fb2-b222-bfac81da69ab' }
           ])
         })
       })
@@ -99,7 +99,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
             const result = ExistingPresenter(session)
 
             expect(result.existingOptions).toEqual([
-              { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
+              { text: '1 January 2023', value: '60b5d10d-1372-4fb2-b222-bfac81da69ab' }
             ])
           })
         })
@@ -115,7 +115,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
             const result = ExistingPresenter(session)
 
             expect(result.existingOptions).toEqual([
-              { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023 - Record Loaded During Migration' }
+              { text: '1 January 2023 - Record Loaded During Migration', value: '60b5d10d-1372-4fb2-b222-bfac81da69ab' }
             ])
           })
         })
@@ -135,8 +135,8 @@ describe('Return Versions - Setup - Existing presenter', () => {
         const result = ExistingPresenter(session)
 
         expect(result.existingOptions).toEqual([
-          { value: '22ecef19-3a13-44a0-a55e-8f4d34dd59a5', text: '7 May 2024 - Major change' },
-          { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
+          { text: '7 May 2024 - Major change', value: '22ecef19-3a13-44a0-a55e-8f4d34dd59a5' },
+          { text: '1 January 2023', value: '60b5d10d-1372-4fb2-b222-bfac81da69ab' }
         ])
       })
     })

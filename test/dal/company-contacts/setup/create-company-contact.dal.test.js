@@ -46,7 +46,6 @@ describe('Company Contacts - Create Company Contact dal', () => {
       expect(newCompanyContact).toMatchObject({
         abstractionAlertLicences: null,
         abstractionAlerts: true,
-        createdBy: companyContact.createdBy,
         companyId: company.id,
         contact: {
           contactType: 'department',
@@ -63,6 +62,7 @@ describe('Company Contacts - Create Company Contact dal', () => {
           suffix: null
         },
         contactId: newCompanyContact.contact.id,
+        createdBy: companyContact.createdBy,
         default: false,
         deletedAt: null,
         id: result,

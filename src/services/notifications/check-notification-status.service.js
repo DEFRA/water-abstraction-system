@@ -34,12 +34,12 @@ const NOTIFICATIONS_STATUS = {
  */
 const EMAIL_STATUS = {
   created: NOTIFICATIONS_STATUS.pending,
-  sending: NOTIFICATIONS_STATUS.pending,
   delivered: NOTIFICATIONS_STATUS.sent,
+  error: NOTIFICATIONS_STATUS.error,
   'permanent-failure': NOTIFICATIONS_STATUS.error,
+  sending: NOTIFICATIONS_STATUS.pending,
   'technical-failure': NOTIFICATIONS_STATUS.error,
-  'temporary-failure': NOTIFICATIONS_STATUS.error,
-  error: NOTIFICATIONS_STATUS.error
+  'temporary-failure': NOTIFICATIONS_STATUS.error
 }
 
 /**
@@ -53,17 +53,17 @@ const EMAIL_STATUS = {
  * - **pending-virus-check** - GOV.UK Notify has not completed a virus scan of the precompiled letter file.
  */
 const LETTER_STATUS = {
-  'pending-virus-check': NOTIFICATIONS_STATUS.pending,
-  'permanent-failure': NOTIFICATIONS_STATUS.error,
-  'technical-failure': NOTIFICATIONS_STATUS.error,
-  'temporary-failure': NOTIFICATIONS_STATUS.error,
-  'validation-failed': NOTIFICATIONS_STATUS.error,
   accepted: NOTIFICATIONS_STATUS.pending,
   cancelled: NOTIFICATIONS_STATUS.cancelled,
   created: NOTIFICATIONS_STATUS.pending,
   error: NOTIFICATIONS_STATUS.error,
+  'pending-virus-check': NOTIFICATIONS_STATUS.pending,
+  'permanent-failure': NOTIFICATIONS_STATUS.error,
   received: NOTIFICATIONS_STATUS.sent,
-  sending: NOTIFICATIONS_STATUS.pending
+  sending: NOTIFICATIONS_STATUS.pending,
+  'technical-failure': NOTIFICATIONS_STATUS.error,
+  'temporary-failure': NOTIFICATIONS_STATUS.error,
+  'validation-failed': NOTIFICATIONS_STATUS.error
 }
 
 /**
@@ -148,6 +148,7 @@ async function _recordReturnLogs(notification, status, trx) {
   // having to do additional queries against the DB each time we process a notification just to work out whether we have
   // a later letter due date.
   const dueDateMinusOneDay = new Date(dueDate)
+
   dueDateMinusOneDay.setDate(dueDateMinusOneDay.getDate() - 1)
 
   await ReturnLogModel.query(trx)

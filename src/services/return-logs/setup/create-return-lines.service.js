@@ -33,8 +33,8 @@ function _returnLines(returnSubmissionId, session, timestamp) {
 
     return {
       ...restOfLine,
-      id: generateUUID(),
       createdAt: timestamp,
+      id: generateUUID(),
       quantity: line.quantityCubicMetres,
       readingType: session.meterProvided === 'yes' ? 'measured' : 'estimated',
       returnSubmissionId,

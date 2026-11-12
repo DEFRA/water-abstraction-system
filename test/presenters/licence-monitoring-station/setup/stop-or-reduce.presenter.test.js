@@ -23,9 +23,9 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce presenter', () => {
         backLink: '/system/licence-monitoring-station/setup/56b6545a-c8e9-4ecd-95fb-927677954f22/threshold-and-unit',
         monitoringStationLabel: 'Monitoring Station Label',
         pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
+        reduceAtThreshold: null,
         sessionId: '56b6545a-c8e9-4ecd-95fb-927677954f22',
-        stopOrReduce: null,
-        reduceAtThreshold: null
+        stopOrReduce: null
       })
     })
   })

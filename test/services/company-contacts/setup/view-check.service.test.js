@@ -19,10 +19,11 @@ describe('Company Contacts - Setup - Check Service', () => {
   let notification
   let session
   let yarStub
+
   beforeEach(async () => {
     company = CustomersFixtures.company()
 
-    session = SessionModelStub({ company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' })
+    session = SessionModelStub({ abstractionAlerts: 'yes', company, email: 'eric@test.com', name: 'Eric' })
 
     notification = undefined
 
@@ -31,7 +32,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
-    yarStub.flash.mockReturnValue([{ title: 'Test', text: 'Notification' }])
+    yarStub.flash.mockReturnValue([{ text: 'Notification', title: 'Test' }])
   })
 
   afterEach(() => {

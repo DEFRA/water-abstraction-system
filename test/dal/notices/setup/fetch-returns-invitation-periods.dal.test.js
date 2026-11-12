@@ -27,26 +27,26 @@ describe('Notices - Setup - Fetch Returns Invitation Periods DAL', () => {
 
     // This should be returned because it has a non-void return log with a null "due date"
     latestSummerReturnLogs = [
-      await ReturnLogHelper.add({ returnCycleId: latestSummerCycle.id, dueDate: null, status: 'due' }),
-      await ReturnLogHelper.add({ returnCycleId: latestSummerCycle.id, dueDate: null, status: 'void' }),
-      await ReturnLogHelper.add({ returnCycleId: latestSummerCycle.id, dueDate: yesterday(), status: 'due' })
+      await ReturnLogHelper.add({ dueDate: null, returnCycleId: latestSummerCycle.id, status: 'due' }),
+      await ReturnLogHelper.add({ dueDate: null, returnCycleId: latestSummerCycle.id, status: 'void' }),
+      await ReturnLogHelper.add({ dueDate: yesterday(), returnCycleId: latestSummerCycle.id, status: 'due' })
     ]
     // This should NOT be returned because all the linked return logs have a 'void' status
     latestWinterReturnLogs = [
-      await ReturnLogHelper.add({ returnCycleId: latestWinterCycle.id, dueDate: null, status: 'void' })
+      await ReturnLogHelper.add({ dueDate: null, returnCycleId: latestWinterCycle.id, status: 'void' })
     ]
     // This should not be returned because all the linked return logs have a non-null "due date"
     previousSummerLogs = [
-      await ReturnLogHelper.add({ returnCycleId: previousSummerCycle.id, dueDate: yesterday(), status: 'due' })
+      await ReturnLogHelper.add({ dueDate: yesterday(), returnCycleId: previousSummerCycle.id, status: 'due' })
     ]
     // This should be returned because the linked return logs have a non-void return log with a null "due date" or
     // are not current
     previousWinterReturnLogs = [
-      await ReturnLogHelper.add({ returnCycleId: previousWinterCycle.id, dueDate: null, status: 'due' }),
+      await ReturnLogHelper.add({ dueDate: null, returnCycleId: previousWinterCycle.id, status: 'due' }),
       await ReturnLogHelper.add({
-        returnCycleId: previousWinterCycle.id,
         dueDate: yesterday(),
         metadata: { isCurrent: false },
+        returnCycleId: previousWinterCycle.id,
         status: 'due'
       })
     ]

@@ -17,11 +17,11 @@ describe('Fetch Existing Licence Details Service', () => {
     describe('and the licence has no charge versions', () => {
       beforeAll(async () => {
         licence = await LicenceHelper.add({
-          revokedDate: new Date('2024-08-01'),
-          lapsedDate: new Date('2024-06-01'),
           expiredDate: new Date('2024-04-01'),
+          includeInPresrocBilling: 'yes',
           includeInSrocBilling: true,
-          includeInPresrocBilling: 'yes'
+          lapsedDate: new Date('2024-06-01'),
+          revokedDate: new Date('2024-08-01')
         })
       })
 
@@ -57,8 +57,8 @@ describe('Fetch Existing Licence Details Service', () => {
 
         // two-part tariff indicators
         const chargeReference = await ChargeReferenceHelper.add({
-          chargeVersionId: chargeVersion.id,
-          adjustments: { s127: true }
+          adjustments: { s127: true },
+          chargeVersionId: chargeVersion.id
         })
 
         await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })

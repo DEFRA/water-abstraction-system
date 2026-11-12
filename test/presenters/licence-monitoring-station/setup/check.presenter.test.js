@@ -9,22 +9,22 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
 
   beforeEach(() => {
     session = {
-      id: 'b9593e3f-865e-4594-a686-2be8910a876b',
-      unit: 'Ml/d',
-      label: 'LABEL',
-      licenceId: '1f172f20-75c1-484c-9697-5b0c7237d97a',
-      threshold: 100,
-      licenceRef: 'LICENCE_REF',
-      conditionId: '3bc24c6d-7998-40e1-8d01-8d6e093e9297',
-      stopOrReduce: 'stop',
-      checkPageVisited: true,
-      reduceAtThreshold: null,
-      monitoringStationId: 'f022a9d9-63b2-4a1c-b15e-171982832152',
-      conditionDisplayText: 'CONDITION_DISPLAY_TEXT',
       abstractionPeriodEndDay: 31,
       abstractionPeriodEndMonth: 12,
       abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 1
+      abstractionPeriodStartMonth: 1,
+      checkPageVisited: true,
+      conditionDisplayText: 'CONDITION_DISPLAY_TEXT',
+      conditionId: '3bc24c6d-7998-40e1-8d01-8d6e093e9297',
+      id: 'b9593e3f-865e-4594-a686-2be8910a876b',
+      label: 'LABEL',
+      licenceId: '1f172f20-75c1-484c-9697-5b0c7237d97a',
+      licenceRef: 'LICENCE_REF',
+      monitoringStationId: 'f022a9d9-63b2-4a1c-b15e-171982832152',
+      reduceAtThreshold: null,
+      stopOrReduce: 'stop',
+      threshold: 100,
+      unit: 'Ml/d'
     }
   })
 
@@ -48,13 +48,13 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
       const result = CheckPresenter(session)
 
       expect(result.links).toEqual({
-        threshold: '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/threshold-and-unit',
-        type: '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/stop-or-reduce',
-        licenceNumber: '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/licence-number',
+        abstractionPeriod:
+          '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/abstraction-period',
         licenceCondition:
           '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/full-condition',
-        abstractionPeriod:
-          '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/abstraction-period'
+        licenceNumber: '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/licence-number',
+        threshold: '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/threshold-and-unit',
+        type: '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/stop-or-reduce'
       })
     })
 

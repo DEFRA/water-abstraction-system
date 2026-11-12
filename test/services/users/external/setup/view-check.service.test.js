@@ -26,7 +26,7 @@ describe('Users - External - Setup - View Check Service', () => {
     vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
-    yarStub.flash.mockReturnValue([{ title: 'Updated', text: 'Licences unregistered.' }])
+    yarStub.flash.mockReturnValue([{ text: 'Licences unregistered.', title: 'Updated' }])
   })
 
   afterEach(() => {

@@ -57,19 +57,19 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: null,
           items: [
             {
+              checked: false,
               id: contact.id,
-              value: contact.id,
               text: contact.$name(),
-              checked: false
+              value: contact.id
             },
             {
               divider: 'or'
             },
             {
+              checked: false,
               id: 'new',
-              value: 'new',
               text: 'Add a new contact',
-              checked: false
+              value: 'new'
             }
           ],
           pageTitle: `Set up a contact for ${session.billingAccount.company.name}`,
@@ -102,19 +102,19 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: null,
           items: [
             {
+              checked: false,
               id: contact.id,
-              value: contact.id,
               text: contact.$name(),
-              checked: false
+              value: contact.id
             },
             {
               divider: 'or'
             },
             {
+              checked: false,
               id: 'new',
-              value: 'new',
               text: 'Add a new contact',
-              checked: false
+              value: 'new'
             }
           ],
           pageTitle: `Set up a contact for ${session.billingAccount.company.name}`,

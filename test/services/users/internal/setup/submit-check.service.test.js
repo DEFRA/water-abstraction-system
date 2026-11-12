@@ -78,8 +78,8 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
       expect(flashType).toEqual('notification')
       expect(bannerMessage).toEqual({
-        titleText: 'User added',
-        text: `We have emailed ${session.email} instructions to complete their account set up.`
+        text: `We have emailed ${session.email} instructions to complete their account set up.`,
+        titleText: 'User added'
       })
     })
 
@@ -138,8 +138,8 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({
-          titleText: 'User updated',
-          text: `We have emailed ${session.email} instructions to complete their account set up.`
+          text: `We have emailed ${session.email} instructions to complete their account set up.`,
+          titleText: 'User updated'
         })
       })
 
@@ -158,8 +158,8 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({
-          titleText: 'User updated',
-          text: `User ${session.email} has been updated.`
+          text: `User ${session.email} has been updated.`,
+          titleText: 'User updated'
         })
       })
 

@@ -31,9 +31,9 @@ export default async function fetchUserAuthDetailsDal(userId) {
 
   if (!user) {
     return {
-      user: null,
+      groups: [],
       roles: [],
-      groups: []
+      user: null
     }
   }
 
@@ -42,9 +42,9 @@ export default async function fetchUserAuthDetailsDal(userId) {
   const combinedAndDedupedRoles = _combineAndDedupeRoles([...roles, ...rolesFromGroups])
 
   return {
-    user,
+    groups,
     roles: combinedAndDedupedRoles,
-    groups
+    user
   }
 }
 
@@ -61,7 +61,7 @@ function _extractRolesAndGroupsFromUser(user) {
   delete user.roles
   delete user.groups
 
-  return { roles, groups }
+  return { groups, roles }
 }
 
 /**

@@ -4,9 +4,9 @@
  */
 
 import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
-import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { renewalNoticeDate } from 'water-abstraction-engine/lib/dates.lib.js'
 import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import { licenceRefSchema } from '../../../schemas/licence-ref.schema.js'
 

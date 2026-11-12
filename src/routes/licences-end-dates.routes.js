@@ -1,32 +1,38 @@
+/**
+ * Routes for the /licences/end-dates endpoints
+ *
+ * @module LicencesEndDatesRoutes
+ */
+
 import { check, process } from '../controllers/licences-end-dates.controller.js'
 
 export default [
   {
     method: 'POST',
-    path: '/licences/end-dates/check',
     options: {
-      handler: check,
       app: {
         plainOutput: true
       },
       auth: false,
+      handler: check,
       plugins: {
         crumb: false
       }
-    }
+    },
+    path: '/licences/end-dates/check'
   },
   {
     method: 'POST',
-    path: '/licences/end-dates/process',
     options: {
-      handler: process,
       app: {
         plainOutput: true
       },
       auth: false,
+      handler: process,
       plugins: {
         crumb: false
       }
-    }
+    },
+    path: '/licences/end-dates/process'
   }
 ]

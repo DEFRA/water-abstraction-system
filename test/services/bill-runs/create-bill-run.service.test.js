@@ -11,6 +11,7 @@ import CreateBillRunService from '../../../src/services/bill-runs/create-bill-ru
 
 describe('Create Bill Run service', () => {
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }
+
   let region
 
   beforeEach(async () => {
@@ -48,11 +49,11 @@ describe('Create Bill Run service', () => {
     it('returns the new bill run instance containing the provided values', async () => {
       const result = await CreateBillRunService(region.id, financialYearEndings, {
         batchType,
+        errorCode,
+        externalId,
         scheme,
         source,
-        externalId,
-        status,
-        errorCode
+        status
       })
 
       expect(result).toBeInstanceOf(BillRunModel)

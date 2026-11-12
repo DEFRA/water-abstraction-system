@@ -23,8 +23,8 @@ describe('View Bill service', () => {
       beforeEach(() => {
         vi.spyOn(FetchBillService, 'default').mockResolvedValue({
           bill: {
-            id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
-            billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
+            billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737',
+            id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3'
           },
           licenceSummaries: [
             { id: '82c106dd-ee90-4566-b06b-a66d9e56b4b1' },
@@ -85,8 +85,8 @@ describe('View Bill service', () => {
       beforeEach(() => {
         vi.spyOn(FetchBillService, 'default').mockResolvedValue({
           bill: {
-            id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
-            billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
+            billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737',
+            id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3'
           },
           licenceSummaries: [{ id: '82c106dd-ee90-4566-b06b-a66d9e56b4b1' }]
         })

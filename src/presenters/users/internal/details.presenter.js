@@ -3,8 +3,8 @@
  * @module DetailsPresenter
  */
 
-import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 import { formatLongDateTime, sentenceCase } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 
 /**
  * Formats data for internal users on the `/users/internal/{id}/details` page

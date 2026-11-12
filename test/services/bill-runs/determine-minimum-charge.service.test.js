@@ -13,8 +13,8 @@ const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
 
 describe('Determine Minimum Charge service', () => {
   const chargePeriod = {
-    startDate: new Date('2023-04-01'),
-    endDate: new Date('2024-03-31')
+    endDate: new Date('2024-03-31'),
+    startDate: new Date('2023-04-01')
   }
 
   let minimumChargeChangeReason
@@ -30,8 +30,8 @@ describe('Determine Minimum Charge service', () => {
     describe('and the charge version change reason triggers a minimum charge', () => {
       beforeEach(async () => {
         chargeVersion = await ChargeVersionHelper.add({
-          startDate: new Date('2023-04-01'),
-          changeReasonId: minimumChargeChangeReason.id
+          changeReasonId: minimumChargeChangeReason.id,
+          startDate: new Date('2023-04-01')
         })
         chargeVersion.changeReason = minimumChargeChangeReason
         chargeVersion.licence = { startDate: new Date('2022-01-01') }
@@ -47,8 +47,8 @@ describe('Determine Minimum Charge service', () => {
     describe('and the charge version change reason does not trigger a minimum charge', () => {
       beforeEach(async () => {
         chargeVersion = await ChargeVersionHelper.add({
-          startDate: new Date('2022-05-01'),
-          changeReasonId: noMinimumChargeChangeReason.id
+          changeReasonId: noMinimumChargeChangeReason.id,
+          startDate: new Date('2022-05-01')
         })
         chargeVersion.changeReason = noMinimumChargeChangeReason
         chargeVersion.licence = { startDate: new Date('2022-01-01') }
@@ -65,8 +65,8 @@ describe('Determine Minimum Charge service', () => {
   describe('where the charge version start date is not the same as the charge period', () => {
     beforeEach(async () => {
       chargeVersion = await ChargeVersionHelper.add({
-        startDate: new Date('2022-03-01'),
-        changeReasonId: minimumChargeChangeReason.id
+        changeReasonId: minimumChargeChangeReason.id,
+        startDate: new Date('2022-03-01')
       })
       chargeVersion.changeReason = minimumChargeChangeReason
       chargeVersion.licence = { startDate: new Date('2022-01-01') }

@@ -103,11 +103,11 @@ describe('Notices - Base presenter', () => {
 
     beforeEach(() => {
       returnsPeriod = {
-        name: 'allYear',
-        summer: 'false',
         dueDate: '2025-11-28T00:00:00.000Z',
         endDate: '2025-10-31T00:00:00.000Z',
-        startDate: '2024-11-01T00:00:00.000Z'
+        name: 'allYear',
+        startDate: '2024-11-01T00:00:00.000Z',
+        summer: 'false'
       }
     })
 

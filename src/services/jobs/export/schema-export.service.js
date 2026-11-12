@@ -21,6 +21,7 @@ import SendToS3BucketService from './send-to-s3-bucket.service.js'
  */
 export default async function schemaExportService(schemaName) {
   const schemaFolderPath = _folderToUpload(schemaName)
+
   let compressedSchemaPath
 
   try {

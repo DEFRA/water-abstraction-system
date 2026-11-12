@@ -19,10 +19,10 @@ export default function contactsPresenter(company, contacts) {
       href: '/',
       text: 'Go back to search'
     },
+    contacts: _contacts(contacts, company),
     links: _links(company),
     pageTitle: 'Contacts',
-    pageTitleCaption: company.name,
-    contacts: _contacts(contacts, company)
+    pageTitleCaption: company.name
   }
 }
 

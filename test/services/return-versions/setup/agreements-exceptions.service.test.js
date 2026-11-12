@@ -19,18 +19,18 @@ describe('Return Versions Setup - Agreements Exceptions service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
+      reason: 'major-change',
       requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change'
+      startDateOptions: 'licenceStartDate'
     }
 
     session = SessionModelStub(sessionData)
@@ -53,15 +53,15 @@ describe('Return Versions Setup - Agreements Exceptions service', () => {
       const result = await AgreementsExceptionsService(session.id, requirementIndex)
 
       expect(result).toMatchObject({
-        pageTitle: 'Select agreements and exceptions for the requirements for returns',
-        pageTitleCaption: 'Licence 01/ABC',
         agreementsExceptions: null,
         backLink: {
           href: `/system/return-versions/setup/${session.id}/frequency-reported/0`,
           text: 'Back'
         },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licenceRef: '01/ABC'
+        licenceRef: '01/ABC',
+        pageTitle: 'Select agreements and exceptions for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC'
       })
     })
   })

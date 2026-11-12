@@ -49,12 +49,12 @@ describe('Bills controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: rootPath,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: rootPath
         }
       })
 
@@ -110,12 +110,12 @@ describe('Bills controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `${rootPath}/remove`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `${rootPath}/remove`
         }
 
         vi.spyOn(RemoveBillService, 'default').mockResolvedValue({
@@ -181,6 +181,18 @@ function _testMultiLicenceBill() {
     addressLines: ['C/O Noel Edmonds', 'Crinkley Bottom', 'Cricket St Thomas', 'Somerset', 'TA20 1KL'],
     billId: '64924759-8142-4a08-9d1e-1e902cd9d316',
     billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+    billLicences: [
+      {
+        id: '6eff32eb-7c78-478a-8c8f-fb4d0451c359',
+        reference: '17/99/001/G/999',
+        total: '£2,889.00'
+      },
+      {
+        id: '09818dfd-9903-4180-9a2e-e7e72a9e66bb',
+        reference: '17/99/001/G/998',
+        total: '£70,709.00'
+      }
+    ],
     billNumber: 'EAI9999999T',
     billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
     billRunNumber: 10003,
@@ -198,21 +210,9 @@ function _testMultiLicenceBill() {
     flaggedForReissue: false,
     pageTitle: 'Bill for Mr B Blobby',
     region: 'South West',
+    tableCaption: '2 licences',
     total: '£213,178.00',
-    transactionFile: 'nalei50002t',
-    billLicences: [
-      {
-        id: '6eff32eb-7c78-478a-8c8f-fb4d0451c359',
-        reference: '17/99/001/G/999',
-        total: '£2,889.00'
-      },
-      {
-        id: '09818dfd-9903-4180-9a2e-e7e72a9e66bb',
-        reference: '17/99/001/G/998',
-        total: '£70,709.00'
-      }
-    ],
-    tableCaption: '2 licences'
+    transactionFile: 'nalei50002t'
   }
 }
 
@@ -232,22 +232,22 @@ function _testSingleLicenceBill() {
     contactName: null,
     credit: false,
     creditsTotal: '£0.00',
+    creditTotal: '£0.00',
     dateCreated: '1 November 2023',
     debitsTotal: '£1,162.00',
+    debitTotal: '£1,162.00',
     deminimis: false,
     displayCreditDebitTotals: true,
     financialYear: '2023 to 2024',
     flaggedForReissue: false,
-    pageTitle: 'Bill for Mr B Blobby',
-    region: 'South West',
-    total: '£1,162.00',
-    transactionFile: 'nalei50002t',
-    creditTotal: '£0.00',
-    debitTotal: '£1,162.00',
     licenceId: '6d4236b2-add7-4446-9472-6ffc98b0ded1',
     licenceRef: '17/99/001/G/999',
+    pageTitle: 'Bill for Mr B Blobby',
+    region: 'South West',
     scheme: 'sroc',
     tableCaption: '2 transactions',
+    total: '£1,162.00',
+    transactionFile: 'nalei50002t',
     transactions: [
       {
         additionalCharges: '',
@@ -256,8 +256,8 @@ function _testSingleLicenceBill() {
         chargeCategoryDescription: 'Medium loss, non-tidal, greater than 83 up to and including 142 ML/yr',
         chargeElements: [
           {
-            purpose: 'Trickle Irrigation - Direct',
             abstractionPeriod: '1 April to 31 October',
+            purpose: 'Trickle Irrigation - Direct',
             volume: '21.474ML'
           }
         ],
@@ -299,22 +299,22 @@ function _testSingleLicenceBillPreSroc() {
     contactName: null,
     credit: false,
     creditsTotal: '£0.00',
+    creditTotal: '£0.00',
     dateCreated: '1 November 2023',
     debitsTotal: '£1,162.00',
+    debitTotal: '£1,162.00',
     deminimis: false,
     displayCreditDebitTotals: true,
     financialYear: '2023 to 2024',
     flaggedForReissue: false,
-    pageTitle: 'Bill for Mr B Blobby',
-    region: 'South West',
-    total: '£1,162.00',
-    transactionFile: 'nalei50002t',
-    creditTotal: '£0.00',
-    debitTotal: '£1,162.00',
     licenceId: '6d4236b2-add7-4446-9472-6ffc98b0ded1',
     licenceRef: '17/99/001/G/999',
+    pageTitle: 'Bill for Mr B Blobby',
+    region: 'South West',
     scheme: 'alcs',
     tableCaption: '2 transactions',
+    total: '£1,162.00',
+    transactionFile: 'nalei50002t',
     transactions: [
       {
         additionalCharges: '',
@@ -323,8 +323,8 @@ function _testSingleLicenceBillPreSroc() {
         chargeCategoryDescription: 'Medium loss, non-tidal, greater than 83 up to and including 142 ML/yr',
         chargeElements: [
           {
-            purpose: 'Trickle Irrigation - Direct',
             abstractionPeriod: '1 April to 31 October',
+            purpose: 'Trickle Irrigation - Direct',
             volume: '21.474ML'
           }
         ],

@@ -1,5 +1,3 @@
-import tokenRequest from '../requests/charging-module/token.request.js'
-
 /**
  * Adds a server method which returns a Cognito token for the Charging Module.
  *
@@ -7,6 +5,8 @@ import tokenRequest from '../requests/charging-module/token.request.js'
  *
  * @module ChargingModuleTokenCachePlugin
  */
+
+import tokenRequest from '../requests/charging-module/token.request.js'
 
 const ONE_HOUR_IN_MS = 60 * 60 * 1000
 const ONE_MINUTE_IN_MS = 60 * 1000

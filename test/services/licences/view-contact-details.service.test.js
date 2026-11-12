@@ -36,9 +36,9 @@ describe('Licences - View Contact Details service', () => {
 
     contacts = [
       {
-        id: companyId,
+        contactName: 'Eldon Tyrell',
         contactType: 'licence-holder',
-        contactName: 'Eldon Tyrell'
+        id: companyId
       }
     ]
 

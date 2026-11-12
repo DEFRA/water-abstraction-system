@@ -65,12 +65,12 @@ describe('Company Contacts Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/setup/${generateUUID()}`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}`
         }
 
         id = generateUUID()
@@ -93,12 +93,12 @@ describe('Company Contacts Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/setup/${generateUUID()}/edit`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/edit`
         }
 
         id = generateUUID()
@@ -119,12 +119,12 @@ describe('Company Contacts Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/setup/${generateUUID()}/abstraction-alerts`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/abstraction-alerts`
         }
 
         vi.spyOn(ViewAbstractionAlertsService, 'default').mockReturnValue({ pageTitle: 'Abstraction alerts' })
@@ -164,12 +164,12 @@ describe('Company Contacts Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/setup/${generateUUID()}/cancel`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/cancel`
         }
 
         vi.spyOn(ViewCancelService, 'default').mockReturnValue({ pageTitle: 'Cancel' })
@@ -211,12 +211,12 @@ describe('Company Contacts Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/setup/${generateUUID()}/check`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/check`
         }
 
         vi.spyOn(ViewCheckService, 'default').mockReturnValue({ pageTitle: 'Check' })
@@ -258,12 +258,12 @@ describe('Company Contacts Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/setup/${generateUUID()}/contact-name`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/contact-name`
         }
 
         vi.spyOn(ViewContactNameService, 'default').mockReturnValue({ pageTitle: 'Contact name' })
@@ -301,12 +301,12 @@ describe('Company Contacts Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/setup/${generateUUID()}/contact-email`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/contact-email`
         }
 
         vi.spyOn(ViewContactEmailService, 'default').mockReturnValue({ pageTitle: 'Contact email' })
@@ -346,12 +346,12 @@ describe('Company Contacts Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/setup/${generateUUID()}/licences`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/licences`
         }
 
         vi.spyOn(ViewLicencesService, 'default').mockReturnValue({ pageTitle: 'Licences' })
@@ -389,12 +389,12 @@ describe('Company Contacts Setup controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/setup/${generateUUID()}/restore`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/restore`
         }
 
         vi.spyOn(ViewRestoreService, 'default').mockReturnValue({ pageTitle: 'Restore' })

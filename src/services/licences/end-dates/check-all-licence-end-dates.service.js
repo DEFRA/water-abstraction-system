@@ -8,6 +8,7 @@ import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstra
 
 import CheckLicenceEndDatesService from './check-licence-end-dates.service.js'
 import FetchLicences from './fetch-licences.service.js'
+
 import LicencesConfig from '../../../config/licences.config.js'
 
 /**

@@ -234,57 +234,55 @@ function _generateData(returnMatched = true) {
 
   // All data not required for the tests has been excluded from the generated data
   const dataToPersist = {
-    id: generateUUID(),
-    licenceRef: '1/11/10/*S/0084',
-    licenceHolder: 'A licence holder',
-    status: 'ready',
-    issues: [],
     chargeVersions: [
       {
-        id: generateUUID(),
         changeReason: {
           description: 'Strategic review of charges (SRoC)'
         },
+        chargePeriod: {
+          endDate: new Date('2023-03-31'),
+          startDate: new Date('2022-04-01')
+        },
         chargeReferences: [
           {
-            id: generateUUID(),
             aggregate: null,
-            winter: true,
             charge: null,
+            chargeElements: [
+              {
+                allocatedQuantity: returnMatched ? 32 : 0,
+                chargeDatesOverlap: false,
+                id: generateUUID(),
+                issues: [],
+                returnLogs: returnMatched ? chargeElementReturnLogs : [],
+                status: 'ready'
+              }
+            ],
+            id: generateUUID(),
             s126: null,
             s127: true,
             s130: false,
             volume: 200,
-            chargeElements: [
-              {
-                id: generateUUID(),
-                returnLogs: returnMatched ? chargeElementReturnLogs : [],
-                allocatedQuantity: returnMatched ? 32 : 0,
-                chargeDatesOverlap: false,
-                status: 'ready',
-                issues: []
-              }
-            ]
+            winter: true
           }
         ],
-        chargePeriod: {
-          startDate: new Date('2022-04-01'),
-          endDate: new Date('2023-03-31')
-        }
+        id: generateUUID()
       }
     ],
+    id: generateUUID(),
+    issues: [],
+    licenceHolder: 'A licence holder',
+    licenceRef: '1/11/10/*S/0084',
     returnLogs: [
       {
-        id: returnLogId,
-        returnId: generateReturnId(),
-        returnReference: 10021668,
+        abstractionOutsidePeriod: false,
+        allocatedQuantity: returnMatched ? 32 : 0,
         description: 'DRAINS ETC-DEEPING FEN AND OTHER LINKED SITES',
-        startDate: new Date('2022-04-01'),
-        endDate: new Date('2023-03-31'),
-        receivedDate: new Date('2023-03-01'),
         dueDate: new Date('2023-04-28'),
-        status: 'completed',
-        underQuery: false,
+        endDate: new Date('2023-03-31'),
+        id: returnLogId,
+        issues: [],
+        matched: returnMatched,
+        nilReturn: false,
         purposes: [
           {
             tertiary: {
@@ -293,14 +291,16 @@ function _generateData(returnMatched = true) {
             }
           }
         ],
-        nilReturn: false,
         quantity: 32,
-        allocatedQuantity: returnMatched ? 32 : 0,
-        abstractionOutsidePeriod: false,
-        matched: returnMatched,
-        issues: []
+        receivedDate: new Date('2023-03-01'),
+        returnId: generateReturnId(),
+        returnReference: 10021668,
+        startDate: new Date('2022-04-01'),
+        status: 'completed',
+        underQuery: false
       }
-    ]
+    ],
+    status: 'ready'
   }
 
   return dataToPersist

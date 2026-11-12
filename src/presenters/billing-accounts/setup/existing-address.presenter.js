@@ -70,10 +70,10 @@ function _radioOptions(addressSelected, companyAddresses) {
     const text = addressParts.join(', ')
 
     items.push({
+      checked: addressSelected === address.id,
       id: address.id,
-      value: address.id,
       text,
-      checked: addressSelected === address.id
+      value: address.id
     })
   }
 
@@ -82,10 +82,10 @@ function _radioOptions(addressSelected, companyAddresses) {
       divider: 'or'
     },
     {
+      checked: addressSelected === 'new',
       id: 'new',
-      value: 'new',
       text: 'Setup a new address',
-      checked: addressSelected === 'new'
+      value: 'new'
     }
   )
 

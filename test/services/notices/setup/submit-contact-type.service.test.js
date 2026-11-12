@@ -47,8 +47,8 @@ describe('Notices - Setup - Submit Contact Type service', () => {
     describe('email payload', () => {
       beforeEach(() => {
         payload = {
-          contactType: 'email',
-          contactEmail: 'test@test.gov.uk'
+          contactEmail: 'test@test.gov.uk',
+          contactType: 'email'
         }
       })
 
@@ -82,7 +82,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
-        expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).toEqual({ text: 'Additional recipient added', titleText: 'Updated' })
 
         expect(result).toEqual({
           contactType: 'email'
@@ -93,8 +93,8 @@ describe('Notices - Setup - Submit Contact Type service', () => {
     describe('email payload with no existing additionalRecipients', () => {
       beforeEach(() => {
         payload = {
-          contactType: 'email',
-          contactEmail: 'test@test.gov.uk'
+          contactEmail: 'test@test.gov.uk',
+          contactType: 'email'
         }
 
         session = SessionModelStub(sessionData)
@@ -125,7 +125,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
-        expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).toEqual({ text: 'Additional recipient added', titleText: 'Updated' })
 
         expect(result).toEqual({
           contactType: 'email'
@@ -136,8 +136,8 @@ describe('Notices - Setup - Submit Contact Type service', () => {
     describe('email payload with no existing additionalRecipients with the address capitalised', () => {
       beforeEach(() => {
         payload = {
-          contactType: 'email',
-          contactEmail: 'TEST@TEST.GOV.UK'
+          contactEmail: 'TEST@TEST.GOV.UK',
+          contactType: 'email'
         }
 
         session = SessionModelStub(sessionData)
@@ -168,7 +168,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
-        expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).toEqual({ text: 'Additional recipient added', titleText: 'Updated' })
 
         expect(result).toEqual({
           contactType: 'email'
@@ -179,8 +179,8 @@ describe('Notices - Setup - Submit Contact Type service', () => {
     describe('email payload with an existing additionalRecipients', () => {
       beforeEach(() => {
         payload = {
-          contactType: 'email',
-          contactEmail: 'other.test@test.gov.uk'
+          contactEmail: 'other.test@test.gov.uk',
+          contactType: 'email'
         }
 
         sessionData.additionalRecipients = [
@@ -232,7 +232,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
-        expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
+        expect(bannerMessage).toEqual({ text: 'Additional recipient added', titleText: 'Updated' })
 
         expect(result).toEqual({
           contactType: 'email'
@@ -243,8 +243,8 @@ describe('Notices - Setup - Submit Contact Type service', () => {
     describe('post payload', () => {
       beforeEach(() => {
         payload = {
-          contactType: 'post',
-          contactName: 'Fake Name'
+          contactName: 'Fake Name',
+          contactType: 'post'
         }
 
         session = SessionModelStub(sessionData)
@@ -293,15 +293,15 @@ describe('Notices - Setup - Submit Contact Type service', () => {
           contactName: null,
           contactType: null,
           error: {
+            contactType: {
+              text: 'Select how to contact the recipient'
+            },
             errorList: [
               {
                 href: '#contactType',
                 text: 'Select how to contact the recipient'
               }
-            ],
-            contactType: {
-              text: 'Select how to contact the recipient'
-            }
+            ]
           },
           pageTitle: 'Select how to contact the recipient',
           pageTitleCaption: 'Notice RINV-CPFRQ4'
@@ -335,15 +335,15 @@ describe('Notices - Setup - Submit Contact Type service', () => {
           contactName: null,
           contactType: 'email',
           error: {
+            contactEmail: {
+              text: 'Enter an email address'
+            },
             errorList: [
               {
                 href: '#contactEmail',
                 text: 'Enter an email address'
               }
-            ],
-            contactEmail: {
-              text: 'Enter an email address'
-            }
+            ]
           },
           pageTitle: 'Select how to contact the recipient',
           pageTitleCaption: 'Notice RINV-CPFRQ4'
@@ -377,15 +377,15 @@ describe('Notices - Setup - Submit Contact Type service', () => {
           contactName: null,
           contactType: 'post',
           error: {
+            contactName: {
+              text: 'Enter the recipients name'
+            },
             errorList: [
               {
                 href: '#contactName',
                 text: 'Enter the recipients name'
               }
-            ],
-            contactName: {
-              text: 'Enter the recipients name'
-            }
+            ]
           },
           pageTitle: 'Select how to contact the recipient',
           pageTitleCaption: 'Notice RINV-CPFRQ4'

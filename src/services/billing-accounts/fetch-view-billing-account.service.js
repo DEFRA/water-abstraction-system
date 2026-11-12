@@ -3,9 +3,9 @@
  * @module FetchViewBillingAccountService
  */
 
+import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
-import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
 
 /**

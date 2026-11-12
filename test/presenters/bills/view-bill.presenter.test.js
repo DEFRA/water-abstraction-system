@@ -171,70 +171,70 @@ describe('View Bill presenter', () => {
 
 function _testBill() {
   return {
-    id: '64924759-8142-4a08-9d1e-1e902cd9d316',
-    creditNoteValue: 0,
-    financialYearEnding: 2023,
     billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+    billRun: {
+      batchType: 'annual',
+      billRunNumber: 10003,
+      createdAt: new Date('2023-03-07'),
+      id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+      region: {
+        displayName: 'South West',
+        id: 'adca5dd3-114d-4477-8cdd-684081429f4b'
+      },
+      scheme: 'sroc',
+      source: 'wrls',
+      status: 'sent',
+      summer: false,
+      transactionFileReference: 'nalei50002t'
+    },
+    createdAt: new Date('2023-03-07'),
+    credit: false,
+    creditNoteValue: 0,
+    deminimis: false,
+    financialYearEnding: 2023,
+    flaggedForRebilling: false,
+    id: '64924759-8142-4a08-9d1e-1e902cd9d316',
     invoiceNumber: 'EAI0000007T',
     invoiceValue: 21317800,
-    credit: false,
-    flaggedForRebilling: false,
     netAmount: 21317800,
-    rebillingState: null,
-    deminimis: false,
-    createdAt: new Date('2023-03-07'),
-    billRun: {
-      id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
-      batchType: 'annual',
-      status: 'sent',
-      billRunNumber: 10003,
-      transactionFileReference: 'nalei50002t',
-      scheme: 'sroc',
-      summer: false,
-      source: 'wrls',
-      createdAt: new Date('2023-03-07'),
-      region: {
-        id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
-        displayName: 'South West'
-      }
-    }
+    rebillingState: null
   }
 }
 
 function _testBillingAccount() {
   const data = {
-    id: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
     accountNumber: 'E88888888A',
-    company: {
-      type: 'organisation',
-      name: 'Wessex Water Services Ltd'
-    },
     billingAccountAddresses: [
       {
-        id: 'b0e53215-b73a-4570-992b-2a724944ea19',
-        billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
-        addressId: 'f3360183-8002-4802-a6d4-80d7e7160a50',
-        startDate: new Date('1999-10-01'),
-        endDate: null,
-        companyId: null,
-        contactId: null,
-        createdAt: new Date('2022-06-15'),
-        updatedAt: new Date('2023-10-17'),
-        company: null,
-        contact: null,
         address: {
-          id: 'f3360183-8002-4802-a6d4-80d7e7160a50',
           address1: '86 Oxford Road',
           address2: 'WOOTTON',
           address3: null,
           address4: null,
           address5: 'COURTENAY',
           address6: null,
-          postcode: 'TA24 8NX',
-          country: null
-        }
+          country: null,
+          id: 'f3360183-8002-4802-a6d4-80d7e7160a50',
+          postcode: 'TA24 8NX'
+        },
+        addressId: 'f3360183-8002-4802-a6d4-80d7e7160a50',
+        billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+        company: null,
+        companyId: null,
+        contact: null,
+        contactId: null,
+        createdAt: new Date('2022-06-15'),
+        endDate: null,
+        id: 'b0e53215-b73a-4570-992b-2a724944ea19',
+        startDate: new Date('1999-10-01'),
+        updatedAt: new Date('2023-10-17')
       }
-    ]
+    ],
+    company: {
+      name: 'Wessex Water Services Ltd',
+      type: 'organisation'
+    },
+    id: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0'
   }
 
   return BillingAccountModel.fromJson(data)

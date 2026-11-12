@@ -245,9 +245,9 @@ function _addBillRun(billRunNumber, createdAt, netTotal, creditNoteCount, invoic
   return BillRunHelper.add({
     billRunNumber,
     createdAt,
-    netTotal,
     creditNoteCount,
     invoiceCount,
+    netTotal,
     regionId,
     status: 'sent'
   })

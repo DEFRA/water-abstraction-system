@@ -22,7 +22,6 @@ describe('Address - Submit International Service', () => {
     sessionId = generateUUID()
 
     sessionData = {
-      id: sessionId,
       addressJourney: {
         activeNavBar: 'manage',
         address: {},
@@ -31,7 +30,8 @@ describe('Address - Submit International Service', () => {
           text: 'Back'
         },
         redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-      }
+      },
+      id: sessionId
     }
 
     session = SessionModelStub(sessionData)
@@ -84,6 +84,16 @@ describe('Address - Submit International Service', () => {
           const result = await SubmitInternationalService(sessionId, payload)
 
           expect(result).toEqual({
+            activeNavBar: 'manage',
+            addressLine1: null,
+            addressLine2: null,
+            addressLine3: null,
+            addressLine4: null,
+            backLink: {
+              href: `/system/address/${sessionId}/postcode`,
+              text: 'Back'
+            },
+            country: countryLookup(),
             error: {
               addressLine1: { text: 'Enter address line 1' },
               country: { text: 'Select a country' },
@@ -98,16 +108,6 @@ describe('Address - Submit International Service', () => {
                 }
               ]
             },
-            activeNavBar: 'manage',
-            addressLine1: null,
-            addressLine2: null,
-            addressLine3: null,
-            addressLine4: null,
-            backLink: {
-              href: `/system/address/${sessionId}/postcode`,
-              text: 'Back'
-            },
-            country: countryLookup(),
             pageTitle: 'Enter the international address',
             pageTitleCaption: null,
             postcode: null
@@ -124,15 +124,6 @@ describe('Address - Submit International Service', () => {
           const result = await SubmitInternationalService(sessionId, payload)
 
           expect(result).toEqual({
-            error: {
-              country: { text: 'Select a country' },
-              errorList: [
-                {
-                  href: '#country',
-                  text: 'Select a country'
-                }
-              ]
-            },
             activeNavBar: 'manage',
             addressLine1: 'Falsches Unternehmen',
             addressLine2: null,
@@ -143,6 +134,15 @@ describe('Address - Submit International Service', () => {
               text: 'Back'
             },
             country: countryLookup(),
+            error: {
+              country: { text: 'Select a country' },
+              errorList: [
+                {
+                  href: '#country',
+                  text: 'Select a country'
+                }
+              ]
+            },
             pageTitle: 'Enter the international address',
             pageTitleCaption: null,
             postcode: null

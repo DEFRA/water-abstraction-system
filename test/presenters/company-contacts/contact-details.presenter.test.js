@@ -41,10 +41,10 @@ describe('Company Contacts - Contact Details presenter', () => {
           name: 'Rachael Tyrell'
         },
         editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
-        warning: null,
         pageTitle: 'Contact details for Rachael Tyrell',
         pageTitleCaption: 'Tyrell Corporation',
-        removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
+        removeContactLink: `/system/company-contacts/${companyContact.id}/remove`,
+        warning: null
       })
     })
 
@@ -159,8 +159,8 @@ describe('Company Contacts - Contact Details presenter', () => {
           const result = ContactDetailsPresenter(company, companyContact, licences)
 
           expect(result.warning).toEqual({
-            text: 'One or more licences for abstraction alerts have ended. No alerts will be sent for these.',
-            iconFallbackText: 'Warning'
+            iconFallbackText: 'Warning',
+            text: 'One or more licences for abstraction alerts have ended. No alerts will be sent for these.'
           })
         })
       })

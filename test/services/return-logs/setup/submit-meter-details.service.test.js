@@ -19,8 +19,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
   beforeEach(async () => {
     sessionData = {
-      returnReference: 12345,
-      reported: 'meterReadings'
+      reported: 'meterReadings',
+      returnReference: 12345
     }
 
     session = SessionModelStub(sessionData)
@@ -39,9 +39,9 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
+          meter10TimesDisplay: 'yes',
           meterMake: 'WATER',
-          meterSerialNumber: '123',
-          meter10TimesDisplay: 'yes'
+          meterSerialNumber: '123'
         }
       })
 
@@ -92,7 +92,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
         const [flashType, notification] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
-        expect(notification).toEqual({ titleText: 'Updated', text: 'Reporting details changed' })
+        expect(notification).toEqual({ text: 'Reporting details changed', titleText: 'Updated' })
       })
     })
 
@@ -106,9 +106,9 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
         expect(result).toMatchObject({
           backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
+          meter10TimesDisplay: null,
           meterMake: null,
           meterSerialNumber: null,
-          meter10TimesDisplay: null,
           pageTitle: 'Meter details',
           pageTitleCaption: 'Return reference 12345'
         })
@@ -127,9 +127,9 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
                 text: 'Select if the meter has a ×10 display'
               }
             ],
+            meter10TimesDisplay: { text: 'Select if the meter has a ×10 display' },
             meterMake: { text: 'Enter the make of the meter' },
-            meterSerialNumber: { text: 'Enter a serial number' },
-            meter10TimesDisplay: { text: 'Select if the meter has a ×10 display' }
+            meterSerialNumber: { text: 'Enter a serial number' }
           })
         })
       })
@@ -137,8 +137,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       describe('because the user has not entered the "make"', () => {
         beforeEach(() => {
           payload = {
-            meterSerialNumber: '123',
-            meter10TimesDisplay: 'yes'
+            meter10TimesDisplay: 'yes',
+            meterSerialNumber: '123'
           }
         })
 
@@ -155,8 +155,8 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       describe('because the user has not entered the "serial number"', () => {
         beforeEach(() => {
           payload = {
-            meterMake: 'WATER',
-            meter10TimesDisplay: 'yes'
+            meter10TimesDisplay: 'yes',
+            meterMake: 'WATER'
           }
         })
 

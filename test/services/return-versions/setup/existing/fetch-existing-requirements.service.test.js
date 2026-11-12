@@ -28,7 +28,6 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
         id: seededReturnVersion.id,
         multipleUpload: false,
         quarterlyReturns: false,
-        startDate: seededReturnVersion.startDate,
         returnRequirements: [
           {
             abstractionPeriodEndDay: 31,
@@ -41,21 +40,21 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
             id: seededReturnRequirementTwo.id,
             points: [
               {
-                id: seededReturnRequirementTwo.points[0].id,
-                description: 'WELL AT WELLINGTON'
+                description: 'WELL AT WELLINGTON',
+                id: seededReturnRequirementTwo.points[0].id
               }
             ],
             reabstraction: true,
             reportingFrequency: 'month',
             returnRequirementPurposes: [
               {
-                id: seededReturnRequirementTwo.returnRequirementPurposes[0].id,
                 alias: null,
-                purposeId: seededReturnRequirementTwo.returnRequirementPurposes[0].purpose.id,
+                id: seededReturnRequirementTwo.returnRequirementPurposes[0].id,
                 purpose: {
-                  id: seededReturnRequirementTwo.returnRequirementPurposes[0].purpose.id,
-                  description: seededReturnRequirementTwo.returnRequirementPurposes[0].purpose.description
-                }
+                  description: seededReturnRequirementTwo.returnRequirementPurposes[0].purpose.description,
+                  id: seededReturnRequirementTwo.returnRequirementPurposes[0].purpose.id
+                },
+                purposeId: seededReturnRequirementTwo.returnRequirementPurposes[0].purpose.id
               }
             ],
             siteDescription: 'SUMMER BOREHOLE AT AVALON',
@@ -73,28 +72,29 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
             id: seededReturnRequirementOne.id,
             points: [
               {
-                id: seededReturnRequirementOne.points[0].id,
-                description: 'WELL AT WELLINGTON'
+                description: 'WELL AT WELLINGTON',
+                id: seededReturnRequirementOne.points[0].id
               }
             ],
             reabstraction: false,
             reportingFrequency: 'week',
             returnRequirementPurposes: [
               {
-                id: seededReturnRequirementOne.returnRequirementPurposes[0].id,
                 alias: 'I have an alias',
-                purposeId: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.id,
+                id: seededReturnRequirementOne.returnRequirementPurposes[0].id,
                 purpose: {
-                  id: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.id,
-                  description: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.description
-                }
+                  description: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.description,
+                  id: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.id
+                },
+                purposeId: seededReturnRequirementOne.returnRequirementPurposes[0].purpose.id
               }
             ],
             siteDescription: 'WINTER BOREHOLE AT AVALON',
             summer: false,
             twoPartTariff: false
           }
-        ]
+        ],
+        startDate: seededReturnVersion.startDate
       })
     })
   })

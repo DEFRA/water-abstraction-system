@@ -22,26 +22,26 @@ export default async function updateCompanyContactDal(companyContact) {
 async function _update(companyContact) {
   return CompanyContactModel.query().upsertGraph(
     {
-      id: companyContact.id,
       abstractionAlertLicences: companyContact.abstractionAlertLicences,
       abstractionAlerts: companyContact.abstractionAlerts,
-      updatedBy: companyContact.updatedBy,
-      updatedAt: today().toISOString(),
-      deletedAt: null,
       contact: {
-        id: companyContact.contactId,
+        contactType: 'department',
+        dataSource: 'wrls',
         department: companyContact.name,
         email: companyContact.email,
-        dataSource: 'wrls',
-        contactType: 'department',
+        firstName: null,
+        id: companyContact.contactId,
         initials: null,
         lastName: null,
         middleInitials: null,
         salutation: null,
         suffix: null,
-        firstName: null,
         updatedAt: today().toISOString()
-      }
+      },
+      deletedAt: null,
+      id: companyContact.id,
+      updatedAt: today().toISOString(),
+      updatedBy: companyContact.updatedBy
     },
     { noDelete: true }
   )

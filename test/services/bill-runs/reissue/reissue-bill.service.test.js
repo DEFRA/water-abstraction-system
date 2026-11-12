@@ -4,9 +4,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Test helpers
 import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
 import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import http2 from 'node:http2'
 import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
-import http2 from 'node:http2'
 
 // Things we need to stub
 import * as ChargingModuleReissueBillRequest from '../../../../src/requests/charging-module/reissue-bill.request.js'
@@ -32,14 +32,11 @@ const CHARGING_MODULE_REISSUE_INVOICE_RESPONSE = {
 
 const CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE = {
   invoice: {
-    id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[0].id,
     billRunId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID,
-    rebilledInvoiceId: INVOICE_EXTERNAL_ID,
-    rebilledType: 'C',
-    netTotal: -2000,
-    deminimisInvoice: false,
-    debitLineValue: 0,
     creditLineValue: 2000,
+    debitLineValue: 0,
+    deminimisInvoice: false,
+    id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[0].id,
     licences: [
       {
         id: generateUUID(),
@@ -51,20 +48,20 @@ const CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE = {
         licenceNumber: 'INVOICE_LICENCE_2',
         transactions: [_generateCMTransaction(true, INVOICE_LICENCE_2_TRANSACTION_ID)]
       }
-    ]
+    ],
+    netTotal: -2000,
+    rebilledInvoiceId: INVOICE_EXTERNAL_ID,
+    rebilledType: 'C'
   }
 }
 
 const CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE = {
   invoice: {
-    id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[1].id,
     billRunId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID,
-    rebilledInvoiceId: INVOICE_EXTERNAL_ID,
-    rebilledType: 'R',
-    netTotal: 2000,
-    deminimisInvoice: false,
-    debitLineValue: 2000,
     creditLineValue: 0,
+    debitLineValue: 2000,
+    deminimisInvoice: false,
+    id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[1].id,
     licences: [
       {
         id: generateUUID(),
@@ -76,7 +73,10 @@ const CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE = {
         licenceNumber: 'INVOICE_LICENCE_2',
         transactions: [_generateCMTransaction(false, INVOICE_LICENCE_2_TRANSACTION_ID)]
       }
-    ]
+    ],
+    netTotal: 2000,
+    rebilledInvoiceId: INVOICE_EXTERNAL_ID,
+    rebilledType: 'R'
   }
 }
 
@@ -88,27 +88,27 @@ describe('Reissue Bill service', () => {
     reissueBillRun = { externalId: generateUUID() }
 
     vi.spyOn(ChargingModuleReissueBillRequest, 'default').mockResolvedValue({
-      succeeded: true,
-      response: { body: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE }
+      response: { body: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE },
+      succeeded: true
     })
 
     vi.spyOn(ChargingModuleViewBillRequest, 'default')
       .mockResolvedValueOnce({
-        succeeded: true,
-        response: { body: CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE }
+        response: { body: CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE },
+        succeeded: true
       })
       .mockResolvedValueOnce({
-        succeeded: true,
-        response: { body: CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE }
+        response: { body: CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE },
+        succeeded: true
       })
 
     vi.spyOn(ChargingModuleViewBillRunStatusRequest, 'default').mockResolvedValue({
-      succeeded: true,
       response: {
         body: {
           status: 'initialised'
         }
-      }
+      },
+      succeeded: true
     })
 
     sourceBill = await BillHelper.add({
@@ -228,13 +228,13 @@ describe('Reissue Bill service', () => {
           .spyOn(ChargingModuleViewBillRunStatusRequest, 'default')
 
           .mockResolvedValueOnce({
-            succeeded: true,
-            response: { body: { status: 'pending' } }
+            response: { body: { status: 'pending' } },
+            succeeded: true
           })
 
           .mockResolvedValueOnce({
-            succeeded: true,
-            response: { body: { status: 'initialised' } }
+            response: { body: { status: 'initialised' } },
+            succeeded: true
           })
       })
 
@@ -250,14 +250,14 @@ describe('Reissue Bill service', () => {
     describe('when sending the reissue request', () => {
       beforeEach(() => {
         vi.spyOn(ChargingModuleReissueBillRequest, 'default').mockResolvedValue({
-          succeeded: false,
           response: {
             body: {
               error: 'Conflict',
               message: 'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.',
               statusCode: HTTP_STATUS_CONFLICT
             }
-          }
+          },
+          succeeded: false
         })
       })
 
@@ -294,14 +294,14 @@ describe('Reissue Bill service', () => {
         vi.spyOn(ChargingModuleViewBillRequest, 'default')
           .mockReset()
           .mockResolvedValue({
-            succeeded: false,
             response: {
               body: {
                 error: 'Conflict',
                 message: 'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.',
                 statusCode: HTTP_STATUS_CONFLICT
               }
-            }
+            },
+            succeeded: false
           })
       })
 
@@ -339,9 +339,9 @@ describe('Reissue Bill service', () => {
 
 function _generateCMTransaction(credit, rebilledTransactionId) {
   return {
-    id: generateUUID(),
     chargeValue: 1000,
     credit,
+    id: generateUUID(),
     rebilledTransactionId
   }
 }

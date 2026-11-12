@@ -84,8 +84,8 @@ function _transaction(reviewChargeReference) {
     compensationCharge: false, // Always false for the two-part tariff annual
     credit: false,
     loss: chargeReference.loss,
-    periodStart: formatChargingModuleDate(reviewChargeVersion.chargePeriodStartDate),
     periodEnd: formatChargingModuleDate(reviewChargeVersion.chargePeriodEndDate),
+    periodStart: formatChargingModuleDate(reviewChargeVersion.chargePeriodStartDate),
     ruleset: 'sroc',
     section127Agreement,
     section130Agreement,

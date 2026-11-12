@@ -87,9 +87,9 @@ async function _agentCompany(session, companyContacts, existingAccount) {
 
   return {
     ...(companyId && { companyId }),
+    companyNumber: session.companiesHouseNumber ?? null,
     name: companyName,
-    type: session.accountType === 'company' ? 'organisation' : 'person',
-    companyNumber: session.companiesHouseNumber ?? null
+    type: session.accountType === 'company' ? 'organisation' : 'person'
   }
 }
 
@@ -101,6 +101,7 @@ function _contact(session, companyContacts) {
   const { contacts } = companyContacts
 
   const existingContact = !!session.contactSelected && session.contactSelected !== 'new'
+
   let name = session.contactName
 
   if (existingContact) {
@@ -113,7 +114,7 @@ function _contact(session, companyContacts) {
 
   return {
     ...(existingContact && { id: session.contactSelected }),
-    type: 'department',
-    department: name
+    department: name,
+    type: 'department'
   }
 }

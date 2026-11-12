@@ -5,8 +5,8 @@
  */
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
-import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 import { handleOneOptionSelected } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
 import LicencesPresenter from '../../../presenters/company-contacts/setup/licences.presenter.js'

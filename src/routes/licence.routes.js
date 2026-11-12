@@ -1,6 +1,12 @@
+/**
+ * Routes for the /licences endpoints
+ *
+ * @module LicenceRoutes
+ */
+
 import {
-  markForSupplementaryBilling,
   markedForSupplementaryBilling,
+  markForSupplementaryBilling,
   noReturnsRequired,
   returnsRequired,
   submitMarkForSupplementaryBilling,
@@ -20,148 +26,148 @@ import {
 export default [
   {
     method: 'GET',
-    path: '/licences/{id}/bills',
     options: {
-      handler: viewBills,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: viewBills
+    },
+    path: '/licences/{id}/bills'
+  },
+  {
+    handler: viewCommunications,
+    method: 'GET',
+    path: '/licences/{id}/communications'
   },
   {
     method: 'GET',
-    path: '/licences/{id}/communications',
-    handler: viewCommunications
-  },
-  {
-    method: 'GET',
-    path: '/licences/{id}/conditions',
     options: {
       handler: viewLicenceConditions
-    }
+    },
+    path: '/licences/{id}/conditions'
+  },
+  {
+    handler: viewContactDetails,
+    method: 'GET',
+    path: '/licences/{id}/contact-details'
   },
   {
     method: 'GET',
-    path: '/licences/{id}/contact-details',
-    handler: viewContactDetails
-  },
-  {
-    method: 'GET',
-    path: '/licences/{id}/history',
     options: {
       handler: viewHistory
-    }
+    },
+    path: '/licences/{id}/history'
   },
   {
     method: 'GET',
-    path: '/licences/{id}/points',
     options: {
       handler: viewLicencePoints
-    }
+    },
+    path: '/licences/{id}/points'
   },
   {
     method: 'GET',
-    path: '/licences/{id}/purposes',
     options: {
       handler: viewLicencePurposes
-    }
+    },
+    path: '/licences/{id}/purposes'
   },
   {
     method: 'GET',
-    path: '/licences/{id}/set-up',
     options: {
-      handler: viewSetUp,
       auth: {
         access: {
           scope: ['view_charge_versions']
         }
-      }
-    }
+      },
+      handler: viewSetUp
+    },
+    path: '/licences/{id}/set-up'
+  },
+  {
+    handler: viewSummary,
+    method: 'GET',
+    path: '/licences/{id}/summary'
+  },
+  {
+    handler: viewReturns,
+    method: 'GET',
+    path: '/licences/{id}/returns'
   },
   {
     method: 'GET',
-    path: '/licences/{id}/summary',
-    handler: viewSummary
-  },
-  {
-    method: 'GET',
-    path: '/licences/{id}/returns',
-    handler: viewReturns
-  },
-  {
-    method: 'GET',
-    path: '/licences/{id}/no-returns-required',
     options: {
-      handler: noReturnsRequired,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: noReturnsRequired
+    },
+    path: '/licences/{id}/no-returns-required'
   },
   {
     method: 'GET',
-    path: '/licences/{id}/returns-required',
     options: {
-      handler: returnsRequired,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: returnsRequired
+    },
+    path: '/licences/{id}/returns-required'
   },
   {
     method: 'POST',
-    path: '/licences/supplementary',
     options: {
-      handler: supplementary,
       app: {
         plainOutput: true
       },
       auth: false,
+      handler: supplementary,
       plugins: {
         crumb: false
       }
-    }
+    },
+    path: '/licences/supplementary'
   },
   {
     method: 'GET',
-    path: '/licences/{id}/mark-for-supplementary-billing',
     options: {
-      handler: markForSupplementaryBilling,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: markForSupplementaryBilling
+    },
+    path: '/licences/{id}/mark-for-supplementary-billing'
   },
   {
     method: 'POST',
-    path: '/licences/{id}/mark-for-supplementary-billing',
     options: {
-      handler: submitMarkForSupplementaryBilling,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitMarkForSupplementaryBilling
+    },
+    path: '/licences/{id}/mark-for-supplementary-billing'
   },
   {
     method: 'GET',
-    path: '/licences/{id}/marked-for-supplementary-billing',
     options: {
-      handler: markedForSupplementaryBilling,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: markedForSupplementaryBilling
+    },
+    path: '/licences/{id}/marked-for-supplementary-billing'
   }
 ]

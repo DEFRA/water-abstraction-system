@@ -86,6 +86,7 @@ function _determineReturnLogsIssues(returnLogs, licence) {
 
 function _determineReturnSplitOverChargeReference(licence, returnLog) {
   let chargeReferenceCounter = 0
+
   const { chargeVersions } = licence
 
   chargeVersions.forEach((chargeVersion) => {
@@ -116,6 +117,7 @@ function _determineReturnSplitOverChargeReference(licence, returnLog) {
 
 function _elementIssues(chargeReference, chargeElement, licenceReturnLogs, returnLogs) {
   let status = 'ready'
+
   const elementIssues = []
 
   // Issue Aggregate
@@ -269,7 +271,7 @@ function _returnsReceivedStatus(returnLogs, licenceReturnLogs) {
   }
 
   return {
-    someReturnsNotReceived: someReturnsNotReceived && !noReturnsReceived,
-    noReturnsReceived
+    noReturnsReceived,
+    someReturnsNotReceived: someReturnsNotReceived && !noReturnsReceived
   }
 }

@@ -3,8 +3,8 @@
  * @module ProcessAddRecipientService
  */
 
-import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import crypto from 'node:crypto'
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 
 /**
@@ -23,12 +23,12 @@ export default async function processAddRecipientService(sessionId, yar) {
 
   const additionalRecipient = {
     contact: {
-      name: session.contactName,
       address1: address.addressLine1,
       address2: address.addressLine2,
       address3: address.addressLine3,
       address4: address.addressLine4,
       country: address.country,
+      name: session.contactName,
       postcode: address.postcode
     },
     contact_hash_id: _contactHashId(session),

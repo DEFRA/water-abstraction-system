@@ -20,11 +20,11 @@ describe('Licences - History presenter', () => {
 
     licenceHistory = [
       LicenceVersionModel.fromJson({
+        administrative: null,
         endDate: new Date('2022-06-05'),
         id: generateUUID(),
         modLogs: [{ id: generateUUID(), reasonDescription: 'Licence Holder Name/Address Change' }],
-        startDate: new Date('2022-04-01'),
-        administrative: null
+        startDate: new Date('2022-04-01')
       })
     ]
   })

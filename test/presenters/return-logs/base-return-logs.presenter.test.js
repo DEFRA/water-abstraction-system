@@ -113,8 +113,8 @@ describe('Return Logs - Base Return Logs presenter', () => {
           unitNames.CUBIC_METRES
         )
 
-        expect(result).not.toContainEqual({ text: 'Reading', format: 'numeric' })
-        expect(result).not.toContainEqual({ text: 'End reading', format: 'numeric' })
+        expect(result).not.toContainEqual({ format: 'numeric', text: 'Reading' })
+        expect(result).not.toContainEqual({ format: 'numeric', text: 'End reading' })
       })
     })
 
@@ -127,7 +127,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.CUBIC_METRES
           )
 
-          expect(result).toContainEqual({ text: 'Reading', format: 'numeric' })
+          expect(result).toContainEqual({ format: 'numeric', text: 'Reading' })
         })
       })
 
@@ -139,7 +139,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.CUBIC_METRES
           )
 
-          expect(result).toContainEqual({ text: 'End reading', format: 'numeric' })
+          expect(result).toContainEqual({ format: 'numeric', text: 'End reading' })
         })
       })
     })
@@ -153,7 +153,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.GALLONS
           )
 
-          expect(result).toContainEqual({ text: 'Gallons', format: 'numeric' })
+          expect(result).toContainEqual({ format: 'numeric', text: 'Gallons' })
         })
       })
 
@@ -165,7 +165,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.GALLONS
           )
 
-          expect(result).toContainEqual({ text: 'Total gallons', format: 'numeric' })
+          expect(result).toContainEqual({ format: 'numeric', text: 'Total gallons' })
         })
       })
     })
@@ -179,7 +179,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.CUBIC_METRES
           )
 
-          expect(result).toContainEqual({ text: 'Total cubic metres', format: 'numeric' })
+          expect(result).toContainEqual({ format: 'numeric', text: 'Total cubic metres' })
         })
       })
 
@@ -191,7 +191,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.CUBIC_METRES
           )
 
-          expect(result).toContainEqual({ text: 'Cubic metres', format: 'numeric' })
+          expect(result).toContainEqual({ format: 'numeric', text: 'Cubic metres' })
         })
       })
     })
@@ -204,7 +204,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
           unitNames.CUBIC_METRES
         )
 
-        expect(result).toContainEqual({ text: 'Details', format: 'numeric' })
+        expect(result).toContainEqual({ format: 'numeric', text: 'Details' })
       })
 
       it('is not present when the frequency is month', () => {
@@ -214,7 +214,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
           unitNames.CUBIC_METRES
         )
 
-        expect(result).not.toContainEqual({ text: 'Details', format: 'numeric' })
+        expect(result).not.toContainEqual({ format: 'numeric', text: 'Details' })
       })
 
       it('is present when the frequency is month and "alwaysDisplayLinkHeader" is true', () => {
@@ -225,7 +225,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
           true
         )
 
-        expect(result).toContainEqual({ text: 'Details', format: 'numeric' })
+        expect(result).toContainEqual({ format: 'numeric', text: 'Details' })
       })
     })
   })

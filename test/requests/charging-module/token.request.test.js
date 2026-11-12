@@ -19,11 +19,11 @@ describe('Charging Module Token request', () => {
   describe('when the request is able to generate a token', () => {
     beforeEach(() => {
       vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
-        succeeded: true,
         response: {
-          statusCode: HTTP_STATUS_OK,
-          body: '{"access_token":"reallylong.stringoflettersandnumbers.in3parts","expires_in":3600,"token_type":"Bearer"}'
-        }
+          body: '{"access_token":"reallylong.stringoflettersandnumbers.in3parts","expires_in":3600,"token_type":"Bearer"}',
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 
@@ -38,11 +38,11 @@ describe('Charging Module Token request', () => {
   describe('when the request cannot generate a token', () => {
     beforeEach(() => {
       vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
-        succeeded: false,
         response: {
-          statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
-          body: 'Kaboom'
-        }
+          body: 'Kaboom',
+          statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR
+        },
+        succeeded: false
       })
     })
 

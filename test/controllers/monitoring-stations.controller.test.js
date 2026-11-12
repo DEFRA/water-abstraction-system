@@ -44,23 +44,16 @@ describe('Monitoring stations controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3'
         }
 
         vi.spyOn(ViewService, 'default').mockResolvedValue({
-          pageTitle: 'Bodney Bridge',
-          monitoringStationId: '499247a2-bebf-4a94-87dc-b83af2a133f3',
-          monitoringStationName: 'Bodney Bridge',
           gridReference: 'TL82959885',
-          permissionToManageLinks: true,
-          permissionToSendAlerts: true,
-          wiskiId: 'L33802',
-          stationReference: 'E23746',
           licences: [
             {
               licenceId: 'bf1befed-2ece-4805-89fd-3056a5cf5020',
@@ -71,15 +64,22 @@ describe('Monitoring stations controller', () => {
                   alertType: 'Stop',
                   alertUpdatedAt: '26 September 2024',
                   createdAt: '2023-12-14 21:33:04.006',
-                  lastUpdatedAt: '2024-09-26 01:39:11.340',
                   id: '76ada4a6-00f6-4e9a-b930-a3512b0f4d77',
+                  lastUpdatedAt: '2024-09-26 01:39:11.340',
                   licenceRef: 'AT/Test',
                   restrictionType: 'Level',
                   threshold: '500 Ml/d'
                 }
               ]
             }
-          ]
+          ],
+          monitoringStationId: '499247a2-bebf-4a94-87dc-b83af2a133f3',
+          monitoringStationName: 'Bodney Bridge',
+          pageTitle: 'Bodney Bridge',
+          permissionToManageLinks: true,
+          permissionToSendAlerts: true,
+          stationReference: 'E23746',
+          wiskiId: 'L33802'
         })
       })
 
@@ -98,12 +98,12 @@ describe('Monitoring stations controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3/licence/bf1befed-2ece-4805-89fd-3056a5cf5020',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['manage_gauging_station_licence_links'] }
-          }
+            credentials: { scope: ['manage_gauging_station_licence_links'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3/licence/bf1befed-2ece-4805-89fd-3056a5cf5020'
         }
 
         vi.spyOn(ViewLicenceService, 'default').mockResolvedValue({

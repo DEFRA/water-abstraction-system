@@ -50,15 +50,15 @@ describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
         },
         contacts: [
           {
-            id: contact.id,
-            salutation: null,
-            firstName: 'Amara',
-            middleInitials: null,
-            lastName: 'Gupta',
-            initials: null,
             contactType: 'person',
-            suffix: null,
-            department: null
+            department: null,
+            firstName: 'Amara',
+            id: contact.id,
+            initials: null,
+            lastName: 'Gupta',
+            middleInitials: null,
+            salutation: null,
+            suffix: null
           }
         ]
       })

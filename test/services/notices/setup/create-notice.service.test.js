@@ -21,19 +21,19 @@ describe('Notices - Setup - Create Notice service', () => {
     recipients = [fixtureData.primaryUser, fixtureData.returnsUser]
 
     noticeData = {
-      returnsPeriod: 'quarterFour',
-      removeLicences: [],
-      journey: 'standard',
-      referenceCode: generateNoticeReferenceCode('RINV-'),
       determinedReturnsPeriod: {
         dueDate: new Date(`2025-07-28`),
         endDate: new Date(`2025-06-30`),
         startDate: new Date(`2025-04-01`),
         summer: 'true'
       },
-      subType: 'returnInvitation',
+      journey: 'standard',
       name: 'Returns: invitation',
-      noticeType: 'invitations'
+      noticeType: 'invitations',
+      referenceCode: generateNoticeReferenceCode('RINV-'),
+      removeLicences: [],
+      returnsPeriod: 'quarterFour',
+      subType: 'returnInvitation'
     }
   })
 
@@ -46,13 +46,13 @@ describe('Notices - Setup - Create Notice service', () => {
       licences: [...recipients[0].licence_refs, ...recipients[1].licence_refs],
       metadata: {
         name: 'Returns: invitation',
-        recipients: 2,
         options: { excludeLicences: [] },
+        recipients: 2,
         returnCycle: {
           dueDate: '2025-07-28',
           endDate: '2025-06-30',
-          startDate: '2025-04-01',
-          isSummer: true
+          isSummer: true,
+          startDate: '2025-04-01'
         }
       },
       overallStatus: 'pending',

@@ -6,8 +6,9 @@
 import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
 import { pause } from 'water-abstraction-engine/lib/general.lib.js'
 
-import billingConfig from '../../config/billing.config.js'
 import viewBillRunStatusRequest from './view-bill-run-status.request.js'
+
+import billingConfig from '../../config/billing.config.js'
 
 /**
  * Wait for a Charging Module bill run to have a specified state
@@ -66,9 +67,9 @@ export default async function waitForStatusRequest(billRunId, statusesToWaitFor,
   }
 
   return {
-    succeeded: statusesToWaitFor.includes(status),
+    attempts,
     status,
-    attempts
+    succeeded: statusesToWaitFor.includes(status)
   }
 }
 

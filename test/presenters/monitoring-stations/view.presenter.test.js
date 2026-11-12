@@ -33,16 +33,16 @@ describe('Monitoring Stations - View presenter', () => {
         abstractionPeriodStartDay: 1,
         abstractionPeriodStartMonth: 4,
         id: '3ee344db-784c-4d21-8d53-e50833f7e848',
-        measureType: 'flow',
-        restrictionType: 'reduce',
-        thresholdUnit: 'm3/s',
-        thresholdValue: 100,
         latestNotification: null,
         licence: {
           id: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',
           licenceRef: 'AT/TEST'
         },
-        licenceVersionPurposeCondition: null
+        licenceVersionPurposeCondition: null,
+        measureType: 'flow',
+        restrictionType: 'reduce',
+        thresholdUnit: 'm3/s',
+        thresholdValue: 100
       }
     ]
   })
@@ -62,11 +62,11 @@ describe('Monitoring Stations - View presenter', () => {
       restrictionHeading: 'Flow restriction type and threshold',
       restrictions: [
         {
+          abstractionPeriod: '1 April to 31 August',
           action: {
             link: '/system/monitoring-stations/f122d4bb-42bd-4af9-a081-1656f5a30b63/licence/3cd1481c-e96a-45fc-8f2b-1849564b95a5',
             text: 'View'
           },
-          abstractionPeriod: '1 April to 31 August',
           alert: '',
           alertDate: '',
           licenceId: '3cd1481c-e96a-45fc-8f2b-1849564b95a5',

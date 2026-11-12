@@ -40,9 +40,9 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
           returns: `/system/notices/setup/${session.id}/paper-return`,
           returnsPeriod: `/system/notices/setup/${session.id}/invitation-period`
         },
+        noticeType: 'Returns invitation',
         pageTitle: 'Check the notice type',
-        sessionId: session.id,
-        noticeType: 'Returns invitation'
+        sessionId: session.id
       })
     })
 
@@ -55,16 +55,16 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
         const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
+          licenceRef,
           links: {
             licenceNumber: `/system/notices/setup/${session.id}/licence`,
             noticeType: `/system/notices/setup/${session.id}/notice-type`,
             returns: `/system/notices/setup/${session.id}/paper-return`,
             returnsPeriod: `/system/notices/setup/${session.id}/invitation-period`
           },
+          noticeType: 'Returns invitation',
           pageTitle: 'Check the notice type',
-          sessionId: session.id,
-          licenceRef,
-          noticeType: 'Returns invitation'
+          sessionId: session.id
         })
       })
     })
@@ -72,11 +72,11 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
     describe('and "determinedReturnsPeriod" is set', () => {
       beforeEach(() => {
         session.determinedReturnsPeriod = {
-          name: 'summer',
-          summer: 'true',
           dueDate: '2025-11-28T00:00:00.000Z',
           endDate: '2025-10-31T00:00:00.000Z',
-          startDate: '2024-11-01T00:00:00.000Z'
+          name: 'summer',
+          startDate: '2024-11-01T00:00:00.000Z',
+          summer: 'true'
         }
       })
 
@@ -90,10 +90,10 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
             returns: `/system/notices/setup/${session.id}/paper-return`,
             returnsPeriod: `/system/notices/setup/${session.id}/invitation-period`
           },
-          pageTitle: 'Check the notice type',
-          sessionId: session.id,
           noticeType: 'Returns invitation',
-          returnsPeriodText: 'Summer annual 1 November 2024 to 31 October 2025'
+          pageTitle: 'Check the notice type',
+          returnsPeriodText: 'Summer annual 1 November 2024 to 31 October 2025',
+          sessionId: session.id
         })
       })
     })
@@ -113,9 +113,9 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
             returns: `/system/notices/setup/${session.id}/paper-return`,
             returnsPeriod: `/system/notices/setup/${session.id}/reminder-period`
           },
+          noticeType: 'Returns reminder',
           pageTitle: 'Check the notice type',
-          sessionId: session.id,
-          noticeType: 'Returns reminder'
+          sessionId: session.id
         })
       })
     })
@@ -151,17 +151,17 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
         const result = CheckNoticeTypePresenter(session)
 
         expect(result).toEqual({
+          licenceRef,
           links: {
             licenceNumber: `/system/notices/setup/${session.id}/licence`,
             noticeType: `/system/notices/setup/${session.id}/notice-type`,
             returns: `/system/notices/setup/${session.id}/paper-return`,
             returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
           },
-          pageTitle: 'Check the notice type',
-          sessionId: session.id,
-          licenceRef,
           noticeType: 'Paper return',
-          returns: ['3135 - 1 April 2002 to 31 March 2003']
+          pageTitle: 'Check the notice type',
+          returns: ['3135 - 1 April 2002 to 31 March 2003'],
+          sessionId: session.id
         })
       })
 
@@ -196,9 +196,9 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
             returns: `/system/notices/setup/${session.id}/paper-return`,
             returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
           },
+          noticeType: 'Renewals invitation',
           pageTitle: 'Check the notice type',
-          sessionId: session.id,
-          noticeType: 'Renewals invitation'
+          sessionId: session.id
         })
       })
     })
@@ -218,9 +218,9 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
             returns: `/system/notices/setup/${session.id}/paper-return`,
             returnsPeriod: `/system/notices/setup/${session.id}/returns-period`
           },
+          noticeType: 'Renewals reminder',
           pageTitle: 'Check the notice type',
-          sessionId: session.id,
-          noticeType: 'Renewals reminder'
+          sessionId: session.id
         })
       })
     })

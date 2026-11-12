@@ -3,8 +3,8 @@
  * @module AlertThresholdsPresenter
  */
 
-import { unitConversion } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { formatValueUnit, titleCase } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { unitConversion } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js'
 
@@ -118,11 +118,11 @@ function _thresholdOptions(alertThresholds, alertType, licenceMonitoringStations
 
     return {
       checked: alertThresholds ? alertThresholds.includes(thresholdGroup) : false,
-      value: thresholdGroup,
-      text: formatValueUnit(thresholdValue, thresholdUnit),
       hint: {
         text: `${titleCase(measureType)} threshold`
-      }
+      },
+      text: formatValueUnit(thresholdValue, thresholdUnit),
+      value: thresholdGroup
     }
   })
 }

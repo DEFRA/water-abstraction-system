@@ -20,9 +20,9 @@ describe('Return Logs Setup - Reported presenter', () => {
 
       expect(result).toEqual({
         backLink: { href: `/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/submission`, text: 'Back' },
-        reported: null,
         pageTitle: 'How was this return reported?',
         pageTitleCaption: 'Return reference 12345',
+        reported: null,
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })

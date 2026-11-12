@@ -1,11 +1,15 @@
+/**
+ * Routes for the /reports endpoints
+ *
+ * @module ReportsRoutes
+ */
+
 import { invalidAddresses } from '../controllers/reports.controller.js'
 
 export default [
   {
     method: 'GET',
-    path: '/reports/invalid-addresses',
     options: {
-      handler: invalidAddresses,
       auth: {
         access: {
           scope: [
@@ -18,7 +22,9 @@ export default [
             'returns'
           ]
         }
-      }
-    }
+      },
+      handler: invalidAddresses
+    },
+    path: '/reports/invalid-addresses'
   }
 ]

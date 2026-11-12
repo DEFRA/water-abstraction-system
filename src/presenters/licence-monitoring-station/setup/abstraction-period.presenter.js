@@ -1,9 +1,9 @@
-import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
-
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/abstraction-period`
  * @module AbstractionPeriodPresenter
  */
+
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/abstraction-period`
@@ -23,10 +23,10 @@ export default function abstractionPeriodPresenter(session) {
   } = session
 
   return {
-    abstractionPeriodStartDay,
     abstractionPeriodEndDay,
-    abstractionPeriodStartMonth,
     abstractionPeriodEndMonth,
+    abstractionPeriodStartDay,
+    abstractionPeriodStartMonth,
     backLink: _backLink(session),
     monitoringStationLabel: label,
     pageTitle: `Enter an abstraction period for licence ${licenceRef}`

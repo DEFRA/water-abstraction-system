@@ -32,9 +32,9 @@ export default function viewBillLicencePresenter(billLicence) {
     displayCreditDebitTotals: displayCreditDebitTotals(bill.billRun.batchType),
     licenceId,
     licenceRef,
+    pageTitle: `Transactions for ${licenceRef}`,
     removeLicenceLink: _removeLicenceLink(bill.billRun, billLicenceId),
     scheme: bill.billRun.scheme,
-    pageTitle: `Transactions for ${licenceRef}`,
     tableCaption: _tableCaption(transactions),
     transactions: _transactions(transactions),
     transactionsTotal: total

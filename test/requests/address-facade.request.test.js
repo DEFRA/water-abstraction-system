@@ -13,8 +13,8 @@ const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address Facade request', () => {
   const headers = {
-    'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39',
-    'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+    'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+    'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39'
   }
   const testRoute = 'TEST_ROUTE'
 
@@ -32,48 +32,48 @@ describe('Address Facade request', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: HTTP_STATUS_OK,
             body: {
               results: [
                 {
-                  uprn: 340116,
                   address: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-                  organisation: 'ENVIRONMENT AGENCY',
-                  premises: 'HORIZON HOUSE',
-                  street_address: 'DEANERY ROAD',
-                  locality: null,
-                  city: 'BRISTOL',
-                  postcode: 'BS1 5AH',
-                  country: 'United Kingdom',
-                  x: 358205.03,
-                  y: 172708.06,
-                  coordinate_system: null,
-                  blpu_state_date: '12/10/2009',
                   blpu_state_code: 2,
-                  postal_address_code: 'D',
-                  logical_status_code: 1,
-                  source_data_type: 'dpa',
                   blpu_state_code_description: 'In use',
+                  blpu_state_date: '12/10/2009',
+                  city: 'BRISTOL',
                   classification_code: 'CO01',
                   classification_code_description: 'Office / Work Studio',
+                  coordinate_system: null,
+                  country: 'United Kingdom',
+                  entry_date: '12/10/2009',
+                  language: 'EN',
+                  last_update_date: '10/02/2016',
+                  locality: null,
+                  logical_status_code: 1,
                   lpi_logical_status_code: null,
                   lpi_logical_status_code_description: null,
                   match: 1,
                   match_description: 'EXACT',
-                  topography_layer_toid: 'osgb1000002529079737',
+                  organisation: 'ENVIRONMENT AGENCY',
                   parent_uprn: null,
-                  last_update_date: '10/02/2016',
-                  status: 'APPROVED',
-                  entry_date: '12/10/2009',
+                  postal_address_code: 'D',
                   postal_address_code_description: 'A record which is linked to PAF',
+                  postcode: 'BS1 5AH',
+                  premises: 'HORIZON HOUSE',
+                  source_data_type: 'dpa',
+                  status: 'APPROVED',
+                  street_address: 'DEANERY ROAD',
+                  topography_layer_toid: 'osgb1000002529079737',
+                  uprn: 340116,
                   usrn: null,
-                  language: 'EN'
+                  x: 358205.03,
+                  y: 172708.06
                 }
               ]
-            }
-          }
+            },
+            statusCode: HTTP_STATUS_OK
+          },
+          succeeded: true
         })
       })
 
@@ -109,13 +109,13 @@ describe('Address Facade request', () => {
     describe('when the request fails', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
           response: {
+            body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
             headers,
             statusCode: HTTP_STATUS_NOT_FOUND,
-            statusMessage: 'Not Found',
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
-          }
+            statusMessage: 'Not Found'
+          },
+          succeeded: false
         })
       })
 

@@ -10,8 +10,8 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
   describe('when valid data is provided', () => {
     beforeEach(() => {
       payload = {
-        unit: 'm3/d',
-        'threshold-m3/d': '1000'
+        'threshold-m3/d': '1000',
+        unit: 'm3/d'
       }
     })
 

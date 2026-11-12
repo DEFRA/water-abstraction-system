@@ -55,9 +55,9 @@ describe('Notices - Setup - View Check Notice Type service', () => {
           returns: `/system/notices/setup/${session.id}/paper-return`,
           returnsPeriod: `/system/notices/setup/${session.id}/invitation-period`
         },
+        noticeType: 'Returns invitation',
         notification: undefined,
         pageTitle: 'Check the notice type',
-        noticeType: 'Returns invitation',
         sessionId: session.id
       })
     })

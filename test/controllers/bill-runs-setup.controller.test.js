@@ -53,7 +53,7 @@ describe('Bill Runs Setup controller', () => {
 
   describe('/bill-runs/setup', () => {
     describe('GET', () => {
-      const session = { id: 'e009b394-8405-4358-86af-1a9eb31298a5', data: {} }
+      const session = { data: {}, id: 'e009b394-8405-4358-86af-1a9eb31298a5' }
 
       beforeEach(async () => {
         options = _getOptions('')
@@ -159,7 +159,6 @@ describe('Bill Runs Setup controller', () => {
           options = _postOptions('check')
 
           vi.spyOn(SubmitCheckService, 'default').mockResolvedValue({
-            error: true,
             backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
             billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',
             billRunNumber: 12345,
@@ -167,6 +166,7 @@ describe('Bill Runs Setup controller', () => {
             billRunType: 'Annual',
             chargeScheme: 'Current',
             dateCreated: '1 May 2024',
+            error: true,
             exists: true,
             financialYear: '2024 to 2025',
             pageTitle: 'This bill run already exists',
@@ -219,11 +219,11 @@ describe('Bill Runs Setup controller', () => {
         vi.spyOn(RegionService, 'default').mockResolvedValue({
           pageTitle: 'Select the region',
           regions: [
-            { id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28', displayName: 'Riverlands' },
-            { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'Stormlands' }
+            { displayName: 'Riverlands', id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28' },
+            { displayName: 'Stormlands', id: '19a027c6-4aad-47d3-80e3-3917a4579a5b' }
           ],
-          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-          selectedRegion: null
+          selectedRegion: null,
+          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5'
         })
       })
 
@@ -281,9 +281,9 @@ describe('Bill Runs Setup controller', () => {
           vi.spyOn(SubmitRegionService, 'default').mockResolvedValue({
             error: { text: 'Select a region' },
             pageTitle: 'Select a region',
-            regions: [{ id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28', displayName: 'Riverlands' }],
-            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-            selectedRegion: null
+            regions: [{ displayName: 'Riverlands', id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28' }],
+            selectedRegion: null,
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5'
           })
         })
 
@@ -305,8 +305,8 @@ describe('Bill Runs Setup controller', () => {
 
         vi.spyOn(SeasonService, 'default').mockResolvedValue({
           pageTitle: 'Select the season',
-          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-          selectedSeason: null
+          selectedSeason: null,
+          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5'
         })
       })
 
@@ -345,8 +345,8 @@ describe('Bill Runs Setup controller', () => {
           vi.spyOn(SubmitSeasonService, 'default').mockResolvedValue({
             error: { text: 'Select the season' },
             pageTitle: 'Select the season',
-            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-            selectedSeason: null
+            selectedSeason: null,
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5'
           })
         })
 
@@ -368,8 +368,8 @@ describe('Bill Runs Setup controller', () => {
 
         vi.spyOn(TypeService, 'default').mockResolvedValue({
           pageTitle: 'Select the bill run type',
-          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-          selectedType: null
+          selectedType: null,
+          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5'
         })
       })
 
@@ -408,8 +408,8 @@ describe('Bill Runs Setup controller', () => {
           vi.spyOn(SubmitTypeService, 'default').mockResolvedValue({
             error: { text: 'Select the bill run type' },
             pageTitle: 'Select the bill run type',
-            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-            selectedType: null
+            selectedType: null,
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5'
           })
         })
 
@@ -435,14 +435,14 @@ describe('Bill Runs Setup controller', () => {
           vi.spyOn(YearService, 'default').mockResolvedValue({
             financialYearsData: [
               {
+                checked: false,
                 text: '2023 to 2024',
-                value: 2024,
-                checked: false
+                value: 2024
               }
             ],
             pageTitle: 'Select the financial year',
-            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-            selectedYear: null
+            selectedYear: null,
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5'
           })
         })
 
@@ -458,8 +458,8 @@ describe('Bill Runs Setup controller', () => {
         beforeEach(async () => {
           vi.spyOn(YearService, 'default').mockResolvedValue({
             financialYearsData: [],
-            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-            selectedYear: null
+            selectedYear: null,
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5'
           })
         })
 
@@ -518,8 +518,8 @@ describe('Bill Runs Setup controller', () => {
           vi.spyOn(SubmitYearService, 'default').mockResolvedValue({
             error: { text: 'Select a financial year' },
             pageTitle: 'Select the financial year',
-            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-            selectedYear: null
+            selectedYear: null,
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5'
           })
         })
 
@@ -537,12 +537,12 @@ describe('Bill Runs Setup controller', () => {
 
 function _getOptions(path) {
   return {
-    method: 'GET',
-    url: `/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/${path}`,
     auth: {
-      strategy: 'session',
-      credentials: { scope: ['billing'] }
-    }
+      credentials: { scope: ['billing'] },
+      strategy: 'session'
+    },
+    method: 'GET',
+    url: `/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/${path}`
   }
 }
 

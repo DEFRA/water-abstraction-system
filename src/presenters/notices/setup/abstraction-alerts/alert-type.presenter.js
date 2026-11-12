@@ -24,35 +24,35 @@ function _alertTypeOptions(alertType) {
   return [
     {
       checked: alertType === 'warning',
-      value: 'warning',
-      text: 'Warning',
       hint: {
         text: 'Tell licence holders they may need to reduce or stop water abstraction soon.'
-      }
+      },
+      text: 'Warning',
+      value: 'warning'
     },
     {
       checked: alertType === 'reduce',
-      value: 'reduce',
-      text: 'Reduce',
       hint: {
         text: 'Tell licence holders they can take water at a reduced amount.'
-      }
+      },
+      text: 'Reduce',
+      value: 'reduce'
     },
     {
       checked: alertType === 'stop',
-      value: 'stop',
-      text: 'Stop',
       hint: {
         text: 'Tell licence holders they must stop taking water.'
-      }
+      },
+      text: 'Stop',
+      value: 'stop'
     },
     {
       checked: alertType === 'resume',
-      value: 'resume',
-      text: 'Resume',
       hint: {
         text: 'Tell licence holders they can take water at the normal amount.'
-      }
+      },
+      text: 'Resume',
+      value: 'resume'
     }
   ]
 }

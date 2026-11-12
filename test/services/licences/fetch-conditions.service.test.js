@@ -45,8 +45,8 @@ describe('Licences - Fetch Conditions service', () => {
       depth: 123,
       description: 'RIVER OUSE AT BLETSOE',
       hydroInterceptDistance: 8.01,
-      hydroReference: 'TL 14/133',
       hydroOffsetDistance: 5.56,
+      hydroReference: 'TL 14/133',
       locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
       ngr1: 'SD 963 193',
       ngr2: 'SD 963 193',
@@ -74,8 +74,8 @@ describe('Licences - Fetch Conditions service', () => {
   describe('when the licence has licence versions, licence version purposes, conditions and condition types', () => {
     beforeEach(async () => {
       licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
-        licenceVersionPurposeId: licenceVersionPurpose.id,
-        licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id
+        licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id,
+        licenceVersionPurposeId: licenceVersionPurpose.id
       })
     })
 
@@ -84,40 +84,40 @@ describe('Licences - Fetch Conditions service', () => {
 
       expect(result).toEqual([
         {
-          id: licenceVersionPurposeConditionType.id,
-          displayTitle: licenceVersionPurposeConditionType.displayTitle,
           description: licenceVersionPurposeConditionType.description,
-          subcodeDescription: licenceVersionPurposeConditionType.subcodeDescription,
-          param1Label: licenceVersionPurposeConditionType.param1Label,
-          param2Label: licenceVersionPurposeConditionType.param2Label,
+          displayTitle: licenceVersionPurposeConditionType.displayTitle,
+          id: licenceVersionPurposeConditionType.id,
           licenceVersionPurposeConditions: [
             {
               id: licenceVersionPurposeCondition.id,
-              param1: licenceVersionPurposeCondition.param1,
-              param2: licenceVersionPurposeCondition.param2,
-              notes: licenceVersionPurposeCondition.notes,
               licenceVersionPurpose: {
                 id: licenceVersionPurpose.id,
-                purpose: {
-                  id: purpose.id,
-                  description: purpose.description
-                },
                 licenceVersionPurposePoints: [
                   {
                     id: licenceVersionPurposePoint.id,
                     point: {
-                      id: point.id,
                       description: point.description,
+                      id: point.id,
                       ngr1: point.ngr1,
                       ngr2: point.ngr2,
                       ngr3: point.ngr3,
                       ngr4: point.ngr4
                     }
                   }
-                ]
-              }
+                ],
+                purpose: {
+                  description: purpose.description,
+                  id: purpose.id
+                }
+              },
+              notes: licenceVersionPurposeCondition.notes,
+              param1: licenceVersionPurposeCondition.param1,
+              param2: licenceVersionPurposeCondition.param2
             }
-          ]
+          ],
+          param1Label: licenceVersionPurposeConditionType.param1Label,
+          param2Label: licenceVersionPurposeConditionType.param2Label,
+          subcodeDescription: licenceVersionPurposeConditionType.subcodeDescription
         }
       ])
     })
@@ -126,8 +126,8 @@ describe('Licences - Fetch Conditions service', () => {
   describe('when the licence has licence versions, licence version purposes, condition types and no conditions', () => {
     beforeEach(async () => {
       licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
-        licenceVersionPurposeId: generateUUID(),
-        licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id
+        licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id,
+        licenceVersionPurposeId: generateUUID()
       })
     })
 

@@ -59,6 +59,7 @@ describe('Notices - Setup - View Reminder Period service', () => {
           href: `/system/notices/setup/${session.id}/notice-type`,
           text: 'Back'
         },
+        pageTitle: 'Select the returns period for the reminders',
         reminderPeriods: [
           {
             checked: false,
@@ -70,8 +71,7 @@ describe('Notices - Setup - View Reminder Period service', () => {
             text: 'Winter 1 April 2025 to 31 March 2026',
             value: returnCycles[1].id
           }
-        ],
-        pageTitle: 'Select the returns period for the reminders'
+        ]
       })
     })
   })

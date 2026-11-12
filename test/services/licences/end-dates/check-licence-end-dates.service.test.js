@@ -75,8 +75,8 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
 
       vi.spyOn(LicenceEndDateChangeModel, 'query').mockReturnValue({
         insert: vi.fn().mockReturnThis(),
-        onConflict: vi.fn().mockReturnThis(),
-        merge: vi.fn().mockRejectedValue(new Error())
+        merge: vi.fn().mockRejectedValue(new Error()),
+        onConflict: vi.fn().mockReturnThis()
       })
     })
 
@@ -91,13 +91,13 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
         expect.any(Error)
       )
       expect(errorLogArgs[1]).toEqual({
-        id: licence.id,
         changedDateDetails: {
           changeDate: new Date('2023-01-01'),
           dateType: 'revoked',
           naldDate: new Date('2023-01-01'),
           wrlsDate: null
-        }
+        },
+        id: licence.id
       })
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })

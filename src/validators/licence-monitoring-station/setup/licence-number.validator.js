@@ -28,10 +28,10 @@ export default function licenceNumberValidator(payload, licence) {
       .custom(isFalse(!licenceExists, 'invalidLicence'))
       .custom(isFalse(licenceHasEnded, 'licenceEnded'))
       .messages({
+        'any.only': ENTER_A_LICENCE_NUMBER_ERROR,
+        'any.required': ENTER_A_LICENCE_NUMBER_ERROR,
         invalidLicence: 'Licence could not be found',
         licenceEnded: 'The licence has ended',
-        'any.required': ENTER_A_LICENCE_NUMBER_ERROR,
-        'any.only': ENTER_A_LICENCE_NUMBER_ERROR,
         'string.empty': ENTER_A_LICENCE_NUMBER_ERROR
       })
   })

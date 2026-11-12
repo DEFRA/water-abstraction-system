@@ -12,51 +12,51 @@ describe('Return Versions - Setup - Purpose presenter', () => {
 
   beforeEach(() => {
     licencePurposes = [
-      { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
-      { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
-      { id: '1d03c79b-da97-4838-a68c-ccb613d54367', description: 'Hydraulic Rams' },
-      { id: '02036782-81d2-43be-b6af-bf20898653e1', description: 'Hydraulic Testing' }
+      { description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' },
+      { description: 'Horticultural Watering', id: '49088608-ee9f-491a-8070-6831240945ac' },
+      { description: 'Hydraulic Rams', id: '1d03c79b-da97-4838-a68c-ccb613d54367' },
+      { description: 'Hydraulic Testing', id: '02036782-81d2-43be-b6af-bf20898653e1' }
     ]
 
     session = {
-      id: '61e07498-f309-4829-96a9-72084a54996d',
       checkPageVisited: false,
+      id: '61e07498-f309-4829-96a9-72084a54996d',
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z',
         waterUndertaker: false
       },
-      multipleUpload: false,
-      journey: 'returns-required',
-      requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
       licenceVersion: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        endDate: null,
-        startDate: '2022-04-01T00:00:00.000Z',
         copyableReturnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
-        ]
+        ],
+        endDate: null,
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        startDate: '2022-04-01T00:00:00.000Z'
       },
-      reason: 'major-change'
+      multipleUpload: false,
+      reason: 'major-change',
+      requirements: [{}],
+      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
+      startDateOptions: 'licenceStartDate'
     }
   })
 
@@ -141,8 +141,8 @@ describe('Return Versions - Setup - Purpose presenter', () => {
     describe('when the user has previously submitted purposes', () => {
       beforeEach(() => {
         session.requirements[0].purposes = [
-          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump', alias: '' },
-          { id: '1d03c79b-da97-4838-a68c-ccb613d54367', description: 'Hydraulic Rams', alias: 'Steampunk sheep' }
+          { alias: '', description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' },
+          { alias: 'Steampunk sheep', description: 'Hydraulic Rams', id: '1d03c79b-da97-4838-a68c-ccb613d54367' }
         ]
       })
 

@@ -10,11 +10,12 @@ import TransactionModel from 'water-abstraction-engine/models/transaction.model.
 import { generateUUID } from 'water-abstraction-engine/lib/general.lib.js'
 
 import BillRunError from '../../../errors/bill-run.error.js'
-import BillingConfig from '../../../config/billing.config.js'
 import DetermineChargePeriodService from '../determine-charge-period.service.js'
 import DetermineMinimumChargeService from '../determine-minimum-charge.service.js'
 import GenerateTwoPartTariffTransactionService from '../generate-two-part-tariff-transaction.service.js'
 import SendTransactionsService from '../send-transactions.service.js'
+
+import BillingConfig from '../../../config/billing.config.js'
 
 /**
  * Process the billing accounts for a given billing period and creates their annual two-part tariff bills
@@ -151,7 +152,7 @@ function _extractBillableLicences(allBillLicences) {
     const { id, billId, licenceId, licenceRef, billable } = billLicence
 
     if (billable) {
-      billableBillLicences.push({ id, billId, licenceId, licenceRef })
+      billableBillLicences.push({ billId, id, licenceId, licenceRef })
     }
   })
 
@@ -192,11 +193,11 @@ function _findOrCreateBillLicence(billLicences, licence, billId) {
 
   if (!billLicence) {
     billLicence = {
-      id: generateUUID(),
+      billable: false,
       billId,
+      id: generateUUID(),
       licenceId,
-      licenceRef,
-      billable: false
+      licenceRef
     }
 
     billLicences.push(billLicence)
@@ -258,13 +259,13 @@ async function _processBillingAccount(billingAccount, billRun, billingPeriod) {
   const { id: billRunId, externalId: billRunExternalId } = billRun
 
   const bill = {
-    id: generateUUID(),
     accountNumber,
     address: {}, // Address is set to an empty object for SROC billing invoices
     billingAccountId,
     billRunId,
     credit: false,
-    financialYearEnding: billingPeriod.endDate.getFullYear()
+    financialYearEnding: billingPeriod.endDate.getFullYear(),
+    id: generateUUID()
   }
 
   const billData = await _createBillLicencesAndTransactions(bill.id, billingAccount, billRunExternalId, billingPeriod)

@@ -28,6 +28,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
 
   let billRunPatchStub
   let notifierStub
+
   beforeEach(async () => {
     billRunPatchStub = vi.fn().mockResolvedValue()
 

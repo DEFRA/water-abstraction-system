@@ -106,7 +106,7 @@ function _consolidateDates(dateRanges) {
       // (starting the same day as the previous one ends counts as overlapping) so we add a new date range to our ongoing
       // acc array, starting when the previous range starts and ending when the current range ends
       if (currentRange.startDate <= previousRange.endDate) {
-        return [...acc, { startDate: previousRange.startDate, endDate: currentRange.endDate }]
+        return [...acc, { endDate: currentRange.endDate, startDate: previousRange.startDate }]
       }
 
       // If ranges don't overlap then simply add the previous _and_ current ranges to our ongoing acc array

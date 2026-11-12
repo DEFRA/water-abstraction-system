@@ -28,8 +28,8 @@ export default async function submitProfileDetailsService(userId, payload, yar) 
     await _save(userId, payload)
 
     yar.flash('notification', {
-      title: 'Updated',
-      text: 'Profile details updated'
+      text: 'Profile details updated',
+      title: 'Updated'
     })
   }
 

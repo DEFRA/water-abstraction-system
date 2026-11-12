@@ -24,12 +24,12 @@ export default async function createReturnSubmissionService(metadata, session, t
   const { version, previousVersion } = await _determineVersionNumbers(session.returnLogId, trx)
 
   const returnSubmission = {
-    id: generateUUID(),
     createdAt: timestamp,
     createdBy: user.userId,
     current: true,
-    nilReturn: session.journey === 'nilReturn',
+    id: generateUUID(),
     metadata,
+    nilReturn: session.journey === 'nilReturn',
     notes: session.note?.content,
     returnId: session.returnId,
     returnLogId: session.returnLogId,

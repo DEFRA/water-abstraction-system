@@ -47,9 +47,9 @@ describe('Fetch Billing Accounts service', () => {
     describe('because all their charge versions do not have a status of "current"', () => {
       beforeEach(async () => {
         await ChargeVersionHelper.add({
-          status: 'draft',
           billingAccountId: billingAccount.id,
-          licenceId: licence.id
+          licenceId: licence.id,
+          status: 'draft'
         })
       })
 
@@ -67,9 +67,9 @@ describe('Fetch Billing Accounts service', () => {
     describe('because all their charge versions are for the "alcs" (presroc) scheme', () => {
       beforeEach(async () => {
         await ChargeVersionHelper.add({
-          scheme: 'alcs',
           billingAccountId: billingAccount.id,
-          licenceId: licence.id
+          licenceId: licence.id,
+          scheme: 'alcs'
         })
       })
 
@@ -90,9 +90,9 @@ describe('Fetch Billing Accounts service', () => {
 
         // This creates an charge version with a start date after the billing period
         await ChargeVersionHelper.add({
-          startDate: new Date(financialStartYear, 8, 15),
           billingAccountId: billingAccount.id,
-          licenceId: licence.id
+          licenceId: licence.id,
+          startDate: new Date(financialStartYear, 8, 15)
         })
       })
 
@@ -113,8 +113,8 @@ describe('Fetch Billing Accounts service', () => {
 
         // This creates an charge version with a end date before the billing period starts
         await ChargeVersionHelper.add({
-          endDate: new Date(financialEndYear, 2, 31),
           billingAccountId: billingAccount.id,
+          endDate: new Date(financialEndYear, 2, 31),
           licenceId: licence.id
         })
       })
@@ -198,22 +198,22 @@ describe('Fetch Billing Accounts service', () => {
       billingAccount = await BillingAccountHelper.add()
 
       chargeVersion = await ChargeVersionHelper.add({
-        startDate: new Date('2023-11-01'),
-        changeReasonId: minimumChargeChangeReason.id,
         billingAccountId: billingAccount.id,
+        changeReasonId: minimumChargeChangeReason.id,
         licenceId: licence.id,
-        licenceRef: licence.licenceRef
+        licenceRef: licence.licenceRef,
+        startDate: new Date('2023-11-01')
       })
 
       chargeCategory = ChargeCategoryHelper.select()
       chargeReference = await ChargeReferenceHelper.add({
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 3,
-        adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null },
-        chargeVersionId: chargeVersion.id,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        adjustments: { aggregate: null, charge: null, s126: null, s127: false, s130: false, winter: false },
         chargeCategoryId: chargeCategory.id,
+        chargeVersionId: chargeVersion.id,
         description: 'Charge reference 1 - Mineral washing',
         scheme: 'sroc'
       })
@@ -292,20 +292,15 @@ describe('Fetch Billing Accounts service', () => {
         expect(chargeReferences).toHaveLength(1)
 
         expect(chargeReferences[0]).toEqual({
-          id: chargeReference.id,
-          source: 'non-tidal',
-          loss: 'low',
-          volume: 200,
+          additionalCharges: null,
           adjustments: {
+            aggregate: null,
+            charge: null,
             s126: null,
             s127: false,
             s130: false,
-            charge: null,
-            winter: false,
-            aggregate: null
+            winter: false
           },
-          additionalCharges: null,
-          description: 'Charge reference 1 - Mineral washing',
           chargeCategory: {
             id: chargeCategory.id,
             reference: chargeCategory.reference,
@@ -313,13 +308,18 @@ describe('Fetch Billing Accounts service', () => {
           },
           chargeElements: [
             {
-              id: chargeElement.id,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
               abstractionPeriodStartDay: 1,
               abstractionPeriodStartMonth: 4,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 3
+              id: chargeElement.id
             }
-          ]
+          ],
+          description: 'Charge reference 1 - Mineral washing',
+          id: chargeReference.id,
+          loss: 'low',
+          source: 'non-tidal',
+          volume: 200
         })
       })
     })

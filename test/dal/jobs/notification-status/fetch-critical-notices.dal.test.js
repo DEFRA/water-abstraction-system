@@ -33,6 +33,7 @@ describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
     criticalNoticeWithErrors = await EventHelper.add(noticeData)
 
     let notificationData = NotificationsFixture.renewalInvitationEmail(criticalNoticeWithErrors)
+
     notificationData.status = 'error'
 
     notificationForCriticalNoticeWithErrors = await NotificationHelper.add(notificationData)

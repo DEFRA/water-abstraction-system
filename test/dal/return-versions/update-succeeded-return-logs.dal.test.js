@@ -87,9 +87,9 @@ describe('DAL - Return Versions - Update Succeeded Return Logs dal', () => {
         .orderBy([{ column: 'startDate', order: 'asc' }])
 
       expect(results).toMatchObject([
-        { id: returnLogs[0].id, current: 'false' },
-        { id: returnLogs[1].id, current: 'false' },
-        { id: returnLogs[2].id, current: 'true' }
+        { current: 'false', id: returnLogs[0].id },
+        { current: 'false', id: returnLogs[1].id },
+        { current: 'true', id: returnLogs[2].id }
       ])
 
       // Also check we updated `updatedAt` but only on those records we set isCurrent to false

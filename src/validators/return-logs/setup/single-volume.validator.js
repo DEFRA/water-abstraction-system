@@ -25,8 +25,8 @@ export default function singleVolumeValidator(payload) {
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': singleVolumeError,
         'any.only': singleVolumeError,
+        'any.required': singleVolumeError,
         'string.empty': singleVolumeError
       }),
     singleVolumeQuantity: Joi.number()
@@ -37,8 +37,8 @@ export default function singleVolumeValidator(payload) {
         'any.required': 'Enter a total amount',
         'custom.maxDecimals': 'Enter a total amount with no more than 6 decimal places',
         'number.base': 'Enter a number for the total amount',
-        'number.unsafe': 'Enter a positive total amount up to a maximum of 9007199254740991',
-        'number.positive': 'Enter a total amount greater than zero'
+        'number.positive': 'Enter a total amount greater than zero',
+        'number.unsafe': 'Enter a positive total amount up to a maximum of 9007199254740991'
       })
   })
 

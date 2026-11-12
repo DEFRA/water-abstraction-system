@@ -20,12 +20,12 @@ export default function companyWithAddressPresenter(company, address, role, lice
 
   return {
     backLink: _backLink(companyId, licenceId),
-    pageTitle: roles[role].label,
-    pageTitleCaption: companyName,
     details: {
-      name: companyName,
-      address: _formatCompanyAddress(address)
-    }
+      address: _formatCompanyAddress(address),
+      name: companyName
+    },
+    pageTitle: roles[role].label,
+    pageTitleCaption: companyName
   }
 }
 

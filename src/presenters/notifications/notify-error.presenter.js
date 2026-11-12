@@ -17,9 +17,9 @@
 export default function notifyErrorPresenter(statusCode, message, errors) {
   return {
     notifyError: JSON.stringify({
-      status: statusCode,
+      errors,
       message,
-      errors
+      status: statusCode
     }),
     status: 'error'
   }

@@ -38,8 +38,8 @@ describe('Return Logs Setup - Submit Volumes service', () => {
           startDate: '2023-06-01T00:00:00.000Z'
         }
       ],
-      returnsFrequency: 'month',
       returnReference: 1234,
+      returnsFrequency: 'month',
       units: 'megalitres',
       unitSymbol: 'Ml'
     }
@@ -96,7 +96,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ titleText: 'Updated', text: 'Volumes have been updated' })
+          expect(notification).toEqual({ text: 'Volumes have been updated', titleText: 'Updated' })
         })
       })
 
@@ -135,7 +135,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ titleText: 'Updated', text: 'Volumes have been updated' })
+          expect(notification).toEqual({ text: 'Volumes have been updated', titleText: 'Updated' })
         })
       })
     })
@@ -150,16 +150,16 @@ describe('Return Logs Setup - Submit Volumes service', () => {
         const result = await SubmitVolumesService(session.id, payload, yarStub, yearMonth)
 
         expect(result).toEqual({
+          backLink: { href: `/system/return-logs/setup/${session.id}/check`, text: 'Back' },
           error: {
+            '2023-04-30T00:00:00.000Z': { text: 'Volume must be a number or blank' },
             errorList: [
               {
                 href: '#2023-04-30T00:00:00.000Z',
                 text: 'Volume must be a number or blank'
               }
-            ],
-            '2023-04-30T00:00:00.000Z': { text: 'Volume must be a number or blank' }
+            ]
           },
-          backLink: { href: `/system/return-logs/setup/${session.id}/check`, text: 'Back' },
           inputLines: [
             {
               endDate: '2023-04-30T00:00:00.000Z',
@@ -180,13 +180,13 @@ describe('Return Logs Setup - Submit Volumes service', () => {
           const result = await SubmitVolumesService(session.id, payload, yarStub, yearMonth)
 
           expect(result.error).toEqual({
+            '2023-04-30T00:00:00.000Z': { text: 'Volume must be a number or blank' },
             errorList: [
               {
                 href: '#2023-04-30T00:00:00.000Z',
                 text: 'Volume must be a number or blank'
               }
-            ],
-            '2023-04-30T00:00:00.000Z': { text: 'Volume must be a number or blank' }
+            ]
           })
         })
       })

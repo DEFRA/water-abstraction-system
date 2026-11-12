@@ -1,9 +1,9 @@
-import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
-
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/start-reading` page
  * @module StartReadingPresenter
  */
+
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/start-reading` page

@@ -50,8 +50,8 @@ export default function viewNotificationPresenter(
     paperForm: _paperForm(notification),
     reference: licence ? event.referenceCode : null,
     returnedDate: returnedAt ? formatLongDate(returnedAt) : null,
-    sentDate: formatLongDate(createdAt),
     sentBy: event.issuer,
+    sentDate: formatLongDate(createdAt),
     sentTo: _sentTo(notification),
     status: notification.status
   }

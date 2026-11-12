@@ -3,9 +3,9 @@
  * @module ReturnsPeriodPresenter
  */
 
-import { determineUpcomingReturnPeriods } from 'water-abstraction-engine/lib/return-periods.lib.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
 import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { determineUpcomingReturnPeriods } from 'water-abstraction-engine/lib/return-periods.lib.js'
 
 import { returnsPeriodText } from '../base.presenter.js'
 
@@ -54,11 +54,11 @@ function _returnsPeriod(savedReturnsPeriod) {
 
 function _formatReturnPeriod(returnsPeriod, savedReturnsPeriod) {
   return {
-    value: returnsPeriod.name,
-    text: returnsPeriodText(returnsPeriod),
+    checked: returnsPeriod.name === savedReturnsPeriod,
     hint: {
       text: `Due date ${formatLongDate(returnsPeriod.dueDate)}`
     },
-    checked: returnsPeriod.name === savedReturnsPeriod
+    text: returnsPeriodText(returnsPeriod),
+    value: returnsPeriod.name
   }
 }

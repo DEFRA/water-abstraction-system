@@ -60,6 +60,7 @@ describe('Licences - Fetch Returns dal', () => {
       startDate: new Date('2020-02-01'),
       status: 'due'
     })
+
     returnLogs.push(returnLog)
 
     returnLog = await ReturnLogHelper.add({

@@ -15,9 +15,9 @@ export default function contactNamePresenter(session) {
 
   return {
     backLink: _backLink(session),
+    name: session.name ?? '',
     pageTitle: 'Enter a name for the contact',
-    pageTitleCaption: company.name,
-    name: session.name ?? ''
+    pageTitleCaption: company.name
   }
 }
 

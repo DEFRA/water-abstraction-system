@@ -1,4 +1,10 @@
 /**
+ * Formatting functions shared by the user presenters
+ *
+ * @module BaseUsersPresenter
+ */
+
+/**
  * Formats for display selected licences to unlink in the external check and cancel pages
  *
  * @param {object} session - The session object containing external unlinking licence data

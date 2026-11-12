@@ -65,9 +65,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
             returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
               alias: 'Summer purpose alias for testing',
-              returnRequirementId: returnRequirement.id,
               primaryPurposeId: primaryPurpose.id,
               purposeId: purpose.id,
+              returnRequirementId: returnRequirement.id,
               secondaryPurposeId: secondaryPurpose.id
             })
 
@@ -75,8 +75,8 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               description: 'Summer cycle - live licence - live return version - summer return requirement'
             })
             await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
+              pointId: point.id,
+              returnRequirementId: returnRequirement.id
             })
           })
 
@@ -148,9 +148,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             secondaryPurpose = SecondaryPurposeHelper.select()
 
             returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              returnRequirementId: returnRequirement.id,
               primaryPurposeId: primaryPurpose.id,
               purposeId: purpose.id,
+              returnRequirementId: returnRequirement.id,
               secondaryPurposeId: secondaryPurpose.id
             })
 
@@ -158,8 +158,8 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               description: 'Summer cycle - live licence - live return version - winter return requirement'
             })
             await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
+              pointId: point.id,
+              returnRequirementId: returnRequirement.id
             })
           })
 
@@ -191,9 +191,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             secondaryPurpose = SecondaryPurposeHelper.select()
 
             returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              returnRequirementId: returnRequirement.id,
               primaryPurposeId: primaryPurpose.id,
               purposeId: purpose.id,
+              returnRequirementId: returnRequirement.id,
               secondaryPurposeId: secondaryPurpose.id
             })
 
@@ -201,8 +201,8 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               description: 'Summer cycle - live licence - ended return version - summer return requirement'
             })
             await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
+              pointId: point.id,
+              returnRequirementId: returnRequirement.id
             })
           })
 
@@ -241,9 +241,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             secondaryPurpose = SecondaryPurposeHelper.select()
 
             returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              returnRequirementId: returnRequirement.id,
               primaryPurposeId: primaryPurpose.id,
               purposeId: purpose.id,
+              returnRequirementId: returnRequirement.id,
               secondaryPurposeId: secondaryPurpose.id
             })
 
@@ -251,8 +251,8 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               description: 'Summer cycle - ended licence - live return version - summer return requirement'
             })
             await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
+              pointId: point.id,
+              returnRequirementId: returnRequirement.id
             })
           })
 
@@ -298,9 +298,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
             returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
               alias: 'Winter purpose alias for testing',
-              returnRequirementId: returnRequirement.id,
               primaryPurposeId: primaryPurpose.id,
               purposeId: purpose.id,
+              returnRequirementId: returnRequirement.id,
               secondaryPurposeId: secondaryPurpose.id
             })
 
@@ -308,8 +308,8 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               description: 'Winter cycle - live licence - live return version - winter return requirement'
             })
             await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
+              pointId: point.id,
+              returnRequirementId: returnRequirement.id
             })
           })
 
@@ -381,9 +381,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             secondaryPurpose = SecondaryPurposeHelper.select()
 
             returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              returnRequirementId: returnRequirement.id,
               primaryPurposeId: primaryPurpose.id,
               purposeId: purpose.id,
+              returnRequirementId: returnRequirement.id,
               secondaryPurposeId: secondaryPurpose.id
             })
 
@@ -391,8 +391,8 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               description: 'Winter cycle - live licence - live return version - summer return requirement'
             })
             await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
+              pointId: point.id,
+              returnRequirementId: returnRequirement.id
             })
           })
 
@@ -424,9 +424,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             secondaryPurpose = SecondaryPurposeHelper.select()
 
             returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              returnRequirementId: returnRequirement.id,
               primaryPurposeId: primaryPurpose.id,
               purposeId: purpose.id,
+              returnRequirementId: returnRequirement.id,
               secondaryPurposeId: secondaryPurpose.id
             })
 
@@ -434,8 +434,8 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               description: 'Winter cycle - live licence - ended return version - winter return requirement'
             })
             await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
+              pointId: point.id,
+              returnRequirementId: returnRequirement.id
             })
           })
 
@@ -474,9 +474,9 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
             secondaryPurpose = SecondaryPurposeHelper.select()
 
             returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              returnRequirementId: returnRequirement.id,
               primaryPurposeId: primaryPurpose.id,
               purposeId: purpose.id,
+              returnRequirementId: returnRequirement.id,
               secondaryPurposeId: secondaryPurpose.id
             })
 
@@ -484,8 +484,8 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               description: 'Winter cycle - ended licence - live return version - winter return requirement'
             })
             await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
+              pointId: point.id,
+              returnRequirementId: returnRequirement.id
             })
           })
 
@@ -510,32 +510,6 @@ function _expectedResult() {
     abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
     externalId: returnRequirement.externalId,
     id: returnRequirement.id,
-    reference: returnRequirement.reference,
-    reportingFrequency: returnRequirement.reportingFrequency,
-    returnVersionId: returnRequirement.returnVersionId,
-    siteDescription: returnRequirement.siteDescription,
-    summer: returnRequirement.summer,
-    twoPartTariff: returnRequirement.twoPartTariff,
-    returnVersion: {
-      endDate: returnVersion.endDate,
-      id: returnVersion.id,
-      reason: returnVersion.reason,
-      startDate: returnVersion.startDate,
-      licence: {
-        expiredDate: licence.expiredDate,
-        id: licence.id,
-        lapsedDate: licence.lapsedDate,
-        licenceRef: licence.licenceRef,
-        revokedDate: licence.revokedDate,
-        areacode: 'SAAR',
-        region: {
-          id: region.id,
-          naldRegionId: region.naldRegionId
-        }
-      },
-      quarterlyReturns: returnVersion.quarterlyReturns,
-      multipleUpload: returnVersion.multipleUpload
-    },
     points: [
       {
         description: point.description,
@@ -545,6 +519,8 @@ function _expectedResult() {
         ngr4: point.ngr4
       }
     ],
+    reference: returnRequirement.reference,
+    reportingFrequency: returnRequirement.reportingFrequency,
     returnRequirementPurposes: [
       {
         alias: returnRequirementPurpose.alias,
@@ -565,7 +541,31 @@ function _expectedResult() {
           legacyId: secondaryPurpose.legacyId
         }
       }
-    ]
+    ],
+    returnVersion: {
+      endDate: returnVersion.endDate,
+      id: returnVersion.id,
+      licence: {
+        areacode: 'SAAR',
+        expiredDate: licence.expiredDate,
+        id: licence.id,
+        lapsedDate: licence.lapsedDate,
+        licenceRef: licence.licenceRef,
+        region: {
+          id: region.id,
+          naldRegionId: region.naldRegionId
+        },
+        revokedDate: licence.revokedDate
+      },
+      multipleUpload: returnVersion.multipleUpload,
+      quarterlyReturns: returnVersion.quarterlyReturns,
+      reason: returnVersion.reason,
+      startDate: returnVersion.startDate
+    },
+    returnVersionId: returnRequirement.returnVersionId,
+    siteDescription: returnRequirement.siteDescription,
+    summer: returnRequirement.summer,
+    twoPartTariff: returnRequirement.twoPartTariff
   })
 }
 

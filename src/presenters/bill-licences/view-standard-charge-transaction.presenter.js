@@ -101,11 +101,11 @@ function _agreement(section127Agreement) {
 
 function _chargeElement(purpose, startDay, startMonth, endDay, endMonth, source, season, loss) {
   return {
-    purpose: purpose.description,
     abstractionPeriod: formatAbstractionPeriod(startDay, startMonth, endDay, endMonth),
-    source: titleCase(source),
+    loss: titleCase(loss),
+    purpose: purpose.description,
     season: titleCase(season),
-    loss: titleCase(loss)
+    source: titleCase(source)
   }
 }
 
@@ -121,8 +121,8 @@ function _chargeElements(chargeElements) {
     } = chargeElement
 
     return {
-      purpose: purpose.description,
       abstractionPeriod: formatAbstractionPeriod(startDay, startMonth, endDay, endMonth),
+      purpose: purpose.description,
       volume: `${authorisedAnnualQuantity}ML`
     }
   })

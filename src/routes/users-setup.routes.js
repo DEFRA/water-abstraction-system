@@ -1,3 +1,9 @@
+/**
+ * Routes for setting up internal and external users
+ *
+ * @module UsersSetupRoutes
+ */
+
 import {
   setupExternal,
   setupInternal,
@@ -23,230 +29,230 @@ import {
 export default [
   {
     method: 'POST',
-    path: '/users/external/{id}/setup',
     options: {
-      handler: setupExternal,
       auth: {
         access: {
           scope: ['unlink_licences']
         }
-      }
-    }
+      },
+      handler: setupExternal
+    },
+    path: '/users/external/{id}/setup'
   },
   {
     method: 'GET',
-    path: '/users/external/setup/{sessionId}/cancel',
     options: {
-      handler: viewExternalCancel,
       auth: {
         access: {
           scope: ['unlink_licences']
         }
-      }
-    }
+      },
+      handler: viewExternalCancel
+    },
+    path: '/users/external/setup/{sessionId}/cancel'
   },
   {
     method: 'POST',
-    path: '/users/external/setup/{sessionId}/cancel',
     options: {
-      handler: submitExternalCancel,
       auth: {
         access: {
           scope: ['unlink_licences']
         }
-      }
-    }
+      },
+      handler: submitExternalCancel
+    },
+    path: '/users/external/setup/{sessionId}/cancel'
   },
   {
     method: 'GET',
-    path: '/users/external/setup/{sessionId}/check',
     options: {
-      handler: viewExternalCheck,
       auth: {
         access: {
           scope: ['unlink_licences']
         }
-      }
-    }
+      },
+      handler: viewExternalCheck
+    },
+    path: '/users/external/setup/{sessionId}/check'
   },
   {
     method: 'POST',
-    path: '/users/external/setup/{sessionId}/check',
     options: {
-      handler: submitExternalCheck,
       auth: {
         access: {
           scope: ['unlink_licences']
         }
-      }
-    }
+      },
+      handler: submitExternalCheck
+    },
+    path: '/users/external/setup/{sessionId}/check'
   },
   {
     method: 'GET',
-    path: '/users/external/setup/{sessionId}/licences',
     options: {
-      handler: viewExternalLicences,
       auth: {
         access: {
           scope: ['unlink_licences']
         }
-      }
-    }
+      },
+      handler: viewExternalLicences
+    },
+    path: '/users/external/setup/{sessionId}/licences'
   },
   {
     method: 'POST',
-    path: '/users/external/setup/{sessionId}/licences',
     options: {
-      handler: submitExternalLicences,
       auth: {
         access: {
           scope: ['unlink_licences']
         }
-      }
-    }
+      },
+      handler: submitExternalLicences
+    },
+    path: '/users/external/setup/{sessionId}/licences'
   },
   {
     method: 'GET',
-    path: '/users/internal/setup',
     options: {
-      handler: setupInternal,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: setupInternal
+    },
+    path: '/users/internal/setup'
   },
   {
     method: 'GET',
-    path: '/users/internal/setup/{id}/edit',
     options: {
-      handler: setupInternalEdit,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: setupInternalEdit
+    },
+    path: '/users/internal/setup/{id}/edit'
   },
   {
     method: 'GET',
-    path: '/users/internal/setup/{sessionId}/access',
     options: {
-      handler: viewInternalAccess,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: viewInternalAccess
+    },
+    path: '/users/internal/setup/{sessionId}/access'
   },
   {
     method: 'POST',
-    path: '/users/internal/setup/{sessionId}/access',
     options: {
-      handler: submitInternalAccess,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: submitInternalAccess
+    },
+    path: '/users/internal/setup/{sessionId}/access'
   },
   {
     method: 'GET',
-    path: '/users/internal/setup/{sessionId}/cancel',
     options: {
-      handler: viewInternalCancel,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: viewInternalCancel
+    },
+    path: '/users/internal/setup/{sessionId}/cancel'
   },
   {
     method: 'POST',
-    path: '/users/internal/setup/{sessionId}/cancel',
     options: {
-      handler: submitInternalCancel,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: submitInternalCancel
+    },
+    path: '/users/internal/setup/{sessionId}/cancel'
   },
   {
     method: 'GET',
-    path: '/users/internal/setup/{sessionId}/check',
     options: {
-      handler: viewInternalCheck,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: viewInternalCheck
+    },
+    path: '/users/internal/setup/{sessionId}/check'
   },
   {
     method: 'POST',
-    path: '/users/internal/setup/{sessionId}/check',
     options: {
-      handler: submitInternalCheck,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: submitInternalCheck
+    },
+    path: '/users/internal/setup/{sessionId}/check'
   },
   {
     method: 'GET',
-    path: '/users/internal/setup/{sessionId}/email',
     options: {
-      handler: viewInternalEmail,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: viewInternalEmail
+    },
+    path: '/users/internal/setup/{sessionId}/email'
   },
   {
     method: 'POST',
-    path: '/users/internal/setup/{sessionId}/email',
     options: {
-      handler: submitInternalEmail,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: submitInternalEmail
+    },
+    path: '/users/internal/setup/{sessionId}/email'
   },
   {
     method: 'GET',
-    path: '/users/internal/setup/{sessionId}/permissions',
     options: {
-      handler: viewInternalPermissions,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: viewInternalPermissions
+    },
+    path: '/users/internal/setup/{sessionId}/permissions'
   },
   {
     method: 'POST',
-    path: '/users/internal/setup/{sessionId}/permissions',
     options: {
-      handler: submitInternalPermissions,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: submitInternalPermissions
+    },
+    path: '/users/internal/setup/{sessionId}/permissions'
   }
 ]

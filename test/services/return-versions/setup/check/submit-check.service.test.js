@@ -24,6 +24,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
   let session
   let sessionData
   let userId
+
   beforeEach(() => {
     userId = 12345
 
@@ -31,11 +32,11 @@ describe('Return Versions - Setup - Submit Check service', () => {
       checkPageVisited: true,
       journey: 'returns-required',
       licence: {
-        id: '7cf4a46b-1375-42c8-bfe7-24c1bfff765c',
+        currentVersionStartDate: '2023-02-13T00:00:00.000Z',
         endDate: null,
-        startDate: '1967-12-08T00:00:00.000Z',
-        licenceRef: '99/99/9999',
+        id: '7cf4a46b-1375-42c8-bfe7-24c1bfff765c',
         licenceHolder: 'A licence holder',
+        licenceRef: '99/99/9999',
         returnVersions: [
           {
             id: '1b67ad84-1511-4944-834d-00814899564f',
@@ -48,7 +49,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
             startDate: '2008-04-01T00:00:00.000Z'
           }
         ],
-        currentVersionStartDate: '2023-02-13T00:00:00.000Z'
+        startDate: '1967-12-08T00:00:00.000Z'
       },
       method: 'use-existing-requirements',
       multipleUpload: false,
@@ -56,24 +57,24 @@ describe('Return Versions - Setup - Submit Check service', () => {
       reason: 'minor-change',
       requirements: [
         {
-          points: ['796f83bb-d50d-446f-bc47-28daff6bcb78'],
-          purposes: [
-            {
-              id: 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e',
-              alias: ''
-            }
-          ],
-          returnsCycle: 'winter-and-all-year',
-          siteDescription: 'Site Number One',
           abstractionPeriod: {
             abstractionPeriodEndDay: '31',
             abstractionPeriodEndMonth: '3',
             abstractionPeriodStartDay: '1',
             abstractionPeriodStartMonth: '4'
           },
-          frequencyReported: 'month',
+          agreementsExceptions: ['none'],
           frequencyCollected: 'week',
-          agreementsExceptions: ['none']
+          frequencyReported: 'month',
+          points: ['796f83bb-d50d-446f-bc47-28daff6bcb78'],
+          purposes: [
+            {
+              alias: '',
+              id: 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'
+            }
+          ],
+          returnsCycle: 'winter-and-all-year',
+          siteDescription: 'Site Number One'
         }
       ],
       returnVersionStartDate: '2023-02-13',
@@ -83,17 +84,16 @@ describe('Return Versions - Setup - Submit Check service', () => {
     generatedReturnVersionData = {
       returnRequirements: [
         {
-          abstractionPeriodStartDay: '1',
-          abstractionPeriodStartMonth: '4',
           abstractionPeriodEndDay: '31',
           abstractionPeriodEndMonth: '3',
+          abstractionPeriodStartDay: '1',
+          abstractionPeriodStartMonth: '4',
           collectionFrequency: 'week',
           fiftySixException: false,
           gravityFill: false,
           points: ['796f83bb-d50d-446f-bc47-28daff6bcb78'],
           reabstraction: false,
           reportingFrequency: 'month',
-          returnsFrequency: 'year',
           returnRequirementPurposes: [
             {
               alias: null,
@@ -102,6 +102,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
               secondaryPurposeId: '0a80d135-9bd4-40ec-90ff-f4a365ccac3f'
             }
           ],
+          returnsFrequency: 'year',
           siteDescription: 'Site Number One',
           summer: false,
           twoPartTariff: false

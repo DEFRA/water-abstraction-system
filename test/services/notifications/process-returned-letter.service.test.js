@@ -21,11 +21,12 @@ describe('Notifications - Process Returned Letter service', () => {
   let notification
   let notifierStub
   let payload
+
   beforeEach(async () => {
     notification = await NotificationHelper.add({
       eventId: generateUUID(),
-      messageType: 'letter',
       messageRef: 'returns reminder',
+      messageType: 'letter',
       notifyId: generateUUID(),
       notifyStatus: 'sent',
       recipient: null,
@@ -80,8 +81,8 @@ describe('Notifications - Process Returned Letter service', () => {
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.payload).toEqual(payload)
       expect(logDataArg.notification).toEqual({
-        id: notification.id,
-        eventId: notification.eventId
+        eventId: notification.eventId,
+        id: notification.id
       })
     })
   })

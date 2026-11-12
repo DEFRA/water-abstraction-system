@@ -31,7 +31,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
       beforeEach(() => {
         vi.spyOn(BillRunModel, 'query').mockReturnValueOnce({
           findById: vi.fn().mockReturnThis(),
-          select: vi.fn().mockResolvedValue({ id: billRunId, externalId, status: 'ready' })
+          select: vi.fn().mockResolvedValue({ externalId, id: billRunId, status: 'ready' })
         })
       })
 
@@ -47,7 +47,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
       it('returns an instance of the bill run including its external ID and status set to "cancel"', async () => {
         const result = await CancelBillBunService(billRunId)
 
-        expect(result).toEqual({ id: billRunId, externalId, status: 'cancel' })
+        expect(result).toEqual({ externalId, id: billRunId, status: 'cancel' })
       })
     })
 
@@ -55,7 +55,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
       beforeEach(async () => {
         vi.spyOn(BillRunModel, 'query').mockReturnValueOnce({
           findById: vi.fn().mockReturnThis(),
-          select: vi.fn().mockResolvedValue({ id: billRunId, externalId, status: 'sent' })
+          select: vi.fn().mockResolvedValue({ externalId, id: billRunId, status: 'sent' })
         })
       })
 
@@ -69,7 +69,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
       it('returns an instance of the bill run including its external ID and status unchanged', async () => {
         const result = await CancelBillBunService(billRunId)
 
-        expect(result).toEqual({ id: billRunId, externalId, status: 'sent' })
+        expect(result).toEqual({ externalId, id: billRunId, status: 'sent' })
       })
     })
   })

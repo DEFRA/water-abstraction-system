@@ -31,8 +31,8 @@ export default async function reissueBillsService(reissueBillRun) {
   }
 
   const dataToPersist = {
-    bills: [],
     billLicences: [],
+    bills: [],
     transactions: []
   }
 

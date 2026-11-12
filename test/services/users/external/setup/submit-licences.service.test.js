@@ -62,8 +62,8 @@ describe('Users - External - Setup - Submit Licences Service', () => {
             beforeEach(() => {
               session = SessionModelStub({
                 ...sessionData,
-                checkPageVisited: true,
-                allLicences: true
+                allLicences: true,
+                checkPageVisited: true
               })
 
               vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
@@ -83,8 +83,8 @@ describe('Users - External - Setup - Submit Licences Service', () => {
               beforeEach(() => {
                 session = SessionModelStub({
                   ...sessionData,
-                  checkPageVisited: true,
-                  allLicences: true
+                  allLicences: true,
+                  checkPageVisited: true
                 })
 
                 vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
@@ -98,7 +98,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
                 const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
                 expect(flashType).toEqual('notification')
-                expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Licences to unregister updated' })
+                expect(bannerMessage).toEqual({ text: 'Licences to unregister updated', titleText: 'Updated' })
               })
             })
 
@@ -106,8 +106,8 @@ describe('Users - External - Setup - Submit Licences Service', () => {
               beforeEach(() => {
                 session = SessionModelStub({
                   ...sessionData,
-                  checkPageVisited: true,
                   allLicences: false,
+                  checkPageVisited: true,
                   selectedLicences: [sessionData.licences[0].id, sessionData.licences[1].id]
                 })
 
@@ -122,7 +122,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
                 const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
                 expect(flashType).toEqual('notification')
-                expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Licences to unregister updated' })
+                expect(bannerMessage).toEqual({ text: 'Licences to unregister updated', titleText: 'Updated' })
               })
             })
 
@@ -130,8 +130,8 @@ describe('Users - External - Setup - Submit Licences Service', () => {
               beforeEach(() => {
                 session = SessionModelStub({
                   ...sessionData,
-                  checkPageVisited: true,
                   allLicences: false,
+                  checkPageVisited: true,
                   selectedLicences: [sessionData.licences[1].id]
                 })
 
@@ -146,7 +146,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
                 const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
                 expect(flashType).toEqual('notification')
-                expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Licences to unregister updated' })
+                expect(bannerMessage).toEqual({ text: 'Licences to unregister updated', titleText: 'Updated' })
               })
             })
           })
@@ -172,17 +172,6 @@ describe('Users - External - Setup - Submit Licences Service', () => {
       const result = await SubmitLicencesService(session.id, payload, yarStub)
 
       expect(result).toEqual({
-        error: {
-          licences: {
-            text: 'Select licences to unregister'
-          },
-          errorList: [
-            {
-              href: '#licences',
-              text: 'Select licences to unregister'
-            }
-          ]
-        },
         activeNavBar: 'users',
         backLink: {
           href: `/system/users/external/${sessionData.user.id}/licences`,
@@ -211,6 +200,17 @@ describe('Users - External - Setup - Submit Licences Service', () => {
             value: 'all'
           }
         ],
+        error: {
+          errorList: [
+            {
+              href: '#licences',
+              text: 'Select licences to unregister'
+            }
+          ],
+          licences: {
+            text: 'Select licences to unregister'
+          }
+        },
         pageTitle: 'Select licences to unregister',
         pageTitleCaption: sessionData.user.username,
         showHint: true

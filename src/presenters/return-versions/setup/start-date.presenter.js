@@ -16,9 +16,6 @@ export default function startDatePresenter(session) {
   const { id: sessionId, licence, startDateOptions, startDateDay, startDateMonth, startDateYear } = session
 
   return {
-    startDateDay: startDateDay ?? null,
-    startDateMonth: startDateMonth ?? null,
-    startDateYear: startDateYear ?? null,
     backLink: { href: _backLinkHref(session), text: 'Back' },
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
@@ -26,7 +23,10 @@ export default function startDatePresenter(session) {
     pageTitle: 'Select the start date for the requirements for returns',
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     sessionId,
-    startDateOption: startDateOptions ?? null
+    startDateDay: startDateDay ?? null,
+    startDateMonth: startDateMonth ?? null,
+    startDateOption: startDateOptions ?? null,
+    startDateYear: startDateYear ?? null
   }
 }
 

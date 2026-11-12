@@ -25,9 +25,9 @@ export async function seed(existingLicenceRef = null, existingRegionId = null, e
   const licenceRef = existingLicenceRef ?? generateLicenceRef()
 
   const licence = await LicenceHelper.add({
+    expiredDate,
     licenceRef,
-    regionId,
-    expiredDate
+    regionId
   })
 
   const licenceDocument = await LicenceDocumentHelper.add({
@@ -39,13 +39,13 @@ export async function seed(existingLicenceRef = null, existingRegionId = null, e
   })
 
   return {
-    licence,
-    licenceDocument,
-    licenceDocumentHeader,
     clean: async () => {
       await licence.$query().delete()
       await licenceDocument.$query().delete()
       await licenceDocumentHeader.$query().delete()
-    }
+    },
+    licence,
+    licenceDocument,
+    licenceDocumentHeader
   }
 }

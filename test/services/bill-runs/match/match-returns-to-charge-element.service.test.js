@@ -10,23 +10,23 @@ describe('Match Returns To Charge Element Service', () => {
 
   beforeEach(() => {
     chargeElement = {
-      id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-      purpose: {
-        id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
-        legacyId: '400',
-        description: 'Spray Irrigation - Direct'
-      },
-      returnLogs: [],
       abstractionPeriods: [
         {
-          startDate: new Date('2022-04-01'),
-          endDate: new Date('2022-10-31')
+          endDate: new Date('2022-10-31'),
+          startDate: new Date('2022-04-01')
         },
         {
-          startDate: new Date('2023-03-01'),
-          endDate: new Date('2023-03-31')
+          endDate: new Date('2023-03-31'),
+          startDate: new Date('2023-03-01')
         }
-      ]
+      ],
+      id: '8eac5976-d16c-4818-8bc8-384d958ce863',
+      purpose: {
+        description: 'Spray Irrigation - Direct',
+        id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
+        legacyId: '400'
+      },
+      returnLogs: []
     }
   })
 
@@ -155,41 +155,41 @@ describe('Match Returns To Charge Element Service', () => {
 function _testReturnLogs() {
   return [
     {
+      abstractionPeriods: [
+        {
+          endDate: new Date('2022-10-31'),
+          startDate: new Date('2022-04-01')
+        }
+      ],
       id: '870c6cae-1f31-4e0e-bdd1-4df07b31084e',
+      matched: false,
       purposes: [
         {
           alias: 'Spray Irrigation - Direct',
           primary: { code: 'A', description: 'Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
-          secondary: { code: 'AGR', description: 'General Agriculture' }
+          secondary: { code: 'AGR', description: 'General Agriculture' },
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
         }
       ],
-      abstractionPeriods: [
-        {
-          startDate: new Date('2022-04-01'),
-          endDate: new Date('2022-10-31')
-        }
-      ],
-      matched: false,
       reviewReturnId: '5f86823b-2384-48ca-b20f-e0f178122a0f'
     },
     {
+      abstractionPeriods: [
+        {
+          endDate: new Date('2022-10-31'),
+          startDate: new Date('2022-04-01')
+        }
+      ],
       id: '9341b05c-b24d-4c03-b5e3-fa19950b04d0',
+      matched: false,
       purposes: [
         {
           alias: 'Spray Irrigation - Direct',
           primary: { code: 'A', description: 'Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
-          secondary: { code: 'AGR', description: 'General Agriculture' }
+          secondary: { code: 'AGR', description: 'General Agriculture' },
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
         }
-      ],
-      abstractionPeriods: [
-        {
-          startDate: new Date('2022-04-01'),
-          endDate: new Date('2022-10-31')
-        }
-      ],
-      matched: false
+      ]
     }
   ]
 }

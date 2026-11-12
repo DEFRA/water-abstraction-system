@@ -16,8 +16,8 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
 
   beforeEach(() => {
     sessionData = {
-      monitoringStationId: 'e1c44f9b-51c2-4aee-a518-5509d6f05869',
-      label: 'Monitoring Station Label'
+      label: 'Monitoring Station Label',
+      monitoringStationId: 'e1c44f9b-51c2-4aee-a518-5509d6f05869'
     }
 
     session = SessionModelStub(sessionData)
@@ -43,8 +43,8 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
         backLink: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,
         monitoringStationLabel: 'Monitoring Station Label',
         pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
-        stopOrReduce: null,
-        reduceAtThreshold: null
+        reduceAtThreshold: null,
+        stopOrReduce: null
       })
     })
   })

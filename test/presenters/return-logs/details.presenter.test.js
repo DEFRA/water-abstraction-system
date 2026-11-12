@@ -45,8 +45,8 @@ describe('Return Logs - Details presenter', () => {
     expect(result).toEqual({
       abstractionPeriod: '1 April to 28 April',
       actionButton: {
-        value: returnLog.id,
-        text: 'Edit return'
+        text: 'Edit return',
+        value: returnLog.id
       },
       backLink: {
         href: `/system/licences/${returnLog.licence.id}/returns`,
@@ -65,15 +65,15 @@ describe('Return Logs - Details presenter', () => {
       pageTitleCaption: `Licence ${returnLog.licenceRef}`,
       purpose: ['Mineral Washing'],
       receivedDate: '12 April 2023',
-      returnReference: returnLog.returnReference,
       returnPeriod: '1 April 2022 to 31 March 2023',
+      returnReference: returnLog.returnReference,
       showUnderQuery: true,
       siteDescription: 'BOREHOLE AT AVALON',
       startReading: null,
       status: 'complete',
       succeeded: false,
       summaryTableData: {
-        headers: [{ text: 'Month' }, { text: 'Cubic metres', format: 'numeric' }],
+        headers: [{ text: 'Month' }, { format: 'numeric', text: 'Cubic metres' }],
         rows: [
           { month: 'April 2022', monthlyTotal: formatNumber(lines[0].quantity) },
           { month: 'May 2022', monthlyTotal: formatNumber(lines[1].quantity) },
@@ -99,8 +99,8 @@ describe('Return Logs - Details presenter', () => {
           link: `/system/return-logs/${returnLog.id}/details?version=1`,
           notes: null,
           selected: true,
-          version: 1,
-          user: 'admin-internal@wrls.gov.uk'
+          user: 'admin-internal@wrls.gov.uk',
+          version: 1
         }
       ],
       warning: null
@@ -185,8 +185,8 @@ describe('Return Logs - Details presenter', () => {
         const result = DetailsPresenter(returnLog, auth)
 
         expect(result.actionButton).toEqual({
-          value: returnLog.id,
-          text: 'Submit return'
+          text: 'Submit return',
+          value: returnLog.id
         })
       })
     })
@@ -222,8 +222,8 @@ describe('Return Logs - Details presenter', () => {
           const result = DetailsPresenter(returnLog, auth)
 
           expect(result.actionButton).toEqual({
-            value: returnLog.id,
-            text: 'Edit return'
+            text: 'Edit return',
+            value: returnLog.id
           })
         })
       })
@@ -856,6 +856,7 @@ describe('Return Logs - Details presenter', () => {
       // NOTE: We create an extra version just to demonstrate something more than the 'correctly presents the data' at
       // the top
       const latestSubmission = ReturnLogsFixture.returnSubmission(returnLog, 'estimated')
+
       latestSubmission.notes = 'This was a good one'
 
       returnLog.versions.unshift(latestSubmission)
@@ -873,16 +874,16 @@ describe('Return Logs - Details presenter', () => {
           link: `/system/return-logs/${returnLog.id}/details?version=${returnLog.versions[0].version}`,
           notes: 'This was a good one',
           selected: false,
-          version: returnLog.versions[0].version,
-          user: returnLog.versions[0].userId
+          user: returnLog.versions[0].userId,
+          version: returnLog.versions[0].version
         },
         {
           createdAt: '16 December 2023',
           link: `/system/return-logs/${returnLog.id}/details?version=${returnLog.versions[1].version}`,
           notes: null,
           selected: true,
-          version: returnLog.versions[1].version,
-          user: returnLog.versions[1].userId
+          user: returnLog.versions[1].userId,
+          version: returnLog.versions[1].version
         }
       ])
     })
@@ -898,8 +899,8 @@ describe('Return Logs - Details presenter', () => {
         const result = DetailsPresenter(returnLog, auth)
 
         expect(result.warning).toEqual({
-          text: 'This return is void and has been replaced. Do not use this data.',
-          iconFallbackText: 'Warning'
+          iconFallbackText: 'Warning',
+          text: 'This return is void and has been replaced. Do not use this data.'
         })
       })
     })
@@ -939,8 +940,8 @@ describe('Return Logs - Details presenter', () => {
         const result = DetailsPresenter(returnLog, auth)
 
         expect(result.warning).toEqual({
-          text: 'You are viewing a previous version. This is not the latest submission data.',
-          iconFallbackText: 'Warning'
+          iconFallbackText: 'Warning',
+          text: 'You are viewing a previous version. This is not the latest submission data.'
         })
       })
     })

@@ -67,6 +67,7 @@ describe('Bill Runs - Setup - Submit Year service', () => {
     describe('with an invalid payload', () => {
       describe('because the user has not selected anything', () => {
         const regionId = 'cff057a0-f3a7-4ae6-bc2b-01183e40fd05'
+
         beforeEach(() => {
           sessionData = { region: regionId, type: 'two_part_supplementary' }
 
@@ -85,13 +86,13 @@ describe('Bill Runs - Setup - Submit Year service', () => {
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
             backlink: `/system/bill-runs/setup/${session.id}/region`,
-            financialYearsData: [{ text: '2023 to 2024', value: 2024, checked: false }],
-            pageTitle: 'Select the financial year',
-            sessionId: session.id,
-            selectedYear: null,
             error: {
               text: 'Select the financial year'
-            }
+            },
+            financialYearsData: [{ checked: false, text: '2023 to 2024', value: 2024 }],
+            pageTitle: 'Select the financial year',
+            selectedYear: null,
+            sessionId: session.id
           })
         })
       })

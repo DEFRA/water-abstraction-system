@@ -122,36 +122,36 @@ describe('Return Logs - Fetch Return Log Details service', () => {
     describe('and the return log has submissions', () => {
       beforeAll(async () => {
         returnSubmissions = await Promise.all([
-          ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 1, notes: 'NOTES_V1' }),
-          ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 2, notes: 'NOTES_V2' }),
-          ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 3, notes: 'NOTES_V3' })
+          ReturnSubmissionHelper.add({ notes: 'NOTES_V1', returnLogId: returnLog.id, version: 1 }),
+          ReturnSubmissionHelper.add({ notes: 'NOTES_V2', returnLogId: returnLog.id, version: 2 }),
+          ReturnSubmissionHelper.add({ notes: 'NOTES_V3', returnLogId: returnLog.id, version: 3 })
         ])
 
         returnSubmissions[0].returnSubmissionLines = [
           await ReturnSubmissionLineHelper.add({
+            quantity: 0,
             returnSubmissionId: returnSubmissions[0].id,
-            startDate: '2023-03-01',
-            quantity: 0
+            startDate: '2023-03-01'
           })
         ]
         returnSubmissions[1].returnSubmissionLines = [
           await ReturnSubmissionLineHelper.add({
+            quantity: 1,
             returnSubmissionId: returnSubmissions[1].id,
-            startDate: '2023-03-01',
-            quantity: 1
+            startDate: '2023-03-01'
           })
         ]
 
         returnSubmissions[2].returnSubmissionLines = [
           await ReturnSubmissionLineHelper.add({
+            quantity: 10,
             returnSubmissionId: returnSubmissions[2].id,
-            startDate: '2023-03-01',
-            quantity: 10
+            startDate: '2023-03-01'
           }),
           await ReturnSubmissionLineHelper.add({
+            quantity: 5,
             returnSubmissionId: returnSubmissions[2].id,
-            startDate: '2023-01-01',
-            quantity: 5
+            startDate: '2023-01-01'
           })
         ]
       })

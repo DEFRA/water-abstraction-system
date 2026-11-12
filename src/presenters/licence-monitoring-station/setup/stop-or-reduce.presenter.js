@@ -1,9 +1,9 @@
-import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
-
 /**
  * Formats data for the `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page
  * @module StopOrReducePresenter
  */
+
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 
 /**
  * Formats data for the `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page

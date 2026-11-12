@@ -96,10 +96,6 @@ describe('Licence Monitoring Station - Remove presenter', () => {
 function _licenceMonitoringStation() {
   return {
     id: '27a7dc96-fad9-4b38-9117-c09623e99a9f',
-    measureType: 'flow',
-    restrictionType: 'reduce',
-    thresholdUnit: 'Ml/d',
-    thresholdValue: 175,
     licence: {
       id: licenceId,
       licenceRef: '99/999'
@@ -110,11 +106,15 @@ function _licenceMonitoringStation() {
         displayTitle: 'Aggregate condition link between licences'
       }
     },
+    measureType: 'flow',
     monitoringStation: {
-      id: monitoringStationId,
       catchmentName: 'Test catchment name',
+      id: monitoringStationId,
       label: 'Test monitoring station',
       riverName: ''
-    }
+    },
+    restrictionType: 'reduce',
+    thresholdUnit: 'Ml/d',
+    thresholdValue: 175
   }
 }

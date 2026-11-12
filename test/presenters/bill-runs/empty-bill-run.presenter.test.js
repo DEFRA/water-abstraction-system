@@ -33,17 +33,17 @@ describe('Empty Bill Run presenter', () => {
 
 function _testBillRun() {
   return {
-    id: '420e948f-1992-437e-8a47-74c0066cb017',
     batchType: 'supplementary',
     billRunNumber: 10010,
-    summer: false,
+    createdAt: new Date('2023-11-01'),
+    id: '420e948f-1992-437e-8a47-74c0066cb017',
+    region: {
+      displayName: 'Wales',
+      id: 'f6c4699f-9a80-419a-82e7-f785ece727e1'
+    },
     scheme: 'sroc',
     status: 'empty',
-    toFinancialYearEnding: 2024,
-    createdAt: new Date('2023-11-01'),
-    region: {
-      id: 'f6c4699f-9a80-419a-82e7-f785ece727e1',
-      displayName: 'Wales'
-    }
+    summer: false,
+    toFinancialYearEnding: 2024
   }
 }

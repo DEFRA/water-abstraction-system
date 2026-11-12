@@ -3,8 +3,8 @@
  * @module PurposesPresenter
  */
 
-import { formatLicencePurposes } from '../licence.presenter.js'
 import { pluralise } from './base-licences.presenter.js'
+import { formatLicencePurposes } from '../licence.presenter.js'
 
 /**
  * Formats the licence and related licenceVersionPurposes data for the view licence purposes page

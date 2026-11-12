@@ -13,15 +13,15 @@ const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address Facade - Lookup UPRN request', () => {
   const match = {
-    uprn: 340116,
     address: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+    city: 'BRISTOL',
+    country: 'United Kingdom',
+    locality: null,
     organisation: 'ENVIRONMENT AGENCY',
+    postcode: 'BS1 5AH',
     premises: 'HORIZON HOUSE',
     street_address: 'DEANERY ROAD',
-    locality: null,
-    city: 'BRISTOL',
-    postcode: 'BS1 5AH',
-    country: 'United Kingdom'
+    uprn: 340116
   }
   const uprn = '123456789'
 
@@ -32,14 +32,14 @@ describe('Address Facade - Lookup UPRN request', () => {
   describe('when the request succeeds', () => {
     beforeEach(async () => {
       vi.spyOn(AddressFacadeRequest, 'getRequest').mockResolvedValue({
-        succeeded: true,
+        matches: [match],
         response: {
-          statusCode: HTTP_STATUS_OK,
           body: {
             results: []
-          }
+          },
+          statusCode: HTTP_STATUS_OK
         },
-        matches: [match]
+        succeeded: true
       })
     })
 
@@ -68,12 +68,12 @@ describe('Address Facade - Lookup UPRN request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         vi.spyOn(AddressFacadeRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
+          matches: [],
           response: {
-            statusCode: HTTP_STATUS_NOT_FOUND,
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
+            body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
+            statusCode: HTTP_STATUS_NOT_FOUND
           },
-          matches: []
+          succeeded: false
         })
       })
 
@@ -87,9 +87,9 @@ describe('Address Facade - Lookup UPRN request', () => {
         const result = await LookupUPRNRequest(uprn)
 
         expect(result.response.body).toEqual({
-          statusCode: HTTP_STATUS_NOT_FOUND,
           error: 'Not Found',
-          message: 'Not Found'
+          message: 'Not Found',
+          statusCode: HTTP_STATUS_NOT_FOUND
         })
       })
 
@@ -105,9 +105,9 @@ describe('Address Facade - Lookup UPRN request', () => {
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
         vi.spyOn(AddressFacadeRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
+          matches: [],
           response: new Error("Timeout awaiting 'request' for 5000ms"),
-          matches: []
+          succeeded: false
         })
       })
 

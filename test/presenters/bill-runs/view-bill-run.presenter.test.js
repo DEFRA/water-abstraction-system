@@ -18,11 +18,11 @@ describe('View Bill Run presenter', () => {
       const result = ViewBillRunPresenter(billRun, billSummaries)
 
       expect(result).toEqual({
-        billsCount: '8 Supplementary bills',
         billRunNumber: 10010,
         billRunStatus: 'sent',
         billRunTotal: '£707.00',
         billRunType: 'Supplementary',
+        billsCount: '8 Supplementary bills',
         chargeScheme: 'Current',
         creditsCount: '2 credit notes',
         creditsTotal: '£1,992.78',
@@ -182,50 +182,50 @@ describe('View Bill Run presenter', () => {
 
 function _testBillRun() {
   return {
-    id: '420e948f-1992-437e-8a47-74c0066cb017',
     batchType: 'supplementary',
     billRunNumber: 10010,
+    createdAt: new Date('2023-11-01'),
     creditNoteCount: 2,
     creditNoteValue: -199278,
+    id: '420e948f-1992-437e-8a47-74c0066cb017',
     invoiceCount: 6,
     invoiceValue: 269978,
-    summer: false,
     netTotal: 70700,
+    region: {
+      displayName: 'Wales',
+      id: 'f6c4699f-9a80-419a-82e7-f785ece727e1'
+    },
     scheme: 'sroc',
     source: 'wrls',
     status: 'sent',
+    summer: false,
     toFinancialYearEnding: 2024,
-    transactionFileReference: 'nalwi50002t',
-    createdAt: new Date('2023-11-01'),
-    region: {
-      id: 'f6c4699f-9a80-419a-82e7-f785ece727e1',
-      displayName: 'Wales'
-    }
+    transactionFileReference: 'nalwi50002t'
   }
 }
 
 function _testBillSummaries() {
   return [
     {
-      id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-      billingAccountId: 'e8bd9fe1-47eb-42f2-a507-786bccd35aee',
       accountNumber: 'E11101999A',
-      netAmount: -9700,
-      financialYearEnding: 2023,
-      companyName: 'H M Scotty & Daughter',
       agentName: 'Geordie Leforge',
       allLicences: '17/53/001/G/782',
+      billingAccountId: 'e8bd9fe1-47eb-42f2-a507-786bccd35aee',
+      companyName: 'H M Scotty & Daughter',
+      financialYearEnding: 2023,
+      id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+      netAmount: -9700,
       waterCompany: false
     },
     {
-      id: '64924759-8142-4a08-9d1e-1e902cd9d316',
-      billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
       accountNumber: 'E22288888A',
-      netAmount: 21317800,
-      financialYearEnding: 2023,
-      companyName: 'Acme Water Services Ltd',
       agentName: null,
       allLicences: '17/53/001/A/101,17/53/002/B/205,17/53/002/C/308',
+      billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+      companyName: 'Acme Water Services Ltd',
+      financialYearEnding: 2023,
+      id: '64924759-8142-4a08-9d1e-1e902cd9d316',
+      netAmount: 21317800,
       waterCompany: true
     }
   ]

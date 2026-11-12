@@ -25,25 +25,25 @@ export default async function preGenerateBillingDataService(chargeVersions, bill
   const bills = _preGenerateBills(billingAccounts, billRunId, billingPeriod)
   const billLicences = _preGenerateBillLicences(chargeVersions, bills)
 
-  return { bills, billLicences }
+  return { billLicences, bills }
 }
 
 function _generateBill(billingAccountId, accountNumber, billRunId, financialYearEnding) {
   return {
-    id: generateUUID(),
     accountNumber,
     address: {}, // Address is set to an empty object for SROC billing invoices
     billingAccountId,
     billRunId,
     credit: false,
-    financialYearEnding
+    financialYearEnding,
+    id: generateUUID()
   }
 }
 
 function _generateBillLicence(billId, licenceId, licenceRef) {
   return {
-    id: generateUUID(),
     billId,
+    id: generateUUID(),
     licenceId,
     licenceRef
   }

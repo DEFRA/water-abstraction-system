@@ -10,9 +10,9 @@ describe('Return Logs Setup - Meter Details validator', () => {
   describe('when valid data is provided', () => {
     beforeEach(() => {
       payload = {
+        meter10TimesDisplay: 'yes',
         meterMake: 'WATER',
-        meterSerialNumber: '1234',
-        meter10TimesDisplay: 'yes'
+        meterSerialNumber: '1234'
       }
     })
 
@@ -28,12 +28,12 @@ describe('Return Logs Setup - Meter Details validator', () => {
       beforeEach(() => {
         // Max is 310 characters. This is 311 characters
         payload = {
+          meter10TimesDisplay: 'yes',
           meterMake:
             'kFZIOKxCJeDsSuaRqOjbmAFdtSNqkXVWfUTTPFXSQrftvnfJpUAUiGqXqiMXzKSlxQBFgIxZoBmBHmMECbEMsFHxVbQExkddgDaqXqFh' +
             'XDPStjqHjGdfXLErwoqVoehMemMDcnNwVZpoShasNXmwXwTXaPkSalsZEthlKJbaIynKCrUlWUSKLRlTKluwTFvGUkYeMVSgZIVRRaaX' +
             'dEdZTgcrcxeEzFDsoeuovupUcqbmvmzRQnwyiRFngNwIIELPOXjxDgHOSCzTDXYuJTLuuqjjTgFVXNBogeMowPRFBIdiDzWiHjXFHEH',
-          meterSerialNumber: '1234',
-          meter10TimesDisplay: 'yes'
+          meterSerialNumber: '1234'
         }
       })
 
@@ -49,11 +49,11 @@ describe('Return Logs Setup - Meter Details validator', () => {
       beforeEach(() => {
         // Max is 180 characters. This is 181 characters
         payload = {
+          meter10TimesDisplay: 'yes',
           meterMake: 'WATER',
           meterSerialNumber:
             'MTCbIgRZCXIcRtRGnkuRkqREOjBcKUzaFgwWDSgGPhXkDGxNPWfAqpXmttxCmjBdQEtSfrFOYHIHBgNJrvKQfSMvnQhQKHMMwlDzIYRX' +
-            'ZgtrparekHBvIvnxyaYDviUqCOxlJPnSVSvgyUyRlJlpNNrBMatWdYPWQrJNDydjISjjIxYsugOpY',
-          meter10TimesDisplay: 'yes'
+            'ZgtrparekHBvIvnxyaYDviUqCOxlJPnSVSvgyUyRlJlpNNrBMatWdYPWQrJNDydjISjjIxYsugOpY'
         }
       })
 

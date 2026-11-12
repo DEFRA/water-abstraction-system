@@ -26,48 +26,14 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
         expect(results).toHaveLength(1)
 
         expect(results[0]).toEqual({
-          id: seedData.billingAccount.id,
           accountNumber: seedData.billingAccount.accountNumber,
           chargeVersions: [
             {
-              id: seedData.chargeVersion.id,
-              scheme: seedData.chargeVersion.scheme,
-              startDate: seedData.chargeVersion.startDate,
-              endDate: seedData.chargeVersion.endDate,
               billingAccountId: seedData.chargeVersion.billingAccountId,
-              status: seedData.chargeVersion.status,
-              licence: {
-                id: seedData.licence.id,
-                licenceRef: seedData.licence.licenceRef,
-                waterUndertaker: seedData.licence.waterUndertaker,
-                historicalAreaCode: seedData.licence.regions.historicalAreaCode,
-                regionalChargeArea: seedData.licence.regions.regionalChargeArea,
-                startDate: seedData.licence.startDate,
-                expiredDate: seedData.licence.expiredDate,
-                lapsedDate: seedData.licence.lapsedDate,
-                revokedDate: seedData.licence.revokedDate,
-                region: {
-                  id: seedData.region.id,
-                  chargeRegionId: seedData.region.chargeRegionId
-                }
-              },
               chargeReferences: [
                 {
-                  id: seedData.chargeReference.id,
-                  source: seedData.chargeReference.source,
-                  loss: seedData.chargeReference.loss,
-                  volume: seedData.chargeReference.volume,
-                  adjustments: seedData.chargeReference.adjustments,
                   additionalCharges: seedData.chargeReference.additionalCharges,
-                  description: seedData.chargeReference.description,
-                  reviewChargeReferences: [
-                    {
-                      id: seedData.reviewChargeReference.id,
-                      amendedAggregate: seedData.reviewChargeReference.amendedAggregate,
-                      amendedChargeAdjustment: seedData.reviewChargeReference.amendedChargeAdjustment,
-                      amendedAuthorisedVolume: seedData.reviewChargeReference.amendedAuthorisedVolume
-                    }
-                  ],
+                  adjustments: seedData.chargeReference.adjustments,
                   chargeCategory: {
                     id: seedData.chargeCategory.id,
                     reference: seedData.chargeCategory.reference,
@@ -75,23 +41,57 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
                   },
                   chargeElements: [
                     {
-                      id: seedData.chargeElement.id,
-                      abstractionPeriodStartDay: seedData.chargeElement.abstractionPeriodStartDay,
-                      abstractionPeriodStartMonth: seedData.chargeElement.abstractionPeriodStartMonth,
                       abstractionPeriodEndDay: seedData.chargeElement.abstractionPeriodEndDay,
                       abstractionPeriodEndMonth: seedData.chargeElement.abstractionPeriodEndMonth,
+                      abstractionPeriodStartDay: seedData.chargeElement.abstractionPeriodStartDay,
+                      abstractionPeriodStartMonth: seedData.chargeElement.abstractionPeriodStartMonth,
+                      id: seedData.chargeElement.id,
                       reviewChargeElements: [
                         {
-                          id: seedData.reviewChargeElement.id,
-                          amendedAllocated: seedData.reviewChargeElement.amendedAllocated
+                          amendedAllocated: seedData.reviewChargeElement.amendedAllocated,
+                          id: seedData.reviewChargeElement.id
                         }
                       ]
                     }
-                  ]
+                  ],
+                  description: seedData.chargeReference.description,
+                  id: seedData.chargeReference.id,
+                  loss: seedData.chargeReference.loss,
+                  reviewChargeReferences: [
+                    {
+                      amendedAggregate: seedData.reviewChargeReference.amendedAggregate,
+                      amendedAuthorisedVolume: seedData.reviewChargeReference.amendedAuthorisedVolume,
+                      amendedChargeAdjustment: seedData.reviewChargeReference.amendedChargeAdjustment,
+                      id: seedData.reviewChargeReference.id
+                    }
+                  ],
+                  source: seedData.chargeReference.source,
+                  volume: seedData.chargeReference.volume
                 }
-              ]
+              ],
+              endDate: seedData.chargeVersion.endDate,
+              id: seedData.chargeVersion.id,
+              licence: {
+                expiredDate: seedData.licence.expiredDate,
+                historicalAreaCode: seedData.licence.regions.historicalAreaCode,
+                id: seedData.licence.id,
+                lapsedDate: seedData.licence.lapsedDate,
+                licenceRef: seedData.licence.licenceRef,
+                region: {
+                  chargeRegionId: seedData.region.chargeRegionId,
+                  id: seedData.region.id
+                },
+                regionalChargeArea: seedData.licence.regions.regionalChargeArea,
+                revokedDate: seedData.licence.revokedDate,
+                startDate: seedData.licence.startDate,
+                waterUndertaker: seedData.licence.waterUndertaker
+              },
+              scheme: seedData.chargeVersion.scheme,
+              startDate: seedData.chargeVersion.startDate,
+              status: seedData.chargeVersion.status
             }
-          ]
+          ],
+          id: seedData.billingAccount.id
         })
       })
     })
@@ -108,48 +108,14 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
         expect(results).toEqual([
           {
-            id: seedData.billingAccountB.id,
             accountNumber: seedData.billingAccountB.accountNumber,
             chargeVersions: [
               {
-                id: seedData.chargeVersionB.id,
-                scheme: seedData.chargeVersionB.scheme,
-                startDate: seedData.chargeVersionB.startDate,
-                endDate: seedData.chargeVersionB.endDate,
                 billingAccountId: seedData.chargeVersionB.billingAccountId,
-                status: seedData.chargeVersionB.status,
-                licence: {
-                  id: seedData.licence.id,
-                  licenceRef: seedData.licence.licenceRef,
-                  waterUndertaker: seedData.licence.waterUndertaker,
-                  historicalAreaCode: seedData.licence.regions.historicalAreaCode,
-                  regionalChargeArea: seedData.licence.regions.regionalChargeArea,
-                  startDate: seedData.licence.startDate,
-                  expiredDate: seedData.licence.expiredDate,
-                  lapsedDate: seedData.licence.lapsedDate,
-                  revokedDate: seedData.licence.revokedDate,
-                  region: {
-                    id: seedData.region.id,
-                    chargeRegionId: seedData.region.chargeRegionId
-                  }
-                },
                 chargeReferences: [
                   {
-                    id: seedData.chargeReferenceB.id,
-                    source: seedData.chargeReferenceB.source,
-                    loss: seedData.chargeReferenceB.loss,
-                    volume: seedData.chargeReferenceB.volume,
-                    adjustments: seedData.chargeReferenceB.adjustments,
                     additionalCharges: seedData.chargeReferenceB.additionalCharges,
-                    description: seedData.chargeReferenceB.description,
-                    reviewChargeReferences: [
-                      {
-                        id: seedData.reviewChargeReference.id,
-                        amendedAggregate: seedData.reviewChargeReference.amendedAggregate,
-                        amendedChargeAdjustment: seedData.reviewChargeReference.amendedChargeAdjustment,
-                        amendedAuthorisedVolume: seedData.reviewChargeReference.amendedAuthorisedVolume
-                      }
-                    ],
+                    adjustments: seedData.chargeReferenceB.adjustments,
                     chargeCategory: {
                       id: seedData.chargeCategory.id,
                       reference: seedData.chargeCategory.reference,
@@ -157,53 +123,87 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
                     },
                     chargeElements: [
                       {
-                        id: seedData.chargeElementB.id,
-                        abstractionPeriodStartDay: seedData.chargeElementB.abstractionPeriodStartDay,
-                        abstractionPeriodStartMonth: seedData.chargeElementB.abstractionPeriodStartMonth,
                         abstractionPeriodEndDay: seedData.chargeElementB.abstractionPeriodEndDay,
                         abstractionPeriodEndMonth: seedData.chargeElementB.abstractionPeriodEndMonth,
+                        abstractionPeriodStartDay: seedData.chargeElementB.abstractionPeriodStartDay,
+                        abstractionPeriodStartMonth: seedData.chargeElementB.abstractionPeriodStartMonth,
+                        id: seedData.chargeElementB.id,
                         reviewChargeElements: [
                           {
-                            id: seedData.reviewChargeElement.id,
-                            amendedAllocated: seedData.reviewChargeElement.amendedAllocated
+                            amendedAllocated: seedData.reviewChargeElement.amendedAllocated,
+                            id: seedData.reviewChargeElement.id
                           }
                         ]
                       }
-                    ]
+                    ],
+                    description: seedData.chargeReferenceB.description,
+                    id: seedData.chargeReferenceB.id,
+                    loss: seedData.chargeReferenceB.loss,
+                    reviewChargeReferences: [
+                      {
+                        amendedAggregate: seedData.reviewChargeReference.amendedAggregate,
+                        amendedAuthorisedVolume: seedData.reviewChargeReference.amendedAuthorisedVolume,
+                        amendedChargeAdjustment: seedData.reviewChargeReference.amendedChargeAdjustment,
+                        id: seedData.reviewChargeReference.id
+                      }
+                    ],
+                    source: seedData.chargeReferenceB.source,
+                    volume: seedData.chargeReferenceB.volume
                   }
-                ]
+                ],
+                endDate: seedData.chargeVersionB.endDate,
+                id: seedData.chargeVersionB.id,
+                licence: {
+                  expiredDate: seedData.licence.expiredDate,
+                  historicalAreaCode: seedData.licence.regions.historicalAreaCode,
+                  id: seedData.licence.id,
+                  lapsedDate: seedData.licence.lapsedDate,
+                  licenceRef: seedData.licence.licenceRef,
+                  region: {
+                    chargeRegionId: seedData.region.chargeRegionId,
+                    id: seedData.region.id
+                  },
+                  regionalChargeArea: seedData.licence.regions.regionalChargeArea,
+                  revokedDate: seedData.licence.revokedDate,
+                  startDate: seedData.licence.startDate,
+                  waterUndertaker: seedData.licence.waterUndertaker
+                },
+                scheme: seedData.chargeVersionB.scheme,
+                startDate: seedData.chargeVersionB.startDate,
+                status: seedData.chargeVersionB.status
               }
-            ]
+            ],
+            id: seedData.billingAccountB.id
           },
           {
-            id: seedData.billingAccountA.id,
             accountNumber: seedData.billingAccountA.accountNumber,
             chargeVersions: [
               {
+                billingAccountId: seedData.chargeVersionA.billingAccountId,
+                chargeReferences: [],
+                endDate: seedData.chargeVersionA.endDate,
                 id: seedData.chargeVersionA.id,
+                licence: {
+                  expiredDate: seedData.licence.expiredDate,
+                  historicalAreaCode: seedData.licence.regions.historicalAreaCode,
+                  id: seedData.licence.id,
+                  lapsedDate: seedData.licence.lapsedDate,
+                  licenceRef: seedData.licence.licenceRef,
+                  region: {
+                    chargeRegionId: seedData.region.chargeRegionId,
+                    id: seedData.region.id
+                  },
+                  regionalChargeArea: seedData.licence.regions.regionalChargeArea,
+                  revokedDate: seedData.licence.revokedDate,
+                  startDate: seedData.licence.startDate,
+                  waterUndertaker: seedData.licence.waterUndertaker
+                },
                 scheme: seedData.chargeVersionA.scheme,
                 startDate: seedData.chargeVersionA.startDate,
-                endDate: seedData.chargeVersionA.endDate,
-                billingAccountId: seedData.chargeVersionA.billingAccountId,
-                status: seedData.chargeVersionA.status,
-                licence: {
-                  id: seedData.licence.id,
-                  licenceRef: seedData.licence.licenceRef,
-                  waterUndertaker: seedData.licence.waterUndertaker,
-                  historicalAreaCode: seedData.licence.regions.historicalAreaCode,
-                  regionalChargeArea: seedData.licence.regions.regionalChargeArea,
-                  startDate: seedData.licence.startDate,
-                  expiredDate: seedData.licence.expiredDate,
-                  lapsedDate: seedData.licence.lapsedDate,
-                  revokedDate: seedData.licence.revokedDate,
-                  region: {
-                    id: seedData.region.id,
-                    chargeRegionId: seedData.region.chargeRegionId
-                  }
-                },
-                chargeReferences: []
+                status: seedData.chargeVersionA.status
               }
-            ]
+            ],
+            id: seedData.billingAccountA.id
           }
         ])
       })
@@ -220,34 +220,34 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
         expect(results).toHaveLength(1)
 
         expect(results[0]).toEqual({
-          id: seedData.billingAccount.id,
           accountNumber: seedData.billingAccount.accountNumber,
           chargeVersions: [
             {
+              billingAccountId: seedData.chargeVersionA.billingAccountId,
+              chargeReferences: [],
+              endDate: seedData.chargeVersionA.endDate,
               id: seedData.chargeVersionA.id,
+              licence: {
+                expiredDate: seedData.licence.expiredDate,
+                historicalAreaCode: seedData.licence.regions.historicalAreaCode,
+                id: seedData.licence.id,
+                lapsedDate: seedData.licence.lapsedDate,
+                licenceRef: seedData.licence.licenceRef,
+                region: {
+                  chargeRegionId: seedData.region.chargeRegionId,
+                  id: seedData.region.id
+                },
+                regionalChargeArea: seedData.licence.regions.regionalChargeArea,
+                revokedDate: seedData.licence.revokedDate,
+                startDate: seedData.licence.startDate,
+                waterUndertaker: seedData.licence.waterUndertaker
+              },
               scheme: seedData.chargeVersionA.scheme,
               startDate: seedData.chargeVersionA.startDate,
-              endDate: seedData.chargeVersionA.endDate,
-              billingAccountId: seedData.chargeVersionA.billingAccountId,
-              status: seedData.chargeVersionA.status,
-              licence: {
-                id: seedData.licence.id,
-                licenceRef: seedData.licence.licenceRef,
-                waterUndertaker: seedData.licence.waterUndertaker,
-                historicalAreaCode: seedData.licence.regions.historicalAreaCode,
-                regionalChargeArea: seedData.licence.regions.regionalChargeArea,
-                startDate: seedData.licence.startDate,
-                expiredDate: seedData.licence.expiredDate,
-                lapsedDate: seedData.licence.lapsedDate,
-                revokedDate: seedData.licence.revokedDate,
-                region: {
-                  id: seedData.region.id,
-                  chargeRegionId: seedData.region.chargeRegionId
-                }
-              },
-              chargeReferences: []
+              status: seedData.chargeVersionA.status
             }
-          ]
+          ],
+          id: seedData.billingAccount.id
         })
       })
     })
@@ -263,58 +263,58 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
         expect(results).toHaveLength(1)
 
         expect(results[0]).toEqual({
-          id: seedData.billingAccount.id,
           accountNumber: seedData.billingAccount.accountNumber,
           chargeVersions: [
             {
+              billingAccountId: seedData.chargeVersionA.billingAccountId,
+              chargeReferences: [],
+              endDate: seedData.chargeVersionA.endDate,
               id: seedData.chargeVersionA.id,
+              licence: {
+                expiredDate: seedData.licence.expiredDate,
+                historicalAreaCode: seedData.licence.regions.historicalAreaCode,
+                id: seedData.licence.id,
+                lapsedDate: seedData.licence.lapsedDate,
+                licenceRef: seedData.licence.licenceRef,
+                region: {
+                  chargeRegionId: seedData.region.chargeRegionId,
+                  id: seedData.region.id
+                },
+                regionalChargeArea: seedData.licence.regions.regionalChargeArea,
+                revokedDate: seedData.licence.revokedDate,
+                startDate: seedData.licence.startDate,
+                waterUndertaker: seedData.licence.waterUndertaker
+              },
               scheme: seedData.chargeVersionA.scheme,
               startDate: seedData.chargeVersionA.startDate,
-              endDate: seedData.chargeVersionA.endDate,
-              billingAccountId: seedData.chargeVersionA.billingAccountId,
-              status: seedData.chargeVersionA.status,
-              licence: {
-                id: seedData.licence.id,
-                licenceRef: seedData.licence.licenceRef,
-                waterUndertaker: seedData.licence.waterUndertaker,
-                historicalAreaCode: seedData.licence.regions.historicalAreaCode,
-                regionalChargeArea: seedData.licence.regions.regionalChargeArea,
-                startDate: seedData.licence.startDate,
-                expiredDate: seedData.licence.expiredDate,
-                lapsedDate: seedData.licence.lapsedDate,
-                revokedDate: seedData.licence.revokedDate,
-                region: {
-                  id: seedData.region.id,
-                  chargeRegionId: seedData.region.chargeRegionId
-                }
-              },
-              chargeReferences: []
+              status: seedData.chargeVersionA.status
             },
             {
+              billingAccountId: seedData.chargeVersionB.billingAccountId,
+              chargeReferences: [],
+              endDate: seedData.chargeVersionB.endDate,
               id: seedData.chargeVersionB.id,
+              licence: {
+                expiredDate: seedData.licence.expiredDate,
+                historicalAreaCode: seedData.licence.regions.historicalAreaCode,
+                id: seedData.licence.id,
+                lapsedDate: seedData.licence.lapsedDate,
+                licenceRef: seedData.licence.licenceRef,
+                region: {
+                  chargeRegionId: seedData.region.chargeRegionId,
+                  id: seedData.region.id
+                },
+                regionalChargeArea: seedData.licence.regions.regionalChargeArea,
+                revokedDate: seedData.licence.revokedDate,
+                startDate: seedData.licence.startDate,
+                waterUndertaker: seedData.licence.waterUndertaker
+              },
               scheme: seedData.chargeVersionB.scheme,
               startDate: seedData.chargeVersionB.startDate,
-              endDate: seedData.chargeVersionB.endDate,
-              billingAccountId: seedData.chargeVersionB.billingAccountId,
-              status: seedData.chargeVersionB.status,
-              licence: {
-                id: seedData.licence.id,
-                licenceRef: seedData.licence.licenceRef,
-                waterUndertaker: seedData.licence.waterUndertaker,
-                historicalAreaCode: seedData.licence.regions.historicalAreaCode,
-                regionalChargeArea: seedData.licence.regions.regionalChargeArea,
-                startDate: seedData.licence.startDate,
-                expiredDate: seedData.licence.expiredDate,
-                lapsedDate: seedData.licence.lapsedDate,
-                revokedDate: seedData.licence.revokedDate,
-                region: {
-                  id: seedData.region.id,
-                  chargeRegionId: seedData.region.chargeRegionId
-                }
-              },
-              chargeReferences: []
+              status: seedData.chargeVersionB.status
             }
-          ]
+          ],
+          id: seedData.billingAccount.id
         })
       })
     })
@@ -331,48 +331,14 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
       expect(results).toHaveLength(1)
 
       expect(results[0]).toEqual({
-        id: seedData.billingAccount.id,
         accountNumber: seedData.billingAccount.accountNumber,
         chargeVersions: [
           {
-            id: seedData.chargeVersion.id,
-            scheme: 'sroc',
-            startDate: seedData.chargeVersion.startDate,
-            endDate: seedData.chargeVersion.endDate,
             billingAccountId: seedData.chargeVersion.billingAccountId,
-            status: seedData.chargeVersion.status,
-            licence: {
-              id: seedData.licence.id,
-              licenceRef: seedData.licence.licenceRef,
-              waterUndertaker: seedData.licence.waterUndertaker,
-              historicalAreaCode: seedData.licence.regions.historicalAreaCode,
-              regionalChargeArea: seedData.licence.regions.regionalChargeArea,
-              startDate: seedData.licence.startDate,
-              expiredDate: seedData.licence.expiredDate,
-              lapsedDate: seedData.licence.lapsedDate,
-              revokedDate: seedData.licence.revokedDate,
-              region: {
-                id: seedData.region.id,
-                chargeRegionId: seedData.region.chargeRegionId
-              }
-            },
             chargeReferences: [
               {
-                id: seedData.chargeReference.id,
-                source: seedData.chargeReference.source,
-                loss: seedData.chargeReference.loss,
-                volume: seedData.chargeReference.volume,
-                adjustments: seedData.chargeReference.adjustments,
                 additionalCharges: seedData.chargeReference.additionalCharges,
-                description: seedData.chargeReference.description,
-                reviewChargeReferences: [
-                  {
-                    id: seedData.reviewChargeReference.id,
-                    amendedAggregate: seedData.reviewChargeReference.amendedAggregate,
-                    amendedChargeAdjustment: seedData.reviewChargeReference.amendedChargeAdjustment,
-                    amendedAuthorisedVolume: seedData.reviewChargeReference.amendedAuthorisedVolume
-                  }
-                ],
+                adjustments: seedData.chargeReference.adjustments,
                 chargeCategory: {
                   id: seedData.chargeCategory.id,
                   reference: seedData.chargeCategory.reference,
@@ -380,23 +346,57 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
                 },
                 chargeElements: [
                   {
-                    id: seedData.chargeElement.id,
-                    abstractionPeriodStartDay: seedData.chargeElement.abstractionPeriodStartDay,
-                    abstractionPeriodStartMonth: seedData.chargeElement.abstractionPeriodStartMonth,
                     abstractionPeriodEndDay: seedData.chargeElement.abstractionPeriodEndDay,
                     abstractionPeriodEndMonth: seedData.chargeElement.abstractionPeriodEndMonth,
+                    abstractionPeriodStartDay: seedData.chargeElement.abstractionPeriodStartDay,
+                    abstractionPeriodStartMonth: seedData.chargeElement.abstractionPeriodStartMonth,
+                    id: seedData.chargeElement.id,
                     reviewChargeElements: [
                       {
-                        id: seedData.reviewChargeElement.id,
-                        amendedAllocated: seedData.reviewChargeElement.amendedAllocated
+                        amendedAllocated: seedData.reviewChargeElement.amendedAllocated,
+                        id: seedData.reviewChargeElement.id
                       }
                     ]
                   }
-                ]
+                ],
+                description: seedData.chargeReference.description,
+                id: seedData.chargeReference.id,
+                loss: seedData.chargeReference.loss,
+                reviewChargeReferences: [
+                  {
+                    amendedAggregate: seedData.reviewChargeReference.amendedAggregate,
+                    amendedAuthorisedVolume: seedData.reviewChargeReference.amendedAuthorisedVolume,
+                    amendedChargeAdjustment: seedData.reviewChargeReference.amendedChargeAdjustment,
+                    id: seedData.reviewChargeReference.id
+                  }
+                ],
+                source: seedData.chargeReference.source,
+                volume: seedData.chargeReference.volume
               }
-            ]
+            ],
+            endDate: seedData.chargeVersion.endDate,
+            id: seedData.chargeVersion.id,
+            licence: {
+              expiredDate: seedData.licence.expiredDate,
+              historicalAreaCode: seedData.licence.regions.historicalAreaCode,
+              id: seedData.licence.id,
+              lapsedDate: seedData.licence.lapsedDate,
+              licenceRef: seedData.licence.licenceRef,
+              region: {
+                chargeRegionId: seedData.region.chargeRegionId,
+                id: seedData.region.id
+              },
+              regionalChargeArea: seedData.licence.regions.regionalChargeArea,
+              revokedDate: seedData.licence.revokedDate,
+              startDate: seedData.licence.startDate,
+              waterUndertaker: seedData.licence.waterUndertaker
+            },
+            scheme: 'sroc',
+            startDate: seedData.chargeVersion.startDate,
+            status: seedData.chargeVersion.status
           }
-        ]
+        ],
+        id: seedData.billingAccount.id
       })
     })
   })

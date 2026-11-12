@@ -1,3 +1,8 @@
+/**
+ * Controller for /company-contacts/setup endpoints
+ * @module CompanyContactsSetupController
+ */
+
 import InitiateEditSessionService from '../services/company-contacts/setup/initiate-edit-session.service.js'
 import InitiateSessionService from '../services/company-contacts/setup/initiate-session.service.js'
 import SubmitAbstractionAlertsService from '../services/company-contacts/setup/submit-abstraction-alerts.service.js'
@@ -14,11 +19,6 @@ import ViewContactEmailService from '../services/company-contacts/setup/view-con
 import ViewContactNameService from '../services/company-contacts/setup/view-contact-name.service.js'
 import ViewLicencesService from '../services/company-contacts/setup/view-licences.service.js'
 import ViewRestoreService from '../services/company-contacts/setup/view-restore.service.js'
-
-/**
- * Controller for /company-contacts/setup endpoints
- * @module CompanyContactsSetupController
- */
 
 export async function setup(request, h) {
   const { companyId } = request.params

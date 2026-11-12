@@ -1,9 +1,9 @@
-import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/no-returns-required` page
  * @module NoReturnsRequiredPresenter
  */
+
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/no-returns-required` page
@@ -18,9 +18,9 @@ export default function noReturnsRequiredPresenter(session) {
   return {
     backLink: _backLink(session),
     licenceRef: licence.licenceRef,
-    reason: reason || null,
     pageTitle: 'Why are no returns required?',
     pageTitleCaption: `Licence ${licence.licenceRef}`,
+    reason: reason || null,
     sessionId
   }
 }

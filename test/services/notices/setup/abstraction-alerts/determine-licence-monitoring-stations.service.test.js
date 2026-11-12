@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import { yesterday } from 'water-abstraction-engine/test/general.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import LicenceFixture from '../../../../support/fixtures/licence.fixture.js'
 
 // Things we need to stub
@@ -16,6 +16,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
   let licenceMonitoringStations
   let monitoringStation
   let monitoringStationId
+
   beforeEach(() => {
     monitoringStationId = generateUUID()
 
@@ -36,13 +37,13 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         abstractionPeriodStartDay: 1,
         abstractionPeriodStartMonth: 4,
         id: generateUUID(),
+        latestNotification: null,
+        licence: LicenceFixture.licenceEnds(),
+        licenceVersionPurposeCondition: null,
         measureType: 'flow',
         restrictionType: 'reduce',
         thresholdUnit: 'm3/s',
-        thresholdValue: 100,
-        latestNotification: null,
-        licence: LicenceFixture.licenceEnds(),
-        licenceVersionPurposeCondition: null
+        thresholdValue: 100
       },
       {
         abstractionPeriodEndDay: 31,
@@ -50,16 +51,16 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         abstractionPeriodStartDay: 1,
         abstractionPeriodStartMonth: 1,
         id: generateUUID(),
-        measureType: 'level',
-        restrictionType: 'reduce',
-        thresholdUnit: 'm3/s',
-        thresholdValue: 100,
         latestNotification: null,
         licence: LicenceFixture.licenceEnds(),
         licenceVersionPurposeCondition: {
           id: generateUUID(),
           notes: 'I have a bad feeling about this'
-        }
+        },
+        measureType: 'level',
+        restrictionType: 'reduce',
+        thresholdUnit: 'm3/s',
+        thresholdValue: 100
       },
       {
         abstractionPeriodEndDay: 31,

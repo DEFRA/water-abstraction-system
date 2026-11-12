@@ -48,12 +48,12 @@ describe('Notices - Setup - Process Add Recipient service', () => {
         sessionData.addressJourney = {
           activeNavBar: 'notices',
           address: {
-            uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'HORIZON HOUSE DEANERY ROAD',
             addressLine3: 'VILLAGE GREEN',
             addressLine4: 'BRISTOL',
-            postcode: 'BS1 5AH'
+            postcode: 'BS1 5AH',
+            uprn: 340116
           },
           backLink: {
             href: `/system/notices/setup/${sessionId}/contact-type`,
@@ -75,7 +75,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
           vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
           yarStub = YarStub()
-          yarStub.flash.mockReturnValue([{ title: 'Updated', text: 'Additional recipient added' }])
+          yarStub.flash.mockReturnValue([{ text: 'Additional recipient added', title: 'Updated' }])
         })
 
         it('adds an `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
@@ -84,7 +84,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
           const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).toEqual({ text: 'Additional recipient added', titleText: 'Updated' })
           expect(session.additionalRecipients).toEqual([
             {
               contact: {
@@ -114,11 +114,11 @@ describe('Notices - Setup - Process Add Recipient service', () => {
           sessionData.additionalRecipients = [
             {
               contact: {
-                name: 'Fake Other',
                 address1: '2 Fake Farm',
                 address2: '2 Fake street',
                 address3: 'Fake Village',
                 address4: 'Fake City',
+                name: 'Fake Other',
                 postcode: 'SW2A 2AA'
               },
               contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
@@ -138,7 +138,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
           vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
           yarStub = YarStub()
-          yarStub.flash.mockReturnValue([{ title: 'Updated', text: 'Additional recipient added' }])
+          yarStub.flash.mockReturnValue([{ text: 'Additional recipient added', title: 'Updated' }])
         })
 
         it('adds the recipient to `additionalRecipients` and pushes its hash ID into `selectedRecipients`', async () => {
@@ -147,15 +147,15 @@ describe('Notices - Setup - Process Add Recipient service', () => {
           const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).toEqual({ text: 'Additional recipient added', titleText: 'Updated' })
           expect(session.additionalRecipients).toEqual([
             {
               contact: {
-                name: 'Fake Other',
                 address1: '2 Fake Farm',
                 address2: '2 Fake street',
                 address3: 'Fake Village',
                 address4: 'Fake City',
+                name: 'Fake Other',
                 postcode: 'SW2A 2AA'
               },
               contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
@@ -217,7 +217,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
           vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
           yarStub = YarStub()
-          yarStub.flash.mockReturnValue([{ title: 'Updated', text: 'Additional recipient added' }])
+          yarStub.flash.mockReturnValue([{ text: 'Additional recipient added', title: 'Updated' }])
         })
 
         it('adds a `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
@@ -226,7 +226,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
           const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
+          expect(bannerMessage).toEqual({ text: 'Additional recipient added', titleText: 'Updated' })
           expect(session.additionalRecipients).toEqual([
             {
               contact: {

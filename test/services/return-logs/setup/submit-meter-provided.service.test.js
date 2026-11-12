@@ -19,8 +19,8 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: 12345,
-      reported: 'abstractionVolumes'
+      reported: 'abstractionVolumes',
+      returnReference: 12345
     }
 
     session = SessionModelStub(sessionData)
@@ -81,12 +81,12 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
               payload = { meterProvided: 'no' }
               sessionData = {
                 data: {
-                  meterProvided: 'yes',
-                  meterMake: 'Test Meter Make',
-                  meterSerialNumber: 'TEST-9876543',
                   meter10TimesDisplay: 'no',
-                  returnReference: 12345,
-                  reported: 'abstractionVolumes'
+                  meterMake: 'Test Meter Make',
+                  meterProvided: 'yes',
+                  meterSerialNumber: 'TEST-9876543',
+                  reported: 'abstractionVolumes',
+                  returnReference: 12345
                 }
               }
 
@@ -129,7 +129,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
             const [flashType, notification] = yarStub.flash.mock.calls[0]
 
             expect(flashType).toEqual('notification')
-            expect(notification).toEqual({ titleText: 'Updated', text: 'Reporting details changed' })
+            expect(notification).toEqual({ text: 'Reporting details changed', titleText: 'Updated' })
           })
         })
       })

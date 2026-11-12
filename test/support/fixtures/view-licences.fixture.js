@@ -14,33 +14,33 @@ import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/
  **/
 function condition() {
   return {
-    id: generateUUID(),
-    displayTitle: 'Political cessation condition',
     description: 'Cessation Condition',
-    subcodeDescription: 'Political - Hosepipe Ban',
-    param1Label: 'Start date',
-    param2Label: 'End date',
+    displayTitle: 'Political cessation condition',
+    id: generateUUID(),
     licenceVersionPurposeConditions: [
       {
         id: generateUUID(),
-        param1: '01/05',
-        param2: '30/09',
-        notes: 'DROUGHT CONDITION',
         licenceVersionPurpose: {
           id: generateUUID(),
-          purpose: {
-            id: generateUUID(),
-            description: 'Animal Watering & General Use In Non Farming Situations'
-          },
           licenceVersionPurposePoints: [
             {
               id: generateUUID(),
               point: point()
             }
-          ]
-        }
+          ],
+          purpose: {
+            description: 'Animal Watering & General Use In Non Farming Situations',
+            id: generateUUID()
+          }
+        },
+        notes: 'DROUGHT CONDITION',
+        param1: '01/05',
+        param2: '30/09'
       }
-    ]
+    ],
+    param1Label: 'Start date',
+    param2Label: 'End date',
+    subcodeDescription: 'Political - Hosepipe Ban'
   }
 }
 
@@ -52,10 +52,10 @@ function condition() {
 function licence() {
   return LicenceModel.fromJson({
     id: generateUUID(),
-    licenceRef: generateLicenceRef(),
     includeInPresrocBilling: 'no',
     includeInSrocBilling: false,
     includeInTwoPartTariffBilling: true,
+    licenceRef: generateLicenceRef(),
     licenceVersions: [
       {
         id: generateUUID(),
@@ -90,9 +90,9 @@ function licenceVersion() {
       id: generateUUID(),
       name: 'ORDER OF THE PHOENIX'
     },
+    createdAt: new Date('2022-01-01'),
     criticalityCode: 'LC',
     criticalityDescription: 'Less Critical',
-    createdAt: new Date('2022-01-01'),
     endDate: null,
     id: generateUUID(),
     issueDate: null,
@@ -104,9 +104,9 @@ function licenceVersion() {
     modLogs: [
       {
         id: generateUUID(),
+        note: 'Whole licence trade',
         reasonDescription: 'Licence Holder Name/Address Change',
-        userId: 'JOBSWORTH01',
-        note: 'Whole licence trade'
+        userId: 'JOBSWORTH01'
       }
     ],
     startDate: new Date('2022-01-01')
@@ -120,38 +120,38 @@ function licenceVersion() {
  **/
 function licenceVersionPurpose() {
   return {
-    id: generateUUID(),
-    abstractionPeriodStartDay: 1,
-    abstractionPeriodStartMonth: 4,
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 10,
+    abstractionPeriodStartDay: 1,
+    abstractionPeriodStartMonth: 4,
     annualQuantity: 180000,
     dailyQuantity: 720,
     hourlyQuantity: 144,
+    id: generateUUID(),
     instantQuantity: 40,
     licenceVersionPurposePoints: [
       {
         abstractionMethod: 'Unspecified Pump'
       }
     ],
-    purpose: {
-      id: generateUUID(),
-      description: 'Spray Irrigation - Storage'
-    },
     points: [
       PointModel.fromJson({
-        id: generateUUID(),
         description: null,
+        id: generateUUID(),
         ngr1: 'TL 23198 88603',
         ngr2: null,
         ngr3: null,
         ngr4: null,
         source: {
-          id: generateUUID(),
-          description: 'SURFACE WATER SOURCE OF SUPPLY'
+          description: 'SURFACE WATER SOURCE OF SUPPLY',
+          id: generateUUID()
         }
       })
-    ]
+    ],
+    purpose: {
+      description: 'Spray Irrigation - Storage',
+      id: generateUUID()
+    }
   }
 }
 
@@ -167,8 +167,8 @@ function point() {
     depth: 123,
     description: 'RIVER OUSE AT BLETSOE',
     hydroInterceptDistance: 8.01,
-    hydroReference: 'TL 14/133',
     hydroOffsetDistance: 5.56,
+    hydroReference: 'TL 14/133',
     id: generateUUID(),
     locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
     ngr1: 'SD 963 193',
@@ -205,8 +205,8 @@ function pointWithSource() {
     depth: 123,
     description: 'RIVER OUSE AT BLETSOE',
     hydroInterceptDistance: 8.01,
-    hydroReference: 'TL 14/133',
     hydroOffsetDistance: 5.56,
+    hydroReference: 'TL 14/133',
     id: generateUUID(),
     locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
     ngr1: 'SD 963 193',
@@ -216,8 +216,8 @@ function pointWithSource() {
     note: 'WELL IS SPRING-FED',
     primaryType: 'Groundwater',
     secondaryType: 'Borehole',
-    wellReference: '81312',
-    source: { description: 'SURFACE WATER SOURCE OF SUPPLY', sourceType: 'Borehole' }
+    source: { description: 'SURFACE WATER SOURCE OF SUPPLY', sourceType: 'Borehole' },
+    wellReference: '81312'
   })
 }
 

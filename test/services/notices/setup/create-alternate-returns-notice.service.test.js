@@ -3,11 +3,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import EventModel from 'water-abstraction-engine/models/event.model.js'
-import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
 import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
 import { futureDueDate } from 'water-abstraction-engine/presenters/notices/base.presenter.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 
 // Things we need to stub
@@ -52,8 +52,8 @@ describe('Notices - Setup - Create Alternate Returns Notice service', () => {
       issuer: notice.issuer,
       licences: notice.licences,
       metadata: {
-        name: 'Returns: invitation',
         error: 0,
+        name: 'Returns: invitation',
         options: { excludedLicences: [] },
         recipients: 1,
         returnCycle: notice.metadata.returnCycle
@@ -71,15 +71,12 @@ describe('Notices - Setup - Create Alternate Returns Notice service', () => {
       contactType: 'licence holder',
       dueDate,
       eventId: result.notice.id,
-      licences: recipient.licence_refs,
       licenceMonitoringStationId: null,
-      messageType: 'letter',
+      licences: recipient.licence_refs,
       messageRef: 'returns invitation alternate',
+      messageType: 'letter',
       pdf: null,
       personalisation: {
-        name: 'Returnsholder',
-        periodEndDate: '31 March 2025',
-        returnDueDate: formatLongDate(dueDate),
         address_line_1: 'Returnsholder',
         address_line_2: '4',
         address_line_3: 'Privet Drive',
@@ -87,7 +84,10 @@ describe('Notices - Setup - Create Alternate Returns Notice service', () => {
         address_line_5: 'Surrey',
         address_line_6: 'WD25 7LR',
         licenceNumber: recipient.licence_refs[0],
-        periodStartDate: '1 April 2024'
+        name: 'Returnsholder',
+        periodEndDate: '31 March 2025',
+        periodStartDate: '1 April 2024',
+        returnDueDate: formatLongDate(dueDate)
       },
       recipient: null,
       returnLogIds,

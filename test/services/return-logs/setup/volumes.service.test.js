@@ -29,8 +29,8 @@ describe('Return Logs Setup - Volumes service', () => {
           startDate: '2023-05-01T00:00:00.000Z'
         }
       ],
-      returnsFrequency: 'month',
       returnReference: 1234,
+      returnsFrequency: 'month',
       units: 'cubicMetres'
     }
 

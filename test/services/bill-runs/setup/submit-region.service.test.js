@@ -122,8 +122,8 @@ describe('Bill Runs - Setup - Submit Region service', () => {
             },
             pageTitle: 'Select the region',
             regions,
-            sessionId: session.id,
-            selectedRegion: null
+            selectedRegion: null,
+            sessionId: session.id
           })
         })
       })

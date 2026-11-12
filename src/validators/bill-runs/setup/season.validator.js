@@ -21,8 +21,8 @@ export default function seasonValidator(payload) {
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': 'Select the season',
         'any.only': 'Select the season',
+        'any.required': 'Select the season',
         'string.empty': 'Select the season'
       })
   })

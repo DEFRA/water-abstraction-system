@@ -20,23 +20,23 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'no-returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'no-returns-required',
       requirements: [{}],
       startDateOptions: 'licenceStartDate'
     }
@@ -98,7 +98,7 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ titleText: 'Updated', text: 'Return version updated' })
+          expect(notification).toEqual({ text: 'Return version updated', titleText: 'Updated' })
         })
       })
     })
@@ -112,13 +112,13 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
         const result = await SubmitNoReturnsRequiredService(session.id, payload)
 
         expect(result).toMatchObject({
-          pageTitle: 'Why are no returns required?',
-          pageTitleCaption: 'Licence 01/ABC',
           backLink: {
             href: `/system/return-versions/setup/${session.id}/start-date`,
             text: 'Back'
           },
           licenceRef: '01/ABC',
+          pageTitle: 'Why are no returns required?',
+          pageTitleCaption: 'Licence 01/ABC',
           reason: null
         })
       })

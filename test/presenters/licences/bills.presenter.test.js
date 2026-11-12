@@ -32,9 +32,9 @@ describe('Licences - Bills presenter', () => {
         bills: [
           {
             accountNumber: bill.accountNumber,
+            billId: bill.id,
             billingAccountId: bill.billingAccountId,
             billingAccountLink: `/system/billing-accounts/${bill.billingAccountId}?licence-id=${licence.id}`,
-            billId: bill.id,
             billNumber: 'WAC0003872T',
             billRunType: 'Annual',
             credit: false,
@@ -116,8 +116,8 @@ describe('Licences - Bills presenter', () => {
 function _bill() {
   return {
     accountNumber: generateAccountNumber(),
-    billRun: { batchType: 'annual', scheme: 'sroc', summer: false },
     billingAccountId: generateUUID(),
+    billRun: { batchType: 'annual', scheme: 'sroc', summer: false },
     createdAt: new Date('2020-01-01'),
     credit: false,
     deminimis: false,

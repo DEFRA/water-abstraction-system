@@ -1,3 +1,9 @@
+/**
+ * Joi schema for validating an address line
+ *
+ * @module AddressLineValidator
+ */
+
 import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 import { invalidStartCharacters } from 'water-abstraction-engine/validators/helpers/notify-address-line.validator.js'
 

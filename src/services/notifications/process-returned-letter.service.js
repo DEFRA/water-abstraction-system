@@ -40,8 +40,8 @@ export default async function processReturnedLetterService(payload) {
     }
 
     calculateAndLogTimeTaken(startTime, 'Returned letter complete', {
-      payload,
-      notification: { ...updatedNotifications[0] }
+      notification: { ...updatedNotifications[0] },
+      payload
     })
   } catch (error) {
     globalThis.GlobalNotifier.omfg('Returned letter failed', payload, error)

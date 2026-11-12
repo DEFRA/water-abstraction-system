@@ -20,9 +20,9 @@ export default function licencesPresenter(company, licences) {
       href: '/',
       text: 'Go back to search'
     },
-    pageTitleCaption: company.name,
+    licences: _licences(company.id, licences),
     pageTitle: 'Licences',
-    licences: _licences(company.id, licences)
+    pageTitleCaption: company.name
   }
 }
 

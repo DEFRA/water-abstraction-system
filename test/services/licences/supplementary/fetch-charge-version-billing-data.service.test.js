@@ -26,23 +26,23 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
       // Add sroc charge version and charge reference
       srocChargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, startDate: new Date('2023-04-01') })
       srocChargeReference = await ChargeReferenceHelper.add({
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 3,
-        adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: null },
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        adjustments: { aggregate: null, charge: null, s126: null, s127: true, s130: false, winter: false },
         chargeVersionId: srocChargeVersion.id,
         description: 'Charge reference 1 - SROC',
         scheme: 'sroc'
       })
 
       // Add pre sroc charge version
-      preSrocChargeVersion = await ChargeVersionHelper.add({ scheme: 'alcs', licenceId: licence.id })
+      preSrocChargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, scheme: 'alcs' })
       preSrocChargeReference = await ChargeReferenceHelper.add({
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 3,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
         authorisedAnnualQuantity: 200,
         chargeVersionId: preSrocChargeVersion.id,
         description: 'Charge element 1 - PRESROC',
@@ -60,10 +60,6 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         const result = await FetchChargeVersionBillingDataService(preSrocChargeVersion.id)
 
         expect(result.chargeVersion).toEqual({
-          id: preSrocChargeVersion.id,
-          scheme: 'alcs',
-          startDate: preSrocChargeVersion.startDate,
-          endDate: null,
           chargeReferences: [
             {
               id: preSrocChargeReference.id,
@@ -71,12 +67,16 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
               twoPartTariff: null
             }
           ],
+          endDate: null,
+          id: preSrocChargeVersion.id,
           licence: {
             id: licence.id,
-            regionId: licence.regionId,
+            includeInPresrocBilling: 'no',
             includeInSrocBilling: false,
-            includeInPresrocBilling: 'no'
-          }
+            regionId: licence.regionId
+          },
+          scheme: 'alcs',
+          startDate: preSrocChargeVersion.startDate
         })
       })
 
@@ -92,10 +92,6 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         const result = await FetchChargeVersionBillingDataService(srocChargeVersion.id)
 
         expect(result.chargeVersion).toEqual({
-          id: srocChargeVersion.id,
-          scheme: 'sroc',
-          startDate: srocChargeVersion.startDate,
-          endDate: null,
           chargeReferences: [
             {
               id: srocChargeReference.id,
@@ -103,12 +99,16 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
               twoPartTariff: true
             }
           ],
+          endDate: null,
+          id: srocChargeVersion.id,
           licence: {
             id: licence.id,
-            regionId: licence.regionId,
+            includeInPresrocBilling: 'no',
             includeInSrocBilling: false,
-            includeInPresrocBilling: 'no'
-          }
+            regionId: licence.regionId
+          },
+          scheme: 'sroc',
+          startDate: srocChargeVersion.startDate
         })
       })
 
@@ -121,8 +121,8 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
           srocAnnualBillRun = await BillRunHelper.add({
             batchType: 'annual',
             scheme: 'sroc',
-            toFinancialYearEnding: '2025',
-            status: 'sent'
+            status: 'sent',
+            toFinancialYearEnding: '2025'
           })
 
           bill = await BillHelper.add({ billRunId: srocAnnualBillRun.id })
@@ -132,8 +132,8 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
           srocSupplementaryBillRun = await BillRunHelper.add({
             batchType: 'supplementary',
             scheme: 'sroc',
-            toFinancialYearEnding: '2024',
-            status: 'review'
+            status: 'review',
+            toFinancialYearEnding: '2024'
           })
 
           bill = await BillHelper.add({ billRunId: srocSupplementaryBillRun.id })
@@ -145,16 +145,16 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
 
           expect(result.srocBillRuns).toEqual([
             {
+              batchType: 'supplementary',
               regionId: srocSupplementaryBillRun.regionId,
               scheme: 'sroc',
-              toFinancialYearEnding: 2024,
-              batchType: 'supplementary'
+              toFinancialYearEnding: 2024
             },
             {
+              batchType: 'annual',
               regionId: srocAnnualBillRun.regionId,
               scheme: 'sroc',
-              toFinancialYearEnding: 2025,
-              batchType: 'annual'
+              toFinancialYearEnding: 2025
             }
           ])
         })
@@ -166,8 +166,8 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
           const preSrocAnnualBillRun = await BillRunHelper.add({
             batchType: 'annual',
             scheme: 'alcs',
-            toFinancialYearEnding: '2021',
-            status: 'sent'
+            status: 'sent',
+            toFinancialYearEnding: '2021'
           })
 
           bill = await BillHelper.add({ billRunId: preSrocAnnualBillRun.id })
@@ -189,8 +189,8 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
           const preSrocAnnualBillRun = await BillRunHelper.add({
             batchType: 'annual',
             scheme: 'sroc',
-            toFinancialYearEnding: '2023',
-            status: 'sent'
+            status: 'sent',
+            toFinancialYearEnding: '2023'
           })
 
           bill = await BillHelper.add({ billRunId: preSrocAnnualBillRun.id })
@@ -214,8 +214,8 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
           const erroredBillRun = await BillRunHelper.add({
             batchType: 'annual',
             scheme: 'sroc',
-            toFinancialYearEnding: '2024',
-            status: 'errored'
+            status: 'errored',
+            toFinancialYearEnding: '2024'
           })
 
           bill = await BillHelper.add({ billRunId: erroredBillRun.id })
@@ -225,8 +225,8 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
           const cancelledBillRun = await BillRunHelper.add({
             batchType: 'annual',
             scheme: 'sroc',
-            toFinancialYearEnding: '2025',
-            status: 'cancelled'
+            status: 'cancelled',
+            toFinancialYearEnding: '2025'
           })
 
           bill = await BillHelper.add({ billRunId: cancelledBillRun.id })
@@ -236,8 +236,8 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
           reviewBillRun = await BillRunHelper.add({
             batchType: 'annual',
             scheme: 'sroc',
-            toFinancialYearEnding: '2025',
-            status: 'review'
+            status: 'review',
+            toFinancialYearEnding: '2025'
           })
 
           bill = await BillHelper.add({ billRunId: reviewBillRun.id })

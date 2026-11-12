@@ -15,7 +15,7 @@ export default function removeLicencesPresenter(removeLicences, session) {
   const { referenceCode, id: sessionId } = session
 
   return {
-    backLink: { text: 'Back', href: `/system/notices/setup/${sessionId}/check` },
+    backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
     hint: 'Separate the licences numbers with a comma or new line.',
     pageTitle: 'Enter the licence numbers to remove from the mailing list',
     pageTitleCaption: `Notice ${referenceCode}`,

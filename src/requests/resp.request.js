@@ -48,10 +48,10 @@ async function _sendRequest(path, method) {
  */
 function _requestOptions(accessToken) {
   return {
-    prefixUrl: respConfig.url,
     headers: {
       authorization: `Bearer ${accessToken}`
     },
+    prefixUrl: respConfig.url,
     responseType: 'json'
   }
 }
@@ -66,11 +66,11 @@ function _parseResult(result) {
 
   if (body) {
     return {
-      succeeded: result.succeeded,
       response: {
-        statusCode,
-        body
-      }
+        body,
+        statusCode
+      },
+      succeeded: result.succeeded
     }
   }
 

@@ -9,11 +9,11 @@ describe('Abstraction Period Presenter', () => {
 
   beforeEach(() => {
     session = {
-      id: '356bb545-3e0d-46bd-9df4-d60e1a9eae72',
-      abstractionPeriodStartDay: '1',
       abstractionPeriodEndDay: '2',
-      abstractionPeriodStartMonth: '3',
       abstractionPeriodEndMonth: '4',
+      abstractionPeriodStartDay: '1',
+      abstractionPeriodStartMonth: '3',
+      id: '356bb545-3e0d-46bd-9df4-d60e1a9eae72',
       label: 'LABEL',
       licenceRef: 'LICENCE_REF'
     }
@@ -24,10 +24,10 @@ describe('Abstraction Period Presenter', () => {
       const result = AbstractionPeriodPresenter(session)
 
       expect(result).toMatchObject({
-        abstractionPeriodStartDay: '1',
         abstractionPeriodEndDay: '2',
-        abstractionPeriodStartMonth: '3',
         abstractionPeriodEndMonth: '4',
+        abstractionPeriodStartDay: '1',
+        abstractionPeriodStartMonth: '3',
         monitoringStationLabel: 'LABEL',
         pageTitle: 'Enter an abstraction period for licence LICENCE_REF'
       })

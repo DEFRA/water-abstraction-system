@@ -76,18 +76,18 @@ async function _persistChargeElementsReturns(reviewChargeElementId, reviewReturn
 
 async function _persistChargeReference(chargeReference, reviewChargeVersionId) {
   const data = {
-    reviewChargeVersionId,
-    chargeReferenceId: chargeReference.id,
+    abatementAgreement: chargeReference.s126 ?? 1,
     aggregate: chargeReference.aggregate ?? 1,
     amendedAggregate: chargeReference.aggregate ?? 1,
-    chargeAdjustment: chargeReference.charge ?? 1,
+    amendedAuthorisedVolume: chargeReference.volume,
     amendedChargeAdjustment: chargeReference.charge ?? 1,
-    winterDiscount: chargeReference.winter,
-    abatementAgreement: chargeReference.s126 ?? 1,
-    twoPartTariffAgreement: chargeReference.s127,
-    canalAndRiverTrustAgreement: chargeReference.s130,
     authorisedVolume: chargeReference.volume,
-    amendedAuthorisedVolume: chargeReference.volume
+    canalAndRiverTrustAgreement: chargeReference.s130,
+    chargeAdjustment: chargeReference.charge ?? 1,
+    chargeReferenceId: chargeReference.id,
+    reviewChargeVersionId,
+    twoPartTariffAgreement: chargeReference.s127,
+    winterDiscount: chargeReference.winter
   }
 
   const { id: reviewChargeReferenceId } = await ReviewChargeReferenceModel.query().insert(data).returning('id')
@@ -97,11 +97,11 @@ async function _persistChargeReference(chargeReference, reviewChargeVersionId) {
 
 async function _persistChargeVersion(chargeVersion, reviewLicenceId) {
   const data = {
-    reviewLicenceId,
-    chargeVersionId: chargeVersion.id,
     changeReason: chargeVersion.changeReason.description,
+    chargePeriodEndDate: chargeVersion.chargePeriod.endDate,
     chargePeriodStartDate: chargeVersion.chargePeriod.startDate,
-    chargePeriodEndDate: chargeVersion.chargePeriod.endDate
+    chargeVersionId: chargeVersion.id,
+    reviewLicenceId
   }
 
   const { id: reviewChargeVersionId } = await ReviewChargeVersionModel.query().insert(data).returning('id')
@@ -112,11 +112,11 @@ async function _persistChargeVersion(chargeVersion, reviewLicenceId) {
 async function _persistLicenceData(licence, billRunId) {
   const data = {
     billRunId,
+    issues: licence.issues.join(', '),
+    licenceHolder: licence.licenceHolder,
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    licenceHolder: licence.licenceHolder,
-    status: licence.status,
-    issues: licence.issues.join(', ')
+    status: licence.status
   }
 
   const { id: reviewLicenceId } = await ReviewLicenceModel.query().insert(data).returning('id')
@@ -138,12 +138,12 @@ async function _persistReturnLogs(returnLogs, reviewLicenceId) {
 
 async function _persistReviewChargeElement(chargeElement, reviewChargeReferenceId) {
   const data = {
-    reviewChargeReferenceId,
-    chargeElementId: chargeElement.id,
     allocated: chargeElement.allocatedQuantity,
     amendedAllocated: chargeElement.allocatedQuantity,
     chargeDatesOverlap: chargeElement.chargeDatesOverlap,
+    chargeElementId: chargeElement.id,
     issues: chargeElement.issues.join(', '),
+    reviewChargeReferenceId,
     status: chargeElement.status
   }
 
@@ -154,23 +154,23 @@ async function _persistReviewChargeElement(chargeElement, reviewChargeReferenceI
 
 async function _persistReviewReturn(returnLog, reviewLicenceId) {
   const data = {
-    returnId: returnLog.returnId,
-    returnLogId: returnLog.id,
-    reviewLicenceId,
-    returnReference: returnLog.returnReference,
-    startDate: returnLog.startDate,
-    endDate: returnLog.endDate,
-    dueDate: returnLog.dueDate,
-    receivedDate: returnLog.receivedDate,
-    returnStatus: returnLog.status,
-    underQuery: returnLog.underQuery,
-    nilReturn: returnLog.nilReturn,
+    abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod,
+    allocated: returnLog.allocatedQuantity,
     description: returnLog.description,
+    dueDate: returnLog.dueDate,
+    endDate: returnLog.endDate,
+    issues: returnLog.issues.join(', '),
+    nilReturn: returnLog.nilReturn,
     purposes: returnLog.purposes,
     quantity: returnLog.quantity,
-    allocated: returnLog.allocatedQuantity,
-    abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod,
-    issues: returnLog.issues.join(', ')
+    receivedDate: returnLog.receivedDate,
+    returnId: returnLog.returnId,
+    returnLogId: returnLog.id,
+    returnReference: returnLog.returnReference,
+    returnStatus: returnLog.status,
+    reviewLicenceId,
+    startDate: returnLog.startDate,
+    underQuery: returnLog.underQuery
   }
 
   const { id: reviewReturnId } = await ReviewReturnModel.query().insert(data).returning('id')

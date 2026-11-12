@@ -36,8 +36,8 @@ describe('Return Logs Setup - Submit Readings service', () => {
           startDate: '2023-06-01T00:00:00.000Z'
         }
       ],
-      returnsFrequency: 'month',
-      returnReference: 1234
+      returnReference: 1234,
+      returnsFrequency: 'month'
     }
 
     session = SessionModelStub(sessionData)
@@ -89,7 +89,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ titleText: 'Updated', text: 'Readings have been updated' })
+          expect(notification).toEqual({ text: 'Readings have been updated', titleText: 'Updated' })
         })
       })
 
@@ -127,7 +127,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ titleText: 'Updated', text: 'Readings have been updated' })
+          expect(notification).toEqual({ text: 'Readings have been updated', titleText: 'Updated' })
         })
       })
     })
@@ -142,6 +142,10 @@ describe('Return Logs Setup - Submit Readings service', () => {
         const result = await SubmitReadingsService(session.id, payload, yarStub, yearMonth)
 
         expect(result).toEqual({
+          backLink: {
+            href: `/system/return-logs/setup/${session.id}/check`,
+            text: 'Back'
+          },
           error: {
             '2023-04-30T00:00:00.000Z': {
               text: 'Reading must be a number or blank'
@@ -152,10 +156,6 @@ describe('Return Logs Setup - Submit Readings service', () => {
                 text: 'Reading must be a number or blank'
               }
             ]
-          },
-          backLink: {
-            href: `/system/return-logs/setup/${session.id}/check`,
-            text: 'Back'
           },
           inputLines: [
             {

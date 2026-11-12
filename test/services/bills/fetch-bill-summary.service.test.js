@@ -3,10 +3,10 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
-import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
-import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import BillingAccountAddressHelper from 'water-abstraction-engine/test/helpers/billing-account-address.helper.js'
 import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
 import ContactHelper from 'water-abstraction-engine/test/helpers/contact.helper.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
@@ -58,8 +58,8 @@ describe('Fetch Bill Summary service', () => {
     const billRun = await BillRunHelper.add({
       billRunNumber: 1075,
       createdAt: new Date('2023-05-01'),
-      status: 'ready',
-      regionId: region.id
+      regionId: region.id,
+      status: 'ready'
     })
 
     billRunId = billRun.id
@@ -85,19 +85,10 @@ describe('Fetch Bill Summary service', () => {
       const result = await FetchBillSummaryService(bill.id)
 
       expect(result).toEqual({
-        id: bill.id,
-        netAmount: 1045,
         billingAccount: {
-          id: billingAccountId,
           accountNumber: billingAccount.accountNumber,
-          company: {
-            id: companyId,
-            name: 'Example Trading Ltd',
-            type: 'organisation'
-          },
           billingAccountAddresses: [
             {
-              id: billingAccountAddressId,
               address: null,
               company: {
                 id: agentCompanyId,
@@ -105,38 +96,47 @@ describe('Fetch Bill Summary service', () => {
                 type: 'organisation'
               },
               contact: {
-                id: contactId,
                 contactType: 'person',
                 dataSource: 'wrls',
                 department: null,
                 firstName: 'Amara',
+                id: contactId,
                 initials: null,
                 lastName: 'Gupta',
                 middleInitials: null,
                 salutation: null,
                 suffix: null
-              }
+              },
+              id: billingAccountAddressId
             }
-          ]
+          ],
+          company: {
+            id: companyId,
+            name: 'Example Trading Ltd',
+            type: 'organisation'
+          },
+          id: billingAccountId
         },
         billLicences: [
           { id: billLicences[0].id, licenceRef: billLicences[0].licenceRef },
           { id: billLicences[1].id, licenceRef: billLicences[1].licenceRef }
         ],
         billRun: {
-          id: billRunId,
           batchType: 'supplementary',
           billRunNumber: 1075,
           createdAt: new Date('2023-05-01'),
+          id: billRunId,
+          region: {
+            displayName: region.displayName,
+            id: region.id
+          },
           scheme: 'sroc',
           source: 'wrls',
           status: 'ready',
-          toFinancialYearEnding: 2023,
-          region: {
-            id: region.id,
-            displayName: region.displayName
-          }
-        }
+          toFinancialYearEnding: 2023
+        },
+        id: bill.id,
+        netAmount: 1045
       })
     })
   })

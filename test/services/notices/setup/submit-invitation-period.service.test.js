@@ -88,9 +88,9 @@ describe('Notices - Setup - Submit Invitation Period service', () => {
           dueDate: selectedReturnCycle.dueDate,
           endDate: selectedReturnCycle.endDate,
           name: 'summer',
+          quarterly: false,
           startDate: selectedReturnCycle.startDate,
-          summer: 'true',
-          quarterly: false
+          summer: 'true'
         })
       })
 
@@ -156,9 +156,9 @@ describe('Notices - Setup - Submit Invitation Period service', () => {
           dueDate: selectedReturnCycle.dueDate,
           endDate: selectedReturnCycle.endDate,
           name: 'summer',
+          quarterly: false,
           startDate: selectedReturnCycle.startDate,
-          summer: 'true',
-          quarterly: false
+          summer: 'true'
         })
       })
 

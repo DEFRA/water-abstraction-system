@@ -24,14 +24,8 @@ describe('Users - Internal - Fetch User Details DAL', () => {
       const result = await FetchUserDetailsDal(user.id)
 
       expect(result).toEqual({
-        id: user.id,
-        userId: user.userId,
-        username: user.username,
-        enabled: true,
-        lastLogin: user.lastLogin,
-        statusPassword: null,
         application: 'water_admin',
-        licenceEntity: null,
+        enabled: true,
         groups: [
           {
             group: user.groups[0].group,
@@ -39,13 +33,19 @@ describe('Users - Internal - Fetch User Details DAL', () => {
             roles: user.groups[0].roles
           }
         ],
+        id: user.id,
+        lastLogin: user.lastLogin,
+        licenceEntity: null,
         roles: [
           {
+            description: user.roles[0].description,
             id: user.roles[0].id,
-            role: user.roles[0].role,
-            description: user.roles[0].description
+            role: user.roles[0].role
           }
-        ]
+        ],
+        statusPassword: null,
+        userId: user.userId,
+        username: user.username
       })
     })
   })

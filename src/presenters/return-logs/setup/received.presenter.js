@@ -49,6 +49,7 @@ function _backLinkHref(session) {
 
 function _yesterdaysDate() {
   const yesterdaysDate = new Date()
+
   yesterdaysDate.setDate(yesterdaysDate.getDate() - 1)
 
   return formatLongDate(yesterdaysDate)

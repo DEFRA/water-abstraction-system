@@ -1,3 +1,9 @@
+/**
+ * SQL query for fetching the recipients of an abstraction alert notice
+ *
+ * @module AbstractionAlertRecipientsQueryDal
+ */
+
 import {
   additionalContactRecipientQuery,
   licenceHolderRecipientQuery,

@@ -69,8 +69,8 @@ describe('Notices - Submit Index Notices service', () => {
 
         expect(setArgs[0]).toEqual('noticesFilter')
         expect(setArgs[1]).toEqual({
-          noticeTypes: [],
           fromDate: undefined,
+          noticeTypes: [],
           reference: null,
           sentBy: null,
           sentFromDay: null,
@@ -113,8 +113,8 @@ describe('Notices - Submit Index Notices service', () => {
 
           expect(setArgs[0]).toEqual('noticesFilter')
           expect(setArgs[1]).toEqual({
-            noticeTypes: [],
             fromDate: '2023-04-01',
+            noticeTypes: [],
             reference: payload.reference,
             sentBy: payload.sentBy,
             sentFromDay: payload.sentFromDay,
@@ -147,8 +147,8 @@ describe('Notices - Submit Index Notices service', () => {
 
           expect(setArgs[0]).toEqual('noticesFilter')
           expect(setArgs[1]).toEqual({
-            noticeTypes: ['stop'],
             fromDate: '2023-04-01',
+            noticeTypes: ['stop'],
             reference: payload.reference,
             sentBy: payload.sentBy,
             sentFromDay: payload.sentFromDay,
@@ -181,8 +181,8 @@ describe('Notices - Submit Index Notices service', () => {
 
           expect(setArgs[0]).toEqual('noticesFilter')
           expect(setArgs[1]).toEqual({
-            noticeTypes: payload.noticeTypes,
             fromDate: '2023-04-01',
+            noticeTypes: payload.noticeTypes,
             reference: payload.reference,
             sentBy: payload.sentBy,
             sentFromDay: payload.sentFromDay,
@@ -201,9 +201,9 @@ describe('Notices - Submit Index Notices service', () => {
     describe('with an invalid payload', () => {
       beforeEach(() => {
         payload = {
+          sentBy: 'admin-internal@wrls.gov.uk',
           sentFromDay: '1',
-          sentFromMonth: '4',
-          sentBy: 'admin-internal@wrls.gov.uk'
+          sentFromMonth: '4'
         }
 
         results = NoticesFixture.mapToFetchNoticesResult([NoticesFixture.alertStop()])
@@ -225,8 +225,8 @@ describe('Notices - Submit Index Notices service', () => {
               fromDate: { text: 'Enter a valid from date' }
             },
             filters: {
-              noticeTypes: [],
               fromDate: '-04-01',
+              noticeTypes: [],
               openFilter: true,
               reference: null,
               sentBy: 'admin-internal@wrls.gov.uk',
@@ -315,8 +315,8 @@ describe('Notices - Submit Index Notices service', () => {
               fromDate: { text: 'Enter a valid from date' }
             },
             filters: {
-              noticeTypes: [],
               fromDate: '-04-01',
+              noticeTypes: [],
               openFilter: true,
               reference: null,
               sentBy: 'admin-internal@wrls.gov.uk',

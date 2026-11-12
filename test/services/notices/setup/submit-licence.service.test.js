@@ -74,7 +74,7 @@ describe('Notices - Setup - Submit Licence service', () => {
       describe('for a "paper return" notice type', () => {
         describe('and the check page has not been visited', () => {
           beforeEach(() => {
-            sessionData = { noticeType: 'paperReturn', checkPageVisited: false }
+            sessionData = { checkPageVisited: false, noticeType: 'paperReturn' }
 
             session = SessionModelStub(sessionData)
 
@@ -90,7 +90,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
         describe('and the check page has been visited', () => {
           beforeEach(() => {
-            sessionData = { noticeType: 'paperReturn', licenceRef, checkPageVisited: true }
+            sessionData = { checkPageVisited: true, licenceRef, noticeType: 'paperReturn' }
 
             session = SessionModelStub(sessionData)
 
@@ -151,7 +151,7 @@ describe('Notices - Setup - Submit Licence service', () => {
       describe('and the journey is for "standard"', () => {
         describe('and the check page has been visited', () => {
           beforeEach(() => {
-            sessionData = { journey: 'standard', licenceRef, checkPageVisited: true }
+            sessionData = { checkPageVisited: true, journey: 'standard', licenceRef }
 
             session = SessionModelStub(sessionData)
 
@@ -167,7 +167,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
         describe('and the check page has not been visited', () => {
           beforeEach(() => {
-            sessionData = { journey: 'standard', checkPageVisited: false }
+            sessionData = { checkPageVisited: false, journey: 'standard' }
 
             session = SessionModelStub(sessionData)
 
@@ -185,7 +185,7 @@ describe('Notices - Setup - Submit Licence service', () => {
       describe('from the check page', () => {
         describe('and the licence ref has been updated', () => {
           beforeEach(() => {
-            sessionData = { licenceRef: '01/11', checkPageVisited: true }
+            sessionData = { checkPageVisited: true, licenceRef: '01/11' }
 
             session = SessionModelStub(sessionData)
 
@@ -219,7 +219,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
         describe('and the licence ref has not been updated', () => {
           beforeEach(() => {
-            sessionData = { licenceRef, checkPageVisited: true }
+            sessionData = { checkPageVisited: true, licenceRef }
 
             session = SessionModelStub(sessionData)
 

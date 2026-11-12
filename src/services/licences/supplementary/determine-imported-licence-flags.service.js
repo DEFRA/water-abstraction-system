@@ -42,13 +42,13 @@ export default async function determineImportedLicenceFlagsService(licenceId, ch
   const { flagForSrocSupplementary, flagForPreSrocSupplementary } = _determineExistingFlags(existingLicenceDetails)
 
   const result = {
-    licenceId: existingLicenceDetails.id,
-    regionId: existingLicenceDetails.region_id,
-    startDate: changeDate > endDate ? null : changeDate,
     endDate,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
-    flagForTwoPartTariffSupplementary: false
+    flagForTwoPartTariffSupplementary: false,
+    licenceId: existingLicenceDetails.id,
+    regionId: existingLicenceDetails.region_id,
+    startDate: changeDate > endDate ? null : changeDate
   }
 
   // If not set it means none of the dates changed were before the current financial year end so there is no reason
@@ -80,7 +80,7 @@ function _determineExistingFlags(existingLicenceDetails) {
     ? existingLicenceDetails.pre_sroc_charge_versions
     : false
 
-  return { flagForSrocSupplementary, flagForPreSrocSupplementary }
+  return { flagForPreSrocSupplementary, flagForSrocSupplementary }
 }
 
 /**

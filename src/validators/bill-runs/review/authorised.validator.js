@@ -33,11 +33,11 @@ function _validate(amendedAuthorisedVolume, totalBillableReturns) {
     .required()
     .custom(maxDecimalPlaces(MAX_DECIMALS), 'maxDecimals')
     .messages({
-      'number.base': 'The authorised volume must be a number',
-      'number.unsafe': 'The authorised volume must be a number or fewer than 17 digits long',
-      'number.min': `The authorised volume must be greater than ${totalBillableReturns}`,
       'any.required': 'Enter an authorised volume',
-      'custom.maxDecimals': 'The authorised volume must not have more than 6 decimal places'
+      'custom.maxDecimals': 'The authorised volume must not have more than 6 decimal places',
+      'number.base': 'The authorised volume must be a number',
+      'number.min': `The authorised volume must be greater than ${totalBillableReturns}`,
+      'number.unsafe': 'The authorised volume must be a number or fewer than 17 digits long'
     })
 
   return schema.validate(amendedAuthorisedVolume, { abortEarly: false })

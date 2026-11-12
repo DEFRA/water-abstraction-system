@@ -21,11 +21,11 @@ describe('Legacy Refresh Bill Run request', () => {
   describe('when the request can refresh a bill run', () => {
     beforeEach(async () => {
       vi.spyOn(LegacyRequest, 'postRequest').mockResolvedValue({
-        succeeded: true,
         response: {
-          statusCode: HTTP_STATUS_OK,
-          body: null
-        }
+          body: null,
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 
@@ -47,16 +47,16 @@ describe('Legacy Refresh Bill Run request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         vi.spyOn(LegacyRequest, 'postRequest').mockResolvedValue({
-          succeeded: false,
           response: {
-            statusCode: HTTP_STATUS_UNAUTHORIZED,
             body: {
-              statusCode: HTTP_STATUS_UNAUTHORIZED,
+              attributes: { error: 'Invalid JWT: Token format not valid' },
               error: 'Unauthorized',
               message: 'Invalid JWT: Token format not valid',
-              attributes: { error: 'Invalid JWT: Token format not valid' }
-            }
-          }
+              statusCode: HTTP_STATUS_UNAUTHORIZED
+            },
+            statusCode: HTTP_STATUS_UNAUTHORIZED
+          },
+          succeeded: false
         })
       })
 
@@ -78,8 +78,8 @@ describe('Legacy Refresh Bill Run request', () => {
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
         vi.spyOn(LegacyRequest, 'postRequest').mockResolvedValue({
-          succeeded: false,
-          response: new Error("Timeout awaiting 'request' for 5000ms")
+          response: new Error("Timeout awaiting 'request' for 5000ms"),
+          succeeded: false
         })
       })
 

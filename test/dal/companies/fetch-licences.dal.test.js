@@ -37,11 +37,11 @@ describe('Companies - Fetch Licences dal', () => {
     // This is an older licence version linked to a different company. This confirms we are getting the right current
     // licence holder details
     olderLicenceVersion = await LicenceVersionHelper.add({
+      companyId: generateUUID(),
       increment: 0,
       issue: 1,
       licenceId: licence.id,
-      startDate: new Date('2021-12-31'),
-      companyId: generateUUID()
+      startDate: new Date('2021-12-31')
     })
 
     // This is another licence for the same company and details we expect to retrieve. This should appear first
@@ -51,22 +51,22 @@ describe('Companies - Fetch Licences dal', () => {
     })
 
     anotherLicenceVersion = await LicenceVersionHelper.add({
+      companyId: licenceHolder.company.id,
       increment: 0,
       issue: 1,
       licenceId: anotherLicence.id,
-      startDate: new Date('2025-04-01'),
-      companyId: licenceHolder.company.id
+      startDate: new Date('2025-04-01')
     })
 
     // This is a different licence linked to a different company. This confirms we are only getting licences for the
     // selected company
     otherLicence = await LicenceHelper.add()
     otherLicenceVersion = await LicenceVersionHelper.add({
+      companyId: generateUUID(),
       increment: 0,
       issue: 2,
       licenceId: otherLicence.id,
-      startDate: new Date('2025-04-01'),
-      companyId: generateUUID()
+      startDate: new Date('2025-04-01')
     })
   })
 
@@ -100,24 +100,24 @@ describe('Companies - Fetch Licences dal', () => {
       expect(result).toEqual({
         licences: [
           {
+            currentLicenceHolder: licenceHolder.company.name,
+            currentLicenceHolderId: licenceHolder.company.id,
             expiredDate: null,
             id: anotherLicence.id,
             lapsedDate: null,
             licenceRef: anotherLicence.licenceRef,
             revokedDate: null,
-            startDate: new Date('2022-01-01'),
-            currentLicenceHolderId: licenceHolder.company.id,
-            currentLicenceHolder: licenceHolder.company.name
+            startDate: new Date('2022-01-01')
           },
           {
+            currentLicenceHolder: licenceHolder.company.name,
+            currentLicenceHolderId: licenceHolder.company.id,
             expiredDate: null,
             id: licence.id,
             lapsedDate: null,
             licenceRef: licence.licenceRef,
             revokedDate: null,
-            startDate: new Date('2022-01-01'),
-            currentLicenceHolderId: licenceHolder.company.id,
-            currentLicenceHolder: licenceHolder.company.name
+            startDate: new Date('2022-01-01')
           }
         ],
         totalNumber: 2

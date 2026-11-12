@@ -20,8 +20,8 @@ export default function communicationsPresenter(notifications, licence) {
 
   return {
     backLink: {
-      text: 'Go back to search',
-      href: '/'
+      href: '/',
+      text: 'Go back to search'
     },
     notifications: notificationsTableData,
     pageTitle: 'Communications',

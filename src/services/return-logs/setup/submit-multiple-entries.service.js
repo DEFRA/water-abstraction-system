@@ -5,8 +5,8 @@
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
-import { returnRequirementFrequencies } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { convertFromCubicMetres, convertToCubicMetres } from 'water-abstraction-engine/lib/general.lib.js'
+import { returnRequirementFrequencies } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import MultipleEntriesPresenter from '../../../presenters/return-logs/setup/multiple-entries.presenter.js'
 import MultipleEntriesValidator from '../../../validators/return-logs/setup/multiple-entries.validator.js'

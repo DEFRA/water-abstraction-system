@@ -47,11 +47,11 @@ export default function viewBillRunPresenter(billRun, billSummaries) {
   const billRunType = formatBillRunType(batchType, scheme, summer)
 
   return {
-    billsCount: _billsCount(creditNoteCount, invoiceCount, billRunType, billSummaries),
     billRunNumber,
     billRunStatus: status,
     billRunTotal: _billRunTotal(netTotal),
     billRunType,
+    billsCount: _billsCount(creditNoteCount, invoiceCount, billRunType, billSummaries),
     chargeScheme: formatChargeScheme(scheme),
     creditsCount: _creditsCount(creditNoteCount),
     creditsTotal: formatMoney(creditNoteValue),

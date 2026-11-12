@@ -1,3 +1,9 @@
+/**
+ * Routes for the /companies endpoints
+ *
+ * @module CompaniesRoutes
+ */
+
 import {
   viewBillingAccounts,
   viewCompany,
@@ -10,49 +16,49 @@ import {
 export default [
   {
     method: 'GET',
-    path: '/companies/{id}/{role}',
     options: {
       handler: viewCompany
-    }
+    },
+    path: '/companies/{id}/{role}'
   },
   {
     method: 'GET',
-    path: '/companies/{id}/address/{addressId}/{role}',
     options: {
       handler: viewCompanyWithAddress
-    }
+    },
+    path: '/companies/{id}/address/{addressId}/{role}'
   },
   {
     method: 'GET',
-    path: '/companies/{id}/billing-accounts',
     options: {
-      handler: viewBillingAccounts,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: viewBillingAccounts
+    },
+    path: '/companies/{id}/billing-accounts'
   },
   {
     method: 'GET',
-    path: '/companies/{id}/contacts',
     options: {
       handler: viewContacts
-    }
+    },
+    path: '/companies/{id}/contacts'
   },
   {
     method: 'GET',
-    path: '/companies/{id}/history',
     options: {
       handler: viewHistory
-    }
+    },
+    path: '/companies/{id}/history'
   },
   {
     method: 'GET',
-    path: '/companies/{id}/licences',
     options: {
       handler: viewLicences
-    }
+    },
+    path: '/companies/{id}/licences'
   }
 ]

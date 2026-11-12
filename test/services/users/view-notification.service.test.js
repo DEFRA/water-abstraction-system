@@ -38,7 +38,7 @@ describe('Users - Internal - View Notifications Service', () => {
   describe('when called', () => {
     describe('by a non-super user', () => {
       beforeEach(() => {
-        auth = { credentials: { groups: [{ id: '242f836e-74a1-4b87-8b18-f6450a332e14', group: 'billing' }] } }
+        auth = { credentials: { groups: [{ group: 'billing', id: '242f836e-74a1-4b87-8b18-f6450a332e14' }] } }
       })
 
       it('returns "protected" page data for the view', async () => {
@@ -64,7 +64,7 @@ describe('Users - Internal - View Notifications Service', () => {
 
     describe('by a super user', () => {
       beforeEach(() => {
-        auth = { credentials: { groups: [{ id: '0348d272-a282-4bd4-8439-e312036f306e', group: 'super' }] } }
+        auth = { credentials: { groups: [{ group: 'super', id: '0348d272-a282-4bd4-8439-e312036f306e' }] } }
       })
 
       it('returns "full" page data for the view', async () => {

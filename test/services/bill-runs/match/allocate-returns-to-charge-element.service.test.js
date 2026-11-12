@@ -7,8 +7,8 @@ import AllocateReturnsToChargeElementService from '../../../../src/services/bill
 describe('Allocate Returns to Charge Element Service', () => {
   describe('when there are records to process', () => {
     const chargePeriod = {
-      startDate: new Date('2022-04-01'),
-      endDate: new Date('2023-03-31')
+      endDate: new Date('2023-03-31'),
+      startDate: new Date('2022-04-01')
     }
 
     let testData
@@ -473,71 +473,71 @@ describe('Allocate Returns to Charge Element Service', () => {
 function _generateTestData(returnStatus = 'completed') {
   // Data not required for the tests has been excluded from the generated data
   const chargeElement = {
+    abstractionPeriods: [
+      {
+        endDate: new Date('2022-10-31'),
+        startDate: new Date('2022-04-01')
+      },
+      {
+        endDate: new Date('2023-03-31'),
+        startDate: new Date('2023-03-01')
+      }
+    ],
+    allocatedQuantity: 0,
     authorisedAnnualQuantity: 32,
     returnLogs: [
       {
         allocatedQuantity: 0
       }
-    ],
-    allocatedQuantity: 0,
-    abstractionPeriods: [
-      {
-        startDate: new Date('2022-04-01'),
-        endDate: new Date('2022-10-31')
-      },
-      {
-        startDate: new Date('2023-03-01'),
-        endDate: new Date('2023-03-31')
-      }
     ]
   }
 
   const chargeReference = {
-    volume: 32,
-    allocatedQuantity: 0
+    allocatedQuantity: 0,
+    volume: 32
   }
 
   const returnSubmissions = [
     {
       returnSubmissionLines: [
         {
-          startDate: new Date('2022-04-01'),
           endDate: new Date('2022-04-30'),
+          startDate: new Date('2022-04-01'),
           unallocated: 4
         },
         {
-          startDate: new Date('2022-05-01'),
           endDate: new Date('2022-05-31'),
+          startDate: new Date('2022-05-01'),
           unallocated: 4
         },
         {
-          startDate: new Date('2022-06-01'),
           endDate: new Date('2022-06-30'),
+          startDate: new Date('2022-06-01'),
           unallocated: 4
         },
         {
-          startDate: new Date('2022-07-01'),
           endDate: new Date('2022-07-31'),
+          startDate: new Date('2022-07-01'),
           unallocated: 4
         },
         {
-          startDate: new Date('2022-08-01'),
           endDate: new Date('2022-08-31'),
+          startDate: new Date('2022-08-01'),
           unallocated: 4
         },
         {
-          startDate: new Date('2022-09-01'),
           endDate: new Date('2022-09-30'),
+          startDate: new Date('2022-09-01'),
           unallocated: 4
         },
         {
-          startDate: new Date('2022-10-01'),
           endDate: new Date('2022-10-31'),
+          startDate: new Date('2022-10-01'),
           unallocated: 4
         },
         {
-          startDate: new Date('2023-03-01'),
           endDate: new Date('2023-03-31'),
+          startDate: new Date('2023-03-01'),
           unallocated: 4
         }
       ]
@@ -547,8 +547,8 @@ function _generateTestData(returnStatus = 'completed') {
   // If a returns status isn't "complete" it won't have any return submission lines and the "issues" will be "true"
   const matchingReturns = [
     {
-      returnSubmissions: returnStatus === 'completed' ? returnSubmissions : [],
       allocatedQuantity: 0,
+      returnSubmissions: returnStatus === 'completed' ? returnSubmissions : [],
       status: returnStatus
     }
   ]

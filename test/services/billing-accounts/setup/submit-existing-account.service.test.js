@@ -16,6 +16,7 @@ import SubmitExistingAccountService from '../../../../src/services/billing-accou
 
 describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   const companies = _companies()
+
   let payload
   let session
   let sessionData
@@ -268,8 +269,8 @@ function _companies() {
 function _commonExpectedValues() {
   return {
     accountSelected: 'another',
-    addressSelected: null,
     addressJourney: null,
+    addressSelected: null,
     checkPageVisited: false,
     contactName: null,
     contactSelected: null,
@@ -313,13 +314,13 @@ function _commonSessionData(session) {
 
   return {
     accountSelected: 'another',
-    addressSelected: 'new',
     addressJourney: {
       address: {},
       backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-account`, text: 'Back' },
       pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
       redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
     },
+    addressSelected: 'new',
     billingAccount,
     contactName: 'Contact Name',
     contactSelected: 'new',

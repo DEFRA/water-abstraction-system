@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import { yesterday } from 'water-abstraction-engine/test/general.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
 import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
 
@@ -177,8 +177,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
             const result = CheckPresenter(session, savedCompanyContacts, sentNotification)
 
             expect(result.warning).toEqual({
-              text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.',
-              iconFallbackText: 'Warning'
+              iconFallbackText: 'Warning',
+              text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.'
             })
           })
         })
@@ -204,8 +204,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
                 const result = CheckPresenter(session, savedCompanyContacts, sentNotification)
 
                 expect(result.warning).toEqual({
-                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
-                  iconFallbackText: 'Warning'
+                  iconFallbackText: 'Warning',
+                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.'
                 })
               })
             })
@@ -219,8 +219,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
                 const result = CheckPresenter(session, savedCompanyContacts, sentNotification)
 
                 expect(result.warning).toEqual({
-                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
-                  iconFallbackText: 'Warning'
+                  iconFallbackText: 'Warning',
+                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.'
                 })
               })
             })
@@ -242,8 +242,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
                 const result = CheckPresenter(session, savedCompanyContacts, sentNotification)
 
                 expect(result.warning).toEqual({
-                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
-                  iconFallbackText: 'Warning'
+                  iconFallbackText: 'Warning',
+                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.'
                 })
               })
             })
@@ -257,8 +257,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
                 const result = CheckPresenter(session, savedCompanyContacts, sentNotification)
 
                 expect(result.warning).toEqual({
-                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
-                  iconFallbackText: 'Warning'
+                  iconFallbackText: 'Warning',
+                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.'
                 })
               })
             })
@@ -290,8 +290,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
                 const result = CheckPresenter(session, savedCompanyContacts, sentNotification)
 
                 expect(result.warning).toEqual({
-                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
-                  iconFallbackText: 'Warning'
+                  iconFallbackText: 'Warning',
+                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.'
                 })
               })
             })
@@ -305,8 +305,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
                 const result = CheckPresenter(session, savedCompanyContacts, sentNotification)
 
                 expect(result.warning).toEqual({
-                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
-                  iconFallbackText: 'Warning'
+                  iconFallbackText: 'Warning',
+                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.'
                 })
               })
             })
@@ -328,8 +328,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
                 const result = CheckPresenter(session, savedCompanyContacts, sentNotification)
 
                 expect(result.warning).toEqual({
-                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
-                  iconFallbackText: 'Warning'
+                  iconFallbackText: 'Warning',
+                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.'
                 })
               })
             })
@@ -343,8 +343,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
                 const result = CheckPresenter(session, savedCompanyContacts, sentNotification)
 
                 expect(result.warning).toEqual({
-                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
-                  iconFallbackText: 'Warning'
+                  iconFallbackText: 'Warning',
+                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.'
                 })
               })
             })

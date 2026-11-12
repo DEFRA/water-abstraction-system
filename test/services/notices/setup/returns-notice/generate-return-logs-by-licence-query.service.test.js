@@ -2,12 +2,12 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import { db } from 'water-abstraction-engine/db/db.js'
-import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 import { tomorrow } from 'water-abstraction-engine/test/general.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 // Thing under test
 import GenerateReturnLogsByLicenceQueryService from '../../../../../src/services/notices/setup/returns-notice/generate-return-logs-by-licence-query.service.js'
@@ -156,10 +156,10 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
             due_date: returnLogs[4].dueDate,
             end_date: returnLogs[4].endDate,
             licence_ref: returnLogs[4].licenceRef,
+            quarterly: returnLogs[4].quarterly,
             return_log_id: returnLogs[4].id,
             return_reference: Number(returnLogs[4].returnReference),
-            start_date: returnLogs[4].startDate,
-            quarterly: returnLogs[4].quarterly
+            start_date: returnLogs[4].startDate
           }
         ])
       })
@@ -181,20 +181,20 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
           due_date: returnLogs[0].dueDate,
           end_date: returnLogs[0].endDate,
           licence_ref: returnLogs[0].licenceRef,
+          quarterly: returnLogs[0].quarterly,
           return_log_id: returnLogs[0].id,
           return_reference: Number(returnLogs[0].returnReference),
-          start_date: returnLogs[0].startDate,
-          quarterly: returnLogs[0].quarterly
+          start_date: returnLogs[0].startDate
         })
 
         expect(rows).toContainEqual({
           due_date: returnLogs[4].dueDate,
           end_date: returnLogs[4].endDate,
           licence_ref: returnLogs[4].licenceRef,
+          quarterly: returnLogs[4].quarterly,
           return_log_id: returnLogs[4].id,
           return_reference: Number(returnLogs[4].returnReference),
-          start_date: returnLogs[4].startDate,
-          quarterly: returnLogs[4].quarterly
+          start_date: returnLogs[4].startDate
         })
       })
     })
@@ -213,10 +213,10 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
             due_date: linkedReturnLog.dueDate,
             end_date: linkedReturnLog.endDate,
             licence_ref: linkedReturnLog.licenceRef,
+            quarterly: linkedReturnLog.quarterly,
             return_log_id: linkedReturnLog.id,
             return_reference: returnRequirement.reference,
-            start_date: linkedReturnLog.startDate,
-            quarterly: linkedReturnLog.quarterly
+            start_date: linkedReturnLog.startDate
           }
         ])
       })

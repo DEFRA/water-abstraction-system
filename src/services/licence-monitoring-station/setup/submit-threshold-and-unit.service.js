@@ -77,6 +77,7 @@ function _validate(payload) {
 
   validation.error.details.forEach((detail) => {
     let href
+
     if (detail.context.key === 'threshold') {
       href = '#threshold'
     } else {

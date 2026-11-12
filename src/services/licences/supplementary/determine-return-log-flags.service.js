@@ -39,13 +39,13 @@ export default async function determineReturnLogFlagsService(returnLogId) {
   const { twoPartTariff, licence, endDate, startDate } = await _fetchReturnLog(returnLogId)
 
   const result = {
-    licenceId: licence.id,
-    regionId: licence.regionId,
-    startDate,
     endDate,
     flagForPreSrocSupplementary: licence.includeInPresrocBilling === 'yes',
     flagForSrocSupplementary: licence.includeInSrocBilling,
-    flagForTwoPartTariffSupplementary: twoPartTariff
+    flagForTwoPartTariffSupplementary: twoPartTariff,
+    licenceId: licence.id,
+    regionId: licence.regionId,
+    startDate
   }
 
   if (startDate < SROC_START_DATE) {

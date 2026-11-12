@@ -25,8 +25,8 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
     sessionData = {
       beenReceived: false,
-      receivedDateOptions: 'today',
       receivedDate: new Date('2025-02-14'),
+      receivedDateOptions: 'today',
       returnLogId,
       returnReference: generateReference()
     }

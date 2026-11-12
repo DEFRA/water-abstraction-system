@@ -143,9 +143,9 @@ export default async function fetchSearchResultsService(query, resultTypes, page
 }
 
 function _allSql(exactQuery, partialQuery, resultTypes, page) {
-  const countSqls = { statements: [], params: [] }
+  const countSqls = { params: [], statements: [] }
 
-  const searchSqls = { statements: [], params: [] }
+  const searchSqls = { params: [], statements: [] }
 
   _billingAccountSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
   _billSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)

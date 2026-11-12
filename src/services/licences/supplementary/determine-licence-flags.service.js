@@ -39,11 +39,11 @@ export default async function determineLicenceFlagsService(licenceId, scheme) {
   }
 
   const result = {
-    licenceId,
-    regionId: licence.regionId,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
-    flagForTwoPartTariffSupplementary: false
+    flagForTwoPartTariffSupplementary: false,
+    licenceId,
+    regionId: licence.regionId
   }
 
   return result

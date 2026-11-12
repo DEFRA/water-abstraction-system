@@ -22,6 +22,7 @@ describe('Notices - Index validator', () => {
         const result = IndexValidator(payload)
 
         expect(result.value).toEqual({
+          fromDate: new Date('2024-04-01'),
           noticeTypes: ['reduce', 'stop'],
           sentBy: 'test@test.com',
           sentFromDay: '1',
@@ -30,7 +31,6 @@ describe('Notices - Index validator', () => {
           sentToDay: '28',
           sentToMonth: '4',
           sentToYear: '2024',
-          fromDate: new Date('2024-04-01'),
           statuses: ['error', 'sent'],
           toDate: new Date('2024-04-28')
         })

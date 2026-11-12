@@ -4,8 +4,8 @@
  */
 
 import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.presenter.js'
-import { clearFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { clearFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
 import FetchNoticeService from '../../services/notices/fetch-notice.service.js'
 import ViewNoticePresenter from '../../presenters/notices/view-notice.presenter.js'

@@ -1,3 +1,9 @@
+/**
+ * Routes for the /users endpoints
+ *
+ * @module UsersRoutes
+ */
+
 import {
   index,
   submitIndex,
@@ -16,121 +22,121 @@ import {
 export default [
   {
     method: 'GET',
-    path: '/users',
     options: {
-      handler: index,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: index
+    },
+    path: '/users'
   },
   {
     method: 'POST',
-    path: '/users',
     options: {
-      handler: submitIndex,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: submitIndex
+    },
+    path: '/users'
   },
   {
     method: 'GET',
-    path: '/users/external/{id}/communications',
     options: {
       handler: viewExternalCommunications
-    }
+    },
+    path: '/users/external/{id}/communications'
   },
   {
     method: 'GET',
-    path: '/users/external/{id}/details',
     options: {
       handler: viewExternalDetails
-    }
+    },
+    path: '/users/external/{id}/details'
   },
   {
     method: 'GET',
-    path: '/users/external/{id}/licences',
     options: {
       handler: viewExternalLicences
-    }
+    },
+    path: '/users/external/{id}/licences'
   },
   {
     method: 'GET',
-    path: '/users/external/{id}/verifications',
     options: {
       handler: viewExternalVerifications
-    }
+    },
+    path: '/users/external/{id}/verifications'
   },
   {
     method: 'GET',
-    path: '/users/internal/{id}/communications',
     options: {
-      handler: viewInternalCommunications,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: viewInternalCommunications
+    },
+    path: '/users/internal/{id}/communications'
   },
   {
     method: 'GET',
-    path: '/users/internal/{id}/details',
     options: {
-      handler: viewInternalDetails,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: viewInternalDetails
+    },
+    path: '/users/internal/{id}/details'
   },
   {
     method: 'POST',
-    path: '/users/internal/{id}/details',
     options: {
-      handler: submitInternalDetails,
       auth: {
         access: {
           scope: ['manage_accounts']
         }
-      }
-    }
+      },
+      handler: submitInternalDetails
+    },
+    path: '/users/internal/{id}/details'
   },
   {
     method: 'GET',
-    path: '/users/{type}/{id}/notifications/{notificationId}',
     options: {
       handler: viewNotification
-    }
+    },
+    path: '/users/{type}/{id}/notifications/{notificationId}'
   },
   {
     method: 'GET',
-    path: '/users/me/profile-details',
     options: {
-      handler: viewProfileDetails,
       auth: {
         access: {
           scope: ['hof_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: viewProfileDetails
+    },
+    path: '/users/me/profile-details'
   },
   {
     method: 'POST',
-    path: '/users/me/profile-details',
     options: {
-      handler: submitProfileDetails,
       auth: {
         access: {
           scope: ['hof_notifications', 'renewal_notifications']
         }
-      }
-    }
+      },
+      handler: submitProfileDetails
+    },
+    path: '/users/me/profile-details'
   }
 ]

@@ -19,8 +19,8 @@ export default function contactValidator(payload) {
 
   const schema = Joi.object({
     contactSelected: Joi.alternatives().try(Joi.string().valid('new'), Joi.string().uuid()).required().messages({
-      'any.required': errorMessage,
       'any.only': errorMessage,
+      'any.required': errorMessage,
       'string.empty': errorMessage
     })
   })

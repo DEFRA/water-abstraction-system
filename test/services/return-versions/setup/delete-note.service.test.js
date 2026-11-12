@@ -19,22 +19,22 @@ describe('Return Versions Setup - Delete Note service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
-      requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change',
       note: {
         content: 'I am not long for this world',
         userEmail: 'carol.shaw@atari.com'
-      }
+      },
+      reason: 'major-change',
+      requirements: [{}],
+      startDateOptions: 'licenceStartDate'
     }
 
     session = SessionModelStub(sessionData)
@@ -61,6 +61,6 @@ describe('Return Versions Setup - Delete Note service', () => {
     const [flashType, notification] = yarStub.flash.mock.calls[0]
 
     expect(flashType).toEqual('notification')
-    expect(notification).toEqual({ title: 'Deleted', text: 'Note deleted' })
+    expect(notification).toEqual({ text: 'Note deleted', title: 'Deleted' })
   })
 })

@@ -34,13 +34,13 @@ function _formatTableData(notifications) {
     const recipient = _recipient(notification)
 
     return {
-      recipient,
       licenceRefs: notification.licences,
       link: {
-        href: `/system/notifications/${notification.id}`,
-        hiddenText: `notification for recipient ${recipient[0]}`
+        hiddenText: `notification for recipient ${recipient[0]}`,
+        href: `/system/notifications/${notification.id}`
       },
       messageType: notification.messageType,
+      recipient,
       status: notification.status
     }
   })

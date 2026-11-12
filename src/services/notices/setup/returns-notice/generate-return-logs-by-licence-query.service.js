@@ -3,8 +3,8 @@
  * @module GenerateReturnLogsByLicenceQueryService
  */
 
-import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 /**
  * Generates the query and bindings for selecting the return logs by licence that determine which recipients to fetch

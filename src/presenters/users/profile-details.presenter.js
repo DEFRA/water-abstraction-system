@@ -1,9 +1,9 @@
-import { formatEmail } from 'water-abstraction-engine/presenters/base.presenter.js'
-
 /**
  * Formats data for the `/users/me/profile-details` page
  * @module ProfileDetailsPresenter
  */
+
+import { formatEmail } from 'water-abstraction-engine/presenters/base.presenter.js'
 
 const NAVIGATION_LINKS = [
   { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },

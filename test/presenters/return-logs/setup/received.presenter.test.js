@@ -25,17 +25,17 @@ describe('Return Logs - Setup - Received presenter', () => {
       const result = ReceivedPresenter(session)
 
       expect(result).toEqual({
-        pageTitle: 'When was the return received?',
-        sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        pageTitleCaption: 'Return reference 12345',
-        receivedDateOption: null,
-        receivedDateDay: null,
-        receivedDateMonth: null,
-        receivedDateYear: null,
         backLink: {
           href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3/details',
           text: 'Back'
         },
+        pageTitle: 'When was the return received?',
+        pageTitleCaption: 'Return reference 12345',
+        receivedDateDay: null,
+        receivedDateMonth: null,
+        receivedDateOption: null,
+        receivedDateYear: null,
+        sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         todaysDate: formatLongDate(today()),
         yesterdaysDate: _yesterdaysDate()
       })
@@ -129,6 +129,7 @@ describe('Return Logs - Setup - Received presenter', () => {
 
 function _yesterdaysDate() {
   const yesterdaysDate = new Date()
+
   yesterdaysDate.setDate(yesterdaysDate.getDate() - 1)
 
   return formatLongDate(yesterdaysDate)

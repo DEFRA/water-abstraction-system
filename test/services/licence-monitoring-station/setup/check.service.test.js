@@ -16,18 +16,18 @@ describe('Licence Monitoring Station Setup - Check Service', () => {
 
   beforeEach(() => {
     sessionData = {
-      unit: 'Ml/d',
-      label: 'LABEL',
-      threshold: 100,
-      licenceRef: 'LICENCE_REF',
-      conditionId: 'no_condition',
-      stopOrReduce: 'stop',
-      reduceAtThreshold: null,
-      conditionDisplayText: 'None',
       abstractionPeriodEndDay: '3',
       abstractionPeriodEndMonth: '4',
       abstractionPeriodStartDay: '1',
-      abstractionPeriodStartMonth: '2'
+      abstractionPeriodStartMonth: '2',
+      conditionDisplayText: 'None',
+      conditionId: 'no_condition',
+      label: 'LABEL',
+      licenceRef: 'LICENCE_REF',
+      reduceAtThreshold: null,
+      stopOrReduce: 'stop',
+      threshold: 100,
+      unit: 'Ml/d'
     }
 
     session = SessionModelStub(sessionData)
@@ -49,11 +49,11 @@ describe('Licence Monitoring Station Setup - Check Service', () => {
         condition: 'None',
         licenceRef: 'LICENCE_REF',
         links: {
-          threshold: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,
-          type: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,
-          licenceNumber: `/system/licence-monitoring-station/setup/${session.id}/licence-number`,
+          abstractionPeriod: `/system/licence-monitoring-station/setup/${session.id}/abstraction-period`,
           licenceCondition: `/system/licence-monitoring-station/setup/${session.id}/full-condition`,
-          abstractionPeriod: `/system/licence-monitoring-station/setup/${session.id}/abstraction-period`
+          licenceNumber: `/system/licence-monitoring-station/setup/${session.id}/licence-number`,
+          threshold: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,
+          type: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`
         },
         monitoringStationLabel: 'LABEL',
         pageTitle: 'Check the restriction details',

@@ -33,13 +33,13 @@ export default async function determineChargeVersionFlagsService(chargeVersionId
   const { chargeReferences, licence, endDate, startDate, scheme } = chargeVersion
 
   const result = {
-    licenceId: licence.id,
-    startDate,
     endDate,
-    regionId: chargeVersion.licence.regionId,
     flagForPreSrocSupplementary: licence.includeInPresrocBilling === 'yes',
     flagForSrocSupplementary: licence.includeInSrocBilling,
-    flagForTwoPartTariffSupplementary: false
+    flagForTwoPartTariffSupplementary: false,
+    licenceId: licence.id,
+    regionId: chargeVersion.licence.regionId,
+    startDate
   }
 
   const futureChargeVersion = _futureChargeVersion(chargeVersion)

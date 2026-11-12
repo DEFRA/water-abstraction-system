@@ -87,8 +87,8 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
         beforeEach(async () => {
           sessionData = {
             ...sessionData,
-            checkPageVisited: true,
-            abstractionAlerts: 'yes'
+            abstractionAlerts: 'yes',
+            checkPageVisited: true
           }
 
           session = SessionModelStub(sessionData)
@@ -116,7 +116,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
               const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
               expect(flashType).toEqual('notification')
-              expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Water abstraction alerts updated' })
+              expect(bannerMessage).toEqual({ text: 'Water abstraction alerts updated', titleText: 'Updated' })
             })
           })
         })
@@ -148,15 +148,15 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
           text: 'Back'
         },
         error: {
+          abstractionAlerts: {
+            text: 'Should the contact get water abstraction alerts'
+          },
           errorList: [
             {
               href: '#abstractionAlerts',
               text: 'Should the contact get water abstraction alerts'
             }
-          ],
-          abstractionAlerts: {
-            text: 'Should the contact get water abstraction alerts'
-          }
+          ]
         },
         pageTitle: 'Should the contact get abstraction alerts?',
         pageTitleCaption: 'Tyrell Corporation',

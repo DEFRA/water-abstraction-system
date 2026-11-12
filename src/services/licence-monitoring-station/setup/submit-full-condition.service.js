@@ -60,7 +60,7 @@ async function _determineAbstractionPeriod(condition) {
   const { abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth } =
     condition
 
-  return { abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth }
+  return { abstractionPeriodEndDay, abstractionPeriodEndMonth, abstractionPeriodStartDay, abstractionPeriodStartMonth }
 }
 
 async function _determineConditionDisplayText(condition, conditionIndex) {

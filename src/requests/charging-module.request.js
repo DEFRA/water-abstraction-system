@@ -96,15 +96,15 @@ async function _sendRequest(path, method, body) {
  */
 function _requestOptions(accessToken, body) {
   return {
-    prefixUrl: chargingModuleConfig.url,
     headers: {
       authorization: `Bearer ${accessToken}`
     },
+    json: body,
+    prefixUrl: chargingModuleConfig.url,
     responseType: 'json',
     timeout: {
       request: chargingModuleConfig.timeout
-    },
-    json: body
+    }
   }
 }
 
@@ -118,15 +118,15 @@ function _parseResult(result) {
 
   if (body) {
     return {
-      succeeded: result.succeeded,
       response: {
+        body,
         info: {
-          gitCommit: headers['x-cma-git-commit'],
-          dockerTag: headers['x-cma-docker-tag']
+          dockerTag: headers['x-cma-docker-tag'],
+          gitCommit: headers['x-cma-git-commit']
         },
-        statusCode,
-        body
-      }
+        statusCode
+      },
+      succeeded: result.succeeded
     }
   }
 

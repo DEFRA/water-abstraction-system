@@ -32,7 +32,7 @@ export default async function fetchLicenceService(licenceId) {
             { column: 'licenceId', order: 'asc' },
             { column: 'issue', order: 'desc' },
             { column: 'increment', order: 'desc' },
-            { column: 'endDate', order: 'desc', nulls: 'first' }
+            { column: 'endDate', nulls: 'first', order: 'desc' }
           ])
       })
       .withGraphFetched('licenceVersions.company')

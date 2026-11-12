@@ -27,8 +27,8 @@ describe('Users - External - View Verifications service', () => {
 
     vi.spyOn(FetchUserDal, 'default').mockResolvedValue(user)
     vi.spyOn(FetchVerificationsDal, 'default').mockResolvedValue({
-      verifications: [],
-      totalNumber: 0
+      totalNumber: 0,
+      verifications: []
     })
   })
 
@@ -43,11 +43,6 @@ describe('Users - External - View Verifications service', () => {
       expect(result).toEqual({
         activeNavBar: 'users',
         activeSecondaryNav: 'verifications',
-        pagination: {
-          currentPageNumber: 1,
-          numberOfPages: 0,
-          showingMessage: 'Showing all 0 verifications'
-        },
         backLink: {
           href: '/system/users',
           text: 'Go back to users'
@@ -55,6 +50,11 @@ describe('Users - External - View Verifications service', () => {
         backQueryString: '?back=users',
         pageTitle: 'Verifications',
         pageTitleCaption: user.username,
+        pagination: {
+          currentPageNumber: 1,
+          numberOfPages: 0,
+          showingMessage: 'Showing all 0 verifications'
+        },
         verifications: []
       })
     })

@@ -31,7 +31,7 @@ describe('Notices - Setup - View Check service', () => {
     })
 
     yarStub = YarStub()
-    yarStub.flash.mockReturnValue([{ title: 'Test', text: 'Notification' }])
+    yarStub.flash.mockReturnValue([{ text: 'Notification', title: 'Test' }])
 
     vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
   })

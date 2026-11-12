@@ -65,8 +65,8 @@ describe('Bill Runs - Setup - Submit Season service', () => {
               text: 'Select the season'
             },
             pageTitle: 'Select the season',
-            sessionId: session.id,
-            selectedSeason: null
+            selectedSeason: null,
+            sessionId: session.id
           })
         })
       })

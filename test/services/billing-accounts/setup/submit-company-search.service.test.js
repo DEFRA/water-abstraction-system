@@ -13,6 +13,7 @@ import SubmitCompanySearchService from '../../../../src/services/billing-account
 
 describe('Billing Accounts - Setup - Submit Company Search Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
   let payload
   let session
   let sessionData
@@ -143,8 +144,8 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
         checkPageVisited: false,
         companiesHouseNumber: false,
         companySearch: payload.companySearch,
-        contactSelected: null,
         contactName: null,
+        contactSelected: null,
         fao: null
       })
     })
@@ -160,15 +161,15 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
         const result = await SubmitCompanySearchService(session.id, payload)
 
         expect(result.error).toEqual({
+          companySearch: {
+            text: 'Enter the Companies House number or company name'
+          },
           errorList: [
             {
               href: '#companySearch',
               text: 'Enter the Companies House number or company name'
             }
-          ],
-          companySearch: {
-            text: 'Enter the Companies House number or company name'
-          }
+          ]
         })
       })
     })
@@ -184,15 +185,15 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
         const result = await SubmitCompanySearchService(session.id, payload)
 
         expect(result.error).toEqual({
+          companySearch: {
+            text: 'Companies House number or company name must be 100 characters or less'
+          },
           errorList: [
             {
               href: '#companySearch',
               text: 'Companies House number or company name must be 100 characters or less'
             }
-          ],
-          companySearch: {
-            text: 'Companies House number or company name must be 100 characters or less'
-          }
+          ]
         })
       })
     })

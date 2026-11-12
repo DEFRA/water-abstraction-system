@@ -21,30 +21,30 @@ describe('Charging Module - View Customer Files request', () => {
   describe('when the service can view a bill run', () => {
     beforeEach(async () => {
       vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
-        succeeded: true,
         response: {
-          info: {
-            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1'
-          },
-          statusCode: HTTP_STATUS_OK,
           body: [
             {
-              id: '9523ff61-bd21-4800-aa7d-d97aa6c923aa',
-              fileReference: 'nalac50001',
-              status: 'exported',
               exportedAt: '2025-08-10T12:34:56.789Z',
-              exportedCustomers: ['AB01BEEB', 'BB01BEEB', 'CB01BEEB']
+              exportedCustomers: ['AB01BEEB', 'BB01BEEB', 'CB01BEEB'],
+              fileReference: 'nalac50001',
+              id: '9523ff61-bd21-4800-aa7d-d97aa6c923aa',
+              status: 'exported'
             },
             {
-              id: 'aa271bc5-0e36-4aeb-b636-64d95482825f',
-              fileReference: 'nalac50002',
-              status: 'exported',
               exportedAt: '2025-08-11T13:57:24.680Z',
-              exportedCustomers: ['DB02BEEB', 'EB02BEEB', 'FB02BEEB']
+              exportedCustomers: ['DB02BEEB', 'EB02BEEB', 'FB02BEEB'],
+              fileReference: 'nalac50002',
+              id: 'aa271bc5-0e36-4aeb-b636-64d95482825f',
+              status: 'exported'
             }
-          ]
-        }
+          ],
+          info: {
+            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1',
+            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
+          },
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 
@@ -73,20 +73,20 @@ describe('Charging Module - View Customer Files request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
           response: {
-            info: {
-              gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-              dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1'
-            },
-            statusCode: HTTP_STATUS_UNAUTHORIZED,
             body: {
-              statusCode: HTTP_STATUS_UNAUTHORIZED,
+              attributes: { error: 'Invalid JWT: Token format not valid' },
               error: 'Unauthorized',
               message: 'Invalid JWT: Token format not valid',
-              attributes: { error: 'Invalid JWT: Token format not valid' }
-            }
-          }
+              statusCode: HTTP_STATUS_UNAUTHORIZED
+            },
+            info: {
+              dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1',
+              gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
+            },
+            statusCode: HTTP_STATUS_UNAUTHORIZED
+          },
+          succeeded: false
         })
       })
 
@@ -108,8 +108,8 @@ describe('Charging Module - View Customer Files request', () => {
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
         vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
-          response: new Error("Timeout awaiting 'request' for 5000ms")
+          response: new Error("Timeout awaiting 'request' for 5000ms"),
+          succeeded: false
         })
       })
 

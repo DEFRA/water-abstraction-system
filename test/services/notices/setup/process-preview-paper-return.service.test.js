@@ -37,8 +37,8 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
     contactHashId = recipient.contact_hash_id
 
     sessionData = {
-      licenceRef,
-      dueReturns: [dueReturnLog]
+      dueReturns: [dueReturnLog],
+      licenceRef
     }
 
     session = SessionModelStub(sessionData)
@@ -107,8 +107,8 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
         regionAndArea: 'North West / Lower Trent',
         regionCode: '1',
         returnLogId: dueReturnLog.returnLogId,
-        returnsFrequency: 'month',
         returnReference: dueReturnLog.returnReference,
+        returnsFrequency: 'month',
         siteDescription: 'BOREHOLE AT AVALON',
         startDate: '1 April 2022',
         twoPartTariff: false

@@ -20,13 +20,13 @@ describe('Start Bill Run Process service', () => {
   const userEmail = 'test@wrsl.gov.uk'
 
   const billRun = {
+    batchType: 'supplementary',
+    errorCode: null,
+    externalId: '8c8448a6-f0ea-44a7-b41e-aafe79cb02f8',
     id: 'e3bc5bb1-a223-43a2-b73f-10e6c4ed9626',
     regionId,
     scheme: 'sroc',
-    batchType: 'supplementary',
-    status: 'queued',
-    externalId: '8c8448a6-f0ea-44a7-b41e-aafe79cb02f8',
-    errorCode: null
+    status: 'queued'
   }
 
   let batchType
@@ -38,8 +38,8 @@ describe('Start Bill Run Process service', () => {
   describe('when the service succeeds', () => {
     beforeEach(async () => {
       const billingPeriods = [
-        { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
-        { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
+        { endDate: new Date('2024-03-31'), startDate: new Date('2023-04-01') },
+        { endDate: new Date('2023-03-31'), startDate: new Date('2022-04-01') }
       ]
 
       vi.spyOn(DetermineBillingPeriodsService, 'default').mockReturnValue(billingPeriods)

@@ -1,11 +1,11 @@
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstraction-engine/lib/general.lib.js'
-
-import SendRenewalNotice from './send-renewal-notice.service.js'
-
 /**
  * Orchestrates the process of fetching, sending, and updating renewal invitation, reminder and final notifications
  * @module ProcessRenewalNoticeService
  */
+
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstraction-engine/lib/general.lib.js'
+
+import SendRenewalNotice from './send-renewal-notice.service.js'
 
 /**
  * Orchestrates the process of fetching, sending, and updating renewal invitation, reminder and final notifications

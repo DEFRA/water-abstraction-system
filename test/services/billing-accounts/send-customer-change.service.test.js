@@ -16,16 +16,16 @@ describe('Send Transactions service', () => {
 
   beforeEach(() => {
     vi.spyOn(ChargingModuleCreateCustomerChangePresenter, 'default').mockReturnValue({
-      region: 'B',
-      customerReference: 'B19120000A',
-      customerName: 'Mr W Aston',
       addressLine1: 'Park Farm',
       addressLine2: 'Sugar Lane',
       addressLine3: 'West Waterford',
       addressLine4: 'Angleton',
       addressLine5: 'Southampton',
       addressLine6: 'Hampshire',
-      postcode: 'SO74 3KD'
+      customerName: 'Mr W Aston',
+      customerReference: 'B19120000A',
+      postcode: 'SO74 3KD',
+      region: 'B'
     })
   })
 

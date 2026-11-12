@@ -45,8 +45,8 @@ function _licencePoints(points) {
   // First extract our points from the data, including generating the descriptions
   const licencePoints = points.map((point) => {
     return {
-      id: point.id,
-      description: point.$describe()
+      description: point.$describe(),
+      id: point.id
     }
   })
 

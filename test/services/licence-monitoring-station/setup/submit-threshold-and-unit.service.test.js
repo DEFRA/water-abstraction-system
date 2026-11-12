@@ -33,7 +33,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
   describe('when called', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
-        payload = { unit: 'Ml/d', 'threshold-Ml/d': '1000' }
+        payload = { 'threshold-Ml/d': '1000', unit: 'Ml/d' }
       })
 
       it('saves the submitted option', async () => {
@@ -84,18 +84,18 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
         expect(result).toMatchObject({
           backLink: '/system/monitoring-stations/e1c44f9b-51c2-4aee-a518-5509d6f05869',
           displayUnits: [
-            { value: 'Ml/d', text: 'Ml/d', hint: { text: 'megalitres per day' }, checked: false },
-            { value: 'm3/s', text: 'm3/s', hint: { text: 'cubic metres per second' }, checked: false },
-            { value: 'm3/d', text: 'm3/d', hint: { text: 'cubic metres per day' }, checked: false },
-            { value: 'l/s', text: 'l/s', hint: { text: 'litres per second' }, checked: false },
-            { value: 'mAOD', text: 'mAOD', hint: { text: 'metres above ordnance datum' }, checked: false },
-            { value: 'mBOD', text: 'mBOD', hint: { text: 'metres below ordnance datum' }, checked: false },
-            { value: 'mASD', text: 'mASD', hint: { text: 'metres above sea datum' }, checked: false },
-            { value: 'm', text: 'm', hint: { text: 'metres' }, checked: false },
-            { value: 'SLD', text: 'SLD', hint: { text: 'south level datum' }, checked: false },
-            { value: 'ft3/s', text: 'ft3/s', hint: { text: 'cubic foot per second' }, checked: false },
-            { value: 'gpd', text: 'gpd', hint: { text: 'gallons per day' }, checked: false },
-            { value: 'Mgpd', text: 'Mgpd', hint: { text: 'million gallons per day' }, checked: false }
+            { checked: false, hint: { text: 'megalitres per day' }, text: 'Ml/d', value: 'Ml/d' },
+            { checked: false, hint: { text: 'cubic metres per second' }, text: 'm3/s', value: 'm3/s' },
+            { checked: false, hint: { text: 'cubic metres per day' }, text: 'm3/d', value: 'm3/d' },
+            { checked: false, hint: { text: 'litres per second' }, text: 'l/s', value: 'l/s' },
+            { checked: false, hint: { text: 'metres above ordnance datum' }, text: 'mAOD', value: 'mAOD' },
+            { checked: false, hint: { text: 'metres below ordnance datum' }, text: 'mBOD', value: 'mBOD' },
+            { checked: false, hint: { text: 'metres above sea datum' }, text: 'mASD', value: 'mASD' },
+            { checked: false, hint: { text: 'metres' }, text: 'm', value: 'm' },
+            { checked: false, hint: { text: 'south level datum' }, text: 'SLD', value: 'SLD' },
+            { checked: false, hint: { text: 'cubic foot per second' }, text: 'ft3/s', value: 'ft3/s' },
+            { checked: false, hint: { text: 'gallons per day' }, text: 'gpd', value: 'gpd' },
+            { checked: false, hint: { text: 'million gallons per day' }, text: 'Mgpd', value: 'Mgpd' }
           ],
           monitoringStationLabel: 'Monitoring Station Label',
           pageTitle: 'What is the licence hands-off flow or level threshold?',

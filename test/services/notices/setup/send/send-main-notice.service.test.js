@@ -31,6 +31,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
     '^ You must submit a record of your water abstraction. \r\n' +
     '\r\n' +
     '^ You’ll need to submit your returns by  2 December 2025.\r\n'
+
   let notice
   let notifications
   let notificationPatchStub
@@ -40,8 +41,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     notificationPatchStub = vi.fn().mockReturnThis()
     vi.spyOn(NotificationModel, 'query').mockReturnValue({
-      patch: notificationPatchStub,
       findById: vi.fn().mockResolvedValue(),
+      patch: notificationPatchStub,
       where: vi.fn().mockReturnThis(),
       whereNull: vi.fn().mockReturnThis()
     })
@@ -121,19 +122,19 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub).toHaveBeenCalledTimes(2)
         expect(notificationPatchStub.mock.calls[0][0]).toEqual({
-          pdf: undefined,
-          plaintext: letterPlaintext,
           notifyError: undefined,
           notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
           notifyStatus: 'created',
+          pdf: undefined,
+          plaintext: letterPlaintext,
           status: 'pending'
         })
         expect(notificationPatchStub.mock.calls[1][0]).toEqual({
-          pdf: undefined,
-          plaintext: emailPlaintext,
           notifyError: undefined,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
+          pdf: undefined,
+          plaintext: emailPlaintext,
           status: 'pending'
         })
       })
@@ -177,20 +178,20 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub).toHaveBeenCalledTimes(2)
         expect(notificationPatchStub.mock.calls[0][0]).toEqual({
-          pdf: undefined,
-          plaintext: undefined,
           notifyError:
             '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"Last line of address must be a real UK postcode or another country"}]}',
           notifyId: undefined,
           notifyStatus: undefined,
+          pdf: undefined,
+          plaintext: undefined,
           status: 'error'
         })
         expect(notificationPatchStub.mock.calls[1][0]).toEqual({
-          pdf: undefined,
-          plaintext: emailPlaintext,
           notifyError: undefined,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
+          pdf: undefined,
+          plaintext: emailPlaintext,
           status: 'pending'
         })
       })
@@ -217,9 +218,9 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         vi.spyOn(SendEmailNotificationService, 'default').mockResolvedValue({
           ...notifications[1],
           id: notifications[1].id,
-          notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyError:
             '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"email_address Not a valid email address"}]}',
+          notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           plaintext: emailPlaintext,
           status: 'error'
         })
@@ -241,6 +242,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       delete notice.metadata.error
 
       const notification = NotificationsFixture.paperReturn(notice)
+
       notifications.push({
         createdAt: notification.createdAt,
         id: notification.id,
@@ -273,11 +275,11 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub).toHaveBeenCalledOnce()
         expect(notificationPatchStub.mock.calls[0][0]).toEqual({
-          pdf: Buffer.from('mock file'),
-          plaintext: null,
           notifyError: undefined,
           notifyId: '95296b09-fef6-4723-9716-e962fcd48e8f',
           notifyStatus: 'created',
+          pdf: Buffer.from('mock file'),
+          plaintext: null,
           status: 'pending'
         })
       })
@@ -306,11 +308,11 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub).toHaveBeenCalledOnce()
         expect(notificationPatchStub.mock.calls[0][0]).toEqual({
-          pdf: Buffer.from('mock file'),
-          plaintext: undefined,
           notifyError: '{"status":404,"message":"Request failed with status code 404"}',
           notifyId: undefined,
           notifyStatus: undefined,
+          pdf: Buffer.from('mock file'),
+          plaintext: undefined,
           status: 'error'
         })
       })

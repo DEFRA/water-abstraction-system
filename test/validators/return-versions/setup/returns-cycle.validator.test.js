@@ -87,41 +87,41 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
 
 function _testSession() {
   return {
-    id: 'bbfb8568-cd71-4ca1-b56b-2d50dae2b2b9',
     data: {
-      method: 'use-existing-requirements',
-      reason: 'new-licence',
+      checkPageVisited: false,
       journey: 'returns-required',
       licence: {
-        id: '91aff99a-3204-4727-86bd-7bdf3ef24533',
+        currentVersionStartDate: '2019-05-13T00:00:00.000Z',
         endDate: null,
-        startDate: '1992-08-19T00:00:00.000Z',
-        licenceRef: '01/117',
+        id: '91aff99a-3204-4727-86bd-7bdf3ef24533',
         licenceHolder: 'Ferns Surfacing Limited',
+        licenceRef: '01/117',
         returnVersions: [],
-        waterUndertaker: false,
-        currentVersionStartDate: '2019-05-13T00:00:00.000Z'
+        startDate: '1992-08-19T00:00:00.000Z',
+        waterUndertaker: false
       },
+      method: 'use-existing-requirements',
+      multipleUpload: false,
+      quarterlyReturns: false,
+      reason: 'new-licence',
       requirements: [
         {
+          abstractionPeriod: [],
+          agreementsExceptions: [],
+          frequencyCollected: 'month',
+          frequencyReported: 'month',
           points: [],
           purposes: [],
           returnsCycle: 'winter-and-all-year',
-          siteDescription: 'POINT A, ADDINGTON SANDPITS',
-          abstractionPeriod: [],
-          frequencyReported: 'month',
-          frequencyCollected: 'month',
-          agreementsExceptions: []
+          siteDescription: 'POINT A, ADDINGTON SANDPITS'
         }
       ],
+      returnVersionStartDate: '2025-12-28T00:00:00.000Z',
       startDateDay: '28',
-      startDateYear: '2025',
-      multipleUpload: false,
       startDateMonth: '12',
-      checkPageVisited: false,
-      quarterlyReturns: false,
       startDateOptions: 'anotherStartDate',
-      returnVersionStartDate: '2025-12-28T00:00:00.000Z'
-    }
+      startDateYear: '2025'
+    },
+    id: 'bbfb8568-cd71-4ca1-b56b-2d50dae2b2b9'
   }
 }

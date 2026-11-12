@@ -4,13 +4,13 @@
  */
 
 import Big from 'water-abstraction-engine/wrappers/big.wrapper.js'
-import { convertFromCubicMetres } from 'water-abstraction-engine/lib/general.lib.js'
 import {
   formatLongDate,
   formatNumber,
   formatQuantityToUnit,
   sentenceCase
 } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { convertFromCubicMetres } from 'water-abstraction-engine/lib/general.lib.js'
 import { returnUnits, unitNames } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 /**
@@ -66,7 +66,7 @@ function _determineRequestedYearAndMonth(yearMonth) {
 }
 
 function _pageTitle(date) {
-  const titleDate = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' })
+  const titleDate = date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
 
   return `Water abstracted ${titleDate}`
 }
@@ -109,14 +109,14 @@ function _generateTableHeaders(units, method, frequency) {
   }
 
   if (method !== 'abstractionVolumes') {
-    headers.push({ text: 'Reading', format: 'numeric' })
+    headers.push({ format: 'numeric', text: 'Reading' })
   }
 
   if (units !== unitNames.CUBIC_METRES) {
-    headers.push({ text: sentenceCase(returnUnits[units].label), format: 'numeric' })
+    headers.push({ format: 'numeric', text: sentenceCase(returnUnits[units].label) })
   }
 
-  headers.push({ text: 'Cubic metres', format: 'numeric' })
+  headers.push({ format: 'numeric', text: 'Cubic metres' })
 
   return headers
 }

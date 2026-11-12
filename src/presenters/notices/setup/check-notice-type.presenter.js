@@ -6,8 +6,9 @@
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
 import { NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
-import featureFlagsConfig from '../../../config/feature-flags.config.js'
 import { returnsPeriodText } from '../base.presenter.js'
+
+import featureFlagsConfig from '../../../config/feature-flags.config.js'
 
 const NOTICE_TYPE_TEXT = {
   [NoticeType.INVITATIONS]: NoticeTypes[NoticeType.INVITATIONS].notificationType,
@@ -37,8 +38,8 @@ export default function checkNoticeTypePresenter(session) {
 
   return {
     links: _links(sessionId, noticeType),
-    pageTitle: 'Check the notice type',
     noticeType: NOTICE_TYPE_TEXT[noticeType],
+    pageTitle: 'Check the notice type',
     sessionId,
     ..._returns(selectedReturns, dueReturns, noticeType),
     ..._licence(licenceRef),
@@ -61,9 +62,9 @@ function _links(sessionId, noticeType) {
 
   return {
     licenceNumber: `/system/notices/setup/${sessionId}/licence`,
-    returnsPeriod: `/system/notices/setup/${sessionId}/${returnsPeriodPath}`,
     noticeType: `/system/notices/setup/${sessionId}/notice-type`,
-    returns: `/system/notices/setup/${sessionId}/paper-return`
+    returns: `/system/notices/setup/${sessionId}/paper-return`,
+    returnsPeriod: `/system/notices/setup/${sessionId}/${returnsPeriodPath}`
   }
 }
 

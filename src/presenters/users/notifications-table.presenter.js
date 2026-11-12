@@ -3,8 +3,8 @@
  * @module NotificationsTablePresenter
  */
 
-import { userNotificationTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { formatLongDate, sentenceCase } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { userNotificationTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 /**
  * Formats data for display in communications tables on view external and internal user pages

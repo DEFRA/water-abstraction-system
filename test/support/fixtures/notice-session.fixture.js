@@ -1,11 +1,11 @@
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
-import { NoticeJourney, NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import {
   generateLicenceRef,
   generateNoticeReferenceCode,
   generateReference,
   generateUUID
 } from 'water-abstraction-engine/test/generators.js'
+import { NoticeJourney, NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 /**
  * Creates an abstraction alert stop notice setup session fixture for testing purposes
@@ -41,8 +41,8 @@ function abstractionAlertStop(licenceRef = null) {
       notes: null,
       restrictionType: 'stop',
       thresholdGroup: 'flow-50-m3/s',
-      thresholdValue: 50,
-      thresholdUnit: 'm3/s'
+      thresholdUnit: 'm3/s',
+      thresholdValue: 50
     },
     {
       abstractionPeriodEndDay: 31,
@@ -59,8 +59,8 @@ function abstractionAlertStop(licenceRef = null) {
       notes: null,
       restrictionType: 'stop',
       thresholdGroup: 'flow-500-Ml/d',
-      thresholdValue: 500,
-      thresholdUnit: 'Ml/d'
+      thresholdUnit: 'Ml/d',
+      thresholdValue: 500
     }
   ]
 
@@ -70,9 +70,9 @@ function abstractionAlertStop(licenceRef = null) {
     alertThresholds: ['flow-50-m3/s', 'flow-500-Ml/d'],
     alertType: 'stop',
     id,
-    licenceRefs: [licenceRef],
-    licenceMonitoringStations,
     journey: NoticeJourney.ALERTS,
+    licenceMonitoringStations,
+    licenceRefs: [licenceRef],
     monitoringStationId: generateUUID(),
     monitoringStationName: 'DEATH STAR',
     monitoringStationRiverName: '',
@@ -106,14 +106,14 @@ function adHocInvitation(licenceRef = null) {
 
   return {
     addressJourney: {
+      activeNavBar: 'notices',
       address: {},
       backLink: {
         href: `/system/notices/setup/${id}/contact-type`,
         text: 'Back'
       },
-      redirectUrl: `/system/notices/setup/${id}/add-recipient`,
-      activeNavBar: 'notices',
-      pageTitleCaption: `Notice ${referenceCode}`
+      pageTitleCaption: `Notice ${referenceCode}`,
+      redirectUrl: `/system/notices/setup/${id}/add-recipient`
     },
     checkPageVisited: true,
     dueReturns: [_generateReturnLog(licenceRef)],
@@ -149,14 +149,14 @@ function adHocReminder(licenceRef = null) {
 
   return {
     addressJourney: {
+      activeNavBar: 'notices',
       address: {},
       backLink: {
         href: `/system/notices/setup/${id}/contact-type`,
         text: 'Back'
       },
-      redirectUrl: `/system/notices/setup/${id}/add-recipient`,
-      activeNavBar: 'notices',
-      pageTitleCaption: `Notice ${referenceCode}`
+      pageTitleCaption: `Notice ${referenceCode}`,
+      redirectUrl: `/system/notices/setup/${id}/add-recipient`
     },
     checkPageVisited: true,
     dueReturns: [_generateReturnLog(licenceRef)],
@@ -261,14 +261,14 @@ function paperReturn(licenceRef = null, selectedReturnLog = null) {
 
   return {
     addressJourney: {
+      activeNavBar: 'notices',
       address: {},
       backLink: {
         href: `/system/notices/setup/${id}/contact-type`,
         text: 'Back'
       },
-      redirectUrl: `/system/notices/setup/${id}/add-recipient`,
-      activeNavBar: 'notices',
-      pageTitleCaption: `Notice ${referenceCode}`
+      pageTitleCaption: `Notice ${referenceCode}`,
+      redirectUrl: `/system/notices/setup/${id}/add-recipient`
     },
     checkPageVisited: true,
     dueReturns: [dueReturn],
@@ -305,23 +305,23 @@ function standardInvitation(licenceRef = null) {
 
   return {
     addressJourney: {
+      activeNavBar: 'notices',
       address: {},
       backLink: {
         href: `/system/notices/setup/${id}/contact-type`,
         text: 'Back'
       },
-      redirectUrl: `/system/notices/setup/${id}/add-recipient`,
-      activeNavBar: 'notices',
-      pageTitleCaption: `Notice ${referenceCode}`
+      pageTitleCaption: `Notice ${referenceCode}`,
+      redirectUrl: `/system/notices/setup/${id}/add-recipient`
     },
     checkPageVisited: true,
     determinedReturnsPeriod: {
-      name: 'allYear',
-      summer: 'false',
       dueDate: null,
       endDate: '2025-03-31T00:00:00.000Z',
+      name: 'allYear',
       quarterly: false,
-      startDate: '2024-04-01T00:00:00.000Z'
+      startDate: '2024-04-01T00:00:00.000Z',
+      summer: 'false'
     },
     id,
     journey: NoticeJourney.STANDARD,
@@ -356,23 +356,23 @@ function standardReminder(licenceRef = null) {
 
   return {
     addressJourney: {
+      activeNavBar: 'notices',
       address: {},
       backLink: {
         href: `/system/notices/setup/${id}/contact-type`,
         text: 'Back'
       },
-      redirectUrl: `/system/notices/setup/${id}/add-recipient`,
-      activeNavBar: 'notices',
-      pageTitleCaption: `Notice ${referenceCode}`
+      pageTitleCaption: `Notice ${referenceCode}`,
+      redirectUrl: `/system/notices/setup/${id}/add-recipient`
     },
     checkPageVisited: true,
     determinedReturnsPeriod: {
-      name: 'allYear',
-      summer: 'false',
       dueDate: null,
       endDate: '2025-03-31T00:00:00.000Z',
+      name: 'allYear',
       quarterly: false,
-      startDate: '2024-04-01T00:00:00.000Z'
+      startDate: '2024-04-01T00:00:00.000Z',
+      summer: 'false'
     },
     id,
     journey: NoticeJourney.STANDARD,

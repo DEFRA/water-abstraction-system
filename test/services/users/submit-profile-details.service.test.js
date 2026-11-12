@@ -64,8 +64,8 @@ describe('Users - Submit profile details service', () => {
 
         expect(yarStub.flash.mock.calls[yarStub.flash.mock.calls.length - 1][0]).toEqual('notification')
         expect(yarStub.flash.mock.calls[yarStub.flash.mock.calls.length - 1][1]).toEqual({
-          title: 'Updated',
-          text: 'Profile details updated'
+          text: 'Profile details updated',
+          title: 'Updated'
         })
       })
 

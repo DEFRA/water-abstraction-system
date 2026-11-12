@@ -25,58 +25,58 @@ describe('Licences - Set Up presenter', () => {
     licence = ViewLicencesFixture.licence()
 
     agreement = {
-      id: generateUUID(),
-      startDate: new Date('2020-01-01'),
       endDate: null,
+      financialAgreement: { code: 'S127', id: generateUUID() },
+      id: generateUUID(),
       signedOn: null,
-      financialAgreement: { id: generateUUID(), code: 'S127' }
+      startDate: new Date('2020-01-01')
     }
 
     chargeVersion = {
-      id: generateUUID(),
-      startDate: new Date('2020-01-01'),
-      endDate: null,
-      status: 'current',
       changeReason: { description: 'Major change' },
-      licenceId: licence.id
+      endDate: null,
+      id: generateUUID(),
+      licenceId: licence.id,
+      startDate: new Date('2020-01-01'),
+      status: 'current'
     }
 
     workflow = {
-      id: generateUUID(),
       createdAt: new Date('2020-01-01'),
-      status: 'review',
       data: {
         chargeVersion: {
           changeReason: { description: 'changed something' },
           dateRange: { startDate: '2022-04-01' }
         }
       },
-      licenceId: licence.id
+      id: generateUUID(),
+      licenceId: licence.id,
+      status: 'review'
     }
 
     auth = {
-      isValid: true,
       credentials: {
-        user: { id: generateUUID() },
-        roles: ['billing', 'charge_version_workflow_editor'],
         groups: [],
+        permissions: { abstractionReform: false, billRuns: true, manage: true },
+        roles: ['billing', 'charge_version_workflow_editor'],
         scope: ['billing', 'charge_version_workflow_editor'],
-        permissions: { abstractionReform: false, billRuns: true, manage: true }
-      }
+        user: { id: generateUUID() }
+      },
+      isValid: true
     }
 
     returnVersion = ReturnVersionModel.fromJson({
-      id: generateUUID(),
-      startDate: new Date('2020-01-01'),
       endDate: null,
-      status: 'current',
-      reason: 'change-to-special-agreement',
+      id: generateUUID(),
       modLogs: [
         {
           id: generateUUID(),
           reasonDescription: 'Special Agreement - Change'
         }
-      ]
+      ],
+      reason: 'change-to-special-agreement',
+      startDate: new Date('2020-01-01'),
+      status: 'current'
     })
 
     agreements = []
@@ -145,9 +145,9 @@ describe('Licences - Set Up presenter', () => {
                 text: 'End'
               }
             ],
-            signedOn: '',
             description: 'Two-part tariff',
             endDate: '',
+            signedOn: '',
             startDate: '1 January 2020'
           }
         ])
@@ -326,11 +326,11 @@ describe('Licences - Set Up presenter', () => {
         expect(result.chargeInformation).toEqual([
           {
             action: [],
-            id: workflow.id,
-            startDate: '1 April 2022',
             endDate: '',
-            status: 'review',
-            reason: 'changed something'
+            id: workflow.id,
+            reason: 'changed something',
+            startDate: '1 April 2022',
+            status: 'review'
           },
           {
             action: [
@@ -340,11 +340,11 @@ describe('Licences - Set Up presenter', () => {
                 text: 'View'
               }
             ],
-            id: chargeVersion.id,
-            startDate: '1 January 2020',
             endDate: '',
-            status: 'current',
-            reason: 'Major change'
+            id: chargeVersion.id,
+            reason: 'Major change',
+            startDate: '1 January 2020',
+            status: 'current'
           }
         ])
       })
@@ -374,11 +374,11 @@ describe('Licences - Set Up presenter', () => {
                   text: 'View'
                 }
               ],
-              id: chargeVersion.id,
-              startDate: '1 January 2020',
               endDate: '',
-              status: 'current',
-              reason: 'Major change'
+              id: chargeVersion.id,
+              reason: 'Major change',
+              startDate: '1 January 2020',
+              status: 'current'
             }
           ])
         })
@@ -402,11 +402,11 @@ describe('Licences - Set Up presenter', () => {
                   text: 'View'
                 }
               ],
-              id: chargeVersion.id,
-              startDate: '1 January 2020',
               endDate: '31 March 2024',
-              status: 'current',
-              reason: 'Major change'
+              id: chargeVersion.id,
+              reason: 'Major change',
+              startDate: '1 January 2020',
+              status: 'current'
             }
           ])
         })
@@ -440,11 +440,11 @@ describe('Licences - Set Up presenter', () => {
                     text: 'Review'
                   }
                 ],
-                id: workflow.id,
-                startDate: '1 April 2022',
                 endDate: '',
-                status: 'review',
-                reason: 'changed something'
+                id: workflow.id,
+                reason: 'changed something',
+                startDate: '1 April 2022',
+                status: 'review'
               }
             ])
           })
@@ -457,11 +457,11 @@ describe('Licences - Set Up presenter', () => {
             expect(result.chargeInformation).toEqual([
               {
                 action: [],
-                id: workflow.id,
-                startDate: '1 April 2022',
                 endDate: '',
-                status: 'review',
-                reason: 'changed something'
+                id: workflow.id,
+                reason: 'changed something',
+                startDate: '1 April 2022',
+                status: 'review'
               }
             ])
           })
@@ -491,11 +491,11 @@ describe('Licences - Set Up presenter', () => {
                     text: 'Review'
                   }
                 ],
-                id: workflow.id,
-                startDate: '1 April 2022',
                 endDate: '',
-                status: 'changes_requested',
-                reason: 'changed something'
+                id: workflow.id,
+                reason: 'changed something',
+                startDate: '1 April 2022',
+                status: 'changes_requested'
               }
             ])
           })
@@ -508,11 +508,11 @@ describe('Licences - Set Up presenter', () => {
             expect(result.chargeInformation).toEqual([
               {
                 action: [],
-                id: workflow.id,
-                startDate: '1 April 2022',
                 endDate: '',
-                status: 'changes_requested',
-                reason: 'changed something'
+                id: workflow.id,
+                reason: 'changed something',
+                startDate: '1 April 2022',
+                status: 'changes_requested'
               }
             ])
           })
@@ -542,11 +542,11 @@ describe('Licences - Set Up presenter', () => {
                     text: 'Review'
                   }
                 ],
-                id: workflow.id,
-                startDate: '',
                 endDate: '',
-                status: 'to_setup',
-                reason: 'changed something'
+                id: workflow.id,
+                reason: 'changed something',
+                startDate: '',
+                status: 'to_setup'
               }
             ])
           })
@@ -563,11 +563,11 @@ describe('Licences - Set Up presenter', () => {
             expect(result.chargeInformation).toEqual([
               {
                 action: [],
-                id: workflow.id,
-                startDate: '',
                 endDate: '',
-                status: 'to_setup',
-                reason: 'changed something'
+                id: workflow.id,
+                reason: 'changed something',
+                startDate: '',
+                status: 'to_setup'
               }
             ])
           })
@@ -747,14 +747,14 @@ describe('Licences - Set Up presenter', () => {
 
       describe('when the user with view permissions wants to manage return versions', () => {
         const viewAuth = {
-          isValid: true,
           credentials: {
-            user: { id: 123 },
-            roles: ['view_charge_versions'],
             groups: [],
+            permissions: { abstractionReform: false, billRuns: true, manage: true },
+            roles: ['view_charge_versions'],
             scope: ['view_charge_versions'],
-            permissions: { abstractionReform: false, billRuns: true, manage: true }
-          }
+            user: { id: 123 }
+          },
+          isValid: true
         }
 
         it('returns no return version setup links', () => {

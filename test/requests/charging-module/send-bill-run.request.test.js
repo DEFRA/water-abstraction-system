@@ -31,17 +31,17 @@ describe('Charging Module Send Bill Run request', () => {
   describe('when the request can send a bill run', () => {
     beforeEach(async () => {
       chargingModuleRequestStub.mockResolvedValue({
-        succeeded: true,
         response: {
+          body: null,
           info: {
-            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
           },
-          statusCode: HTTP_STATUS_NO_CONTENT,
-          body: null
-        }
+          statusCode: HTTP_STATUS_NO_CONTENT
+        },
+        succeeded: true
       })
-      vi.spyOn(WaitForStatusRequest, 'default').mockResolvedValue({ succeeded: true, status: 'billed', attempts: 1 })
+      vi.spyOn(WaitForStatusRequest, 'default').mockResolvedValue({ attempts: 1, status: 'billed', succeeded: true })
     })
 
     it('returns a "true" success status', async () => {
@@ -67,8 +67,8 @@ describe('Charging Module Send Bill Run request', () => {
     describe('because the approve request fails', () => {
       beforeEach(async () => {
         chargingModuleRequestStub.mockResolvedValueOnce({
-          succeeded: false,
-          response: { body: 'Boom' }
+          response: { body: 'Boom' },
+          succeeded: false
         })
       })
 
@@ -88,8 +88,8 @@ describe('Charging Module Send Bill Run request', () => {
       beforeEach(async () => {
         chargingModuleRequestStub.mockResolvedValueOnce({ succeeded: true })
         chargingModuleRequestStub.mockResolvedValueOnce({
-          succeeded: false,
-          response: { body: 'Boom' }
+          response: { body: 'Boom' },
+          succeeded: false
         })
       })
 
@@ -110,9 +110,9 @@ describe('Charging Module Send Bill Run request', () => {
         chargingModuleRequestStub.mockResolvedValueOnce({ succeeded: true })
         chargingModuleRequestStub.mockResolvedValueOnce({ succeeded: true })
         vi.spyOn(WaitForStatusRequest, 'default').mockResolvedValue({
-          succeeded: false,
           attempts: 100,
-          response: { body: 'Boom' }
+          response: { body: 'Boom' },
+          succeeded: false
         })
       })
 

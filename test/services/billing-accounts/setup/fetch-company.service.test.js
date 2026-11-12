@@ -13,8 +13,8 @@ const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Billing Accounts - Setup - Fetch Company service', () => {
   const body = {
-    company_number: 340116,
-    company_name: 'ENVIRONMENT AGENCY'
+    company_name: 'ENVIRONMENT AGENCY',
+    company_number: 340116
   }
   const companiesHouseNumber = body.company_number
 
@@ -25,11 +25,11 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
   describe('when called with a "companiesHouseNumber" that has a reponse', () => {
     beforeEach(async () => {
       vi.spyOn(LookupCompanysHouseNumberRequest, 'default').mockResolvedValue({
-        succeeded: true,
         response: {
-          statusCode: HTTP_STATUS_OK,
-          body
-        }
+          body,
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 
@@ -46,13 +46,13 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
   describe('when called with a "companySearch" that has no responses', () => {
     beforeEach(async () => {
       vi.spyOn(LookupCompanysHouseNumberRequest, 'default').mockResolvedValue({
-        succeeded: false,
         response: {
-          statusCode: HTTP_STATUS_NOT_FOUND,
           body: {
             message: 'Resource not found for company profile 12345678'
-          }
-        }
+          },
+          statusCode: HTTP_STATUS_NOT_FOUND
+        },
+        succeeded: false
       })
     })
 

@@ -62,9 +62,9 @@ export default function createCustomerChangePresenter(billingAccount, address, c
   const formattedAddress = _formattedAddress(address, contact)
 
   return {
-    region,
-    customerReference,
     customerName,
+    customerReference,
+    region,
     ...formattedAddress
   }
 }

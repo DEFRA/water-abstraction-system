@@ -28,14 +28,14 @@ describe('Companies - Fetch History dal', () => {
 
     // A licence version not linked to the company
     licenceVersionSameLicenceDifferentCompany = await LicenceVersionHelper.add({
-      licenceId: licence.id,
-      companyId: generateUUID()
+      companyId: generateUUID(),
+      licenceId: licence.id
     })
 
     // A licence version not linked to the company or licence
     licenceVersionDifferentLicenceAndCompany = await LicenceVersionHelper.add({
-      licenceId: generateUUID(),
-      companyId: generateUUID()
+      companyId: generateUUID(),
+      licenceId: generateUUID()
     })
 
     pageNumber = '1'

@@ -28,7 +28,7 @@ describe('Return Versions - Fetch Return Version service', () => {
       seededReturnRequirementTwo = seededReturnVersion.returnRequirements[1]
       seededUser = seedData.user
 
-      modLog = await ModLogHelper.add({ returnVersionId: seededReturnVersion.id, note: 'This is a test note' })
+      modLog = await ModLogHelper.add({ note: 'This is a test note', returnVersionId: seededReturnVersion.id })
     })
 
     it('returns the matching return version and the pagination array', async () => {
@@ -39,13 +39,6 @@ describe('Return Versions - Fetch Return Version service', () => {
           createdAt: seededReturnVersion.createdAt,
           createdBy: seededUser.userId,
           id: seededReturnVersion.id,
-          multipleUpload: false,
-          notes: null,
-          quarterlyReturns: false,
-          reason: 'new-licence',
-          startDate: new Date('2022-04-01'),
-          status: 'current',
-          user: { id: seededUser.id, userId: seededUser.userId, username: seededUser.username },
           licence: {
             id: seededLicence.id,
             licenceRef: seededLicence.licenceRef
@@ -59,6 +52,10 @@ describe('Return Versions - Fetch Return Version service', () => {
               userId: 'TTESTER'
             }
           ],
+          multipleUpload: false,
+          notes: null,
+          quarterlyReturns: false,
+          reason: 'new-licence',
           returnRequirements: [
             {
               abstractionPeriodEndDay: 31,
@@ -132,7 +129,10 @@ describe('Return Versions - Fetch Return Version service', () => {
               summer: false,
               twoPartTariff: false
             }
-          ]
+          ],
+          startDate: new Date('2022-04-01'),
+          status: 'current',
+          user: { id: seededUser.id, userId: seededUser.userId, username: seededUser.username }
         },
         returnVersionsForPagination: [
           {

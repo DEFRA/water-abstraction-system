@@ -4,8 +4,8 @@
  */
 
 import ContactModel from 'water-abstraction-engine/models/contact.model.js'
-import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import { formatLongDate, formatReturnLogStatus } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 
 /**
  * Formats data for the `/search` page
@@ -89,16 +89,16 @@ function _filterItems(userScopes, resultType) {
   const items = []
 
   if (userScopes.includes('billing')) {
-    items.push({ checked: resultType === 'billingAccount', value: 'billingAccount', text: 'Billing accounts' })
-    items.push({ checked: resultType === 'bill', value: 'bill', text: 'Bills' })
+    items.push({ checked: resultType === 'billingAccount', text: 'Billing accounts', value: 'billingAccount' })
+    items.push({ checked: resultType === 'bill', text: 'Bills', value: 'bill' })
   }
 
   items.push(
-    { checked: resultType === 'licenceHolder', value: 'licenceHolder', text: 'Licence holders' },
-    { checked: resultType === 'licence', value: 'licence', text: 'Licences' },
-    { checked: resultType === 'monitoringStation', value: 'monitoringStation', text: 'Monitoring stations' },
-    { checked: resultType === 'returnLog', value: 'returnLog', text: 'Return logs' },
-    { checked: resultType === 'user', value: 'user', text: 'Users' }
+    { checked: resultType === 'licenceHolder', text: 'Licence holders', value: 'licenceHolder' },
+    { checked: resultType === 'licence', text: 'Licences', value: 'licence' },
+    { checked: resultType === 'monitoringStation', text: 'Monitoring stations', value: 'monitoringStation' },
+    { checked: resultType === 'returnLog', text: 'Return logs', value: 'returnLog' },
+    { checked: resultType === 'user', text: 'Users', value: 'user' }
   )
 
   return items

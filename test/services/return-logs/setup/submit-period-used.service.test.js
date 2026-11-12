@@ -17,31 +17,31 @@ describe('Return Logs Setup - Submit Period Used service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: 12345,
-      startDate: '2023-04-01',
       endDate: '2024-03-31',
-      periodStartDay: '01',
-      periodStartMonth: '04',
-      periodEndDay: '31',
-      periodEndMonth: '03',
-      singleVolumeQuantity: '1200',
-      units: 'cubicMetres',
-      unitSymbol: 'm³',
       lines: [
         // The session object will have the dates set as strings, so we need to convert the type here
-        { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
-        { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() },
-        { startDate: new Date('2023-06-01').toISOString(), endDate: new Date('2023-06-30').toISOString() },
-        { startDate: new Date('2023-07-01').toISOString(), endDate: new Date('2023-07-31').toISOString() },
-        { startDate: new Date('2023-08-01').toISOString(), endDate: new Date('2023-08-31').toISOString() },
-        { startDate: new Date('2023-09-01').toISOString(), endDate: new Date('2023-09-30').toISOString() },
-        { startDate: new Date('2023-10-01').toISOString(), endDate: new Date('2023-10-31').toISOString() },
-        { startDate: new Date('2023-11-01').toISOString(), endDate: new Date('2023-11-30').toISOString() },
-        { startDate: new Date('2023-12-01').toISOString(), endDate: new Date('2023-12-31').toISOString() },
-        { startDate: new Date('2024-01-01').toISOString(), endDate: new Date('2024-01-31').toISOString() },
-        { startDate: new Date('2024-02-01').toISOString(), endDate: new Date('2024-02-29').toISOString() },
-        { startDate: new Date('2024-03-01').toISOString(), endDate: new Date('2024-03-31').toISOString() }
-      ]
+        { endDate: new Date('2023-04-30').toISOString(), startDate: new Date('2023-04-01').toISOString() },
+        { endDate: new Date('2023-05-31').toISOString(), startDate: new Date('2023-05-01').toISOString() },
+        { endDate: new Date('2023-06-30').toISOString(), startDate: new Date('2023-06-01').toISOString() },
+        { endDate: new Date('2023-07-31').toISOString(), startDate: new Date('2023-07-01').toISOString() },
+        { endDate: new Date('2023-08-31').toISOString(), startDate: new Date('2023-08-01').toISOString() },
+        { endDate: new Date('2023-09-30').toISOString(), startDate: new Date('2023-09-01').toISOString() },
+        { endDate: new Date('2023-10-31').toISOString(), startDate: new Date('2023-10-01').toISOString() },
+        { endDate: new Date('2023-11-30').toISOString(), startDate: new Date('2023-11-01').toISOString() },
+        { endDate: new Date('2023-12-31').toISOString(), startDate: new Date('2023-12-01').toISOString() },
+        { endDate: new Date('2024-01-31').toISOString(), startDate: new Date('2024-01-01').toISOString() },
+        { endDate: new Date('2024-02-29').toISOString(), startDate: new Date('2024-02-01').toISOString() },
+        { endDate: new Date('2024-03-31').toISOString(), startDate: new Date('2024-03-01').toISOString() }
+      ],
+      periodEndDay: '31',
+      periodEndMonth: '03',
+      periodStartDay: '01',
+      periodStartMonth: '04',
+      returnReference: 12345,
+      singleVolumeQuantity: '1200',
+      startDate: '2023-04-01',
+      units: 'cubicMetres',
+      unitSymbol: 'm³'
     }
 
     session = SessionModelStub(sessionData)

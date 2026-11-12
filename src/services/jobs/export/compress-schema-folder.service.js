@@ -17,8 +17,8 @@ export default async function compressSchemaFolderService(schemaFolderPath) {
 
   await tarCreate(
     {
-      gzip: true,
-      file
+      file,
+      gzip: true
     },
     [schemaFolderPath]
   )

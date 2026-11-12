@@ -19,7 +19,7 @@ describe('Company Contacts - Setup - Restore Service', () => {
   beforeEach(async () => {
     company = CustomersFixtures.company()
 
-    sessionData = { company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }
+    sessionData = { abstractionAlerts: 'yes', company, email: 'eric@test.com', name: 'Eric' }
 
     session = SessionModelStub(sessionData)
 

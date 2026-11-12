@@ -40,9 +40,9 @@ describe('Return Logs Setup - Meter Details service', () => {
 
       expect(result).toMatchObject({
         backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
+        meter10TimesDisplay: null,
         meterMake: null,
         meterSerialNumber: null,
-        meter10TimesDisplay: null,
         pageTitle: 'Meter details',
         pageTitleCaption: 'Return reference 12345'
       })

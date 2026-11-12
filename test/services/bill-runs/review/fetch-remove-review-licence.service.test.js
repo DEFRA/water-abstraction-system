@@ -27,21 +27,21 @@ describe('Bill Runs - Review - Fetch Remove Review Licence service', () => {
       const result = await FetchRemoveReviewLicenceService(reviewLicence.id)
 
       expect(result).toEqual({
-        id: reviewLicence.id,
-        licenceId: reviewLicence.licenceId,
-        licenceRef: reviewLicence.licenceRef,
         billRun: {
-          id: billRun.id,
           batchType: billRun.batchType,
           billRunNumber: billRun.billRunNumber,
           createdAt: billRun.createdAt,
-          status: 'review',
-          toFinancialYearEnding: billRun.toFinancialYearEnding,
+          id: billRun.id,
           region: {
-            id: region.id,
-            displayName: region.displayName
-          }
-        }
+            displayName: region.displayName,
+            id: region.id
+          },
+          status: 'review',
+          toFinancialYearEnding: billRun.toFinancialYearEnding
+        },
+        id: reviewLicence.id,
+        licenceId: reviewLicence.licenceId,
+        licenceRef: reviewLicence.licenceRef
       })
     })
   })

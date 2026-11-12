@@ -32,24 +32,24 @@ export default function indexValidator(payload) {
       .optional()
       .valid(...permissions)
       .messages({
-        'any.required': 'Select a valid permission',
         'any.only': 'Select a valid permission',
+        'any.required': 'Select a valid permission',
         'string.empty': 'Select a valid permission'
       }),
     status: Joi.string()
       .optional()
       .valid(...VALID_STATUSES)
       .messages({
-        'any.required': 'Select a valid status',
         'any.only': 'Select a valid status',
+        'any.required': 'Select a valid status',
         'string.empty': 'Select a valid status'
       }),
     type: Joi.string()
       .optional()
       .valid(...VALID_TYPES)
       .messages({
-        'any.required': 'Select a valid type',
         'any.only': 'Select a valid type',
+        'any.required': 'Select a valid type',
         'string.empty': 'Select a valid type'
       })
   })

@@ -69,8 +69,8 @@ describe('Company Contacts - Fetch Notification dal', () => {
       beforeEach(async () => {
         notification = await NotificationHelper.add({
           ...NotificationsFixture.returnsInvitationEmail(notice),
-          recipient: email,
-          messageRef: 'password_reset_email'
+          messageRef: 'password_reset_email',
+          recipient: email
         })
       })
 

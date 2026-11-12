@@ -4,8 +4,8 @@
  */
 
 import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.presenter.js'
-import { clearFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { clearFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
 import FetchUsersDal from '../../dal/users/fetch-users.dal.js'
 import IndexUsersPresenter from '../../presenters/users/index-users.presenter.js'

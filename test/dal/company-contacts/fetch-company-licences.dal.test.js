@@ -2,9 +2,9 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
-import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import { tomorrow, yesterday } from 'water-abstraction-engine/test/general.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import {
   exLicenceHolderWithSingleLicences,
   licenceHolderWithMultipleLicences,

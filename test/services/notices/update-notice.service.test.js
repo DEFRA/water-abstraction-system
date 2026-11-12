@@ -28,8 +28,8 @@ describe('Notices - Update Notice service', () => {
       issuer: 'admin-internal@wrls.gov.uk',
       licences: ['01/123'],
       metadata: {
-        name: 'Returns: invitation',
         error: 0,
+        name: 'Returns: invitation',
         options: { excludeLicences: [] },
         recipients: 1,
         returnCycle: { dueDate: '2025-04-28', endDate: '2025-03-31', isSummer: false, startDate: '2024-04-01' }
@@ -38,6 +38,7 @@ describe('Notices - Update Notice service', () => {
       subtype: 'returnInvitation',
       type: 'notification'
     }
+
     notifications = []
 
     notIncludedNotice = await EventHelper.add({

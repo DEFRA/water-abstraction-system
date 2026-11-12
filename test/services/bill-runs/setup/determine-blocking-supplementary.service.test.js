@@ -28,10 +28,10 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
     }
 
     srocMatch = {
-      id: 'aadb1af8-16d5-46c3-9b80-00a6201b8196',
       batchType: 'supplementary',
       billRunNumber: 1045,
       createdAt: new Date('2024-04-11'),
+      id: 'aadb1af8-16d5-46c3-9b80-00a6201b8196',
       scheme: 'sroc',
       status: 'ready',
       summer: false,
@@ -39,10 +39,10 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
     }
 
     preSrocMatch = {
-      id: '1933937f-2977-4892-b158-3f568f1c7c23',
       batchType: 'supplementary',
       billRunNumber: 1044,
       createdAt: new Date('2024-04-11'),
+      id: '1933937f-2977-4892-b158-3f568f1c7c23',
       scheme: 'alcs',
       status: 'ready',
       summer: false,
@@ -50,13 +50,13 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
     }
 
     billRunQueryStub = {
+      limit: vi.fn().mockReturnThis(),
+      modifyGraph: vi.fn().mockReturnThis(),
+      orderBy: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis(),
       where: vi.fn().mockReturnThis(),
       whereIn: vi.fn().mockReturnThis(),
-      orderBy: vi.fn().mockReturnThis(),
-      withGraphFetched: vi.fn().mockReturnThis(),
-      modifyGraph: vi.fn().mockReturnThis(),
-      limit: vi.fn().mockReturnThis()
+      withGraphFetched: vi.fn().mockReturnThis()
     }
   })
 

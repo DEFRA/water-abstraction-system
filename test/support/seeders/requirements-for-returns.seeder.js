@@ -38,7 +38,7 @@ export async function seed() {
   const licence = await LicenceHelper.add()
 
   // Create a return version to which we'll link multiple return requirements
-  const returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, createdBy: user.userId })
+  const returnVersion = await ReturnVersionHelper.add({ createdBy: user.userId, licenceId: licence.id })
 
   const legacyIds = _legacyIds()
 
@@ -109,9 +109,9 @@ async function _returnRequirement(returnVersionId, legacyId, reportingFrequency,
   })
 
   const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+    alias,
     purposeId: purpose.id,
-    returnRequirementId,
-    alias
+    returnRequirementId
   })
 
   returnRequirementPurpose.purpose = purpose

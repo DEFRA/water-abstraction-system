@@ -6,8 +6,8 @@ import PrepareChargeVersionService from '../../../../src/services/bill-runs/matc
 
 describe('Prepare Charge Version Service', () => {
   const billingPeriod = {
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2023-03-31')
+    endDate: new Date('2023-03-31'),
+    startDate: new Date('2022-04-01')
   }
 
   describe('when given a charge version', () => {
@@ -28,24 +28,24 @@ describe('Prepare Charge Version Service', () => {
       await PrepareChargeVersionService(chargeVersion, billingPeriod)
 
       expect(chargeVersion.chargeReferences[0].chargeElements[0]).toEqual({
-        id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 3,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 10,
-        authorisedAnnualQuantity: 32,
-        returnLogs: [],
-        allocatedQuantity: 0,
         abstractionPeriods: [
           {
-            startDate: new Date('2022-04-01'),
-            endDate: new Date(' 2022-10-31')
+            endDate: new Date(' 2022-10-31'),
+            startDate: new Date('2022-04-01')
           },
           {
-            startDate: new Date('2023-03-01'),
-            endDate: new Date('2023-03-31')
+            endDate: new Date('2023-03-31'),
+            startDate: new Date('2023-03-01')
           }
-        ]
+        ],
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 3,
+        allocatedQuantity: 0,
+        authorisedAnnualQuantity: 32,
+        id: '8eac5976-d16c-4818-8bc8-384d958ce863',
+        returnLogs: []
       })
     })
   })
@@ -54,17 +54,8 @@ describe('Prepare Charge Version Service', () => {
 // All data not required for the tests has been excluded from the generated data
 function _testChargeVersion() {
   return {
-    id: 'aad7de5b-d684-4980-bcb7-e3b631d3036f',
-    startDate: new Date('2022-04-01'),
-    endDate: null,
-    licence: {
-      id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
-      licenceRef: '5/31/14/*S/0116A',
-      startDate: new Date('1966-02-01T00:00:00.000Z')
-    },
     chargeReferences: [
       {
-        id: '4e7f1824-3680-4df0-806f-c6d651ba4771',
         chargeCategory: {
           reference: '4.5.12',
           shortDescription:
@@ -73,17 +64,17 @@ function _testChargeVersion() {
         },
         chargeElements: [
           {
-            id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 3,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 10,
-            authorisedAnnualQuantity: 32
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 3,
+            authorisedAnnualQuantity: 32,
+            id: '8eac5976-d16c-4818-8bc8-384d958ce863'
           }
-        ]
+        ],
+        id: '4e7f1824-3680-4df0-806f-c6d651ba4771'
       },
       {
-        id: '6e7f1824-3680-4df0-806f-c6d651ba4771',
         chargeCategory: {
           reference: '4.5.12',
           shortDescription:
@@ -92,15 +83,24 @@ function _testChargeVersion() {
         },
         chargeElements: [
           {
-            id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 3,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 10,
-            authorisedAnnualQuantity: 32
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 3,
+            authorisedAnnualQuantity: 32,
+            id: '8eac5976-d16c-4818-8bc8-384d958ce863'
           }
-        ]
+        ],
+        id: '6e7f1824-3680-4df0-806f-c6d651ba4771'
       }
-    ]
+    ],
+    endDate: null,
+    id: 'aad7de5b-d684-4980-bcb7-e3b631d3036f',
+    licence: {
+      id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
+      licenceRef: '5/31/14/*S/0116A',
+      startDate: new Date('1966-02-01T00:00:00.000Z')
+    },
+    startDate: new Date('2022-04-01')
   }
 }

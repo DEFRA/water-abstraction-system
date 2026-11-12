@@ -10,13 +10,13 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      returnReference: 12345,
       lines: [
-        { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
-        { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
+        { endDate: new Date('2023-04-30').toISOString(), startDate: new Date('2023-04-01').toISOString() },
+        { endDate: new Date('2023-05-31').toISOString(), startDate: new Date('2023-05-01').toISOString() }
       ],
-      returnsFrequency: 'month',
-      reported: 'abstractionVolumes'
+      reported: 'abstractionVolumes',
+      returnReference: 12345,
+      returnsFrequency: 'month'
     }
   })
 

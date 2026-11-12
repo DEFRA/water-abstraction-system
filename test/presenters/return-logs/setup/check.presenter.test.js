@@ -47,9 +47,9 @@ describe('Return Logs Setup - Check presenter', () => {
         pageTitle: 'Check details and enter new volumes or readings',
         pageTitleCaption: 'Return reference 1234',
         purposes: 'Evaporative Cooling',
-        returnReceivedDate: '31 January 2025',
         reportingFigures: 'Volumes',
         returnPeriod: '1 April 2023 to 31 March 2024',
+        returnReceivedDate: '31 January 2025',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         startReading: undefined,
         summaryTableData: {
@@ -375,8 +375,8 @@ describe('Return Logs Setup - Check presenter', () => {
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
-              { text: 'Cubic metres', format: 'numeric' },
-              { text: 'Details', format: 'numeric' }
+              { format: 'numeric', text: 'Cubic metres' },
+              { format: 'numeric', text: 'Details' }
             ])
           })
 
@@ -445,9 +445,9 @@ describe('Return Logs Setup - Check presenter', () => {
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
-              { text: 'Megalitres', format: 'numeric' },
-              { text: 'Cubic metres', format: 'numeric' },
-              { text: 'Details', format: 'numeric' }
+              { format: 'numeric', text: 'Megalitres' },
+              { format: 'numeric', text: 'Cubic metres' },
+              { format: 'numeric', text: 'Details' }
             ])
           })
 
@@ -522,8 +522,8 @@ describe('Return Logs Setup - Check presenter', () => {
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
-              { text: 'Total cubic metres', format: 'numeric' },
-              { text: 'Details', format: 'numeric' }
+              { format: 'numeric', text: 'Total cubic metres' },
+              { format: 'numeric', text: 'Details' }
             ])
           })
 
@@ -574,9 +574,9 @@ describe('Return Logs Setup - Check presenter', () => {
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
-              { text: 'Total gallons', format: 'numeric' },
-              { text: 'Total cubic metres', format: 'numeric' },
-              { text: 'Details', format: 'numeric' }
+              { format: 'numeric', text: 'Total gallons' },
+              { format: 'numeric', text: 'Total cubic metres' },
+              { format: 'numeric', text: 'Details' }
             ])
           })
 
@@ -641,9 +641,9 @@ describe('Return Logs Setup - Check presenter', () => {
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
-              { text: 'Reading', format: 'numeric' },
-              { text: 'Cubic metres', format: 'numeric' },
-              { text: 'Details', format: 'numeric' }
+              { format: 'numeric', text: 'Reading' },
+              { format: 'numeric', text: 'Cubic metres' },
+              { format: 'numeric', text: 'Details' }
             ])
           })
 
@@ -658,8 +658,8 @@ describe('Return Logs Setup - Check presenter', () => {
                 },
                 month: 'April 2023',
                 monthlyTotal: null,
-                unitTotal: null,
-                reading: undefined
+                reading: undefined,
+                unitTotal: null
               },
               {
                 link: {
@@ -668,8 +668,8 @@ describe('Return Logs Setup - Check presenter', () => {
                 },
                 month: 'May 2023',
                 monthlyTotal: '2',
-                unitTotal: '2',
-                reading: 102
+                reading: 102,
+                unitTotal: '2'
               },
               {
                 link: {
@@ -678,8 +678,8 @@ describe('Return Logs Setup - Check presenter', () => {
                 },
                 month: 'June 2023',
                 monthlyTotal: '98',
-                unitTotal: '98',
-                reading: 200
+                reading: 200,
+                unitTotal: '98'
               }
             ])
           })
@@ -715,10 +715,10 @@ describe('Return Logs Setup - Check presenter', () => {
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
-              { text: 'Reading', format: 'numeric' },
-              { text: 'Megalitres', format: 'numeric' },
-              { text: 'Cubic metres', format: 'numeric' },
-              { text: 'Details', format: 'numeric' }
+              { format: 'numeric', text: 'Reading' },
+              { format: 'numeric', text: 'Megalitres' },
+              { format: 'numeric', text: 'Cubic metres' },
+              { format: 'numeric', text: 'Details' }
             ])
           })
 
@@ -733,8 +733,8 @@ describe('Return Logs Setup - Check presenter', () => {
                 },
                 month: 'April 2023',
                 monthlyTotal: null,
-                unitTotal: null,
-                reading: undefined
+                reading: undefined,
+                unitTotal: null
               },
               {
                 link: {
@@ -743,8 +743,8 @@ describe('Return Logs Setup - Check presenter', () => {
                 },
                 month: 'May 2023',
                 monthlyTotal: '2,000',
-                unitTotal: '2',
-                reading: 102
+                reading: 102,
+                unitTotal: '2'
               },
               {
                 link: {
@@ -753,8 +753,8 @@ describe('Return Logs Setup - Check presenter', () => {
                 },
                 month: 'June 2023',
                 monthlyTotal: '98,000',
-                unitTotal: '98',
-                reading: 200
+                reading: 200,
+                unitTotal: '98'
               }
             ])
           })
@@ -785,8 +785,8 @@ describe('Return Logs Setup - Check presenter', () => {
                 },
                 month: 'April 2023',
                 monthlyTotal: '0',
-                unitTotal: '0',
-                reading: 0
+                reading: 0,
+                unitTotal: '0'
               }
             ])
           })
@@ -828,9 +828,9 @@ describe('Return Logs Setup - Check presenter', () => {
 
             expect(result.summaryTableData.headers).toEqual([
               { text: 'Month' },
-              { text: 'End reading', format: 'numeric' },
-              { text: 'Total cubic metres', format: 'numeric' },
-              { text: 'Details', format: 'numeric' }
+              { format: 'numeric', text: 'End reading' },
+              { format: 'numeric', text: 'Total cubic metres' },
+              { format: 'numeric', text: 'Details' }
             ])
           })
 
@@ -845,8 +845,8 @@ describe('Return Logs Setup - Check presenter', () => {
                 },
                 month: 'April 2023',
                 monthlyTotal: '100',
-                unitTotal: '100',
-                reading: 200
+                reading: 200,
+                unitTotal: '100'
               }
             ])
           })

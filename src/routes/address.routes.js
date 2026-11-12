@@ -1,3 +1,9 @@
+/**
+ * Routes for the /address endpoints
+ *
+ * @module AddressRoutes
+ */
+
 import {
   submitInternational,
   submitManual,
@@ -12,58 +18,58 @@ import {
 export default [
   {
     method: 'GET',
-    path: '/address/{sessionId}/postcode',
     options: {
       handler: viewPostcode
-    }
+    },
+    path: '/address/{sessionId}/postcode'
   },
   {
     method: 'POST',
-    path: '/address/{sessionId}/postcode',
     options: {
       handler: submitPostcode
-    }
+    },
+    path: '/address/{sessionId}/postcode'
   },
   {
     method: 'GET',
-    path: '/address/{sessionId}/select',
     options: {
       handler: viewSelect
-    }
+    },
+    path: '/address/{sessionId}/select'
   },
   {
     method: 'POST',
-    path: '/address/{sessionId}/select',
     options: {
       handler: submitSelect
-    }
+    },
+    path: '/address/{sessionId}/select'
   },
   {
     method: 'GET',
-    path: '/address/{sessionId}/manual',
     options: {
       handler: viewManual
-    }
+    },
+    path: '/address/{sessionId}/manual'
   },
   {
     method: 'POST',
-    path: '/address/{sessionId}/manual',
     options: {
       handler: submitManual
-    }
+    },
+    path: '/address/{sessionId}/manual'
   },
   {
     method: 'GET',
-    path: '/address/{sessionId}/international',
     options: {
       handler: viewInternational
-    }
+    },
+    path: '/address/{sessionId}/international'
   },
   {
     method: 'POST',
-    path: '/address/{sessionId}/international',
     options: {
       handler: submitInternational
-    }
+    },
+    path: '/address/{sessionId}/international'
   }
 ]

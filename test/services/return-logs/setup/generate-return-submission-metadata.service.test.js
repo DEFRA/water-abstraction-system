@@ -23,12 +23,12 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
       sessionData.journey = 'nilReturn'
       sessionData.lines.push(
         {
-          startDate: '2025-03-01T00:00:00.000Z',
-          endDate: '2025-03-31T00:00:00.000Z'
+          endDate: '2025-03-31T00:00:00.000Z',
+          startDate: '2025-03-01T00:00:00.000Z'
         },
         {
-          startDate: '2025-04-01T00:00:00.000Z',
-          endDate: '2025-04-30T00:00:00.000Z'
+          endDate: '2025-04-30T00:00:00.000Z',
+          startDate: '2025-04-01T00:00:00.000Z'
         }
       )
     })
@@ -45,16 +45,16 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
       sessionData.journey = 'enterReturn'
       sessionData.lines.push(
         {
-          startDate: '2025-03-01T00:00:00.000Z',
           endDate: '2025-03-31T00:00:00.000Z',
+          quantity: 1000,
           reading: null,
-          quantity: 1000
+          startDate: '2025-03-01T00:00:00.000Z'
         },
         {
-          startDate: '2025-04-01T00:00:00.000Z',
           endDate: '2025-04-30T00:00:00.000Z',
+          quantity: 4000,
           reading: null,
-          quantity: 4000
+          startDate: '2025-04-01T00:00:00.000Z'
         }
       )
     })
@@ -98,10 +98,10 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
           expect(result.meters).toEqual([
             {
-              multiplier: 1,
               manufacturer: 'MAKE',
-              serialNumber: 'SERIAL',
-              meterDetailsProvided: true
+              meterDetailsProvided: true,
+              multiplier: 1,
+              serialNumber: 'SERIAL'
             }
           ])
         })
@@ -249,16 +249,16 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
           expect(result.meters).toEqual([
             {
-              units: 'm³',
+              manufacturer: 'MAKE',
               meterDetailsProvided: true,
               multiplier: 1,
-              manufacturer: 'MAKE',
-              serialNumber: 'SERIAL',
-              startReading: 250,
               readings: {
                 '2025-03-01_2025-03-31': 750,
                 '2025-04-01_2025-04-30': 3000
-              }
+              },
+              serialNumber: 'SERIAL',
+              startReading: 250,
+              units: 'm³'
             }
           ])
         })
@@ -281,14 +281,14 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
           expect(result.meters).toEqual([
             {
-              units: 'm³',
               meterDetailsProvided: false,
               multiplier: 1,
-              startReading: 250,
               readings: {
                 '2025-03-01_2025-03-31': 750,
                 '2025-04-01_2025-04-30': 3000
-              }
+              },
+              startReading: 250,
+              units: 'm³'
             }
           ])
         })

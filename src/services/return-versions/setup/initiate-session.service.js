@@ -41,18 +41,18 @@ function _data(licence, journey) {
 
   return {
     checkPageVisited: false,
+    journey,
     licence: {
-      id,
       currentVersionStartDate: _currentVersionStartDate(licenceVersions),
       endDate: ends ? ends.date : null,
-      licenceRef,
+      id,
       licenceHolder: licence.$licenceHolder(),
+      licenceRef,
       returnVersions,
       startDate,
       waterUndertaker
     },
     multipleUpload: waterUndertaker,
-    journey,
     requirements: [{}]
   }
 }

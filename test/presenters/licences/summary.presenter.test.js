@@ -5,8 +5,8 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import CompanyModel from 'water-abstraction-engine/models/company.model.js'
 import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
 import PointModel from 'water-abstraction-engine/models/point.model.js'
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Thing under test
@@ -71,36 +71,36 @@ describe('Licences - Summary Presenter', () => {
       beforeEach(() => {
         summary.licenceVersions[0].licenceVersionPurposes = [
           {
-            id: generateUUID(),
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 10,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
             annualQuantity: 180000,
             dailyQuantity: 720,
             hourlyQuantity: 144,
+            id: generateUUID(),
             instantQuantity: 40,
-            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
-            points: [
-              PointModel.fromJson({
-                id: generateUUID(),
-                description: null,
-                ngr1: 'TL 23198 88603',
-                ngr2: null,
-                ngr3: null,
-                ngr4: null,
-                source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
-              })
-            ],
             licenceVersionPurposeConditions: [
               {
                 id: generateUUID(),
                 licenceVersionPurposeConditionType: {
-                  id: generateUUID(),
-                  displayTitle: 'General conditions'
+                  displayTitle: 'General conditions',
+                  id: generateUUID()
                 }
               }
-            ]
+            ],
+            points: [
+              PointModel.fromJson({
+                description: null,
+                id: generateUUID(),
+                ngr1: 'TL 23198 88603',
+                ngr2: null,
+                ngr3: null,
+                ngr4: null,
+                source: { description: 'SURFACE WATER SOURCE OF SUPPLY', id: generateUUID() }
+              })
+            ],
+            purpose: { description: 'Spray Irrigation - Storage', id: generateUUID() }
           }
         ]
       })
@@ -130,35 +130,35 @@ describe('Licences - Summary Presenter', () => {
     describe('when there are multiple licence version purposes', () => {
       beforeEach(() => {
         const point = PointModel.fromJson({
-          id: generateUUID(),
           description: null,
+          id: generateUUID(),
           ngr1: 'TL 23198 88603',
           ngr2: null,
           ngr3: null,
           ngr4: null,
-          source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
+          source: { description: 'SURFACE WATER SOURCE OF SUPPLY', id: generateUUID() }
         })
 
         summary.licenceVersions[0].licenceVersionPurposes = [
           {
-            id: generateUUID(),
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 10,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            id: generateUUID(),
+            licenceVersionPurposeConditions: [],
             points: [point],
-            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
-            licenceVersionPurposeConditions: []
+            purpose: { description: 'Spray Irrigation - Storage', id: generateUUID() }
           },
           {
-            id: generateUUID(),
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 11,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 11,
+            id: generateUUID(),
+            licenceVersionPurposeConditions: [],
             points: [point],
-            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
-            licenceVersionPurposeConditions: []
+            purpose: { description: 'Spray Irrigation - Storage', id: generateUUID() }
           }
         ]
       })
@@ -168,16 +168,16 @@ describe('Licences - Summary Presenter', () => {
           summary.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push({
             id: generateUUID(),
             licenceVersionPurposeConditionType: {
-              id: generateUUID(),
-              displayTitle: 'General conditions'
+              displayTitle: 'General conditions',
+              id: generateUUID()
             }
           })
 
           summary.licenceVersions[0].licenceVersionPurposes[1].licenceVersionPurposeConditions.push({
             id: generateUUID(),
             licenceVersionPurposeConditionType: {
-              id: generateUUID(),
-              displayTitle: 'Derogation clause'
+              displayTitle: 'Derogation clause',
+              id: generateUUID()
             }
           })
         })
@@ -194,16 +194,16 @@ describe('Licences - Summary Presenter', () => {
           summary.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push({
             id: generateUUID(),
             licenceVersionPurposeConditionType: {
-              id: generateUUID(),
-              displayTitle: 'General conditions'
+              displayTitle: 'General conditions',
+              id: generateUUID()
             }
           })
 
           summary.licenceVersions[0].licenceVersionPurposes[1].licenceVersionPurposeConditions.push({
             id: generateUUID(),
             licenceVersionPurposeConditionType: {
-              id: generateUUID(),
-              displayTitle: 'General conditions'
+              displayTitle: 'General conditions',
+              id: generateUUID()
             }
           })
         })
@@ -220,24 +220,24 @@ describe('Licences - Summary Presenter', () => {
       beforeEach(() => {
         summary.licenceVersions[0].licenceVersionPurposes = [
           {
-            id: generateUUID(),
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 10,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            id: generateUUID(),
+            licenceVersionPurposeConditions: [],
             points: [
               PointModel.fromJson({
-                id: generateUUID(),
                 description: null,
+                id: generateUUID(),
                 ngr1: 'TL 23198 88603',
                 ngr2: null,
                 ngr3: null,
                 ngr4: null,
-                source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
+                source: { description: 'SURFACE WATER SOURCE OF SUPPLY', id: generateUUID() }
               })
             ],
-            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
-            licenceVersionPurposeConditions: []
+            purpose: { description: 'Spray Irrigation - Storage', id: generateUUID() }
           }
         ]
       })
@@ -248,15 +248,15 @@ describe('Licences - Summary Presenter', () => {
             {
               id: generateUUID(),
               licenceVersionPurposeConditionType: {
-                id: generateUUID(),
-                displayTitle: 'General conditions'
+                displayTitle: 'General conditions',
+                id: generateUUID()
               }
             },
             {
               id: generateUUID(),
               licenceVersionPurposeConditionType: {
-                id: generateUUID(),
-                displayTitle: 'Derogation clause'
+                displayTitle: 'Derogation clause',
+                id: generateUUID()
               }
             }
           )
@@ -275,15 +275,15 @@ describe('Licences - Summary Presenter', () => {
             {
               id: generateUUID(),
               licenceVersionPurposeConditionType: {
-                id: generateUUID(),
-                displayTitle: 'General conditions'
+                displayTitle: 'General conditions',
+                id: generateUUID()
               }
             },
             {
               id: generateUUID(),
               licenceVersionPurposeConditionType: {
-                id: generateUUID(),
-                displayTitle: 'General conditions'
+                displayTitle: 'General conditions',
+                id: generateUUID()
               }
             }
           )
@@ -449,7 +449,7 @@ describe('Licences - Summary Presenter', () => {
                 ngr2: null,
                 ngr3: null,
                 ngr4: null,
-                source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
+                source: { description: 'SURFACE WATER SOURCE OF SUPPLY', id: generateUUID() }
               })
             )
           })
@@ -483,7 +483,7 @@ describe('Licences - Summary Presenter', () => {
               ngr2: null,
               ngr3: null,
               ngr4: null,
-              source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
+              source: { description: 'SURFACE WATER SOURCE OF SUPPLY', id: generateUUID() }
             })
           })
 
@@ -544,7 +544,7 @@ describe('Licences - Summary Presenter', () => {
               ngr2: null,
               ngr3: null,
               ngr4: null,
-              source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
+              source: { description: 'SURFACE WATER SOURCE OF SUPPLY', id: generateUUID() }
             })
           })
 
@@ -900,7 +900,7 @@ describe('Licences - Summary Presenter', () => {
     describe('when the current version is not null', () => {
       beforeEach(() => {
         summary.$currentVersion = () => {
-          return { startDate: '2021-01-01', licenceVersionPurposes: [] }
+          return { licenceVersionPurposes: [], startDate: '2021-01-01' }
         }
       })
 
@@ -920,107 +920,19 @@ function _summary() {
     type: 'organisation'
   })
   const point = PointModel.fromJson({
-    id: generateUUID(),
     description: null,
+    id: generateUUID(),
     ngr1: 'TL 23198 88603',
     ngr2: null,
     ngr3: null,
     ngr4: null,
-    source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
+    source: { description: 'SURFACE WATER SOURCE OF SUPPLY', id: generateUUID() }
   })
 
   return LicenceModel.fromJson({
-    id: generateUUID(),
     expiredDate: null,
-    startDate: new Date('2019-04-01'),
-    region: {
-      id: generateUUID(),
-      displayName: 'Avalon'
-    },
-    licenceVersions: [
-      {
-        id: generateUUID(),
-        criticalityDescription: 'Less Critical',
-        startDate: new Date('2022-04-01'),
-        status: 'current',
-        company,
-        licenceVersionPurposes: [
-          {
-            id: generateUUID(),
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 10,
-            annualQuantity: 180000,
-            dailyQuantity: 720,
-            hourlyQuantity: 144,
-            instantQuantity: 40,
-            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
-            points: [point],
-            licenceVersionPurposeConditions: [
-              {
-                id: generateUUID(),
-                licenceVersionPurposeConditionType: {
-                  id: generateUUID(),
-                  displayTitle: 'General conditions'
-                }
-              },
-              {
-                id: generateUUID(),
-                licenceVersionPurposeConditionType: {
-                  id: generateUUID(),
-                  displayTitle: 'Derogation clause'
-                }
-              }
-            ]
-          },
-          {
-            id: generateUUID(),
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 11,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3,
-            annualQuantity: null,
-            dailyQuantity: null,
-            hourlyQuantity: null,
-            instantQuantity: null,
-            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
-            points: [point],
-            licenceVersionPurposeConditions: [
-              {
-                id: generateUUID(),
-                licenceVersionPurposeConditionType: {
-                  id: generateUUID(),
-                  displayTitle: 'General conditions'
-                }
-              }
-            ]
-          },
-          {
-            id: generateUUID(),
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 10,
-            annualQuantity: null,
-            dailyQuantity: null,
-            hourlyQuantity: null,
-            instantQuantity: null,
-            purpose: { id: generateUUID(), description: 'Spray Irrigation - Direct' },
-            points: [point],
-            licenceVersionPurposeConditions: [
-              {
-                id: generateUUID(),
-                licenceVersionPurposeConditionType: {
-                  id: generateUUID(),
-                  displayTitle: 'Non standard quantities'
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ],
+    id: generateUUID(),
+    licenceDocument: null,
     licenceMonitoringStations: [
       {
         id: generateUUID(),
@@ -1030,6 +942,94 @@ function _summary() {
         }
       }
     ],
-    licenceDocument: null
+    licenceVersions: [
+      {
+        company,
+        criticalityDescription: 'Less Critical',
+        id: generateUUID(),
+        licenceVersionPurposes: [
+          {
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 10,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            annualQuantity: 180000,
+            dailyQuantity: 720,
+            hourlyQuantity: 144,
+            id: generateUUID(),
+            instantQuantity: 40,
+            licenceVersionPurposeConditions: [
+              {
+                id: generateUUID(),
+                licenceVersionPurposeConditionType: {
+                  displayTitle: 'General conditions',
+                  id: generateUUID()
+                }
+              },
+              {
+                id: generateUUID(),
+                licenceVersionPurposeConditionType: {
+                  displayTitle: 'Derogation clause',
+                  id: generateUUID()
+                }
+              }
+            ],
+            points: [point],
+            purpose: { description: 'Spray Irrigation - Storage', id: generateUUID() }
+          },
+          {
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 11,
+            annualQuantity: null,
+            dailyQuantity: null,
+            hourlyQuantity: null,
+            id: generateUUID(),
+            instantQuantity: null,
+            licenceVersionPurposeConditions: [
+              {
+                id: generateUUID(),
+                licenceVersionPurposeConditionType: {
+                  displayTitle: 'General conditions',
+                  id: generateUUID()
+                }
+              }
+            ],
+            points: [point],
+            purpose: { description: 'Spray Irrigation - Storage', id: generateUUID() }
+          },
+          {
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 10,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            annualQuantity: null,
+            dailyQuantity: null,
+            hourlyQuantity: null,
+            id: generateUUID(),
+            instantQuantity: null,
+            licenceVersionPurposeConditions: [
+              {
+                id: generateUUID(),
+                licenceVersionPurposeConditionType: {
+                  displayTitle: 'Non standard quantities',
+                  id: generateUUID()
+                }
+              }
+            ],
+            points: [point],
+            purpose: { description: 'Spray Irrigation - Direct', id: generateUUID() }
+          }
+        ],
+        startDate: new Date('2022-04-01'),
+        status: 'current'
+      }
+    ],
+    region: {
+      displayName: 'Avalon',
+      id: generateUUID()
+    },
+    startDate: new Date('2019-04-01')
   })
 }

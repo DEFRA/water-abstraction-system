@@ -48,21 +48,21 @@ describe('Users - External - View Licences service', () => {
       expect(result).toEqual({
         activeNavBar: 'users',
         activeSecondaryNav: 'licences',
-        pagination: {
-          currentPageNumber: 1,
-          numberOfPages: 0,
-          showingMessage: 'Showing all 0 licences'
-        },
-        notification: undefined,
         backLink: {
           href: '/system/users',
           text: 'Go back to users'
         },
         backQueryString: '?back=users',
         displayLicenceEndedMessage: false,
+        licences: [],
+        notification: undefined,
         pageTitle: 'Licences',
         pageTitleCaption: user.username,
-        licences: [],
+        pagination: {
+          currentPageNumber: 1,
+          numberOfPages: 0,
+          showingMessage: 'Showing all 0 licences'
+        },
         unregisterActionLink: null
       })
     })

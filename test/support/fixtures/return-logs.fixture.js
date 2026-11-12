@@ -3,13 +3,13 @@ import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.he
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 import ReturnSubmissionLineModel from 'water-abstraction-engine/models/return-submission-line.model.js'
 import ReturnSubmissionModel from 'water-abstraction-engine/models/return-submission.model.js'
-import { relativeToToday } from 'water-abstraction-engine/test/general.js'
 import {
   daysFromPeriod,
   formatDateObjectToISO,
   monthsFromPeriod,
   weeksFromPeriod
 } from 'water-abstraction-engine/lib/dates.lib.js'
+import { relativeToToday } from 'water-abstraction-engine/test/general.js'
 import { generateRandomInteger, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 /**
@@ -104,9 +104,9 @@ function returnSubmission(returnLog, type = 'estimated', userUnit = 'm³') {
   }
 
   const returnSubmission = ReturnSubmissionModel.fromJson({
-    id: generateUUID(),
     createdAt: new Date('2023-12-16 09:42:11.000'),
     current: true,
+    id: generateUUID(),
     metadata: _returnSubmissionMetadata(returnLog, type),
     nilReturn: false,
     notes: null,
@@ -147,13 +147,13 @@ function _returnLogData(returnsFrequency) {
       code: 'I',
       description: 'Industrial, Commercial And Public Services'
     },
-    tertiary: {
-      code: '300',
-      description: 'Mineral Washing'
-    },
     secondary: {
       code: 'MIN',
       description: 'Mineral Products'
+    },
+    tertiary: {
+      code: '300',
+      description: 'Mineral Washing'
     }
   })
 
@@ -163,30 +163,30 @@ function _returnLogData(returnsFrequency) {
 function _returnSubmissionMetadata(returnLog, type) {
   if (type === 'estimated') {
     return {
-      type: 'estimated',
-      units: 'm³',
       meters: [],
       method: 'abstractionVolumes',
-      totalFlag: false
+      totalFlag: false,
+      type: 'estimated',
+      units: 'm³'
     }
   }
 
   const startReading = generateRandomInteger(50, 150)
   const metadata = {
-    type: 'measured',
-    units: 'm³',
     meters: [
       {
-        units: 'm³',
-        multiplier: 10,
         manufacturer: 'MeterMaid',
+        meterDetailsProvided: true,
+        multiplier: 10,
         serialNumber: '123456X',
         startReading,
-        meterDetailsProvided: true
+        units: 'm³'
       }
     ],
     method: 'oneMeter',
-    totalFlag: false
+    totalFlag: false,
+    type: 'measured',
+    units: 'm³'
   }
 
   const lines = _datedLines(returnLog)
@@ -199,6 +199,7 @@ function _returnSubmissionMetadata(returnLog, type) {
     reading++
 
     const key = `${formatDateObjectToISO(new Date(startDate))}_${formatDateObjectToISO(new Date(endDate))}`
+
     acc[key] = reading
 
     return acc
@@ -212,6 +213,7 @@ function _returnSubmissionLines(returnLog, returnSubmissionId, type, userUnit) {
 
   return lines.map((line) => {
     const { endDate, startDate } = line
+
     return ReturnSubmissionLineModel.fromJson({
       endDate,
       id: generateUUID(),

@@ -5,8 +5,8 @@
 
 import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
 
-import { patchRequest } from '../charging-module.request.js'
 import waitForStatusRequest from './wait-for-status.request.js'
+import { patchRequest } from '../charging-module.request.js'
 
 /**
  * Approve then send a bill run in the Charging Module API
@@ -72,8 +72,8 @@ async function _waitForSent(billRunId) {
 
   if (!result.succeeded) {
     const error = new ExpandedError('Charging Module wait request failed', {
-      billRunExternalId: billRunId,
       attempts: result.attempts,
+      billRunExternalId: billRunId,
       responseBody: result.response.body
     })
 

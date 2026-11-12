@@ -3,8 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
-import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 import http2 from 'node:http2'
+import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Things we need to stub
 import * as ChargingModuleCreateBillRunRequest from '../../../src/requests/charging-module/create-bill-run.request.js'
@@ -37,8 +37,8 @@ describe('Initiate Bill Run service', () => {
   describe('when initiating a bill run succeeds', () => {
     const responseBody = {
       billRun: {
-        id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
-        billRunNumber: 10004
+        billRunNumber: 10004,
+        id: '2bbbe459-966e-4026-b5d2-2f10867bdddd'
       }
     }
 
@@ -46,15 +46,15 @@ describe('Initiate Bill Run service', () => {
       batchType = 'supplementary'
 
       vi.spyOn(ChargingModuleCreateBillRunRequest, 'default').mockResolvedValue({
-        succeeded: true,
         response: {
+          body: responseBody,
           info: {
-            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
           },
-          statusCode: HTTP_STATUS_OK,
-          body: responseBody
-        }
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 
@@ -90,19 +90,19 @@ describe('Initiate Bill Run service', () => {
     describe('because a bill run could not be created in the Charging Module', () => {
       beforeEach(() => {
         vi.spyOn(ChargingModuleCreateBillRunRequest, 'default').mockResolvedValue({
-          succeeded: false,
           response: {
-            info: {
-              gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-              dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
-            },
-            statusCode: HTTP_STATUS_FORBIDDEN,
             body: {
-              statusCode: HTTP_STATUS_FORBIDDEN,
               error: 'Forbidden',
-              message: "Unauthorised for regime 'wrls'"
-            }
-          }
+              message: "Unauthorised for regime 'wrls'",
+              statusCode: HTTP_STATUS_FORBIDDEN
+            },
+            info: {
+              dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+              gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
+            },
+            statusCode: HTTP_STATUS_FORBIDDEN
+          },
+          succeeded: false
         })
       })
 

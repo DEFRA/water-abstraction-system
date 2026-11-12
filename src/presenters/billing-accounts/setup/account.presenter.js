@@ -15,12 +15,12 @@ export default function accountPresenter(session) {
 
   return {
     accountSelected: session.accountSelected ?? null,
-    companyId: billingAccount.company.id,
-    companyName: billingAccount.company.name,
     backLink: {
       href: _backLink(session),
       text: 'Back'
     },
+    companyId: billingAccount.company.id,
+    companyName: billingAccount.company.name,
     pageTitle: 'Who should the bills go to?',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
     searchInput: session.searchInput ?? null

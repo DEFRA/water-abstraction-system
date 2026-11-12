@@ -16,22 +16,23 @@ describe('Bills - Submit Remove Bill service', () => {
   let bill
   let billStub
   let legacyDeleteBillRequestStub
+
   beforeEach(async () => {
     bill = {
-      id: '274a3c01-42fe-4ed0-9212-c703ea5feaab',
-      billRunId: '340c0f17-6e01-4d6c-b2ba-e1ab027364bb',
       billLicences: [
         { id: '9d75e160-fe4c-4f1a-bce9-ecc6b35316cb', licenceId: '0716ad45-f5f0-4f3f-b8cb-f24956dcd10d' },
         { id: '1c61e430-ac5a-43ed-a2e0-854ceb45fce5', licenceId: 'eafe888c-ed7a-405b-8df7-616c8d17e91a' }
-      ]
+      ],
+      billRunId: '340c0f17-6e01-4d6c-b2ba-e1ab027364bb',
+      id: '274a3c01-42fe-4ed0-9212-c703ea5feaab'
     }
 
     billStub = vi.fn().mockResolvedValue(bill)
     vi.spyOn(BillModel, 'query').mockReturnValue({
       findById: vi.fn().mockReturnThis(),
+      modifyGraph: billStub,
       select: vi.fn().mockReturnThis(),
-      withGraphFetched: vi.fn().mockReturnThis(),
-      modifyGraph: billStub
+      withGraphFetched: vi.fn().mockReturnThis()
     })
 
     legacyDeleteBillRequestStub = vi.spyOn(LegacyDeleteBillRequest, 'default').mockResolvedValue()

@@ -18,12 +18,12 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
 
   beforeEach(() => {
     condition = {
+      createdAt: Date.now(),
+      displayTitle: 'DISPLAY_TITLE',
       id: 'd5d05f06-b380-4f74-a479-9cbdb81bc279',
       notes: 'NOTES',
       param1: 'PARAM_1',
-      param2: 'PARAM_2',
-      createdAt: Date.now(),
-      displayTitle: 'DISPLAY_TITLE'
+      param2: 'PARAM_2'
     }
 
     vi.spyOn(FetchFullConditionDal, 'default').mockResolvedValue([condition])
@@ -53,18 +53,18 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
         pageTitle: `Select the full condition for licence LICENCE_REF`,
         radioButtons: [
           {
-            value: condition.id,
-            text: 'DISPLAY_TITLE 1',
+            checked: false,
             hint: {
               text: 'NOTES (Additional information 1: PARAM_1) (Additional information 2: PARAM_2)'
             },
-            checked: false
+            text: 'DISPLAY_TITLE 1',
+            value: condition.id
           },
           { divider: 'or' },
           {
-            value: 'no_condition',
+            checked: false,
             text: 'The condition is not listed for this licence',
-            checked: false
+            value: 'no_condition'
           }
         ]
       })

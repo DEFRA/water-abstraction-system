@@ -88,9 +88,9 @@ describe('Notices - Setup - Submit Reminder Period service', () => {
           dueDate: selectedReturnCycle.dueDate,
           endDate: selectedReturnCycle.endDate,
           name: 'summer',
+          quarterly: false,
           startDate: selectedReturnCycle.startDate,
-          summer: 'true',
-          quarterly: false
+          summer: 'true'
         })
       })
 
@@ -156,9 +156,9 @@ describe('Notices - Setup - Submit Reminder Period service', () => {
           dueDate: selectedReturnCycle.dueDate,
           endDate: selectedReturnCycle.endDate,
           name: 'summer',
+          quarterly: false,
           startDate: selectedReturnCycle.startDate,
-          summer: 'true',
-          quarterly: false
+          summer: 'true'
         })
       })
 
@@ -203,6 +203,7 @@ describe('Notices - Setup - Submit Reminder Period service', () => {
             text: 'Select the returns period for the reminders'
           }
         },
+        pageTitle: 'Select the returns period for the reminders',
         reminderPeriods: [
           {
             checked: false,
@@ -214,8 +215,7 @@ describe('Notices - Setup - Submit Reminder Period service', () => {
             text: 'Winter 1 April 2025 to 31 March 2026',
             value: returnCycles[1].id
           }
-        ],
-        pageTitle: 'Select the returns period for the reminders'
+        ]
       })
     })
   })

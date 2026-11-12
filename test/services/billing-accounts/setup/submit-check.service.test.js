@@ -904,12 +904,12 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 function _addressJourney() {
   return {
     address: {
-      uprn: 12345678,
-      postcode: 'BS1 5AH',
       addressLine1: 'ENVIRONMENT AGENCY',
       addressLine2: 'HORIZON HOUSE',
       addressLine3: null,
-      addressLine4: 'BRISTOL'
+      addressLine4: 'BRISTOL',
+      postcode: 'BS1 5AH',
+      uprn: 12345678
     }
   }
 }

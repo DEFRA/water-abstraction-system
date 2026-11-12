@@ -47,8 +47,8 @@ function _companyAddresses(companyAddresses) {
   return companyAddresses.map((companyAddress) => {
     return {
       address: _address(companyAddress),
-      startDate: formatLongDate(companyAddress.startDate),
-      endDate: companyAddress.endDate ? formatLongDate(companyAddress.endDate) : null
+      endDate: companyAddress.endDate ? formatLongDate(companyAddress.endDate) : null,
+      startDate: formatLongDate(companyAddress.startDate)
     }
   })
 }

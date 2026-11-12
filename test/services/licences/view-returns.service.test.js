@@ -20,18 +20,18 @@ describe('Licences - View Returns service', () => {
 
   beforeEach(async () => {
     auth = {
-      isValid: true,
       credentials: {
-        user: { id: 123 },
+        groups: [],
+        permissions: { abstractionReform: false, billRuns: true, manage: true },
         roles: [
           {
             role: 'returns'
           }
         ],
-        groups: [],
         scope: ['returns'],
-        permissions: { abstractionReform: false, billRuns: true, manage: true }
-      }
+        user: { id: 123 }
+      },
+      isValid: true
     }
 
     licence = {
@@ -43,8 +43,8 @@ describe('Licences - View Returns service', () => {
     vi.spyOn(FetchLicenceDal, 'default').mockResolvedValue(licence)
 
     vi.spyOn(FetchReturnsDal, 'default').mockResolvedValue({
-      totalNumber: 1,
-      returns: _returnLogs()
+      returns: _returnLogs(),
+      totalNumber: 1
     })
   })
 
@@ -60,8 +60,8 @@ describe('Licences - View Returns service', () => {
         expect(result).toEqual({
           activeSecondaryNav: 'returns',
           backLink: {
-            text: 'Go back to search',
-            href: '/'
+            href: '/',
+            text: 'Go back to search'
           },
           noReturnsMessage: null,
           pageTitle: 'Returns',
@@ -87,15 +87,15 @@ describe('Licences - View Returns service', () => {
 
 function _returnLogs() {
   const returnLog = {
-    id: 'c4458436-4766-4271-b978-6af7a0e4fd95',
     dueDate: new Date('2020-11-28'),
-    status: 'completed',
-    startDate: new Date('2020/01/02'),
     endDate: new Date('2020/02/01'),
+    id: 'c4458436-4766-4271-b978-6af7a0e4fd95',
     purposes: [{ alias: null, description: 'Spray Irrigation - Direct' }],
     returnId: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
     returnReference: '10046821',
-    siteDescription: 'BOREHOLE AT AVALON'
+    siteDescription: 'BOREHOLE AT AVALON',
+    startDate: new Date('2020/01/02'),
+    status: 'completed'
   }
 
   return [returnLog]

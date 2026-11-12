@@ -16,16 +16,16 @@ describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
 
   beforeEach(() => {
     dueReturn = {
-      siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
       returnLogId: generateUUID(),
       returnReference: '3135',
+      siteDescription: 'Potable Water Supply - Direct',
       startDate: '2002-04-01'
     }
 
     session = {
-      id: sessionId,
       dueReturns: [dueReturn],
+      id: sessionId,
       referenceCode: 'PRTF-WJUKBX',
       selectedReturns: [dueReturn.returnLogId]
     }
@@ -59,10 +59,10 @@ describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
 
         beforeEach(() => {
           additionalDueReturn = {
-            siteDescription: 'Not a moon',
             endDate: '2003-05-04',
             returnLogId: generateUUID(),
             returnReference: '5653',
+            siteDescription: 'Not a moon',
             startDate: '2002-04-01'
           }
         })

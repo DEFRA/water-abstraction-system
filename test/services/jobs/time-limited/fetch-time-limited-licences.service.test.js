@@ -66,7 +66,7 @@ describe('Fetch Time Limited Licences service', () => {
 
     describe('including those linked to soft-deleted workflow records', () => {
       beforeEach(async () => {
-        await WorkflowHelper.add({ licenceId, deletedAt: new Date('2022-04-01') })
+        await WorkflowHelper.add({ deletedAt: new Date('2022-04-01'), licenceId })
       })
 
       it('returns the licenceId, licenceVersionId and chargeVersionId for the SROC licence with an expiring element', async () => {
@@ -136,7 +136,7 @@ describe('Fetch Time Limited Licences service', () => {
     describe('because the licence has expired', () => {
       beforeEach(async () => {
         // This creates a licence that has expired
-        const licence = await LicenceHelper.add({ regionId, expiredDate: new Date('2023-03-30') })
+        const licence = await LicenceHelper.add({ expiredDate: new Date('2023-03-30'), regionId })
 
         licenceId = licence.id
 
@@ -218,7 +218,7 @@ describe('Fetch Time Limited Licences service', () => {
     describe('because the licence has lapsed', () => {
       beforeEach(async () => {
         // This creates a licence that has lapsed
-        const licence = await LicenceHelper.add({ regionId, lapsedDate: new Date('2023-03-30') })
+        const licence = await LicenceHelper.add({ lapsedDate: new Date('2023-03-30'), regionId })
 
         licenceId = licence.id
 
@@ -267,7 +267,7 @@ describe('Fetch Time Limited Licences service', () => {
         licenceVersionId = licenceVersion.id
 
         // This creates a SROC charge version that is not the latest
-        const chargeVersion = await ChargeVersionHelper.add({ licenceId, endDate: new Date('2023-03-30') })
+        const chargeVersion = await ChargeVersionHelper.add({ endDate: new Date('2023-03-30'), licenceId })
 
         chargeVersionId = chargeVersion.id
 

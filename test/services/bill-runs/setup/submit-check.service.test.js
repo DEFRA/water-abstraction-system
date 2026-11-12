@@ -15,16 +15,16 @@ import SubmitCheckService from '../../../../src/services/bill-runs/setup/submit-
 
 describe('Bill Runs - Setup - Submit Check service', () => {
   const auth = {
-    isValid: true,
     credentials: {
-      user: { id: 123 },
-      roles: ['billing', 'charge_version_workflow_editor'],
       groups: [],
+      permissions: { abstractionReform: false, billRuns: true, manage: true },
+      roles: ['billing', 'charge_version_workflow_editor'],
       scope: ['billing', 'charge_version_workflow_editor'],
-      permissions: { abstractionReform: false, billRuns: true, manage: true }
-    }
+      user: { id: 123 }
+    },
+    isValid: true
   }
-  const region = { id: '292fe1c3-c9d4-47dd-a01b-0ac916497af5', displayName: 'Avalon' }
+  const region = { displayName: 'Avalon', id: '292fe1c3-c9d4-47dd-a01b-0ac916497af5' }
   const sessionId = '4bcb28c5-95ae-487c-8f13-ac71ec3c5ff6'
 
   let blockingResults
@@ -72,10 +72,10 @@ describe('Bill Runs - Setup - Submit Check service', () => {
         blockingResults = {
           matches: [
             {
-              id: 'c0608545-9870-4605-a407-5ff49f8a5182',
               batchType: 'annual',
               billRunNumber: 12345,
               createdAt: new Date('2024-05-01'),
+              id: 'c0608545-9870-4605-a407-5ff49f8a5182',
               region,
               scheme: 'sroc',
               status: 'sent',
@@ -95,7 +95,6 @@ describe('Bill Runs - Setup - Submit Check service', () => {
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
-          error: true,
           backLink: `/system/bill-runs/setup/${session.id}/region`,
           billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',
           billRunNumber: 12345,
@@ -103,6 +102,7 @@ describe('Bill Runs - Setup - Submit Check service', () => {
           billRunType: 'Annual',
           chargeScheme: 'Current',
           dateCreated: '1 May 2024',
+          error: true,
           financialYearEnd: 2025,
           pageTitle: 'This bill run already exists',
           regionName: 'Avalon',

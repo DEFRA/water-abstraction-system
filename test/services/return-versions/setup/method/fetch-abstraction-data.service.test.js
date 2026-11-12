@@ -21,21 +21,29 @@ describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
       expect(result).toEqual({
         id: seedData.licenceId,
         licenceRef: seedData.licenceRef,
-        waterUndertaker: false,
         licenceVersions: [
           {
-            id: seedData.licenceVersions.currentId,
             endDate: null,
-            startDate: new Date('2022-05-01'),
+            id: seedData.licenceVersions.currentId,
             licenceVersionPurposes: [
               {
-                id: seedData.licenceVersionPurposes.electricity.id,
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3,
                 abstractionPeriodStartDay: 1,
                 abstractionPeriodStartMonth: 1,
                 dailyQuantity: 455,
                 externalId: seedData.licenceVersionPurposes.electricity.externalId,
+                id: seedData.licenceVersionPurposes.electricity.id,
+                points: [
+                  {
+                    description: 'INTAKE POINT',
+                    id: seedData.points.electricity1.id
+                  },
+                  {
+                    description: 'OUT TAKE POINT',
+                    id: seedData.points.electricity2.id
+                  }
+                ],
                 primaryPurpose: { id: seedData.allPurposes.primaryPurposes.primaryElectricityId, legacyId: 'P' },
                 purpose: {
                   description: 'Heat Pump',
@@ -46,26 +54,22 @@ describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
                 secondaryPurpose: {
                   id: seedData.allPurposes.secondaryPurposes.secondaryElectricityId,
                   legacyId: 'ELC'
-                },
-                points: [
-                  {
-                    description: 'INTAKE POINT',
-                    id: seedData.points.electricity1.id
-                  },
-                  {
-                    description: 'OUT TAKE POINT',
-                    id: seedData.points.electricity2.id
-                  }
-                ]
+                }
               },
               {
-                id: seedData.licenceVersionPurposes.standard.id,
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3,
                 abstractionPeriodStartDay: 1,
                 abstractionPeriodStartMonth: 1,
                 dailyQuantity: 2675,
                 externalId: seedData.licenceVersionPurposes.standard.externalId,
+                id: seedData.licenceVersionPurposes.standard.id,
+                points: [
+                  {
+                    description: 'SOUTH BOREHOLE',
+                    id: seedData.points.standard.id
+                  }
+                ],
                 primaryPurpose: { id: seedData.allPurposes.primaryPurposes.primaryAgricultureId, legacyId: 'A' },
                 purpose: {
                   description: 'Vegetable Washing',
@@ -76,22 +80,22 @@ describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
                 secondaryPurpose: {
                   id: seedData.allPurposes.secondaryPurposes.secondaryAgricultureId,
                   legacyId: 'AGR'
-                },
-                points: [
-                  {
-                    description: 'SOUTH BOREHOLE',
-                    id: seedData.points.standard.id
-                  }
-                ]
+                }
               },
               {
-                id: seedData.licenceVersionPurposes.twoPartTariff.id,
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3,
                 abstractionPeriodStartDay: 1,
                 abstractionPeriodStartMonth: 1,
                 dailyQuantity: 300,
                 externalId: seedData.licenceVersionPurposes.twoPartTariff.externalId,
+                id: seedData.licenceVersionPurposes.twoPartTariff.id,
+                points: [
+                  {
+                    description: 'MAIN INTAKE',
+                    id: seedData.points.twoPartTariff.id
+                  }
+                ],
                 primaryPurpose: { id: seedData.allPurposes.primaryPurposes.primaryAgricultureId, legacyId: 'A' },
                 purpose: {
                   description: 'Spray Irrigation - Direct',
@@ -102,17 +106,13 @@ describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
                 secondaryPurpose: {
                   id: seedData.allPurposes.secondaryPurposes.secondaryAgricultureId,
                   legacyId: 'AGR'
-                },
-                points: [
-                  {
-                    description: 'MAIN INTAKE',
-                    id: seedData.points.twoPartTariff.id
-                  }
-                ]
+                }
               }
-            ]
+            ],
+            startDate: new Date('2022-05-01')
           }
-        ]
+        ],
+        waterUndertaker: false
       })
     })
   })

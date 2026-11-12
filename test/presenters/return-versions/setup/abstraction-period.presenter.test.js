@@ -11,20 +11,20 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
 
   beforeEach(() => {
     session = {
-      id: '61e07498-f309-4829-96a9-72084a54996d',
       checkPageVisited: false,
+      id: '61e07498-f309-4829-96a9-72084a54996d',
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
+      reason: 'major-change',
       requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change'
+      startDateOptions: 'licenceStartDate'
     }
   })
 
@@ -51,10 +51,10 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
     describe('when the user has previously submitted an abstraction period', () => {
       beforeEach(() => {
         session.requirements[0].abstractionPeriod = {
-          abstractionPeriodStartDay: '07',
-          abstractionPeriodStartMonth: '12',
           abstractionPeriodEndDay: '22',
-          abstractionPeriodEndMonth: '07'
+          abstractionPeriodEndMonth: '07',
+          abstractionPeriodStartDay: '07',
+          abstractionPeriodStartMonth: '12'
         }
       })
 
@@ -62,10 +62,10 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
         const result = AbstractionPeriodPresenter(session, requirementIndex)
 
         expect(result.abstractionPeriod).toEqual({
-          abstractionPeriodStartDay: '07',
-          abstractionPeriodStartMonth: '12',
           abstractionPeriodEndDay: '22',
-          abstractionPeriodEndMonth: '07'
+          abstractionPeriodEndMonth: '07',
+          abstractionPeriodStartDay: '07',
+          abstractionPeriodStartMonth: '12'
         })
       })
     })

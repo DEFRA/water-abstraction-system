@@ -53,9 +53,9 @@ describe('Return Logs - Create Return Logs service', () => {
         const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
         await ReturnLogHelper.add({
-          returnId: `${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`,
-          licenceRef: returnRequirement.returnVersion.licence.licenceRef,
           endDate: returnCycle.endDate,
+          licenceRef: returnRequirement.returnVersion.licence.licenceRef,
+          returnId: `${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`,
           returnReference: returnRequirement.reference,
           startDate: returnCycle.startDate
         })

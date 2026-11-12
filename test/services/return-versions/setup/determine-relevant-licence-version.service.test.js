@@ -18,39 +18,39 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
 
     session = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2018-03-27',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2014-02-27',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2014-02-27'
           },
           {
             id: '7e4fa51b-ff51-4516-be5e-0230f252bc64',
-            startDate: '2008-04-01',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2008-04-01'
           },
           {
             id: 'aab39560-5625-4cf3-8b33-d5fef4a225be',
-            startDate: '1998-01-01',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '1998-01-01'
           }
         ],
         startDate: '1967-05-01',
         waterUndertaker: true
       },
-      journey: 'returns-required',
       requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      returnVersionStartDate: new Date('2018-03-27')
+      returnVersionStartDate: new Date('2018-03-27'),
+      startDateOptions: 'licenceStartDate'
     }
   })
 

@@ -3,8 +3,8 @@
  * @module IndexBillRunsPresenter
  */
 
-import { billRunStatuses, billRunTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { formatLongDate, formatMoney, titleCase } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { billRunStatuses, billRunTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import { formatBillRunType } from '../billing.presenter.js'
 
@@ -35,8 +35,8 @@ function _billRuns(billRuns) {
     const { batchType, billRunNumber, createdAt, id, netTotal, numberOfBills, region, scheme, summer, status } = billRun
 
     return {
-      id,
       createdAt: formatLongDate(createdAt),
+      id,
       link: _link(id, status, scheme),
       number: billRunNumber,
       numberOfBills,

@@ -4,9 +4,9 @@
  */
 
 import CreateEmailRequest from 'water-abstraction-engine/requests/notify/create-email.request.js'
-import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
 import { pause } from 'water-abstraction-engine/lib/general.lib.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 
 import CheckNotificationStatusService from '../../../notifications/check-notification-status.service.js'
 import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'

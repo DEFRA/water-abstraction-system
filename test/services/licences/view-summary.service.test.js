@@ -20,12 +20,12 @@ describe('Licences - View Summary service', () => {
   beforeEach(() => {
     licence = LicenceModel.fromJson({
       id: generateUUID(),
-      lapsedDate: null,
       includeInPresrocBilling: 'no',
       includeInSrocBilling: false,
+      lapsedDate: null,
       licenceRef: generateLicenceRef(),
-      revokedDate: null,
       licenceSupplementaryYears: [],
+      revokedDate: null,
       startDate: new Date('2019-04-01')
     })
 
@@ -111,27 +111,11 @@ function _auth() {
 
 function _testSummary(licenceId) {
   return LicenceModel.fromJson({
-    id: licenceId,
     expiredDate: null,
-    startDate: new Date('2019-04-01'),
-    region: {
-      id: generateUUID(),
-      displayName: 'Avalon'
-    },
-    licenceVersions: [],
-    licenceMonitoringStations: [
-      {
-        id: generateUUID(),
-        monitoringStation: {
-          id: generateUUID(),
-          label: 'MEVAGISSEY FIRE STATION'
-        }
-      }
-    ],
+    id: licenceId,
     licenceDocument: null,
     licenceDocumentHeader: {
       id: generateUUID(),
-      licenceName: 'Between two ferns',
       licenceEntityRoles: [
         {
           id: generateUUID(),
@@ -143,8 +127,24 @@ function _testSummary(licenceId) {
             }
           }
         }
-      ]
+      ],
+      licenceName: 'Between two ferns'
     },
+    licenceMonitoringStations: [
+      {
+        id: generateUUID(),
+        monitoringStation: {
+          id: generateUUID(),
+          label: 'MEVAGISSEY FIRE STATION'
+        }
+      }
+    ],
+    licenceVersions: [],
+    region: {
+      displayName: 'Avalon',
+      id: generateUUID()
+    },
+    startDate: new Date('2019-04-01'),
     workflows: [{ id: generateUUID(), status: 'to_setup' }]
   })
 }

@@ -83,8 +83,6 @@ describe('Companies - Fetch Company details dal', () => {
       const result = await FetchCompanyDetailsDal(company.id, 'licenceHolder')
 
       expect(result).toEqual({
-        id: company.id,
-        name: 'Example Trading Ltd',
         companyAddresses: [
           {
             address: {
@@ -134,7 +132,9 @@ describe('Companies - Fetch Company details dal', () => {
             id: companyAddressEndDateInPast.id,
             startDate: companyAddressEndDateInPast.startDate
           }
-        ]
+        ],
+        id: company.id,
+        name: 'Example Trading Ltd'
       })
     })
 
@@ -143,9 +143,9 @@ describe('Companies - Fetch Company details dal', () => {
         const result = await FetchCompanyDetailsDal(company.id, 'billing')
 
         expect(result).toEqual({
+          companyAddresses: [],
           id: company.id,
-          name: 'Example Trading Ltd',
-          companyAddresses: []
+          name: 'Example Trading Ltd'
         })
       })
     })

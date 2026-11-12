@@ -54,9 +54,9 @@ function _email(session) {
 
 async function _createCompanyContact(session, auth, yar) {
   const companyContact = {
-    createdBy: auth.credentials.user.id,
     abstractionAlertLicences: _abstractionAlertLicences(session),
     abstractionAlerts: _abstractionAlerts(session),
+    createdBy: auth.credentials.user.id,
     email: _email(session),
     name: session.name
   }
@@ -68,11 +68,11 @@ async function _createCompanyContact(session, auth, yar) {
 
 async function _updateCompanyContact(session, auth, yar) {
   const companyContact = {
-    id: session.companyContact.id,
     abstractionAlertLicences: _abstractionAlertLicences(session),
     abstractionAlerts: _abstractionAlerts(session),
     contactId: session.companyContact.contact.id,
     email: _email(session),
+    id: session.companyContact.id,
     name: session.name,
     updatedBy: auth.credentials.user.id
   }

@@ -44,10 +44,8 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
           chargeVersions: [
             {
               billingAccountDetails: {
-                billingAccountId: 'f041c128-bb4d-4f67-8f97-e33d71d50842',
-                accountNumber: 'E99999999A',
                 accountName: 'Mr B Blobby Ltd',
-                contactName: null,
+                accountNumber: 'E99999999A',
                 addressLines: [
                   'C/O Noel Edmonds',
                   'Crinkley Bottom',
@@ -55,7 +53,9 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
                   'Somerset',
                   'TA20 1KL',
                   'United Kingdom'
-                ]
+                ],
+                billingAccountId: 'f041c128-bb4d-4f67-8f97-e33d71d50842',
+                contactName: null
               },
               chargePeriod: '1 April 2023 to 31 March 2024',
               chargeReferences: [
@@ -64,22 +64,22 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
                   chargeCategory: 'Charge reference 4.6.5',
                   chargeDescription:
                     'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
-                  id: '6c70461b-3f83-47b1-9538-8305e82b34eb',
                   chargeElements: [
                     {
                       billableReturns: '0 ML / 9.092 ML',
                       chargePeriods: ['1 April 2023 to 30 September 2023'],
-                      returnVolumes: ['0 ML (10030495)'],
                       description: 'Spray Irrigation - Direct',
                       elementCount: 1,
                       elementIndex: 1,
-                      status: 'review',
                       id: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1',
                       issues: ['Aggregate'],
-                      purpose: 'Spray Irrigation - Direct'
+                      purpose: 'Spray Irrigation - Direct',
+                      returnVolumes: ['0 ML (10030495)'],
+                      status: 'review'
                     }
                   ],
                   chargeReferenceLinkTitle: 'Change details',
+                  id: '6c70461b-3f83-47b1-9538-8305e82b34eb',
                   totalBillableReturns: '0 ML / 9.092 ML'
                 }
               ],
@@ -142,10 +142,8 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
           chargeVersions: [
             {
               billingAccountDetails: {
-                billingAccountId: 'f041c128-bb4d-4f67-8f97-e33d71d50842',
-                accountNumber: 'E99999999A',
                 accountName: 'Mr B Blobby Ltd',
-                contactName: null,
+                accountNumber: 'E99999999A',
                 addressLines: [
                   'C/O Noel Edmonds',
                   'Crinkley Bottom',
@@ -153,7 +151,9 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
                   'Somerset',
                   'TA20 1KL',
                   'United Kingdom'
-                ]
+                ],
+                billingAccountId: 'f041c128-bb4d-4f67-8f97-e33d71d50842',
+                contactName: null
               },
               chargePeriod: '1 April 2023 to 31 March 2024',
               chargeReferences: [
@@ -162,22 +162,22 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
                   chargeCategory: 'Charge reference 4.6.5',
                   chargeDescription:
                     'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
-                  id: '6c70461b-3f83-47b1-9538-8305e82b34eb',
                   chargeElements: [
                     {
                       billableReturns: '0 ML / 9.092 ML',
                       chargePeriods: ['1 April 2023 to 30 September 2023'],
-                      returnVolumes: ['0 ML (10030495)'],
                       description: 'Spray Irrigation - Direct',
                       elementCount: 1,
                       elementIndex: 1,
-                      status: 'review',
                       id: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1',
                       issues: ['Aggregate'],
-                      purpose: 'Spray Irrigation - Direct'
+                      purpose: 'Spray Irrigation - Direct',
+                      returnVolumes: ['0 ML (10030495)'],
+                      status: 'review'
                     }
                   ],
                   chargeReferenceLinkTitle: 'Change details',
+                  id: '6c70461b-3f83-47b1-9538-8305e82b34eb',
                   totalBillableReturns: '0 ML / 9.092 ML'
                 }
               ],

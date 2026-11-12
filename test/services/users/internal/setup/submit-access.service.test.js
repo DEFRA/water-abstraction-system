@@ -79,7 +79,7 @@ describe('Users - Internal - Setup - Submit Access Service', () => {
             const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
             expect(flashType).toEqual('notification')
-            expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Access updated' })
+            expect(bannerMessage).toEqual({ text: 'Access updated', titleText: 'Updated' })
           })
         })
       })

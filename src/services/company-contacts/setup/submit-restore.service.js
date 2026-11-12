@@ -37,10 +37,10 @@ export default async function submitRestoreService(sessionId, yar, auth) {
 
 async function _updateCompanyContact(session, auth) {
   const companyContact = {
-    id: session.matchingContact.id,
     abstractionAlerts: session.abstractionAlerts === 'yes',
     contactId: session.matchingContact.contact.id,
     email: session.email.toLowerCase(),
+    id: session.matchingContact.id,
     name: session.name,
     updatedBy: auth.credentials.user.id
   }

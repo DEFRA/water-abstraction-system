@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import ReturnSubmissionLineModel from 'water-abstraction-engine/models/return-submission-line.model.js'
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
 import CreateReturnLinesService from '../../../../src/services/return-logs/setup/create-return-lines.service.js'
@@ -21,22 +21,22 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
       session = {
         lines: [
           {
-            startDate: '2024-10-26T00:00:00.000Z',
             endDate: '2024-11-01T00:00:00.000Z',
             quantity: 16,
             quantityCubicMetres: 16,
-            reading: 1234
+            reading: 1234,
+            startDate: '2024-10-26T00:00:00.000Z'
           },
           {
-            startDate: '2024-11-02T00:00:00.000Z',
             endDate: '2024-11-08T00:00:00.000Z',
             quantity: 0,
             quantityCubicMetres: 0,
-            reading: 2345
+            reading: 2345,
+            startDate: '2024-11-02T00:00:00.000Z'
           },
           {
-            startDate: '2024-11-09T00:00:00.000Z',
-            endDate: '2024-11-15T00:00:00.000Z'
+            endDate: '2024-11-15T00:00:00.000Z',
+            startDate: '2024-11-09T00:00:00.000Z'
           }
         ],
         meter10TimesDisplay: 'no',

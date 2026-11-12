@@ -19,15 +19,15 @@ describe('Companies - Fetch Address dal', () => {
       const result = await FetchAddressDal(address.id)
 
       expect(result).toEqual({
-        id: address.id,
         address1: 'ENVIRONMENT AGENCY',
         address2: 'HORIZON HOUSE',
         address3: 'DEANERY ROAD',
         address4: 'BRISTOL',
         address5: null,
         address6: null,
-        postcode: 'BS1 5AH',
-        country: 'United Kingdom'
+        country: 'United Kingdom',
+        id: address.id,
+        postcode: 'BS1 5AH'
       })
     })
   })

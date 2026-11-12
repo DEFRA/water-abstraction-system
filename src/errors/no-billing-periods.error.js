@@ -1,3 +1,9 @@
+/**
+ * Error thrown when no billing periods can be determined for a bill run
+ *
+ * @module NoBillingPeriodsError
+ */
+
 export default class NoBillingPeriodsError extends Error {
   constructor(year = null) {
     super(

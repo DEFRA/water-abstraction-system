@@ -54,8 +54,8 @@ describe('Billing Accounts - Setup - View Select Company Service', () => {
         companies: [
           {
             checked: false,
-            id: companies[0].number,
             hint: { text: companies[0].address },
+            id: companies[0].number,
             text: companies[0].title,
             value: companies[0].number
           }

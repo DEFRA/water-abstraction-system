@@ -47,7 +47,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
     await _addReturnLog(returnLogs, { ...defaultDates, metadata: { isCurrent: false, isSummer: false } })
 
     // 6) Add a 'due' return log OUTSIDE of the returns period to confirm it is NOT included in results
-    await _addReturnLog(returnLogs, { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') })
+    await _addReturnLog(returnLogs, { endDate: new Date('2024-03-31'), startDate: new Date('2023-04-01') })
 
     // RETURNS REMINDERS - These have populated due dates so would be considered when notice type is 'reminders'.
     // We don't reproduce _all_ the return logs above as the only change to the query relevant to the notice type is
@@ -57,6 +57,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
     // DISTINCT in the results
     distinctReminderLicenceRef = generateLicenceRef()
     const dueDate = new Date('2025-04-28')
+
     await _addReturnLog(returnLogs, { ...defaultDates, dueDate, licenceRef: distinctReminderLicenceRef })
     await _addReturnLog(returnLogs, { ...defaultDates, dueDate, licenceRef: distinctReminderLicenceRef })
 

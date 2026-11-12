@@ -26,11 +26,11 @@ describe('Users - Fetch User Auth Details DAL', () => {
 
     // Select a role and assign it directly to the user
     roleForUser = RoleHelper.select(ROLE_RETURNS_INDEX)
-    await UserRoleHelper.add({ userId: user.userId, roleId: roleForUser.id })
+    await UserRoleHelper.add({ roleId: roleForUser.id, userId: user.userId })
 
     // Select a group and assign it to the user via a group
     groupForUser = GroupHelper.select(GROUP_ENV_OFFICER_INDEX)
-    await UserGroupHelper.add({ userId: user.userId, groupId: groupForUser.id })
+    await UserGroupHelper.add({ groupId: groupForUser.id, userId: user.userId })
 
     // The result will be the users has 3 roles; 1 directly via user roles and 2 via the user group
   })
@@ -74,7 +74,7 @@ describe('Users - Fetch User Auth Details DAL', () => {
       beforeEach(async () => {
         duplicateRoleForUser = RoleHelper.select(ROLE_HOF_NOTIFICATIONS_INDEX)
 
-        await UserRoleHelper.add({ userId: user.userId, roleId: duplicateRoleForUser.id })
+        await UserRoleHelper.add({ roleId: duplicateRoleForUser.id, userId: user.userId })
       })
 
       it('returns only one instance of the role', async () => {

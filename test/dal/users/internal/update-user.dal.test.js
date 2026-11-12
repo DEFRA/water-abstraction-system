@@ -80,8 +80,8 @@ describe('Users - Internal - Update User DAL', () => {
         lastLogin: null,
         licenceEntityId: null,
         resetGuid: null,
-        resetRequired: 0,
         resetGuidCreatedAt: null,
+        resetRequired: 0,
         userData: null,
         username: existingUser.username
       })
@@ -94,20 +94,20 @@ describe('Users - Internal - Update User DAL', () => {
       const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
 
       expect(event).toMatchObject({
-        referenceCode: null,
-        type: 'update-user-roles',
-        subtype: 'internal',
+        entities: [],
         issuer: 'internal-user-creator@wrls.gov.uk',
         licences: [],
-        entities: [],
         metadata: {
           user: session.email,
           userId: existingUser.userId
         },
-        status: null,
         overallStatus: null,
+        referenceCode: null,
+        status: null,
         statusCounts: null,
-        triggerNoticeId: null
+        subtype: 'internal',
+        triggerNoticeId: null,
+        type: 'update-user-roles'
       })
 
       expect(event.createdAt).toBeInstanceOf(Date)

@@ -15,9 +15,9 @@ export default {
   // These values are used as part of requesting a JSON web token from the Charging Modules's AWS Cognito service.
   // This token is then used to authenticate with the Charging Module itself.
   token: {
+    password: process.env.CHARGING_MODULE_TOKEN_PASSWORD,
     url: process.env.CHARGING_MODULE_TOKEN_URL,
-    username: process.env.CHARGING_MODULE_TOKEN_USERNAME,
-    password: process.env.CHARGING_MODULE_TOKEN_PASSWORD
+    username: process.env.CHARGING_MODULE_TOKEN_USERNAME
   },
   url: process.env.CHARGING_MODULE_URL
 }

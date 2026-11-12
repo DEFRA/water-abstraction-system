@@ -22,8 +22,8 @@ describe('Bill Runs - Unassign Licences To Bill Run service', () => {
 
     vi.spyOn(LicenceSupplementaryYearModel, 'query').mockReturnValue({
       patch: licenceSupplementaryYearPatch,
-      whereIn: licenceSupplementaryYearWhereIn,
-      where: licenceSupplementaryYearWhere
+      where: licenceSupplementaryYearWhere,
+      whereIn: licenceSupplementaryYearWhereIn
     })
   })
 

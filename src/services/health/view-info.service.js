@@ -6,8 +6,8 @@
 import ChildProcess from 'node:child_process'
 import FetchAppInfoService from 'water-abstraction-engine/services/health/fetch-app-info.service.js'
 import NotifyViewHealthRequest from 'water-abstraction-engine/requests/notify/view-health.request.js'
-import { sentenceCase } from 'water-abstraction-engine/presenters/base.presenter.js'
 import util from 'node:util'
+import { sentenceCase } from 'water-abstraction-engine/presenters/base.presenter.js'
 
 import AddressFacadeViewHealthRequest from '../../requests/address-facade/view-health.request.js'
 import ChargingModuleViewHealthRequest from '../../requests/charging-module/view-health.request.js'
@@ -42,12 +42,12 @@ export default async function viewInfoService() {
   const appData = await _addSystemInfoToLegacyAppData(legacyAppData)
 
   return {
-    pageTitle: 'Info',
     addressFacadeData,
     appData,
     chargingModuleData,
     gotenbergData,
     notifyData,
+    pageTitle: 'Info',
     redisConnectivityData,
     respData,
     virusScannerData
@@ -85,6 +85,7 @@ async function _gotenbergData() {
 
   if (result.succeeded) {
     const body = result.response.body
+
     return `${sentenceCase(body.status)} - Chromium ${sentenceCase(body.details.chromium.status)}`
   }
 

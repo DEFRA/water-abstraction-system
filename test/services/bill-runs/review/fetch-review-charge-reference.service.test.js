@@ -62,7 +62,6 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
       const result = await FetchReviewChargeReferenceService(reviewChargeReference.id)
 
       expect(result).toEqual({
-        id: reviewChargeReference.id,
         abatementAgreement: 1,
         aggregate: 1,
         amendedAggregate: 1,
@@ -70,42 +69,43 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
         amendedChargeAdjustment: 1,
         canalAndRiverTrustAgreement: false,
         chargeAdjustment: 1,
-        twoPartTariffAgreement: false,
-        winterDiscount: false,
+        chargeReference: {
+          chargeCategory: {
+            id: chargeCategory.id,
+            reference: chargeCategory.reference,
+            shortDescription: chargeCategory.shortDescription
+          },
+          id: chargeReference.id,
+          loss: 'low',
+          supportedSourceName: 'Foo source',
+          volume: 200,
+          waterCompanyCharge: true
+        },
+        id: reviewChargeReference.id,
+        reviewChargeElements: [
+          {
+            amendedAllocated: 0,
+            id: reviewChargeElement.id
+          }
+        ],
         reviewChargeVersion: {
-          id: reviewChargeVersion.id,
-          chargePeriodStartDate: new Date('2022-04-01'),
           chargePeriodEndDate: new Date('2022-06-05'),
+          chargePeriodStartDate: new Date('2022-04-01'),
+          id: reviewChargeVersion.id,
           reviewLicence: {
-            id: reviewLicence.id,
             billRun: {
               id: billRun.id,
               toFinancialYearEnding: 2023
             },
+            id: reviewLicence.id,
             licence: {
               id: licence.id,
               waterUndertaker: false
             }
           }
         },
-        reviewChargeElements: [
-          {
-            id: reviewChargeElement.id,
-            amendedAllocated: 0
-          }
-        ],
-        chargeReference: {
-          id: chargeReference.id,
-          volume: 200,
-          loss: 'low',
-          supportedSourceName: 'Foo source',
-          waterCompanyCharge: true,
-          chargeCategory: {
-            id: chargeCategory.id,
-            reference: chargeCategory.reference,
-            shortDescription: chargeCategory.shortDescription
-          }
-        }
+        twoPartTariffAgreement: false,
+        winterDiscount: false
       })
     })
   })

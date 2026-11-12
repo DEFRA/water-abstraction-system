@@ -36,9 +36,9 @@ export default function reverseSupplementaryTransactionsService(transactions, bi
   return transactions.map((transaction) => {
     return {
       ...transaction,
-      id: generateUUID(),
       billLicenceId,
       credit: true,
+      id: generateUUID(),
       status: 'candidate'
     }
   })

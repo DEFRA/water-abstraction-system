@@ -42,6 +42,7 @@ describe('Search - Fetch Search Results service', () => {
 
     // Add the billing accounts in non-alphabetical order to prove the ordering in the results
     const company = await CompanyHelper.add({ regionId: anglianRegion.id })
+
     billingAccounts.push(
       await BillingAccountHelper.add({ accountNumber: 'TESTSEARCH-Y97327242A', companyId: company.id })
     )
@@ -184,9 +185,9 @@ describe('Search - Fetch Search Results service', () => {
 
     // Add the users in non-alphabetical order to prove the ordering in the results. We also have both internal and
     // external users to prove that only external users are returned
-    users.push(await UserHelper.add({ username: 'TESTSEARCH02@wrls.gov.uk', application: 'water_vml' }))
+    users.push(await UserHelper.add({ application: 'water_vml', username: 'TESTSEARCH02@wrls.gov.uk' }))
     users.push(await UserHelper.add({ username: 'TESTSEARCH03@wrls.gov.uk' }))
-    users.push(await UserHelper.add({ username: 'TESTSEARCH01@wrls.gov.uk', application: 'water_vml' }))
+    users.push(await UserHelper.add({ application: 'water_vml', username: 'TESTSEARCH01@wrls.gov.uk' }))
   })
 
   afterAll(async () => {

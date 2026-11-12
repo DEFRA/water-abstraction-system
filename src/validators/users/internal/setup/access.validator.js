@@ -17,8 +17,8 @@ import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 export default function accessValidator(payload) {
   const schema = Joi.object({
     access: Joi.string().required().valid('enabled', 'disabled').messages({
-      'any.required': 'Select access for the user',
-      'any.only': 'Select a valid access option for the user'
+      'any.only': 'Select a valid access option for the user',
+      'any.required': 'Select access for the user'
     })
   })
 

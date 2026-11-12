@@ -1,40 +1,46 @@
+/**
+ * Routes for the /bills endpoints
+ *
+ * @module BillsRoutes
+ */
+
 import { remove, submitRemove, view } from '../controllers/bills.controller.js'
 
 export default [
   {
     method: 'GET',
-    path: '/bills/{id}',
     options: {
-      handler: view,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: view
+    },
+    path: '/bills/{id}'
   },
   {
     method: 'GET',
-    path: '/bills/{id}/remove',
     options: {
-      handler: remove,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: remove
+    },
+    path: '/bills/{id}/remove'
   },
   {
     method: 'POST',
-    path: '/bills/{id}/remove',
     options: {
-      handler: submitRemove,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitRemove
+    },
+    path: '/bills/{id}/remove'
   }
 ]

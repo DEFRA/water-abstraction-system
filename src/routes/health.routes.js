@@ -1,11 +1,15 @@
+/**
+ * Routes for the /health endpoints
+ *
+ * @module HealthRoutes
+ */
+
 import { viewInfo } from '../controllers/health.controller.js'
 
 export default [
   {
     method: 'GET',
-    path: '/health/info',
     options: {
-      handler: viewInfo,
       auth: {
         // NOTE: this means any request credentials are attempted authentication, but if the credentials are invalid,
         // the request proceeds regardless of the authentication error. We do this so we can display the change
@@ -13,7 +17,9 @@ export default [
         // authenticated to see this page. So, if you have no creds or you are running with an expired cookie we don't
         // care, you'll just not see the links.
         mode: 'try'
-      }
-    }
+      },
+      handler: viewInfo
+    },
+    path: '/health/info'
   }
 ]

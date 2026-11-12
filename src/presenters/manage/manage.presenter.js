@@ -55,7 +55,7 @@ function _viewReports(userScopes) {
     returnsCycles: _hasPermission(userScopes, ['returns'])
   }
 
-  return { show: Object.values(links).includes(true), links }
+  return { links, show: Object.values(links).includes(true) }
 }
 
 function _viewWorkflow(userScopes) {
@@ -63,5 +63,5 @@ function _viewWorkflow(userScopes) {
     checkLicences: _hasPermission(userScopes, ['charge_version_workflow_editor', 'charge_version_workflow_reviewer'])
   }
 
-  return { show: links.checkLicences, links }
+  return { links, show: links.checkLicences }
 }

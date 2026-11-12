@@ -43,26 +43,26 @@ describe('Bill Runs Review - Preview service', () => {
       describe('and the request to the Charging Module API succeeds', () => {
         beforeEach(async () => {
           calculateChargeRequestStub = vi.spyOn(CalculateChargeRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              info: {
-                gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-                dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
-              },
-              statusCode: HTTP_STATUS_OK,
               body: {
                 calculation: {
-                  chargeValue: 2000,
                   baseCharge: 12000,
-                  waterCompanyChargeValue: 0,
-                  supportedSourceValue: 0,
-                  winterOnlyFactor: null,
-                  section130Factor: null,
+                  chargeValue: 2000,
+                  compensationChargePercent: null,
                   section127Factor: 0.5,
-                  compensationChargePercent: null
+                  section130Factor: null,
+                  supportedSourceValue: 0,
+                  waterCompanyChargeValue: 0,
+                  winterOnlyFactor: null
                 }
-              }
-            }
+              },
+              info: {
+                dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+                gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
+              },
+              statusCode: HTTP_STATUS_OK
+            },
+            succeeded: true
           })
         })
 
@@ -84,8 +84,8 @@ describe('Bill Runs Review - Preview service', () => {
               compensationCharge: false,
               credit: false,
               loss: 'high',
-              periodStart: '01-APR-2023',
               periodEnd: '31-MAR-2024',
+              periodStart: '01-APR-2023',
               ruleset: 'sroc',
               section127Agreement: true,
               section130Agreement: false,
@@ -132,8 +132,8 @@ describe('Bill Runs Review - Preview service', () => {
               compensationCharge: false,
               credit: false,
               loss: 'high',
-              periodStart: '01-APR-2023',
               periodEnd: '31-MAR-2024',
+              periodStart: '01-APR-2023',
               ruleset: 'sroc',
               section127Agreement: true,
               section130Agreement: false,
@@ -161,16 +161,16 @@ describe('Bill Runs Review - Preview service', () => {
       describe('and the request to the Charging Module API fails', () => {
         beforeEach(async () => {
           vi.spyOn(CalculateChargeRequest, 'default').mockResolvedValue({
-            succeeded: false,
             response: {
-              info: { gitCommit: undefined, dockerTag: undefined },
-              statusCode: HTTP_STATUS_UNPROCESSABLE_ENTITY,
               body: {
-                statusCode: HTTP_STATUS_UNPROCESSABLE_ENTITY,
                 error: 'Unprocessable Entity',
-                message: '"section127Agreement" must be [true]'
-              }
-            }
+                message: '"section127Agreement" must be [true]',
+                statusCode: HTTP_STATUS_UNPROCESSABLE_ENTITY
+              },
+              info: { dockerTag: undefined, gitCommit: undefined },
+              statusCode: HTTP_STATUS_UNPROCESSABLE_ENTITY
+            },
+            succeeded: false
           })
         })
 

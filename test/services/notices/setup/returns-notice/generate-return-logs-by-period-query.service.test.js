@@ -2,10 +2,10 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import { db } from 'water-abstraction-engine/db/db.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 // Things we need to stub
 import * as featureFlagsConfig from '../../../../../src/config/feature-flags.config.js'
@@ -329,9 +329,9 @@ function _transformToResult(returnLog) {
     due_date: returnLog.dueDate,
     end_date: returnLog.endDate,
     licence_ref: returnLog.licenceRef,
+    quarterly: returnLog.quarterly,
     return_log_id: returnLog.id,
     return_reference: Number(returnLog.returnReference),
-    start_date: returnLog.startDate,
-    quarterly: returnLog.quarterly
+    start_date: returnLog.startDate
   }
 }

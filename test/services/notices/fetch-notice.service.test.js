@@ -22,11 +22,11 @@ describe('Notices - Fetch Notice service', () => {
       issuer: 'admin-internal@wrls.gov.uk',
       licences: ['01/123', '01/124'],
       metadata: {
-        name: 'Water abstraction alert',
         error: 1,
+        name: 'Water abstraction alert',
         options: {
-          sendingAlertType: 'warning',
-          monitoringStationId: '7195f45e-6597-4771-85dc-e223cb55bc63'
+          monitoringStationId: '7195f45e-6597-4771-85dc-e223cb55bc63',
+          sendingAlertType: 'warning'
         },
         recipients: 2
       },
@@ -80,8 +80,8 @@ describe('Notices - Fetch Notice service', () => {
         issuer_email_address: 'admin-internal@wrls.gov.uk',
         licence_ref: '01/123',
         licenceMonitoringStationId: 'b7cb48d1-7e23-49b8-9cee-686d302fdc48',
-        name: 'Clean Water Limited',
         monitoring_station_name: 'FRENCHAY',
+        name: 'Clean Water Limited',
         source: '',
         threshold_unit: 'm3/s',
         threshold_value: 100
@@ -107,33 +107,33 @@ describe('Notices - Fetch Notice service', () => {
       const result = await FetchNoticeService(event.id, filters, pageNumber)
 
       expect(result.notice).toEqual({
+        alertType: 'warning',
         createdAt: event.createdAt,
         id: event.id,
-        referenceCode: event.referenceCode,
         issuer: 'admin-internal@wrls.gov.uk',
         overallStatus: 'error',
+        referenceCode: event.referenceCode,
         status: 'completed',
-        subtype: 'waterAbstractionAlerts',
-        alertType: 'warning'
+        subtype: 'waterAbstractionAlerts'
       })
 
       expect(result.notifications).toEqual([
         {
           id: notificationLetter.id,
-          recipientName: 'Clean Water Limited',
           licences: ['01/123'],
           messageType: 'letter',
           notifyStatus: 'received',
           personalisation: notificationLetter.personalisation,
+          recipientName: 'Clean Water Limited',
           status: 'sent'
         },
         {
           id: notificationEmail.id,
-          recipientName: 'shaw.carol@atari.com',
           licences: ['01/124'],
           messageType: 'email',
           notifyStatus: 'permanent-failure',
           personalisation: notificationEmail.personalisation,
+          recipientName: 'shaw.carol@atari.com',
           status: 'error'
         }
       ])
@@ -155,11 +155,11 @@ describe('Notices - Fetch Notice service', () => {
           expect(result.notifications).toEqual([
             {
               id: notificationEmail.id,
-              recipientName: 'shaw.carol@atari.com',
               licences: ['01/124'],
               messageType: 'email',
               notifyStatus: 'permanent-failure',
               personalisation: notificationEmail.personalisation,
+              recipientName: 'shaw.carol@atari.com',
               status: 'error'
             }
           ])
@@ -172,11 +172,11 @@ describe('Notices - Fetch Notice service', () => {
 
           expect(result.notifications).not.toContainEqual({
             id: notificationLetter.id,
-            recipientName: 'Clean Water Limited',
             licences: ['01/123'],
             messageType: 'letter',
             notifyStatus: 'received',
             personalisation: notificationLetter.personalisation,
+            recipientName: 'Clean Water Limited',
             status: 'sent'
           })
         })
@@ -200,21 +200,21 @@ describe('Notices - Fetch Notice service', () => {
 
           expect(result.notifications).not.toContainEqual({
             id: notificationEmail.id,
-            recipientName: 'shaw.carol@atari.com',
             licences: ['01/124'],
             messageType: 'email',
             notifyStatus: 'permanent-failure',
             personalisation: notificationEmail.personalisation,
+            recipientName: 'shaw.carol@atari.com',
             status: 'error'
           })
 
           expect(result.notifications).not.toContainEqual({
             id: notificationLetter.id,
-            recipientName: 'Clean Water Limited',
             licences: ['01/123'],
             messageType: 'letter',
             notifyStatus: 'received',
             personalisation: notificationLetter.personalisation,
+            recipientName: 'Clean Water Limited',
             status: 'sent'
           })
         })
@@ -231,11 +231,11 @@ describe('Notices - Fetch Notice service', () => {
           expect(result.notifications).toEqual([
             {
               id: notificationLetter.id,
-              recipientName: 'Clean Water Limited',
               licences: ['01/123'],
               messageType: 'letter',
               notifyStatus: 'received',
               personalisation: notificationLetter.personalisation,
+              recipientName: 'Clean Water Limited',
               status: 'sent'
             }
           ])
@@ -248,11 +248,11 @@ describe('Notices - Fetch Notice service', () => {
 
           expect(result.notifications).not.toContainEqual({
             id: notificationEmail.id,
-            recipientName: 'shaw.carol@atari.com',
             licences: ['01/124'],
             messageType: 'email',
             notifyStatus: 'permanent-failure',
             personalisation: notificationEmail.personalisation,
+            recipientName: 'shaw.carol@atari.com',
             status: 'error'
           })
         })
@@ -271,11 +271,11 @@ describe('Notices - Fetch Notice service', () => {
         expect(result.notifications).toEqual([
           {
             id: notificationLetter.id,
-            recipientName: 'Clean Water Limited',
             licences: ['01/123'],
             messageType: 'letter',
             notifyStatus: 'received',
             personalisation: notificationLetter.personalisation,
+            recipientName: 'Clean Water Limited',
             status: 'sent'
           }
         ])
@@ -288,11 +288,11 @@ describe('Notices - Fetch Notice service', () => {
 
         expect(result.notifications).not.toContainEqual({
           id: notificationEmail.id,
-          recipientName: 'shaw.carol@atari.com',
           licences: ['01/124'],
           messageType: 'email',
           notifyStatus: 'permanent-failure',
           personalisation: notificationEmail.personalisation,
+          recipientName: 'shaw.carol@atari.com',
           status: 'error'
         })
       })
@@ -309,11 +309,11 @@ describe('Notices - Fetch Notice service', () => {
         expect(result.notifications).toEqual([
           {
             id: notificationEmail.id,
-            recipientName: 'shaw.carol@atari.com',
             licences: ['01/124'],
             messageType: 'email',
             notifyStatus: 'permanent-failure',
             personalisation: notificationEmail.personalisation,
+            recipientName: 'shaw.carol@atari.com',
             status: 'error'
           }
         ])
@@ -326,11 +326,11 @@ describe('Notices - Fetch Notice service', () => {
 
         expect(result.notifications).not.toContainEqual({
           id: notificationLetter.id,
-          recipientName: 'Clean Water Limited',
           licences: ['01/123'],
           messageType: 'letter',
           notifyStatus: 'received',
           personalisation: notificationLetter.personalisation,
+          recipientName: 'Clean Water Limited',
           status: 'sent'
         })
       })

@@ -19,8 +19,8 @@ export default function noteValidator(payload) {
 
   const schema = Joi.object({
     note: Joi.string().required().max(500).messages({
-      'any.required': errorMessage,
       'any.only': errorMessage,
+      'any.required': errorMessage,
       'string.empty': errorMessage,
       'string.max': maxErrorMessage
     })

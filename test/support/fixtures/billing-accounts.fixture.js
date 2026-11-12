@@ -9,58 +9,58 @@ import { generateAccountNumber, generateUUID } from 'water-abstraction-engine/te
  */
 function billingAccount() {
   const contact = ContactModel.fromJson({
-    id: generateUUID(),
     contactType: 'person',
     department: 'Testing department',
     firstName: 'Test',
+    id: generateUUID(),
     lastName: 'Testingson'
   })
 
   return {
     billingAccount: BillingAccountModel.fromJson({
-      id: generateUUID(),
       accountNumber: generateAccountNumber(),
-      createdAt: new Date('2023-12-14T18:42:59.659Z'),
-      lastTransactionFile: null,
-      lastTransactionFileCreatedAt: null,
       billingAccountAddresses: [
         {
-          id: generateUUID(),
           address: {
-            id: generateUUID(),
             address1: 'Tutsham Farm',
             address2: 'West Farleigh',
             address3: null,
             address4: null,
             address5: 'Maidstone',
             address6: 'Kent',
+            id: generateUUID(),
             postcode: 'ME15 0NE'
           },
           company: null,
-          contact
+          contact,
+          id: generateUUID()
         }
       ],
       company: {
         id: generateUUID(),
         name: 'Ferns Surfacing Limited'
-      }
+      },
+      createdAt: new Date('2023-12-14T18:42:59.659Z'),
+      id: generateUUID(),
+      lastTransactionFile: null,
+      lastTransactionFileCreatedAt: null
     }),
     bills: [
       {
-        id: generateUUID(),
-        createdAt: new Date('2023-12-14T18:42:59.659Z'),
-        credit: false,
-        invoiceNumber: false,
-        netAmount: 10384,
-        financialYearEnding: 2021,
         billRun: {
-          id: generateUUID(),
           batchType: 'annual',
           billRunNumber: 607,
+          id: generateUUID(),
           scheme: 'alcs',
           source: 'nald',
           summer: false
-        }
+        },
+        createdAt: new Date('2023-12-14T18:42:59.659Z'),
+        credit: false,
+        financialYearEnding: 2021,
+        id: generateUUID(),
+        invoiceNumber: false,
+        netAmount: 10384
       }
     ],
     totalNumber: 1

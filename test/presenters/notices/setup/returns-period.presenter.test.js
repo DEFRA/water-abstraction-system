@@ -18,7 +18,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
   beforeEach(() => {
     referenceCode = generateNoticeReferenceCode('RINV-')
-    session = { referenceCode, noticeType: 'invitations', id: generateUUID() }
+    session = { id: generateUUID(), noticeType: 'invitations', referenceCode }
   })
 
   afterEach(() => {
@@ -120,9 +120,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
         expect(currentReturnPeriod).toEqual({
           checked: true,
-          value: 'quarterOne',
+          hint: { text: `Due date 28 July ${currentYear}` },
           text: `Quarterly 1 April ${currentYear} to 30 June ${currentYear}`,
-          hint: { text: `Due date 28 July ${currentYear}` }
+          value: 'quarterOne'
         })
       })
     })
@@ -140,9 +140,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
         expect(currentReturnPeriod).toEqual({
           checked: false,
-          value: 'quarterFour',
+          hint: { text: `Due date 28 April ${currentYear}` },
           text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,
-          hint: { text: `Due date 28 April ${currentYear}` }
+          value: 'quarterFour'
         })
       })
 
@@ -153,9 +153,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
         expect(nextReturnPeriod).toEqual({
           checked: false,
-          value: 'allYear',
+          hint: { text: `Due date 28 April ${currentYear}` },
           text: `Winter and all year annual 1 April 2024 to 31 March ${currentYear}`,
-          hint: { text: `Due date 28 April ${currentYear}` }
+          value: 'allYear'
         })
       })
     })
@@ -174,9 +174,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
-            value: 'quarterFour',
+            hint: { text: `Due date 28 April ${currentYear}` },
             text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,
-            hint: { text: `Due date 28 April ${currentYear}` }
+            value: 'quarterFour'
           })
         })
 
@@ -187,9 +187,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
-            value: 'allYear',
+            hint: { text: `Due date 28 April ${currentYear}` },
             text: `Winter and all year annual 1 April 2024 to 31 March ${currentYear}`,
-            hint: { text: `Due date 28 April ${currentYear}` }
+            value: 'allYear'
           })
         })
       })
@@ -209,9 +209,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
-            value: 'quarterOne',
+            hint: { text: `Due date 28 July ${currentYear}` },
             text: `Quarterly 1 April ${currentYear} to 30 June ${currentYear}`,
-            hint: { text: `Due date 28 July ${currentYear}` }
+            value: 'quarterOne'
           })
         })
 
@@ -222,9 +222,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
-            value: 'quarterTwo',
+            hint: { text: `Due date 28 October ${currentYear}` },
             text: `Quarterly 1 July ${currentYear} to 30 September ${currentYear}`,
-            hint: { text: `Due date 28 October ${currentYear}` }
+            value: 'quarterTwo'
           })
         })
       })
@@ -244,9 +244,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
-            value: 'quarterTwo',
+            hint: { text: `Due date 28 October ${currentYear}` },
             text: `Quarterly 1 July ${currentYear} to 30 September ${currentYear}`,
-            hint: { text: `Due date 28 October ${currentYear}` }
+            value: 'quarterTwo'
           })
         })
 
@@ -257,9 +257,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
-            value: 'summer',
+            hint: { text: `Due date 28 November ${currentYear}` },
             text: `Summer annual 1 November ${previousYear} to 31 October ${currentYear}`,
-            hint: { text: `Due date 28 November ${currentYear}` }
+            value: 'summer'
           })
         })
       })
@@ -279,9 +279,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
-            value: 'summer',
+            hint: { text: `Due date 28 November ${currentYear}` },
             text: `Summer annual 1 November ${previousYear} to 31 October ${currentYear}`,
-            hint: { text: `Due date 28 November ${currentYear}` }
+            value: 'summer'
           })
         })
 
@@ -292,9 +292,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
-            value: 'quarterThree',
+            hint: { text: `Due date 28 January ${nextYear}` },
             text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
-            hint: { text: `Due date 28 January ${nextYear}` }
+            value: 'quarterThree'
           })
         })
       })
@@ -314,9 +314,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
-            value: 'quarterThree',
+            hint: { text: `Due date 28 January ${nextYear}` },
             text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
-            hint: { text: `Due date 28 January ${nextYear}` }
+            value: 'quarterThree'
           })
         })
 
@@ -327,9 +327,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
-            value: 'quarterFour',
+            hint: { text: `Due date 28 April ${nextYear}` },
             text: `Quarterly 1 January ${nextYear} to 31 March ${nextYear}`,
-            hint: { text: `Due date 28 April ${nextYear}` }
+            value: 'quarterFour'
           })
         })
       })
@@ -347,9 +347,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
-            value: 'quarterThree',
+            hint: { text: `Due date 28 January ${currentYear}` },
             text: `Quarterly 1 October ${previousYear} to 31 December ${previousYear}`,
-            hint: { text: `Due date 28 January ${currentYear}` }
+            value: 'quarterThree'
           })
         })
 
@@ -360,9 +360,9 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
-            value: 'quarterFour',
+            hint: { text: `Due date 28 April ${currentYear}` },
             text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,
-            hint: { text: `Due date 28 April ${currentYear}` }
+            value: 'quarterFour'
           })
         })
       })

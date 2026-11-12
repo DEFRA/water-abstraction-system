@@ -26,10 +26,10 @@ export default function agreementsExceptionsValidator(payload) {
       .min(1)
       .required()
       .messages({
-        'any.required': errorMessage,
         'any.only': errorMessage,
-        'array.includesOne': errorMessage,
+        'any.required': errorMessage,
         'array.includes': errorMessage,
+        'array.includesOne': errorMessage,
         'array.min': errorMessage,
         'array.sparse': errorMessage
       })

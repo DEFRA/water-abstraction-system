@@ -23,15 +23,15 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
     referenceCode = generateNoticeReferenceCode('RINV-')
 
     sessionData = {
-      returnsPeriod: 'allYear',
-      referenceCode,
       determinedReturnsPeriod: {
-        name: 'allYear',
         dueDate: '2024-04-28',
         endDate: '2024-03-31',
-        summer: false,
-        startDate: '2023-04-01'
-      }
+        name: 'allYear',
+        startDate: '2023-04-01',
+        summer: false
+      },
+      referenceCode,
+      returnsPeriod: 'allYear'
     }
 
     session = SessionModelStub(sessionData)
@@ -99,9 +99,9 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
             }
           },
           hint: 'Separate the licences numbers with a comma or new line.',
-          removeLicences: '789',
+          pageTitle: 'Enter the licence numbers to remove from the mailing list',
           pageTitleCaption: `Notice ${referenceCode}`,
-          pageTitle: 'Enter the licence numbers to remove from the mailing list'
+          removeLicences: '789'
         })
       })
     })

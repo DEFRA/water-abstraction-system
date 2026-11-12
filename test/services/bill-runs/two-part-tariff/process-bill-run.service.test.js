@@ -11,7 +11,7 @@ import * as MatchAndAllocateService from '../../../../src/services/bill-runs/mat
 import ProcessBillRunService from '../../../../src/services/bill-runs/two-part-tariff/process-bill-run.service.js'
 
 describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
-  const billingPeriods = [{ startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }]
+  const billingPeriods = [{ endDate: new Date('2023-03-31'), startDate: new Date('2022-04-01') }]
   const billRun = { id: '410c84a5-39d3-441a-97ca-6104e14d00a2' }
 
   let billRunPatchStub

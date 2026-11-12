@@ -3,9 +3,9 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
-import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import { yesterday } from 'water-abstraction-engine/test/general.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Thing under test
@@ -114,66 +114,66 @@ function _verifications() {
     {
       createdAt: yesterday(),
       id: generateUUID(),
-      verifiedAt: null,
-      verificationCode: 'c7SgB',
       licenceDocumentHeaders: [
         {
           id: generateUUID(),
-          licenceRef: 'FE/TC/H/US/ER/01',
           licence: {
             id: generateUUID(),
             licenceRef: 'FE/TC/H/US/ER/01',
             licenceVersions: [
               {
-                id: generateUUID(),
                 company: {
                   name: 'Current Holder multi'
-                }
+                },
+                id: generateUUID()
               }
             ]
-          }
+          },
+          licenceRef: 'FE/TC/H/US/ER/01'
         },
         {
           id: generateUUID(),
-          licenceRef: 'FE/TC/H/US/ER/03',
           licence: {
             id: generateUUID(),
             licenceRef: 'FE/TC/H/US/ER/03',
             licenceVersions: [
               {
-                id: generateUUID(),
                 company: {
                   name: 'Current Holder multi'
-                }
+                },
+                id: generateUUID()
               }
             ]
-          }
+          },
+          licenceRef: 'FE/TC/H/US/ER/03'
         }
-      ]
+      ],
+      verificationCode: 'c7SgB',
+      verifiedAt: null
     },
     {
       createdAt: yesterday(),
       id: generateUUID(),
-      verifiedAt: today(),
-      verificationCode: 'Qz4aK',
       licenceDocumentHeaders: [
         {
           id: generateUUID(),
-          licenceRef: 'FE/TC/H/US/ER/02',
           licence: {
             id: generateUUID(),
             licenceRef: 'FE/TC/H/US/ER/02',
             licenceVersions: [
               {
-                id: generateUUID(),
                 company: {
                   name: 'Current Holder single'
-                }
+                },
+                id: generateUUID()
               }
             ]
-          }
+          },
+          licenceRef: 'FE/TC/H/US/ER/02'
         }
-      ]
+      ],
+      verificationCode: 'Qz4aK',
+      verifiedAt: today()
     }
   ]
 }

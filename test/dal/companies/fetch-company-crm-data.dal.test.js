@@ -41,34 +41,34 @@ describe('Companies - Fetch Company CRM Data dal', () => {
       expect(result).toEqual({
         contacts: [
           {
+            contactName: 'albus.dumbledore@hogwarts.com',
             contactType: 'primary-user',
-            id: crmData.primaryUser.record.id,
-            contactName: 'albus.dumbledore@hogwarts.com'
+            id: crmData.primaryUser.record.id
           },
           {
+            contactName: 'Hogwarts',
             contactType: 'licence-holder',
-            id: crmData.company.record.id,
-            contactName: 'Hogwarts'
+            id: crmData.company.record.id
           },
           {
+            contactName: 'Hogwarts',
             contactType: 'returns-to',
-            id: crmData.company.record.id,
-            contactName: 'Hogwarts'
+            id: crmData.company.record.id
           },
           {
+            contactName: 'Horace Slughorn',
             contactType: 'additional-contact',
-            id: crmData.additionalContact.record.id,
-            contactName: 'Horace Slughorn'
+            id: crmData.additionalContact.record.id
           },
           {
+            contactName: 'minerva.mchonagall@hogwarts.com',
             contactType: 'basic-user',
-            id: crmData.basicUser.record.id,
-            contactName: 'minerva.mchonagall@hogwarts.com'
+            id: crmData.basicUser.record.id
           },
           {
+            contactName: 'Prof Gilderoy Lockhart',
             contactType: 'abstraction-alerts',
-            id: crmData.abstractionAlerts.record.id,
-            contactName: 'Prof Gilderoy Lockhart'
+            id: crmData.abstractionAlerts.record.id
           },
           {
             contactName: 'rubeus.hagrid@hogwarts.com',
@@ -76,14 +76,14 @@ describe('Companies - Fetch Company CRM Data dal', () => {
             id: crmData.extraBasicUser.record.id
           },
           {
+            contactName: 'severus.snape@hogwarts.com',
             contactType: 'returns-user',
-            id: crmData.returnsUser.record.id,
-            contactName: 'severus.snape@hogwarts.com'
+            id: crmData.returnsUser.record.id
           },
           {
+            contactName: crmData.billing.record.accountNumber,
             contactType: 'billing',
-            id: crmData.billing.record.id,
-            contactName: crmData.billing.record.accountNumber
+            id: crmData.billing.record.id
           }
         ],
         totalNumber: 9
@@ -106,9 +106,9 @@ describe('Companies - Fetch Company CRM Data dal', () => {
           expect(result).toEqual({
             contacts: [
               {
+                contactName: 'albus.dumbledore@hogwarts.com',
                 contactType: 'primary-user',
-                id: crmData.primaryUser.record.id,
-                contactName: 'albus.dumbledore@hogwarts.com'
+                id: crmData.primaryUser.record.id
               }
             ],
             totalNumber: 9
@@ -127,9 +127,9 @@ describe('Companies - Fetch Company CRM Data dal', () => {
           expect(result).toEqual({
             contacts: [
               {
+                contactName: 'albus.dumbledore@hogwarts.com',
                 contactType: 'primary-user',
-                id: crmData.primaryUser.record.id,
-                contactName: 'albus.dumbledore@hogwarts.com'
+                id: crmData.primaryUser.record.id
               }
             ],
             totalNumber: 9
@@ -148,9 +148,9 @@ describe('Companies - Fetch Company CRM Data dal', () => {
           expect(result).toEqual({
             contacts: [
               {
+                contactName: 'Hogwarts',
                 contactType: 'licence-holder',
-                id: crmData.company.record.id,
-                contactName: 'Hogwarts'
+                id: crmData.company.record.id
               }
             ],
             totalNumber: 9

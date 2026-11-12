@@ -41,8 +41,8 @@ export default async function viewLicencesService(id, auth, page, yar, back = 'u
 
   return {
     activeSecondaryNav: 'licences',
-    pagination,
     notification,
+    pagination,
     ...pageData
   }
 }

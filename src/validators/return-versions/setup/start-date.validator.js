@@ -30,8 +30,8 @@ import { leftPadZeroes } from 'water-abstraction-engine/presenters/base.presente
  */
 export default function startDateValidator(payload, licenceStartDate, licenceEndDate) {
   const _payload = {
-    startDateOptions: payload.startDateOptions,
-    anotherStartDate: _fullDate(payload)
+    anotherStartDate: _fullDate(payload),
+    startDateOptions: payload.startDateOptions
   }
 
   return _validateAnotherStartDate(_payload, licenceStartDate, licenceEndDate)
@@ -87,8 +87,8 @@ function _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate) {
         .messages({
           'date.base': 'Enter a real start date',
           'date.format': 'Enter a real start date',
-          'date.min': minMessage,
-          'date.less': 'Start date must be before the licence end date'
+          'date.less': 'Start date must be before the licence end date',
+          'date.min': minMessage
         }),
       otherwise: Joi.string().optional()
     })

@@ -19,14 +19,14 @@ describe('Return Versions Setup - Purpose validator', () => {
       beforeEach(() => {
         purposes = [
           {
-            id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f',
             alias: 'Spray irrigation indiscreet',
-            description: 'Spray irrigation - direct'
+            description: 'Spray irrigation - direct',
+            id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f'
           },
           {
-            id: '1d03c79b-da97-4838-a68c-ccb613d54367',
             alias: 'Trickle irrigation all over',
-            description: 'Trickle irrigation'
+            description: 'Trickle irrigation',
+            id: '1d03c79b-da97-4838-a68c-ccb613d54367'
           }
         ]
       })
@@ -43,14 +43,14 @@ describe('Return Versions Setup - Purpose validator', () => {
       beforeEach(() => {
         purposes = [
           {
-            id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f',
             alias: 'Spray irrigation indiscreet',
-            description: 'Spray irrigation - direct'
+            description: 'Spray irrigation - direct',
+            id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f'
           },
           {
-            id: '1d03c79b-da97-4838-a68c-ccb613d54367',
             alias: '',
-            description: 'Trickle irrigation'
+            description: 'Trickle irrigation',
+            id: '1d03c79b-da97-4838-a68c-ccb613d54367'
           }
         ]
       })
@@ -66,8 +66,8 @@ describe('Return Versions Setup - Purpose validator', () => {
     describe('that has purpose IDs, descriptions, and no aliases', () => {
       beforeEach(() => {
         purposes = [
-          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', alias: '', description: 'Spray irrigation - direct' },
-          { id: '1d03c79b-da97-4838-a68c-ccb613d54367', alias: '', description: 'Trickle irrigation' }
+          { alias: '', description: 'Spray irrigation - direct', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' },
+          { alias: '', description: 'Trickle irrigation', id: '1d03c79b-da97-4838-a68c-ccb613d54367' }
         ]
       })
 
@@ -82,8 +82,8 @@ describe('Return Versions Setup - Purpose validator', () => {
     describe('that has purpose IDs but no descriptions or aliases', () => {
       beforeEach(() => {
         purposes = [
-          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', alias: '' },
-          { id: '1d03c79b-da97-4838-a68c-ccb613d54367', alias: '' }
+          { alias: '', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' },
+          { alias: '', id: '1d03c79b-da97-4838-a68c-ccb613d54367' }
         ]
       })
 
@@ -99,7 +99,7 @@ describe('Return Versions Setup - Purpose validator', () => {
   describe('when invalid data is provided', () => {
     describe('because it contains an invalid purpose id', () => {
       beforeEach(() => {
-        purposes = [{ id: 'c73399a6-2194-4d50-b4c8-c4fcf225c711', alias: '', description: 'Spray irrigation - direct' }]
+        purposes = [{ alias: '', description: 'Spray irrigation - direct', id: 'c73399a6-2194-4d50-b4c8-c4fcf225c711' }]
       })
 
       it('fails validation', () => {
@@ -130,10 +130,10 @@ describe('Return Versions Setup - Purpose validator', () => {
         // Max is 100 characters. This is 101 characters
         purposes = [
           {
-            id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f',
             alias:
               'THGBk2GM85EyXB54SsfenU2yWiKjDuPTcJCrPfTsSzojNvj6ciVmI3PXJ2fisQgXWfSI4ZPIqV5GLPtR15qbcw3Hamoeit764Cojz',
-            description: 'Spray irrigation - direct'
+            description: 'Spray irrigation - direct',
+            id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f'
           }
         ]
       })

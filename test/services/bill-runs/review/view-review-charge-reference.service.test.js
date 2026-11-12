@@ -42,9 +42,6 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
-          pageTitle: 'Review charge reference',
-          bannerMessage: 'The authorised volume for this licence have been updated',
-          chargeMessage: undefined,
           additionalCharges: '',
           adjustments: [
             'Aggregate factor (0.333333333 / 0.333333333)',
@@ -52,11 +49,14 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
             'Two part tariff agreement'
           ],
           amendedAuthorisedVolume: 9.092,
+          bannerMessage: 'The authorised volume for this licence have been updated',
           canAmend: true,
           chargeCategory: '4.6.5',
           chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
+          chargeMessage: undefined,
           chargePeriod: '1 April 2023 to 31 March 2024',
           financialPeriod: '2023 to 2024',
+          pageTitle: 'Review charge reference',
           reviewChargeReferenceId: '6b3d11f2-d361-4eaa-bce2-5561283bd023',
           reviewLicenceId: 'bb779166-0576-4581-b504-edbc0227d763',
           totalBillableReturns: 0
@@ -80,9 +80,6 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
-          pageTitle: 'Review charge reference',
-          bannerMessage: undefined,
-          chargeMessage: 'Based on this information the example charge is £256.48.',
           additionalCharges: '',
           adjustments: [
             'Aggregate factor (0.333333333 / 0.333333333)',
@@ -90,11 +87,14 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
             'Two part tariff agreement'
           ],
           amendedAuthorisedVolume: 9.092,
+          bannerMessage: undefined,
           canAmend: true,
           chargeCategory: '4.6.5',
           chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
+          chargeMessage: 'Based on this information the example charge is £256.48.',
           chargePeriod: '1 April 2023 to 31 March 2024',
           financialPeriod: '2023 to 2024',
+          pageTitle: 'Review charge reference',
           reviewChargeReferenceId: '6b3d11f2-d361-4eaa-bce2-5561283bd023',
           reviewLicenceId: 'bb779166-0576-4581-b504-edbc0227d763',
           totalBillableReturns: 0
@@ -118,9 +118,6 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
-          pageTitle: 'Review charge reference',
-          bannerMessage: undefined,
-          chargeMessage: undefined,
           additionalCharges: '',
           adjustments: [
             'Aggregate factor (0.333333333 / 0.333333333)',
@@ -128,11 +125,14 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
             'Two part tariff agreement'
           ],
           amendedAuthorisedVolume: 9.092,
+          bannerMessage: undefined,
           canAmend: true,
           chargeCategory: '4.6.5',
           chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
+          chargeMessage: undefined,
           chargePeriod: '1 April 2023 to 31 March 2024',
           financialPeriod: '2023 to 2024',
+          pageTitle: 'Review charge reference',
           reviewChargeReferenceId: '6b3d11f2-d361-4eaa-bce2-5561283bd023',
           reviewLicenceId: 'bb779166-0576-4581-b504-edbc0227d763',
           totalBillableReturns: 0

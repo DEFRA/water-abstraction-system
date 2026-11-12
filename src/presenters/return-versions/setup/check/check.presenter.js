@@ -34,8 +34,8 @@ export default function checkPresenter(session) {
     note: _note(note),
     pageTitle: `Check the requirements for returns for ${licence.licenceHolder}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,
-    quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(returnVersionStartDate),
     quarterlyReturns,
+    quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(returnVersionStartDate),
     reason: returnRequirementReasons[reason],
     reasonLink: _reasonLink(sessionId, returnsRequired),
     sessionId,
@@ -47,14 +47,14 @@ function _note(note) {
   if (note?.content) {
     return {
       actions: [
-        { text: 'Change', href: 'note' },
-        { text: 'Delete', href: 'delete-note' }
+        { href: 'note', text: 'Change' },
+        { href: 'delete-note', text: 'Delete' }
       ],
       text: note.content
     }
   } else {
     return {
-      actions: [{ text: 'Add a note', href: 'note' }],
+      actions: [{ href: 'note', text: 'Add a note' }],
       text: 'No notes added'
     }
   }

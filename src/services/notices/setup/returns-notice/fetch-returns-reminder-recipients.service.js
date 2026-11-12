@@ -3,9 +3,9 @@
  * @module FetchReturnsReminderRecipientsService
  */
 
-import { NoticeJourney } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { db } from 'water-abstraction-engine/db/db.js'
 import { transformStringOfLicencesToArray } from 'water-abstraction-engine/lib/general.lib.js'
+import { NoticeJourney } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
 import GenerateReturnLogsByLicenceQueryService from './generate-return-logs-by-licence-query.service.js'

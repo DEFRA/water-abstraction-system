@@ -31,6 +31,7 @@ describe('Notices - Setup - Submit Check service', () => {
       }
     }
   }
+
   let recipients
   let referenceCode
   let session
@@ -70,24 +71,24 @@ describe('Notices - Setup - Submit Check service', () => {
     referenceCode = generateNoticeReferenceCode('RINV-')
 
     sessionData = {
-      id: sessionId,
       addressJourney: {
+        activeNavBar: 'notices',
         address: {},
         backLink: {
           href: `/system/notices/setup/${sessionId}/recipient-name`,
           text: 'Back'
         },
-        redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`,
-        activeNavBar: 'notices',
-        pageTitleCaption: `Notice ${referenceCode}`
+        pageTitleCaption: `Notice ${referenceCode}`,
+        redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
       },
       checkPageVisited: true,
       dueReturns,
-      licenceRef,
+      id: sessionId,
       journey: 'adhoc',
+      licenceRef,
       name: 'Returns: invitation',
-      notificationType: 'Returns invitation',
       noticeType: 'invitations',
+      notificationType: 'Returns invitation',
       referenceCode,
       selectedRecipients: [...recipients[0].contact_hash_id],
       subType: 'returnInvitation'

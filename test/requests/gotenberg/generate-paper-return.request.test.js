@@ -35,11 +35,11 @@ describe('Gotenberg - Generate Paper Return Request', () => {
   describe('when the request can create a file', () => {
     beforeEach(async () => {
       gotenbergRequestStub.mockResolvedValue({
-        succeeded: true,
         response: {
-          statusCode: HTTP_STATUS_NO_CONTENT,
-          body: pdfBytes
-        }
+          body: pdfBytes,
+          statusCode: HTTP_STATUS_NO_CONTENT
+        },
+        succeeded: true
       })
     })
 
@@ -53,8 +53,8 @@ describe('Gotenberg - Generate Paper Return Request', () => {
       const result = await GeneratePaperReturnRequest(pageData)
 
       expect(result.response).toEqual({
-        statusCode: HTTP_STATUS_NO_CONTENT,
-        body: pdfBytes
+        body: pdfBytes,
+        statusCode: HTTP_STATUS_NO_CONTENT
       })
     })
 
@@ -66,10 +66,13 @@ describe('Gotenberg - Generate Paper Return Request', () => {
 
         // Check the html has been added to the form data
         const appendCall = FormData.prototype.append.mock.calls[0]
+
         expect(appendCall).toBeDefined()
         const blob = appendCall[1]
+
         expect(blob).toBeInstanceOf(Blob)
         const content = await blob.text()
+
         expect(content).toContain('<!DOCTYPE html>')
 
         // Check all append calls
@@ -87,14 +90,17 @@ describe('Gotenberg - Generate Paper Return Request', () => {
 
         // Get the second call to append (index 0) - this should be the html file
         const appendCall = FormData.prototype.append.mock.calls[0]
+
         expect(appendCall).toBeDefined()
 
         // Check that the second argument (the value being appended) is a Blob
         const blob = appendCall[1]
+
         expect(blob).toBeInstanceOf(Blob)
 
         // Verify the blob content contains '<!DOCTYPE html>'
         const content = await blob.text()
+
         expect(content).toContain('<!DOCTYPE html>')
 
         // Verify the complete append call signature
@@ -108,14 +114,17 @@ describe('Gotenberg - Generate Paper Return Request', () => {
 
         // Get the second call to append (index 1) - this should be the footer file
         const appendCall = FormData.prototype.append.mock.calls[1]
+
         expect(appendCall).toBeDefined()
 
         // Check that the second argument (the value being appended) is a Blob
         const blob = appendCall[1]
+
         expect(blob).toBeInstanceOf(Blob)
 
         // Verify the blob content contains 'footer'
         const content = await blob.text()
+
         expect(content).toContain('footer')
 
         // Verify the complete append call signature

@@ -21,14 +21,14 @@ describe('Companies House - Lookup Companies House Number request', () => {
   describe('when the request succeeds', () => {
     beforeEach(async () => {
       vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
-        succeeded: true,
         response: {
-          statusCode: HTTP_STATUS_OK,
           body: {
-            company_number: 12345678,
-            company_name: 'Example Ltd'
-          }
-        }
+            company_name: 'Example Ltd',
+            company_number: 12345678
+          },
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 
@@ -50,8 +50,8 @@ describe('Companies House - Lookup Companies House Number request', () => {
       const result = await LookupCompaniesHouseNumberRequest(companiesHouseNumber)
 
       expect(result.response.body).toEqual({
-        company_number: 12345678,
-        company_name: 'Example Ltd'
+        company_name: 'Example Ltd',
+        company_number: 12345678
       })
     })
   })
@@ -60,11 +60,11 @@ describe('Companies House - Lookup Companies House Number request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
           response: {
-            statusCode: HTTP_STATUS_NOT_FOUND,
-            body: { message: 'Resource not found for company profile 12345678' }
-          }
+            body: { message: 'Resource not found for company profile 12345678' },
+            statusCode: HTTP_STATUS_NOT_FOUND
+          },
+          succeeded: false
         })
       })
 
@@ -87,8 +87,8 @@ describe('Companies House - Lookup Companies House Number request', () => {
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
         vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
-          response: new Error("Timeout awaiting 'request' for 5000ms")
+          response: new Error("Timeout awaiting 'request' for 5000ms"),
+          succeeded: false
         })
       })
 

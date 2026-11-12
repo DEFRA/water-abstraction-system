@@ -39,20 +39,20 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
 
       expect(result).toEqual([
         {
-          id: companyContact.id,
           contact: {
-            id: contact.id,
-            salutation: null,
-            firstName: 'Amara',
-            middleInitials: null,
-            lastName: 'Gupta',
-            initials: null,
             contactType: 'person',
-            suffix: null,
             department: null,
-            email: null
+            email: null,
+            firstName: 'Amara',
+            id: contact.id,
+            initials: null,
+            lastName: 'Gupta',
+            middleInitials: null,
+            salutation: null,
+            suffix: null
           },
-          deletedAt: null
+          deletedAt: null,
+          id: companyContact.id
         }
       ])
     })
@@ -60,8 +60,8 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
     describe('and there is a company contact to ignore', () => {
       beforeAll(async () => {
         companyContactToIgnore = await CompanyContactHelper.add({
-          contactId: contact.id,
-          companyId: companyContact.companyId
+          companyId: companyContact.companyId,
+          contactId: contact.id
         })
       })
 
@@ -70,20 +70,20 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
 
         expect(result).toEqual([
           {
-            id: companyContact.id,
             contact: {
-              id: contact.id,
-              salutation: null,
-              firstName: 'Amara',
-              middleInitials: null,
-              lastName: 'Gupta',
-              initials: null,
               contactType: 'person',
-              suffix: null,
               department: null,
-              email: null
+              email: null,
+              firstName: 'Amara',
+              id: contact.id,
+              initials: null,
+              lastName: 'Gupta',
+              middleInitials: null,
+              salutation: null,
+              suffix: null
             },
-            deletedAt: null
+            deletedAt: null,
+            id: companyContact.id
           }
         ])
       })

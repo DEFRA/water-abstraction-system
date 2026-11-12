@@ -26,8 +26,8 @@ describe('Licences - Returns presenter', () => {
 
     expect(result).toEqual({
       backLink: {
-        text: 'Go back to search',
-        href: '/'
+        href: '/',
+        text: 'Go back to search'
       },
       noReturnsMessage: null,
       pageTitle: 'Returns',
@@ -139,15 +139,15 @@ describe('Licences - Returns presenter', () => {
 
 function _returnLogs() {
   const returnLog = {
-    id: 'c4458436-4766-4271-b978-6af7a0e4fd95',
     dueDate: new Date('2020-11-28'),
-    status: 'completed',
-    startDate: new Date('2020/01/02'),
     endDate: new Date('2020/02/01'),
+    id: 'c4458436-4766-4271-b978-6af7a0e4fd95',
     purposes: [{ alias: 'The Big One', description: 'Spray Irrigation - Direct' }],
     returnId: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
     returnReference: '10046821',
-    siteDescription: 'BOREHOLE AT AVALON'
+    siteDescription: 'BOREHOLE AT AVALON',
+    startDate: new Date('2020/01/02'),
+    status: 'completed'
   }
 
   return [
@@ -155,9 +155,9 @@ function _returnLogs() {
     {
       ...returnLog,
       id: '2e35c9c6-5017-46ea-8fa8-8960dc1a8ae7',
-      status: 'due',
       returnId: 'v1:1:01/123:10046820:2020-01-02:2020-02-01',
-      returnReference: '10046820'
+      returnReference: '10046820',
+      status: 'due'
     }
   ]
 }

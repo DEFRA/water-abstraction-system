@@ -5,8 +5,8 @@
 
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
 
-import { licenceEndsWarning } from '../licence.presenter.js'
 import { supplementaryBillingNotification } from './base-licences.presenter.js'
+import { licenceEndsWarning } from '../licence.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/summary` page
@@ -25,8 +25,8 @@ export default function summaryHeadingPresenter(licence, summary) {
 
   return {
     backLink: {
-      text: 'Go back to search',
-      href: '/'
+      href: '/',
+      text: 'Go back to search'
     },
     currentVersion: _currentVersion(summary, startDate),
     licenceRef,

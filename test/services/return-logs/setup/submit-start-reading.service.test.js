@@ -19,7 +19,6 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: 12345,
       lines: [
         {
           endDate: '2019-04-30T00:00:00.000Z',
@@ -29,7 +28,8 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
           endDate: '2019-05-31T00:00:00.000Z',
           startDate: '2019-05-01T00:00:00.000Z'
         }
-      ]
+      ],
+      returnReference: 12345
     }
 
     session = SessionModelStub(sessionData)
@@ -88,7 +88,7 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ titleText: 'Updated', text: 'Reporting details changed' })
+          expect(notification).toEqual({ text: 'Reporting details changed', titleText: 'Updated' })
         })
       })
     })
@@ -103,9 +103,9 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
 
         expect(result).toMatchObject({
           backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },
-          startReading: null,
           pageTitle: 'Enter the start meter reading',
-          pageTitleCaption: 'Return reference 12345'
+          pageTitleCaption: 'Return reference 12345',
+          startReading: null
         })
       })
 
@@ -113,7 +113,7 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitStartReadingService(session.id, payload, yarStub)
 
-          expect(result.error.errorList).toEqual([{ text: 'Enter a start meter reading', href: '#startReading' }])
+          expect(result.error.errorList).toEqual([{ href: '#startReading', text: 'Enter a start meter reading' }])
         })
       })
     })

@@ -426,15 +426,15 @@ function _filters() {
 
 function _transformNoticeToResult(eventInstance) {
   const data = {
-    id: eventInstance.id,
-    createdAt: eventInstance.createdAt,
-    issuer: eventInstance.issuer,
-    overallStatus: eventInstance.overallStatus,
-    referenceCode: eventInstance.referenceCode,
-    subtype: eventInstance.subtype,
-    name: eventInstance.metadata.name,
     alertType: eventInstance.metadata.options?.sendingAlertType || null,
-    recipientCount: eventInstance.metadata.recipients
+    createdAt: eventInstance.createdAt,
+    id: eventInstance.id,
+    issuer: eventInstance.issuer,
+    name: eventInstance.metadata.name,
+    overallStatus: eventInstance.overallStatus,
+    recipientCount: eventInstance.metadata.recipients,
+    referenceCode: eventInstance.referenceCode,
+    subtype: eventInstance.subtype
   }
 
   return EventModel.fromJson(data)

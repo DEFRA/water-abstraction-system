@@ -57,8 +57,8 @@ function _noticeTypes(noticeType, journey, auth) {
     if (scope.includes('bulk_return_notifications')) {
       items.push({
         checked: noticeType === NoticeType.PAPER_RETURN,
-        value: NoticeType.PAPER_RETURN,
-        text: 'Paper return'
+        text: 'Paper return',
+        value: NoticeType.PAPER_RETURN
       })
     }
 
@@ -66,18 +66,18 @@ function _noticeTypes(noticeType, journey, auth) {
       items.push(
         {
           checked: noticeType === NoticeType.RENEWAL_FINALS,
-          value: NoticeType.RENEWAL_FINALS,
-          text: NoticeTypes[NoticeType.RENEWAL_FINALS].notificationType
+          text: NoticeTypes[NoticeType.RENEWAL_FINALS].notificationType,
+          value: NoticeType.RENEWAL_FINALS
         },
         {
           checked: noticeType === NoticeType.RENEWAL_INVITATIONS,
-          value: NoticeType.RENEWAL_INVITATIONS,
-          text: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType
+          text: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType,
+          value: NoticeType.RENEWAL_INVITATIONS
         },
         {
           checked: noticeType === NoticeType.RENEWAL_REMINDERS,
-          value: NoticeType.RENEWAL_REMINDERS,
-          text: NoticeTypes[NoticeType.RENEWAL_REMINDERS].notificationType
+          text: NoticeTypes[NoticeType.RENEWAL_REMINDERS].notificationType,
+          value: NoticeType.RENEWAL_REMINDERS
         }
       )
     }
@@ -87,13 +87,13 @@ function _noticeTypes(noticeType, journey, auth) {
     items.push(
       {
         checked: noticeType === NoticeType.INVITATIONS,
-        value: NoticeType.INVITATIONS,
-        text: NoticeTypes[NoticeType.INVITATIONS].notificationType
+        text: NoticeTypes[NoticeType.INVITATIONS].notificationType,
+        value: NoticeType.INVITATIONS
       },
       {
         checked: noticeType === NoticeType.REMINDERS,
-        value: NoticeType.REMINDERS,
-        text: NoticeTypes[NoticeType.REMINDERS].notificationType
+        text: NoticeTypes[NoticeType.REMINDERS].notificationType,
+        value: NoticeType.REMINDERS
       }
     )
   }

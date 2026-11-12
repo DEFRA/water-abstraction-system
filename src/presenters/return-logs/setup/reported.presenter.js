@@ -1,9 +1,9 @@
-import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
-
 /**
  * Format data for the `/return-log/setup/{sessionId}/reported` page
  * @module ReportedPresenter
  */
+
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 
 /**
  * Format data for the `/return-log/setup/{sessionId}/reported` page

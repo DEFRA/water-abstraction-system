@@ -61,10 +61,10 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
             expect(licenceSupplementaryYears).toHaveLength(1)
             expect(licenceSupplementaryYears[0]).toMatchObject({
-              licenceId: licence.id,
               billRunId: null,
-              twoPartTariff: true,
-              financialYearEnd: 2023
+              financialYearEnd: 2023,
+              licenceId: licence.id,
+              twoPartTariff: true
             })
           })
         })
@@ -128,10 +128,10 @@ describe('Submit Mark For Supplementary Billing Service', () => {
             expect(licenceSupplementaryYears).toHaveLength(1)
             expect(licenceSupplementaryYears).toEqual([
               {
-                licenceId: licence.id,
                 billRunId: null,
-                twoPartTariff: true,
-                financialYearEnd: 2023
+                financialYearEnd: 2023,
+                licenceId: licence.id,
+                twoPartTariff: true
               }
             ])
           })
@@ -196,10 +196,10 @@ describe('Submit Mark For Supplementary Billing Service', () => {
             expect(licenceSupplementaryYears).toHaveLength(1)
             expect(licenceSupplementaryYears).toEqual([
               {
-                licenceId: licence.id,
                 billRunId: null,
-                twoPartTariff: true,
-                financialYearEnd: 2023
+                financialYearEnd: 2023,
+                licenceId: licence.id,
+                twoPartTariff: true
               }
             ])
           })
@@ -271,16 +271,16 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
             expect(licenceSupplementaryYears).toEqual([
               {
-                licenceId: licence.id,
                 billRunId: null,
-                twoPartTariff: true,
-                financialYearEnd: 2024
+                financialYearEnd: 2024,
+                licenceId: licence.id,
+                twoPartTariff: true
               },
               {
-                licenceId: licence.id,
                 billRunId: null,
-                twoPartTariff: true,
-                financialYearEnd: 2023
+                financialYearEnd: 2023,
+                licenceId: licence.id,
+                twoPartTariff: true
               }
             ])
           })
@@ -311,10 +311,10 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
             expect(licenceSupplementaryYears).toEqual([
               {
-                licenceId: licence.id,
                 billRunId: null,
-                twoPartTariff: true,
-                financialYearEnd: 2023
+                financialYearEnd: 2023,
+                licenceId: licence.id,
+                twoPartTariff: true
               }
             ])
           })
@@ -378,16 +378,16 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
             expect(licenceSupplementaryYears).toEqual([
               {
-                licenceId: licence.id,
                 billRunId: null,
-                twoPartTariff: true,
-                financialYearEnd: 2024
+                financialYearEnd: 2024,
+                licenceId: licence.id,
+                twoPartTariff: true
               },
               {
-                licenceId: licence.id,
                 billRunId: null,
-                twoPartTariff: true,
-                financialYearEnd: 2023
+                financialYearEnd: 2023,
+                licenceId: licence.id,
+                twoPartTariff: true
               }
             ])
           })
@@ -418,10 +418,10 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
             expect(licenceSupplementaryYears).toEqual([
               {
-                licenceId: licence.id,
                 billRunId: null,
-                twoPartTariff: true,
-                financialYearEnd: 2023
+                financialYearEnd: 2023,
+                licenceId: licence.id,
+                twoPartTariff: true
               }
             ])
           })
@@ -485,16 +485,16 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
             expect(licenceSupplementaryYears).toEqual([
               {
-                licenceId: licence.id,
                 billRunId: null,
-                twoPartTariff: true,
-                financialYearEnd: 2024
+                financialYearEnd: 2024,
+                licenceId: licence.id,
+                twoPartTariff: true
               },
               {
-                licenceId: licence.id,
                 billRunId: null,
-                twoPartTariff: true,
-                financialYearEnd: 2023
+                financialYearEnd: 2023,
+                licenceId: licence.id,
+                twoPartTariff: true
               }
             ])
           })
@@ -525,10 +525,10 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
             expect(licenceSupplementaryYears).toEqual([
               {
-                licenceId: licence.id,
                 billRunId: null,
-                twoPartTariff: true,
-                financialYearEnd: 2023
+                financialYearEnd: 2023,
+                licenceId: licence.id,
+                twoPartTariff: true
               }
             ])
           })
@@ -600,10 +600,10 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
             expect(licenceSupplementaryYears).toHaveLength(1)
             expect(licenceSupplementaryYears[0]).toMatchObject({
-              licenceId: licence.id,
               billRunId: null,
-              twoPartTariff: true,
-              financialYearEnd: 2023
+              financialYearEnd: 2023,
+              licenceId: licence.id,
+              twoPartTariff: true
             })
           })
         })
@@ -666,10 +666,10 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
             expect(licenceSupplementaryYears).toHaveLength(1)
             expect(licenceSupplementaryYears[0]).toMatchObject({
-              licenceId: licence.id,
               billRunId: null,
-              twoPartTariff: true,
-              financialYearEnd: 2023
+              financialYearEnd: 2023,
+              licenceId: licence.id,
+              twoPartTariff: true
             })
           })
         })
@@ -732,10 +732,10 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
             expect(licenceSupplementaryYears).toHaveLength(1)
             expect(licenceSupplementaryYears[0]).toMatchObject({
-              licenceId: licence.id,
               billRunId: null,
-              twoPartTariff: true,
-              financialYearEnd: 2023
+              financialYearEnd: 2023,
+              licenceId: licence.id,
+              twoPartTariff: true
             })
           })
         })
@@ -809,13 +809,13 @@ describe('Submit Mark For Supplementary Billing Service', () => {
             }
           },
           financialYears: [
-            { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
-            { text: '2022 to 2023', value: 2023, attributes: { 'data-test': 'sroc-years-2023' } },
+            { attributes: { 'data-test': 'sroc-years-2024' }, text: '2023 to 2024', value: 2024 },
+            { attributes: { 'data-test': 'sroc-years-2023' }, text: '2022 to 2023', value: 2023 },
             {
-              text: 'Before 2022',
-              value: 'preSroc',
+              attributes: { 'data-test': 'pre-sroc-years' },
               hint: { text: 'Old charge scheme' },
-              attributes: { 'data-test': 'pre-sroc-years' }
+              text: 'Before 2022',
+              value: 'preSroc'
             }
           ],
           pageTitle: 'Select which years you need to recalculate bills for',

@@ -38,8 +38,8 @@ async function _fetchExistingLicenceSupplementaryYears(licenceId, financialYearE
 
 async function _persistSupplementaryBillingYearsData(licenceId, financialYearEnd, twoPartTariff) {
   await LicenceSupplementaryYearModel.query().insert({
-    licenceId,
     financialYearEnd,
+    licenceId,
     twoPartTariff
   })
 }

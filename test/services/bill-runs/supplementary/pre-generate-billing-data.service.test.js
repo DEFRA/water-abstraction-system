@@ -12,19 +12,19 @@ import PreGenerateBillingDataService from '../../../../src/services/bill-runs/su
 
 describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => {
   const billingPeriod = {
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2023-03-31')
+    endDate: new Date('2023-03-31'),
+    startDate: new Date('2022-04-01')
   }
   const billRunId = generateUUID()
 
   const billingAccounts = [
     {
-      id: generateUUID(),
-      accountNumber: generateAccountNumber()
+      accountNumber: generateAccountNumber(),
+      id: generateUUID()
     },
     {
-      id: generateUUID(),
-      accountNumber: generateAccountNumber()
+      accountNumber: generateAccountNumber(),
+      id: generateUUID()
     }
   ]
 

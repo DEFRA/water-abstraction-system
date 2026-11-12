@@ -13,6 +13,7 @@ import SubmitAccountService from '../../../../src/services/billing-accounts/setu
 
 describe('Billing Accounts - Setup - Submit Account Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
   let payload
   let session
   let sessionData
@@ -205,13 +206,13 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
         const result = await SubmitAccountService(session.id, payload)
 
         expect(result.error).toEqual({
+          accountSelected: { text: 'Select who should the bills go to' },
           errorList: [
             {
               href: '#accountSelected',
               text: 'Select who should the bills go to'
             }
-          ],
-          accountSelected: { text: 'Select who should the bills go to' }
+          ]
         })
       })
     })

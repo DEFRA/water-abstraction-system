@@ -21,16 +21,16 @@ export async function additionalContact(licenceSeedData, additionalContact) {
   const { email } = additionalContact.contact
 
   return {
+    clean: async () => {
+      await additionalContact.clean()
+      await licenceSeedData.clean()
+    },
     contact: null,
     contactHashId: _emailHashId(email),
     contactType: 'additional contact',
     email,
     licenceRefs: [licenceSeedData.licence.licenceRef],
-    messageType: 'Email',
-    clean: async () => {
-      await additionalContact.clean()
-      await licenceSeedData.clean()
-    }
+    messageType: 'Email'
   }
 }
 
@@ -78,22 +78,22 @@ export async function licenceHolder(licenceSeedData, licenceHolderSeedData) {
     address5: licenceHolderSeedData.address.address5,
     address6: licenceHolderSeedData.address.address6,
     country: licenceHolderSeedData.address.country,
-    postcode: licenceHolderSeedData.address.postcode,
-    name: licenceHolderSeedData.company.name
+    name: licenceHolderSeedData.company.name,
+    postcode: licenceHolderSeedData.address.postcode
   }
 
   return {
-    contact,
+    clean: async () => {
+      await licenceSeedData.clean()
+      await licenceHolderSeedData.clean()
+    },
     company: licenceHolder.company,
+    contact,
     contactHashId: _contactHashId(contact),
     contactType: 'licence holder',
     email: null,
     licenceRefs: [licenceSeedData.licence.licenceRef],
-    messageType: 'Letter',
-    clean: async () => {
-      await licenceSeedData.clean()
-      await licenceHolderSeedData.clean()
-    }
+    messageType: 'Letter'
   }
 }
 
@@ -113,16 +113,16 @@ export async function primaryUser(licenceSeedData, primaryUserSeedData) {
   const { name: email } = primaryUserSeedData.individualEntity
 
   return {
+    clean: async () => {
+      await licenceSeedData.clean()
+      await primaryUserSeedData.clean()
+    },
     contact: null,
     contactHashId: _emailHashId(email),
     contactType: 'primary user',
     email,
     licenceRefs: [licenceSeedData.licence.licenceRef],
-    messageType: 'Email',
-    clean: async () => {
-      await licenceSeedData.clean()
-      await primaryUserSeedData.clean()
-    }
+    messageType: 'Email'
   }
 }
 
@@ -148,16 +148,16 @@ export async function returnsUser(licenceSeedData, returnsUserSeedData) {
   const { name: email } = returnsUserSeedData.individualEntity
 
   return {
+    clean: async () => {
+      await licenceSeedData.clean()
+      await returnsUserSeedData.clean()
+    },
     contact: null,
     contactHashId: _emailHashId(email),
     contactType: 'returns user',
     email,
     licenceRefs: [licenceSeedData.licence.licenceRef],
-    messageType: 'Email',
-    clean: async () => {
-      await licenceSeedData.clean()
-      await returnsUserSeedData.clean()
-    }
+    messageType: 'Email'
   }
 }
 
@@ -182,21 +182,21 @@ export async function returnsTo(licenceSeedData, returnsToHolderSeedData) {
     address5: returnsToHolderSeedData.address.address5,
     address6: returnsToHolderSeedData.address.address6,
     country: returnsToHolderSeedData.address.country,
-    postcode: returnsToHolderSeedData.address.postcode,
-    name: returnsToHolderSeedData.company.name
+    name: returnsToHolderSeedData.company.name,
+    postcode: returnsToHolderSeedData.address.postcode
   }
 
   return {
+    clean: async () => {
+      await licenceSeedData.clean()
+      await returnsToHolderSeedData.clean()
+    },
     contact,
     contactHashId: _contactHashId(contact),
     contactType: 'returns to',
     email: null,
     licenceRefs: [licenceSeedData.licence.licenceRef],
-    messageType: 'Letter',
-    clean: async () => {
-      await licenceSeedData.clean()
-      await returnsToHolderSeedData.clean()
-    }
+    messageType: 'Letter'
   }
 }
 
@@ -218,8 +218,8 @@ export function transformToDownloadingResult(recipient, returnLog) {
     contact_type: recipient.contactType,
     due_date: returnLog.dueDate,
     due_date_status: returnLog.dueDate ? 'all populated' : 'all nulls',
-    end_date: returnLog.endDate,
     email: recipient.email,
+    end_date: returnLog.endDate,
     latest_due_date: returnLog.dueDate,
     licence_ref: returnLog.licenceRef,
     message_type: recipient.messageType,

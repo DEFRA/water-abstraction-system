@@ -49,12 +49,12 @@ describe('Company Contacts controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/${generateUUID()}/communications`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/${generateUUID()}/communications`
         }
 
         vi.spyOn(ViewCommunicationsService, 'default').mockReturnValue({
@@ -75,12 +75,12 @@ describe('Company Contacts controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/${generateUUID()}/contact-details`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/${generateUUID()}/contact-details`
         }
 
         vi.spyOn(ViewContactDetailsService, 'default').mockReturnValue({
@@ -102,12 +102,12 @@ describe('Company Contacts controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/company-contacts/${generateUUID()}/remove`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['hof_notifications'] }
-          }
+            credentials: { scope: ['hof_notifications'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/company-contacts/${generateUUID()}/remove`
         }
 
         vi.spyOn(ViewRemoveCompanyContactService, 'default').mockReturnValue({ pageTitle: 'Remove page' })

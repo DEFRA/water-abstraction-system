@@ -19,8 +19,8 @@ const errorMessage = 'Select the returns for the paper return'
 export default function paperReturnValidator(payload) {
   const schema = Joi.object({
     returns: Joi.array().min(1).required().messages({
-      'any.required': errorMessage,
       'any.only': errorMessage,
+      'any.required': errorMessage,
       'array.min': errorMessage
     })
   })

@@ -50,7 +50,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
 
       describe('but it was marked as "received" before being voided', () => {
         beforeEach(async () => {
-          returnLog = await ReturnLogHelper.add({ status: 'void', receivedDate: new Date() })
+          returnLog = await ReturnLogHelper.add({ receivedDate: new Date(), status: 'void' })
         })
 
         it('does not remove the return log and returns the count', async () => {
@@ -92,8 +92,8 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
       vi.spyOn(ReturnLogModel, 'query').mockReturnValue({
         delete: vi.fn().mockReturnThis(),
         where: vi.fn().mockReturnThis(),
-        whereNotNull: vi.fn().mockReturnThis(),
-        whereNotExists: vi.fn().mockRejectedValue(new Error())
+        whereNotExists: vi.fn().mockRejectedValue(new Error()),
+        whereNotNull: vi.fn().mockReturnThis()
       })
     })
 

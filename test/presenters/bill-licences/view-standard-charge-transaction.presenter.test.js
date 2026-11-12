@@ -177,13 +177,13 @@ describe('View Standard Charge Transaction presenter', () => {
 
         expect(result.chargeElements).toEqual([
           {
-            purpose: 'Spray Irrigation - Direct',
             abstractionPeriod: '1 April to 30 April',
+            purpose: 'Spray Irrigation - Direct',
             volume: '5ML'
           },
           {
-            purpose: 'Spray Irrigation - Direct',
             abstractionPeriod: '1 May to 30 September',
+            purpose: 'Spray Irrigation - Direct',
             volume: '24ML'
           }
         ])
@@ -208,13 +208,13 @@ describe('View Standard Charge Transaction presenter', () => {
         chargeCategoryDescription: 'Medium loss, non-tidal, greater than 83 up to and including 142 ML/yr',
         chargeElements: [
           {
-            purpose: 'Spray Irrigation - Direct',
             abstractionPeriod: '1 April to 30 April',
+            purpose: 'Spray Irrigation - Direct',
             volume: '5ML'
           },
           {
-            purpose: 'Spray Irrigation - Direct',
             abstractionPeriod: '1 May to 30 September',
+            purpose: 'Spray Irrigation - Direct',
             volume: '24ML'
           }
         ],
@@ -291,11 +291,11 @@ describe('View Standard Charge Transaction presenter', () => {
         const result = ViewStandardChargeTransactionPresenter(transaction)
 
         expect(result.chargeElement).toEqual({
-          purpose: 'Trickle Irrigation - Direct',
           abstractionPeriod: '1 May to 31 August',
-          source: 'Unsupported',
+          loss: 'High',
+          purpose: 'Trickle Irrigation - Direct',
           season: 'Summer',
-          loss: 'High'
+          source: 'Unsupported'
         })
       })
     })
@@ -307,11 +307,11 @@ describe('View Standard Charge Transaction presenter', () => {
         agreement: null,
         billableDays: '153/214',
         chargeElement: {
-          purpose: 'Trickle Irrigation - Direct',
           abstractionPeriod: '1 May to 31 August',
-          source: 'Unsupported',
+          loss: 'High',
+          purpose: 'Trickle Irrigation - Direct',
           season: 'Summer',
-          loss: 'High'
+          source: 'Unsupported'
         },
         chargePeriod: '1 April 2023 to 31 March 2024',
         chargeType: 'standard',
@@ -326,40 +326,40 @@ describe('View Standard Charge Transaction presenter', () => {
 
 function _baseTransaction() {
   return {
-    billingTransactionId: '3ca5221c-94c4-4246-8e96-41084cad1429',
     authorisedDays: 214,
     billableDays: 153,
-    chargeType: 'standard',
-    description: 'Water abstraction charge: Testing',
-    endDate: new Date('2024-03-31'),
-    credit: false,
-    netAmount: 116200,
-    startDate: new Date('2023-04-01'),
-    volume: 100,
+    billingTransactionId: '3ca5221c-94c4-4246-8e96-41084cad1429',
     chargeReference: {
       chargeElementId: 'ce404dc9-181e-4539-b604-e0aa1b294e18'
-    }
+    },
+    chargeType: 'standard',
+    credit: false,
+    description: 'Water abstraction charge: Testing',
+    endDate: new Date('2024-03-31'),
+    netAmount: 116200,
+    startDate: new Date('2023-04-01'),
+    volume: 100
   }
 }
 
 function _presrocTransaction() {
   const transaction = {
     ..._baseTransaction(),
+    abstractionPeriodEndDay: 31,
+    abstractionPeriodEndMonth: 8,
+    abstractionPeriodStartDay: 1,
+    abstractionPeriodStartMonth: 5,
     loss: 'high',
     scheme: 'alcs',
     season: 'summer',
     section127Agreement: false,
     source: 'unsupported',
-    volume: 12,
-    abstractionPeriodStartDay: 1,
-    abstractionPeriodStartMonth: 5,
-    abstractionPeriodEndDay: 31,
-    abstractionPeriodEndMonth: 8
+    volume: 12
   }
 
   transaction.chargeReference.purpose = {
-    purposeUseId: 'd146914e-7866-40f6-bfe4-9095e783a535',
-    description: 'Trickle Irrigation - Direct'
+    description: 'Trickle Irrigation - Direct',
+    purposeUseId: 'd146914e-7866-40f6-bfe4-9095e783a535'
   }
 
   return transaction
@@ -368,45 +368,45 @@ function _presrocTransaction() {
 function _srocTransaction() {
   const transaction = {
     ..._baseTransaction(),
-    aggregateFactor: 1,
     adjustmentFactor: 1,
+    aggregateFactor: 1,
+    baselineCharge: 1162,
     chargeCategoryCode: '4.5.13',
     chargeCategoryDescription: 'Medium loss, non-tidal, greater than 83 up to and including 142 ML/yr',
-    waterCompanyCharge: false,
-    winterOnly: false,
     scheme: 'sroc',
     section126Factor: 1,
     section127Agreement: false,
     section130Agreement: 'false',
-    supportedSourceName: null,
-    baselineCharge: 1162,
     supportedSourceChargeValue: 0,
-    waterCompanyChargeValue: 0
+    supportedSourceName: null,
+    waterCompanyCharge: false,
+    waterCompanyChargeValue: 0,
+    winterOnly: false
   }
 
   transaction.chargeReference.chargeElements = [
     {
-      chargePurposeId: 'fd2f0260-aa18-473a-ab20-70efc0aef9f9',
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 4,
       abstractionPeriodEndDay: 30,
       abstractionPeriodEndMonth: 4,
+      abstractionPeriodStartDay: 1,
+      abstractionPeriodStartMonth: 4,
       authorisedAnnualQuantity: 5,
+      chargePurposeId: 'fd2f0260-aa18-473a-ab20-70efc0aef9f9',
       purpose: {
-        purposeUseId: 'b1e0ef46-b1f6-4607-8642-d916d5b76b44',
-        description: 'Spray Irrigation - Direct'
+        description: 'Spray Irrigation - Direct',
+        purposeUseId: 'b1e0ef46-b1f6-4607-8642-d916d5b76b44'
       }
     },
     {
-      chargePurposeId: 'c79f8e0e-71f7-404c-a19a-11a8fc4cfae4',
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 5,
       abstractionPeriodEndDay: 30,
       abstractionPeriodEndMonth: 9,
+      abstractionPeriodStartDay: 1,
+      abstractionPeriodStartMonth: 5,
       authorisedAnnualQuantity: 24,
+      chargePurposeId: 'c79f8e0e-71f7-404c-a19a-11a8fc4cfae4',
       purpose: {
-        purposeUseId: 'b1e0ef46-b1f6-4607-8642-d916d5b76b44',
-        description: 'Spray Irrigation - Direct'
+        description: 'Spray Irrigation - Direct',
+        purposeUseId: 'b1e0ef46-b1f6-4607-8642-d916d5b76b44'
       }
     }
   ]

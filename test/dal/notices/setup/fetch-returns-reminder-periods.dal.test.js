@@ -5,9 +5,9 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
 import ReturnCycleModel from 'water-abstraction-engine/models/return-cycle.model.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
-import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import { tomorrow, yesterday } from 'water-abstraction-engine/test/general.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
@@ -52,45 +52,45 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           }),
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'void'
           }),
           await ReturnLogHelper.add({
-            endDate: selectedReturnCycle.endDate,
-            returnCycleId: selectedReturnCycle.id,
             dueDate: null,
+            endDate: selectedReturnCycle.endDate,
+            returnCycleId: selectedReturnCycle.id,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           }),
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           }),
           await ReturnLogHelper.add({
-            endDate: selectedReturnCycle.endDate,
-            returnCycleId: selectedReturnCycle.id,
             dueDate: yesterday(),
+            endDate: selectedReturnCycle.endDate,
             metadata: { isCurrent: false },
+            returnCycleId: selectedReturnCycle.id,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           }),
           await ReturnLogHelper.add({
+            dueDate: eightDaysForward,
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: eightDaysForward,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -115,9 +115,9 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'void'
           })
@@ -136,10 +136,10 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
-            endDate: selectedReturnCycle.endDate,
-            returnCycleId: selectedReturnCycle.id,
             dueDate: yesterday(),
+            endDate: selectedReturnCycle.endDate,
             metadata: { isCurrent: false },
+            returnCycleId: selectedReturnCycle.id,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -158,9 +158,9 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: null,
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: null,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -179,9 +179,9 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: eightDaysForward,
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: eightDaysForward,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -200,9 +200,9 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: tomorrow(),
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -221,9 +221,9 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -254,45 +254,45 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           }),
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'void'
           }),
           await ReturnLogHelper.add({
-            endDate: selectedReturnCycle.endDate,
-            returnCycleId: selectedReturnCycle.id,
             dueDate: null,
+            endDate: selectedReturnCycle.endDate,
+            returnCycleId: selectedReturnCycle.id,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           }),
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           }),
           await ReturnLogHelper.add({
-            endDate: selectedReturnCycle.endDate,
-            returnCycleId: selectedReturnCycle.id,
             dueDate: yesterday(),
+            endDate: selectedReturnCycle.endDate,
             metadata: { isCurrent: false },
+            returnCycleId: selectedReturnCycle.id,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           }),
           await ReturnLogHelper.add({
+            dueDate: eightDaysForward,
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: eightDaysForward,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -317,9 +317,9 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'void'
           })
@@ -338,10 +338,10 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
-            endDate: selectedReturnCycle.endDate,
-            returnCycleId: selectedReturnCycle.id,
             dueDate: yesterday(),
+            endDate: selectedReturnCycle.endDate,
             metadata: { isCurrent: false },
+            returnCycleId: selectedReturnCycle.id,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -360,9 +360,9 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: null,
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: null,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -381,9 +381,9 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: eightDaysForward,
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: eightDaysForward,
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -402,9 +402,9 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: tomorrow(),
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -423,9 +423,9 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
+            dueDate: yesterday(),
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
-            dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           })
@@ -453,9 +453,9 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
 
       returnLogs = [
         await ReturnLogHelper.add({
+          dueDate: yesterday(),
           endDate: selectedReturnCycle.endDate,
           returnCycleId: selectedReturnCycle.id,
-          dueDate: yesterday(),
           startDate: selectedReturnCycle.startDate,
           status: 'due'
         })
@@ -494,5 +494,5 @@ async function _fetchReturnCyclesForTest() {
     return returnCycle.startDate >= threeYearsAgo && returnCycle.endDate < todaysDate
   })
 
-  return { current: ended[0], previous: ended[1], old: old[0] }
+  return { current: ended[0], old: old[0], previous: ended[1] }
 }

@@ -30,6 +30,6 @@ export default async function checkLicenceEndDatesService(licence) {
       .onConflict(['licenceId', 'dateType'])
       .merge(['changeDate', 'naldDate', 'wrlsDate', 'updatedAt'])
   } catch (error) {
-    globalThis.GlobalNotifier.omfg('Check licence end dates failed', { id: licence.id, changedDateDetails }, error)
+    globalThis.GlobalNotifier.omfg('Check licence end dates failed', { changedDateDetails, id: licence.id }, error)
   }
 }

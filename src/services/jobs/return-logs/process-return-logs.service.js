@@ -44,7 +44,7 @@ export default async function processReturnLogsService(cycle) {
       try {
         await CreateReturnLogsService(returnRequirement, returnCycle, licenceEndDate)
       } catch (error) {
-        globalThis.GlobalNotifier.omfg('Return logs creation errored', { returnRequirement, returnCycle }, error)
+        globalThis.GlobalNotifier.omfg('Return logs creation errored', { returnCycle, returnRequirement }, error)
       }
     }
 

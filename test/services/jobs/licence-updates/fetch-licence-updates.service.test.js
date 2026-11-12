@@ -61,7 +61,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
   describe('when there are no matching licence version records', () => {
     describe('because they were all created more than 2 months ago', () => {
       beforeEach(async () => {
-        licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id, createdAt: _threeMonthsAgo() })
+        licenceVersion = await LicenceVersionHelper.add({ createdAt: _threeMonthsAgo(), licenceId: licence.id })
       })
 
       it('returns no results', async () => {

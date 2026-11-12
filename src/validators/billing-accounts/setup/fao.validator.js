@@ -24,8 +24,8 @@ export default function faoValidator(payload) {
       .valid(...VALID_VALUES)
       .required()
       .messages({
-        'any.required': errorMessage,
         'any.only': errorMessage,
+        'any.required': errorMessage,
         'string.empty': errorMessage
       })
   })

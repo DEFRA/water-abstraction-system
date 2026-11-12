@@ -1,3 +1,9 @@
+/**
+ * Routes for the /return-versions/setup endpoints
+ *
+ * @module ReturnVersionsSetupRoutes
+ */
+
 import {
   abstractionPeriod,
   add,
@@ -43,470 +49,470 @@ import {
 export default [
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/abstraction-period/{requirementIndex}',
     options: {
-      handler: abstractionPeriod,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: abstractionPeriod
+    },
+    path: '/return-versions/setup/{sessionId}/abstraction-period/{requirementIndex}'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/abstraction-period/{requirementIndex}',
     options: {
-      handler: submitAbstractionPeriod,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitAbstractionPeriod
+    },
+    path: '/return-versions/setup/{sessionId}/abstraction-period/{requirementIndex}'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/add',
     options: {
-      handler: add,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: add
+    },
+    path: '/return-versions/setup/{sessionId}/add'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/additional-submission-options',
     options: {
-      handler: additionalSubmissionOptions,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: additionalSubmissionOptions
+    },
+    path: '/return-versions/setup/{sessionId}/additional-submission-options'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/additional-submission-options',
     options: {
-      handler: submitAdditionalSubmissionOptions,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitAdditionalSubmissionOptions
+    },
+    path: '/return-versions/setup/{sessionId}/additional-submission-options'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/agreements-exceptions/{requirementIndex}',
     options: {
-      handler: agreementsExceptions,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: agreementsExceptions
+    },
+    path: '/return-versions/setup/{sessionId}/agreements-exceptions/{requirementIndex}'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/agreements-exceptions/{requirementIndex}',
     options: {
-      handler: submitAgreementsExceptions,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitAgreementsExceptions
+    },
+    path: '/return-versions/setup/{sessionId}/agreements-exceptions/{requirementIndex}'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{licenceId}/approved',
     options: {
-      handler: approved,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: approved
+    },
+    path: '/return-versions/setup/{licenceId}/approved'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/cancel',
     options: {
-      handler: cancel,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: cancel
+    },
+    path: '/return-versions/setup/{sessionId}/cancel'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/cancel',
     options: {
-      handler: submitCancel,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitCancel
+    },
+    path: '/return-versions/setup/{sessionId}/cancel'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/check',
     options: {
-      handler: check,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: check
+    },
+    path: '/return-versions/setup/{sessionId}/check'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/check',
     options: {
-      handler: submitCheck,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitCheck
+    },
+    path: '/return-versions/setup/{sessionId}/check'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/delete-note',
     options: {
-      handler: deleteNote,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: deleteNote
+    },
+    path: '/return-versions/setup/{sessionId}/delete-note'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/existing',
     options: {
-      handler: existing,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: existing
+    },
+    path: '/return-versions/setup/{sessionId}/existing'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/existing',
     options: {
-      handler: submitExisting,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitExisting
+    },
+    path: '/return-versions/setup/{sessionId}/existing'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/frequency-collected/{requirementIndex}',
     options: {
-      handler: frequencyCollected,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: frequencyCollected
+    },
+    path: '/return-versions/setup/{sessionId}/frequency-collected/{requirementIndex}'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/frequency-collected/{requirementIndex}',
     options: {
-      handler: submitFrequencyCollected,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitFrequencyCollected
+    },
+    path: '/return-versions/setup/{sessionId}/frequency-collected/{requirementIndex}'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/frequency-reported/{requirementIndex}',
     options: {
-      handler: frequencyReported,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: frequencyReported
+    },
+    path: '/return-versions/setup/{sessionId}/frequency-reported/{requirementIndex}'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/frequency-reported/{requirementIndex}',
     options: {
-      handler: submitFrequencyReported,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitFrequencyReported
+    },
+    path: '/return-versions/setup/{sessionId}/frequency-reported/{requirementIndex}'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/method',
     options: {
-      handler: method,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: method
+    },
+    path: '/return-versions/setup/{sessionId}/method'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/method',
     options: {
-      handler: submitMethod,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitMethod
+    },
+    path: '/return-versions/setup/{sessionId}/method'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/no-returns-required',
     options: {
-      handler: noReturnsRequired,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: noReturnsRequired
+    },
+    path: '/return-versions/setup/{sessionId}/no-returns-required'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/no-returns-required',
     options: {
-      handler: submitNoReturnsRequired,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitNoReturnsRequired
+    },
+    path: '/return-versions/setup/{sessionId}/no-returns-required'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/note',
     options: {
-      handler: note,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: note
+    },
+    path: '/return-versions/setup/{sessionId}/note'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/note',
     options: {
-      handler: submitNote,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitNote
+    },
+    path: '/return-versions/setup/{sessionId}/note'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/points/{requirementIndex}',
     options: {
-      handler: points,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: points
+    },
+    path: '/return-versions/setup/{sessionId}/points/{requirementIndex}'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/points/{requirementIndex}',
     options: {
-      handler: submitPoints,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitPoints
+    },
+    path: '/return-versions/setup/{sessionId}/points/{requirementIndex}'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/purpose/{requirementIndex}',
     options: {
-      handler: purpose,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: purpose
+    },
+    path: '/return-versions/setup/{sessionId}/purpose/{requirementIndex}'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/purpose/{requirementIndex}',
     options: {
-      handler: submitPurpose,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitPurpose
+    },
+    path: '/return-versions/setup/{sessionId}/purpose/{requirementIndex}'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/reason',
     options: {
-      handler: reason,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: reason
+    },
+    path: '/return-versions/setup/{sessionId}/reason'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/reason',
     options: {
-      handler: submitReason,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitReason
+    },
+    path: '/return-versions/setup/{sessionId}/reason'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/remove/{requirementIndex}',
     options: {
-      handler: remove,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: remove
+    },
+    path: '/return-versions/setup/{sessionId}/remove/{requirementIndex}'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/remove/{requirementIndex}',
     options: {
-      handler: submitRemove,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitRemove
+    },
+    path: '/return-versions/setup/{sessionId}/remove/{requirementIndex}'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/returns-cycle/{requirementIndex}',
     options: {
-      handler: returnsCycle,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: returnsCycle
+    },
+    path: '/return-versions/setup/{sessionId}/returns-cycle/{requirementIndex}'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/returns-cycle/{requirementIndex}',
     options: {
-      handler: submitReturnsCycle,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitReturnsCycle
+    },
+    path: '/return-versions/setup/{sessionId}/returns-cycle/{requirementIndex}'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/site-description/{requirementIndex}',
     options: {
-      handler: siteDescription,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: siteDescription
+    },
+    path: '/return-versions/setup/{sessionId}/site-description/{requirementIndex}'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/site-description/{requirementIndex}',
     options: {
-      handler: submitSiteDescription,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitSiteDescription
+    },
+    path: '/return-versions/setup/{sessionId}/site-description/{requirementIndex}'
   },
   {
     method: 'GET',
-    path: '/return-versions/setup/{sessionId}/start-date',
     options: {
-      handler: startDate,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: startDate
+    },
+    path: '/return-versions/setup/{sessionId}/start-date'
   },
   {
     method: 'POST',
-    path: '/return-versions/setup/{sessionId}/start-date',
     options: {
-      handler: submitStartDate,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitStartDate
+    },
+    path: '/return-versions/setup/{sessionId}/start-date'
   }
 ]

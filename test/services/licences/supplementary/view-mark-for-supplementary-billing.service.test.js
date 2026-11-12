@@ -32,14 +32,14 @@ describe('Licences - View Mark For Supplementary Billing Service', () => {
         text: 'Back'
       },
       financialYears: [
-        { text: '2024 to 2025', value: 2025, attributes: { 'data-test': 'sroc-years-2025' } },
-        { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
-        { text: '2022 to 2023', value: 2023, attributes: { 'data-test': 'sroc-years-2023' } },
+        { attributes: { 'data-test': 'sroc-years-2025' }, text: '2024 to 2025', value: 2025 },
+        { attributes: { 'data-test': 'sroc-years-2024' }, text: '2023 to 2024', value: 2024 },
+        { attributes: { 'data-test': 'sroc-years-2023' }, text: '2022 to 2023', value: 2023 },
         {
-          text: 'Before 2022',
-          value: 'preSroc',
+          attributes: { 'data-test': 'pre-sroc-years' },
           hint: { text: 'Old charge scheme' },
-          attributes: { 'data-test': 'pre-sroc-years' }
+          text: 'Before 2022',
+          value: 'preSroc'
         }
       ],
       pageTitle: 'Select which years you need to recalculate bills for',

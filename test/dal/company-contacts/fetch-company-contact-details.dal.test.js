@@ -82,8 +82,8 @@ describe('Company Contacts - Fetch Company Contact Details dal', () => {
           companyContact = await CompanyContactHelper.add({
             contactId: contact.id,
             createdBy: user.id,
-            updatedBy: user.id,
-            licenceRoleId: licenceRole.id
+            licenceRoleId: licenceRole.id,
+            updatedBy: user.id
           })
         })
 
@@ -125,28 +125,28 @@ describe('Company Contacts - Fetch Company Contact Details dal', () => {
 
 function _transformToFetchResult(companyContact, contact, user, licenceRole, abstractionAlertsCount = 0) {
   return {
-    id: companyContact.id,
     abstractionAlertLicences: null,
     abstractionAlerts: companyContact.abstractionAlerts,
     abstractionAlertsCount,
     companyId: companyContact.companyId,
     contact: {
-      id: contact.id,
-      salutation: null,
-      firstName: 'Amara',
-      middleInitials: null,
-      lastName: 'Gupta',
-      initials: null,
       contactType: 'person',
-      suffix: null,
       department: null,
-      email: null
+      email: null,
+      firstName: 'Amara',
+      id: contact.id,
+      initials: null,
+      lastName: 'Gupta',
+      middleInitials: null,
+      salutation: null,
+      suffix: null
     },
     createdAt: companyContact.createdAt,
     createdByUser: {
       id: user.id,
       username: user.username
     },
+    id: companyContact.id,
     licenceRole: {
       id: licenceRole.id,
       name: licenceRole.name

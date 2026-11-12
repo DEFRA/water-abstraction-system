@@ -61,7 +61,6 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear Clean Water Limited,\r\n',
               html: null,
@@ -70,12 +69,13 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               subject: 'Submit your water abstraction returns by 28th April 2025',
               type: 'letter',
               version: 32
-            }
+            },
+            statusCode: HTTP_STATUS_OK
           }
 
           vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
-            succeeded: true,
-            response
+            response,
+            succeeded: true
           })
         })
 
@@ -125,7 +125,6 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear licence holder,\r\n',
               html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence holder,</p>',
@@ -134,12 +133,13 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               subject: 'Submit your water abstraction returns by 28th April 2025',
               type: 'email',
               version: 40
-            }
+            },
+            statusCode: HTTP_STATUS_OK
           }
 
           vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
-            succeeded: true,
-            response
+            response,
+            succeeded: true
           })
         })
 
@@ -192,8 +192,8 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               issuer_email_address: 'admin-internal@wrls.gov.uk',
               licence_ref: '11/1111',
               licenceMonitoringStationId,
-              name: 'Clean Water Limited',
               monitoring_station_name: 'FRENCHAY',
+              name: 'Clean Water Limited',
               source: '',
               threshold_unit: 'm3/s',
               threshold_value: 100
@@ -202,7 +202,6 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear licence contact,\r\n',
               html: null,
@@ -211,12 +210,13 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               subject: 'Water abstraction alert: You may need to stop water abstraction soon',
               type: 'letter',
               version: 7
-            }
+            },
+            statusCode: HTTP_STATUS_OK
           }
 
           vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
-            succeeded: true,
-            response
+            response,
+            succeeded: true
           })
         })
 
@@ -272,7 +272,6 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear licence contact,\r\n',
               html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence contact,</p>',
@@ -281,12 +280,13 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               subject: 'Water abstraction alert: You may need to reduce or stop water abstraction soon',
               type: 'email',
               version: 1
-            }
+            },
+            statusCode: HTTP_STATUS_OK
           }
 
           vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
-            succeeded: true,
-            response
+            response,
+            succeeded: true
           })
         })
 
@@ -332,7 +332,6 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
       }
 
       response = {
-        statusCode: HTTP_STATUS_BAD_REQUEST,
         body: {
           errors: [
             {
@@ -341,12 +340,13 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           ],
           status_code: HTTP_STATUS_BAD_REQUEST
-        }
+        },
+        statusCode: HTTP_STATUS_BAD_REQUEST
       }
 
       vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
-        succeeded: false,
-        response
+        response,
+        succeeded: false
       })
     })
 

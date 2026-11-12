@@ -10,11 +10,11 @@ describe('Users - Profile Details validator', () => {
   describe('when the payload is valid', () => {
     beforeEach(() => {
       payload = {
-        name: 'John Doe',
-        jobTitle: 'Developer',
+        address: '123 Main St',
         email: 'john.doe@environment-agency.gov.uk',
-        tel: '1234567890',
-        address: '123 Main St'
+        jobTitle: 'Developer',
+        name: 'John Doe',
+        tel: '1234567890'
       }
     })
 
@@ -28,7 +28,7 @@ describe('Users - Profile Details validator', () => {
 
   describe('when the payload fields are empty', () => {
     beforeEach(() => {
-      payload = { name: '', jobTitle: '', email: '', tel: '', address: '' }
+      payload = { address: '', email: '', jobTitle: '', name: '', tel: '' }
     })
 
     it('confirms the payload is valid', () => {

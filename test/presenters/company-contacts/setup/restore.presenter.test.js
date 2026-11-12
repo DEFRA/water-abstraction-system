@@ -15,7 +15,7 @@ describe('Company Contacts - Setup - Restore Presenter', () => {
   beforeEach(() => {
     company = CustomersFixtures.company()
 
-    session = { id: generateUUID(), company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }
+    session = { abstractionAlerts: 'yes', company, email: 'eric@test.com', id: generateUUID(), name: 'Eric' }
   })
 
   describe('when called', () => {

@@ -28,8 +28,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   beforeEach(() => {
     session = {
       billingAccount,
-      id: generateUUID(),
-      fao: 'no'
+      fao: 'no',
+      id: generateUUID()
     }
   })
 
@@ -49,6 +49,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         existingAccount: '',
         fao: 'no',
         impactedLicences: undefined,
+        individualName: '',
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
@@ -63,7 +64,6 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         },
         pageTitle: 'Check billing account details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-        individualName: '',
         searchInput: ''
       })
     })
@@ -455,8 +455,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         const result = CheckPresenter(
           {
             ...session,
-            contactSelected: contact.id,
-            contactName: 'Jon Snow'
+            contactName: 'Jon Snow',
+            contactSelected: contact.id
           },
           companyContacts,
           address,
@@ -527,12 +527,12 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             addressJourney: {
               address: {
-                uprn: 12345678,
-                postcode: 'BS1 5AH',
                 addressLine1: 'ENVIRONMENT AGENCY',
                 addressLine2: 'HORIZON HOUSE',
                 addressLine3: null,
-                addressLine4: 'BRISTOL'
+                addressLine4: 'BRISTOL',
+                postcode: 'BS1 5AH',
+                uprn: 12345678
               }
             }
           },
@@ -552,11 +552,11 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             addressJourney: {
               address: {
-                postcode: 'BS1 5AH',
                 addressLine1: 'ENVIRONMENT AGENCY',
                 addressLine2: 'HORIZON HOUSE',
                 addressLine3: null,
-                addressLine4: 'BRISTOL'
+                addressLine4: 'BRISTOL',
+                postcode: 'BS1 5AH'
               }
             }
           },
@@ -576,12 +576,12 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             addressJourney: {
               address: {
-                country: 'ENGLAND',
-                postcode: 'BS1 5AH',
                 addressLine1: 'ENVIRONMENT AGENCY',
                 addressLine2: 'HORIZON HOUSE',
                 addressLine3: null,
-                addressLine4: 'BRISTOL'
+                addressLine4: 'BRISTOL',
+                country: 'ENGLAND',
+                postcode: 'BS1 5AH'
               }
             }
           },

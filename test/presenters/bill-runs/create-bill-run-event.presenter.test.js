@@ -39,12 +39,12 @@ describe('Create Bill Run Event presenter', () => {
       expect(result.batch.creditNoteValue).toEqual(billRun.creditNoteValue)
 
       expect(result.batch.region).toEqual({
-        id: billRun.region.id,
         code: billRun.region.chargeRegionId,
-        name: billRun.region.name,
-        type: 'region',
         displayName: billRun.region.displayName,
-        numericCode: billRun.region.naldRegionId
+        id: billRun.region.id,
+        name: billRun.region.name,
+        numericCode: billRun.region.naldRegionId,
+        type: 'region'
       })
 
       expect(result.batch.endYear).toEqual({ yearEnding: billRun.toFinancialYearEnding })

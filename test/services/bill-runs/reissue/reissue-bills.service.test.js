@@ -22,6 +22,7 @@ describe('Reissue Bills service', () => {
   const reissueBillRun = { regionId: generateUUID() }
 
   let notifierStub
+
   beforeEach(async () => {
     // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -121,18 +122,18 @@ describe('Reissue Bills service', () => {
 
 function _reissueBillServiceResponse() {
   return {
-    bills: [BillModel.fromJson(BillHelper.defaults())],
     billLicences: [BillLicenceModel.fromJson(BillLicenceHelper.defaults())],
+    bills: [BillModel.fromJson(BillHelper.defaults())],
     transactions: [
       TransactionModel.fromJson({
         ...TransactionHelper.defaults(),
         purposes: [
           {
-            id: '01adfc33-4ba9-4215-bbe0-97014730991b',
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3,
             abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4
+            abstractionPeriodStartMonth: 4,
+            id: '01adfc33-4ba9-4215-bbe0-97014730991b'
           }
         ]
       })

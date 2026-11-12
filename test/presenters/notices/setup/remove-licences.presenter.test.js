@@ -9,6 +9,7 @@ import RemoveLicencesPresenter from '../../../../src/presenters/notices/setup/re
 
 describe('Notices - Setup - Remove Licences presenter', () => {
   const licences = []
+
   let referenceCode
   let session
 

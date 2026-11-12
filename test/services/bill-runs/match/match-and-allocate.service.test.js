@@ -37,13 +37,13 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
 
   describe('with a given billRun and billingPeriods', () => {
     const billingPeriods = [
-      { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
-      { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
+      { endDate: new Date('2024-03-31'), startDate: new Date('2023-04-01') },
+      { endDate: new Date('2023-03-31'), startDate: new Date('2022-04-01') }
     ]
 
     const billRun = {
-      regionId: 'ffea25c2-e577-4969-8667-b0eed899230d',
-      billingBatchId: '41be6d72-701b-4252-90d5-2d38614b6282'
+      billingBatchId: '41be6d72-701b-4252-90d5-2d38614b6282',
+      regionId: 'ffea25c2-e577-4969-8667-b0eed899230d'
     }
 
     describe('when there are licences to be processed', () => {
@@ -153,58 +153,58 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
 function _generateMatchingReturnsData() {
   return [
     {
-      id: 'v1:1:5/31/14/*S/0116A:10021668:2022-04-01:2023-03-31',
-      returnReference: 10021668,
+      abstractionOutsidePeriod: true,
+      abstractionPeriods: [
+        {
+          endDate: new Date('2022-10-31'),
+          startDate: new Date('2022-04-01')
+        },
+        {
+          endDate: new Date('2023-03-31'),
+          startDate: new Date('2023-03-01')
+        }
+      ],
+      allocatedQuantity: 0,
       description: 'DRAINS ETC-DEEPING FEN AND OTHER LINKED SITES',
-      startDate: new Date('2022-04-01'),
-      endDate: new Date('2023-03-31'),
-      receivedDate: new Date('2024-01-10'),
       dueDate: new Date('2023-04-28'),
-      status: 'completed',
-      underQuery: false,
-      periodStartDay: 1,
-      periodStartMonth: 3,
+      endDate: new Date('2023-03-31'),
+      id: 'v1:1:5/31/14/*S/0116A:10021668:2022-04-01:2023-03-31',
+      issues: false,
+      matched: true,
+      nilReturn: false,
       periodEndDay: 31,
       periodEndMonth: 10,
+      periodStartDay: 1,
+      periodStartMonth: 3,
       purposes: [
         {
           alias: 'Spray Irrigation - Direct',
           primary: { code: 'A', description: 'Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
-          secondary: { code: 'AGR', description: 'General Agriculture' }
+          secondary: { code: 'AGR', description: 'General Agriculture' },
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
         }
       ],
+      quantity: 0.000263,
+      receivedDate: new Date('2024-01-10'),
+      returnReference: 10021668,
       returnSubmissions: [
         {
           id: '1313d4f1-0fe8-4dfa-b18d-3faddedcc18f',
           nilReturn: false,
           returnSubmissionLines: [
             {
-              id: 'e828b761-0fe0-4d57-8fcd-fa892ecc213e',
-              startDate: new Date('2022-04-01'),
               endDate: new Date('2022-04-30'),
+              id: 'e828b761-0fe0-4d57-8fcd-fa892ecc213e',
               quantity: 0.025,
+              startDate: new Date('2022-04-01'),
               unallocated: 0.000025
             }
           ]
         }
       ],
-      nilReturn: false,
-      quantity: 0.000263,
-      allocatedQuantity: 0,
-      abstractionPeriods: [
-        {
-          startDate: new Date('2022-04-01'),
-          endDate: new Date('2022-10-31')
-        },
-        {
-          startDate: new Date('2023-03-01'),
-          endDate: new Date('2023-03-31')
-        }
-      ],
-      abstractionOutsidePeriod: true,
-      matched: true,
-      issues: false
+      startDate: new Date('2022-04-01'),
+      status: 'completed',
+      underQuery: false
     }
   ]
 }
@@ -212,36 +212,14 @@ function _generateMatchingReturnsData() {
 function _generateLicencesData() {
   return [
     {
-      id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
-      licenceRef: '5/31/14/*S/0116A',
-      startDate: new Date('1966-02-01'),
-      expiredDate: null,
-      lapsedDate: null,
-      revokedDate: null,
       chargeVersions: [
         {
-          id: 'aad7de5b-d684-4980-bcb7-e3b631d3036f',
-          startDate: new Date('2022-04-01'),
-          endDate: null,
-          status: 'current',
           changeReason: {
             description: 'Strategic review of charges (SRoC)'
           },
-          licence: {
-            id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
-            licenceRef: '5/31/14/*S/0116A',
-            startDate: new Date('1966-02-01'),
-            expiredDate: null,
-            lapsedDate: null,
-            revokedDate: null
-          },
           chargeReferences: [
             {
-              id: '4e7f1824-3680-4df0-806f-c6d651ba4771',
-              volume: 32,
-              description: 'Example 1',
               aggregate: null,
-              s127: 'true',
               chargeCategory: {
                 reference: '4.6.12',
                 shortDescription:
@@ -250,40 +228,62 @@ function _generateLicencesData() {
               },
               chargeElements: [
                 {
-                  id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-                  description:
-                    'Spray irrigation at Welland and Deepings Internal Drainage Board drains and the River Glen at West Pinchbeck',
-                  abstractionPeriodStartDay: 1,
-                  abstractionPeriodStartMonth: 3,
                   abstractionPeriodEndDay: 31,
                   abstractionPeriodEndMonth: 10,
+                  abstractionPeriodStartDay: 1,
+                  abstractionPeriodStartMonth: 3,
                   authorisedAnnualQuantity: 30,
+                  description:
+                    'Spray irrigation at Welland and Deepings Internal Drainage Board drains and the River Glen at West Pinchbeck',
+                  id: '8eac5976-d16c-4818-8bc8-384d958ce863',
                   purpose: {
+                    description: 'Spray Irrigation - Direct',
                     id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
-                    legacyId: '400',
-                    description: 'Spray Irrigation - Direct'
+                    legacyId: '400'
                   }
                 },
                 {
-                  id: '5713d337-0d52-4d7f-8ecc-0e77d8d63444',
-                  description:
-                    'Spray irrigation at Welland and Deepings Internal Drainage Board drains and the River Glen at West Pinchbeck',
-                  abstractionPeriodStartDay: 1,
-                  abstractionPeriodStartMonth: 3,
                   abstractionPeriodEndDay: 31,
                   abstractionPeriodEndMonth: 10,
+                  abstractionPeriodStartDay: 1,
+                  abstractionPeriodStartMonth: 3,
                   authorisedAnnualQuantity: 30,
+                  description:
+                    'Spray irrigation at Welland and Deepings Internal Drainage Board drains and the River Glen at West Pinchbeck',
+                  id: '5713d337-0d52-4d7f-8ecc-0e77d8d63444',
                   purpose: {
+                    description: 'Spray Irrigation - Storage',
                     id: '4c1ecee4-a1a3-41fe-8004-ae6a27ef2207',
-                    legacyId: '420',
-                    description: 'Spray Irrigation - Storage'
+                    legacyId: '420'
                   }
                 }
-              ]
+              ],
+              description: 'Example 1',
+              id: '4e7f1824-3680-4df0-806f-c6d651ba4771',
+              s127: 'true',
+              volume: 32
             }
-          ]
+          ],
+          endDate: null,
+          id: 'aad7de5b-d684-4980-bcb7-e3b631d3036f',
+          licence: {
+            expiredDate: null,
+            id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
+            lapsedDate: null,
+            licenceRef: '5/31/14/*S/0116A',
+            revokedDate: null,
+            startDate: new Date('1966-02-01')
+          },
+          startDate: new Date('2022-04-01'),
+          status: 'current'
         }
-      ]
+      ],
+      expiredDate: null,
+      id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
+      lapsedDate: null,
+      licenceRef: '5/31/14/*S/0116A',
+      revokedDate: null,
+      startDate: new Date('1966-02-01')
     }
   ]
 }

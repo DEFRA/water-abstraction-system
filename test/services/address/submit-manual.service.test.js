@@ -21,8 +21,6 @@ describe('Address - Submit Manual Service', () => {
     sessionId = generateUUID()
 
     sessionData = {
-      id: sessionId,
-
       addressJourney: {
         activeNavBar: 'manage',
         address: { postcode: 'SW1A 1AA' },
@@ -31,7 +29,9 @@ describe('Address - Submit Manual Service', () => {
           text: 'Back'
         },
         redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-      }
+      },
+
+      id: sessionId
     }
 
     session = SessionModelStub(sessionData)
@@ -82,6 +82,15 @@ describe('Address - Submit Manual Service', () => {
           const result = await SubmitManualService(sessionId, payload)
 
           expect(result).toEqual({
+            activeNavBar: 'manage',
+            addressLine1: null,
+            addressLine2: null,
+            addressLine3: null,
+            addressLine4: null,
+            backLink: {
+              href: `/system/address/${sessionId}/postcode`,
+              text: 'Back'
+            },
             error: {
               addressLine1: { text: 'Enter address line 1' },
               errorList: [
@@ -95,15 +104,6 @@ describe('Address - Submit Manual Service', () => {
                 }
               ],
               postcode: { text: 'Enter a UK postcode' }
-            },
-            activeNavBar: 'manage',
-            addressLine1: null,
-            addressLine2: null,
-            addressLine3: null,
-            addressLine4: null,
-            backLink: {
-              href: `/system/address/${sessionId}/postcode`,
-              text: 'Back'
             },
             pageTitle: 'Enter the address',
             pageTitleCaption: null,
@@ -121,15 +121,6 @@ describe('Address - Submit Manual Service', () => {
           const result = await SubmitManualService(sessionId, payload)
 
           expect(result).toEqual({
-            error: {
-              errorList: [
-                {
-                  href: '#postcode',
-                  text: 'Enter a valid UK postcode'
-                }
-              ],
-              postcode: { text: 'Enter a valid UK postcode' }
-            },
             activeNavBar: 'manage',
             addressLine1: 'Fake farm',
             addressLine2: null,
@@ -138,6 +129,15 @@ describe('Address - Submit Manual Service', () => {
             backLink: {
               href: `/system/address/${sessionId}/postcode`,
               text: 'Back'
+            },
+            error: {
+              errorList: [
+                {
+                  href: '#postcode',
+                  text: 'Enter a valid UK postcode'
+                }
+              ],
+              postcode: { text: 'Enter a valid UK postcode' }
             },
             pageTitle: 'Enter the address',
             pageTitleCaption: null,

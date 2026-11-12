@@ -25,9 +25,9 @@ describe('Determine Existing Bill Run Years Service', () => {
       describe('when an annual two-part tariff bill run has not been created for those years', () => {
         beforeEach(async () => {
           // Add an annual bill run to check this doesn't get picked up when we are looking for twoPartTariff ones
-          billRun = await BillRunHelper.add({ batchType: 'annual', status: 'sent', regionId })
+          billRun = await BillRunHelper.add({ batchType: 'annual', regionId, status: 'sent' })
           // Add an errored two-part tariff bill run to check this doesn't get picked up either
-          billRunTwo = await BillRunHelper.add({ batchType: 'two_part_tariff', status: 'error', regionId })
+          billRunTwo = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId, status: 'error' })
         })
 
         afterEach(async () => {
@@ -44,11 +44,11 @@ describe('Determine Existing Bill Run Years Service', () => {
 
       describe('when an annual two-part tariff bill run has been created for those years', () => {
         beforeEach(async () => {
-          billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', status: 'sent', regionId })
+          billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId, status: 'sent' })
           billRunTwo = await BillRunHelper.add({
             batchType: 'two_part_tariff',
-            status: 'review',
             regionId,
+            status: 'review',
             toFinancialYearEnding: 2024
           })
         })
@@ -74,9 +74,9 @@ describe('Determine Existing Bill Run Years Service', () => {
       describe('when an annual bill run has not been created for those years', () => {
         beforeEach(async () => {
           // Add an annual two-part tariff bill run to confirm we only match to non two-part tariff
-          billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', status: 'sent', regionId })
+          billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId, status: 'sent' })
           // Add a cancelled annual bill run to check this doesn't get picked up either
-          billRunTwo = await BillRunHelper.add({ batchType: 'annual', status: 'cancel', regionId })
+          billRunTwo = await BillRunHelper.add({ batchType: 'annual', regionId, status: 'cancel' })
         })
 
         afterEach(async () => {
@@ -92,11 +92,11 @@ describe('Determine Existing Bill Run Years Service', () => {
 
       describe('when an annual bill run has been created for those years', () => {
         beforeEach(async () => {
-          billRun = await BillRunHelper.add({ batchType: 'annual', status: 'sent', regionId })
+          billRun = await BillRunHelper.add({ batchType: 'annual', regionId, status: 'sent' })
           billRunTwo = await BillRunHelper.add({
             batchType: 'annual',
-            status: 'review',
             regionId,
+            status: 'review',
             toFinancialYearEnding: 2024
           })
         })

@@ -16,9 +16,9 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
   beforeEach(() => {
     sessionData = {
+      checkPageVisited: false,
       label: 'MONITORING_STATION_LABEL',
-      licenceRef: 'LICENCE_REF',
-      checkPageVisited: false
+      licenceRef: 'LICENCE_REF'
     }
 
     session = SessionModelStub(sessionData)

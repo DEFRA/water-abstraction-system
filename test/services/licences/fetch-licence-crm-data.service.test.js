@@ -40,51 +40,51 @@ describe('Licences - Fetch Licence CRM data service', () => {
         contacts: [
           {
             addressId: null,
+            contactName: 'albus.dumbledore@hogwarts.com',
             contactType: 'primary-user',
-            id: crmData.primaryUser.record.id,
-            contactName: 'albus.dumbledore@hogwarts.com'
+            id: crmData.primaryUser.record.id
           },
           {
             addressId: null,
+            contactName: 'Hogwarts',
             contactType: 'licence-holder',
-            id: crmData.company.record.id,
-            contactName: 'Hogwarts'
+            id: crmData.company.record.id
           },
           {
             addressId: crmData.returnsTo.record.addressId,
+            contactName: 'Hogwarts',
             contactType: 'returns-to',
-            id: crmData.company.record.id,
-            contactName: 'Hogwarts'
+            id: crmData.company.record.id
           },
           {
             addressId: null,
+            contactName: 'Horace Slughorn',
             contactType: 'additional-contact',
-            id: crmData.additionalContact.record.id,
-            contactName: 'Horace Slughorn'
+            id: crmData.additionalContact.record.id
           },
           {
             addressId: null,
+            contactName: 'minerva.mchonagall@hogwarts.com',
             contactType: 'basic-user',
-            id: crmData.basicUser.record.id,
-            contactName: 'minerva.mchonagall@hogwarts.com'
+            id: crmData.basicUser.record.id
           },
           {
             addressId: null,
+            contactName: 'Prof Gilderoy Lockhart',
             contactType: 'abstraction-alerts',
-            id: crmData.abstractionAlerts.record.id,
-            contactName: 'Prof Gilderoy Lockhart'
+            id: crmData.abstractionAlerts.record.id
           },
           {
             addressId: null,
+            contactName: 'severus.snape@hogwarts.com',
             contactType: 'returns-user',
-            id: crmData.returnsUser.record.id,
-            contactName: 'severus.snape@hogwarts.com'
+            id: crmData.returnsUser.record.id
           },
           {
             addressId: null,
+            contactName: crmData.billing.record.accountNumber,
             contactType: 'billing',
-            id: crmData.billing.record.id,
-            contactName: crmData.billing.record.accountNumber
+            id: crmData.billing.record.id
           }
         ],
         totalNumber: 8
@@ -99,21 +99,21 @@ describe('Licences - Fetch Licence CRM data service', () => {
           contacts: [
             {
               addressId: null,
-              id: crmData.otherBasicUser.record.id,
               contactName: 'Draco Malfoy',
-              contactType: 'basic-user'
+              contactType: 'basic-user',
+              id: crmData.otherBasicUser.record.id
             },
             {
               addressId: null,
-              id: crmData.otherBilling.record.id,
               contactName: crmData.otherBilling.record.accountNumber,
-              contactType: 'billing'
+              contactType: 'billing',
+              id: crmData.otherBilling.record.id
             },
             {
               addressId: null,
-              id: crmData.otherCompany.record.id,
               contactName: "Weasleys' Wizard Wheezes",
-              contactType: 'licence-holder'
+              contactType: 'licence-holder',
+              id: crmData.otherCompany.record.id
             }
           ],
           totalNumber: 3
@@ -138,9 +138,9 @@ describe('Licences - Fetch Licence CRM data service', () => {
             contacts: [
               {
                 addressId: null,
+                contactName: 'albus.dumbledore@hogwarts.com',
                 contactType: 'primary-user',
-                id: crmData.primaryUser.record.id,
-                contactName: 'albus.dumbledore@hogwarts.com'
+                id: crmData.primaryUser.record.id
               }
             ],
             totalNumber: 8
@@ -160,9 +160,9 @@ describe('Licences - Fetch Licence CRM data service', () => {
             contacts: [
               {
                 addressId: null,
+                contactName: 'albus.dumbledore@hogwarts.com',
                 contactType: 'primary-user',
-                id: crmData.primaryUser.record.id,
-                contactName: 'albus.dumbledore@hogwarts.com'
+                id: crmData.primaryUser.record.id
               }
             ],
             totalNumber: 8
@@ -182,9 +182,9 @@ describe('Licences - Fetch Licence CRM data service', () => {
             contacts: [
               {
                 addressId: null,
+                contactName: 'Hogwarts',
                 contactType: 'licence-holder',
-                id: crmData.company.record.id,
-                contactName: 'Hogwarts'
+                id: crmData.company.record.id
               }
             ],
             totalNumber: 8

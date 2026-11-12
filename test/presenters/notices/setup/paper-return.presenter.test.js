@@ -13,16 +13,16 @@ describe('Notices - Setup - Paper Return presenter', () => {
 
   beforeEach(() => {
     dueReturn = {
-      siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
       returnLogId: generateUUID(),
       returnReference: '3135',
+      siteDescription: 'Potable Water Supply - Direct',
       startDate: '2002-04-01'
     }
 
     session = {
-      id: generateUUID(),
-      dueReturns: [dueReturn]
+      dueReturns: [dueReturn],
+      id: generateUUID()
     }
   })
 

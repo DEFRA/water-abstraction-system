@@ -18,8 +18,8 @@ describe('Bill Runs - Send Transactions service', () => {
   const licence = {
     historicalAreaCode: 'DALES',
     licenceRef: generateLicenceRef(),
-    regionalChargeArea: 'Yorkshire',
-    region: { chargeRegionId: 'N' }
+    region: { chargeRegionId: 'N' },
+    regionalChargeArea: 'Yorkshire'
   }
 
   let chargingModuleCreateTransactionRequestStub
@@ -83,45 +83,45 @@ describe('Bill Runs - Send Transactions service', () => {
 
 function _transaction(transactionId) {
   return {
-    id: transactionId,
-    chargeReferenceId: '32058a19-4813-4ee7-808b-a0559deb8469',
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2022-10-31'),
-    source: 'non-tidal',
-    season: 'all year',
-    loss: 'low',
-    credit: false,
-    chargeType: 'standard',
-    authorisedQuantity: 6.82,
-    billableQuantity: 6.82,
+    adjustmentFactor: 1,
+    aggregateFactor: 0.562114443,
     authorisedDays: 365,
+    authorisedQuantity: 6.82,
     billableDays: 214,
-    status: 'candidate',
+    billableQuantity: 6.82,
+    chargeCategoryCode: '4.4.5',
+    chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+    chargeReferenceId: '32058a19-4813-4ee7-808b-a0559deb8469',
+    chargeType: 'standard',
+    credit: false,
     description: 'Water abstraction charge: Mineral washing',
-    volume: 6.82,
+    endDate: new Date('2022-10-31'),
+    id: transactionId,
+    loss: 'low',
+    newLicence: false,
+    scheme: 'sroc',
+    season: 'all year',
     section126Factor: 1,
     section127Agreement: false,
     section130Agreement: false,
-    newLicence: false,
-    twoPartSecondPartCharge: false,
-    scheme: 'sroc',
-    aggregateFactor: 0.562114443,
-    adjustmentFactor: 1,
-    chargeCategoryCode: '4.4.5',
-    chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+    source: 'non-tidal',
+    startDate: new Date('2022-04-01'),
+    status: 'candidate',
     supportedSource: false,
     supportedSourceName: null,
+    twoPartSecondPartCharge: false,
+    volume: 6.82,
     waterCompanyCharge: true,
-    winterOnly: false,
-    waterUndertaker: false
+    waterUndertaker: false,
+    winterOnly: false
   }
 }
 
 function _chargingModuleResponse(transactionId) {
   return {
-    succeeded: true,
     response: {
       body: { transaction: { id: transactionId } }
-    }
+    },
+    succeeded: true
   }
 }

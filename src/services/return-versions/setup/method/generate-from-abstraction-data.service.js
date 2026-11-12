@@ -38,6 +38,7 @@ const TWO_PART_IRRIGATION_IDS = new Set(['380', '390', '400', '410', '420', '600
  */
 export default async function generateFromAbstractionDataService(licenceId, licenceVersionId, startDate) {
   const licence = await FetchAbstractionDataService(licenceId, licenceVersionId)
+
   licence.twoPartTariffAgreement = await DetermineTwoPartTariffAgreementService(licence.licenceRef, startDate)
 
   const returnRequirements = _transformForSetup(licence)
@@ -233,19 +234,19 @@ function _transformForSetup(licence) {
     } = licenceVersionPurpose
 
     return {
+      abstractionPeriod: {
+        abstractionPeriodEndDay,
+        abstractionPeriodEndMonth,
+        abstractionPeriodStartDay,
+        abstractionPeriodStartMonth
+      },
+      agreementsExceptions: _agreementExceptions(purpose),
+      frequencyCollected: _frequencyCollected(licence, licenceVersionPurpose),
+      frequencyReported: _frequencyReported(licence, licenceVersionPurpose),
       points: _points(points),
       purposes: [{ alias: '', description: purpose.description, id: purpose.id }],
       returnsCycle: _returnsCycle(abstractionPeriodStartMonth, abstractionPeriodEndMonth),
-      siteDescription: _siteDescription(points),
-      abstractionPeriod: {
-        abstractionPeriodStartDay,
-        abstractionPeriodStartMonth,
-        abstractionPeriodEndDay,
-        abstractionPeriodEndMonth
-      },
-      frequencyReported: _frequencyReported(licence, licenceVersionPurpose),
-      frequencyCollected: _frequencyCollected(licence, licenceVersionPurpose),
-      agreementsExceptions: _agreementExceptions(purpose)
+      siteDescription: _siteDescription(points)
     }
   })
 }

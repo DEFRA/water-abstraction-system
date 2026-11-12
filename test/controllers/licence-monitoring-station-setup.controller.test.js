@@ -119,7 +119,21 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
       describe('and the validation fails', () => {
         beforeEach(() => {
           vi.spyOn(SubmitAbstractionPeriodService, 'default').mockResolvedValue({
+            abstractionPeriodEndDay: 'INVALID',
+            abstractionPeriodEndMonth: 'INVALID',
+            abstractionPeriodStartDay: 'INVALID',
+            abstractionPeriodStartMonth: 'INVALID',
+            backLink: {
+              href: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
+              text: 'Back'
+            },
             error: {
+              'abstraction-period-end': {
+                text: 'Enter a real end date'
+              },
+              'abstraction-period-start': {
+                text: 'Enter a real start date'
+              },
               errorList: [
                 {
                   href: '#abstraction-period-start',
@@ -129,21 +143,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
                   href: '#abstraction-period-end',
                   text: 'Enter a real end date'
                 }
-              ],
-              'abstraction-period-start': {
-                text: 'Enter a real start date'
-              },
-              'abstraction-period-end': {
-                text: 'Enter a real end date'
-              }
-            },
-            abstractionPeriodStartDay: 'INVALID',
-            abstractionPeriodEndDay: 'INVALID',
-            abstractionPeriodStartMonth: 'INVALID',
-            abstractionPeriodEndMonth: 'INVALID',
-            backLink: {
-              href: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
-              text: 'Back'
+              ]
             },
             monitoringStationLabel: 'Station Label',
             pageTitle: 'Enter an abstraction period for licence 01/234'
@@ -255,8 +255,8 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
             vi.spyOn(FullConditionService, 'default').mockResolvedValue({
-              error: { text: 'Select a condition' },
               backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
+              error: { text: 'Select a condition' },
               monitoringStationLabel: 'Station Label',
               pageTitle: 'Select the full condition for licence 01/234'
             })
@@ -329,8 +329,8 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         describe('and the validation fails', () => {
           beforeEach(() => {
             vi.spyOn(SubmitLicenceNumberService, 'default').mockResolvedValue({
-              error: { text: 'Enter a valid licence number' },
               backLink: `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`,
+              error: { text: 'Enter a valid licence number' },
               monitoringStationLabel: 'Station Label',
               pageTitle: 'Enter the licence number this threshold applies to'
             })
@@ -355,11 +355,11 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           vi.spyOn(StopOrReduceService, 'default').mockResolvedValue({
-            sessionId,
             backLink: `/system/licence-monitoring-station/setup/${sessionId}/threshold-and-unit`,
             monitoringStationLabel: 'Station Label',
             pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
             reduceAtThreshold: null,
+            sessionId,
             stopOrReduce: null
           })
         })
@@ -413,8 +413,8 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
               },
               monitoringStationLabel: 'Station Label',
               pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
-              sessionId,
               reduceAtThreshold: null,
+              sessionId,
               stopOrReduce: null
             })
           })
@@ -438,9 +438,9 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           vi.spyOn(ThresholdAndUnitService, 'default').mockResolvedValue({
-            sessionId,
             monitoringStationLabel: 'Station Label',
-            pageTitle: 'What is the licence hands-off flow or level threshold?'
+            pageTitle: 'What is the licence hands-off flow or level threshold?',
+            sessionId
           })
         })
 
@@ -513,12 +513,12 @@ function _getOptions(path) {
   const url = `/licence-monitoring-station/setup/${sessionId}/${path}`
 
   return {
-    method: 'GET',
-    url,
     auth: {
-      strategy: 'session',
-      credentials: { scope: ['manage_gauging_station_licence_links'] }
-    }
+      credentials: { scope: ['manage_gauging_station_licence_links'] },
+      strategy: 'session'
+    },
+    method: 'GET',
+    url
   }
 }
 

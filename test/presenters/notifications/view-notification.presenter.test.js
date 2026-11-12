@@ -41,8 +41,8 @@ describe('Notifications - View Notification presenter', () => {
       paperForm: null,
       reference: notice.referenceCode,
       returnedDate: null,
-      sentDate: '2 April 2025',
       sentBy: notice.issuer,
+      sentDate: '2 April 2025',
       sentTo: notification.recipient,
       status: notification.status
     })

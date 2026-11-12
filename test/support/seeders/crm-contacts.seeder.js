@@ -32,18 +32,18 @@ export async function additionalContact(
   deletedAt = null
 ) {
   const additionalContact = additionalContactSeedData || {
+    email: 'Ron.Burgundy@news.com',
     firstName: 'Ron',
-    lastName: 'Burgundy',
-    email: 'Ron.Burgundy@news.com'
+    lastName: 'Burgundy'
   }
 
   const licenceRole = await LicenceRoleHelper.select('additionalContact')
 
   const companyContact = await CompanyContactHelper.add({
-    companyId: licenceHolderSeedData.company.id,
-    licenceRoleId: licenceRole.id,
     abstractionAlerts,
-    deletedAt
+    companyId: licenceHolderSeedData.company.id,
+    deletedAt,
+    licenceRoleId: licenceRole.id
   })
 
   const contact = await ContactHelper.add({
@@ -52,13 +52,13 @@ export async function additionalContact(
   })
 
   return {
-    companyContact,
-    contact,
-    licenceRole,
     clean: async () => {
       await companyContact.$query().delete()
       await contact.$query().delete()
-    }
+    },
+    companyContact,
+    contact,
+    licenceRole
   }
 }
 
@@ -78,9 +78,9 @@ export async function licenceHolder(licenceSeedData, name, existingRegionId = nu
   const regionId = existingRegionId || licenceSeedData.licence.regionId
 
   const company = await CompanyHelper.add({
+    externalId: generateCompanyExternalId(),
     name,
-    regionId,
-    externalId: generateCompanyExternalId()
+    regionId
   })
 
   const address = await AddressHelper.add({
@@ -105,13 +105,13 @@ export async function licenceHolder(licenceSeedData, name, existingRegionId = nu
 
   return {
     address,
-    company,
-    licenceVersion,
     clean: async () => {
       await address.$query().delete()
       await company.$query().delete()
       await licenceVersion.$query().delete()
-    }
+    },
+    company,
+    licenceVersion
   }
 }
 
@@ -143,14 +143,14 @@ export async function primaryUser(licenceSeedData, email) {
   })
 
   return {
-    companyEntity,
-    individualEntity,
-    licenceEntityRole,
     clean: async () => {
       await companyEntity.$query().delete()
       await individualEntity.$query().delete()
       await licenceEntityRole.$query().delete()
-    }
+    },
+    companyEntity,
+    individualEntity,
+    licenceEntityRole
   }
 }
 
@@ -189,24 +189,24 @@ export async function returnsTo(licenceSeedData, licenceHolderSeedData, name) {
   const licenceRole = LicenceRoleHelper.select('returnsTo')
 
   const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
-    licenceRoleId: licenceRole.id,
-    licenceDocumentId: licenceSeedData.licenceDocument.id,
-    companyId: company.id,
     addressId: address.id,
-    endDate: null
+    companyId: company.id,
+    endDate: null,
+    licenceDocumentId: licenceSeedData.licenceDocument.id,
+    licenceRoleId: licenceRole.id
   })
 
   return {
     address,
-    company,
-    licenceDocumentRole,
-    licenceRole,
     clean: async () => {
       await address.$query().delete()
       await company.$query().delete()
       await licenceDocumentRole.$query().delete()
       await licenceHolderSeedData.clean()
-    }
+    },
+    company,
+    licenceDocumentRole,
+    licenceRole
   }
 }
 
@@ -229,11 +229,11 @@ export async function returnsUser(licenceSeedData, email) {
   })
 
   return {
-    individualEntity,
-    licenceEntityRole,
     clean: async () => {
       await individualEntity.$query().delete()
       await licenceEntityRole.$query().delete()
-    }
+    },
+    individualEntity,
+    licenceEntityRole
   }
 }

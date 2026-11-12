@@ -30,8 +30,8 @@ describe('Notices - Setup - Initiate Session service', () => {
         const result = await InitiateSessionService(journey, monitoringStationId)
 
         expect(result).toEqual({
-          sessionId: result.sessionId,
-          path: 'notice-type'
+          path: 'notice-type',
+          sessionId: result.sessionId
         })
       })
 
@@ -56,8 +56,8 @@ describe('Notices - Setup - Initiate Session service', () => {
         const result = await InitiateSessionService(journey, monitoringStationId)
 
         expect(result).toEqual({
-          sessionId: result.sessionId,
-          path: 'notice-type'
+          path: 'notice-type',
+          sessionId: result.sessionId
         })
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
@@ -84,8 +84,8 @@ describe('Notices - Setup - Initiate Session service', () => {
         const result = await InitiateSessionService(journey, monitoringStationId)
 
         expect(result).toEqual({
-          sessionId: result.sessionId,
-          path: 'abstraction-alerts/alert-type'
+          path: 'abstraction-alerts/alert-type',
+          sessionId: result.sessionId
         })
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
@@ -93,70 +93,70 @@ describe('Notices - Setup - Initiate Session service', () => {
         expect(matchingSession.referenceCode).toMatch(/^WAA-/)
 
         expect(matchingSession.data).toMatchObject({
-          name: 'Water abstraction alert',
           journey: 'alerts',
-          subType: 'waterAbstractionAlerts',
-          noticeType: 'abstractionAlerts',
-          notificationType: 'Abstraction alert',
-          monitoringStationId,
-          monitoringStationName: 'Death star',
           licenceMonitoringStations: [
             {
+              abstractionPeriodEndDay: 1,
+              abstractionPeriodEndMonth: 1,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 2,
               id: monitoringStationData.licenceMonitoringStations[0].id,
-              notes: null,
+              latestNotification: null,
               licence: {
                 id: monitoringStationData.licenceMonitoringStations[0].licence.id,
                 licenceRef: monitoringStationData.licenceMonitoringStations[0].licence.licenceRef
               },
               measureType: 'level',
-              thresholdUnit: 'm',
-              thresholdGroup: 'level-1000-m',
-              thresholdValue: 1000,
+              notes: null,
               restrictionType: 'reduce',
-              latestNotification: null,
-              abstractionPeriodEndDay: 1,
-              abstractionPeriodEndMonth: 1,
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 2
+              thresholdGroup: 'level-1000-m',
+              thresholdUnit: 'm',
+              thresholdValue: 1000
             },
             {
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 1,
               id: monitoringStationData.licenceMonitoringStations[1].id,
-              notes: 'I have a bad feeling about this',
+              latestNotification: null,
               licence: {
                 id: monitoringStationData.licenceMonitoringStations[1].licence.id,
                 licenceRef: monitoringStationData.licenceMonitoringStations[1].licence.licenceRef
               },
               measureType: 'flow',
-              thresholdUnit: 'm3/s',
-              thresholdGroup: 'flow-100-m3/s',
-              thresholdValue: 100,
+              notes: 'I have a bad feeling about this',
               restrictionType: 'stop',
-              latestNotification: null,
+              thresholdGroup: 'flow-100-m3/s',
+              thresholdUnit: 'm3/s',
+              thresholdValue: 100
+            },
+            {
               abstractionPeriodEndDay: 31,
               abstractionPeriodEndMonth: 3,
               abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 1
-            },
-            {
+              abstractionPeriodStartMonth: 1,
               id: monitoringStationData.licenceMonitoringStations[2].id,
-              notes: null,
+              latestNotification: null,
               licence: {
                 id: monitoringStationData.licenceMonitoringStations[2].licence.id,
                 licenceRef: monitoringStationData.licenceMonitoringStations[2].licence.licenceRef
               },
               measureType: 'level',
-              thresholdUnit: 'm',
-              thresholdGroup: 'level-100-m',
-              thresholdValue: 100,
+              notes: null,
               restrictionType: 'stop_or_reduce',
-              latestNotification: null,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 3,
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 1
+              thresholdGroup: 'level-100-m',
+              thresholdUnit: 'm',
+              thresholdValue: 100
             }
           ],
-          monitoringStationRiverName: 'Meridian Trench'
+          monitoringStationId,
+          monitoringStationName: 'Death star',
+          monitoringStationRiverName: 'Meridian Trench',
+          name: 'Water abstraction alert',
+          noticeType: 'abstractionAlerts',
+          notificationType: 'Abstraction alert',
+          subType: 'waterAbstractionAlerts'
         })
       })
     })

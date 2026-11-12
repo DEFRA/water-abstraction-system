@@ -1,3 +1,9 @@
+/**
+ * Transforms data into CSV formatted strings
+ *
+ * @module TransformToCsvLib
+ */
+
 import { formatDateObjectToISO } from 'water-abstraction-engine/lib/dates.lib.js'
 
 /**

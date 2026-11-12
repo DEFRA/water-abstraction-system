@@ -4,10 +4,10 @@
  * @module SubmitContactTypeService
  */
 
-import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import crypto from 'node:crypto'
-import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
+import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 
 import ContactTypePresenter from '../../../presenters/notices/setup/contact-type.presenter.js'
 import ContactTypeValidator from '../../../validators/notices/setup/contact-type.validator.js'

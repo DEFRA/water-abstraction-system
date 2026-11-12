@@ -2,9 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import http2 from 'node:http2'
 import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.js'
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
-import http2 from 'node:http2'
 
 // Things we need to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
@@ -18,15 +18,15 @@ const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address - Submit Select Service', () => {
   const match = {
-    uprn: 340116,
     address: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+    city: 'BRISTOL',
+    country: 'United Kingdom',
+    locality: 'VILLAGE GREEN',
     organisation: 'ENVIRONMENT AGENCY',
+    postcode: 'BS1 5AH',
     premises: 'HORIZON HOUSE',
     street_address: 'DEANERY ROAD',
-    locality: 'VILLAGE GREEN',
-    city: 'BRISTOL',
-    postcode: 'BS1 5AH',
-    country: 'United Kingdom'
+    uprn: 340116
   }
 
   let lookupPostcodeRequestStub
@@ -40,8 +40,6 @@ describe('Address - Submit Select Service', () => {
     sessionId = generateUUID()
 
     sessionData = {
-      id: sessionId,
-
       addressJourney: {
         activeNavBar: 'manage',
         address: { postcode: 'BS1 5AH' },
@@ -50,7 +48,9 @@ describe('Address - Submit Select Service', () => {
           text: 'Back'
         },
         redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-      }
+      },
+
+      id: sessionId
     }
 
     lookupPostcodeRequestStub = vi.spyOn(LookupPostcodeRequest, 'default').mockImplementation(() => {})
@@ -72,14 +72,14 @@ describe('Address - Submit Select Service', () => {
           payload = { addresses: '340116' }
 
           lookupUPRNRequestStub.mockResolvedValue({
-            succeeded: true,
+            matches: [match],
             response: {
-              statusCode: HTTP_STATUS_OK,
               body: {
                 results: [match]
-              }
+              },
+              statusCode: HTTP_STATUS_OK
             },
-            matches: [match]
+            succeeded: true
           })
         })
 
@@ -89,12 +89,12 @@ describe('Address - Submit Select Service', () => {
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
           expect(session.addressJourney.address).toEqual({
-            uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'HORIZON HOUSE DEANERY ROAD',
             addressLine3: 'VILLAGE GREEN',
             addressLine4: 'BRISTOL',
-            postcode: 'BS1 5AH'
+            postcode: 'BS1 5AH',
+            uprn: 340116
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
           expect(session.$update).toHaveBeenCalled()
@@ -113,14 +113,14 @@ describe('Address - Submit Select Service', () => {
           }
 
           lookupUPRNRequestStub.mockResolvedValue({
-            succeeded: true,
+            matches: [noOrganisation],
             response: {
-              statusCode: HTTP_STATUS_OK,
               body: {
                 results: [noOrganisation]
-              }
+              },
+              statusCode: HTTP_STATUS_OK
             },
-            matches: [noOrganisation]
+            succeeded: true
           })
         })
 
@@ -130,12 +130,12 @@ describe('Address - Submit Select Service', () => {
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
           expect(session.addressJourney.address).toEqual({
-            uprn: 340116,
             addressLine1: 'HORIZON HOUSE DEANERY ROAD',
             addressLine2: null,
             addressLine3: 'VILLAGE GREEN',
             addressLine4: 'BRISTOL',
-            postcode: 'BS1 5AH'
+            postcode: 'BS1 5AH',
+            uprn: 340116
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
           expect(session.$update).toHaveBeenCalled()
@@ -154,14 +154,14 @@ describe('Address - Submit Select Service', () => {
           }
 
           lookupUPRNRequestStub.mockResolvedValue({
-            succeeded: true,
+            matches: [noPremises],
             response: {
-              statusCode: HTTP_STATUS_OK,
               body: {
                 results: [noPremises]
-              }
+              },
+              statusCode: HTTP_STATUS_OK
             },
-            matches: [noPremises]
+            succeeded: true
           })
         })
 
@@ -171,12 +171,12 @@ describe('Address - Submit Select Service', () => {
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
           expect(session.addressJourney.address).toEqual({
-            uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'DEANERY ROAD',
             addressLine3: 'VILLAGE GREEN',
             addressLine4: 'BRISTOL',
-            postcode: 'BS1 5AH'
+            postcode: 'BS1 5AH',
+            uprn: 340116
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
           expect(session.$update).toHaveBeenCalled()
@@ -195,14 +195,14 @@ describe('Address - Submit Select Service', () => {
           }
 
           lookupUPRNRequestStub.mockResolvedValue({
-            succeeded: true,
+            matches: [noPremises],
             response: {
-              statusCode: HTTP_STATUS_OK,
               body: {
                 results: [noPremises]
-              }
+              },
+              statusCode: HTTP_STATUS_OK
             },
-            matches: [noPremises]
+            succeeded: true
           })
         })
 
@@ -212,12 +212,12 @@ describe('Address - Submit Select Service', () => {
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
           expect(session.addressJourney.address).toEqual({
-            uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'HORIZON HOUSE',
             addressLine3: 'VILLAGE GREEN',
             addressLine4: 'BRISTOL',
-            postcode: 'BS1 5AH'
+            postcode: 'BS1 5AH',
+            uprn: 340116
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
           expect(session.$update).toHaveBeenCalled()
@@ -236,14 +236,14 @@ describe('Address - Submit Select Service', () => {
           }
 
           lookupUPRNRequestStub.mockResolvedValue({
-            succeeded: true,
+            matches: [noPremises],
             response: {
-              statusCode: HTTP_STATUS_OK,
               body: {
                 results: [noPremises]
-              }
+              },
+              statusCode: HTTP_STATUS_OK
             },
-            matches: [noPremises]
+            succeeded: true
           })
         })
 
@@ -253,12 +253,12 @@ describe('Address - Submit Select Service', () => {
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
           expect(session.addressJourney.address).toEqual({
-            uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'HORIZON HOUSE DEANERY ROAD',
             addressLine3: null,
             addressLine4: 'BRISTOL',
-            postcode: 'BS1 5AH'
+            postcode: 'BS1 5AH',
+            uprn: 340116
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
           expect(session.$update).toHaveBeenCalled()
@@ -270,19 +270,19 @@ describe('Address - Submit Select Service', () => {
           payload = { addresses: '340116' }
 
           lookupUPRNRequestStub.mockResolvedValue({
-            succeeded: false,
+            matches: [],
             response: {
-              statusCode: HTTP_STATUS_NOT_FOUND,
               body: {
-                facade_status_code: HTTP_STATUS_NOT_FOUND,
-                facade_error_message: 'HTTP 404 Not Found',
                 facade_error_code: 'address_service_error_11',
-                supplier_was_called: null,
+                facade_error_message: 'HTTP 404 Not Found',
+                facade_status_code: HTTP_STATUS_NOT_FOUND,
+                supplier_response: null,
                 supplier_status_code: null,
-                supplier_response: null
-              }
+                supplier_was_called: null
+              },
+              statusCode: HTTP_STATUS_NOT_FOUND
             },
-            matches: []
+            succeeded: false
           })
         })
 
@@ -298,14 +298,14 @@ describe('Address - Submit Select Service', () => {
       describe('but the UPRN lookup _now_ returns no matches', () => {
         beforeEach(() => {
           lookupUPRNRequestStub.mockResolvedValue({
-            succeeded: true,
+            matches: [],
             response: {
-              statusCode: HTTP_STATUS_OK,
               body: {
                 results: []
-              }
+              },
+              statusCode: HTTP_STATUS_OK
             },
-            matches: []
+            succeeded: true
           })
         })
 
@@ -330,14 +330,14 @@ describe('Address - Submit Select Service', () => {
         describe('and the postcode lookup succeeds', () => {
           beforeEach(() => {
             lookupPostcodeRequestStub.mockResolvedValue({
-              succeeded: true,
+              matches: [match],
               response: {
-                statusCode: HTTP_STATUS_OK,
                 body: {
                   results: [match]
-                }
+                },
+                statusCode: HTTP_STATUS_OK
               },
-              matches: [match]
+              succeeded: true
             })
           })
 
@@ -345,21 +345,12 @@ describe('Address - Submit Select Service', () => {
             const result = await SubmitSelectService(sessionId, payload)
 
             expect(result).toEqual({
-              error: {
-                addresses: { text: 'Select an address' },
-                errorList: [
-                  {
-                    href: '#addresses',
-                    text: 'Select an address'
-                  }
-                ]
-              },
               activeNavBar: 'manage',
               addresses: [
                 {
-                  value: 'select',
                   selected: true,
-                  text: `1 address found`
+                  text: `1 address found`,
+                  value: 'select'
                 },
                 {
                   text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
@@ -369,6 +360,15 @@ describe('Address - Submit Select Service', () => {
               backLink: {
                 href: `/system/address/${sessionId}/postcode`,
                 text: 'Back'
+              },
+              error: {
+                addresses: { text: 'Select an address' },
+                errorList: [
+                  {
+                    href: '#addresses',
+                    text: 'Select an address'
+                  }
+                ]
               },
               pageTitle: 'Select the address',
               pageTitleCaption: null,
@@ -381,12 +381,12 @@ describe('Address - Submit Select Service', () => {
         describe('but the postcode lookup fails', () => {
           beforeEach(() => {
             lookupPostcodeRequestStub.mockResolvedValue({
-              succeeded: false,
+              matches: [],
               response: {
-                statusCode: HTTP_STATUS_NOT_FOUND,
-                body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
+                body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
+                statusCode: HTTP_STATUS_NOT_FOUND
               },
-              matches: []
+              succeeded: false
             })
           })
 
@@ -402,14 +402,14 @@ describe('Address - Submit Select Service', () => {
         describe('but the postcode lookup _now_ returns no matches', () => {
           beforeEach(() => {
             lookupPostcodeRequestStub.mockResolvedValue({
-              succeeded: true,
+              matches: [],
               response: {
-                statusCode: HTTP_STATUS_OK,
                 body: {
                   results: []
-                }
+                },
+                statusCode: HTTP_STATUS_OK
               },
-              matches: []
+              succeeded: true
             })
           })
 

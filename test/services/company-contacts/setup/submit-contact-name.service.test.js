@@ -88,7 +88,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
               const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
               expect(flashType).toEqual('notification')
-              expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Name updated' })
+              expect(bannerMessage).toEqual({ text: 'Name updated', titleText: 'Updated' })
             })
           })
         })

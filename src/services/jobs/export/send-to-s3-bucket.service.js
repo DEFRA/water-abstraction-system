@@ -3,12 +3,12 @@
  * @module SendToS3BucketService
  */
 
-import { NodeHttpHandler } from '@smithy/node-http-handler'
-import { promises as fsPromises } from 'node:fs'
 import hpagent from 'water-abstraction-engine/wrappers/hpagent.wrapper.js'
 import path from 'node:path'
 import serverConfig from 'water-abstraction-engine/config/server.config.js'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { NodeHttpHandler } from '@smithy/node-http-handler'
+import { promises as fsPromises } from 'node:fs'
 
 import S3Config from '../../../config/s3.config.js'
 
@@ -22,9 +22,9 @@ export default async function sendToS3BucketService(filePath) {
   const fileName = path.basename(filePath)
   const fileContent = await fsPromises.readFile(filePath)
   const params = {
+    Body: fileContent,
     Bucket: bucketName,
-    Key: `export/${fileName}`,
-    Body: fileContent
+    Key: `export/${fileName}`
   }
 
   await _uploadFileToS3Bucket(params)
@@ -45,8 +45,8 @@ function _customConfig() {
       // operator to bring the result back into the top level of the `customConfig` object.
       ...(serverConfig.httpProxy
         ? {
-            httpsAgent: new hpagent.HttpsProxyAgent({ proxy: serverConfig.httpProxy }),
-            httpAgent: new hpagent.HttpProxyAgent({ proxy: serverConfig.httpProxy })
+            httpAgent: new hpagent.HttpProxyAgent({ proxy: serverConfig.httpProxy }),
+            httpsAgent: new hpagent.HttpsProxyAgent({ proxy: serverConfig.httpProxy })
           }
         : {}),
       connectionTimeout: 10000

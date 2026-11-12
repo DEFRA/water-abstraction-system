@@ -1,19 +1,25 @@
+/**
+ * Routes for the /check endpoints
+ *
+ * @module CheckRoutes
+ */
+
 import { placeholder } from '../controllers/check.controller.js'
 
 export default [
   {
     method: 'POST',
-    path: '/check/placeholder',
     options: {
-      handler: placeholder,
       app: {
         excludeFromProd: true,
         plainOutput: true
       },
       auth: false,
+      handler: placeholder,
       plugins: {
         crumb: false
       }
-    }
+    },
+    path: '/check/placeholder'
   }
 ]

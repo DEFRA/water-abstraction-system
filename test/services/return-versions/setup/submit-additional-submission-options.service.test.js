@@ -22,10 +22,10 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       checkPageVisited: false,
       journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         endDate: null,
-        licenceRef: '01/ABC',
-        licenceHolder: 'Turbo Kid'
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC'
       },
       multipleUpload: false
     }
@@ -63,8 +63,8 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
 
         expect(flashType).toEqual('notification')
         expect(notification).toEqual({
-          title: 'Updated',
-          text: 'Additional submission options updated'
+          text: 'Additional submission options updated',
+          title: 'Updated'
         })
       })
     })
@@ -89,8 +89,8 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
 
         expect(flashType).toEqual('notification')
         expect(notification).toEqual({
-          title: 'Updated',
-          text: 'Additional submission options updated'
+          text: 'Additional submission options updated',
+          title: 'Updated'
         })
       })
     })
@@ -115,8 +115,8 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
 
         expect(flashType).toEqual('notification')
         expect(notification).toEqual({
-          title: 'Updated',
-          text: 'Additional submission options updated'
+          text: 'Additional submission options updated',
+          title: 'Updated'
         })
       })
     })
@@ -134,13 +134,13 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
             href: `/system/return-versions/setup/${session.id}/check`,
             text: 'Back'
           },
-          pageTitle: 'Select any additional submission options for the return requirements',
-          pageTitleCaption: 'Licence 01/ABC',
           licenceRef: '01/ABC',
           multipleUpload: false,
           noAdditionalOptions: undefined,
-          quarterlyReturnSubmissions: false,
-          quarterlyReturns: undefined
+          pageTitle: 'Select any additional submission options for the return requirements',
+          pageTitleCaption: 'Licence 01/ABC',
+          quarterlyReturns: undefined,
+          quarterlyReturnSubmissions: false
         })
       })
 
@@ -149,15 +149,15 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
           const result = await SubmitAdditionalSubmissionOptionsService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
+            additionalSubmissionOptions: {
+              text: 'Select additional submission options for the requirements for returns'
+            },
             errorList: [
               {
                 href: '#additionalSubmissionOptions',
                 text: 'Select additional submission options for the requirements for returns'
               }
-            ],
-            additionalSubmissionOptions: {
-              text: 'Select additional submission options for the requirements for returns'
-            }
+            ]
           })
         })
       })

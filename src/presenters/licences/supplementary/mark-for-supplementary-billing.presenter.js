@@ -3,8 +3,8 @@
  * @module MarkForSupplementaryBillingPresenter
  */
 
-import { determineFinancialYearEnd } from 'water-abstraction-engine/lib/dates.lib.js'
 import { formatFinancialYear } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { determineFinancialYearEnd } from 'water-abstraction-engine/lib/dates.lib.js'
 
 const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
 const PREVIOUS_SIX_YEARS = 6
@@ -47,16 +47,16 @@ function _yearsToDisplay() {
 
     if (year > LAST_PRE_SROC_FINANCIAL_YEAR_END) {
       lastSixFinancialYears.push({
+        attributes: { 'data-test': `sroc-years-${year}` },
         text: formatFinancialYear(year),
-        value: year,
-        attributes: { 'data-test': `sroc-years-${year}` }
+        value: year
       })
     } else {
       lastSixFinancialYears.push({
-        text: 'Before 2022',
-        value: 'preSroc',
+        attributes: { 'data-test': 'pre-sroc-years' },
         hint: { text: 'Old charge scheme' },
-        attributes: { 'data-test': 'pre-sroc-years' }
+        text: 'Before 2022',
+        value: 'preSroc'
       })
 
       break

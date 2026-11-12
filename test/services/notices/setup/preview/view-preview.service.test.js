@@ -55,8 +55,8 @@ describe('Notices - Setup - Preview - View Preview service', () => {
           notes: null,
           restrictionType: 'stop',
           thresholdGroup: 'flow-50-m3/s',
-          thresholdValue: 50,
-          thresholdUnit: 'm3/s'
+          thresholdUnit: 'm3/s',
+          thresholdValue: 50
         }
       ]
 
@@ -65,9 +65,9 @@ describe('Notices - Setup - Preview - View Preview service', () => {
         alertEmailAddressType: 'username',
         alertThresholds: ['flow-50-m3/s'],
         alertType: 'stop',
-        licenceRefs: [...recipients[0].licence_refs],
-        licenceMonitoringStations,
         journey: 'alerts',
+        licenceMonitoringStations,
+        licenceRefs: [...recipients[0].licence_refs],
         monitoringStationId: generateUUID(),
         monitoringStationName: 'DEATH STAR',
         monitoringStationRiverName: '',
@@ -91,9 +91,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
       vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
-        succeeded: true,
         response: {
-          statusCode: HTTP_STATUS_OK,
           body: {
             body: 'Dear licence holder,\r\n',
             html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence holder,</p>',
@@ -102,8 +100,10 @@ describe('Notices - Setup - Preview - View Preview service', () => {
             subject: 'Submit your water abstraction returns by 28th April 2025',
             type: 'email',
             version: 40
-          }
-        }
+          },
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 
@@ -154,24 +154,24 @@ describe('Notices - Setup - Preview - View Preview service', () => {
       ]
 
       sessionData = {
-        id: sessionId,
         addressJourney: {
+          activeNavBar: 'notices',
           address: {},
           backLink: {
             href: `/system/notices/setup/${sessionId}/recipient-name`,
             text: 'Back'
           },
-          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`,
-          activeNavBar: 'notices',
-          pageTitleCaption: `Notice ${referenceCode}`
+          pageTitleCaption: `Notice ${referenceCode}`,
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
         },
         checkPageVisited: true,
         dueReturns,
-        licenceRef,
+        id: sessionId,
         journey: 'adhoc',
+        licenceRef,
         name: 'Returns: invitation',
-        notificationType: 'Returns invitation',
         noticeType: 'invitations',
+        notificationType: 'Returns invitation',
         referenceCode,
         selectedRecipients: [recipients[0].contact_hash_id],
         subType: 'returnInvitation'
@@ -187,9 +187,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
       vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
-        succeeded: true,
         response: {
-          statusCode: HTTP_STATUS_OK,
           body: {
             body: 'Dear licence holder,\r\n',
             html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence holder,</p>',
@@ -198,8 +196,10 @@ describe('Notices - Setup - Preview - View Preview service', () => {
             subject: 'Submit your water abstraction returns by 28th April 2025',
             type: 'email',
             version: 40
-          }
-        }
+          },
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 
@@ -230,9 +230,9 @@ describe('Notices - Setup - Preview - View Preview service', () => {
       const sessionId = generateUUID()
 
       sessionData = {
-        id: sessionId,
         checkPageVisited: true,
         expiryDate: '2025-09-30T00:00:00.000Z',
+        id: sessionId,
         journey: 'adhoc',
         licenceRef: recipients[0].licence_refs[0],
         name: 'Renewals: invitation',
@@ -253,9 +253,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
       vi.spyOn(GeneratePreviewRequest, 'default').mockResolvedValue({
-        succeeded: true,
         response: {
-          statusCode: HTTP_STATUS_OK,
           body: {
             body: 'Dear licence holder,\r\n',
             html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence holder,</p>',
@@ -264,8 +262,10 @@ describe('Notices - Setup - Preview - View Preview service', () => {
             subject: 'Your water abstraction licence is due to expire',
             type: 'email',
             version: 40
-          }
-        }
+          },
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 

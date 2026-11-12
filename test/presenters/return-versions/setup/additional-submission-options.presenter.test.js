@@ -9,21 +9,21 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
 
   beforeEach(() => {
     session = {
-      id: '61e07498-f309-4829-96a9-72084a54996d',
       checkPageVisited: false,
+      id: '61e07498-f309-4829-96a9-72084a54996d',
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
       multipleUpload: false,
+      reason: 'major-change',
       requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change'
+      startDateOptions: 'licenceStartDate'
     }
   })
 
@@ -40,10 +40,10 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
         licenceRef: '01/ABC',
         multipleUpload: false,
         noAdditionalOptions: undefined,
-        quarterlyReturnSubmissions: false,
-        quarterlyReturns: undefined,
         pageTitle: 'Select any additional submission options for the return requirements',
         pageTitleCaption: 'Licence 01/ABC',
+        quarterlyReturns: undefined,
+        quarterlyReturnSubmissions: false,
         sessionId: session.id
       })
     })

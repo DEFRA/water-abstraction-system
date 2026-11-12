@@ -60,9 +60,9 @@ function _formatLicences(licences) {
   return licences.map((licence) => {
     return {
       id: licence.id,
-      licenceRef: licence.licenceRef,
-      licenceHolder: licence.licenceHolder,
       issue: _issue(licence.issues),
+      licenceHolder: licence.licenceHolder,
+      licenceRef: licence.licenceRef,
       progress: licence.progress ? '✓' : '',
       status: licence.status
     }

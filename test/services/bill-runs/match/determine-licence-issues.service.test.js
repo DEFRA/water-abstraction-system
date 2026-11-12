@@ -158,14 +158,14 @@ describe('Determine Licence Issues Service', () => {
             returnLogId: 'faf38f5f-9ca1-4c64-aca5-308cfdc72db7'
           }
           licence.returnLogs[1] = {
-            id: 'faf38f5f-9ca1-4c64-aca5-308cfdc72db7',
             abstractionOutsidePeriod: false,
-            underQuery: false,
-            status: 'completed',
-            quantity: 1,
             allocatedQuantity: 1,
+            dueDate: new Date('2024 01 01'),
+            id: 'faf38f5f-9ca1-4c64-aca5-308cfdc72db7',
+            quantity: 1,
             receivedDate: new Date('2024 01 01'),
-            dueDate: new Date('2024 01 01')
+            status: 'completed',
+            underQuery: false
           }
         })
 
@@ -284,14 +284,14 @@ function _generateNoIssuesLicenceData() {
     ],
     returnLogs: [
       {
-        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
         abstractionOutsidePeriod: false,
-        underQuery: false,
-        status: 'completed',
-        quantity: 1,
         allocatedQuantity: 1,
+        dueDate: new Date('2024 01 01'),
+        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
+        quantity: 1,
         receivedDate: new Date('2024 01 01'),
-        dueDate: new Date('2024 01 01')
+        status: 'completed',
+        underQuery: false
       }
     ]
   }
@@ -321,14 +321,14 @@ function _generateOneIssueLicenceData(status) {
       ],
       returnLogs: [
         {
-          id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
           abstractionOutsidePeriod: false,
-          underQuery: true,
-          status: 'completed',
-          quantity: 1,
           allocatedQuantity: 1,
+          dueDate: new Date('2024 01 01'),
+          id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
+          quantity: 1,
           receivedDate: new Date('2024 01 01'),
-          dueDate: new Date('2024 01 01')
+          status: 'completed',
+          underQuery: true
         }
       ]
     }
@@ -355,14 +355,14 @@ function _generateOneIssueLicenceData(status) {
       ],
       returnLogs: [
         {
-          id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
           abstractionOutsidePeriod: false,
-          underQuery: false,
-          status: 'completed',
-          quantity: 1,
           allocatedQuantity: 0,
+          dueDate: new Date('2024 01 01'),
+          id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
+          quantity: 1,
           receivedDate: new Date('2024 01 01'),
-          dueDate: new Date('2024 01 01')
+          status: 'completed',
+          underQuery: false
         }
       ]
     }
@@ -412,34 +412,34 @@ function _generateMultipleIssuesLicenceData() {
     ],
     returnLogs: [
       {
-        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
         abstractionOutsidePeriod: true,
-        underQuery: true,
-        status: 'completed',
+        allocatedQuantity: 0,
+        dueDate: new Date('2024 01 01'),
+        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
         quantity: 1,
-        allocatedQuantity: 0,
         receivedDate: new Date('2024 02 01'),
-        dueDate: new Date('2024 01 01')
+        status: 'completed',
+        underQuery: true
       },
       {
+        abstractionOutsidePeriod: false,
+        allocatedQuantity: 0,
+        dueDate: new Date('2024 01 01'),
         id: '5963059f-f91a-4f34-9efb-0a30b265cf5e',
-        abstractionOutsidePeriod: false,
-        underQuery: false,
-        status: 'due',
         quantity: 0,
-        allocatedQuantity: 0,
         receivedDate: null,
-        dueDate: new Date('2024 01 01')
+        status: 'due',
+        underQuery: false
       },
       {
-        id: 'd2535659-1d87-4eaa-850f-d87afa40c6b2',
         abstractionOutsidePeriod: false,
-        underQuery: false,
-        status: 'received',
-        quantity: 0,
         allocatedQuantity: 0,
+        dueDate: new Date('2024 01 01'),
+        id: 'd2535659-1d87-4eaa-850f-d87afa40c6b2',
+        quantity: 0,
         receivedDate: new Date('2024 01 01'),
-        dueDate: new Date('2024 01 01')
+        status: 'received',
+        underQuery: false
       }
     ]
   }
@@ -471,24 +471,24 @@ function _generateMultipleReadyIssuesLicenceData() {
     ],
     returnLogs: [
       {
-        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
         abstractionOutsidePeriod: true,
-        underQuery: false,
-        status: 'completed',
-        quantity: 1,
         allocatedQuantity: 0,
+        dueDate: new Date('2024 01 01'),
+        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
+        quantity: 1,
         receivedDate: new Date('2024 02 01'),
-        dueDate: new Date('2024 01 01')
+        status: 'completed',
+        underQuery: false
       },
       {
-        id: '5963059f-f91a-4f34-9efb-0a30b265cf5e',
         abstractionOutsidePeriod: false,
-        underQuery: false,
-        status: 'due',
-        quantity: 0,
         allocatedQuantity: 0,
+        dueDate: new Date('2024 01 01'),
+        id: '5963059f-f91a-4f34-9efb-0a30b265cf5e',
+        quantity: 0,
         receivedDate: null,
-        dueDate: new Date('2024 01 01')
+        status: 'due',
+        underQuery: false
       }
     ]
   }
@@ -534,24 +534,24 @@ function _generateMultipleReviewIssuesLicenceData() {
     ],
     returnLogs: [
       {
-        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
         abstractionOutsidePeriod: false,
-        underQuery: true,
-        status: 'completed',
-        quantity: 0,
         allocatedQuantity: 0,
+        dueDate: new Date('2024 01 01'),
+        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
+        quantity: 0,
         receivedDate: new Date('2024 01 01'),
-        dueDate: new Date('2024 01 01')
+        status: 'completed',
+        underQuery: true
       },
       {
-        id: 'd2535659-1d87-4eaa-850f-d87afa40c6b2',
         abstractionOutsidePeriod: false,
-        underQuery: false,
-        status: 'received',
-        quantity: 0,
         allocatedQuantity: 0,
+        dueDate: new Date('2024 01 01'),
+        id: 'd2535659-1d87-4eaa-850f-d87afa40c6b2',
+        quantity: 0,
         receivedDate: new Date('2024 01 01'),
-        dueDate: new Date('2024 01 01')
+        status: 'received',
+        underQuery: false
       }
     ]
   }

@@ -13,9 +13,7 @@ describe('Notifications - Notify Update presenter', () => {
 
   beforeEach(() => {
     notifyResult = {
-      succeeded: true,
       response: {
-        statusCode: HTTP_STATUS_OK,
         body: {
           content: {
             body: 'Dear licence holder,\r\n',
@@ -32,8 +30,10 @@ describe('Notifications - Notify Update presenter', () => {
             version: 40
           },
           uri: 'https://api.notifications.service.gov.uk/v2/notifications/a8023182-5cb3-4ee3-b777-2fb82cde7fc5'
-        }
-      }
+        },
+        statusCode: HTTP_STATUS_OK
+      },
+      succeeded: true
     }
   })
 
@@ -51,9 +51,7 @@ describe('Notifications - Notify Update presenter', () => {
   describe('when there is an error', () => {
     beforeEach(() => {
       notifyResult = {
-        succeeded: false,
         response: {
-          statusCode: HTTP_STATUS_BAD_REQUEST,
           body: {
             errors: [
               {
@@ -62,8 +60,10 @@ describe('Notifications - Notify Update presenter', () => {
               }
             ],
             status_code: HTTP_STATUS_BAD_REQUEST
-          }
-        }
+          },
+          statusCode: HTTP_STATUS_BAD_REQUEST
+        },
+        succeeded: false
       }
     })
 
@@ -72,7 +72,7 @@ describe('Notifications - Notify Update presenter', () => {
 
       expect(result).toEqual({
         notifyError:
-          '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"BadRequestError","message":"Missing personalisation: returnDueDate"}]}',
+          '{"errors":[{"error":"BadRequestError","message":"Missing personalisation: returnDueDate"}],"message":"Request failed with status code 400","status":400}',
         status: 'error'
       })
     })

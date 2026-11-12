@@ -4,8 +4,8 @@
  */
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
-import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 import { handleOneOptionSelected } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
 import FetchPurposesService from './fetch-purposes.service.js'
@@ -69,9 +69,9 @@ function _combinePurposeDetails(payload, licencePurposes) {
     })
 
     combinedValues.push({
-      id: purpose,
       alias: alias || '',
-      description: matchedLicencePurpose.description
+      description: matchedLicencePurpose.description,
+      id: purpose
     })
   }
 

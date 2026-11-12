@@ -4,8 +4,8 @@
  */
 
 import PointModel from 'water-abstraction-engine/models/point.model.js'
-import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import { formatAbstractionPeriod, formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 
 import { formatAbstractionAmounts } from './licences/base-licences.presenter.js'
 
@@ -113,8 +113,8 @@ function _abstractionPoints(licenceVersionPurposePoints) {
   const descriptions = _formatAbstractionPoints(points)
 
   return {
-    label: descriptions.length === 1 ? 'Abstraction point' : 'Abstraction points',
-    descriptions
+    descriptions,
+    label: descriptions.length === 1 ? 'Abstraction point' : 'Abstraction points'
   }
 }
 
@@ -201,20 +201,20 @@ export function licenceEndsWarning(licence) {
 
   if (ends.reason === 'revoked') {
     return {
-      text: `This licence was revoked on ${formattedDate}`,
-      iconFallbackText: 'Warning'
+      iconFallbackText: 'Warning',
+      text: `This licence was revoked on ${formattedDate}`
     }
   }
 
   if (ends.reason === 'lapsed') {
     return {
-      text: `This licence lapsed on ${formattedDate}`,
-      iconFallbackText: 'Warning'
+      iconFallbackText: 'Warning',
+      text: `This licence lapsed on ${formattedDate}`
     }
   }
 
   return {
-    text: `This licence expired on ${formattedDate}`,
-    iconFallbackText: 'Warning'
+    iconFallbackText: 'Warning',
+    text: `This licence expired on ${formattedDate}`
   }
 }

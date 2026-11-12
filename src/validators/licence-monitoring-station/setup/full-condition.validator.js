@@ -19,8 +19,8 @@ export default function fullConditionValidator(payload) {
 
   const schema = Joi.object({
     condition: Joi.alternatives().try(Joi.string().valid('no_condition'), Joi.string().uuid()).required().messages({
-      'any.required': conditionErrorMessage,
       'any.only': conditionErrorMessage,
+      'any.required': conditionErrorMessage,
       'string.empty': conditionErrorMessage
     })
   })

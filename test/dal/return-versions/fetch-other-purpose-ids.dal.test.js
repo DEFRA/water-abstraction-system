@@ -29,28 +29,28 @@ describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
     // service is executed. Having each of them different means we can trace the result back to the licence version
     // purpose we created.
     currentPurposeDetails = {
-      purposeId: PurposeHelper.select(0).id,
       primaryPurposeId: PrimaryPurposeHelper.select(0).id,
+      purposeId: PurposeHelper.select(0).id,
       secondaryPurposeId: SecondaryPurposeHelper.select(0).id
     }
     supersededPurposeDetails = {
-      purposeId: PurposeHelper.select(0).id,
       primaryPurposeId: PrimaryPurposeHelper.select(1).id,
+      purposeId: PurposeHelper.select(0).id,
       secondaryPurposeId: SecondaryPurposeHelper.select(1).id
     }
     otherLicencePurposeDetails = {
-      purposeId: PurposeHelper.select(0).id,
       primaryPurposeId: PrimaryPurposeHelper.select(2).id,
+      purposeId: PurposeHelper.select(0).id,
       secondaryPurposeId: SecondaryPurposeHelper.select(2).id
     }
     historicPurposeDetails = {
-      purposeId: PurposeHelper.select(1).id,
       primaryPurposeId: PrimaryPurposeHelper.select(3).id,
+      purposeId: PurposeHelper.select(1).id,
       secondaryPurposeId: SecondaryPurposeHelper.select(3).id
     }
     otherPurposeDetails = {
-      purposeId: PurposeHelper.select(2).id,
       primaryPurposeId: PrimaryPurposeHelper.select(4).id,
+      purposeId: PurposeHelper.select(2).id,
       secondaryPurposeId: SecondaryPurposeHelper.select(4).id
     }
 

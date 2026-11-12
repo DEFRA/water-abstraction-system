@@ -1,3 +1,9 @@
+/**
+ * Formatting functions shared by the notice presenters
+ *
+ * @module NoticesBasePresenter
+ */
+
 import NotifyAddressPresenter from 'water-abstraction-engine/presenters/notices/setup/notify-address.presenter.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
 

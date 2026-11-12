@@ -10,8 +10,8 @@ describe('Bill Runs - Setup - Type presenter', () => {
   describe('when provided with a bill run setup session record', () => {
     beforeEach(() => {
       session = {
-        id: '98ad3a1f-8e4f-490a-be05-0aece6755466',
-        data: {}
+        data: {},
+        id: '98ad3a1f-8e4f-490a-be05-0aece6755466'
       }
     })
 
@@ -22,8 +22,8 @@ describe('Bill Runs - Setup - Type presenter', () => {
         expect(result).toEqual({
           backlink: '/system/bill-runs',
           pageTitle: 'Select the bill run type',
-          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
-          selectedType: null
+          selectedType: null,
+          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466'
         })
       })
     })
@@ -39,8 +39,8 @@ describe('Bill Runs - Setup - Type presenter', () => {
         expect(result).toEqual({
           backlink: '/system/bill-runs',
           pageTitle: 'Select the bill run type',
-          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
-          selectedType: 'annual'
+          selectedType: 'annual',
+          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466'
         })
       })
     })

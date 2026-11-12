@@ -3,9 +3,9 @@
  * @module PreviewPresenter
  */
 
-import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import generatePreviewRequest from 'water-abstraction-engine/requests/notify/generate-preview.request.js'
 import { sentenceCase } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 /**
  * Formats notification data ready for presenting in the preview notification page

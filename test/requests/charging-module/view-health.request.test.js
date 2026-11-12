@@ -21,13 +21,13 @@ describe('Charging Module - View Health request', () => {
   describe('when the request succeeds', () => {
     beforeEach(() => {
       response = {
-        statusCode: HTTP_STATUS_OK,
-        body: { status: 'alive' }
+        body: { status: 'alive' },
+        statusCode: HTTP_STATUS_OK
       }
 
       vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
-        succeeded: true,
-        response
+        response,
+        succeeded: true
       })
     })
 
@@ -48,17 +48,17 @@ describe('Charging Module - View Health request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         response = {
-          statusCode: HTTP_STATUS_NOT_FOUND,
           body: {
-            statusCode: HTTP_STATUS_NOT_FOUND,
             error: 'Not Found',
-            message: 'Not Found'
-          }
+            message: 'Not Found',
+            statusCode: HTTP_STATUS_NOT_FOUND
+          },
+          statusCode: HTTP_STATUS_NOT_FOUND
         }
 
         vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
-          response
+          response,
+          succeeded: false
         })
       })
 

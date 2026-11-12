@@ -3,10 +3,10 @@
  * @module RenewalNotificationsPresenter
  */
 
-import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
-import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import NotifyAddressPresenter from 'water-abstraction-engine/presenters/notices/setup/notify-address.presenter.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 const MESSAGE_REFS = {
   [NoticeType.RENEWAL_FINALS]: {
@@ -59,8 +59,8 @@ function _email(recipient, noticeId, noticeData) {
     contactType: recipient.contact_type,
     eventId: noticeId,
     licences: recipient.licence_refs,
-    messageType,
     messageRef: MESSAGE_REFS[noticeType][journey],
+    messageType,
     personalisation: {
       ..._personalisation(recipient, noticeData)
     },
@@ -80,8 +80,8 @@ function _letter(recipient, noticeId, noticeData) {
     contactType: recipient.contact_type,
     eventId: noticeId,
     licences: recipient.licence_refs,
-    messageType,
     messageRef: MESSAGE_REFS[noticeType][journey],
+    messageType,
     personalisation: {
       ...address,
       // NOTE: Address line 1 is always set to the recipient's name
@@ -95,8 +95,8 @@ function _letter(recipient, noticeId, noticeData) {
 
 function _personalisation(recipient, noticeData) {
   const personalisation = {
-    renewalDate: formatLongDate(noticeData.renewalDate),
-    expiryDate: formatLongDate(noticeData.expiryDate)
+    expiryDate: formatLongDate(noticeData.expiryDate),
+    renewalDate: formatLongDate(noticeData.renewalDate)
   }
 
   if (recipient.licence_refs.length > 1) {

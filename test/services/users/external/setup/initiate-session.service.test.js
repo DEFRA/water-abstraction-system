@@ -31,16 +31,16 @@ describe('Users - External - Setup - Initiate Session service', () => {
         licenceRef: '01/123',
         licenceVersions: [
           {
-            id: 'a2793e26-8ef9-4477-9c02-6a1882fc27a0',
-            issueDate: null,
-            licenceId: '2bc430cf-b108-4180-b6bd-0c34d256633f',
-            startDate: new Date('2022-04-01'),
-            status: 'current',
             company: {
               id: 'ee365fa1-c434-4029-884e-3042e685638e',
               name: 'ACME Farms Ltd',
               type: 'organisation'
-            }
+            },
+            id: 'a2793e26-8ef9-4477-9c02-6a1882fc27a0',
+            issueDate: null,
+            licenceId: '2bc430cf-b108-4180-b6bd-0c34d256633f',
+            startDate: new Date('2022-04-01'),
+            status: 'current'
           }
         ]
       }
@@ -59,9 +59,9 @@ describe('Users - External - Setup - Initiate Session service', () => {
       const result = await InitiateSessionService(user.id, back)
 
       expect(result).toEqual({
+        activeNavBar: back,
         data: { activeNavBar: back, licences, selectedLicences: [], user },
         id: result.id,
-        activeNavBar: back,
         licences,
         selectedLicences: [],
         user
