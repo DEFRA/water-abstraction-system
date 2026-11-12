@@ -149,7 +149,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     AND rl.metadata->>'isSummer' = ?
     AND NOT (rl.licence_ref = ANY (?))
     AND rl.due_date IS NOT NULL
-    AND rl.end_date < CURRENT_DATE
+    AND (rl.due_date - INTERVAL '7 days')::date <= CURRENT_DATE
   `
         })
       })

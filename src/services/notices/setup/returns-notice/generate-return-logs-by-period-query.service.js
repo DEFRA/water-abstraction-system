@@ -60,8 +60,13 @@ function _query(dueDateCondition, noticeType, quarterly) {
     AND rl.due_date ${dueDateCondition}
   `
 
-  if (featureFlagsConfig.alternateReturnInvitationPeriods) {
+  // TODO: Once the alternate logic for selecting return periods is live, we just need to check the noticeType and the
+  // second part where we determine whether to apply the quarterly condition can be removed entirely
+  if (noticeType === NoticeType.INVITATIONS && featureFlagsConfig.alternateReturnInvitationPeriods) {
     query += `  AND rl.end_date < CURRENT_DATE
+  `
+  } else if (noticeType === NoticeType.REMINDERS && featureFlagsConfig.alternateReturnReminderPeriods) {
+    query += `  AND (rl.due_date - INTERVAL '7 days')::date <= CURRENT_DATE
   `
   }
 
