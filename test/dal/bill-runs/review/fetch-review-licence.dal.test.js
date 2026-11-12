@@ -90,9 +90,9 @@ describe('Bill Runs - Review - Fetch Review Licence dal', () => {
     reviewReturn = await ReviewReturnHelper.add({
       purposes: [
         {
-          primary: { code: 'A', description: 'Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
-          secondary: { code: 'AGR', description: 'General Agriculture' }
+          alias: null,
+          code: '400',
+          description: 'Spray Irrigation - Direct'
         }
       ],
       returnId: returnLog.returnId,
@@ -152,9 +152,9 @@ describe('Bill Runs - Review - Fetch Review Licence dal', () => {
             quantity: 0,
             purposes: [
               {
-                primary: { code: 'A', description: 'Agriculture' },
-                tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
-                secondary: { code: 'AGR', description: 'General Agriculture' }
+                alias: null,
+                code: '400',
+                description: 'Spray Irrigation - Direct'
               }
             ],
             returnId: reviewReturn.returnId,
