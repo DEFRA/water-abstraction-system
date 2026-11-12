@@ -6,7 +6,7 @@
 import ReviewLicenceModel from 'water-abstraction-engine/models/review-licence.model.js'
 
 /**
- * Fetches the selected review licence instance and associated data for the two-part tariff review licence page
+ * Fetches the selected review licence instance and related data for the two-part tariff review licence page
  *
  * @param {string} reviewLicenceId - the UUID of the selected review licence
  *
