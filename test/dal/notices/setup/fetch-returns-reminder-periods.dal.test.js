@@ -48,7 +48,7 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       selectedReturnCycle = returnCycles.previous
     })
 
-    describe('and at least one return log is "due", has a due date 7 or more days ago, and has not been sent a reminder', () => {
+    describe('and at least one return log is "due", "current", has a due date 7 or more days ago, and has not been sent a reminder', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
@@ -76,6 +76,14 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
             dueDate: yesterday(),
+            startDate: selectedReturnCycle.startDate,
+            status: 'due'
+          }),
+          await ReturnLogHelper.add({
+            endDate: selectedReturnCycle.endDate,
+            returnCycleId: selectedReturnCycle.id,
+            dueDate: yesterday(),
+            metadata: { isCurrent: false },
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           }),
@@ -112,6 +120,28 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
             dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'void'
+          })
+        ]
+      })
+
+      it('is not returned by the query', async () => {
+        const results = await FetchReturnsReminderPeriods()
+
+        expect(results.length).to.equal(0)
+        expect(results).not.toContainEqual({ ...selectedReturnCycle })
+      })
+    })
+
+    describe('but has no current "due" return logs', () => {
+      beforeEach(async () => {
+        returnLogs = [
+          await ReturnLogHelper.add({
+            endDate: selectedReturnCycle.endDate,
+            returnCycleId: selectedReturnCycle.id,
+            dueDate: yesterday(),
+            metadata: { isCurrent: false },
+            startDate: selectedReturnCycle.startDate,
+            status: 'due'
           })
         ]
       })
@@ -220,7 +250,7 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
       selectedReturnCycle = returnCycles.current
     })
 
-    describe('and at least one return log is "due", has a due date 7 or more days ago, and has not been sent a reminder', () => {
+    describe('and at least one return log is "due", "current", has a due date 7 or more days ago, and has not been sent a reminder', () => {
       beforeEach(async () => {
         returnLogs = [
           await ReturnLogHelper.add({
@@ -248,6 +278,14 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
             endDate: selectedReturnCycle.endDate,
             returnCycleId: selectedReturnCycle.id,
             dueDate: yesterday(),
+            startDate: selectedReturnCycle.startDate,
+            status: 'due'
+          }),
+          await ReturnLogHelper.add({
+            endDate: selectedReturnCycle.endDate,
+            returnCycleId: selectedReturnCycle.id,
+            dueDate: yesterday(),
+            metadata: { isCurrent: false },
             startDate: selectedReturnCycle.startDate,
             status: 'due'
           }),
@@ -284,6 +322,28 @@ describe('Notices - Setup - Fetch Returns Reminder Periods DAL', () => {
             dueDate: yesterday(),
             startDate: selectedReturnCycle.startDate,
             status: 'void'
+          })
+        ]
+      })
+
+      it('is not returned by the query', async () => {
+        const results = await FetchReturnsReminderPeriods()
+
+        expect(results.length).to.equal(0)
+        expect(results).not.toContainEqual({ ...selectedReturnCycle })
+      })
+    })
+
+    describe('but has no current "due" return logs', () => {
+      beforeEach(async () => {
+        returnLogs = [
+          await ReturnLogHelper.add({
+            endDate: selectedReturnCycle.endDate,
+            returnCycleId: selectedReturnCycle.id,
+            dueDate: yesterday(),
+            metadata: { isCurrent: false },
+            startDate: selectedReturnCycle.startDate,
+            status: 'due'
           })
         ]
       })
