@@ -7,7 +7,7 @@ import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
 
 /**
- * Fetch all SROC return logs to be processed as part of two-part-tariff billing
+ * Fetches SROC return logs linked to licences flagged for inclusion in next SROC 2PT billing
  *
  * @param {string} licenceRef - The reference of the licence that the return log relates to
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
@@ -41,7 +41,11 @@ export default async function fetchReturnLogsForLicenceDal(licenceRef, billingPe
           Objection.raw(
             `COALESCE(
               JSON_AGG(
-                JSON_BUILD_OBJECT('alias', return_requirement_purposes.alias, 'code', purposes.legacy_id, 'description', purposes.description)
+                JSON_BUILD_OBJECT(
+                  'alias', return_requirement_purposes.alias,
+                  'code', purposes.legacy_id,
+                  'description', purposes.description
+                )
                 ORDER BY purposes.description
               ),
               '[]'::json
@@ -55,7 +59,7 @@ export default async function fetchReturnLogsForLicenceDal(licenceRef, billingPe
     .whereNot('returnLogs.status', 'void')
     .where('returnLogs.endDate', '>=', billingPeriod.startDate)
     .where('returnLogs.endDate', '<=', billingPeriod.endDate)
-    .where('returnRequirement.twoPartTariff', '=', true)
+    .where('returnRequirement.twoPartTariff', true)
     .orderBy('returnLogs.startDate', 'ASC')
     .orderBy('returnRequirement.reference', 'ASC')
     .withGraphFetched('returnSubmissions')
