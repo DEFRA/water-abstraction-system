@@ -1,6 +1,6 @@
 /**
  * Fetches the selected review charge element instance and related data for the 2PT review charge element pages
- * @module FetchReviewChargeReferenceDal
+ * @module FetchReviewChargeElementDal
  */
 
 import ReviewChargeElementModel from 'water-abstraction-engine/models/review-charge-element.model.js'
@@ -8,7 +8,7 @@ import ReviewChargeElementModel from 'water-abstraction-engine/models/review-cha
 /**
  * Fetches the selected review charge element instance and related data for the 2PT review charge element pages
  *
- * This fetch service fetches the data needed for the main review charge element page, but also the edit page/service.
+ * This fetch dal fetches the data needed for the main review charge element page, but also the edit page/service.
  *
  * @param {string} reviewChargeElementId - The UUID of the review charge element being viewed
  *
