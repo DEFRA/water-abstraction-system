@@ -202,10 +202,16 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
+        /*
+         * NOTE: Not in alphabetical order. transformToSendingResults() uses Object.values(), so the expected order depends
+         * on the key order
+         */
+        /* eslint-disable local/alanisms */
         const expectedResults = RecipientScenariosSeeder.transformToSendingResults({
-          additionalContactRecipient: scenarios.primaryUserWithAdditionalContact.additionalContactRecipient,
-          primaryUserRecipient: scenarios.primaryUserWithAdditionalContact.primaryUserRecipient
+          primaryUserRecipient: scenarios.primaryUserWithAdditionalContact.primaryUserRecipient,
+          additionalContactRecipient: scenarios.primaryUserWithAdditionalContact.additionalContactRecipient
         })
+        /* eslint-enable local/alanisms */
 
         expect(rows).toEqual(expectedResults)
       })
@@ -247,12 +253,18 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
+        /*
+         * NOTE: Not in alphabetical order. transformToSendingResults() uses Object.values(), so the expected order depends
+         * on the key order
+         */
+        /* eslint-disable local/alanisms */
         const transformedResults = RecipientScenariosSeeder.transformToSendingResults({
-          firstAdditionalContact: scenarios.differentHoldersAndContacts.firstAdditionalContact,
           firstLicenceHolderRecipient: scenarios.differentHoldersAndContacts.firstLicenceHolderRecipient,
-          secondAdditionalContact: scenarios.differentHoldersAndContacts.secondAdditionalContact,
-          secondLicenceHolderRecipient: scenarios.differentHoldersAndContacts.secondLicenceHolderRecipient
+          secondLicenceHolderRecipient: scenarios.differentHoldersAndContacts.secondLicenceHolderRecipient,
+          firstAdditionalContact: scenarios.differentHoldersAndContacts.firstAdditionalContact,
+          secondAdditionalContact: scenarios.differentHoldersAndContacts.secondAdditionalContact
         })
+        /* eslint-enable local/alanisms */
         const expectedResults = transformedResults.sort((a, b) => {
           return compareStrings(a.licence_refs[0], b.licence_refs[0])
         })
@@ -270,11 +282,17 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
+        /*
+         * NOTE: Not in alphabetical order. transformToSendingResults() uses Object.values(), so the expected order depends
+         * on the key order
+         */
+        /* eslint-disable local/alanisms */
         const transformedResults = RecipientScenariosSeeder.transformToSendingResults({
-          additionalContactWithAlert: scenarios.mixedAlerts.additionalContactWithAlert,
           licenceHolderRecipientWithAlert: scenarios.mixedAlerts.licenceHolderRecipientWithAlert,
-          licenceHolderRecipientWithoutAlert: scenarios.mixedAlerts.licenceHolderRecipientWithoutAlert
+          licenceHolderRecipientWithoutAlert: scenarios.mixedAlerts.licenceHolderRecipientWithoutAlert,
+          additionalContactWithAlert: scenarios.mixedAlerts.additionalContactWithAlert
         })
+        /* eslint-enable local/alanisms */
         const expectedResults = transformedResults.sort((a, b) => {
           return compareStrings(a.licence_refs[0], b.licence_refs[0])
         })
