@@ -68,6 +68,7 @@ WHERE EXISTS (
     rl.return_cycle_id = rrc.id
     AND rl.status = 'due'
     AND rl.due_date IS NOT NULL
+    AND (rl.due_date - INTERVAL '7 days')::date <= CURRENT_DATE
     AND rl.end_date < CURRENT_DATE
     AND rl.start_date > (CURRENT_DATE - INTERVAL '3 years')
     AND NOT EXISTS (
