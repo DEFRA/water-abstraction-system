@@ -40,11 +40,11 @@ export default async function fetchReturnLogsForLicenceService(licenceRef, billi
  * @private
  */
 function _checkAbstractionPeriodExists(licenceRef, returnLogs) {
-  if (
-    returnLogs.some((returnLog) => {
-      return returnLog.periodStartDay === null
-    })
-  ) {
+  const missingAbstractionPeriod = returnLogs.some((returnLog) => {
+    return returnLog.periodStartDay === null
+  })
+
+  if (missingAbstractionPeriod) {
     globalThis.GlobalNotifier.omg(
       `Bill run fetch return logs for licence failed for licence ${licenceRef} due to missing abstraction period`,
       { returnLogs }
