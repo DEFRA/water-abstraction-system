@@ -27,8 +27,8 @@ export default function volumesValidator(payload) {
       .messages({
         'custom.maxDecimals': 'Enter a Volume with no more than 6 decimal places',
         'number.base': 'Volume must be a number or blank',
-        'number.min': 'Volume cannot be negative',
         'number.max': `Volume entered exceeds the maximum of ${MAX_ALLOWED_VOLUME}`,
+        'number.min': 'Volume cannot be negative',
         'number.unsafe': `Volume must be blank or between 0 and ${MAX_ALLOWED_VOLUME}`
       })
   )

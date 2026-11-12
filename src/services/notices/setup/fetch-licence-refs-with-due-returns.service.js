@@ -3,8 +3,8 @@
  * @module FetchLicenceRefsWithDueReturnsService
  */
 
-import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 /**
  * Fetches the licence refs with due returns for the return period selected to validate those licences to be removed

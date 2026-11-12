@@ -16,12 +16,12 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
 
   beforeEach(() => {
     sessionData = {
-      label: 'FRENCHAY',
-      licenceRef: '01/115',
+      abstractionPeriodEndDay: '3',
+      abstractionPeriodEndMonth: '4',
       abstractionPeriodStartDay: '1',
       abstractionPeriodStartMonth: '2',
-      abstractionPeriodEndDay: '3',
-      abstractionPeriodEndMonth: '4'
+      label: 'FRENCHAY',
+      licenceRef: '01/115'
     }
 
     session = SessionModelStub(sessionData)
@@ -38,10 +38,10 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       const result = await AbstractionPeriodService(session.id)
 
       expect(result).toEqual({
-        abstractionPeriodStartDay: '1',
         abstractionPeriodEndDay: '3',
-        abstractionPeriodStartMonth: '2',
         abstractionPeriodEndMonth: '4',
+        abstractionPeriodStartDay: '1',
+        abstractionPeriodStartMonth: '2',
         backLink: {
           href: `/system/licence-monitoring-station/setup/${session.id}/full-condition`,
           text: 'Back'

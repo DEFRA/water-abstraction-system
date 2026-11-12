@@ -1,6 +1,6 @@
 import Big from 'water-abstraction-engine/wrappers/big.wrapper.js'
-import { convertFromCubicMetres } from 'water-abstraction-engine/lib/general.lib.js'
 import { formatNumber, sentenceCase } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { convertFromCubicMetres } from 'water-abstraction-engine/lib/general.lib.js'
 import {
   returnRequirementFrequencies,
   returnUnits,
@@ -81,19 +81,19 @@ export function generateSummaryTableHeaders(method, frequency, units, alwaysDisp
   if (method !== 'abstractionVolumes') {
     const readingHeading = frequency === 'month' ? 'Reading' : 'End reading'
 
-    headers.push({ text: readingHeading, format: 'numeric' })
+    headers.push({ format: 'numeric', text: readingHeading })
   }
 
   const quantityPostfix = frequency === 'month' ? '' : 'Total '
 
   if (units !== unitNames.CUBIC_METRES) {
-    headers.push({ text: sentenceCase(`${quantityPostfix}${returnUnits[units].label}`), format: 'numeric' })
+    headers.push({ format: 'numeric', text: sentenceCase(`${quantityPostfix}${returnUnits[units].label}`) })
   }
 
-  headers.push({ text: sentenceCase(`${quantityPostfix}cubic metres`), format: 'numeric' })
+  headers.push({ format: 'numeric', text: sentenceCase(`${quantityPostfix}cubic metres`) })
 
   if (frequency !== 'month' || alwaysDisplayLinkHeader) {
-    headers.push({ text: 'Details', format: 'numeric' })
+    headers.push({ format: 'numeric', text: 'Details' })
   }
 
   return headers

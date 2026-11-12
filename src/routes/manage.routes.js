@@ -3,9 +3,7 @@ import { view } from '../controllers/manage.controller.js'
 export default [
   {
     method: 'GET',
-    path: '/manage',
     options: {
-      handler: view,
       auth: {
         access: {
           scope: [
@@ -20,7 +18,9 @@ export default [
             'returns'
           ]
         }
-      }
-    }
+      },
+      handler: view
+    },
+    path: '/manage'
   }
 ]

@@ -150,7 +150,7 @@ function _matchLines(chargeElement, returnSubmissionLines) {
 
     const { startDate, endDate } = returnSubmissionLine
 
-    return periodsOverlap(chargeElement.abstractionPeriods, [{ startDate, endDate }])
+    return periodsOverlap(chargeElement.abstractionPeriods, [{ endDate, startDate }])
   })
 }
 

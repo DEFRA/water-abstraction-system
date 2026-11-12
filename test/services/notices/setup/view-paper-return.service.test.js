@@ -21,14 +21,14 @@ describe('Notices - Setup - View Paper Return service', () => {
     licenceRef = generateLicenceRef()
 
     dueReturn = {
-      siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
       returnLogId: generateUUID(),
       returnReference: '3135',
+      siteDescription: 'Potable Water Supply - Direct',
       startDate: '2002-04-01'
     }
 
-    sessionData = { licenceRef, dueReturns: [dueReturn] }
+    sessionData = { dueReturns: [dueReturn], licenceRef }
 
     session = SessionModelStub(sessionData)
 

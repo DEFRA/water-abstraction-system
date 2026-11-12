@@ -65,8 +65,8 @@ describe('Bill Runs - Setup - Submit Type service', () => {
               text: 'Select the bill run type'
             },
             pageTitle: 'Select the bill run type',
-            sessionId: session.id,
-            selectedType: null
+            selectedType: null,
+            sessionId: session.id
           })
         })
       })

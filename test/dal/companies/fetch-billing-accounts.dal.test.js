@@ -25,8 +25,8 @@ describe('Companies - Fetch Billing Accounts dal', () => {
     })
 
     billingAccountAddress = await BillingAccountAddressHelper.add({
-      billingAccountId: billingAccount.id,
-      addressId: address.id
+      addressId: address.id,
+      billingAccountId: billingAccount.id
     })
 
     // Additional Billing Account

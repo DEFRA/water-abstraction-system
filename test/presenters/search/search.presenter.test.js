@@ -47,12 +47,12 @@ describe('Search - Search presenter', () => {
               return null
             },
             id: 'licence-1',
-            licenceRef: '01/123',
             licenceDocumentHeader: {
               metadata: {
                 contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr', type: 'Person' }]
               }
-            }
+            },
+            licenceRef: '01/123'
           },
           type: 'licence'
         },
@@ -60,8 +60,8 @@ describe('Search - Search presenter', () => {
           exact: true,
           model: {
             catchmentName: 'Catchment 1',
-            id: 'monitoring-station-1',
             gridReference: 'SX1234512345',
+            id: 'monitoring-station-1',
             label: 'Monitoring Station 1',
             riverName: 'River 1'
           },
@@ -83,15 +83,15 @@ describe('Search - Search presenter', () => {
         {
           exact: true,
           model: {
-            id: 'user-1',
-            lastLogin: new Date('2001-01-01T00:00:00Z'),
-            username: 'TESTSEARCH01@example.gov.uk',
             $permissions: () => {
               return { label: 'None' }
             },
             $status: () => {
               return 'enabled'
-            }
+            },
+            id: 'user-1',
+            lastLogin: new Date('2001-01-01T00:00:00Z'),
+            username: 'TESTSEARCH01@example.gov.uk'
           },
           type: 'user'
         },
@@ -132,12 +132,12 @@ describe('Search - Search presenter', () => {
               return null
             },
             id: 'licence-1',
-            licenceRef: '01/123',
             licenceDocumentHeader: {
               metadata: {
                 contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr', type: 'Person' }]
               }
-            }
+            },
+            licenceRef: '01/123'
           },
           type: 'licence'
         },
@@ -145,8 +145,8 @@ describe('Search - Search presenter', () => {
           exact: false,
           model: {
             catchmentName: 'Catchment 1',
-            id: 'monitoring-station-1',
             gridReference: 'SX1234512345',
+            id: 'monitoring-station-1',
             label: 'Monitoring Station 1',
             riverName: 'River 1'
           },
@@ -168,15 +168,15 @@ describe('Search - Search presenter', () => {
         {
           exact: false,
           model: {
-            id: 'user-2',
-            lastLogin: new Date('2001-01-01T00:00:00Z'),
-            username: 'TESTSEARCH02@example.gov.uk',
             $permissions: () => {
               return { label: 'None' }
             },
             $status: () => {
               return 'enabled'
-            }
+            },
+            id: 'user-2',
+            lastLogin: new Date('2001-01-01T00:00:00Z'),
+            username: 'TESTSEARCH02@example.gov.uk'
           },
           type: 'user'
         },
@@ -727,6 +727,7 @@ describe('Search - Search presenter', () => {
     describe('when a licence has an end date in the future', () => {
       beforeEach(() => {
         const tomorrow = new Date()
+
         tomorrow.setDate(tomorrow.getDate() + 1)
 
         allSearchMatches.results[2].model.$ends = () => {

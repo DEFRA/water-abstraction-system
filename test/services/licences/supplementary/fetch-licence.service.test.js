@@ -27,8 +27,8 @@ describe('Fetch Licence Service', () => {
 
       // two-part tariff indicators
       const chargeReference = await ChargeReferenceHelper.add({
-        chargeVersionId: chargeVersion.id,
-        adjustments: { s127: true }
+        adjustments: { s127: true },
+        chargeVersionId: chargeVersion.id
       })
 
       await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })

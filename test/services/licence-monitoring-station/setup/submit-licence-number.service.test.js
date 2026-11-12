@@ -115,7 +115,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
         describe('and the check page has been visited', () => {
           beforeEach(() => {
-            sessionData = { ...sessionData, licenceRef: licence.licenceRef, checkPageVisited: true }
+            sessionData = { ...sessionData, checkPageVisited: true, licenceRef: licence.licenceRef }
 
             session = SessionModelStub(sessionData)
 
@@ -151,8 +151,8 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       const result = await SubmitLicenceNumberService(session.id, payload)
 
       expect(result).toEqual({
-        error: { text: 'Licence could not be found' },
         backLink: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,
+        error: { text: 'Licence could not be found' },
         licenceRef: '1234567890',
         monitoringStationLabel: 'LABEL',
         pageTitle: 'Enter the licence number this threshold applies to'
@@ -169,8 +169,8 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       const result = await SubmitLicenceNumberService(session.id, payload)
 
       expect(result).toEqual({
-        error: { text: 'Enter a licence number' },
         backLink: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,
+        error: { text: 'Enter a licence number' },
         licenceRef: null,
         monitoringStationLabel: 'LABEL',
         pageTitle: 'Enter the licence number this threshold applies to'

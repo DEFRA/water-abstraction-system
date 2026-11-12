@@ -3,8 +3,8 @@
  * @module SummaryPresenter
  */
 
-import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 import { formatAbstractionDate, formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 
 import { formatAbstractionAmounts } from './base-licences.presenter.js'
 

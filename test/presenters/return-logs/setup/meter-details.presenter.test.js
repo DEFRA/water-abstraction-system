@@ -23,9 +23,9 @@ describe('Return Logs Setup - Meter Details presenter', () => {
           href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-provided',
           text: 'Back'
         },
+        meter10TimesDisplay: null,
         meterMake: null,
         meterSerialNumber: null,
-        meter10TimesDisplay: null,
         pageTitle: 'Meter details',
         pageTitleCaption: 'Return reference 12345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'

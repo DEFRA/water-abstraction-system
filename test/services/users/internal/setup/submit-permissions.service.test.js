@@ -102,7 +102,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
               const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
               expect(flashType).toEqual('notification')
-              expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Permissions updated' })
+              expect(bannerMessage).toEqual({ text: 'Permissions updated', titleText: 'Updated' })
             })
           })
         })
@@ -133,15 +133,15 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
           text: 'Back'
         },
         error: {
-          permission: {
-            text: 'Select permissions for the user'
-          },
           errorList: [
             {
               href: '#permission',
               text: 'Select permissions for the user'
             }
-          ]
+          ],
+          permission: {
+            text: 'Select permissions for the user'
+          }
         },
         pageTitle: 'Select permissions for the user',
         pageTitleCaption: 'Internal',

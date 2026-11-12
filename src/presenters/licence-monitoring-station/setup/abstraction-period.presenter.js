@@ -23,10 +23,10 @@ export default function abstractionPeriodPresenter(session) {
   } = session
 
   return {
-    abstractionPeriodStartDay,
     abstractionPeriodEndDay,
-    abstractionPeriodStartMonth,
     abstractionPeriodEndMonth,
+    abstractionPeriodStartDay,
+    abstractionPeriodStartMonth,
     backLink: _backLink(session),
     monitoringStationLabel: label,
     pageTitle: `Enter an abstraction period for licence ${licenceRef}`

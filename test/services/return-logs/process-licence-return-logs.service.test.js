@@ -22,6 +22,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
   let returnCycleModelStub
   let returnRequirements
   let returnVersionEndDate
+
   beforeEach(() => {
     // NOTE: We set the clock, not because it is needed for the services called, but so that the test data we're
     // providing makes sense in the context we use it.
@@ -34,9 +35,9 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
     returnCycleModelStub = vi.fn()
     vi.spyOn(ReturnCycleModel, 'query').mockReturnValue({
+      orderBy: returnCycleModelStub,
       select: vi.fn().mockReturnThis(),
-      where: vi.fn().mockReturnThis(),
-      orderBy: returnCycleModelStub
+      where: vi.fn().mockReturnThis()
     })
 
     // Whatever CreateReturnLogsService is pushed into an array that is then passed to VoidLicenceReturnLogsService.
@@ -93,19 +94,23 @@ describe('Return Logs - Process Licence Return Logs service', () => {
             // CreateReturnLogsService tests. We are testing that the service processes the 'right' return requirements.
 
             const previousSummerReq = ReturnRequirementsFixture.summerReturnRequirement()
+
             previousSummerReq.siteDescription = 'Previous Summer Requirement'
             previousSummerReq.returnVersion.startDate = new Date('2020-04-01')
             previousSummerReq.returnVersion.endDate = new Date('2025-04-30')
 
             const previousWinterReq = ReturnRequirementsFixture.winterReturnRequirement()
+
             previousWinterReq.siteDescription = 'Previous Winter Requirement'
             previousWinterReq.returnVersion = previousSummerReq.returnVersion
 
             const currentSummerReq = ReturnRequirementsFixture.summerReturnRequirement()
+
             currentSummerReq.siteDescription = 'Current Summer Requirement'
             currentSummerReq.returnVersion.startDate = new Date('2025-05-01')
 
             const currentWinterReq = ReturnRequirementsFixture.winterReturnRequirement()
+
             currentWinterReq.siteDescription = 'Current Winter Requirement'
             currentWinterReq.returnVersion = currentSummerReq.returnVersion
 

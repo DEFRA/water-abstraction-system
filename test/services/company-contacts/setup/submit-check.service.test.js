@@ -89,7 +89,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
-      expect(bannerMessage).toEqual({ titleText: 'Contact added', text: `Eric was added to this company` })
+      expect(bannerMessage).toEqual({ text: `Eric was added to this company`, titleText: 'Contact added' })
     })
 
     describe('the "abstractionAlerts" property', () => {
@@ -145,8 +145,8 @@ describe('Company Contacts - Setup - Check Service', () => {
 
           session = SessionModelStub({
             ...sessionData,
-            abstractionAlerts: 'some',
-            abstractionAlertLicences
+            abstractionAlertLicences,
+            abstractionAlerts: 'some'
           })
 
           vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
@@ -215,11 +215,11 @@ describe('Company Contacts - Setup - Check Service', () => {
       const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
       expect(actualContact).toEqual({
-        id: companyContact.id,
         abstractionAlertLicences: null,
         abstractionAlerts: true,
         contactId: companyContact.contact.id,
         email: 'eric@test.com',
+        id: companyContact.id,
         name: 'Eric',
         updatedBy: auth.credentials.user.id
       })
@@ -231,7 +231,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
-      expect(bannerMessage).toEqual({ titleText: 'Updated', text: `Contact details updated.` })
+      expect(bannerMessage).toEqual({ text: `Contact details updated.`, titleText: 'Updated' })
     })
 
     describe('the "abstractionAlerts" property', () => {
@@ -287,8 +287,8 @@ describe('Company Contacts - Setup - Check Service', () => {
 
           session = SessionModelStub({
             ...sessionData,
-            abstractionAlerts: 'some',
-            abstractionAlertLicences
+            abstractionAlertLicences,
+            abstractionAlerts: 'some'
           })
 
           vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)

@@ -52,6 +52,7 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
       ...returnLogData,
       metadata: { ...returnLogData.metadata, isCurrent: false }
     })
+
     returnLogs.push(returnLog)
 
     // Add a second return log for the same licence which is not transferred (isCurrent=true).

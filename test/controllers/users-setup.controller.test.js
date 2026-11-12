@@ -5,8 +5,8 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import http2 from 'node:http2'
 
 import LoggerStub from 'water-abstraction-engine/test/stubs/logger.stub.js'
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import { postRequestOptions } from 'water-abstraction-engine/test/general.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
 import * as InitiateExternalSessionService from '../../src/services/users/external/setup/initiate-session.service.js'
@@ -250,8 +250,8 @@ describe('Users Setup controller', () => {
             permission: 'basic',
             userId
           },
-          id,
           email: 'bob.bobbles@environment-agency.gov.uk',
+          id,
           permission: 'basic',
           userId
         })
@@ -535,11 +535,11 @@ describe('Users Setup controller', () => {
 
 function _getOptions(url, credentials) {
   return {
-    method: 'GET',
-    url,
     auth: {
-      strategy: 'session',
-      credentials
-    }
+      credentials,
+      strategy: 'session'
+    },
+    method: 'GET',
+    url
   }
 }

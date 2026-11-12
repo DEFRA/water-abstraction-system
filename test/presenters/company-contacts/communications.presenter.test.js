@@ -25,15 +25,15 @@ describe('Company Contacts - Communications presenter', () => {
 
     notification = {
       createdAt,
-      id,
-      messageType,
-      status,
       event: {
         id: notice.id,
         issuer: notice.issuer,
-        subtype: notice.subtype,
-        sendingAlertType: notice.metadata.options.sendingAlertType
-      }
+        sendingAlertType: notice.metadata.options.sendingAlertType,
+        subtype: notice.subtype
+      },
+      id,
+      messageType,
+      status
     }
 
     notifications = [notification]
@@ -48,8 +48,6 @@ describe('Company Contacts - Communications presenter', () => {
           href: `/system/companies/${company.id}/contacts`,
           text: 'Go back to licence holder contacts'
         },
-        pageTitle: 'Communications for Rachael Tyrell',
-        pageTitleCaption: 'Tyrell Corporation',
         notifications: [
           {
             link: {
@@ -62,7 +60,9 @@ describe('Company Contacts - Communications presenter', () => {
             status: 'sent',
             type: 'Stop alert'
           }
-        ]
+        ],
+        pageTitle: 'Communications for Rachael Tyrell',
+        pageTitleCaption: 'Tyrell Corporation'
       })
     })
 

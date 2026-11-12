@@ -49,10 +49,10 @@ export default async function processBillingPeriodService(billRun, billingPeriod
  */
 async function _buildDataToPersist(billingData, billingPeriod, billRunExternalId) {
   const dataToPersist = {
-    transactions: [],
+    billLicences: [],
     // We use a set as this won't create an additional entry if we try to add a billing invoice already in it
     bills: new Set(),
-    billLicences: []
+    transactions: []
   }
 
   for (const currentBillingData of Object.values(billingData)) {
@@ -165,10 +165,10 @@ function _billLicenceKey(billId, licenceId) {
 
 function _initialBillingData(licence, bill, billLicence) {
   return {
-    licence,
     bill,
     billLicence,
-    calculatedTransactions: []
+    calculatedTransactions: [],
+    licence
   }
 }
 

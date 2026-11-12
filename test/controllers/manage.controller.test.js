@@ -60,11 +60,11 @@ describe('Manage controller', () => {
 
 function _getOptions() {
   return {
-    method: 'GET',
-    url: '/manage',
     auth: {
-      strategy: 'session',
-      credentials: { scope: ['hof_notifications'], user: { id: 1000 } }
-    }
+      credentials: { scope: ['hof_notifications'], user: { id: 1000 } },
+      strategy: 'session'
+    },
+    method: 'GET',
+    url: '/manage'
   }
 }

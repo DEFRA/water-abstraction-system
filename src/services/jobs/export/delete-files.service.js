@@ -12,7 +12,7 @@ import { promises as fsPromises } from 'node:fs'
  */
 export default async function deleteFilesService(path) {
   try {
-    await fsPromises.rm(path, { recursive: true, force: true })
+    await fsPromises.rm(path, { force: true, recursive: true })
   } catch (error) {
     globalThis.GlobalNotifier.omfg('Delete file service errored', { path }, error)
   }

@@ -24,7 +24,7 @@ export default async function fetchReturnLogsForLicenceService(licenceRef, billi
     // CAST() in the query then causes an error.
     globalThis.GlobalNotifier.omfg(
       'Bill run process fetch return logs for licence failed',
-      { licenceRef, billingPeriod },
+      { billingPeriod, licenceRef },
       error
     )
     // NOTE: We rethrow the error so that the bill run will be set to 'errored'. We know this will result in us

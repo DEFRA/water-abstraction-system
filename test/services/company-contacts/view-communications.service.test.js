@@ -46,18 +46,18 @@ describe('Company Contacts - View Communications Service', () => {
 
       expect(result).toEqual({
         activeSecondaryNav: 'communications',
-        pagination: {
-          currentPageNumber: 1,
-          numberOfPages: 0,
-          showingMessage: 'Showing all 0 communications'
-        },
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
           text: 'Go back to licence holder contacts'
         },
         notifications: [],
         pageTitle: 'Communications for Rachael Tyrell',
-        pageTitleCaption: 'Tyrell Corporation'
+        pageTitleCaption: 'Tyrell Corporation',
+        pagination: {
+          currentPageNumber: 1,
+          numberOfPages: 0,
+          showingMessage: 'Showing all 0 communications'
+        }
       })
     })
   })

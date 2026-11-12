@@ -42,6 +42,7 @@ describe('Users - Index Users service', () => {
 
     it('returns page data for the view', async () => {
       const result = await IndexUsersService(yarStub, auth, page)
+
       expect(result).toEqual({
         activeNavBar: 'users',
         filters: {
@@ -59,6 +60,7 @@ describe('Users - Index Users service', () => {
         },
         notification: undefined,
         pageTitle: 'Users',
+        pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 1 users' },
         users: [
           {
             email: fetchResults.results[0].username,
@@ -67,8 +69,7 @@ describe('Users - Index Users service', () => {
             status: 'enabled',
             type: 'Internal'
           }
-        ],
-        pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 1 users' }
+        ]
       })
     })
   })

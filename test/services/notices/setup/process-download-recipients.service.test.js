@@ -43,8 +43,8 @@ describe('Notices - Setup - Process Download Recipients service', () => {
           // Headers
           'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           recipientRow,
-        type: 'text/csv',
-        filename: `${session.notificationType} - ${session.referenceCode}.csv`
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`,
+        type: 'text/csv'
       })
     })
   })
@@ -69,8 +69,8 @@ describe('Notices - Setup - Process Download Recipients service', () => {
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Quarterly,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           recipientRow,
-        type: 'text/csv',
-        filename: `${session.notificationType} - ${session.referenceCode}.csv`
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`,
+        type: 'text/csv'
       })
     })
   })
@@ -95,8 +95,8 @@ describe('Notices - Setup - Process Download Recipients service', () => {
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Quarterly,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           recipientRow,
-        type: 'text/csv',
-        filename: `${session.notificationType} - ${session.referenceCode}.csv`
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`,
+        type: 'text/csv'
       })
     })
   })
@@ -121,8 +121,8 @@ describe('Notices - Setup - Process Download Recipients service', () => {
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Quarterly,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           recipientRow,
-        type: 'text/csv',
-        filename: `${session.notificationType} - ${session.referenceCode}.csv`
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`,
+        type: 'text/csv'
       })
     })
   })
@@ -147,8 +147,8 @@ describe('Notices - Setup - Process Download Recipients service', () => {
           // Headers
           'Licence,Renewal date,Expiry date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           recipientRow,
-        type: 'text/csv',
-        filename: `${session.notificationType} - ${session.referenceCode}.csv`
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`,
+        type: 'text/csv'
       })
     })
   })
@@ -173,8 +173,8 @@ describe('Notices - Setup - Process Download Recipients service', () => {
           // Headers
           'Licence,Renewal date,Expiry date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           recipientRow,
-        type: 'text/csv',
-        filename: `${session.notificationType} - ${session.referenceCode}.csv`
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`,
+        type: 'text/csv'
       })
     })
   })

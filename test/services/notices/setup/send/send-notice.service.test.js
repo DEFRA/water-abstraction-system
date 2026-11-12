@@ -18,6 +18,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
   let notice
   let notifications
   let notifierStub
+
   beforeEach(() => {
     vi.spyOn(SendMainNoticeService, 'default').mockResolvedValue()
     vi.spyOn(UpdateNoticeService, 'default').mockResolvedValue()

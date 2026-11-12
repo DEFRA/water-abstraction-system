@@ -3,30 +3,30 @@ import { download, submitDetails, viewCommunications, viewDetails } from '../con
 export default [
   {
     method: 'GET',
-    path: '/return-logs/{id}/communications',
     options: {
       handler: viewCommunications
-    }
+    },
+    path: '/return-logs/{id}/communications'
   },
   {
     method: 'GET',
-    path: '/return-logs/{id}/details',
     options: {
       handler: viewDetails
-    }
+    },
+    path: '/return-logs/{id}/details'
   },
   {
     method: 'POST',
-    path: '/return-logs/{id}/details',
     options: {
       handler: submitDetails
-    }
+    },
+    path: '/return-logs/{id}/details'
   },
   {
     method: 'GET',
-    path: '/return-logs/{id}/download',
     options: {
       handler: download
-    }
+    },
+    path: '/return-logs/{id}/download'
   }
 ]

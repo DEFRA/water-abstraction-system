@@ -15,9 +15,10 @@ import ViewExistingAddressService from '../../../../src/services/billing-account
 describe('Billing Accounts - Setup - View Existing Address Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   const companyAddresses = {
-    company: billingAccount.company,
-    addresses: [billingAccount.billingAccountAddresses[0].address]
+    addresses: [billingAccount.billingAccountAddresses[0].address],
+    company: billingAccount.company
   }
+
   let session
   let sessionData
 
@@ -60,17 +61,17 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
           },
           items: [
             {
+              checked: false,
               id: companyAddresses.addresses[0].id,
-              value: companyAddresses.addresses[0].id,
               text: 'Tutsham Farm, West Farleigh, Maidstone, Kent, ME15 0NE',
-              checked: false
+              value: companyAddresses.addresses[0].id
             },
             { divider: 'or' },
             {
+              checked: false,
               id: 'new',
-              value: 'new',
               text: 'Setup a new address',
-              checked: false
+              value: 'new'
             }
           ],
           pageTitle: `Select an existing address for ${session.billingAccount.company.name}`,
@@ -102,17 +103,17 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
           },
           items: [
             {
+              checked: false,
               id: companyAddresses.addresses[0].id,
-              value: companyAddresses.addresses[0].id,
               text: 'Tutsham Farm, West Farleigh, Maidstone, Kent, ME15 0NE',
-              checked: false
+              value: companyAddresses.addresses[0].id
             },
             { divider: 'or' },
             {
+              checked: false,
               id: 'new',
-              value: 'new',
               text: 'Setup a new address',
-              checked: false
+              value: 'new'
             }
           ],
           pageTitle: `Select an existing address for ${session.billingAccount.company.name}`,
@@ -145,17 +146,17 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
           },
           items: [
             {
+              checked: false,
               id: companyAddresses.addresses[0].id,
-              value: companyAddresses.addresses[0].id,
               text: 'Tutsham Farm, West Farleigh, Maidstone, Kent, ME15 0NE',
-              checked: false
+              value: companyAddresses.addresses[0].id
             },
             { divider: 'or' },
             {
+              checked: false,
               id: 'new',
-              value: 'new',
               text: 'Setup a new address',
-              checked: false
+              value: 'new'
             }
           ],
           pageTitle: `Select an existing address for ${session.billingAccount.company.name}`,

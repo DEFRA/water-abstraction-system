@@ -49,12 +49,12 @@ function _generateRadioButtons(conditions, conditionId) {
       .trim()
 
     return {
-      value: row.id,
-      text: `${row.displayTitle} ${index + 1}`,
+      checked: row.id === conditionId,
       hint: {
         text: hintText
       },
-      checked: row.id === conditionId
+      text: `${row.displayTitle} ${index + 1}`,
+      value: row.id
     }
   })
 
@@ -64,9 +64,9 @@ function _generateRadioButtons(conditions, conditionId) {
       divider: 'or'
     },
     {
-      value: 'no_condition',
+      checked: conditionId === 'no_condition',
       text: 'The condition is not listed for this licence',
-      checked: conditionId === 'no_condition'
+      value: 'no_condition'
     }
   ]
 }

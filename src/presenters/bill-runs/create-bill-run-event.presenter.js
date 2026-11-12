@@ -31,29 +31,29 @@ export default function createBillRunEventPresenter(billRun) {
 
   return {
     batch: {
-      id,
-      type: batchType,
-      region: {
-        id: region.id,
-        code: region.chargeRegionId,
-        name: region.name,
-        type: 'region',
-        displayName: region.displayName,
-        numericCode: region.naldRegionId
-      },
-      source,
-      status,
-      endYear: { yearEnding: toFinancialYearEnding },
-      invoices: [],
-      summer,
-      netTotal,
-      startYear: { yearEnding: fromFinancialYearEnding },
+      creditNoteCount,
+      creditNoteValue,
       dateCreated: createdAt,
       dateUpdated: updatedAt,
+      endYear: { yearEnding: toFinancialYearEnding },
+      id,
       invoiceCount,
+      invoices: [],
       invoiceValue,
-      creditNoteCount,
-      creditNoteValue
+      netTotal,
+      region: {
+        code: region.chargeRegionId,
+        displayName: region.displayName,
+        id: region.id,
+        name: region.name,
+        numericCode: region.naldRegionId,
+        type: 'region'
+      },
+      source,
+      startYear: { yearEnding: fromFinancialYearEnding },
+      status,
+      summer,
+      type: batchType
     }
   }
 }

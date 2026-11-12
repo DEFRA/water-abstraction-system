@@ -17,8 +17,8 @@ import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 export default async function deleteNoteService(sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
   const notification = {
-    title: 'Deleted',
-    text: 'Note deleted'
+    text: 'Note deleted',
+    title: 'Deleted'
   }
 
   yar.flash('notification', notification)

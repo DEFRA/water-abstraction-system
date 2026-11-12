@@ -23,8 +23,8 @@ export default function meterProvidedValidator(payload) {
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': errorMessage,
         'any.only': errorMessage,
+        'any.required': errorMessage,
         'string.empty': errorMessage
       })
   })

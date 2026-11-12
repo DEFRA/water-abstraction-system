@@ -146,9 +146,9 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         vi.spyOn(AdditionalSubmissionOptionsService, 'default').mockResolvedValue({
+          additionalSubmissionOptions: [],
           id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
-          pageTitle: 'Select any additional submission options for the return requirements',
-          additionalSubmissionOptions: []
+          pageTitle: 'Select any additional submission options for the return requirements'
         })
       })
 
@@ -351,8 +351,8 @@ describe('Return Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         vi.spyOn(DeleteNoteService, 'default').mockResolvedValue({
-          title: 'Removed',
-          text: 'Note removed'
+          text: 'Note removed',
+          title: 'Removed'
         })
       })
 
@@ -1099,12 +1099,12 @@ function _getOptions(path, index = -1) {
   }
 
   return {
-    method: 'GET',
-    url,
     auth: {
-      strategy: 'session',
-      credentials: { scope: ['billing'] }
-    }
+      credentials: { scope: ['billing'] },
+      strategy: 'session'
+    },
+    method: 'GET',
+    url
   }
 }
 

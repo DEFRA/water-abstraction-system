@@ -4,11 +4,11 @@ import { beforeEach, describe, expect, it } from 'vitest'
 // Test helpers
 import AddressHelper from 'water-abstraction-engine/test/helpers/address.helper.js'
 import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillingAccountAddressHelper from 'water-abstraction-engine/test/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
 import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
 import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
-import BillingAccountAddressHelper from 'water-abstraction-engine/test/helpers/billing-account-address.helper.js'
-import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
 import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
 import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
@@ -65,12 +65,12 @@ describe('Fetch Bill Run service', () => {
     // company we prepared earlier
     await Promise.all([
       BillingAccountAddressHelper.add({
-        billingAccountId: linkedBillingAccounts[0].id,
-        addressId: address.id
+        addressId: address.id,
+        billingAccountId: linkedBillingAccounts[0].id
       }),
       BillingAccountAddressHelper.add({
-        billingAccountId: linkedBillingAccounts[1].id,
         addressId: address.id,
+        billingAccountId: linkedBillingAccounts[1].id,
         companyId: linkedCompanies[2].id
       })
     ])
@@ -79,15 +79,15 @@ describe('Fetch Bill Run service', () => {
     // result from the service
     linkedBills = await Promise.all([
       BillHelper.add({
-        billRunId: testBillRun.id,
-        billingAccountId: linkedBillingAccounts[0].id,
         accountNumber: linkedBillingAccounts[0].accountNumber,
+        billingAccountId: linkedBillingAccounts[0].id,
+        billRunId: testBillRun.id,
         netAmount: 1550
       }),
       BillHelper.add({
-        billRunId: testBillRun.id,
-        billingAccountId: linkedBillingAccounts[1].id,
         accountNumber: linkedBillingAccounts[1].accountNumber,
+        billingAccountId: linkedBillingAccounts[1].id,
+        billRunId: testBillRun.id,
         netAmount: 2345
       })
     ])
@@ -146,25 +146,25 @@ describe('Fetch Bill Run service', () => {
 
       expect(result).toHaveLength(2)
       expect(result).toContainEqual({
-        id: linkedBills[0].id,
-        billingAccountId: linkedBills[0].billingAccountId,
         accountNumber: linkedBills[0].accountNumber,
-        netAmount: linkedBills[0].netAmount,
-        financialYearEnding: linkedBills[0].financialYearEnding,
-        companyName: linkedCompanies[0].name,
         agentName: null,
         allLicences: firstBillsLicences.join(','),
+        billingAccountId: linkedBills[0].billingAccountId,
+        companyName: linkedCompanies[0].name,
+        financialYearEnding: linkedBills[0].financialYearEnding,
+        id: linkedBills[0].id,
+        netAmount: linkedBills[0].netAmount,
         waterCompany: false
       })
       expect(result).toContainEqual({
-        id: linkedBills[1].id,
-        billingAccountId: linkedBills[1].billingAccountId,
         accountNumber: linkedBills[1].accountNumber,
-        netAmount: linkedBills[1].netAmount,
-        financialYearEnding: linkedBills[1].financialYearEnding,
-        companyName: linkedCompanies[1].name,
         agentName: linkedCompanies[2].name,
         allLicences: `${linkedLicences[2].licenceRef}`,
+        billingAccountId: linkedBills[1].billingAccountId,
+        companyName: linkedCompanies[1].name,
+        financialYearEnding: linkedBills[1].financialYearEnding,
+        id: linkedBills[1].id,
+        netAmount: linkedBills[1].netAmount,
         waterCompany: true
       })
     })

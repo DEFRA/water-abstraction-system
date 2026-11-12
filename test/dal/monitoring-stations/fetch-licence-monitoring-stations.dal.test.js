@@ -80,6 +80,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
           status: 'resume',
           statusUpdatedAt: new Date('2025-08-26 21:22:05')
         })
+
         licenceMonitoringStations.push(licenceMonitoringStation)
 
         // We add a notification for LMS one, but we don't expect to see it in the results because it is 'pending'
@@ -90,13 +91,14 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
           recipient: 'carol.shaw@atari.com',
           status: 'error'
         })
+
         notifications.push(notification)
 
         licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3,
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 4,
           createdBy: user.userId,
           licenceId: licence.id,
           monitoringStationId: monitoringStation.id,
@@ -181,7 +183,6 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
             licenceVersionPurposeCondition: {
               externalId: licenceVersionPurposeCondition.externalId,
               id: licenceVersionPurposeCondition.id,
-              notes: licenceVersionPurposeCondition.notes,
               licenceVersionPurpose: {
                 id: licenceVersionPurpose.id,
                 licenceVersion: { id: licenceVersion.id, status: licenceVersion.status }
@@ -189,7 +190,8 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
               licenceVersionPurposeConditionType: {
                 displayTitle: licenceVersionPurposeConditionType.displayTitle,
                 id: licenceVersionPurposeConditionType.id
-              }
+              },
+              notes: licenceVersionPurposeCondition.notes
             },
             restrictionType: licenceMonitoringStations[0].restrictionType,
             status: licenceMonitoringStations[0].status,

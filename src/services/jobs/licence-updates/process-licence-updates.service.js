@@ -57,11 +57,11 @@ async function _addWorkflowRecords(licenceVersions) {
     const { id: licenceVersionId, licenceId, chargeVersionExists } = licenceVersion
 
     await Workflow.query().insert({
+      createdAt: timestamp,
       data: { chargeVersion: null, chargeVersionExists },
       licenceId,
       licenceVersionId,
       status: 'to_setup',
-      createdAt: timestamp,
       updatedAt: timestamp
     })
   }

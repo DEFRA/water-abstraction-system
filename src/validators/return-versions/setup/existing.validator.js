@@ -26,8 +26,8 @@ export default function existingValidator(payload, returnVersions) {
       .required()
       .valid(...returnVersionIds)
       .messages({
-        'any.required': errorMessage,
         'any.only': errorMessage,
+        'any.required': errorMessage,
         'string.empty': errorMessage
       })
   })

@@ -2,11 +2,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
 import { futureDueDate } from 'water-abstraction-engine/presenters/notices/base.presenter.js'
 import { generateNoticeReferenceCode, generateUUID } from 'water-abstraction-engine/test/generators.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 
 // Thing under test
 import CreateNotificationsService from '../../../../src/services/notices/setup/create-notifications.service.js'
@@ -37,8 +37,8 @@ describe('Notices - Setup - Create Notifications service', () => {
           notes: null,
           restrictionType: 'stop',
           thresholdGroup: 'flow-50-m3/s',
-          thresholdValue: 50,
-          thresholdUnit: 'm3/s'
+          thresholdUnit: 'm3/s',
+          thresholdValue: 50
         },
         {
           abstractionPeriodEndDay: 31,
@@ -55,8 +55,8 @@ describe('Notices - Setup - Create Notifications service', () => {
           notes: null,
           restrictionType: 'stop',
           thresholdGroup: 'flow-500-Ml/d',
-          thresholdValue: 500,
-          thresholdUnit: 'Ml/d'
+          thresholdUnit: 'Ml/d',
+          thresholdValue: 500
         }
       ]
 
@@ -65,9 +65,9 @@ describe('Notices - Setup - Create Notifications service', () => {
         alertEmailAddressType: 'username',
         alertThresholds: ['flow-50-m3/s', 'flow-500-Ml/d'],
         alertType: 'stop',
-        licenceRefs: [...recipients[0].licence_refs, ...recipients[1].licence_refs],
-        licenceMonitoringStations,
         journey: 'alerts',
+        licenceMonitoringStations,
+        licenceRefs: [...recipients[0].licence_refs, ...recipients[1].licence_refs],
         monitoringStationId: generateUUID(),
         monitoringStationName: 'DEATH STAR',
         monitoringStationRiverName: '',
@@ -164,14 +164,14 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       session = {
         addressJourney: {
+          activeNavBar: 'notices',
           address: {},
           backLink: {
             href: `/system/notices/setup/${sessionId}/recipient-name`,
             text: 'Back'
           },
-          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`,
-          activeNavBar: 'notices',
-          pageTitleCaption: `Notice ${referenceCode}`
+          pageTitleCaption: `Notice ${referenceCode}`,
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
         },
         checkPageVisited: true,
         dueReturns: [
@@ -193,25 +193,25 @@ describe('Notices - Setup - Create Notifications service', () => {
           {
             dueDate: '2024-04-28T00:00:00.000Z',
             endDate: '2024-03-31T00:00:00.000Z',
+            naldAreaCode: 'RIDIN',
             purpose: 'Spray Irrigation - Direct',
-            startDate: '2023-04-01T00:00:00.000Z',
             regionCode: 3,
             regionName: 'North East',
             returnId: `v1:3:${licenceRef}:10044001:2023-04-01:2024-03-31`,
             returnLogId: generateUUID(),
-            naldAreaCode: 'RIDIN',
-            twoPartTariff: false,
             returnReference: '10044001',
+            returnsFrequency: 'month',
             siteDescription: 'PUMP AT TINTAGEL',
-            returnsFrequency: 'month'
+            startDate: '2023-04-01T00:00:00.000Z',
+            twoPartTariff: false
           }
         ],
         id: sessionId,
-        licenceRef,
         journey: 'adhoc',
+        licenceRef,
         name: 'Paper returns',
-        notificationType: 'Paper returns',
         noticeType: 'paperReturn',
+        notificationType: 'Paper returns',
         referenceCode,
         selectedRecipients: [recipients[0].contact_hash_id, recipients[1].contact_hash_id],
         selectedReturns: [selectedReturnId],
@@ -307,21 +307,21 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       session = {
         addressJourney: {
+          activeNavBar: 'notices',
           address: {},
           backLink: {
             href: `/system/notices/setup/${sessionId}/recipient-name`,
             text: 'Back'
           },
-          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`,
-          activeNavBar: 'notices',
-          pageTitleCaption: `Notice ${referenceCode}`
+          pageTitleCaption: `Notice ${referenceCode}`,
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
         },
         checkPageVisited: true,
         id: sessionId,
         journey: 'standard',
         name: 'Returns: invitation',
-        notificationType: 'Returns invitation',
         noticeType: 'invitations',
+        notificationType: 'Returns invitation',
         referenceCode,
         selectedRecipients: [recipients[0].contact_hash_id, recipients[1].contact_hash_id],
         subType: 'returnInvitation'
@@ -371,8 +371,6 @@ describe('Notices - Setup - Create Notifications service', () => {
         messageType: 'letter',
         pdf: null,
         personalisation: {
-          name: 'Returnsto',
-          periodEndDate: null,
           address_line_1: 'Returnsto',
           address_line_2: '4',
           address_line_3: 'Privet Drive',
@@ -380,6 +378,8 @@ describe('Notices - Setup - Create Notifications service', () => {
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
           licenceNumber: recipients[1].licence_refs[0],
+          name: 'Returnsto',
+          periodEndDate: null,
           periodStartDate: null,
           returnDueDate: formatLongDate(futureDueDate('letter'))
         },

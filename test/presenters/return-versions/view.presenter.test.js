@@ -38,8 +38,8 @@ describe('Return Versions - View presenter', () => {
       pageTitle: 'Requirements for returns starting 1 April 2022',
       pageTitleCaption: 'Licence 01/123',
       pagination: null,
-      quarterlyReturnSubmissions: false,
       quarterlyReturns: 'No',
+      quarterlyReturnSubmissions: false,
       reason: 'New licence created on 5 April 2022 by carol.shaw@atari.com',
       requirements: [
         {
@@ -506,22 +506,22 @@ describe('Return Versions - View presenter', () => {
 function _returnVersionData() {
   const contact = ContactModel.fromJson({
     firstName: 'Annie',
-    middleInitials: 'J',
     lastName: 'Easley',
+    middleInitials: 'J',
     salutation: 'Mrs'
   })
 
   const licence = LicenceModel.fromJson({
     id: generateUUID(),
-    licenceRef: '01/123',
     licenceDocument: {
       licenceDocumentRoles: [
         {
-          id: generateUUID(),
-          contact
+          contact,
+          id: generateUUID()
         }
       ]
-    }
+    },
+    licenceRef: '01/123'
   })
 
   const point = PointModel.fromJson({
@@ -536,14 +536,11 @@ function _returnVersionData() {
   const returnVersionData = {
     createdAt: new Date('2022-04-05'),
     id: generateUUID(),
+    licence,
+    modLogs: [],
     multipleUpload: false,
     notes: 'A note on the return version record',
     reason: 'new-licence',
-    startDate: new Date('2022-04-01'),
-    status: 'current',
-    modLogs: [],
-    user: { id: 1, username: 'carol.shaw@atari.com' },
-    licence,
     returnRequirements: [
       {
         abstractionPeriodEndDay: 31,
@@ -554,22 +551,25 @@ function _returnVersionData() {
         fiftySixException: false,
         gravityFill: false,
         id: generateUUID(),
+        points: [point],
         reabstraction: false,
         reference: 10012345,
         reportingFrequency: 'month',
-        siteDescription: 'Borehole in field',
-        summer: false,
-        twoPartTariff: false,
-        points: [point],
         returnRequirementPurposes: [
           {
             alias: null,
             id: generateUUID(),
             purpose: { description: 'Spray Irrigation - Direct', id: generateUUID() }
           }
-        ]
+        ],
+        siteDescription: 'Borehole in field',
+        summer: false,
+        twoPartTariff: false
       }
-    ]
+    ],
+    startDate: new Date('2022-04-01'),
+    status: 'current',
+    user: { id: 1, username: 'carol.shaw@atari.com' }
   }
 
   const returnVersionsForPagination = [

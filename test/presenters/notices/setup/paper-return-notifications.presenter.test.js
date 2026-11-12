@@ -63,8 +63,8 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
     ]
 
     session = {
-      licenceRef,
       dueReturns,
+      licenceRef,
       selectedReturns: [dueReturns[0].returnLogId, dueReturns[2].returnLogId]
     }
   })

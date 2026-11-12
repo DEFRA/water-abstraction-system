@@ -46,13 +46,13 @@ export default async function determineBillLicenceFlagsService(billLicenceId) {
   )
 
   const result = {
-    licenceId,
-    regionId: licence.regionId,
-    startDate: new Date(`${bill.billRun.toFinancialYearEnding - 1}-04-01`),
     endDate: new Date(`${bill.billRun.toFinancialYearEnding}-03-31`),
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
-    flagForTwoPartTariffSupplementary
+    flagForTwoPartTariffSupplementary,
+    licenceId,
+    regionId: licence.regionId,
+    startDate: new Date(`${bill.billRun.toFinancialYearEnding - 1}-04-01`)
   }
 
   return result

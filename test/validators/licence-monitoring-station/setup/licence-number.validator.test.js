@@ -2,8 +2,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 import { yesterday } from 'water-abstraction-engine/test/general.js'
+import { generateLicenceRef } from 'water-abstraction-engine/test/generators.js'
 import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
 
 // Thing under test

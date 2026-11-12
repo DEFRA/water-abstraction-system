@@ -17,15 +17,15 @@ const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Address - Select service', () => {
   const match = {
-    uprn: 340116,
     address: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+    city: 'BRISTOL',
+    country: 'United Kingdom',
+    locality: null,
     organisation: 'ENVIRONMENT AGENCY',
+    postcode: 'BS1 5AH',
     premises: 'HORIZON HOUSE',
     street_address: 'DEANERY ROAD',
-    locality: null,
-    city: 'BRISTOL',
-    postcode: 'BS1 5AH',
-    country: 'United Kingdom'
+    uprn: 340116
   }
   const sessionId = 'dba48385-9fc8-454b-8ec8-3832d3b9e323'
 
@@ -35,7 +35,6 @@ describe('Address - Select service', () => {
 
   beforeEach(() => {
     sessionData = {
-      id: sessionId,
       addressJourney: {
         activeNavBar: 'manage',
         address: { postcode: 'BS1 5AH' },
@@ -44,7 +43,8 @@ describe('Address - Select service', () => {
           text: 'Back'
         },
         redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-      }
+      },
+      id: sessionId
     }
 
     session = SessionModelStub(sessionData)
@@ -62,14 +62,14 @@ describe('Address - Select service', () => {
     describe('and the postcode lookup returns a match', () => {
       beforeEach(() => {
         lookupPostcodeRequestStub.mockResolvedValue({
-          succeeded: true,
+          matches: [match],
           response: {
-            statusCode: HTTP_STATUS_OK,
             body: {
               results: [match]
-            }
+            },
+            statusCode: HTTP_STATUS_OK
           },
-          matches: [match]
+          succeeded: true
         })
       })
 
@@ -80,9 +80,9 @@ describe('Address - Select service', () => {
           activeNavBar: 'manage',
           addresses: [
             {
-              value: 'select',
               selected: true,
-              text: `1 address found`
+              text: `1 address found`,
+              value: 'select'
             },
             {
               text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
@@ -104,14 +104,14 @@ describe('Address - Select service', () => {
     describe('and the postcode lookup returns no matches', () => {
       beforeEach(() => {
         lookupPostcodeRequestStub.mockResolvedValue({
-          succeeded: true,
+          matches: [],
           response: {
-            statusCode: HTTP_STATUS_OK,
             body: {
               results: []
-            }
+            },
+            statusCode: HTTP_STATUS_OK
           },
-          matches: []
+          succeeded: true
         })
       })
 
@@ -125,16 +125,16 @@ describe('Address - Select service', () => {
     describe('and the postcode lookup fails', () => {
       beforeEach(() => {
         lookupPostcodeRequestStub.mockResolvedValue({
-          succeeded: false,
+          matches: [],
           response: {
-            statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
             body: {
-              statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
               error: 'Computer says no',
-              message: 'Computer says no'
-            }
+              message: 'Computer says no',
+              statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR
+            },
+            statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR
           },
-          matches: []
+          succeeded: false
         })
       })
 

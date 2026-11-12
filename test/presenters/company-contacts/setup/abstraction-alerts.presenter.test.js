@@ -15,7 +15,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
   beforeEach(() => {
     company = CustomersFixtures.company()
 
-    session = { id: generateUUID(), company, licences: [] }
+    session = { company, id: generateUUID(), licences: [] }
   })
 
   describe('when called', () => {

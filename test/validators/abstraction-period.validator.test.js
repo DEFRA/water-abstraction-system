@@ -11,10 +11,10 @@ describe('Abstraction Period validator', () => {
     describe('and the data is provided as strings', () => {
       beforeEach(() => {
         payload = {
-          abstractionPeriodStartDay: '01',
-          abstractionPeriodStartMonth: '12',
           abstractionPeriodEndDay: '02',
-          abstractionPeriodEndMonth: '7'
+          abstractionPeriodEndMonth: '7',
+          abstractionPeriodStartDay: '01',
+          abstractionPeriodStartMonth: '12'
         }
       })
 
@@ -30,10 +30,10 @@ describe('Abstraction Period validator', () => {
     describe('and the data is provided as numbers', () => {
       beforeEach(() => {
         payload = {
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 12,
           abstractionPeriodEndDay: 2,
-          abstractionPeriodEndMonth: 7
+          abstractionPeriodEndMonth: 7,
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 12
         }
       })
 
@@ -51,10 +51,10 @@ describe('Abstraction Period validator', () => {
     describe('for the start date, with a valid end date', () => {
       beforeEach(() => {
         payload = {
-          abstractionPeriodStartDay: 'INVALID_START_DAY',
-          abstractionPeriodStartMonth: 'INVALID_START_MONTH',
           abstractionPeriodEndDay: '02',
-          abstractionPeriodEndMonth: '07'
+          abstractionPeriodEndMonth: '07',
+          abstractionPeriodStartDay: 'INVALID_START_DAY',
+          abstractionPeriodStartMonth: 'INVALID_START_MONTH'
         }
       })
 
@@ -71,10 +71,10 @@ describe('Abstraction Period validator', () => {
     describe('for the end date, with a valid start date', () => {
       beforeEach(() => {
         payload = {
-          abstractionPeriodStartDay: '01',
-          abstractionPeriodStartMonth: '12',
           abstractionPeriodEndDay: 'INVALID_END_DAY',
-          abstractionPeriodEndMonth: 'INVALID_END_MONTH'
+          abstractionPeriodEndMonth: 'INVALID_END_MONTH',
+          abstractionPeriodStartDay: '01',
+          abstractionPeriodStartMonth: '12'
         }
       })
 
@@ -91,10 +91,10 @@ describe('Abstraction Period validator', () => {
     describe('for the start date, with no end date', () => {
       beforeEach(() => {
         payload = {
-          abstractionPeriodStartDay: 'INVALID_START_DAY',
-          abstractionPeriodStartMonth: 'INVALID_START_MONTH',
           abstractionPeriodEndDay: null,
-          abstractionPeriodEndMonth: null
+          abstractionPeriodEndMonth: null,
+          abstractionPeriodStartDay: 'INVALID_START_DAY',
+          abstractionPeriodStartMonth: 'INVALID_START_MONTH'
         }
       })
 
@@ -112,10 +112,10 @@ describe('Abstraction Period validator', () => {
     describe('for the end date, with no start date', () => {
       beforeEach(() => {
         payload = {
-          abstractionPeriodStartDay: null,
-          abstractionPeriodStartMonth: null,
           abstractionPeriodEndDay: 'INVALID_END_DAY',
-          abstractionPeriodEndMonth: 'INVALID_END_MONTH'
+          abstractionPeriodEndMonth: 'INVALID_END_MONTH',
+          abstractionPeriodStartDay: null,
+          abstractionPeriodStartMonth: null
         }
       })
 
@@ -133,10 +133,10 @@ describe('Abstraction Period validator', () => {
     describe('for both dates', () => {
       beforeEach(() => {
         payload = {
-          abstractionPeriodStartDay: 'INVALID_START_DAY',
-          abstractionPeriodStartMonth: 'INVALID_START_MONTH',
           abstractionPeriodEndDay: 'INVALID_END_DAY',
-          abstractionPeriodEndMonth: 'INVALID_END_MONTH'
+          abstractionPeriodEndMonth: 'INVALID_END_MONTH',
+          abstractionPeriodStartDay: 'INVALID_START_DAY',
+          abstractionPeriodStartMonth: 'INVALID_START_MONTH'
         }
       })
 
@@ -155,10 +155,10 @@ describe('Abstraction Period validator', () => {
   describe('when only start abstraction period data is provided', () => {
     beforeEach(() => {
       payload = {
-        abstractionPeriodStartDay: '01',
-        abstractionPeriodStartMonth: '12',
         abstractionPeriodEndDay: null,
-        abstractionPeriodEndMonth: null
+        abstractionPeriodEndMonth: null,
+        abstractionPeriodStartDay: '01',
+        abstractionPeriodStartMonth: '12'
       }
     })
 
@@ -175,10 +175,10 @@ describe('Abstraction Period validator', () => {
   describe('when only end abstraction period data is provided', () => {
     beforeEach(() => {
       payload = {
-        abstractionPeriodStartDay: null,
-        abstractionPeriodStartMonth: null,
         abstractionPeriodEndDay: '02',
-        abstractionPeriodEndMonth: '7'
+        abstractionPeriodEndMonth: '7',
+        abstractionPeriodStartDay: null,
+        abstractionPeriodStartMonth: null
       }
     })
 

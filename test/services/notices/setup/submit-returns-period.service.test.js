@@ -66,9 +66,9 @@ describe('Notices - Setup - Submit Returns Period service', () => {
           dueDate: new Date('2025-04-28'),
           endDate: new Date('2025-03-31'),
           name: 'quarterFour',
+          quarterly: true,
           startDate: new Date('2025-01-01'),
-          summer: 'false',
-          quarterly: true
+          summer: 'false'
         })
       })
 
@@ -140,9 +140,9 @@ describe('Notices - Setup - Submit Returns Period service', () => {
           dueDate: new Date('2025-04-28'),
           endDate: new Date('2025-03-31'),
           name: 'quarterFour',
+          quarterly: true,
           startDate: new Date('2025-01-01'),
-          summer: 'false',
-          quarterly: true
+          summer: 'false'
         })
       })
 

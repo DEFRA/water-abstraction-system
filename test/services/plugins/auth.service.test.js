@@ -30,9 +30,9 @@ describe('Plugins - Auth service', () => {
   describe('when the user is "valid" (they exist)', () => {
     beforeEach(() => {
       user = {
-        user: { name: 'User' },
+        groups: [{ group: 'Group' }],
         roles: [{ role: 'Role' }],
-        groups: [{ group: 'Group' }]
+        user: { name: 'User' }
       }
 
       vi.spyOn(FetchUserAuthDetailsService, 'default').mockResolvedValue(user)
@@ -85,9 +85,9 @@ describe('Plugins - Auth service', () => {
     describe('such as "ar_user"', () => {
       beforeEach(() => {
         user = {
-          user: { name: 'User' },
+          groups: [{ group: 'Group' }],
           roles: [{ role: 'ar_user' }],
-          groups: [{ group: 'Group' }]
+          user: { name: 'User' }
         }
 
         vi.spyOn(FetchUserAuthDetailsService, 'default').mockResolvedValue(user)
@@ -109,9 +109,9 @@ describe('Plugins - Auth service', () => {
     describe('such as "billing"', () => {
       beforeEach(() => {
         user = {
-          user: { name: 'User' },
+          groups: [{ group: 'Group' }],
           roles: [{ role: 'billing' }],
-          groups: [{ group: 'Group' }]
+          user: { name: 'User' }
         }
 
         vi.spyOn(FetchUserAuthDetailsService, 'default').mockResolvedValue(user)
@@ -135,9 +135,9 @@ describe('Plugins - Auth service', () => {
     describe('such as "returns"', () => {
       beforeEach(() => {
         user = {
-          user: { name: 'User' },
+          groups: [{ group: 'Group' }],
           roles: [{ role: 'returns' }],
-          groups: [{ group: 'Group' }]
+          user: { name: 'User' }
         }
 
         vi.spyOn(FetchUserAuthDetailsService, 'default').mockResolvedValue(user)
@@ -159,9 +159,9 @@ describe('Plugins - Auth service', () => {
     describe('such as "hof_notifications"', () => {
       beforeEach(() => {
         user = {
-          user: { name: 'User' },
+          groups: [{ group: 'Group' }],
           roles: [{ role: 'hof_notifications' }],
-          groups: [{ group: 'Group' }]
+          user: { name: 'User' }
         }
 
         vi.spyOn(FetchUserAuthDetailsService, 'default').mockResolvedValue(user)
@@ -183,9 +183,9 @@ describe('Plugins - Auth service', () => {
     describe('such as "manage_accounts"', () => {
       beforeEach(() => {
         user = {
-          user: { name: 'User' },
+          groups: [{ group: 'Group' }],
           roles: [{ role: 'manage_accounts' }],
-          groups: [{ group: 'Group' }]
+          user: { name: 'User' }
         }
 
         vi.spyOn(FetchUserAuthDetailsService, 'default').mockResolvedValue(user)
@@ -208,9 +208,9 @@ describe('Plugins - Auth service', () => {
   describe('when the user id is not found', () => {
     beforeEach(() => {
       user = {
-        user: null,
+        groups: [],
         roles: [],
-        groups: []
+        user: null
       }
 
       vi.spyOn(FetchUserAuthDetailsService, 'default').mockResolvedValue(user)

@@ -24,7 +24,7 @@ export default async function fetchCompanyDetailsDal(companyId, role) {
         .innerJoinRelated('licenceRole')
         .where('licenceRole.name', role)
         .orderBy([
-          { column: 'endDate', order: 'desc', nulls: 'first' },
+          { column: 'endDate', nulls: 'first', order: 'desc' },
           { column: 'startDate', order: 'desc' }
         ])
         .withGraphFetched('address')

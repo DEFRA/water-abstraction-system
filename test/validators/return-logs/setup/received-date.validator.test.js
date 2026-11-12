@@ -44,9 +44,9 @@ describe('Return Logs Setup - Received Date validator', () => {
     describe('because the user entered a valid custom date', () => {
       beforeEach(() => {
         payload = {
-          receivedDateOptions: 'customDate',
           receivedDateDay: '26',
           receivedDateMonth: '11',
+          receivedDateOptions: 'customDate',
           receivedDateYear: '2023'
         }
       })
@@ -172,6 +172,7 @@ describe('Return Logs Setup - Received Date validator', () => {
         beforeEach(() => {
           // Get today's date and add 1 day
           const futureDate = today()
+
           futureDate.setDate(futureDate.getDate() + 1) // Set to tomorrow
 
           // Update the payload with the future date values

@@ -23,13 +23,13 @@ export default async function createBillRunEventService(billRun, issuer) {
 
   const event = await EventModel.query()
     .insert({
-      type: 'billing-batch',
-      subtype: billRun.batchType,
-      issuer,
-      metadata: _metadata(billRun),
-      licences: JSON.stringify([]),
-      status: 'start',
       createdAt: timestamp,
+      issuer,
+      licences: JSON.stringify([]),
+      metadata: _metadata(billRun),
+      status: 'start',
+      subtype: billRun.batchType,
+      type: 'billing-batch',
       updatedAt: timestamp
     })
     .returning('*')

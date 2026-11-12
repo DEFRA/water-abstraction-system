@@ -18,8 +18,8 @@ export default function contactDetailsPresenter(contacts, licence) {
 
   return {
     backLink: {
-      text: 'Go back to search',
-      href: '/'
+      href: '/',
+      text: 'Go back to search'
     },
     contacts: _contacts(contacts, licenceId),
     licenceHolderContactsLink: _licenceHolderContactsLink(contacts),

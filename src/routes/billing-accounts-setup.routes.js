@@ -25,254 +25,254 @@ import {
 export default [
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{billingAccountId}',
     options: {
-      handler: setup,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: setup
+    },
+    path: '/billing-accounts/setup/{billingAccountId}'
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/account',
     options: {
-      handler: viewAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: viewAccount
+    },
+    path: '/billing-accounts/setup/{sessionId}/account'
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/account',
     options: {
-      handler: submitAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: submitAccount
+    },
+    path: '/billing-accounts/setup/{sessionId}/account'
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/existing-address',
     options: {
-      handler: viewExistingAddress,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: viewExistingAddress
+    },
+    path: '/billing-accounts/setup/{sessionId}/existing-address'
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/existing-address',
     options: {
-      handler: submitExistingAddress,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: submitExistingAddress
+    },
+    path: '/billing-accounts/setup/{sessionId}/existing-address'
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/existing-account',
     options: {
-      handler: viewExistingAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: viewExistingAccount
+    },
+    path: '/billing-accounts/setup/{sessionId}/existing-account'
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/existing-account',
     options: {
-      handler: submitExistingAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: submitExistingAccount
+    },
+    path: '/billing-accounts/setup/{sessionId}/existing-account'
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/fao',
     options: {
-      handler: viewFAO,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: viewFAO
+    },
+    path: '/billing-accounts/setup/{sessionId}/fao'
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/fao',
     options: {
-      handler: submitFAO,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: submitFAO
+    },
+    path: '/billing-accounts/setup/{sessionId}/fao'
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/check',
     options: {
-      handler: viewCheck,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: viewCheck
+    },
+    path: '/billing-accounts/setup/{sessionId}/check'
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/check',
     options: {
-      handler: submitCheck,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: submitCheck
+    },
+    path: '/billing-accounts/setup/{sessionId}/check'
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/account-type',
     options: {
-      handler: viewAccountType,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: viewAccountType
+    },
+    path: '/billing-accounts/setup/{sessionId}/account-type'
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/account-type',
     options: {
-      handler: submitAccountType,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: submitAccountType
+    },
+    path: '/billing-accounts/setup/{sessionId}/account-type'
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/contact',
     options: {
-      handler: viewContact,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: viewContact
+    },
+    path: '/billing-accounts/setup/{sessionId}/contact'
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/contact',
     options: {
-      handler: submitContact,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: submitContact
+    },
+    path: '/billing-accounts/setup/{sessionId}/contact'
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/contact-name',
     options: {
-      handler: viewContactName,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: viewContactName
+    },
+    path: '/billing-accounts/setup/{sessionId}/contact-name'
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/contact-name',
     options: {
-      handler: submitContactName,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: submitContactName
+    },
+    path: '/billing-accounts/setup/{sessionId}/contact-name'
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/company-search',
     options: {
-      handler: viewCompanySearch,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: viewCompanySearch
+    },
+    path: '/billing-accounts/setup/{sessionId}/company-search'
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/company-search',
     options: {
-      handler: submitCompanySearch,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: submitCompanySearch
+    },
+    path: '/billing-accounts/setup/{sessionId}/company-search'
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/select-company',
     options: {
-      handler: viewSelectCompany,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: viewSelectCompany
+    },
+    path: '/billing-accounts/setup/{sessionId}/select-company'
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/select-company',
     options: {
-      handler: submitSelectCompany,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
         }
-      }
-    }
+      },
+      handler: submitSelectCompany
+    },
+    path: '/billing-accounts/setup/{sessionId}/select-company'
   }
 ]

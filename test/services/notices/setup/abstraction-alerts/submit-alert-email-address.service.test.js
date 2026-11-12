@@ -115,8 +115,6 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
             href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
             text: 'Back'
           },
-          pageTitle: 'Select an email address to include in the alerts',
-          pageTitleCaption: 'Death star',
           error: {
             alertEmailAddressType: {
               text: 'Enter an email address'
@@ -128,6 +126,8 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
               }
             ]
           },
+          pageTitle: 'Select an email address to include in the alerts',
+          pageTitleCaption: 'Death star',
           username: 'admin@defra.gov.uk'
         })
       })
@@ -152,8 +152,6 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
             href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
             text: 'Back'
           },
-          pageTitle: 'Select an email address to include in the alerts',
-          pageTitleCaption: 'Death star',
           error: {
             errorList: [
               {
@@ -165,6 +163,8 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
               text: 'Enter an email address'
             }
           },
+          pageTitle: 'Select an email address to include in the alerts',
+          pageTitleCaption: 'Death star',
           username: 'admin@defra.gov.uk'
         })
       })
@@ -189,8 +189,6 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
             href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
             text: 'Back'
           },
-          pageTitle: 'Select an email address to include in the alerts',
-          pageTitleCaption: 'Death star',
           error: {
             errorList: [
               {
@@ -202,6 +200,8 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
               text: 'Enter an email address in the correct format, like name@example.com'
             }
           },
+          pageTitle: 'Select an email address to include in the alerts',
+          pageTitleCaption: 'Death star',
           username: 'admin@defra.gov.uk'
         })
       })

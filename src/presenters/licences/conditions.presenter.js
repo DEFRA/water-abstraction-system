@@ -3,8 +3,8 @@
  * @module ConditionsPresenter
  */
 
-import { formatConditionTypes } from '../licence.presenter.js'
 import { pluralise } from './base-licences.presenter.js'
+import { formatConditionTypes } from '../licence.presenter.js'
 
 /**
  * Formats the licence and related conditions data for the licence conditions page
@@ -28,8 +28,8 @@ export default function conditionsPresenter(conditions, licence) {
     pageTitleCaption: `Licence ${licenceRef}`,
     showingConditions: `Showing ${conditionTypes.length} ${pluralise('type', conditionTypes.length)} of further conditions`,
     warning: {
-      text: 'We may not be able to show a full list of the conditions, because we do not hold all of the licence information on our system yet. You should refer to the paper copy of the licence to view all conditions.',
-      iconFallbackText: 'Warning'
+      iconFallbackText: 'Warning',
+      text: 'We may not be able to show a full list of the conditions, because we do not hold all of the licence information on our system yet. You should refer to the paper copy of the licence to view all conditions.'
     }
   }
 }

@@ -44,16 +44,16 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
           licenceRef: licenceDocumentHeaders[0].licenceRef,
           licenceVersions: [
             {
-              id: generateUUID(),
-              issueDate: null,
-              licenceId: generateUUID(),
-              startDate: new Date('2022-04-01'),
-              status: 'current',
               company: {
                 id: generateUUID(),
                 name: 'ACME Farms Ltd',
                 type: 'organisation'
-              }
+              },
+              id: generateUUID(),
+              issueDate: null,
+              licenceId: generateUUID(),
+              startDate: new Date('2022-04-01'),
+              status: 'current'
             }
           ]
         },
@@ -63,16 +63,16 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
           licenceRef: licenceDocumentHeaders[1].licenceRef,
           licenceVersions: [
             {
-              id: generateUUID(),
-              issueDate: null,
-              licenceId: generateUUID(),
-              startDate: new Date('2023-04-01'),
-              status: 'current',
               company: {
                 id: generateUUID(),
                 name: 'ACME Industry Ltd',
                 type: 'organisation'
-              }
+              },
+              id: generateUUID(),
+              issueDate: null,
+              licenceId: generateUUID(),
+              startDate: new Date('2023-04-01'),
+              status: 'current'
             }
           ]
         }

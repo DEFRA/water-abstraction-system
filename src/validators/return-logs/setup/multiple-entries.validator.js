@@ -41,9 +41,9 @@ export default function multipleEntriesValidator(frequency, length, measurementT
         return value
       })
       .messages({
+        'any.required': `Enter ${length} ${frequency} ${measurementType}`,
         'array.base': `Enter ${length} ${frequency} ${measurementType}`,
-        'array.length': `Enter ${length} ${frequency} ${measurementType}`,
-        'any.required': `Enter ${length} ${frequency} ${measurementType}`
+        'array.length': `Enter ${length} ${frequency} ${measurementType}`
       })
   })
 

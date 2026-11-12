@@ -9,17 +9,17 @@ describe('Return Versions Setup - Start Date presenter', () => {
 
   beforeEach(async () => {
     session = {
-      id: '61e07498-f309-4829-96a9-72084a54996d',
       checkPageVisited: false,
+      id: '61e07498-f309-4829-96a9-72084a54996d',
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
       requirements: [{}]
     }
   })
@@ -29,9 +29,6 @@ describe('Return Versions Setup - Start Date presenter', () => {
       const result = StartDatePresenter(session)
 
       expect(result).toEqual({
-        startDateDay: null,
-        startDateMonth: null,
-        startDateYear: null,
         backLink: {
           href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
           text: 'Back'
@@ -42,7 +39,10 @@ describe('Return Versions Setup - Start Date presenter', () => {
         pageTitle: 'Select the start date for the requirements for returns',
         pageTitleCaption: 'Licence 01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        startDateOption: null
+        startDateDay: null,
+        startDateMonth: null,
+        startDateOption: null,
+        startDateYear: null
       })
     })
   })

@@ -16,6 +16,7 @@ import ProcessReturnLogsService from '../../../../src/services/jobs/return-logs/
 
 describe('Jobs - Return Logs - Process Return Logs service', () => {
   const cycle = 'all-year'
+
   let notifierStub
   let returnRequirement
 

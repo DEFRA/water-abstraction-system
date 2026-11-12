@@ -54,12 +54,12 @@ describe('Users - External - Setup - Fetch Licences DAL', () => {
           licenceRef: licenceData1.licence.licenceRef,
           licenceVersions: [
             {
+              company: { id: licenceData1.company.id, name: licenceData1.company.name, type: 'organisation' },
               id: licenceData1.licenceVersion.id,
               issueDate: null,
               licenceId: licenceData1.licence.id,
               startDate: licenceData1.licenceVersion.startDate,
-              status: 'current',
-              company: { id: licenceData1.company.id, name: licenceData1.company.name, type: 'organisation' }
+              status: 'current'
             }
           ]
         },
@@ -69,12 +69,12 @@ describe('Users - External - Setup - Fetch Licences DAL', () => {
           licenceRef: licenceData3.licence.licenceRef,
           licenceVersions: [
             {
+              company: { id: licenceData3.company.id, name: licenceData3.company.name, type: 'organisation' },
               id: licenceData3.licenceVersion.id,
               issueDate: null,
               licenceId: licenceData3.licence.id,
               startDate: licenceData3.licenceVersion.startDate,
-              status: 'current',
-              company: { id: licenceData3.company.id, name: licenceData3.company.name, type: 'organisation' }
+              status: 'current'
             }
           ]
         },
@@ -84,12 +84,12 @@ describe('Users - External - Setup - Fetch Licences DAL', () => {
           licenceRef: licenceData4.licence.licenceRef,
           licenceVersions: [
             {
+              company: { id: licenceData4.company.id, name: licenceData4.company.name, type: 'organisation' },
               id: licenceData4.licenceVersion.id,
               issueDate: null,
               licenceId: licenceData4.licence.id,
               startDate: licenceData4.licenceVersion.startDate,
-              status: 'current',
-              company: { id: licenceData4.company.id, name: licenceData4.company.name, type: 'organisation' }
+              status: 'current'
             }
           ]
         }
@@ -123,11 +123,6 @@ async function _licenceData(userEntity, licenceRef, role) {
   })
 
   return {
-    company: currentCompany,
-    licence,
-    licenceEntityRoles,
-    licenceDocumentHeader,
-    licenceVersion: licenceVersionCurrent,
     clean: async () => {
       await supersededCompany.$query().delete()
       await currentCompany.$query().delete()
@@ -140,7 +135,12 @@ async function _licenceData(userEntity, licenceRef, role) {
       for (const licenceEntityRole of licenceEntityRoles) {
         await licenceEntityRole.$query().delete()
       }
-    }
+    },
+    company: currentCompany,
+    licence,
+    licenceDocumentHeader,
+    licenceEntityRoles,
+    licenceVersion: licenceVersionCurrent
   }
 }
 

@@ -20,6 +20,7 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Return Logs controller', () => {
   const returnLogId = '168026d8-f29b-4165-8726-734c6b14adec'
+
   let getOptions
   let postOptions
   let server
@@ -49,12 +50,12 @@ describe('Return Logs controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: `/return-logs/${returnLogId}/communications`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/return-logs/${returnLogId}/communications`
         }
 
         vi.spyOn(ViewCommunicationsService, 'default').mockResolvedValue({ pageTitle: 'Communications' })
@@ -73,12 +74,12 @@ describe('Return Logs controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: `/return-logs/${returnLogId}/details`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/return-logs/${returnLogId}/details`
         }
 
         vi.spyOn(ViewDetailsService, 'default').mockResolvedValue({ pageTitle: 'Return details' })
@@ -139,12 +140,12 @@ describe('Return Logs controller', () => {
 
       beforeEach(() => {
         getOptions = {
-          method: 'GET',
-          url: `/return-logs/${returnLogId}/download?version=1`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/return-logs/${returnLogId}/download?version=1`
         }
       })
 
@@ -152,8 +153,8 @@ describe('Return Logs controller', () => {
         beforeEach(() => {
           vi.spyOn(DownloadReturnLogService, 'default').mockReturnValue({
             data: 'test',
-            type: 'type/csv',
-            filename: 'test.csv'
+            filename: 'test.csv',
+            type: 'type/csv'
           })
         })
 

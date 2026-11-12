@@ -14,7 +14,7 @@ export default function seasonPresenter(session) {
   return {
     backlink: `/system/bill-runs/setup/${session.id}/year`,
     pageTitle: 'Select the season',
-    sessionId: session.id,
-    selectedSeason: session.season ? session.season : null
+    selectedSeason: session.season ? session.season : null,
+    sessionId: session.id
   }
 }

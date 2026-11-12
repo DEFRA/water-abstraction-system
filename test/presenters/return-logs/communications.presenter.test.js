@@ -28,15 +28,15 @@ describe('Return Logs - Communications presenter', () => {
 
     notification = {
       createdAt,
-      id,
-      messageType,
-      status,
       event: {
         id: notice.id,
         issuer: notice.issuer,
-        subtype: notice.subtype,
-        sendingAlertType: notice.metadata.options.sendingAlertType
-      }
+        sendingAlertType: notice.metadata.options.sendingAlertType,
+        subtype: notice.subtype
+      },
+      id,
+      messageType,
+      status
     }
 
     notifications = [notification]

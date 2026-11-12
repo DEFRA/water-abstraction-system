@@ -14,11 +14,11 @@ function alertReduce() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Water abstraction alert',
     error: 0,
+    name: 'Water abstraction alert',
     options: {
-      sendingAlertType: 'reduce',
-      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310'
+      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310',
+      sendingAlertType: 'reduce'
     },
     recipients: 1
   }
@@ -37,11 +37,11 @@ function alertResume() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Water abstraction alert',
     error: 0,
+    name: 'Water abstraction alert',
     options: {
-      sendingAlertType: 'resume',
-      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310'
+      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310',
+      sendingAlertType: 'resume'
     },
     recipients: 1
   }
@@ -60,11 +60,11 @@ function alertStop() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Water abstraction alert',
     error: 0,
+    name: 'Water abstraction alert',
     options: {
-      sendingAlertType: 'stop',
-      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310'
+      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310',
+      sendingAlertType: 'stop'
     },
     recipients: 1
   }
@@ -83,11 +83,11 @@ function alertWarning() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Water abstraction alert',
     error: 0,
+    name: 'Water abstraction alert',
     options: {
-      sendingAlertType: 'warning',
-      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310'
+      monitoringStationId: 'f3464f0c-1974-452f-88b4-1ba59c797310',
+      sendingAlertType: 'warning'
     },
     recipients: 1
   }
@@ -108,11 +108,11 @@ function legacyHandsOffFlow() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Hands off flow: levels warning',
-    sent: 1,
     error: 0,
+    name: 'Hands off flow: levels warning',
     pending: 0,
     recipients: 1,
+    sent: 1,
     taskConfigId: 1
   }
   data.referenceCode = generateNoticeReferenceCode('HOF-')
@@ -132,11 +132,11 @@ function legacyRenewal() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Expiring licence(s): invitation to renew',
-    sent: 1,
     error: 0,
+    name: 'Expiring licence(s): invitation to renew',
     pending: 0,
     recipients: 1,
+    sent: 1,
     taskConfigId: 2
   }
   data.referenceCode = generateNoticeReferenceCode('RENEW-')
@@ -157,15 +157,15 @@ function mapToFetchNoticesResult(notices) {
     const { createdAt, id, issuer, referenceCode, subtype, metadata } = notice
 
     return {
-      id,
-      createdAt,
-      issuer,
-      referenceCode,
-      subtype,
-      name: metadata.name,
       alertType: metadata.options?.sendingAlertType,
+      createdAt,
+      id,
+      issuer,
+      name: metadata.name,
+      overallStatus: 'sent',
       recipientCount: metadata.recipients,
-      overallStatus: 'sent'
+      referenceCode,
+      subtype
     }
   })
 }
@@ -199,9 +199,9 @@ function renewalFinal() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Renewals: final',
     error: 0,
     expiryDate: '2026-04-28',
+    name: 'Renewals: final',
     options: { excludeLicences: [] },
     recipients: generateRandomInteger(1, 5000),
     renewalDate: '2026-01-28'
@@ -221,9 +221,9 @@ function renewalInvitation() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Renewals: invitation',
     error: 0,
     expiryDate: '2026-04-28',
+    name: 'Renewals: invitation',
     options: { excludeLicences: [] },
     recipients: generateRandomInteger(1, 5000),
     renewalDate: '2026-01-28'
@@ -243,9 +243,9 @@ function renewalReminder() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Renewals: reminder',
     error: 0,
     expiryDate: '2026-04-28',
+    name: 'Renewals: reminder',
     options: { excludeLicences: [] },
     recipients: generateRandomInteger(1, 5000),
     renewalDate: '2026-01-28'
@@ -265,8 +265,8 @@ function returnsInvitation() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Returns: invitation',
     error: 0,
+    name: 'Returns: invitation',
     options: { excludeLicences: [] },
     recipients: generateRandomInteger(1, 5000),
     returnCycle: { dueDate: '2025-04-28', endDate: '2025-03-31', isSummer: false, startDate: '2024-04-01' }
@@ -286,8 +286,8 @@ function returnsPaperForm() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Paper returns',
     error: 0,
+    name: 'Paper returns',
     options: { excludeLicences: [] },
     recipients: 1,
     returnCycle: { dueDate: '2025-11-03', endDate: null, startDate: null }
@@ -307,9 +307,8 @@ function returnsReminder() {
   const data = _defaults()
 
   data.metadata = {
-    name: 'Returns: reminder',
-    sent: 0,
     error: 0,
+    name: 'Returns: reminder',
     options: {
       excludeLicences: []
     },
@@ -319,7 +318,8 @@ function returnsReminder() {
       endDate: '2025-03-31',
       isSummer: false,
       startDate: '2024-04-01'
-    }
+    },
+    sent: 0
   }
   data.referenceCode = generateNoticeReferenceCode('RREM-')
   data.subtype = 'returnReminder'
@@ -329,8 +329,8 @@ function returnsReminder() {
 
 function _defaults() {
   return {
-    id: generateUUID(),
     createdAt: new Date('2025-03-25'),
+    id: generateUUID(),
     issuer: 'admin-internal@wrls.gov.uk',
     licences: [generateLicenceRef()],
     overallStatus: 'pending',

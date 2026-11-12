@@ -53,7 +53,7 @@ async function _cleanupSession(sessionId, trx) {
 
 async function _markReturnLogAsSubmitted(returnLogId, receivedDate, timestamp, trx) {
   await ReturnLogModel.query(trx)
-    .patch({ status: 'completed', receivedDate, updatedAt: timestamp })
+    .patch({ receivedDate, status: 'completed', updatedAt: timestamp })
     .where({ id: returnLogId })
 }
 

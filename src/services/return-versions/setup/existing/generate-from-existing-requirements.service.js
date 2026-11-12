@@ -104,19 +104,19 @@ function _transformForSetup(returnVersion) {
     } = returnRequirement
 
     return {
-      points: _points(points),
-      purposes: _purposes(returnRequirementPurposes),
-      returnsCycle: summer ? 'summer' : 'winterAndAllYear',
-      siteDescription: _siteDescription(siteDescription, points),
       abstractionPeriod: {
         abstractionPeriodEndDay,
         abstractionPeriodEndMonth,
         abstractionPeriodStartDay,
         abstractionPeriodStartMonth
       },
-      frequencyReported: reportingFrequency,
+      agreementsExceptions: _agreementExceptions(returnRequirement),
       frequencyCollected: collectionFrequency,
-      agreementsExceptions: _agreementExceptions(returnRequirement)
+      frequencyReported: reportingFrequency,
+      points: _points(points),
+      purposes: _purposes(returnRequirementPurposes),
+      returnsCycle: summer ? 'summer' : 'winterAndAllYear',
+      siteDescription: _siteDescription(siteDescription, points)
     }
   })
 }

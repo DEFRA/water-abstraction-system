@@ -1,8 +1,8 @@
 import EventModel from 'water-abstraction-engine/models/event.model.js'
 import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
-import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 
 import ServerConfig from 'water-abstraction-engine/config/server.config.js'
 
@@ -29,11 +29,11 @@ function abstractionAlertEmail(notice) {
   const licenceMonitoringStationId = generateUUID()
 
   const notification = {
-    id: generateUUID(),
     contactType: 'primary user',
     createdAt: new Date('2025-10-09'),
     dueDate: null,
     eventId: notice.id,
+    id: generateUUID(),
     licenceMonitoringStationId,
     licences: notice.licences,
     messageRef: 'abstraction alert stop',
@@ -154,10 +154,10 @@ function legacyHandsOfFlow(notice) {
       address_line_4: ADDRESS.address_line_4,
       address_line_5: ADDRESS.address_line_5,
       address_line_6: ADDRESS.address_line_6,
-      postcode: ADDRESS.address_line_7,
       body: `Water Resources Act 1991  \nOur reference: ${notice.referenceCode}\n\nDear licence holder,\n\n`,
       heading: 'Warning: Abstraction restrictions may happen soon',
       licenceId: generateUUID(),
+      postcode: ADDRESS.address_line_7,
       subject: 'Warning: Abstraction restrictions may happen soon'
     },
     plaintext:
@@ -204,10 +204,10 @@ function legacyRenewal(notice) {
       address_line_4: ADDRESS.address_line_4,
       address_line_5: ADDRESS.address_line_5,
       address_line_6: ADDRESS.address_line_6,
-      postcode: ADDRESS.address_line_7,
       body: `Water Resources Act 1991  \nOur reference: ${notice.referenceCode}\n\nDear licence holder,\n\n`,
       heading: 'Invitation to apply for a water abstraction licence renewal',
       licenceId: generateUUID(),
+      postcode: ADDRESS.address_line_7,
       subject: 'Invitation to apply for a water abstraction licence renewal'
     },
     plaintext:
@@ -240,7 +240,6 @@ function notification() {
 
   const event = EventModel.fromJson({
     metadata: {
-      name: 'Hands off flow: levels warning',
       batch: {
         id: '9fbf0817-1c54-4d40-9fb8-11faa6ca07bd',
         region: {
@@ -248,20 +247,23 @@ function notification() {
         },
         scheme: 'sroc',
         type: 'annual'
-      }
+      },
+      name: 'Hands off flow: levels warning'
     }
   })
 
   const notification = NotificationModel.fromJson({
+    createdAt: new Date('2024-07-02T16:52:17.000Z'),
+    event,
     id: '4222e93e-6798-40ea-82d2-d5decbb01dac',
     messageType: 'letter',
     personalisation: {
-      postcode: 'ME15 0NE',
       address_line_1: 'Ferns Surfacing Limited',
       address_line_2: 'Tutsham Farm',
       address_line_3: 'West Farleigh',
       address_line_4: 'Maidstone',
-      address_line_5: 'Kent'
+      address_line_5: 'Kent',
+      postcode: 'ME15 0NE'
     },
     plaintext:
       'Water Resources Act 1991\n' +
@@ -272,9 +274,7 @@ function notification() {
       '# This is an advance warning that you may be asked to stop or reduce your water abstraction soon.\n' +
       '\n' +
       '# Why you are receiving this notification\n' +
-      '\n',
-    createdAt: new Date('2024-07-02T16:52:17.000Z'),
-    event
+      '\n'
   })
 
   return {
@@ -308,19 +308,19 @@ function paperReturn(notice) {
     pdf: Buffer.from('I am a paper return'),
     personalisation: {
       ...ADDRESS,
-      qr_url: returnLogId,
-      purpose: 'Potable Water Supply - Direct',
       due_date: '2025-04-28',
       end_date: '2025-03-31',
       format_id: '12345678',
-      start_date: '2024-04-01',
+      is_two_part_tariff: false,
       licence_ref: notice.licences[0],
+      naldAreaCode: 'AASWX',
+      purpose: 'Potable Water Supply - Direct',
+      qr_url: returnLogId,
       region_code: 5,
       region_name: 'South West',
-      naldAreaCode: 'AASWX',
-      site_description: 'Wiley Coyote Borehole No 1',
       returns_frequency: 'day',
-      is_two_part_tariff: false
+      site_description: 'Wiley Coyote Borehole No 1',
+      start_date: '2024-04-01'
     },
     plaintext: null,
     returnedAt: null,
@@ -608,8 +608,8 @@ function returnsInvitationAdHocEmail(notice) {
     notifyStatus: 'delivered',
     personalisation: {
       periodEndDate: '31 March 2025',
-      returnDueDate: '28 April 2025',
-      periodStartDate: '1 April 2024'
+      periodStartDate: '1 April 2024',
+      returnDueDate: '28 April 2025'
     },
     plaintext:
       'Dear licence holder\n' +
@@ -710,8 +710,8 @@ function returnsInvitationEmail(notice) {
     notifyStatus: 'delivered',
     personalisation: {
       periodEndDate: '31 March 2025',
-      returnDueDate: '28 April 2025',
-      periodStartDate: '1 April 2024'
+      periodStartDate: '1 April 2024',
+      returnDueDate: '28 April 2025'
     },
     plaintext:
       'Dear licence holder\n' +
@@ -781,8 +781,8 @@ function returnsReminderEmail(notice) {
     pdf: null,
     personalisation: {
       periodEndDate: '31 March 2025',
-      returnDueDate: '28 April 2025',
-      periodStartDate: '1 April 2024'
+      periodStartDate: '1 April 2024',
+      returnDueDate: '28 April 2025'
     },
     plaintext:
       'Dear licence holder\n' +
@@ -825,8 +825,8 @@ function returnsReminderLetter(notice) {
       ...ADDRESS,
       name: 'ACME Services Ltd',
       periodEndDate: '31 March 2025',
-      returnDueDate: '28 April 2025',
-      periodStartDate: '1 April 2024'
+      periodStartDate: '1 April 2024',
+      returnDueDate: '28 April 2025'
     },
     plaintext:
       'Dear ACME Services Ltd\n' +
@@ -882,8 +882,8 @@ function userExternalShareExistingEmail(recipient, sender, overrides = {}) {
     notifyStatus: 'delivered',
     pdf: null,
     personalisation: {
-      link: domains.external,
       email: recipient,
+      link: domains.external,
       sender
     },
     plaintext:

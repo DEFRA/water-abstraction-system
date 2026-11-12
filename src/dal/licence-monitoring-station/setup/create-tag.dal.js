@@ -5,8 +5,8 @@
  */
 
 import LicenceMonitoringStationModel from 'water-abstraction-engine/models/licence-monitoring-station.model.js'
-import { flowUnits } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
+import { flowUnits } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 /**
  * Tags a licence to a monitoring station by creating a licence monitoring station record
@@ -18,10 +18,11 @@ export default async function createTagDal(session, userId) {
   const timestamp = timestampForPostgres()
 
   await LicenceMonitoringStationModel.query().insert({
-    abstractionPeriodStartDay: session.abstractionPeriodStartDay,
-    abstractionPeriodStartMonth: session.abstractionPeriodStartMonth,
     abstractionPeriodEndDay: session.abstractionPeriodEndDay,
     abstractionPeriodEndMonth: session.abstractionPeriodEndMonth,
+    abstractionPeriodStartDay: session.abstractionPeriodStartDay,
+    abstractionPeriodStartMonth: session.abstractionPeriodStartMonth,
+    createdAt: timestamp,
     createdBy: userId,
     licenceId: session.licenceId,
     licenceVersionPurposeConditionId: session.conditionId === 'no_condition' ? null : session.conditionId,
@@ -31,7 +32,6 @@ export default async function createTagDal(session, userId) {
     source: 'wrls',
     thresholdUnit: session.unit,
     thresholdValue: session.threshold,
-    createdAt: timestamp,
     updatedAt: timestamp
   })
 }

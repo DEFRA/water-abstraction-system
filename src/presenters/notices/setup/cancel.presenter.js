@@ -3,8 +3,8 @@
  * @module CancelPresenter
  */
 
-import { NoticeJourney } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { formatLongDate, sentenceCase } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { NoticeJourney } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/cancel` page

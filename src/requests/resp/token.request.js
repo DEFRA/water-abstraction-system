@@ -3,8 +3,8 @@
  * @module TokenRequest
  */
 
-import { postRequest } from 'water-abstraction-engine/requests/base.request.js'
 import querystring from 'node:querystring'
+import { postRequest } from 'water-abstraction-engine/requests/base.request.js'
 
 import config from '../../config/resp.config.js'
 
@@ -36,10 +36,10 @@ function _options() {
   const data = _data()
 
   return {
+    body: data,
     headers: {
       'content-type': 'application/x-www-form-urlencoded'
-    },
-    body: data
+    }
   }
 }
 

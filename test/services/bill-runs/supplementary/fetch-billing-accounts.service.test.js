@@ -22,12 +22,12 @@ describe('Fetch Billing Accounts service', () => {
 
       expectedResult = [
         {
-          id: billingAccounts[0].id,
-          accountNumber: billingAccounts[0].accountNumber
+          accountNumber: billingAccounts[0].accountNumber,
+          id: billingAccounts[0].id
         },
         {
-          id: billingAccounts[1].id,
-          accountNumber: billingAccounts[1].accountNumber
+          accountNumber: billingAccounts[1].accountNumber,
+          id: billingAccounts[1].id
         }
       ]
     })

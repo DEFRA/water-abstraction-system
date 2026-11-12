@@ -4,13 +4,13 @@
  */
 
 import Big from 'water-abstraction-engine/wrappers/big.wrapper.js'
-import { returnRequirementFrequencies } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import {
   formatAbstractionPeriod,
   formatLongDate,
   formatNumber,
   sentenceCase
 } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { returnRequirementFrequencies } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import { generateSummaryTableHeaders } from '../base-return-logs.presenter.js'
 
@@ -192,14 +192,14 @@ function _note(note) {
   if (note?.content) {
     return {
       actions: [
-        { text: 'Change', href: 'note' },
-        { text: 'Delete', href: 'delete-note' }
+        { href: 'note', text: 'Change' },
+        { href: 'delete-note', text: 'Delete' }
       ],
       text: note.content
     }
   } else {
     return {
-      actions: [{ text: 'Add a note', href: 'note' }],
+      actions: [{ href: 'note', text: 'Add a note' }],
       text: 'No notes added'
     }
   }

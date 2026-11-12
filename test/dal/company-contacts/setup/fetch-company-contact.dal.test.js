@@ -21,8 +21,8 @@ describe('Company Contacts - Setup - Fetch Company Contact Dal', () => {
 
     companyContact = await CompanyContactHelper.add({
       abstractionAlerts: false,
-      contactId: contact.id,
-      companyId: company.id
+      companyId: company.id,
+      contactId: contact.id
     })
   })
 
@@ -43,11 +43,11 @@ describe('Company Contacts - Setup - Fetch Company Contact Dal', () => {
           name: 'Example Trading Ltd'
         },
         contact: {
-          id: contact.id,
           contactType: 'person',
           department: null,
           email: null,
           firstName: 'Amara',
+          id: contact.id,
           initials: null,
           lastName: 'Gupta',
           middleInitials: null,

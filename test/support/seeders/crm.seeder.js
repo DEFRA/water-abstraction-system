@@ -110,17 +110,6 @@ export async function seed() {
     additionalContact,
     basicUser,
     billing,
-    company,
-    extraBasicUser,
-    licence,
-    otherBasicUser,
-    otherBilling,
-    otherCompany,
-    otherCompanyContact,
-    otherLicence,
-    primaryUser,
-    returnsTo,
-    returnsUser,
     clean: async () => {
       await abstractionAlerts.clean()
       await additionalContact.clean()
@@ -147,7 +136,18 @@ export async function seed() {
       await primaryUser.clean()
       await returnsTo.clean()
       await returnsUser.clean()
-    }
+    },
+    company,
+    extraBasicUser,
+    licence,
+    otherBasicUser,
+    otherBilling,
+    otherCompany,
+    otherCompanyContact,
+    otherLicence,
+    primaryUser,
+    returnsTo,
+    returnsUser
   }
 }
 
@@ -170,11 +170,11 @@ async function _abstractionAlertsContact(companyId) {
   })
 
   return {
-    record: companyContact,
     clean: async () => {
       await companyContact.$query().delete()
       await contact.$query().delete()
-    }
+    },
+    record: companyContact
   }
 }
 
@@ -192,10 +192,10 @@ async function _additionalCompanyContact(company, additionalContact) {
   })
 
   return {
-    record: additionalCompanyContact,
     clean: async () => {
       await additionalCompanyContact.$query().delete()
-    }
+    },
+    record: additionalCompanyContact
   }
 }
 
@@ -215,11 +215,11 @@ async function _additionalContact(companyId, name) {
   })
 
   return {
-    record: companyContact,
     clean: async () => {
       await companyContact.$query().delete()
       await contact.$query().delete()
-    }
+    },
+    record: companyContact
   }
 }
 
@@ -247,11 +247,11 @@ async function _additionalContactDeleted(companyId, name) {
   })
 
   return {
-    record: companyContact,
     clean: async () => {
       await companyContact.$query().delete()
       await contact.$query().delete()
-    }
+    },
+    record: companyContact
   }
 }
 
@@ -273,12 +273,12 @@ async function _basicUser(companyEntityId, name) {
   })
 
   return {
-    record: user,
     clean: async () => {
       await licenceEntity.$query().delete()
       await licenceEntityRole.$query().delete()
       await user.$query().delete()
-    }
+    },
+    record: user
   }
 }
 
@@ -286,17 +286,17 @@ async function _billing(companyId, licence) {
   const billingAccount = await BillingAccountHelper.add({ companyId })
 
   const chargeVersion = await ChargeVersionHelper.add({
-    companyId,
     billingAccountId: billingAccount.id,
+    companyId,
     licenceId: licence.record.id
   })
 
   return {
-    record: billingAccount,
     clean: async () => {
       await billingAccount.$query().delete()
       await chargeVersion.$query().delete()
-    }
+    },
+    record: billingAccount
   }
 }
 
@@ -306,10 +306,10 @@ async function _company(name) {
   })
 
   return {
-    record: company,
     clean: async () => {
       await company.$query().delete()
-    }
+    },
+    record: company
   }
 }
 
@@ -317,16 +317,16 @@ async function _licence(company) {
   const licence = await LicenceHelper.add()
 
   const licenceVersion = await LicenceVersionHelper.add({
-    licenceId: licence.id,
-    companyId: company.record.id
+    companyId: company.record.id,
+    licenceId: licence.id
   })
 
   return {
-    record: licence,
     clean: async () => {
       await licence.$query().delete()
       await licenceVersion.$query().delete()
-    }
+    },
+    record: licence
   }
 }
 
@@ -337,10 +337,10 @@ async function _licenceCompanyEntity(name) {
   })
 
   return {
-    record: licenceEntity,
     clean: async () => {
       await licenceEntity.$query().delete()
-    }
+    },
+    record: licenceEntity
   }
 }
 
@@ -351,10 +351,10 @@ async function _licenceDocumentHeader(companyEntityId, licenceRef) {
   })
 
   return {
-    record: licenceDocumentHeader,
     clean: async () => {
       await licenceDocumentHeader.$query().delete()
-    }
+    },
+    record: licenceDocumentHeader
   }
 }
 
@@ -373,8 +373,8 @@ async function _otherBillingNaldGap(companyId, licence) {
 
   const naldGapChargeVersion = await ChargeVersionHelper.add({
     billingAccountId: null,
-    companyId,
     changeReasonId: changeReason.id,
+    companyId,
     endDate: new Date('2022-03-31'),
     licenceId: licence.record.id,
     startDate: new Date('2020-01-01'),
@@ -382,12 +382,12 @@ async function _otherBillingNaldGap(companyId, licence) {
   })
 
   return {
-    record: billingAccount,
     clean: async () => {
       await billingAccount.$query().delete()
       await chargeVersion.$query().delete()
       await naldGapChargeVersion.$query().delete()
-    }
+    },
+    record: billingAccount
   }
 }
 
@@ -409,12 +409,12 @@ async function _primaryUser(companyEntityId, name) {
   })
 
   return {
-    record: user,
     clean: async () => {
       await licenceEntity.$query().delete()
       await licenceEntityRole.$query().delete()
       await user.$query().delete()
-    }
+    },
+    record: user
   }
 }
 
@@ -433,11 +433,11 @@ async function _returnsTo(company, licenceRef, endDate = null) {
   })
 
   return {
-    record: licenceDocumentRole,
     clean: async () => {
       await licenceDocument.$query().delete()
       await licenceDocumentRole.$query().delete()
-    }
+    },
+    record: licenceDocumentRole
   }
 }
 
@@ -465,11 +465,11 @@ async function _returnsUser(companyEntityId, name) {
   })
 
   return {
-    record: user,
     clean: async () => {
       await licenceEntity.$query().delete()
       await licenceEntityRole.$query().delete()
       await user.$query().delete()
-    }
+    },
+    record: user
   }
 }

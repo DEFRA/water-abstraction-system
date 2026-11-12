@@ -16,22 +16,22 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
 
   beforeEach(() => {
     chargeVersion = {
-      id: chargeVersionId,
       chargeReferences: [{ twoPartTariff: false }],
       endDate: null,
-      startDate: new Date('2023-04-01'),
+      id: chargeVersionId,
       licence: {
         id: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-        regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
         includeInPresrocBilling: 'no',
-        includeInSrocBilling: false
-      }
+        includeInSrocBilling: false,
+        regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8'
+      },
+      startDate: new Date('2023-04-01')
     }
 
     // Control what the 'current financial year' is for the purpose of testing
     vi.spyOn(GeneralLib, 'determineCurrentFinancialYear').mockReturnValue({
-      startDate: new Date('2024-04-01'),
-      endDate: new Date('2025-03-31')
+      endDate: new Date('2025-03-31'),
+      startDate: new Date('2024-04-01')
     })
   })
 
@@ -58,13 +58,13 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
           const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
           expect(result).toEqual({
-            licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-            startDate: chargeVersion.startDate,
             endDate: null,
-            regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
             flagForPreSrocSupplementary: true,
             flagForSrocSupplementary: false,
-            flagForTwoPartTariffSupplementary: false
+            flagForTwoPartTariffSupplementary: false,
+            licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
+            regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
+            startDate: chargeVersion.startDate
           })
         })
       })
@@ -89,13 +89,13 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
               const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
-                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-                startDate: chargeVersion.startDate,
                 endDate: null,
-                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
                 flagForPreSrocSupplementary: false,
                 flagForSrocSupplementary: true,
-                flagForTwoPartTariffSupplementary: false
+                flagForTwoPartTariffSupplementary: false,
+                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
+                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
+                startDate: chargeVersion.startDate
               })
             })
           })
@@ -114,13 +114,13 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
               const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
-                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-                startDate: chargeVersion.startDate,
                 endDate: null,
-                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
                 flagForPreSrocSupplementary: false,
                 flagForSrocSupplementary: true,
-                flagForTwoPartTariffSupplementary: true
+                flagForTwoPartTariffSupplementary: true,
+                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
+                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
+                startDate: chargeVersion.startDate
               })
             })
           })
@@ -139,13 +139,13 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
               const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
-                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-                startDate: chargeVersion.startDate,
                 endDate: null,
-                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
                 flagForPreSrocSupplementary: false,
                 flagForSrocSupplementary: true,
-                flagForTwoPartTariffSupplementary: false
+                flagForTwoPartTariffSupplementary: false,
+                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
+                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
+                startDate: chargeVersion.startDate
               })
             })
           })
@@ -170,13 +170,13 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
               const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
-                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-                startDate: chargeVersion.startDate,
                 endDate: null,
-                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
                 flagForPreSrocSupplementary: false,
                 flagForSrocSupplementary: true,
-                flagForTwoPartTariffSupplementary: true
+                flagForTwoPartTariffSupplementary: true,
+                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
+                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
+                startDate: chargeVersion.startDate
               })
             })
           })
@@ -195,13 +195,13 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
               const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
-                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-                startDate: chargeVersion.startDate,
                 endDate: null,
-                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
                 flagForPreSrocSupplementary: false,
                 flagForSrocSupplementary: true,
-                flagForTwoPartTariffSupplementary: true
+                flagForTwoPartTariffSupplementary: true,
+                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
+                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
+                startDate: chargeVersion.startDate
               })
             })
           })
@@ -220,13 +220,13 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
               const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
-                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-                startDate: chargeVersion.startDate,
                 endDate: null,
-                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
                 flagForPreSrocSupplementary: false,
                 flagForSrocSupplementary: true,
-                flagForTwoPartTariffSupplementary: true
+                flagForTwoPartTariffSupplementary: true,
+                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
+                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
+                startDate: chargeVersion.startDate
               })
             })
           })
@@ -251,13 +251,13 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
               const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
-                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-                startDate: chargeVersion.startDate,
                 endDate: null,
-                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
                 flagForPreSrocSupplementary: false,
                 flagForSrocSupplementary: true,
-                flagForTwoPartTariffSupplementary: false
+                flagForTwoPartTariffSupplementary: false,
+                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
+                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
+                startDate: chargeVersion.startDate
               })
             })
           })
@@ -276,13 +276,13 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
               const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
-                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-                startDate: chargeVersion.startDate,
                 endDate: null,
-                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
                 flagForPreSrocSupplementary: false,
                 flagForSrocSupplementary: false,
-                flagForTwoPartTariffSupplementary: true
+                flagForTwoPartTariffSupplementary: true,
+                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
+                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
+                startDate: chargeVersion.startDate
               })
             })
           })
@@ -301,13 +301,13 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
               const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
-                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-                startDate: chargeVersion.startDate,
                 endDate: null,
-                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
                 flagForPreSrocSupplementary: false,
                 flagForSrocSupplementary: false,
-                flagForTwoPartTariffSupplementary: false
+                flagForTwoPartTariffSupplementary: false,
+                licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
+                regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
+                startDate: chargeVersion.startDate
               })
             })
           })
@@ -328,13 +328,13 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
         const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
         expect(result).toEqual({
-          licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
-          startDate: chargeVersion.startDate,
           endDate: null,
-          regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
           flagForPreSrocSupplementary: false,
           flagForSrocSupplementary: false,
-          flagForTwoPartTariffSupplementary: false
+          flagForTwoPartTariffSupplementary: false,
+          licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
+          regionId: 'c4b61c55-d795-4cb2-8393-513bea525bd8',
+          startDate: chargeVersion.startDate
         })
       })
     })

@@ -58,25 +58,25 @@ describe('Fetch Return Versions service', () => {
 
       expect(result).toEqual([
         {
-          id: currentReturnVersion.id,
-          startDate: new Date('2022-04-01'),
           endDate: null,
-          status: 'current',
-          reason: 'new-licence',
+          id: currentReturnVersion.id,
           modLogs: [
             {
               id: currentReturnVersionModLog.id,
               reasonDescription: 'Record Loaded During Migration'
             }
-          ]
+          ],
+          reason: 'new-licence',
+          startDate: new Date('2022-04-01'),
+          status: 'current'
         },
         {
-          id: supersededReturnVersion.id,
-          startDate: new Date('2022-04-01'),
           endDate: null,
-          status: 'superseded',
+          id: supersededReturnVersion.id,
+          modLogs: [],
           reason: 'new-licence',
-          modLogs: []
+          startDate: new Date('2022-04-01'),
+          status: 'superseded'
         }
       ])
     })

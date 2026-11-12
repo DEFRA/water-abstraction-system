@@ -19,6 +19,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
   let companyContact
   let contact
   let licences
+
   beforeEach(() => {
     company = CustomersFixtures.company()
     contact = CustomersFixtures.contact()
@@ -26,11 +27,11 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
     licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
 
     companyContact = CompanyContactModel.fromJson({
-      id: generateUUID(),
-      abstractionAlerts: false,
       abstractionAlertLicences: null,
+      abstractionAlerts: false,
       company,
-      contact
+      contact,
+      id: generateUUID()
     })
 
     vi.spyOn(FetchCompanyContactDal, 'default').mockResolvedValue(companyContact)
@@ -158,11 +159,12 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
 function _expectedSessionData(companyContact, company, contact, licences) {
   return {
-    abstractionAlerts: 'no',
     abstractionAlertLicences: null,
+    abstractionAlerts: 'no',
+    company,
     companyContact: {
-      abstractionAlerts: false,
       abstractionAlertLicences: null,
+      abstractionAlerts: false,
       company: {
         id: company.id,
         name: 'Tyrell Corporation'
@@ -170,7 +172,6 @@ function _expectedSessionData(companyContact, company, contact, licences) {
       contact,
       id: companyContact.id
     },
-    company,
     email: 'rachael.tyrell@tyrellcorp.com',
     licences,
     name: 'Rachael Tyrell'

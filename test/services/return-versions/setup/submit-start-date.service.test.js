@@ -24,24 +24,24 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01'
           }
         ],
         startDate: '2019-04-01',
         waterUndertaker: false
       },
-      journey: 'returns-required',
       requirements: [{}]
     }
 
@@ -110,9 +110,9 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
         describe('and the user selected "another start date"', () => {
           beforeEach(() => {
             payload = {
-              startDateOptions: 'anotherStartDate',
               startDateDay: '26',
               startDateMonth: '11',
+              startDateOptions: 'anotherStartDate',
               startDateYear: '2023'
             }
           })
@@ -158,9 +158,9 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           describe('and the selected start date is on or after 1 April 2025', () => {
             beforeEach(() => {
               payload = {
-                startDateOptions: 'anotherStartDate',
                 startDateDay: '01',
                 startDateMonth: '04',
+                startDateOptions: 'anotherStartDate',
                 startDateYear: '2025'
               }
             })
@@ -225,7 +225,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             const [flashType, notification] = yarStub.flash.mock.calls[0]
 
             expect(flashType).toEqual('notification')
-            expect(notification).toEqual({ titleText: 'Updated', text: 'Return version updated' })
+            expect(notification).toEqual({ text: 'Return version updated', titleText: 'Updated' })
           })
 
           it('does not change the relevant licence version for the session', async () => {
@@ -243,9 +243,9 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
         describe('and the start date is changed but the same relevant licence version is found', () => {
           beforeEach(() => {
             payload = {
-              startDateOptions: 'anotherStartDate',
               startDateDay: '01',
               startDateMonth: '04',
+              startDateOptions: 'anotherStartDate',
               startDateYear: '2024'
             }
 
@@ -267,7 +267,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             const [flashType, notification] = yarStub.flash.mock.calls[0]
 
             expect(flashType).toEqual('notification')
-            expect(notification).toEqual({ titleText: 'Updated', text: 'Return version updated' })
+            expect(notification).toEqual({ text: 'Return version updated', titleText: 'Updated' })
           })
 
           it('does not change the relevant licence version for the session', async () => {
@@ -294,9 +294,9 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             }
 
             payload = {
-              startDateOptions: 'anotherStartDate',
               startDateDay: '01',
               startDateMonth: '04',
+              startDateOptions: 'anotherStartDate',
               startDateYear: '2021'
             }
 
@@ -342,11 +342,6 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
         const result = await SubmitStartDateService(session.id, payload, yarStub)
 
         expect(result).toMatchObject({
-          pageTitle: 'Select the start date for the requirements for returns',
-          pageTitleCaption: 'Licence 01/ABC',
-          startDateDay: null,
-          startDateMonth: null,
-          startDateYear: null,
           backLink: {
             href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
             text: 'Back'
@@ -354,7 +349,12 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
           licenceVersionStartDate: '1 January 2023',
-          startDateOption: null
+          pageTitle: 'Select the start date for the requirements for returns',
+          pageTitleCaption: 'Licence 01/ABC',
+          startDateDay: null,
+          startDateMonth: null,
+          startDateOption: null,
+          startDateYear: null
         })
       })
 
@@ -377,9 +377,9 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
       describe('because the user has selected another start date and entered invalid data', () => {
         beforeEach(() => {
           payload = {
-            startDateOptions: 'anotherStartDate',
             startDateDay: 'a',
             startDateMonth: 'b',
+            startDateOptions: 'anotherStartDate',
             startDateYear: 'c'
           }
         })
@@ -388,13 +388,13 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           const result = await SubmitStartDateService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
+            anotherStartDate: { text: 'Enter a real start date' },
             errorList: [
               {
                 href: '#anotherStartDate',
                 text: 'Enter a real start date'
               }
-            ],
-            anotherStartDate: { text: 'Enter a real start date' }
+            ]
           })
         })
 

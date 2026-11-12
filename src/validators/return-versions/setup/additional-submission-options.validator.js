@@ -28,10 +28,10 @@ export default function additionalSubmissionOptionsValidator(payload, session) {
       return _noQuarterlyReturnsForSummerCycle(value, helpers, session)
     }, 'No quarterly returns for summer cycle')
     .messages({
+      'any.invalid': 'Quarterly returns submissions cannot be set for returns requirements in the summer cycle',
       'any.required': errorMessage,
       'array.min': errorMessage,
-      'array.sparse': errorMessage,
-      'any.invalid': 'Quarterly returns submissions cannot be set for returns requirements in the summer cycle'
+      'array.sparse': errorMessage
     })
 
   return schema.validate(payload, { abortEarly: false })

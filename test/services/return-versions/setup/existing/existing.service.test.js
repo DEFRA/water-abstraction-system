@@ -17,42 +17,42 @@ describe('Return Versions - Setup - Existing service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z',
         waterUndertaker: false
       },
-      multipleUpload: false,
-      journey: 'returns-required',
-      requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
       licenceVersion: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        endDate: null,
-        startDate: '2022-04-01T00:00:00.000Z',
         copyableReturnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
-        ]
+        ],
+        endDate: null,
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        startDate: '2022-04-01T00:00:00.000Z'
       },
-      reason: 'major-change'
+      multipleUpload: false,
+      reason: 'major-change',
+      requirements: [{}],
+      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
+      startDateOptions: 'licenceStartDate'
     }
 
     session = SessionModelStub(sessionData)
@@ -75,14 +75,14 @@ describe('Return Versions - Setup - Existing service', () => {
       const result = await ExistingService(session.id)
 
       expect(result).toMatchObject({
-        pageTitle: 'Use previous requirements for returns',
-        pageTitleCaption: 'Licence 01/ABC',
         backLink: {
           href: `/system/return-versions/setup/${session.id}/method`,
           text: 'Back'
         },
-        existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
-        licenceRef: '01/ABC'
+        existingOptions: [{ text: '1 January 2023', value: '60b5d10d-1372-4fb2-b222-bfac81da69ab' }],
+        licenceRef: '01/ABC',
+        pageTitle: 'Use previous requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC'
       })
     })
   })

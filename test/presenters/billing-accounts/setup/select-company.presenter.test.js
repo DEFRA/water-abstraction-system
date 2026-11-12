@@ -39,8 +39,8 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
         companies: [
           {
             checked: false,
-            id: companies[0].number,
             hint: { text: companies[0].address },
+            id: companies[0].number,
             text: companies[0].title,
             value: companies[0].number
           }
@@ -124,13 +124,13 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
 
         expect(result.companies).toEqual([
           {
-            id: companies[0].number,
+            checked: false,
             hint: {
               text: companies[0].address
             },
+            id: companies[0].number,
             text: companies[0].title,
-            value: companies[0].number,
-            checked: false
+            value: companies[0].number
           }
         ])
       })

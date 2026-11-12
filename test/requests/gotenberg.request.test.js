@@ -49,12 +49,12 @@ describe('Gotenberg Request', () => {
         bodyAsBuffer = Buffer.from(bodyAsUint8Array)
 
         vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
-          succeeded: true,
           response: {
+            body: bodyAsUint8Array,
             headers,
-            statusCode: HTTP_STATUS_OK,
-            body: bodyAsUint8Array
-          }
+            statusCode: HTTP_STATUS_OK
+          },
+          succeeded: true
         })
       })
 
@@ -104,13 +104,13 @@ describe('Gotenberg Request', () => {
         bodyAsUint8Array = new TextEncoder().encode('Not Found')
 
         vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
-          succeeded: false,
           response: {
+            body: bodyAsUint8Array,
             headers,
             statusCode: HTTP_STATUS_NOT_FOUND,
-            statusMessage: 'Not Found',
-            body: bodyAsUint8Array
-          }
+            statusMessage: 'Not Found'
+          },
+          succeeded: false
         })
       })
 

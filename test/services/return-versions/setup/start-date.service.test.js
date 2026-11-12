@@ -13,26 +13,27 @@ import StartDateService from '../../../../src/services/return-versions/setup/sta
 describe('Return Versions Setup - Start Date service', () => {
   let session
   let sessionData
+
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
       requirements: [{}]
     }
 
@@ -56,11 +57,6 @@ describe('Return Versions Setup - Start Date service', () => {
       const result = await StartDateService(session.id)
 
       expect(result).toMatchObject({
-        pageTitle: 'Select the start date for the requirements for returns',
-        pageTitleCaption: 'Licence 01/ABC',
-        startDateDay: null,
-        startDateMonth: null,
-        startDateYear: null,
         backLink: {
           href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
           text: 'Back'
@@ -68,7 +64,12 @@ describe('Return Versions Setup - Start Date service', () => {
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         licenceVersionStartDate: '1 January 2023',
-        startDateOption: null
+        pageTitle: 'Select the start date for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
+        startDateDay: null,
+        startDateMonth: null,
+        startDateOption: null,
+        startDateYear: null
       })
     })
   })

@@ -79,7 +79,7 @@ describe('Return Logs Setup - Submit Units service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ titleText: 'Updated', text: 'Reporting details changed' })
+          expect(notification).toEqual({ text: 'Reporting details changed', titleText: 'Updated' })
         })
       })
     })

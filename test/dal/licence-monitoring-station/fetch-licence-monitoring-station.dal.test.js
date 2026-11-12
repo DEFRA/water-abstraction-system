@@ -49,16 +49,6 @@ describe('Licence Monitoring Station - Fetch Licence Monitoring Station dal', ()
 
       expect(result).toEqual({
         id: licenceMonitoringStation.id,
-        measureType: 'flow',
-        restrictionType: 'reduce',
-        thresholdUnit: 'm3/s',
-        thresholdValue: 100,
-        monitoringStation: {
-          id: monitoringStation.id,
-          catchmentName: 'The Catchment',
-          label: 'The Monitoring Station',
-          riverName: 'The River'
-        },
         licence: {
           id: licence.id,
           licenceRef: licence.licenceRef
@@ -68,7 +58,17 @@ describe('Licence Monitoring Station - Fetch Licence Monitoring Station dal', ()
           licenceVersionPurposeConditionType: {
             displayTitle: 'Flow cessation condition'
           }
-        }
+        },
+        measureType: 'flow',
+        monitoringStation: {
+          catchmentName: 'The Catchment',
+          id: monitoringStation.id,
+          label: 'The Monitoring Station',
+          riverName: 'The River'
+        },
+        restrictionType: 'reduce',
+        thresholdUnit: 'm3/s',
+        thresholdValue: 100
       })
     })
   })
@@ -90,21 +90,21 @@ describe('Licence Monitoring Station - Fetch Licence Monitoring Station dal', ()
 
       expect(result).toEqual({
         id: licenceMonitoringStation.id,
-        measureType: 'flow',
-        restrictionType: 'reduce',
-        thresholdUnit: 'm3/s',
-        thresholdValue: 100,
-        monitoringStation: {
-          id: monitoringStation.id,
-          catchmentName: 'The Catchment',
-          label: 'The Monitoring Station',
-          riverName: 'The River'
-        },
         licence: {
           id: licence.id,
           licenceRef: licence.licenceRef
         },
-        licenceVersionPurposeCondition: null
+        licenceVersionPurposeCondition: null,
+        measureType: 'flow',
+        monitoringStation: {
+          catchmentName: 'The Catchment',
+          id: monitoringStation.id,
+          label: 'The Monitoring Station',
+          riverName: 'The River'
+        },
+        restrictionType: 'reduce',
+        thresholdUnit: 'm3/s',
+        thresholdValue: 100
       })
     })
   })

@@ -26,8 +26,8 @@ describe('Users - External - Fetch User Details DAL', () => {
     user = await UserHelper.add({ application: 'water_vml', licenceEntityId: userEntity.id, username: userEntity.name })
 
     licenceEntityRole = await LicenceEntityRoleHelper.add({
-      licenceEntityId: userEntity.id,
       companyEntityId,
+      licenceEntityId: userEntity.id,
       role: 'primary_user'
     })
 

@@ -13,14 +13,14 @@ describe('Notices - View Notice presenter', () => {
 
   beforeEach(() => {
     notice = {
+      alertType: 'warning',
       createdAt: new Date('2025-02-21T14:52:18.000Z'),
       id: 'a40dcb94-cb01-4fce-9a46-94b49eca2057',
       issuer: 'test@wrls.gov.uk',
       overallStatus: 'error',
       referenceCode: generateNoticeReferenceCode('WAA-'),
       status: 'completed',
-      subtype: 'waterAbstractionAlerts',
-      alertType: 'warning'
+      subtype: 'waterAbstractionAlerts'
     }
 
     notifications = [
@@ -42,8 +42,8 @@ describe('Notices - View Notice presenter', () => {
           issuer_email_address: 'admin-internal@wrls.gov.uk',
           licence_ref: '01/123',
           licenceMonitoringStationId: 'b7cb48d1-7e23-49b8-9cee-686d302fdc48',
-          name: 'Clean Water Limited',
           monitoring_station_name: 'FRENCHAY',
+          name: 'Clean Water Limited',
           source: '',
           threshold_unit: 'm3/s',
           threshold_value: 100
@@ -81,6 +81,12 @@ describe('Notices - View Notice presenter', () => {
       backLink: { href: '/system/notices', text: 'Go back to notices' },
       notifications: [
         {
+          licenceRefs: ['01/123'],
+          link: {
+            hiddenText: 'notification for recipient Clean Water Limited',
+            href: `/system/notifications/${notifications[0].id}`
+          },
+          messageType: 'letter',
           recipient: [
             'Clean Water Limited',
             'c/o Bob Bobbles',
@@ -89,22 +95,16 @@ describe('Notices - View Notice presenter', () => {
             'CAMBRIDGESHIRE',
             'CB23 1ZZ'
           ],
-          licenceRefs: ['01/123'],
-          link: {
-            href: `/system/notifications/${notifications[0].id}`,
-            hiddenText: 'notification for recipient Clean Water Limited'
-          },
-          messageType: 'letter',
           status: 'sent'
         },
         {
-          recipient: ['shaw.carol@atari.com'],
           licenceRefs: ['01/124'],
           link: {
-            href: `/system/notifications/${notifications[1].id}`,
-            hiddenText: 'notification for recipient shaw.carol@atari.com'
+            hiddenText: 'notification for recipient shaw.carol@atari.com',
+            href: `/system/notifications/${notifications[1].id}`
           },
           messageType: 'email',
+          recipient: ['shaw.carol@atari.com'],
           status: 'error'
         }
       ],

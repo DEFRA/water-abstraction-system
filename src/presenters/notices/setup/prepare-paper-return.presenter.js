@@ -4,21 +4,21 @@
  */
 
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'
-import { splitArrayIntoGroups } from 'water-abstraction-engine/lib/general.lib.js'
 import { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } from 'water-abstraction-engine/lib/dates.lib.js'
+import { splitArrayIntoGroups } from 'water-abstraction-engine/lib/general.lib.js'
 import { naldAreaCodes, returnRequirementFrequencies } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 const RETURN_TYPE = {
-  week: {
-    columns: 2,
-    columnSize: 14
+  day: {
+    columns: 3
   },
   month: {
     columns: 2,
     columnSize: 12
   },
-  day: {
-    columns: 3
+  week: {
+    columns: 2,
+    columnSize: 14
   }
 }
 
@@ -174,8 +174,8 @@ function _groupDaysIntoMonths(dates) {
 
     if (!group) {
       group = {
-        period: key,
-        days: []
+        days: [],
+        period: key
       }
       acc.push(group)
     }

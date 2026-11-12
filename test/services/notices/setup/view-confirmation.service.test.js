@@ -15,9 +15,9 @@ describe('Notices - Setup - View Confirmation service', () => {
 
   beforeEach(async () => {
     event = await EventHelper.add({
-      type: 'notification',
+      referenceCode,
       subtype: 'returnInvitation',
-      referenceCode
+      type: 'notification'
     })
   })
 

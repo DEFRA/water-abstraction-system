@@ -22,6 +22,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     company: billingAccount.company,
     contacts: [contact]
   }
+
   let payload
   let session
   let sessionData
@@ -254,8 +255,8 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           addressJourney: _addressJourney(session),
           addressSelected: 'new',
           billingAccount,
-          contactSelected: 'new',
-          contactName: 'Contact Name'
+          contactName: 'Contact Name',
+          contactSelected: 'new'
         }
 
         session = SessionModelStub(sessionData)
@@ -270,8 +271,8 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           addressJourney: _addressJourney(session),
           addressSelected: 'new',
           checkPageVisited: false,
-          contactSelected: payload.contactSelected,
-          contactName: null
+          contactName: null,
+          contactSelected: payload.contactSelected
         })
       })
 
@@ -294,8 +295,8 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           sessionData = {
             accountSelected: billingAccount.company.id,
             billingAccount,
-            contactSelected: 'new',
-            contactName: 'Contact Name'
+            contactName: 'Contact Name',
+            contactSelected: 'new'
           }
 
           session = SessionModelStub(sessionData)
@@ -309,15 +310,15 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           const result = await SubmitContactService(session.id, payload)
 
           expect(result.error).toEqual({
+            contactSelected: {
+              text: 'Select a contact'
+            },
             errorList: [
               {
                 href: '#contactSelected',
                 text: 'Select a contact'
               }
-            ],
-            contactSelected: {
-              text: 'Select a contact'
-            }
+            ]
           })
         })
       })
@@ -329,8 +330,8 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           sessionData = {
             accountSelected: 'another',
             billingAccount,
-            contactSelected: 'new',
             contactName: 'Contact Name',
+            contactSelected: 'new',
             existingAccount: billingAccount.company.id
           }
 
@@ -345,15 +346,15 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           const result = await SubmitContactService(session.id, payload)
 
           expect(result.error).toEqual({
+            contactSelected: {
+              text: 'Select a contact'
+            },
             errorList: [
               {
                 href: '#contactSelected',
                 text: 'Select a contact'
               }
-            ],
-            contactSelected: {
-              text: 'Select a contact'
-            }
+            ]
           })
         })
       })

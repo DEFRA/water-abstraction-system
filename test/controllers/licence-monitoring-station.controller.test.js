@@ -85,12 +85,12 @@ function _getOptions(path) {
   const url = `/licence-monitoring-station/${licenceMonitoringStationId}/${path}`
 
   return {
-    method: 'GET',
-    url,
     auth: {
-      strategy: 'session',
-      credentials: { scope: ['manage_gauging_station_licence_links'] }
-    }
+      credentials: { scope: ['manage_gauging_station_licence_links'] },
+      strategy: 'session'
+    },
+    method: 'GET',
+    url
   }
 }
 

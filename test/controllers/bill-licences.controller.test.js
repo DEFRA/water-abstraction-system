@@ -153,12 +153,12 @@ function _options(path) {
   const url = path ? `${root}/${path}` : root
 
   return {
-    method: 'GET',
-    url,
     auth: {
-      strategy: 'session',
-      credentials: { scope: ['billing'] }
-    }
+      credentials: { scope: ['billing'] },
+      strategy: 'session'
+    },
+    method: 'GET',
+    url
   }
 }
 
@@ -180,11 +180,11 @@ function _presrocPageData() {
         agreement: null,
         billableDays: '123/123',
         chargeElement: {
-          purpose: 'Spray Irrigation - Direct',
           abstractionPeriod: '1 May to 31 August',
-          source: 'Unsupported',
+          loss: 'High',
+          purpose: 'Spray Irrigation - Direct',
           season: 'Summer',
-          loss: 'High'
+          source: 'Unsupported'
         },
         chargePeriod: '1 April 2021 to 31 March 2022',
         chargeType: 'standard',
@@ -229,8 +229,8 @@ function _srocPageData() {
           'High loss, non-tidal, restricted water, greater than 120 up to and including 220 ML/yr, Tier 1 model',
         chargeElements: [
           {
-            purpose: 'Trickle Irrigation - Direct',
             abstractionPeriod: '1 April to 31 October',
+            purpose: 'Trickle Irrigation - Direct',
             volume: '150ML'
           }
         ],

@@ -16,10 +16,10 @@ const ROLES = {
 }
 
 const AGREEMENTS = {
+  S126: 'Abatement',
   S127: 'Two-part tariff',
   S130S: 'Canal and Rivers Trust, supported source (S130S)',
-  S130U: 'Canal and Rivers Trust, unsupported source (S130U)',
-  S126: 'Abatement'
+  S130U: 'Canal and Rivers Trust, unsupported source (S130U)'
 }
 
 /**
@@ -36,22 +36,22 @@ const AGREEMENTS = {
  */
 export default function setUpPresenter(chargeVersions, workflows, agreements, returnVersions, auth, licence) {
   const licenceData = {
-    licenceId: licence.id,
-    ends: licence.$ends()
+    ends: licence.$ends(),
+    licenceId: licence.id
   }
 
   return {
     agreements: _agreements(licenceData, agreements, auth),
     backLink: {
-      text: 'Go back to search',
-      href: '/'
+      href: '/',
+      text: 'Go back to search'
     },
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
     links: {
-      chargeInformation: _chargeInformationLinks(auth, licenceData),
       agreements: _agreementLinks(auth, licenceData),
-      returnVersions: _returnVersionsLinks(licenceData, auth),
-      recalculateBills: _recalculateBills(agreements, auth, licenceData)
+      chargeInformation: _chargeInformationLinks(auth, licenceData),
+      recalculateBills: _recalculateBills(agreements, auth, licenceData),
+      returnVersions: _returnVersionsLinks(licenceData, auth)
     },
     notification: supplementaryBillingNotification(licence),
     pageTitle: 'Licence set up',
@@ -63,11 +63,11 @@ export default function setUpPresenter(chargeVersions, workflows, agreements, re
 function _agreements(licenceData, agreements, auth) {
   return agreements.map((agreement, index) => {
     return {
-      startDate: formatLongDate(agreement.startDate),
-      endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
+      action: _agreementActionLinks(licenceData, agreement, auth, index),
       description: AGREEMENTS[_financialAgreementCode(agreement)],
+      endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
       signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '',
-      action: _agreementActionLinks(licenceData, agreement, auth, index)
+      startDate: formatLongDate(agreement.startDate)
     }
   })
 }
@@ -87,16 +87,16 @@ function _agreementActionLinks(licenceData, agreement, auth, index) {
   if (auth.credentials.scope.includes(ROLES.deleteAgreements)) {
     actionLinks.push({
       dataTest: `delete-agreement-${index}`,
-      text: 'Delete',
-      link: `/licences/${licenceData.licenceId}/agreements/${agreement.id}/delete`
+      link: `/licences/${licenceData.licenceId}/agreements/${agreement.id}/delete`,
+      text: 'Delete'
     })
   }
 
   if (hasNotEnded) {
     actionLinks.push({
       dataTest: `end-agreement-${index}`,
-      text: 'End',
-      link: `/licences/${licenceData.licenceId}/agreements/${agreement.id}/end`
+      link: `/licences/${licenceData.licenceId}/agreements/${agreement.id}/end`,
+      text: 'End'
     })
   }
 
@@ -116,8 +116,8 @@ function _agreementLinks(auth, licenceData) {
 function _chargeInformationLinks(auth, licenceData) {
   if (auth.credentials.scope.includes(ROLES.workflowEditor) && !_endsSixYearsAgo(licenceData.ends)) {
     return {
-      setupNewCharge: `/licences/${licenceData.licenceId}/charge-information/create`,
-      makeLicenceNonChargeable: `/licences/${licenceData.licenceId}/charge-information/non-chargeable-reason?start=1`
+      makeLicenceNonChargeable: `/licences/${licenceData.licenceId}/charge-information/non-chargeable-reason?start=1`,
+      setupNewCharge: `/licences/${licenceData.licenceId}/charge-information/create`
     }
   }
 
@@ -131,18 +131,18 @@ function _chargeInformation(chargeVersions, workflows, auth) {
 function _chargeVersions(chargeVersions) {
   return chargeVersions.map((chargeVersion, index) => {
     return {
-      id: chargeVersion.id,
-      startDate: formatLongDate(chargeVersion.startDate),
-      endDate: chargeVersion.endDate ? formatLongDate(chargeVersion.endDate) : '',
-      status: chargeVersion.status,
-      reason: chargeVersion.changeReason?.description,
       action: [
         {
           dataTest: `charge-version-${index}`,
-          text: 'View',
-          link: `/licences/${chargeVersion.licenceId}/charge-information/${chargeVersion.id}/view`
+          link: `/licences/${chargeVersion.licenceId}/charge-information/${chargeVersion.id}/view`,
+          text: 'View'
         }
-      ]
+      ],
+      endDate: chargeVersion.endDate ? formatLongDate(chargeVersion.endDate) : '',
+      id: chargeVersion.id,
+      reason: chargeVersion.changeReason?.description,
+      startDate: formatLongDate(chargeVersion.startDate),
+      status: chargeVersion.status
     }
   })
 }
@@ -153,7 +153,7 @@ function _endsSixYearsAgo(endDate) {
   }
 
   const sixYears = 6
-  const timeStamp = { hour: 23, minutes: 59, seconds: 59, ms: 999 }
+  const timeStamp = { hour: 23, minutes: 59, ms: 999, seconds: 59 }
 
   const yesterday = new Date()
 
@@ -191,8 +191,8 @@ function _returnVersions(returnVersions = [{}]) {
       action: [
         {
           dataTest: `return-version-${index}`,
-          text: 'View',
-          link: `/system/return-versions/${returnVersion.id}`
+          link: `/system/return-versions/${returnVersion.id}`,
+          text: 'View'
         }
       ],
       endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
@@ -206,8 +206,8 @@ function _returnVersions(returnVersions = [{}]) {
 function _returnVersionsLinks(licenceData, auth) {
   if (auth.credentials.scope.includes(ROLES.billing)) {
     return {
-      returnsRequired: `/system/licences/${licenceData.licenceId}/returns-required`,
-      noReturnsRequired: `/system/licences/${licenceData.licenceId}/no-returns-required`
+      noReturnsRequired: `/system/licences/${licenceData.licenceId}/no-returns-required`,
+      returnsRequired: `/system/licences/${licenceData.licenceId}/returns-required`
     }
   }
 
@@ -243,13 +243,13 @@ function _workflowActionEditor(workflow, index) {
   return [
     {
       dataTest: `set-up-charge-version-${index}`,
-      text: 'Set up',
-      link: `/licences/${workflow.licenceId}/charge-information/create?chargeVersionWorkflowId=${workflow.id}`
+      link: `/licences/${workflow.licenceId}/charge-information/create?chargeVersionWorkflowId=${workflow.id}`,
+      text: 'Set up'
     },
     {
       dataTest: `remove-charge-version-${index}`,
-      text: 'Remove',
-      link: `/charge-information-workflow/${workflow.id}/remove`
+      link: `/charge-information-workflow/${workflow.id}/remove`,
+      text: 'Remove'
     }
   ]
 }
@@ -258,8 +258,8 @@ function _workflowActionReviewer(workflow, index) {
   return [
     {
       dataTest: `review-charge-version-${index}`,
-      text: 'Review',
-      link: `/licences/${workflow.licenceId}/charge-information/${workflow.id}/review`
+      link: `/licences/${workflow.licenceId}/charge-information/${workflow.id}/review`,
+      text: 'Review'
     }
   ]
 }

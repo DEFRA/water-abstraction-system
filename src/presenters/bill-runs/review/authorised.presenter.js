@@ -29,8 +29,8 @@ export default function authorisedPresenter(reviewChargeReference) {
     chargeDescription: chargeReference.chargeCategory.shortDescription,
     chargePeriod: formatChargePeriod(reviewChargeVersion),
     financialPeriod: formatFinancialYear(reviewChargeVersion.reviewLicence.billRun.toFinancialYearEnding),
-    reviewChargeReferenceId,
     pageTitle: 'Set the authorised volume',
+    reviewChargeReferenceId,
     totalBillableReturns: calculateTotalBillableReturns(reviewChargeElements)
   }
 }

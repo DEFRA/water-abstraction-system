@@ -7,11 +7,11 @@ import { formatAbstractionDate } from 'water-abstraction-engine/presenters/base.
 import { returnRequirementFrequencies } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 const AGREEMENTS_EXCEPTIONS = {
-  none: 'None',
+  '56-returns-exception': '56 returns exception',
   'gravity-fill': 'Gravity fill',
+  none: 'None',
   'transfer-re-abstraction-scheme': 'Transfer re-abstraction scheme',
-  'two-part-tariff': 'Two-part tariff',
-  '56-returns-exception': '56 returns exception'
+  'two-part-tariff': 'Two-part tariff'
 }
 
 /**
@@ -26,8 +26,8 @@ const AGREEMENTS_EXCEPTIONS = {
  */
 export default function returnsRequirementsPresenter(requirements, points, journey) {
   return {
-    returnsRequired: journey === 'returns-required',
-    requirements: _requirements(requirements, points)
+    requirements: _requirements(requirements, points),
+    returnsRequired: journey === 'returns-required'
   }
 }
 

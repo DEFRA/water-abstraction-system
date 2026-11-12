@@ -2,9 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
 import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
-import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
 import ChangeReasonHelper from 'water-abstraction-engine/test/helpers/change-reason.helper.js'
 import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
 import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
@@ -29,8 +29,8 @@ const REGION_SOUTH_WEST_INDEX = 4
 
 describe('Bill Runs - Supplementary - Process Billing Period service', () => {
   const billingPeriod = {
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2023-03-31')
+    endDate: new Date('2023-03-31'),
+    startDate: new Date('2022-04-01')
   }
 
   let billRun
@@ -95,18 +95,18 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
         describe('because the billable days calculated as 0', () => {
           beforeEach(async () => {
             chargeVersion = await ChargeVersionHelper.add({
-              changeReasonId: changeReason.id,
               billingAccountId: billingAccount.id,
-              startDate: new Date(2022, 7, 1, 9),
-              licenceId: licence.id
+              changeReasonId: changeReason.id,
+              licenceId: licence.id,
+              startDate: new Date(2022, 7, 1, 9)
             })
 
             chargeReference = await ChargeReferenceHelper.add({
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4,
               abstractionPeriodEndDay: 31,
               abstractionPeriodEndMonth: 3,
-              adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null },
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4,
+              adjustments: { aggregate: null, charge: null, s126: null, s127: false, s130: false, winter: false },
               chargeCategoryId: chargeCategory.id,
               chargeVersionId: chargeVersion.id,
               description: 'Charge reference 1 - Mineral washing',
@@ -114,11 +114,11 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
             })
 
             chargeElement = await ChargeElementHelper.add({
-              chargeReferenceId: chargeReference.id,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 5,
               abstractionPeriodStartDay: 1,
               abstractionPeriodStartMonth: 4,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 5
+              chargeReferenceId: chargeReference.id
             })
 
             const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
@@ -139,19 +139,19 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
           describe('and there are no previously billed transactions', () => {
             beforeEach(async () => {
               chargeVersion = await ChargeVersionHelper.add({
-                changeReasonId: changeReason.id,
                 billingAccountId: billingAccount.id,
-                startDate: new Date(2022, 7, 1, 9),
+                changeReasonId: changeReason.id,
                 licenceId: licence.id,
+                startDate: new Date(2022, 7, 1, 9),
                 status: 'superseded'
               })
 
               chargeReference = await ChargeReferenceHelper.add({
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 4,
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3,
-                adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null },
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 4,
+                adjustments: { aggregate: null, charge: null, s126: null, s127: false, s130: false, winter: false },
                 chargeCategoryId: chargeCategory.id,
                 chargeVersionId: chargeVersion.id,
                 description: 'Charge reference 1 - Mineral washing',
@@ -159,11 +159,11 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
               })
 
               chargeElement = await ChargeElementHelper.add({
-                chargeReferenceId: chargeReference.id,
+                abstractionPeriodEndDay: 31,
+                abstractionPeriodEndMonth: 3,
                 abstractionPeriodStartDay: 1,
                 abstractionPeriodStartMonth: 4,
-                abstractionPeriodEndDay: 31,
-                abstractionPeriodEndMonth: 3
+                chargeReferenceId: chargeReference.id
               })
 
               const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
@@ -183,18 +183,18 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       describe('and they are billable', () => {
         beforeEach(async () => {
           chargeVersion = await ChargeVersionHelper.add({
-            changeReasonId: changeReason.id,
             billingAccountId: billingAccount.id,
-            startDate: new Date(2022, 7, 1, 9),
-            licenceId: licence.id
+            changeReasonId: changeReason.id,
+            licenceId: licence.id,
+            startDate: new Date(2022, 7, 1, 9)
           })
 
           chargeReference = await ChargeReferenceHelper.add({
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3,
-            adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: null },
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            adjustments: { aggregate: null, charge: null, s126: null, s127: false, s130: false, winter: false },
             chargeCategoryId: chargeCategory.id,
             chargeVersionId: chargeVersion.id,
             description: 'Charge reference 1 - Mineral washing',
@@ -202,11 +202,11 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
           })
 
           chargeElement = await ChargeElementHelper.add({
-            chargeReferenceId: chargeReference.id,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3
+            chargeReferenceId: chargeReference.id
           })
 
           const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
@@ -215,48 +215,48 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
           const sentTransactions = [
             {
-              id: '9b092372-1a26-436a-bf1f-b5eb3f9aca44',
-              billLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a',
-              chargeReferenceId: '32058a19-4813-4ee7-808b-a0559deb8469',
-              startDate: new Date('2022-04-01'),
-              endDate: new Date('2022-10-31'),
-              source: 'non-tidal',
-              season: 'all year',
-              loss: 'low',
-              credit: false,
-              chargeType: 'standard',
-              authorisedQuantity: 6.82,
-              billableQuantity: 6.82,
-              authorisedDays: 365,
-              billableDays: 214,
-              status: 'charge_created',
-              description: 'Water abstraction charge: Mineral washing',
-              volume: 6.82,
-              section126Factor: 1,
-              section127Agreement: false,
-              section130Agreement: false,
-              newLicence: false,
-              secondPartCharge: false,
-              scheme: 'sroc',
-              aggregateFactor: 0.562114443,
               adjustmentFactor: 1,
+              aggregateFactor: 0.562114443,
+              authorisedDays: 365,
+              authorisedQuantity: 6.82,
+              billableDays: 214,
+              billableQuantity: 6.82,
+              billLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a',
               chargeCategoryCode: '4.4.5',
               chargeCategoryDescription:
                 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+              chargeReferenceId: '32058a19-4813-4ee7-808b-a0559deb8469',
+              chargeType: 'standard',
+              credit: false,
+              description: 'Water abstraction charge: Mineral washing',
+              endDate: new Date('2022-10-31'),
+              externalId: '7e752fa6-a19c-4779-b28c-6e536f028795',
+              id: '9b092372-1a26-436a-bf1f-b5eb3f9aca44',
+              loss: 'low',
+              newLicence: false,
+              purposes: [{}],
+              scheme: 'sroc',
+              season: 'all year',
+              secondPartCharge: false,
+              section126Factor: 1,
+              section127Agreement: false,
+              section130Agreement: false,
+              source: 'non-tidal',
+              startDate: new Date('2022-04-01'),
+              status: 'charge_created',
               supportedSource: false,
               supportedSourceName: null,
+              volume: 6.82,
               waterCompanyCharge: true,
-              winterOnly: false,
               waterUndertaker: false,
-              externalId: '7e752fa6-a19c-4779-b28c-6e536f028795',
-              purposes: [{}]
+              winterOnly: false
             }
           ]
 
           vi.spyOn(SendTransactionsService, 'default').mockResolvedValue(sentTransactions)
           vi.spyOn(ChargingModuleGenerateBillRunRequest, 'default').mockResolvedValue({
-            succeeded: true,
-            response: {}
+            response: {},
+            succeeded: true
           })
         })
 
@@ -272,17 +272,17 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
   describe('when the service errors', () => {
     beforeEach(async () => {
       chargeVersion = await ChargeVersionHelper.add({
-        changeReasonId: changeReason.id,
         billingAccountId: billingAccount.id,
+        changeReasonId: changeReason.id,
         licenceId: licence.id
       })
 
       chargeReference = await ChargeReferenceHelper.add({
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 3,
-        adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: null },
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        adjustments: { aggregate: null, charge: null, s126: null, s127: true, s130: false, winter: false },
         chargeCategoryId: chargeCategory.id,
         chargeVersionId: chargeVersion.id,
         description: 'Charge reference 1 - Mineral washing',

@@ -50,7 +50,7 @@ function _alternateNoticeService(mainNotice) {
 async function _recordResult(sendResult) {
   const { id, plaintext, notifyError, notifyId, notifyStatus, status } = sendResult
 
-  await NotificationModel.query().patch({ plaintext, notifyError, notifyId, notifyStatus, status }).findById(id)
+  await NotificationModel.query().patch({ notifyError, notifyId, notifyStatus, plaintext, status }).findById(id)
 }
 
 async function _sendNotifications(notifications, referenceCode) {

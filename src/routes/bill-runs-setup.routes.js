@@ -16,146 +16,146 @@ import {
 export default [
   {
     method: 'GET',
-    path: '/bill-runs/setup/{sessionId}/check',
     options: {
-      handler: check,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: check
+    },
+    path: '/bill-runs/setup/{sessionId}/check'
   },
   {
     method: 'POST',
-    path: '/bill-runs/setup/{sessionId}/check',
     options: {
-      handler: submitCheck,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitCheck
+    },
+    path: '/bill-runs/setup/{sessionId}/check'
   },
   {
     method: 'GET',
-    path: '/bill-runs/setup/{sessionId}/no-licences',
     options: {
-      handler: noLicences,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: noLicences
+    },
+    path: '/bill-runs/setup/{sessionId}/no-licences'
   },
   {
     method: 'GET',
-    path: '/bill-runs/setup/{sessionId}/region',
     options: {
-      handler: region,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: region
+    },
+    path: '/bill-runs/setup/{sessionId}/region'
   },
   {
     method: 'POST',
-    path: '/bill-runs/setup/{sessionId}/region',
     options: {
-      handler: submitRegion,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitRegion
+    },
+    path: '/bill-runs/setup/{sessionId}/region'
   },
   {
     method: 'GET',
-    path: '/bill-runs/setup/{sessionId}/season',
     options: {
-      handler: season,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: season
+    },
+    path: '/bill-runs/setup/{sessionId}/season'
   },
   {
     method: 'POST',
-    path: '/bill-runs/setup/{sessionId}/season',
     options: {
-      handler: submitSeason,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitSeason
+    },
+    path: '/bill-runs/setup/{sessionId}/season'
   },
   {
     method: 'GET',
-    path: '/bill-runs/setup',
     options: {
-      handler: setup,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: setup
+    },
+    path: '/bill-runs/setup'
   },
   {
     method: 'GET',
-    path: '/bill-runs/setup/{sessionId}/type',
     options: {
-      handler: type,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: type
+    },
+    path: '/bill-runs/setup/{sessionId}/type'
   },
   {
     method: 'POST',
-    path: '/bill-runs/setup/{sessionId}/type',
     options: {
-      handler: submitType,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitType
+    },
+    path: '/bill-runs/setup/{sessionId}/type'
   },
   {
     method: 'GET',
-    path: '/bill-runs/setup/{sessionId}/year',
     options: {
-      handler: year,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: year
+    },
+    path: '/bill-runs/setup/{sessionId}/year'
   },
   {
     method: 'POST',
-    path: '/bill-runs/setup/{sessionId}/year',
     options: {
-      handler: submitYear,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitYear
+    },
+    path: '/bill-runs/setup/{sessionId}/year'
   }
 ]

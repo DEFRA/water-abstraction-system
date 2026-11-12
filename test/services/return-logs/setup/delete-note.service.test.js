@@ -18,11 +18,11 @@ describe('Return Logs Setup - Delete Note service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: 1234,
       note: {
         content: 'I am not long for this world',
         userEmail: 'carol.shaw@atari.com'
-      }
+      },
+      returnReference: 1234
     }
 
     session = SessionModelStub(sessionData)
@@ -49,6 +49,6 @@ describe('Return Logs Setup - Delete Note service', () => {
     const [flashType, notification] = yarStub.flash.mock.calls[0]
 
     expect(flashType).toEqual('notification')
-    expect(notification).toEqual({ titleText: 'Deleted', text: 'Note deleted' })
+    expect(notification).toEqual({ text: 'Note deleted', titleText: 'Deleted' })
   })
 })

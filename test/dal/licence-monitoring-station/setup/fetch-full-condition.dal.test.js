@@ -34,11 +34,12 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition dal', () => {
 
       // Generate a condition with an earlier createdAt date to test distinctOn
       await _generateData(licence.id, 'current', CES_CONDITION_TYPE.id, {
-        notes: conditionA.notes,
-        licenceVersionPurposeCondition: { createdAt: new Date(conditionA.createdAt.getTime() - 1000) }
+        licenceVersionPurposeCondition: { createdAt: new Date(conditionA.createdAt.getTime() - 1000) },
+        notes: conditionA.notes
       })
 
       const anotherLicence = await LicenceHelper.add()
+
       anotherLicenceCondition = await _generateData(anotherLicence.id, 'current', CES_CONDITION_TYPE.id, {
         notes: 'CONDITION_ON_ANOTHER_LICENCE'
       })
@@ -105,8 +106,8 @@ async function _generateData(licenceId, status, conditionTypeId, options = {}) {
   })
 
   return LicenceVersionPurposeConditionHelper.add({
-    licenceVersionPurposeId: licenceVersionPurpose.id,
     licenceVersionPurposeConditionTypeId: conditionTypeId,
+    licenceVersionPurposeId: licenceVersionPurpose.id,
     notes: options.notes,
     param1: options.param1,
     param2: options.param2,

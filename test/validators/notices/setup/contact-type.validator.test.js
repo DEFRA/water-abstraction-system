@@ -10,8 +10,8 @@ describe('Contact Type Validator', () => {
   describe('when called with valid email contact type data', () => {
     beforeEach(() => {
       payload = {
-        contactType: 'email',
-        contactEmail: 'test@test.gov.uk'
+        contactEmail: 'test@test.gov.uk',
+        contactType: 'email'
       }
     })
 
@@ -26,8 +26,8 @@ describe('Contact Type Validator', () => {
   describe('when called with valid post contact type data', () => {
     beforeEach(() => {
       payload = {
-        contactType: 'post',
-        contactName: 'Fake Name'
+        contactName: 'Fake Name',
+        contactType: 'post'
       }
     })
 
@@ -72,8 +72,8 @@ describe('Contact Type Validator', () => {
   describe('when called with an email type and an invalid email', () => {
     beforeEach(() => {
       payload = {
-        contactType: 'email',
-        contactEmail: 'test'
+        contactEmail: 'test',
+        contactType: 'email'
       }
     })
 

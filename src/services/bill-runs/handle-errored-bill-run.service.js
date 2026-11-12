@@ -27,7 +27,7 @@ export default async function handleErroredBillRunService(billRunId, errorCode =
 
 async function _updateBillRun(billRunId, errorCode) {
   await BillRunModel.query().findById(billRunId).patch({
-    status: 'error',
-    errorCode
+    errorCode,
+    status: 'error'
   })
 }

@@ -40,8 +40,8 @@ describe('Company contact - Fetch Notifications DAL', () => {
     // This should not be returned as it is an excluded message type
     excludedNotification = await NotificationHelper.add({
       ...NotificationsFixture.abstractionAlertEmail(notice),
-      recipient: email,
-      messageRef: 'password_reset_email'
+      messageRef: 'password_reset_email',
+      recipient: email
     })
   })
 
@@ -61,27 +61,27 @@ describe('Company contact - Fetch Notifications DAL', () => {
         notifications: [
           {
             createdAt: notificationTwo.createdAt,
-            id: notificationTwo.id,
-            messageType: notificationTwo.messageType,
-            status: notificationTwo.status,
             event: {
               id: noticeTwo.id,
               issuer: noticeTwo.issuer,
-              subtype: noticeTwo.subtype,
-              sendingAlertType: 'stop'
-            }
+              sendingAlertType: 'stop',
+              subtype: noticeTwo.subtype
+            },
+            id: notificationTwo.id,
+            messageType: notificationTwo.messageType,
+            status: notificationTwo.status
           },
           {
             createdAt: notification.createdAt,
-            id: notification.id,
-            messageType: notification.messageType,
-            status: notification.status,
             event: {
               id: notice.id,
               issuer: notice.issuer,
-              subtype: notice.subtype,
-              sendingAlertType: null
-            }
+              sendingAlertType: null,
+              subtype: notice.subtype
+            },
+            id: notification.id,
+            messageType: notification.messageType,
+            status: notification.status
           }
         ],
         totalNumber: 2

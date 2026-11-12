@@ -16,41 +16,28 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
 
     sessionRequirements = [
       {
-        points: ['796f83bb-d50d-446f-bc47-28daff6bcb78'],
-        purposes: [
-          {
-            id: 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e',
-            alias: ''
-          }
-        ],
-        returnsCycle: 'winter-and-all-year',
-        siteDescription: 'Site Number One',
         abstractionPeriod: {
           abstractionPeriodEndDay: '31',
           abstractionPeriodEndMonth: '3',
           abstractionPeriodStartDay: '1',
           abstractionPeriodStartMonth: '4'
         },
-        frequencyReported: 'month',
+        agreementsExceptions: ['none'],
         frequencyCollected: 'week',
-        agreementsExceptions: ['none']
+        frequencyReported: 'month',
+        points: ['796f83bb-d50d-446f-bc47-28daff6bcb78'],
+        purposes: [
+          {
+            alias: '',
+            id: 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'
+          }
+        ],
+        returnsCycle: 'winter-and-all-year',
+        siteDescription: 'Site Number One'
       },
       // Invalid 1 - a return requirement because user clicked 'Add', but then immediately hit back
       {},
       {
-        points: ['30070341-ef94-4df8-87dd-31d51a046b8b', '916a1320-0f57-43b2-bddc-b609218abf1c'],
-        purposes: [
-          {
-            id: 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e',
-            alias: ''
-          },
-          {
-            id: '58855070-25d1-4f17-92e5-2a67721a4434',
-            alias: 'This is the second purpose test alias'
-          }
-        ],
-        returnsCycle: 'summer',
-        siteDescription: 'Site Number Two',
         // NOTE: When abstraction periods are manually entered they are saved in the session as strings rather than integers
         // The ORM isn't fussy and correctly converts the strings to integers when writing the data to the database
         abstractionPeriod: {
@@ -59,25 +46,38 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
           abstractionPeriodStartDay: '1',
           abstractionPeriodStartMonth: '6'
         },
-        frequencyReported: 'day',
-        frequencyCollected: 'day',
         agreementsExceptions: [
           'gravity-fill',
           'transfer-re-abstraction-scheme',
           'two-part-tariff',
           '56-returns-exception'
-        ]
+        ],
+        frequencyCollected: 'day',
+        frequencyReported: 'day',
+        points: ['30070341-ef94-4df8-87dd-31d51a046b8b', '916a1320-0f57-43b2-bddc-b609218abf1c'],
+        purposes: [
+          {
+            alias: '',
+            id: 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'
+          },
+          {
+            alias: 'This is the second purpose test alias',
+            id: '58855070-25d1-4f17-92e5-2a67721a4434'
+          }
+        ],
+        returnsCycle: 'summer',
+        siteDescription: 'Site Number Two'
       },
       // Invalid 2 - a return requirement because user clicked 'Add', but then clicked back from the 'Enter abstraction'
       // page
       {
+        points: ['796f83bb-d50d-446f-bc47-28daff6bcb78'],
         purposes: [
           {
-            id: 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e',
-            alias: ''
+            alias: '',
+            id: 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'
           }
-        ],
-        points: ['796f83bb-d50d-446f-bc47-28daff6bcb78']
+        ]
       }
     ]
 
@@ -108,17 +108,16 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
       expect(results).toHaveLength(2)
       expect(results).toEqual([
         {
-          abstractionPeriodStartDay: '1',
-          abstractionPeriodStartMonth: '4',
           abstractionPeriodEndDay: '31',
           abstractionPeriodEndMonth: '3',
+          abstractionPeriodStartDay: '1',
+          abstractionPeriodStartMonth: '4',
           collectionFrequency: 'week',
           fiftySixException: false,
           gravityFill: false,
           points: ['796f83bb-d50d-446f-bc47-28daff6bcb78'],
           reabstraction: false,
           reportingFrequency: 'month',
-          returnsFrequency: 'year',
           returnRequirementPurposes: [
             {
               alias: null,
@@ -127,22 +126,22 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
               secondaryPurposeId: '0a80d135-9bd4-40ec-90ff-f4a365ccac3f'
             }
           ],
+          returnsFrequency: 'year',
           siteDescription: 'Site Number One',
           summer: false,
           twoPartTariff: false
         },
         {
-          abstractionPeriodStartDay: '1',
-          abstractionPeriodStartMonth: '6',
           abstractionPeriodEndDay: '31',
           abstractionPeriodEndMonth: '8',
+          abstractionPeriodStartDay: '1',
+          abstractionPeriodStartMonth: '6',
           collectionFrequency: 'day',
           fiftySixException: true,
           gravityFill: true,
           points: ['30070341-ef94-4df8-87dd-31d51a046b8b', '916a1320-0f57-43b2-bddc-b609218abf1c'],
           reabstraction: true,
           reportingFrequency: 'day',
-          returnsFrequency: 'year',
           returnRequirementPurposes: [
             {
               alias: null,
@@ -157,6 +156,7 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
               secondaryPurposeId: '8391fe23-a85e-4e7e-a0f8-d819be97d789'
             }
           ],
+          returnsFrequency: 'year',
           siteDescription: 'Site Number Two',
           summer: true,
           twoPartTariff: true

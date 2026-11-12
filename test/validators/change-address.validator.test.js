@@ -6,36 +6,36 @@ import ChangeAddressValidator from '../../src/validators/change-address.validato
 
 describe('Create Bill Run validator', () => {
   const completeAddress = {
-    id: '752446c0-a649-4383-967c-4e4fb6e13dde',
     addressLine1: 'Building 12',
     addressLine2: 'SCP Headquarters',
     addressLine3: 'East campus',
     addressLine4: '227 Roundly Rd',
-    town: 'Leeds',
-    county: 'West Yorkshire',
     country: 'United Kingdom',
+    county: 'West Yorkshire',
+    id: '752446c0-a649-4383-967c-4e4fb6e13dde',
     postcode: 'LS8 4HS',
-    uprn: 97564,
-    source: 'ea-address-facade'
+    source: 'ea-address-facade',
+    town: 'Leeds',
+    uprn: 97564
   }
   const completeAgentCompany = {
+    companyNumber: 'OE008471',
     id: 'aa0dd66a-6f38-4ea6-b2e1-9639cb51c792',
-    type: 'organisation',
-    organisationType: 'limitedCompany',
     name: 'SCP',
-    companyNumber: 'OE008471'
+    organisationType: 'limitedCompany',
+    type: 'organisation'
   }
   const completeContact = {
-    id: '9969a9e6-c440-4065-ba2c-16566cb59575',
-    type: 'person',
-    salutation: 'Mrs',
-    firstName: 'Margherita',
-    middleInitials: 'OE008471',
-    lastName: 'Villar',
-    suffix: 'MBE',
     department: 'Humanoid Risk Assessment',
+    firstName: 'Margherita',
+    id: '9969a9e6-c440-4065-ba2c-16566cb59575',
+    isTest: false,
+    lastName: 'Villar',
+    middleInitials: 'OE008471',
+    salutation: 'Mrs',
     source: 'wrls',
-    isTest: false
+    suffix: 'MBE',
+    type: 'person'
   }
 
   let data
@@ -77,10 +77,10 @@ describe('Create Bill Run validator', () => {
     describe('which includes a minimal address and a valid agent company', () => {
       beforeEach(() => {
         data = {
+          address: {},
           agentCompany: {
             ...completeAgentCompany
-          },
-          address: {}
+          }
         }
       })
 
@@ -96,10 +96,10 @@ describe('Create Bill Run validator', () => {
     describe('which includes a minimal address and a valid contact', () => {
       beforeEach(() => {
         data = {
+          address: {},
           contact: {
             ...completeContact
-          },
-          address: {}
+          }
         }
       })
 
@@ -134,10 +134,10 @@ describe('Create Bill Run validator', () => {
     describe('and the issue is in the agent company', () => {
       beforeEach(() => {
         data = {
+          address: {},
           agentCompany: {
             ...completeAgentCompany
-          },
-          address: {}
+          }
         }
       })
 
@@ -175,10 +175,10 @@ describe('Create Bill Run validator', () => {
     describe('and it is an issue in the contact', () => {
       beforeEach(() => {
         data = {
+          address: {},
           contact: {
             ...completeContact
-          },
-          address: {}
+          }
         }
       })
 

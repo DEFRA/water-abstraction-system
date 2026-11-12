@@ -24,8 +24,8 @@ export default function regionValidator(payload, regions) {
       .required()
       .valid(...validValues)
       .messages({
-        'any.required': 'Select the region',
         'any.only': 'Select the region',
+        'any.required': 'Select the region',
         'string.empty': 'Select the region'
       })
   })

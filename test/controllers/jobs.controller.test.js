@@ -202,7 +202,7 @@ describe('Jobs controller', () => {
     describe('when the requested cycle is summer', () => {
       describe('POST', () => {
         beforeEach(() => {
-          options = { method: 'POST', url: '/jobs/return-logs/summer', payload: {} }
+          options = { method: 'POST', payload: {}, url: '/jobs/return-logs/summer' }
         })
 
         describe('when the request succeeds', () => {

@@ -43,12 +43,12 @@ describe('Licence Versions controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
-          method: 'GET',
-          url: '/licence-versions/123',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/licence-versions/123'
         }
       })
 

@@ -6,8 +6,8 @@ import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper
 import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 import ReviewLicenceHelper from 'water-abstraction-engine/test/helpers/review-licence.helper.js'
-import { generateRandomInteger } from 'water-abstraction-engine/test/generators.js'
 import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateRandomInteger } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
 import FetchBillRunLicencesService from '../../../../src/services/bill-runs/review/fetch-bill-run-licences.service.js'
@@ -36,27 +36,27 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
 
     testLicenceReady = await ReviewLicenceHelper.add({
       billRunId: billRun.id,
+      issues: 'Returns received late',
       licenceHolder: 'Ready Licence Holder Ltd',
       licenceRef: `01/${generateRandomInteger(100, 9999)}`,
-      status: 'ready',
       progress: true,
-      issues: 'Returns received late'
+      status: 'ready'
     })
 
     testLicenceReview = await ReviewLicenceHelper.add({
       billRunId: billRun.id,
+      issues: 'Over abstraction, Returns received but not processed',
       licenceHolder: 'Review Licence Holder Ltd',
       licenceRef: `02/${generateRandomInteger(100, 9999)}`,
-      status: 'review',
-      issues: 'Over abstraction, Returns received but not processed'
+      status: 'review'
     })
 
     testLicenceNoIssues = await ReviewLicenceHelper.add({
       billRunId: billRun.id,
+      issues: '',
       licenceHolder: 'No issues Licence Holder Ltd',
       licenceRef: `03/${generateRandomInteger(100, 9999)}`,
-      status: 'ready',
-      issues: ''
+      status: 'ready'
     })
   })
 
@@ -89,50 +89,50 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
 
       expect(result).toMatchObject({
         billRun: {
-          id: billRun.id,
           batchType: 'two_part_tariff',
           createdAt: todaysDate,
-          scheme: 'sroc',
-          status: 'review',
-          summer: false,
-          toFinancialYearEnding: todaysDate.getFullYear(),
+          id: billRun.id,
           region: {
-            id: region.id,
-            displayName: region.displayName
+            displayName: region.displayName,
+            id: region.id
           },
           reviewLicences: [
             {
-              totalNumberOfLicences: 3,
-              numberOfLicencesToReview: 1
+              numberOfLicencesToReview: 1,
+              totalNumberOfLicences: 3
             }
-          ]
+          ],
+          scheme: 'sroc',
+          status: 'review',
+          summer: false,
+          toFinancialYearEnding: todaysDate.getFullYear()
         },
         licences: {
           results: [
             {
               id: testLicenceReview.id,
+              issues: 'Over abstraction, Returns received but not processed',
+              licenceHolder: 'Review Licence Holder Ltd',
               licenceId: testLicenceReview.licenceId,
               licenceRef: testLicenceReview.licenceRef,
-              licenceHolder: 'Review Licence Holder Ltd',
-              issues: 'Over abstraction, Returns received but not processed',
               progress: false,
               status: 'review'
             },
             {
               id: testLicenceReady.id,
+              issues: 'Returns received late',
+              licenceHolder: 'Ready Licence Holder Ltd',
               licenceId: testLicenceReady.licenceId,
               licenceRef: testLicenceReady.licenceRef,
-              licenceHolder: 'Ready Licence Holder Ltd',
-              issues: 'Returns received late',
               progress: true,
               status: 'ready'
             },
             {
               id: testLicenceNoIssues.id,
+              issues: '',
+              licenceHolder: 'No issues Licence Holder Ltd',
               licenceId: testLicenceNoIssues.licenceId,
               licenceRef: testLicenceNoIssues.licenceRef,
-              licenceHolder: 'No issues Licence Holder Ltd',
-              issues: '',
               progress: false,
               status: 'ready'
             }
@@ -161,10 +161,10 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
             results: [
               {
                 id: testLicenceNoIssues.id,
+                issues: '',
+                licenceHolder: 'No issues Licence Holder Ltd',
                 licenceId: testLicenceNoIssues.licenceId,
                 licenceRef: testLicenceNoIssues.licenceRef,
-                licenceHolder: 'No issues Licence Holder Ltd',
-                issues: '',
                 progress: false,
                 status: 'ready'
               }
@@ -186,10 +186,10 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
             results: [
               {
                 id: testLicenceReady.id,
+                issues: 'Returns received late',
+                licenceHolder: 'Ready Licence Holder Ltd',
                 licenceId: testLicenceReady.licenceId,
                 licenceRef: testLicenceReady.licenceRef,
-                licenceHolder: 'Ready Licence Holder Ltd',
-                issues: 'Returns received late',
                 progress: true,
                 status: 'ready'
               }
@@ -211,19 +211,19 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
             results: [
               {
                 id: testLicenceReview.id,
+                issues: 'Over abstraction, Returns received but not processed',
+                licenceHolder: 'Review Licence Holder Ltd',
                 licenceId: testLicenceReview.licenceId,
                 licenceRef: testLicenceReview.licenceRef,
-                licenceHolder: 'Review Licence Holder Ltd',
-                issues: 'Over abstraction, Returns received but not processed',
                 progress: false,
                 status: 'review'
               },
               {
                 id: testLicenceReady.id,
+                issues: 'Returns received late',
+                licenceHolder: 'Ready Licence Holder Ltd',
                 licenceId: testLicenceReady.licenceId,
                 licenceRef: testLicenceReady.licenceRef,
-                licenceHolder: 'Ready Licence Holder Ltd',
-                issues: 'Returns received late',
                 progress: true,
                 status: 'ready'
               }
@@ -247,10 +247,10 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
             results: [
               {
                 id: testLicenceReview.id,
+                issues: 'Over abstraction, Returns received but not processed',
+                licenceHolder: 'Review Licence Holder Ltd',
                 licenceId: testLicenceReview.licenceId,
                 licenceRef: testLicenceReview.licenceRef,
-                licenceHolder: 'Review Licence Holder Ltd',
-                issues: 'Over abstraction, Returns received but not processed',
                 progress: false,
                 status: 'review'
               }
@@ -272,10 +272,10 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
             results: [
               {
                 id: testLicenceReady.id,
+                issues: 'Returns received late',
+                licenceHolder: 'Ready Licence Holder Ltd',
                 licenceId: testLicenceReady.licenceId,
                 licenceRef: testLicenceReady.licenceRef,
-                licenceHolder: 'Ready Licence Holder Ltd',
-                issues: 'Returns received late',
                 progress: true,
                 status: 'ready'
               }
@@ -298,10 +298,10 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
           results: [
             {
               id: testLicenceReview.id,
+              issues: 'Over abstraction, Returns received but not processed',
+              licenceHolder: 'Review Licence Holder Ltd',
               licenceId: testLicenceReview.licenceId,
               licenceRef: testLicenceReview.licenceRef,
-              licenceHolder: 'Review Licence Holder Ltd',
-              issues: 'Over abstraction, Returns received but not processed',
               progress: false,
               status: 'review'
             }
@@ -323,10 +323,10 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
           results: [
             {
               id: testLicenceReady.id,
+              issues: 'Returns received late',
+              licenceHolder: 'Ready Licence Holder Ltd',
               licenceId: testLicenceReady.licenceId,
               licenceRef: testLicenceReady.licenceRef,
-              licenceHolder: 'Ready Licence Holder Ltd',
-              issues: 'Returns received late',
               progress: true,
               status: 'ready'
             }

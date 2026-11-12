@@ -41,8 +41,8 @@ describe('Bill Runs - Review - View Review Service', () => {
             {
               id: generateUUID(),
               issues: 'Aggregate',
-              licenceId: generateUUID(),
               licenceHolder: 'ACME Water PLC',
+              licenceId: generateUUID(),
               licenceRef: generateLicenceRef(),
               progress: true,
               status: 'review'
@@ -50,8 +50,8 @@ describe('Bill Runs - Review - View Review Service', () => {
             {
               id: generateUUID(),
               issues: '',
-              licenceId: generateUUID(),
               licenceHolder: 'SCEP Holdings Ltd',
+              licenceId: generateUUID(),
               licenceRef: generateLicenceRef(),
               progress: false,
               status: 'ready'
@@ -78,19 +78,18 @@ describe('Bill Runs - Review - View Review Service', () => {
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
-        filters: {
-          issues: [],
-          licenceHolderNumber: null,
-          licenceStatus: null,
-          progress: [],
-          openFilter: false
-        },
-        notification,
         backLink: { href: '/system/bill-runs', text: 'Go back to bill runs' },
         billRunId: fetchData.billRun.id,
         billRunType: 'Two-part tariff',
         chargeScheme: 'Current',
         dateCreated: '10 April 2025',
+        filters: {
+          issues: [],
+          licenceHolderNumber: null,
+          licenceStatus: null,
+          openFilter: false,
+          progress: []
+        },
         financialYear: '2024 to 2025',
         licences: [
           {
@@ -110,18 +109,19 @@ describe('Bill Runs - Review - View Review Service', () => {
             status: 'ready'
           }
         ],
+        notification,
         numberOfLicencesToReview: 1,
         pageTitle: 'Review licences',
         pageTitleCaption: `${fetchData.billRun.region.displayName} two-part tariff`,
-        region: fetchData.billRun.region.displayName,
-        reviewMessage:
-          'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
-        status: 'review',
         pagination: {
           currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 2 licences'
-        }
+        },
+        region: fetchData.billRun.region.displayName,
+        reviewMessage:
+          'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
+        status: 'review'
       })
     })
   })
@@ -185,23 +185,23 @@ function _fetchedBillRun() {
   const { id: regionId, displayName } = RegionHelper.select()
 
   return {
-    id: billRunId,
     batchType: 'two_part_tariff',
     createdAt: new Date('2025-04-10T16:19:14.012Z'),
-    scheme: 'sroc',
-    status: 'review',
-    summer: false,
-    toFinancialYearEnding: 2025,
+    id: billRunId,
     region: {
-      id: regionId,
-      displayName
+      displayName,
+      id: regionId
     },
     reviewLicences: [
       {
-        totalNumberOfLicences: 2,
-        numberOfLicencesToReview: 1
+        numberOfLicencesToReview: 1,
+        totalNumberOfLicences: 2
       }
-    ]
+    ],
+    scheme: 'sroc',
+    status: 'review',
+    summer: false,
+    toFinancialYearEnding: 2025
   }
 }
 

@@ -68,12 +68,12 @@ describe('Search controller', () => {
           beforeEach(async () => {
             getOptions.url = '/search?page=1'
             vi.spyOn(ViewSearchService, 'default').mockResolvedValue({
+              allSearchMatches: { results: [], total: 2 },
+              noResults: false,
               pageTitle: 'Search results for "searchthis"',
               pagination: { currentPageNumber: 1, numberOfPages: 2, showingMessage: 'Showing all 2 matches' },
               query: 'searchthis',
-              showResults: true,
-              noResults: false,
-              allSearchMatches: { results: [], total: 2 }
+              showResults: true
             })
           })
 
@@ -141,12 +141,12 @@ describe('Search controller', () => {
 
 function _getOptions() {
   return {
-    method: 'GET',
-    url: '/search',
     auth: {
-      strategy: 'session',
-      credentials: { scope: [], user: { id: 1000 } }
-    }
+      credentials: { scope: [], user: { id: 1000 } },
+      strategy: 'session'
+    },
+    method: 'GET',
+    url: '/search'
   }
 }
 

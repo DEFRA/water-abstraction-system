@@ -38,8 +38,8 @@ function _links(scope) {
     const href = '/system/users/internal/setup'
 
     links.user = {
-      text: 'Create a user',
-      href
+      href,
+      text: 'Create a user'
     }
   }
 

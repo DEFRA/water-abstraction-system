@@ -33,10 +33,10 @@ function _items(companyContacts, contactSelected) {
 
   for (const contact of companyContacts) {
     items.push({
+      checked: contact.id === contactSelected,
       id: contact.id,
-      value: contact.id,
       text: contact.$name(),
-      checked: contact.id === contactSelected
+      value: contact.id
     })
   }
 
@@ -45,10 +45,10 @@ function _items(companyContacts, contactSelected) {
       divider: 'or'
     },
     {
+      checked: contactSelected === 'new',
       id: 'new',
-      value: 'new',
       text: 'Add a new contact',
-      checked: contactSelected === 'new'
+      value: 'new'
     }
   )
 

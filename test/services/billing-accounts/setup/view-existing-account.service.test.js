@@ -47,17 +47,17 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
         },
         items: [
           {
+            checked: false,
             id: fetchResults[0].id,
-            value: fetchResults[0].id,
             text: fetchResults[0].name,
-            checked: false
+            value: fetchResults[0].id
           },
           { divider: 'or' },
           {
+            checked: false,
             id: 'new',
-            value: 'new',
             text: 'Setup a new account',
-            checked: false
+            value: 'new'
           }
         ],
         pageTitle: 'Does this account already exist?',

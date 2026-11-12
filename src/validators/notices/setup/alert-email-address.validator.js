@@ -32,9 +32,9 @@ export default function alertEmailAddressValidator(payload) {
     otherUser: Joi.alternatives().conditional('alertEmailAddressType', {
       is: 'other',
       then: Joi.string().email().empty('').required().label('otherUser').messages({
+        'any.required': ERROR_MESSAGES.selectOrEmpty,
         'string.email': ERROR_MESSAGES.invalidEmail,
-        'string.empty': ERROR_MESSAGES.selectOrEmpty,
-        'any.required': ERROR_MESSAGES.selectOrEmpty
+        'string.empty': ERROR_MESSAGES.selectOrEmpty
       }),
       otherwise: Joi.string().optional()
     })

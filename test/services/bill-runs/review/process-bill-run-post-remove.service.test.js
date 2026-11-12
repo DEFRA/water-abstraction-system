@@ -14,16 +14,17 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
   let billRun
   let billRunModifyGraphStub
   let billRunPatchStub
+
   beforeEach(() => {
     billRunModifyGraphStub = vi.fn()
     billRunPatchStub = vi.fn().mockResolvedValue()
 
     vi.spyOn(BillRunModel, 'query').mockReturnValue({
       findById: vi.fn().mockReturnThis(),
-      select: vi.fn().mockReturnThis(),
-      withGraphFetched: vi.fn().mockReturnThis(),
       modifyGraph: billRunModifyGraphStub,
-      patch: billRunPatchStub
+      patch: billRunPatchStub,
+      select: vi.fn().mockReturnThis(),
+      withGraphFetched: vi.fn().mockReturnThis()
     })
 
     vi.spyOn(GenerateTwoPartTariffBillRunService, 'default').mockResolvedValue()
@@ -36,7 +37,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
   describe('when called', () => {
     describe('and the bill run being processed is an annual two-part tariff', () => {
       beforeEach(() => {
-        billRun = { id: billRunId, batchType: 'two_part_tariff' }
+        billRun = { batchType: 'two_part_tariff', id: billRunId }
       })
 
       describe('and all licences for review have been removed (it is now empty)', () => {
@@ -89,7 +90,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
 
     describe('and the bill run being processed is a supplementary two-part tariff', () => {
       beforeEach(() => {
-        billRun = { id: billRunId, batchType: 'two_part_supplementary' }
+        billRun = { batchType: 'two_part_supplementary', id: billRunId }
       })
 
       describe('and all licences for review have been removed (it is now empty)', () => {

@@ -44,10 +44,10 @@ function _radioOptions(existingAccount, companies) {
 
   for (const company of companies) {
     items.push({
+      checked: existingAccount === company.id,
       id: company.id,
-      value: company.id,
       text: company.name,
-      checked: existingAccount === company.id
+      value: company.id
     })
   }
 
@@ -56,10 +56,10 @@ function _radioOptions(existingAccount, companies) {
       divider: 'or'
     },
     {
+      checked: existingAccount === 'new',
       id: 'new',
-      value: 'new',
       text: 'Setup a new account',
-      checked: existingAccount === 'new'
+      value: 'new'
     }
   )
 

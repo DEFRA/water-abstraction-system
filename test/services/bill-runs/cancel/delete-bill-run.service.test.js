@@ -59,7 +59,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
       beforeEach(async () => {
         seededBillRun = await BillRunHelper.add({ status: 'cancel' })
 
-        billRun = { id: seededBillRun.id, externalId: seededBillRun.externalId, status: seededBillRun.status }
+        billRun = { externalId: seededBillRun.externalId, id: seededBillRun.id, status: seededBillRun.status }
 
         // Add billing data
         billRunChargeVersionYear = await BillRunChargeVersionYearHelper.add({ billRunId: billRun.id })
@@ -295,8 +295,8 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
 function _billRun() {
   return {
-    id: 'dafe5048-24b1-485a-8289-2e584bb7ba68',
     externalId: 'ef6a17f2-412f-4502-a73d-b74c8b92ff19',
+    id: 'dafe5048-24b1-485a-8289-2e584bb7ba68',
     status: 'cancel'
   }
 }

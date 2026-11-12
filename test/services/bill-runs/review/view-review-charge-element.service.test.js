@@ -39,9 +39,8 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
-          bannerMessage: 'The billable returns for this licence have been updated',
-          pageTitle: 'Review charge element',
           authorisedVolume: 9.092,
+          bannerMessage: 'The billable returns for this licence have been updated',
           billableReturns: 0,
           chargeDescription: 'Spray Irrigation - Direct',
           chargePeriod: '1 April 2023 to 31 March 2024',
@@ -64,6 +63,7 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
               returnTotal: '0 ML / 0 ML'
             }
           ],
+          pageTitle: 'Review charge element',
           reviewChargeElementId: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1',
           reviewLicenceId: 'bb779166-0576-4581-b504-edbc0227d763',
           status: 'review'
@@ -82,9 +82,8 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
-          bannerMessage: undefined,
-          pageTitle: 'Review charge element',
           authorisedVolume: 9.092,
+          bannerMessage: undefined,
           billableReturns: 0,
           chargeDescription: 'Spray Irrigation - Direct',
           chargePeriod: '1 April 2023 to 31 March 2024',
@@ -107,6 +106,7 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
               returnTotal: '0 ML / 0 ML'
             }
           ],
+          pageTitle: 'Review charge element',
           reviewChargeElementId: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1',
           reviewLicenceId: 'bb779166-0576-4581-b504-edbc0227d763',
           status: 'review'

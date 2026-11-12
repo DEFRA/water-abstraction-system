@@ -50,6 +50,7 @@ describe('Notices - Recipient Queries DAL', () => {
       licence = await EmptyLicence.seed()
       licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'MultipleVersionOldHolder')
       const newLicenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'MultipleVersionNewHolder')
+
       await newLicenceHolder.licenceVersion.$query().patch({ issue: 2 })
 
       scenarios.multipleVersions = { licence, licenceHolder, newLicenceHolder }
@@ -94,10 +95,10 @@ describe('Notices - Recipient Queries DAL', () => {
 
           expect(rows).toEqual([
             {
-              licence_ref: licence.licence.licenceRef,
-              company_id: licenceHolder.company.id,
               address_id: licenceHolder.address.id,
-              end_date: null
+              company_id: licenceHolder.company.id,
+              end_date: null,
+              licence_ref: licence.licence.licenceRef
             }
           ])
         })
@@ -112,10 +113,10 @@ describe('Notices - Recipient Queries DAL', () => {
 
           expect(rows).toEqual([
             {
-              licence_ref: licence.licence.licenceRef,
-              company_id: newLicenceHolder.company.id,
               address_id: newLicenceHolder.address.id,
-              end_date: null
+              company_id: newLicenceHolder.company.id,
+              end_date: null,
+              licence_ref: licence.licence.licenceRef
             }
           ])
         })
@@ -390,7 +391,7 @@ async function _additionalContactAbstractionAlertsLicences(licences = true) {
 
   const additionalContactRecipient = await RecipientsFormatter.additionalContact(licence, additionalContact)
 
-  return { licenceHolderRecipient, additionalContactRecipient }
+  return { additionalContactRecipient, licenceHolderRecipient }
 }
 
 /**
@@ -416,18 +417,18 @@ async function _licenceHolderRoleCompanyContact() {
   })
 
   const contact = await ContactHelper.add({
-    id: companyContact.contactId,
-    email: 'brian.fantana@news.com'
+    email: 'brian.fantana@news.com',
+    id: companyContact.contactId
   })
 
   return {
-    licenceHolderRecipient,
     companyContact: {
       clean: async () => {
         await companyContact.$query().delete()
         await contact.$query().delete()
       }
-    }
+    },
+    licenceHolderRecipient
   }
 }
 

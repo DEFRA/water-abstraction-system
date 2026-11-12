@@ -60,6 +60,7 @@ describe('Search - Submit Search service', () => {
       const result = await SubmitSearchService(auth, payload, yar)
 
       expect(result).toEqual({
+        error: EXPECTED_ERROR,
         filterItems: [
           {
             checked: false,
@@ -97,7 +98,6 @@ describe('Search - Submit Search service', () => {
             value: 'user'
           }
         ],
-        error: EXPECTED_ERROR,
         pageTitle: 'Search',
         query: undefined,
         resultType: undefined,
@@ -110,7 +110,7 @@ describe('Search - Submit Search service', () => {
 
   describe('when called to clear the filter', () => {
     beforeEach(() => {
-      payload = { query: 'searchthis', resultType: 'monitoringStation', filter: 'clear' }
+      payload = { filter: 'clear', query: 'searchthis', resultType: 'monitoringStation' }
     })
 
     it('sets the session value and returns a redirect to the search results page', async () => {
@@ -124,7 +124,7 @@ describe('Search - Submit Search service', () => {
 
   describe('when called to apply the filter without a search query', () => {
     beforeEach(() => {
-      payload = { query: '', resultType: 'monitoringStation', filter: 'apply' }
+      payload = { filter: 'apply', query: '', resultType: 'monitoringStation' }
     })
 
     it('redirects to the blank search page without setting session values', async () => {
@@ -137,7 +137,7 @@ describe('Search - Submit Search service', () => {
 
   describe('when called to clear the filter without a search query', () => {
     beforeEach(() => {
-      payload = { query: '', resultType: 'monitoringStation', filter: 'clear' }
+      payload = { filter: 'clear', query: '', resultType: 'monitoringStation' }
     })
 
     it('redirects to the blank search page without setting session values', async () => {

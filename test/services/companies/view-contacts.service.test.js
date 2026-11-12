@@ -29,9 +29,9 @@ describe('Companies - View Contacts service', () => {
 
     contacts = [
       {
-        id: generateUUID(),
+        contactName: 'Rachael Tyrell',
         contactType: 'additional-contact',
-        contactName: 'Rachael Tyrell'
+        id: generateUUID()
       }
     ]
 
@@ -46,7 +46,7 @@ describe('Companies - View Contacts service', () => {
 
     yarStub = YarStub()
     yarStub.flash.mockReturnValue([
-      { titleText: 'Contact removed', text: 'Rachael Tyrell was removed from this company.' }
+      { text: 'Rachael Tyrell was removed from this company.', titleText: 'Contact removed' }
     ])
   })
 
@@ -67,8 +67,8 @@ describe('Companies - View Contacts service', () => {
         contacts: [
           {
             link: `/system/company-contacts/${contacts[0].id}/contact-details`,
-            type: 'Additional contact',
-            name: 'Rachael Tyrell'
+            name: 'Rachael Tyrell',
+            type: 'Additional contact'
           }
         ],
         links: {

@@ -13,142 +13,142 @@ import {
 export default [
   {
     method: 'POST',
-    path: '/jobs/clean',
     options: {
+      app: {
+        plainOutput: true
+      },
+      auth: false,
       handler: clean,
+      plugins: {
+        crumb: false
+      }
+    },
+    path: '/jobs/clean'
+  },
+  {
+    method: 'POST',
+    options: {
       app: {
         plainOutput: true
       },
       auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/jobs/customer-files/{days}',
-    options: {
       handler: customerFiles,
+      plugins: {
+        crumb: false
+      }
+    },
+    path: '/jobs/customer-files/{days}'
+  },
+  {
+    method: 'POST',
+    options: {
       app: {
         plainOutput: true
       },
       auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/jobs/export',
-    options: {
       handler: exportDb,
+      plugins: {
+        crumb: false
+      }
+    },
+    path: '/jobs/export'
+  },
+  {
+    method: 'POST',
+    options: {
       app: {
         plainOutput: true
       },
       auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/jobs/licence-updates',
-    options: {
       handler: licenceUpdates,
+      plugins: {
+        crumb: false
+      }
+    },
+    path: '/jobs/licence-updates'
+  },
+  {
+    method: 'POST',
+    options: {
       app: {
         plainOutput: true
       },
       auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/jobs/notification-status',
-    options: {
       handler: notificationStatus,
+      plugins: {
+        crumb: false
+      }
+    },
+    path: '/jobs/notification-status'
+  },
+  {
+    method: 'POST',
+    options: {
       app: {
         plainOutput: true
       },
       auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/jobs/notifications-status-updates',
-    options: {
       handler: notificationStatus,
+      plugins: {
+        crumb: false
+      }
+    },
+    path: '/jobs/notifications-status-updates'
+  },
+  {
+    method: 'POST',
+    options: {
       app: {
         plainOutput: true
       },
       auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/jobs/renewal-invitations/{days}',
-    options: {
       handler: renewalInvitations,
+      plugins: {
+        crumb: false
+      }
+    },
+    path: '/jobs/renewal-invitations/{days}'
+  },
+  {
+    method: 'POST',
+    options: {
       app: {
         plainOutput: true
       },
       auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/jobs/renewal-notice/{requestedNoticeType}',
-    options: {
       handler: renewalNotice,
+      plugins: {
+        crumb: false
+      }
+    },
+    path: '/jobs/renewal-notice/{requestedNoticeType}'
+  },
+  {
+    method: 'POST',
+    options: {
       app: {
         plainOutput: true
       },
       auth: false,
-      plugins: {
-        crumb: false
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/jobs/return-logs/{cycle}',
-    options: {
       handler: returnLogs,
-      app: {
-        plainOutput: true
-      },
-      auth: false,
       plugins: {
         crumb: false
       }
-    }
+    },
+    path: '/jobs/return-logs/{cycle}'
   },
   {
     method: 'POST',
-    path: '/jobs/time-limited',
     options: {
-      handler: timeLimited,
       app: {
         plainOutput: true
       },
       auth: false,
+      handler: timeLimited,
       plugins: {
         crumb: false
       }
-    }
+    },
+    path: '/jobs/time-limited'
   }
 ]

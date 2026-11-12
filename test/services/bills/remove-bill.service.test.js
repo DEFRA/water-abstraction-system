@@ -26,9 +26,9 @@ describe('Remove Bill service', () => {
       const result = await RemoveBillService(testId)
 
       expect(result).toEqual({
-        activeNavBar: 'bill-runs',
         accountName: 'Example Trading Ltd',
         accountNumber: 'T65757520A',
+        activeNavBar: 'bill-runs',
         billId: testId,
         billRunNumber: 10010,
         billRunStatus: 'ready',
@@ -39,8 +39,8 @@ describe('Remove Bill service', () => {
         licences: '01/01/26/9400, 01/02/26/9400',
         licencesText: 'Licences',
         pageTitle: "You're about to remove the bill for T65757520A from the bill run",
-        supplementaryMessage: 'The licences will go into the next supplementary bill run.',
         region: 'Stormlands',
+        supplementaryMessage: 'The licences will go into the next supplementary bill run.',
         total: '£10.45'
       })
     })
@@ -49,36 +49,34 @@ describe('Remove Bill service', () => {
 
 function _billSummary() {
   const billingAccount = BillingAccountModel.fromJson({
-    id: 'e2b35a4a-7368-425f-9990-faa23efc0a25',
     accountNumber: 'T65757520A',
-    company: {
-      id: '3b60ddd0-654f-4012-a349-000aab3e49c3',
-      name: 'Example Trading Ltd',
-      type: 'organisation'
-    },
     billingAccountAddresses: [
       {
-        id: '1d440029-745a-47ec-a43e-9f4a36014126',
         company: null,
         contact: {
-          id: '95ba53be-543f-415b-90b1-08f58f63ff74',
           contactType: 'person',
           dataSource: 'wrls',
           department: null,
           firstName: 'Amara',
+          id: '95ba53be-543f-415b-90b1-08f58f63ff74',
           initials: null,
           lastName: 'Gupta',
           middleInitials: null,
           salutation: null,
           suffix: null
-        }
+        },
+        id: '1d440029-745a-47ec-a43e-9f4a36014126'
       }
-    ]
+    ],
+    company: {
+      id: '3b60ddd0-654f-4012-a349-000aab3e49c3',
+      name: 'Example Trading Ltd',
+      type: 'organisation'
+    },
+    id: 'e2b35a4a-7368-425f-9990-faa23efc0a25'
   })
 
   return {
-    id: '71d03336-f683-42fe-b67c-c861f25f1fbd',
-    netAmount: 1045,
     billingAccount,
     billLicences: [
       {
@@ -91,18 +89,20 @@ function _billSummary() {
       }
     ],
     billRun: {
-      id: '0e61c36f-f22f-4534-8247-b73a97f551b5',
       batchType: 'supplementary',
       billRunNumber: 10010,
       createdAt: new Date('2023-11-01'),
+      id: '0e61c36f-f22f-4534-8247-b73a97f551b5',
+      region: {
+        displayName: 'Stormlands',
+        id: '4ad8ce03-48a8-447e-bce2-3c317d0aeaf6'
+      },
       scheme: 'sroc',
       source: 'wrls',
       status: 'ready',
-      toFinancialYearEnding: 2024,
-      region: {
-        id: '4ad8ce03-48a8-447e-bce2-3c317d0aeaf6',
-        displayName: 'Stormlands'
-      }
-    }
+      toFinancialYearEnding: 2024
+    },
+    id: '71d03336-f683-42fe-b67c-c861f25f1fbd',
+    netAmount: 1045
   }
 }

@@ -5,8 +5,8 @@
  */
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
-import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 
 import AbstractionAlertsPresenter from '../../../presenters/company-contacts/setup/abstraction-alerts.presenter.js'
 import AbstractionAlertsValidator from '../../../validators/company-contacts/setup/abstraction-alerts.validator.js'

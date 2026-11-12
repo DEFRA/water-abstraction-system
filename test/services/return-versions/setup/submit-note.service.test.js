@@ -13,6 +13,7 @@ import SubmitNoteService from '../../../../src/services/return-versions/setup/su
 
 describe('Return Versions Setup - Submit Note service', () => {
   const user = { username: 'carol.shaw@atari.com' }
+
   let payload
   let session
   let sessionData
@@ -21,26 +22,26 @@ describe('Return Versions Setup - Submit Note service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
+      reason: 'major-change',
       requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change'
+      startDateOptions: 'licenceStartDate'
     }
 
     session = SessionModelStub(sessionData)
@@ -93,22 +94,22 @@ describe('Return Versions Setup - Submit Note service', () => {
         beforeEach(() => {
           sessionData = {
             checkPageVisited: false,
+            journey: 'returns-required',
             licence: {
-              id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
               currentVersionStartDate: '2023-01-01T00:00:00.000Z',
               endDate: null,
-              licenceRef: '01/ABC',
+              id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
               licenceHolder: 'Turbo Kid',
+              licenceRef: '01/ABC',
               startDate: '2022-04-01T00:00:00.000Z'
             },
-            journey: 'returns-required',
-            requirements: [{}],
-            startDateOptions: 'licenceStartDate',
-            reason: 'major-change',
             note: {
               content: 'A old note related to return requirement',
               userEmail: 'carol.shaw@atari.com'
-            }
+            },
+            reason: 'major-change',
+            requirements: [{}],
+            startDateOptions: 'licenceStartDate'
           }
 
           session = SessionModelStub(sessionData)
@@ -142,7 +143,7 @@ describe('Return Versions Setup - Submit Note service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ title: 'Updated', text: 'Note updated' })
+          expect(notification).toEqual({ text: 'Note updated', title: 'Updated' })
         })
       })
     })
@@ -156,14 +157,14 @@ describe('Return Versions Setup - Submit Note service', () => {
         const result = await SubmitNoteService(session.id, payload, user, yarStub)
 
         expect(result).toMatchObject({
-          pageTitle: 'Add a note',
-          pageTitleCaption: 'Licence 01/ABC',
           backLink: {
             href: `/system/return-versions/setup/${session.id}/check`,
             text: 'Back'
           },
           licenceRef: '01/ABC',
-          note: null
+          note: null,
+          pageTitle: 'Add a note',
+          pageTitleCaption: 'Licence 01/ABC'
         })
       })
 

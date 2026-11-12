@@ -38,8 +38,8 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
   describe('when the notification is successful', () => {
     beforeEach(() => {
       vi.spyOn(PreparePaperReturnService, 'default').mockResolvedValue({
-        succeeded: true,
-        response: { body: buffer }
+        response: { body: buffer },
+        succeeded: true
       })
     })
 
@@ -60,8 +60,8 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
   describe('when generating the return form fails', () => {
     beforeEach(() => {
       vi.spyOn(PreparePaperReturnService, 'default').mockResolvedValue({
-        succeeded: false,
-        response: { code: 'ENOTFOUND', message: 'getaddrinfo ENOTFOUND gotenberg' }
+        response: { code: 'ENOTFOUND', message: 'getaddrinfo ENOTFOUND gotenberg' },
+        succeeded: false
       })
     })
 
@@ -71,7 +71,7 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
       expect(result).toEqual({
         id: notification.id,
         notifyError:
-          '{"status":"ENOTFOUND","message":"Failed to generate the paper return PDF","errors":["getaddrinfo ENOTFOUND gotenberg"]}',
+          '{"errors":["getaddrinfo ENOTFOUND gotenberg"],"message":"Failed to generate the paper return PDF","status":"ENOTFOUND"}',
         status: 'error'
       })
     })

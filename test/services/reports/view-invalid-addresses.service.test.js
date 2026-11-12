@@ -25,9 +25,6 @@ describe('Reports - View Invalid Addresses service', () => {
         backLink: { href: '/system/manage', text: 'Go back to manage' },
         invalidAddresses: [
           {
-            licenceRef: '03/28/01/0165',
-            licenceEnds: null,
-            contactRole: 'Licence holder',
             addressLines: [
               'Address Line 1: ENVIRONMENT AGENCY',
               'Address Line 2: HORIZON HOUSE',
@@ -35,7 +32,10 @@ describe('Reports - View Invalid Addresses service', () => {
               'Address Line 4: ',
               'Town: BRISTOL',
               'County: AVON'
-            ]
+            ],
+            contactRole: 'Licence holder',
+            licenceEnds: null,
+            licenceRef: '03/28/01/0165'
           }
         ],
         pageTitle: 'Invalid addresses',
@@ -48,17 +48,17 @@ describe('Reports - View Invalid Addresses service', () => {
 function _invalidAddresses() {
   return [
     {
-      licence_ref: '03/28/01/0165',
-      licence_ends: null,
-      contact_role: 'Licence holder',
       address_line_1: 'ENVIRONMENT AGENCY',
       address_line_2: 'HORIZON HOUSE',
       address_line_3: 'DEANERY ROAD',
       address_line_4: null,
-      town: 'BRISTOL',
+      contact_role: 'Licence holder',
+      country: null,
       county: 'AVON',
+      licence_ends: null,
+      licence_ref: '03/28/01/0165',
       postcode: null,
-      country: null
+      town: 'BRISTOL'
     }
   ]
 }

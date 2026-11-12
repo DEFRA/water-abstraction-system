@@ -22,24 +22,24 @@ const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Health - View Info Service', () => {
   const goodRequestResults = {
-    addressFacade: { succeeded: true, response: { statusCode: HTTP_STATUS_OK, body: 'hola' } },
+    addressFacade: { response: { body: 'hola', statusCode: HTTP_STATUS_OK }, succeeded: true },
+    app: { response: { body: { commit: '99d0e8c', version: '9.0.99' }, statusCode: HTTP_STATUS_OK }, succeeded: true },
     chargingModule: {
-      succeeded: true,
       response: {
-        statusCode: HTTP_STATUS_OK,
+        body: { status: 'alive' },
         info: {
-          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-          dockerTag: 'v0.19.1'
+          dockerTag: 'v0.19.1',
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
         },
-        body: { status: 'alive' }
-      }
+        statusCode: HTTP_STATUS_OK
+      },
+      succeeded: true
     },
     gotenberg: {
-      succeeded: true,
-      response: { body: { status: 'up', details: { chromium: { status: 'up' } } } }
+      response: { body: { details: { chromium: { status: 'up' } }, status: 'up' } },
+      succeeded: true
     },
     notify: {
-      succeeded: true,
       response: {
         body: {
           build_time: '2025-08-20:07:53:38',
@@ -48,10 +48,10 @@ describe('Health - View Info Service', () => {
           status: 'ok'
         },
         statusCode: HTTP_STATUS_OK
-      }
+      },
+      succeeded: true
     },
     resp: {
-      succeeded: true,
       response: {
         body: {
           error: null,
@@ -59,9 +59,9 @@ describe('Health - View Info Service', () => {
           source: 'ReSP'
         },
         statusCode: HTTP_STATUS_OK
-      }
-    },
-    app: { succeeded: true, response: { statusCode: HTTP_STATUS_OK, body: { version: '9.0.99', commit: '99d0e8c' } } }
+      },
+      succeeded: true
+    }
   }
 
   let addressFacadeViewStatusRequestStub
@@ -108,8 +108,8 @@ describe('Health - View Info Service', () => {
   describe('when all the services are running', () => {
     beforeEach(() => {
       vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({
-        ping: vi.fn().mockResolvedValue(),
-        disconnect: vi.fn().mockResolvedValue()
+        disconnect: vi.fn().mockResolvedValue(),
+        ping: vi.fn().mockResolvedValue()
       })
 
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
@@ -118,8 +118,8 @@ describe('Health - View Info Service', () => {
       legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
 
       const execStub = vi.fn().mockResolvedValue({
-        stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
-        stderror: null
+        stderror: null,
+        stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n'
       })
 
       vi.spyOn(util, 'promisify').mockReturnValue(execStub)
@@ -165,8 +165,8 @@ describe('Health - View Info Service', () => {
       legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
 
       const execStub = vi.fn().mockResolvedValue({
-        stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
-        stderror: null
+        stderror: null,
+        stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n'
       })
 
       vi.spyOn(util, 'promisify').mockReturnValue(execStub)
@@ -175,10 +175,10 @@ describe('Health - View Info Service', () => {
     describe('is not running', () => {
       beforeEach(async () => {
         vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({
+          disconnect: vi.fn().mockResolvedValue(),
           ping: vi.fn().mockImplementation(() => {
             throw new Error('Redis check went boom')
-          }),
-          disconnect: vi.fn().mockResolvedValue()
+          })
         })
       })
 
@@ -214,8 +214,8 @@ describe('Health - View Info Service', () => {
   describe('when ClamAV', () => {
     beforeEach(async () => {
       vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({
-        ping: vi.fn().mockResolvedValue(),
-        disconnect: vi.fn().mockResolvedValue()
+        disconnect: vi.fn().mockResolvedValue(),
+        ping: vi.fn().mockResolvedValue()
       })
 
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
@@ -229,8 +229,8 @@ describe('Health - View Info Service', () => {
         // We tweak the execStub so that it returns stderr populated, which is what happens if the shell call
         // returns a non-zero exit code.
         const execStub = vi.fn().mockResolvedValue({
-          stdout: null,
-          stderr: 'Could not connect to clamd'
+          stderr: 'Could not connect to clamd',
+          stdout: null
         })
 
         vi.spyOn(util, 'promisify').mockReturnValue(execStub)
@@ -308,21 +308,21 @@ describe('Health - View Info Service', () => {
     beforeEach(async () => {
       // In these scenarios everything is hunky-dory with clamav and redis. So, we go back to our original stubbing
       const execStub = vi.fn().mockResolvedValue({
-        stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
-        stderror: null
+        stderror: null,
+        stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n'
       })
 
       vi.spyOn(util, 'promisify').mockReturnValue(execStub)
 
       vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({
-        ping: vi.fn().mockResolvedValue(),
-        disconnect: vi.fn().mockResolvedValue()
+        disconnect: vi.fn().mockResolvedValue(),
+        ping: vi.fn().mockResolvedValue()
       })
     })
 
     describe('cannot be reached because of a network error', () => {
       beforeEach(async () => {
-        const badResult = { succeeded: false, response: new Error('Kaboom') }
+        const badResult = { response: new Error('Kaboom'), succeeded: false }
 
         addressFacadeViewStatusRequestStub.mockResolvedValue(badResult)
       })
@@ -358,8 +358,8 @@ describe('Health - View Info Service', () => {
     describe('returns a 5xx response', () => {
       beforeEach(async () => {
         const badResult = {
-          succeeded: false,
-          response: { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR, body: { message: 'Kaboom' } }
+          response: { body: { message: 'Kaboom' }, statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR },
+          succeeded: false
         }
 
         addressFacadeViewStatusRequestStub.mockResolvedValue(badResult)

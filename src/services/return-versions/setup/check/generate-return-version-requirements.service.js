@@ -29,18 +29,18 @@ export default async function generateReturnVersionRequirementsService(licenceId
     const returnRequirementPurposes = await _generateReturnRequirementPurposes(licenceId, requirement.purposes)
 
     const returnRequirement = {
-      abstractionPeriodStartDay: requirement.abstractionPeriod.abstractionPeriodStartDay,
-      abstractionPeriodStartMonth: requirement.abstractionPeriod.abstractionPeriodStartMonth,
       abstractionPeriodEndDay: requirement.abstractionPeriod.abstractionPeriodEndDay,
       abstractionPeriodEndMonth: requirement.abstractionPeriod.abstractionPeriodEndMonth,
+      abstractionPeriodStartDay: requirement.abstractionPeriod.abstractionPeriodStartDay,
+      abstractionPeriodStartMonth: requirement.abstractionPeriod.abstractionPeriodStartMonth,
       collectionFrequency: requirement.frequencyCollected,
       fiftySixException: requirement.agreementsExceptions.includes('56-returns-exception'),
       gravityFill: requirement.agreementsExceptions.includes('gravity-fill'),
       points: requirement.points,
       reabstraction: requirement.agreementsExceptions.includes('transfer-re-abstraction-scheme'),
       reportingFrequency: requirement.frequencyReported,
-      returnsFrequency: 'year',
       returnRequirementPurposes,
+      returnsFrequency: 'year',
       siteDescription: requirement.siteDescription,
       summer: requirement.returnsCycle === 'summer',
       twoPartTariff: requirement.agreementsExceptions.includes('two-part-tariff')

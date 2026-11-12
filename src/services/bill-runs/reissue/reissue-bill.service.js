@@ -38,8 +38,8 @@ import ViewBillRunStatusRequest from '../../../requests/charging-module/view-bil
  */
 export default async function reissueBillService(sourceBill, reissueBillRun) {
   const dataToReturn = {
-    bills: [],
     billLicences: [],
+    bills: [],
     transactions: []
   }
 
@@ -109,8 +109,8 @@ function _generateBill(billingAccountId, accountNumber, billRunId, financialYear
 
 function _generateBillLicence(billId, licenceId, licenceRef) {
   return {
-    id: generateUUID(),
     billId,
+    id: generateUUID(),
     licenceId,
     licenceRef
   }
@@ -159,14 +159,14 @@ async function _pauseUntilNotPending(billRunExternalId) {
 function _generateTransaction(chargingModuleReissueTransaction, sourceTransaction, billLicenceId) {
   return {
     ...sourceTransaction,
-    id: generateUUID(),
-    externalId: chargingModuleReissueTransaction.id,
+    billLicenceId,
     credit: chargingModuleReissueTransaction.credit,
+    externalId: chargingModuleReissueTransaction.id,
+    id: generateUUID(),
     netAmount: _determineSignOfNetAmount(
       chargingModuleReissueTransaction.chargeValue,
       chargingModuleReissueTransaction.credit
-    ),
-    billLicenceId
+    )
   }
 }
 
@@ -190,12 +190,12 @@ function _mapChargingModuleInvoice(chargingModuleInvoice) {
   const chargingModuleRebilledTypes = new Map().set('C', 'reversal').set('R', 'rebill').set('O', null)
 
   return {
-    externalId: chargingModuleInvoice.id,
-    netAmount: chargingModuleInvoice.netTotal,
-    deminimis: chargingModuleInvoice.deminimisInvoice,
-    invoiceValue: chargingModuleInvoice.debitLineValue,
     // As per legacy code we invert the sign of creditLineValue
     creditNoteValue: -chargingModuleInvoice.creditLineValue,
+    deminimis: chargingModuleInvoice.deminimisInvoice,
+    externalId: chargingModuleInvoice.id,
+    invoiceValue: chargingModuleInvoice.debitLineValue,
+    netAmount: chargingModuleInvoice.netTotal,
     rebillingState: chargingModuleRebilledTypes.get(chargingModuleInvoice.rebilledType)
   }
 }
@@ -207,11 +207,11 @@ function _mapChargingModuleInvoice(chargingModuleInvoice) {
  */
 async function _markSourceBillAsRebilled(sourceBill) {
   await sourceBill.$query().patch({
-    rebillingState: 'rebilled',
     // If the source bill's originalBillId field is `null` then we update it with the bill's id; otherwise, we use its
     // existing value. This ensures that if we reissue a bill, then reissue that reissuing bill, every bill in the chain
     // will have originalBillId pointing back to the very first bill in the chain
-    originalBillId: sourceBill.originalBillId ?? sourceBill.id
+    originalBillId: sourceBill.originalBillId ?? sourceBill.id,
+    rebillingState: 'rebilled'
   })
 }
 
@@ -295,8 +295,8 @@ async function _sendReissueRequest(billRunExternalId, billExternalId) {
 
   if (!result.succeeded) {
     const error = new ExpandedError('Charging Module reissue request failed', {
-      billRunExternalId,
       billExternalId,
+      billRunExternalId,
       responseBody: result.response.body
     })
 

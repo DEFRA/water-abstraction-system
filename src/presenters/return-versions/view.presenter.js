@@ -4,13 +4,13 @@
  */
 
 import PreviousAndNextPresenter from 'water-abstraction-engine/presenters/previous-and-next.presenter.js'
-import { isQuarterlyReturnSubmissions } from 'water-abstraction-engine/lib/dates.lib.js'
-import { returnRequirementFrequencies } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import {
   formatAbstractionPeriod,
   formatLongDate,
   formatVersionReason
 } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { isQuarterlyReturnSubmissions } from 'water-abstraction-engine/lib/dates.lib.js'
+import { returnRequirementFrequencies } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import { formatPurposes } from '../return-logs/base-return-logs.presenter.js'
 
@@ -38,8 +38,8 @@ export default function viewPresenter(returnVersionData) {
     pageTitle: `Requirements for returns starting ${formatLongDate(startDate)}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     pagination: _pagination(returnVersionsForPagination, returnVersion),
-    quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(startDate),
     quarterlyReturns: quarterlyReturns === true ? 'Yes' : 'No',
+    quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(startDate),
     reason: formatVersionReason(returnVersion, true),
     requirements: _requirements(returnRequirements),
     status
@@ -124,8 +124,8 @@ function _notes(returnVersion) {
   }
 
   return {
-    firstNote: notes.shift(),
-    additionalNotes: notes
+    additionalNotes: notes,
+    firstNote: notes.shift()
   }
 }
 
@@ -146,17 +146,17 @@ function _pagination(returnVersionsForPagination, returnVersion) {
 
   if (previous) {
     pagination.previous = {
-      text: 'Previous version',
+      href: `/system/return-versions/${previous.id}`,
       labelText: `Starting ${formatLongDate(previous.startDate)}`,
-      href: `/system/return-versions/${previous.id}`
+      text: 'Previous version'
     }
   }
 
   if (next) {
     pagination.next = {
-      text: 'Next version',
+      href: `/system/return-versions/${next.id}`,
       labelText: `Starting ${formatLongDate(next.startDate)}`,
-      href: `/system/return-versions/${next.id}`
+      text: 'Next version'
     }
   }
 

@@ -52,8 +52,8 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
         id: returnLog.id,
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
-        returnReference: returnRequirement.reference,
         purposes,
+        returnReference: returnRequirement.reference,
         siteDescription: returnRequirement.siteDescription,
         status: returnLog.status,
         submissionCount: 0

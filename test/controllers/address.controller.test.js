@@ -52,15 +52,16 @@ describe('Address controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/postcode',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/postcode'
         }
 
         const pageData = _postcodePageData()
+
         vi.spyOn(PostcodeService, 'default').mockReturnValue(pageData)
       })
 
@@ -112,12 +113,12 @@ describe('Address controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/select',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/select'
         }
       })
 
@@ -211,12 +212,12 @@ describe('Address controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual'
         }
       })
 
@@ -278,12 +279,12 @@ describe('Address controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/international',
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/international'
         }
       })
 

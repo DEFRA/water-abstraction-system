@@ -3,8 +3,8 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
-import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 import NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
 import FetchReturnsReminderRecipients from '../../../../../src/services/notices/setup/returns-notice/fetch-returns-reminder-recipients.service.js'

@@ -8,8 +8,8 @@
 import 'dotenv/config'
 
 export default {
+  disableTls: String(process.env.REDIS_DISABLE_TLS) === 'true' || false,
   host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
   password: process.env.REDIS_PASSWORD,
-  disableTls: String(process.env.REDIS_DISABLE_TLS) === 'true' || false
+  port: process.env.REDIS_PORT
 }

@@ -65,8 +65,8 @@ async function _replayView(payload, error, page, savedFilters, auth) {
 
 function _save(payload, yar) {
   yar.set('noticesFilter', {
-    noticeTypes: payload.noticeTypes,
     fromDate: payload.fromDate,
+    noticeTypes: payload.noticeTypes,
     reference: payload.reference ?? null,
     sentBy: payload.sentBy ?? null,
     sentFromDay: payload.sentFromDay ?? null,
@@ -82,16 +82,16 @@ function _save(payload, yar) {
 
 function _savedFilters(yar) {
   return {
+    noticeTypes: [],
+    openFilter: true,
+    reference: null,
+    sentBy: null,
     sentFromDay: null,
     sentFromMonth: null,
     sentFromYear: null,
     sentToDay: null,
     sentToMonth: null,
     sentToYear: null,
-    noticeTypes: [],
-    openFilter: true,
-    reference: null,
-    sentBy: null,
     statuses: [],
     ...yar.get('noticesFilter')
   }

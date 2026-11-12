@@ -33,17 +33,17 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
         },
         items: [
           {
+            checked: false,
             id: companies[0].id,
-            value: companies[0].id,
             text: companies[0].name,
-            checked: false
+            value: companies[0].id
           },
           { divider: 'or' },
           {
+            checked: false,
             id: 'new',
-            value: 'new',
             text: 'Setup a new account',
-            checked: false
+            value: 'new'
           }
         ],
         pageTitle: 'Does this account already exist?',
@@ -57,8 +57,8 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       beforeEach(() => {
         session = {
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-          id: generateUUID(),
-          existingAccount: 'new'
+          existingAccount: 'new',
+          id: generateUUID()
         }
       })
 
@@ -73,8 +73,8 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       beforeEach(() => {
         session = {
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-          id: generateUUID(),
-          existingAccount: null
+          existingAccount: null,
+          id: generateUUID()
         }
       })
 
@@ -83,17 +83,17 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
 
         expect(result.items).toEqual([
           {
+            checked: false,
             id: companies[0].id,
-            value: companies[0].id,
             text: companies[0].name,
-            checked: false
+            value: companies[0].id
           },
           { divider: 'or' },
           {
+            checked: false,
             id: 'new',
-            value: 'new',
             text: 'Setup a new account',
-            checked: false
+            value: 'new'
           }
         ])
       })

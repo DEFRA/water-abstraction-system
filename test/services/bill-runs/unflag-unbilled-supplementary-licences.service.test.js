@@ -23,8 +23,8 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
 
       stdSupplementary.licenceNotBilledInBillRunAndWorkflow = await LicenceHelper.add({ includeInSrocBilling: true })
       stdSupplementary.workflow = await WorkflowHelper.add({
-        licenceId: stdSupplementary.licenceNotBilledInBillRunAndWorkflow.id,
-        deletedAt: null
+        deletedAt: null,
+        licenceId: stdSupplementary.licenceNotBilledInBillRunAndWorkflow.id
       })
 
       stdSupplementary.licenceNotBilledInBillRunAndUpdated = await LicenceHelper.add({
@@ -141,8 +141,8 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
         financialYearEnd: billRun.toFinancialYearEnding
       })
       tptSupplementary.workflow = await WorkflowHelper.add({
-        licenceId: tptSupplementary.licenceNotBilledInBillRunAndWorkflowSupYear.licenceId,
-        deletedAt: null
+        deletedAt: null,
+        licenceId: tptSupplementary.licenceNotBilledInBillRunAndWorkflowSupYear.licenceId
       })
 
       // NOTE: Unlike standard where we used a different licence, we can confirm with TpT that if a licence that _is_
@@ -150,8 +150,8 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
       // entry because the licence was changed after the bill run was created, that we don't delete _that_ record.
       tptSupplementary.licenceNotBilledInBillRunAndUpdatedSupYear = await LicenceSupplementaryYearHelper.add({
         billRunId: null,
-        licenceId: tptSupplementary.licenceNotBilledInBillRunSupYear.licenceId,
-        financialYearEnd: billRun.toFinancialYearEnding
+        financialYearEnd: billRun.toFinancialYearEnding,
+        licenceId: tptSupplementary.licenceNotBilledInBillRunSupYear.licenceId
       })
 
       tptSupplementary.licenceBilledInBillRunSupYear = await LicenceSupplementaryYearHelper.add({

@@ -8,8 +8,8 @@ import EventModel from 'water-abstraction-engine/models/event.model.js'
 import GroupModel from 'water-abstraction-engine/models/group.model.js'
 import RoleModel from 'water-abstraction-engine/models/role.model.js'
 import UserModel from 'water-abstraction-engine/models/user.model.js'
-import { userPermissions } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { generateUUID, timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
+import { userPermissions } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import FetchUserDal from '../fetch-user.dal.js'
 
@@ -80,7 +80,7 @@ async function _insertUser(email, trx) {
 
 async function _insertUserGroups(groupIds, id, trx) {
   for (const { id: groupId } of groupIds) {
-    await UserModel.relatedQuery('userGroups', trx).for(id).insert({ id: generateUUID(), groupId })
+    await UserModel.relatedQuery('userGroups', trx).for(id).insert({ groupId, id: generateUUID() })
   }
 }
 

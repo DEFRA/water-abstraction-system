@@ -81,10 +81,10 @@ export default function generateTransactionsService(
 function _compensationTransaction(standardTransaction) {
   return {
     ...standardTransaction,
-    id: generateUUID(),
     chargeType: 'compensation',
     description:
-      'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
+      'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement',
+    id: generateUUID()
   }
 }
 
@@ -125,40 +125,40 @@ function _standardTransaction(
   waterUndertaker
 ) {
   return {
-    id: generateUUID(),
-    billLicenceId,
+    adjustmentFactor: Number(chargeReference.adjustments.charge) || 1,
+    aggregateFactor: Number(chargeReference.adjustments.aggregate) || 1,
     authorisedDays,
-    billableDays,
-    newLicence,
-    waterUndertaker,
-    chargeReferenceId: chargeReference.id,
-    startDate: chargePeriod.startDate,
-    endDate: chargePeriod.endDate,
-    source: chargeReference.source,
-    season: 'all year',
-    loss: chargeReference.loss,
-    credit: false,
-    chargeType: 'standard',
     authorisedQuantity: chargeReference.volume,
+    billableDays,
     billableQuantity: chargeReference.volume,
-    status: 'candidate',
+    billLicenceId,
+    chargeCategoryCode: chargeReference.chargeCategory.reference,
+    chargeCategoryDescription: chargeReference.chargeCategory.shortDescription,
+    chargeReferenceId: chargeReference.id,
+    chargeType: 'standard',
+    credit: false,
     description: _description(chargeReference),
-    volume: chargeReference.volume,
-    section126Factor: Number(chargeReference.adjustments.s126) || 1,
-    section127Agreement: !!chargeReference.adjustments.s127,
-    section130Agreement: !!chargeReference.adjustments.s130,
+    endDate: chargePeriod.endDate,
+    id: generateUUID(),
+    loss: chargeReference.loss,
+    newLicence,
+    purposes: _generateElements(chargeReference),
+    scheme: 'sroc',
+    season: 'all year',
     // NOTE: We do not currently support two part tariff bill runs. We set this to false until we implement that
     // functionality and understand what determines the flag
     secondPartCharge: false,
-    scheme: 'sroc',
-    aggregateFactor: Number(chargeReference.adjustments.aggregate) || 1,
-    adjustmentFactor: Number(chargeReference.adjustments.charge) || 1,
-    chargeCategoryCode: chargeReference.chargeCategory.reference,
-    chargeCategoryDescription: chargeReference.chargeCategory.shortDescription,
+    section126Factor: Number(chargeReference.adjustments.s126) || 1,
+    section127Agreement: !!chargeReference.adjustments.s127,
+    section130Agreement: !!chargeReference.adjustments.s130,
+    source: chargeReference.source,
+    startDate: chargePeriod.startDate,
+    status: 'candidate',
     supportedSource: !!chargeReference.additionalCharges?.supportedSource?.name,
     supportedSourceName: chargeReference.additionalCharges?.supportedSource?.name || null,
+    volume: chargeReference.volume,
     waterCompanyCharge: !!chargeReference.additionalCharges?.isSupplyPublicWater,
-    winterOnly: !!chargeReference.adjustments.winter,
-    purposes: _generateElements(chargeReference)
+    waterUndertaker,
+    winterOnly: !!chargeReference.adjustments.winter
   }
 }

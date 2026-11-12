@@ -41,15 +41,15 @@ describe('Licences - Fetch Notifications DAL', () => {
         notifications: [
           {
             createdAt: notification.createdAt,
-            id: notification.id,
-            messageType: notification.messageType,
-            status: notification.status,
             event: {
               id: notice.id,
               issuer: notice.issuer,
-              subtype: notice.subtype,
-              sendingAlertType: null
-            }
+              sendingAlertType: null,
+              subtype: notice.subtype
+            },
+            id: notification.id,
+            messageType: notification.messageType,
+            status: notification.status
           }
         ],
         totalNumber: 1

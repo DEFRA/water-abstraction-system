@@ -18,8 +18,8 @@ describe('Return Logs - Submit Details Service', () => {
 
     patchStub = vi.fn().mockReturnThis()
     vi.spyOn(ReturnLogModel, 'query').mockReturnValue({
-      patch: patchStub,
-      findById: vi.fn().mockResolvedValue()
+      findById: vi.fn().mockResolvedValue(),
+      patch: patchStub
     })
   })
 

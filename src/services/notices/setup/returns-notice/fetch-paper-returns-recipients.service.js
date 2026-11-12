@@ -3,8 +3,8 @@
  * @module FetchPaperReturnsRecipientsService
  */
 
-import { db } from 'water-abstraction-engine/db/db.js'
 import { futureDueDate } from 'water-abstraction-engine/presenters/notices/base.presenter.js'
+import { db } from 'water-abstraction-engine/db/db.js'
 
 import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
 import GenerateReturnLogsByIdQueryService from './generate-return-logs-by-id-query.service.js'

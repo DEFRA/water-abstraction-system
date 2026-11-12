@@ -21,16 +21,16 @@ function unregistrationSession() {
         licenceRef: generateLicenceRef(),
         licenceVersions: [
           {
-            id: generateUUID(),
-            issueDate: null,
-            licenceId: generateUUID(),
-            startDate: new Date('2022-04-01'),
-            status: 'current',
             company: {
               id: generateUUID(),
               name: 'ACME Farms Ltd',
               type: 'organisation'
-            }
+            },
+            id: generateUUID(),
+            issueDate: null,
+            licenceId: generateUUID(),
+            startDate: new Date('2022-04-01'),
+            status: 'current'
           }
         ]
       },
@@ -39,16 +39,16 @@ function unregistrationSession() {
         licenceRef: generateLicenceRef(),
         licenceVersions: [
           {
-            id: generateUUID(),
-            issueDate: null,
-            licenceId: generateUUID(),
-            startDate: new Date('2023-04-01'),
-            status: 'current',
             company: {
               id: generateUUID(),
               name: 'ACME Industry Ltd',
               type: 'organisation'
-            }
+            },
+            id: generateUUID(),
+            issueDate: null,
+            licenceId: generateUUID(),
+            startDate: new Date('2023-04-01'),
+            status: 'current'
           }
         ]
       }

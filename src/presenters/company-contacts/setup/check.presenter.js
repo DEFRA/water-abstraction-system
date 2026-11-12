@@ -87,8 +87,8 @@ function _matchingContact(email, name, savedCompanyContacts) {
 function _warning(matchingContact, abstractionAlertLicences, abstractionAlerts) {
   if (abstractionAlerts === 'some' && !abstractionAlertLicences?.length) {
     return {
-      text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.',
-      iconFallbackText: 'Warning'
+      iconFallbackText: 'Warning',
+      text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.'
     }
   }
 
@@ -98,13 +98,13 @@ function _warning(matchingContact, abstractionAlertLicences, abstractionAlerts) 
 
   if (matchingContact.deletedAt) {
     return {
-      text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
-      iconFallbackText: 'Warning'
+      iconFallbackText: 'Warning',
+      text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.'
     }
   }
 
   return {
-    text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
-    iconFallbackText: 'Warning'
+    iconFallbackText: 'Warning',
+    text: 'A contact with this name and email already exists. Change the name or email, or cancel.'
   }
 }

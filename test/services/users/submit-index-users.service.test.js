@@ -150,15 +150,6 @@ describe('Users - Submit Index Users service', () => {
               }
             },
             pageTitle: 'Users',
-            users: [
-              {
-                email: results[0].username,
-                link: `/system/users/internal/${results[0].id}/details`,
-                permissions: 'Basic access',
-                status: 'enabled',
-                type: 'Internal'
-              }
-            ],
             pagination: {
               component: {
                 items: [
@@ -191,7 +182,16 @@ describe('Users - Submit Index Users service', () => {
               currentPageNumber: 2,
               numberOfPages: 3,
               showingMessage: 'Showing 1 of 70 users'
-            }
+            },
+            users: [
+              {
+                email: results[0].username,
+                link: `/system/users/internal/${results[0].id}/details`,
+                permissions: 'Basic access',
+                status: 'enabled',
+                type: 'Internal'
+              }
+            ]
           })
         })
       })
@@ -230,6 +230,7 @@ describe('Users - Submit Index Users service', () => {
               }
             },
             pageTitle: 'Users',
+            pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 1 users' },
             users: [
               {
                 email: results[0].username,
@@ -238,8 +239,7 @@ describe('Users - Submit Index Users service', () => {
                 status: 'enabled',
                 type: 'Internal'
               }
-            ],
-            pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 1 users' }
+            ]
           })
         })
       })

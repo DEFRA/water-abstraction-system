@@ -28,7 +28,6 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
         const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
         expect(result).toEqual({
-          returnsRequired: true,
           requirements: [
             {
               abstractionPeriod: 'From 1 June to 1 March',
@@ -41,7 +40,8 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
               returnsCycle: 'Summer',
               siteDescription: 'A place in the sun'
             }
-          ]
+          ],
+          returnsRequired: true
         })
       })
 
@@ -190,8 +190,8 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
         const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
         expect(result).toEqual({
-          returnsRequired: true,
-          requirements: []
+          requirements: [],
+          returnsRequired: true
         })
       })
     })
@@ -223,9 +223,9 @@ function _requirement() {
     points: ['d03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'],
     purposes: [
       {
-        id: '772136d1-9184-417b-90cd-91053287d1df',
         alias: '',
-        description: 'Spray irrigation'
+        description: 'Spray irrigation',
+        id: '772136d1-9184-417b-90cd-91053287d1df'
       }
     ],
     returnsCycle: 'summer',

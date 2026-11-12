@@ -32,14 +32,14 @@ describe('Fetch Return Submission service', () => {
 
     await Promise.all([
       ReturnSubmissionLineHelper.add({
+        quantity: 10,
         returnSubmissionId: testReturnSubmission.id,
-        startDate: '2023-03-01',
-        quantity: 10
+        startDate: '2023-03-01'
       }),
       ReturnSubmissionLineHelper.add({
+        quantity: 5,
         returnSubmissionId: testReturnSubmission.id,
-        startDate: '2023-01-01',
-        quantity: 5
+        startDate: '2023-01-01'
       })
     ])
   })

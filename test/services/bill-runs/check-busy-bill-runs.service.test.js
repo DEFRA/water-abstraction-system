@@ -14,7 +14,7 @@ describe('Check Busy Bill Runs service', () => {
 
   describe('when there are both building and cancelling bill runs', () => {
     beforeEach(() => {
-      vi.spyOn(db, 'select').mockResolvedValue([{ cancelling: true, building: true }])
+      vi.spyOn(db, 'select').mockResolvedValue([{ building: true, cancelling: true }])
     })
 
     it('returns "both"', async () => {
@@ -26,7 +26,7 @@ describe('Check Busy Bill Runs service', () => {
 
   describe('when there are cancelling bill runs', () => {
     beforeEach(() => {
-      vi.spyOn(db, 'select').mockResolvedValue([{ cancelling: true, building: false }])
+      vi.spyOn(db, 'select').mockResolvedValue([{ building: false, cancelling: true }])
     })
 
     it('returns "cancelling"', async () => {
@@ -38,7 +38,7 @@ describe('Check Busy Bill Runs service', () => {
 
   describe('when there are building bill runs', () => {
     beforeEach(() => {
-      vi.spyOn(db, 'select').mockResolvedValue([{ cancelling: false, building: true }])
+      vi.spyOn(db, 'select').mockResolvedValue([{ building: true, cancelling: false }])
     })
 
     it('returns "building"', async () => {
@@ -50,7 +50,7 @@ describe('Check Busy Bill Runs service', () => {
 
   describe('when there are no building or cancelling bill runs', () => {
     beforeEach(() => {
-      vi.spyOn(db, 'select').mockResolvedValue([{ cancelling: false, building: false }])
+      vi.spyOn(db, 'select').mockResolvedValue([{ building: false, cancelling: false }])
     })
 
     it('returns "none"', async () => {

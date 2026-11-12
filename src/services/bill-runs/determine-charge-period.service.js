@@ -76,14 +76,14 @@ export default function determineChargePeriodService(chargeVersion, billingPerio
   const earliestEndDateTimestamp = Math.min(...endDateTimestamps)
 
   const chargePeriod = {
-    startDate: new Date(latestStartDateTimestamp),
-    endDate: new Date(earliestEndDateTimestamp)
+    endDate: new Date(earliestEndDateTimestamp),
+    startDate: new Date(latestStartDateTimestamp)
   }
 
   if (_periodIsIncompatible(chargePeriod, billingPeriod)) {
     return {
-      startDate: null,
-      endDate: null
+      endDate: null,
+      startDate: null
     }
   }
 

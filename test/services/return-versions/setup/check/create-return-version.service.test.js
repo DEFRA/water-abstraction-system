@@ -87,17 +87,16 @@ function _generateReturnVersionData() {
   return {
     returnRequirements: [
       {
-        abstractionPeriodStartDay: '1',
-        abstractionPeriodStartMonth: '4',
         abstractionPeriodEndDay: '31',
         abstractionPeriodEndMonth: '3',
+        abstractionPeriodStartDay: '1',
+        abstractionPeriodStartMonth: '4',
         collectionFrequency: 'week',
         fiftySixException: false,
         gravityFill: false,
+        points: [generateUUID()],
         reabstraction: false,
         reportingFrequency: 'month',
-        returnsFrequency: 'year',
-        points: [generateUUID()],
         returnRequirementPurposes: [
           {
             alias: 'This is a purpose alias',
@@ -106,6 +105,7 @@ function _generateReturnVersionData() {
             secondaryPurposeId: generateUUID()
           }
         ],
+        returnsFrequency: 'year',
         siteDescription: 'Site description',
         summer: false,
         twoPartTariff: false

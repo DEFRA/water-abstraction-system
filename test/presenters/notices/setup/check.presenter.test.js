@@ -144,6 +144,7 @@ describe('Notices - Setup - Check presenter', () => {
 
       it('should return the links for the "adhoc" journey', () => {
         const result = CheckPresenter(recipients, page, session)
+
         expect(result.links).toEqual({
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`,
@@ -173,6 +174,7 @@ describe('Notices - Setup - Check presenter', () => {
     describe('when the journey is for "standard"', () => {
       it('should return the links for the "standard" journey', () => {
         const result = CheckPresenter(recipients, page, session)
+
         expect(result.links).toEqual({
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`,

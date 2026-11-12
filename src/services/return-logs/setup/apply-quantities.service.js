@@ -52,6 +52,7 @@ export default function applyQuantitiesService(session) {
 
 function _readingsUpdate(session) {
   const multiplier = session.meter10TimesDisplay === 'yes' ? 10 : 1
+
   let previousReading = session.startReading ?? 0
 
   session.lines.forEach((line) => {

@@ -14,7 +14,7 @@ export default function recipientNamePresenter(session) {
   const { id: sessionId, contactName: name, referenceCode } = session
 
   return {
-    backLink: { text: 'Back', href: `/system/notices/setup/${sessionId}/select-recipients` },
+    backLink: { href: `/system/notices/setup/${sessionId}/select-recipients`, text: 'Back' },
     name,
     pageTitle: "Enter the recipient's name",
     pageTitleCaption: `Notice ${referenceCode}`

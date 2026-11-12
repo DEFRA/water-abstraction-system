@@ -13,6 +13,7 @@ import SubmitNoteService from '../../../../src/services/return-logs/setup/submit
 
 describe('Return Logs Setup - Submit Note service', () => {
   const user = { username: 'carol.shaw@atari.com' }
+
   let payload
   let session
   let sessionData
@@ -61,7 +62,7 @@ describe('Return Logs Setup - Submit Note service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ title: 'Added', text: 'Note added' })
+          expect(notification).toEqual({ text: 'Note added', title: 'Added' })
         })
       })
 
@@ -102,7 +103,7 @@ describe('Return Logs Setup - Submit Note service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ title: 'Updated', text: 'Note updated' })
+          expect(notification).toEqual({ text: 'Note updated', title: 'Updated' })
         })
       })
     })

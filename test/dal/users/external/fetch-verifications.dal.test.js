@@ -10,8 +10,8 @@ import LicenceVersionHelper from 'water-abstraction-engine/test/helpers/licence-
 import UserHelper from 'water-abstraction-engine/test/helpers/user.helper.js'
 import UserVerificationDocumentHelper from 'water-abstraction-engine/test/helpers/user-verification-document.helper.js'
 import UserVerificationHelper from 'water-abstraction-engine/test/helpers/user-verification.helper.js'
-import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import { yesterday } from 'water-abstraction-engine/test/general.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
 import FetchVerificationsDal from '../../../../src/dal/users/external/fetch-verifications.dal.js'
@@ -84,114 +84,114 @@ describe('Users - External - Fetch Verifications DAL', () => {
           {
             createdAt: userVerificationData2.userVerification.createdAt,
             id: userVerificationData2.userVerification.id,
-            verifiedAt: userVerificationData2.userVerification.verifiedAt,
-            verificationCode: userVerificationData2.userVerification.verificationCode,
             licenceDocumentHeaders: [
               {
                 id: licenceData1.licenceDocumentHeader.id,
-                licenceRef: licenceData1.licenceDocumentHeader.licenceRef,
                 licence: {
                   id: licenceData1.licence.id,
                   licenceRef: licenceData1.licence.licenceRef,
                   licenceVersions: [
                     {
-                      id: licenceData1.licenceVersionCurrent.id,
-                      issueDate: licenceData1.licenceVersionCurrent.issueDate,
-                      licenceId: licenceData1.licenceVersionCurrent.licenceId,
-                      startDate: licenceData1.licenceVersionCurrent.startDate,
-                      status: licenceData1.licenceVersionCurrent.status,
                       company: {
                         id: licenceData1.companyCurrent.id,
                         name: licenceData1.companyCurrent.name,
                         type: licenceData1.companyCurrent.type
-                      }
+                      },
+                      id: licenceData1.licenceVersionCurrent.id,
+                      issueDate: licenceData1.licenceVersionCurrent.issueDate,
+                      licenceId: licenceData1.licenceVersionCurrent.licenceId,
+                      startDate: licenceData1.licenceVersionCurrent.startDate,
+                      status: licenceData1.licenceVersionCurrent.status
                     }
                   ]
-                }
+                },
+                licenceRef: licenceData1.licenceDocumentHeader.licenceRef
               },
               {
                 id: licenceData3.licenceDocumentHeader.id,
-                licenceRef: licenceData3.licenceDocumentHeader.licenceRef,
                 licence: {
                   id: licenceData3.licence.id,
                   licenceRef: licenceData3.licence.licenceRef,
                   licenceVersions: [
                     {
-                      id: licenceData3.licenceVersionCurrent.id,
-                      issueDate: licenceData3.licenceVersionCurrent.issueDate,
-                      licenceId: licenceData3.licenceVersionCurrent.licenceId,
-                      startDate: licenceData3.licenceVersionCurrent.startDate,
-                      status: licenceData3.licenceVersionCurrent.status,
                       company: {
                         id: licenceData3.companyCurrent.id,
                         name: licenceData3.companyCurrent.name,
                         type: licenceData3.companyCurrent.type
-                      }
+                      },
+                      id: licenceData3.licenceVersionCurrent.id,
+                      issueDate: licenceData3.licenceVersionCurrent.issueDate,
+                      licenceId: licenceData3.licenceVersionCurrent.licenceId,
+                      startDate: licenceData3.licenceVersionCurrent.startDate,
+                      status: licenceData3.licenceVersionCurrent.status
                     }
                   ]
-                }
+                },
+                licenceRef: licenceData3.licenceDocumentHeader.licenceRef
               }
-            ]
+            ],
+            verificationCode: userVerificationData2.userVerification.verificationCode,
+            verifiedAt: userVerificationData2.userVerification.verifiedAt
           },
           {
             createdAt: userVerificationData1.userVerification.createdAt,
             id: userVerificationData1.userVerification.id,
-            verifiedAt: userVerificationData1.userVerification.verifiedAt,
-            verificationCode: userVerificationData1.userVerification.verificationCode,
             licenceDocumentHeaders: [
               {
                 id: licenceData4.licenceDocumentHeader.id,
-                licenceRef: licenceData4.licenceDocumentHeader.licenceRef,
                 licence: {
                   id: licenceData4.licence.id,
                   licenceRef: licenceData4.licence.licenceRef,
                   licenceVersions: [
                     {
-                      id: licenceData4.licenceVersionCurrent.id,
-                      issueDate: licenceData4.licenceVersionCurrent.issueDate,
-                      licenceId: licenceData4.licenceVersionCurrent.licenceId,
-                      startDate: licenceData4.licenceVersionCurrent.startDate,
-                      status: licenceData4.licenceVersionCurrent.status,
                       company: {
                         id: licenceData4.companyCurrent.id,
                         name: licenceData4.companyCurrent.name,
                         type: licenceData4.companyCurrent.type
-                      }
+                      },
+                      id: licenceData4.licenceVersionCurrent.id,
+                      issueDate: licenceData4.licenceVersionCurrent.issueDate,
+                      licenceId: licenceData4.licenceVersionCurrent.licenceId,
+                      startDate: licenceData4.licenceVersionCurrent.startDate,
+                      status: licenceData4.licenceVersionCurrent.status
                     }
                   ]
-                }
+                },
+                licenceRef: licenceData4.licenceDocumentHeader.licenceRef
               }
-            ]
+            ],
+            verificationCode: userVerificationData1.userVerification.verificationCode,
+            verifiedAt: userVerificationData1.userVerification.verifiedAt
           },
           {
             createdAt: userVerificationData3.userVerification.createdAt,
             id: userVerificationData3.userVerification.id,
-            verifiedAt: userVerificationData3.userVerification.verifiedAt,
-            verificationCode: userVerificationData3.userVerification.verificationCode,
             licenceDocumentHeaders: [
               {
                 id: licenceData2.licenceDocumentHeader.id,
-                licenceRef: licenceData2.licenceDocumentHeader.licenceRef,
                 licence: {
                   id: licenceData2.licence.id,
                   licenceRef: licenceData2.licence.licenceRef,
                   licenceVersions: [
                     {
-                      id: licenceData2.licenceVersionCurrent.id,
-                      issueDate: licenceData2.licenceVersionCurrent.issueDate,
-                      licenceId: licenceData2.licenceVersionCurrent.licenceId,
-                      startDate: licenceData2.licenceVersionCurrent.startDate,
-                      status: licenceData2.licenceVersionCurrent.status,
                       company: {
                         id: licenceData2.companyCurrent.id,
                         name: licenceData2.companyCurrent.name,
                         type: licenceData2.companyCurrent.type
-                      }
+                      },
+                      id: licenceData2.licenceVersionCurrent.id,
+                      issueDate: licenceData2.licenceVersionCurrent.issueDate,
+                      licenceId: licenceData2.licenceVersionCurrent.licenceId,
+                      startDate: licenceData2.licenceVersionCurrent.startDate,
+                      status: licenceData2.licenceVersionCurrent.status
                     }
                   ]
-                }
+                },
+                licenceRef: licenceData2.licenceDocumentHeader.licenceRef
               }
-            ]
+            ],
+            verificationCode: userVerificationData3.userVerification.verificationCode,
+            verifiedAt: userVerificationData3.userVerification.verifiedAt
           }
         ]
       })
@@ -202,7 +202,7 @@ describe('Users - External - Fetch Verifications DAL', () => {
     it('returns an empty array and zero', async () => {
       const result = await FetchVerificationsDal('c02ac8b8-e5d4-41f3-b3df-3a370c95ff0a')
 
-      expect(result).toEqual({ verifications: [], totalNumber: 0 })
+      expect(result).toEqual({ totalNumber: 0, verifications: [] })
     })
   })
 })
@@ -226,10 +226,6 @@ async function _licenceData(licenceRef) {
   })
 
   return {
-    companyCurrent,
-    licenceVersionCurrent,
-    licence,
-    licenceDocumentHeader,
     clean: async () => {
       await licence.$query().delete()
       await licenceDocumentHeader.$query().delete()
@@ -237,7 +233,11 @@ async function _licenceData(licenceRef) {
       await licenceVersionSuperseded.$query().delete()
       await companyCurrent.$query().delete()
       await licenceVersionCurrent.$query().delete()
-    }
+    },
+    companyCurrent,
+    licence,
+    licenceDocumentHeader,
+    licenceVersionCurrent
   }
 }
 
@@ -251,17 +251,18 @@ async function _userVerificationData(createdAt, licenceEntityId, licenceDocument
       licenceDocumentHeaderId,
       userVerificationId: userVerification.id
     })
+
     userVerificationDocuments.push(userVerificationDocument)
   }
 
   return {
-    userVerification,
     clean: async () => {
       await userVerification.$query().delete()
 
       for (const userVerificationDocument of userVerificationDocuments) {
         await userVerificationDocument.$query().delete()
       }
-    }
+    },
+    userVerification
   }
 }

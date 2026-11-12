@@ -8,7 +8,7 @@ import { engineTriggers } from 'water-abstraction-engine/lib/static-lookups.lib.
 import BlockedBillRunPresenter from '../../../../../src/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js'
 
 describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
-  const region = { id: '292fe1c3-c9d4-47dd-a01b-0ac916497af5', displayName: 'Avalon' }
+  const region = { displayName: 'Avalon', id: '292fe1c3-c9d4-47dd-a01b-0ac916497af5' }
 
   let blockingResults
   let session
@@ -17,10 +17,10 @@ describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
     blockingResults = {
       matches: [
         {
-          id: 'c0608545-9870-4605-a407-5ff49f8a5182',
           batchType: 'annual',
           billRunNumber: 12345,
           createdAt: new Date('2024-05-01'),
+          id: 'c0608545-9870-4605-a407-5ff49f8a5182',
           region,
           scheme: 'sroc',
           status: 'sent',

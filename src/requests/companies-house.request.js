@@ -46,12 +46,12 @@ function _parseResult(result) {
 
   if (body) {
     return {
-      succeeded: result.succeeded,
+      matches: body?.items || [],
       response: {
-        statusCode,
-        body
+        body,
+        statusCode
       },
-      matches: body?.items || []
+      succeeded: result.succeeded
     }
   }
 
@@ -71,10 +71,10 @@ function _parseResult(result) {
  */
 function _requestOptions(accessToken, searchParams) {
   return {
-    prefixUrl: companiesHouseConfig.url,
     headers: {
       authorization: `Basic ${accessToken}`
     },
+    prefixUrl: companiesHouseConfig.url,
     responseType: 'json',
     ...(searchParams && { searchParams })
   }

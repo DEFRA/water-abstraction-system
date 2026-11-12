@@ -47,8 +47,8 @@ export default async function initiateSessionService(journey, monitoringStationI
   const session = await CreateSessionDal(data)
 
   return {
-    sessionId: session.id,
-    path: _redirect(journey)
+    path: _redirect(journey),
+    sessionId: session.id
   }
 }
 

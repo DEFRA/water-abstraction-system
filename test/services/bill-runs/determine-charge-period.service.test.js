@@ -6,18 +6,19 @@ import DetermineChargePeriodService from '../../../src/services/bill-runs/determ
 
 describe('Determine charge period service', () => {
   const billingPeriod = {
-    startDate: new Date('2023-04-01'),
-    endDate: new Date('2024-03-31')
+    endDate: new Date('2024-03-31'),
+    startDate: new Date('2023-04-01')
   }
+
   let chargeVersion
 
   describe('the charge version starts before the billing period', () => {
     describe('and has an end date that is inside the billing period', () => {
       beforeEach(() => {
         chargeVersion = {
-          startDate: new Date('2022-04-01'),
           endDate: new Date('2023-05-31'),
-          licence: { startDate: new Date('2017-01-01') }
+          licence: { startDate: new Date('2017-01-01') },
+          startDate: new Date('2022-04-01')
         }
       })
 
@@ -32,9 +33,9 @@ describe('Determine charge period service', () => {
     describe('and does not have an end date', () => {
       beforeEach(() => {
         chargeVersion = {
-          startDate: new Date('2022-04-01'),
           endDate: null,
-          licence: { startDate: new Date('2017-01-01') }
+          licence: { startDate: new Date('2017-01-01') },
+          startDate: new Date('2022-04-01')
         }
       })
 
@@ -49,9 +50,9 @@ describe('Determine charge period service', () => {
     describe('and has an end date that is after the billing period', () => {
       beforeEach(() => {
         chargeVersion = {
-          startDate: new Date('2022-04-01'),
           endDate: new Date('2024-05-31'),
-          licence: { startDate: new Date('2017-01-01') }
+          licence: { startDate: new Date('2017-01-01') },
+          startDate: new Date('2022-04-01')
         }
       })
 
@@ -66,9 +67,9 @@ describe('Determine charge period service', () => {
     describe("and the licence start date is after the charge version's and inside the billing period", () => {
       beforeEach(() => {
         chargeVersion = {
-          startDate: new Date('2023-03-01'),
           endDate: null,
-          licence: { startDate: new Date('2023-05-01') }
+          licence: { startDate: new Date('2023-05-01') },
+          startDate: new Date('2023-03-01')
         }
       })
 
@@ -84,9 +85,9 @@ describe('Determine charge period service', () => {
       describe('is inside the billing period', () => {
         beforeEach(() => {
           chargeVersion = {
-            startDate: new Date('2022-04-01'),
             endDate: null,
-            licence: { startDate: new Date('2023-01-01'), revokedDate: new Date('2023-08-01') }
+            licence: { revokedDate: new Date('2023-08-01'), startDate: new Date('2023-01-01') },
+            startDate: new Date('2022-04-01')
           }
         })
 
@@ -101,9 +102,9 @@ describe('Determine charge period service', () => {
       describe('is before the billing period', () => {
         beforeEach(() => {
           chargeVersion = {
-            startDate: new Date('2022-04-01'),
             endDate: null,
-            licence: { startDate: new Date('2023-01-01'), revokedDate: new Date('2023-02-01') }
+            licence: { revokedDate: new Date('2023-02-01'), startDate: new Date('2023-01-01') },
+            startDate: new Date('2022-04-01')
           }
         })
 
@@ -120,9 +121,9 @@ describe('Determine charge period service', () => {
       describe('is inside the billing period', () => {
         beforeEach(() => {
           chargeVersion = {
-            startDate: new Date('2022-04-01'),
             endDate: null,
-            licence: { startDate: new Date('2023-01-01'), lapsedDate: new Date('2023-08-01') }
+            licence: { lapsedDate: new Date('2023-08-01'), startDate: new Date('2023-01-01') },
+            startDate: new Date('2022-04-01')
           }
         })
 
@@ -137,9 +138,9 @@ describe('Determine charge period service', () => {
       describe('is before the billing period', () => {
         beforeEach(() => {
           chargeVersion = {
-            startDate: new Date('2022-04-01'),
             endDate: null,
-            licence: { startDate: new Date('2023-01-01'), lapsedDate: new Date('2023-02-01') }
+            licence: { lapsedDate: new Date('2023-02-01'), startDate: new Date('2023-01-01') },
+            startDate: new Date('2022-04-01')
           }
         })
 
@@ -156,9 +157,9 @@ describe('Determine charge period service', () => {
       describe('is inside the billing period', () => {
         beforeEach(() => {
           chargeVersion = {
-            startDate: new Date('2022-04-01'),
             endDate: null,
-            licence: { startDate: new Date('2023-01-01'), expiredDate: new Date('2023-08-01') }
+            licence: { expiredDate: new Date('2023-08-01'), startDate: new Date('2023-01-01') },
+            startDate: new Date('2022-04-01')
           }
         })
 
@@ -173,9 +174,9 @@ describe('Determine charge period service', () => {
       describe('is before the billing period', () => {
         beforeEach(() => {
           chargeVersion = {
-            startDate: new Date('2022-04-01'),
             endDate: null,
-            licence: { startDate: new Date('2023-01-01'), lapsedDate: new Date('2023-02-01') }
+            licence: { lapsedDate: new Date('2023-02-01'), startDate: new Date('2023-01-01') },
+            startDate: new Date('2022-04-01')
           }
         })
 
@@ -194,9 +195,9 @@ describe('Determine charge period service', () => {
       describe('that is inside the billing period', () => {
         beforeEach(() => {
           chargeVersion = {
-            startDate: new Date('2023-05-01'),
             endDate: new Date('2023-05-31'),
-            licence: { startDate: new Date('2023-01-01') }
+            licence: { startDate: new Date('2023-01-01') },
+            startDate: new Date('2023-05-01')
           }
         })
 
@@ -211,9 +212,9 @@ describe('Determine charge period service', () => {
       describe('that is after the billing period', () => {
         beforeEach(() => {
           chargeVersion = {
-            startDate: new Date('2023-05-01'),
             endDate: new Date('2024-05-31'),
-            licence: { startDate: new Date('2023-01-01') }
+            licence: { startDate: new Date('2023-01-01') },
+            startDate: new Date('2023-05-01')
           }
         })
 
@@ -229,9 +230,9 @@ describe('Determine charge period service', () => {
     describe('and does not have an end date', () => {
       beforeEach(() => {
         chargeVersion = {
-          startDate: new Date('2023-05-01'),
           endDate: null,
-          licence: { startDate: new Date('2023-01-01') }
+          licence: { startDate: new Date('2023-01-01') },
+          startDate: new Date('2023-05-01')
         }
       })
 
@@ -247,9 +248,9 @@ describe('Determine charge period service', () => {
       describe("is inside the billing period before the charge version's start date", () => {
         beforeEach(() => {
           chargeVersion = {
-            startDate: new Date('2023-10-01'),
             endDate: null,
-            licence: { startDate: new Date('2023-01-01'), expiredDate: new Date('2023-06-01') }
+            licence: { expiredDate: new Date('2023-06-01'), startDate: new Date('2023-01-01') },
+            startDate: new Date('2023-10-01')
           }
         })
 
@@ -266,9 +267,9 @@ describe('Determine charge period service', () => {
   describe('the charge version starts after the billing period', () => {
     beforeEach(() => {
       chargeVersion = {
-        startDate: new Date('2024-05-01'),
         endDate: null,
-        licence: { startDate: new Date('2018-01-01') }
+        licence: { startDate: new Date('2018-01-01') },
+        startDate: new Date('2024-05-01')
       }
     })
 

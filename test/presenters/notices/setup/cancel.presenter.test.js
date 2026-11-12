@@ -72,11 +72,11 @@ describe('Notices - Setup - Cancel presenter', () => {
       beforeEach(() => {
         session = {
           determinedReturnsPeriod: {
-            name: 'quarterOne',
             dueDate: '2025-07-28',
             endDate: '2025-06-30',
-            summer: 'false',
-            startDate: '2025-04-01'
+            name: 'quarterOne',
+            startDate: '2025-04-01',
+            summer: 'false'
           },
           journey: 'invitations',
           referenceCode
@@ -97,11 +97,11 @@ describe('Notices - Setup - Cancel presenter', () => {
       beforeEach(() => {
         session = {
           determinedReturnsPeriod: {
-            name: 'quarterOne',
             dueDate: '2025-07-28',
             endDate: '2025-06-30',
-            summer: 'false',
-            startDate: '2025-04-01'
+            name: 'quarterOne',
+            startDate: '2025-04-01',
+            summer: 'false'
           },
           journey: 'reminders',
           referenceCode
@@ -123,11 +123,11 @@ describe('Notices - Setup - Cancel presenter', () => {
         beforeEach(() => {
           session = {
             determinedReturnsPeriod: {
-              name: 'quarterOne',
               dueDate: '2025-07-28',
               endDate: '2025-06-30',
-              summer: 'false',
-              startDate: '2025-04-01'
+              name: 'quarterOne',
+              startDate: '2025-04-01',
+              summer: 'false'
             },
             journey: 'invitations',
             referenceCode
@@ -148,11 +148,11 @@ describe('Notices - Setup - Cancel presenter', () => {
         beforeEach(() => {
           session = {
             determinedReturnsPeriod: {
-              name: 'summer',
               dueDate: '2025-11-28',
               endDate: '2025-10-31',
-              summer: true,
-              startDate: '2024-11-01'
+              name: 'summer',
+              startDate: '2024-11-01',
+              summer: true
             },
             journey: 'invitations',
             referenceCode
@@ -173,11 +173,11 @@ describe('Notices - Setup - Cancel presenter', () => {
         beforeEach(() => {
           session = {
             determinedReturnsPeriod: {
-              name: 'allYear',
               dueDate: '2025-04-28',
               endDate: '2025-03-31',
-              summer: true,
-              startDate: '2024-04-01'
+              name: 'allYear',
+              startDate: '2024-04-01',
+              summer: true
             },
             journey: 'invitations',
             referenceCode

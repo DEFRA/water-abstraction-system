@@ -23,11 +23,11 @@ describe('View Return Submission service', () => {
 
     mockReturnSubmission.returnSubmissionLines = [
       _createInstance(ReturnSubmissionLineModel, ReturnSubmissionLineHelper, {
+        endDate: new Date(2025, 0, 1),
+        quantity: 1000,
         returnSubmissionId: mockReturnSubmission.id,
         startDate: new Date(2025, 0, 1),
-        endDate: new Date(2025, 0, 1),
-        timePeriod: 'day',
-        quantity: 1000
+        timePeriod: 'day'
       })
     ]
 

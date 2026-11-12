@@ -23,9 +23,9 @@ export function licenceRefSchema(licenceExists) {
       return _licenceExists(value, helpers, licenceExists)
     }, 'Custom Licence Validation')
     .messages({
-      invalidLicence: 'Enter a valid licence number',
-      'any.required': errorMessage,
       'any.only': errorMessage,
+      'any.required': errorMessage,
+      invalidLicence: 'Enter a valid licence number',
       'string.empty': errorMessage
     })
 }

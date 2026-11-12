@@ -25,8 +25,8 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
     ])
 
     session = {
-      relevantLicenceMonitoringStations,
-      notificationType: 'Abstraction alert'
+      notificationType: 'Abstraction alert',
+      relevantLicenceMonitoringStations
     }
   })
 
@@ -49,6 +49,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
     const result = DownloadAbstractionAlertPresenter(testRecipients, session)
 
     let [headers] = result.split('\n')
+
     // We want to test the header includes the new line
     headers += '\n'
 
@@ -77,6 +78,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
       const result = DownloadAbstractionAlertPresenter([recipients.additionalContact], session)
 
       let [, row] = result.split('\n')
+
       // We want to test the row includes the new line
       row += '\n'
 
@@ -105,6 +107,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
       const result = DownloadAbstractionAlertPresenter([recipients.primaryUser], session)
 
       let [, row] = result.split('\n')
+
       // We want to test the row includes the new line
       row += '\n'
 
@@ -134,6 +137,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
         const result = DownloadAbstractionAlertPresenter([recipients.licenceHolder], session)
 
         let [, row] = result.split('\n')
+
         // We want to test the row includes the new line
         row += '\n'
 
@@ -165,8 +169,8 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
               ...recipients.licenceHolder,
               contact: {
                 ...recipients.licenceHolder.contact,
-                type: 'Organisation',
-                name: 'Gringotts'
+                name: 'Gringotts',
+                type: 'Organisation'
               }
             }
           ],
@@ -174,6 +178,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
         )
 
         let [, row] = result.split('\n')
+
         // We want to test the row includes the new line
         row += '\n'
 
@@ -233,8 +238,8 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
       ]
 
       session = {
-        relevantLicenceMonitoringStations,
-        notificationType: 'Abstraction alert'
+        notificationType: 'Abstraction alert',
+        relevantLicenceMonitoringStations
       }
     })
 

@@ -26,8 +26,8 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
       describe('and selected "yes" for reduce at threshold', () => {
         beforeEach(() => {
           payload = {
-            stopOrReduce: 'reduce',
-            reduceAtThreshold: 'yes'
+            reduceAtThreshold: 'yes',
+            stopOrReduce: 'reduce'
           }
         })
 
@@ -41,8 +41,8 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
       describe('and selected "no" for reduce at threshold', () => {
         beforeEach(() => {
           payload = {
-            stopOrReduce: 'reduce',
-            reduceAtThreshold: 'no'
+            reduceAtThreshold: 'no',
+            stopOrReduce: 'reduce'
           }
         })
 

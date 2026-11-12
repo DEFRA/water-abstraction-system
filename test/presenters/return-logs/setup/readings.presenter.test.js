@@ -146,7 +146,7 @@ function _sessionData() {
         startDate: '2023-06-01T00:00:00.000Z'
       }
     ],
-    returnsFrequency: 'month',
-    returnReference: 1234
+    returnReference: 1234,
+    returnsFrequency: 'month'
   }
 }

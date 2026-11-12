@@ -13,7 +13,7 @@ import * as MatchAndAllocateService from '../../../../src/services/bill-runs/mat
 import ProcessBillRunService from '../../../../src/services/bill-runs/tpt-supplementary/process-bill-run.service.js'
 
 describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
-  const billingPeriods = [{ startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') }]
+  const billingPeriods = [{ endDate: new Date('2024-03-31'), startDate: new Date('2023-04-01') }]
   const billRun = { id: '410c84a5-39d3-441a-97ca-6104e14d00a2' }
 
   let billRunPatchStub

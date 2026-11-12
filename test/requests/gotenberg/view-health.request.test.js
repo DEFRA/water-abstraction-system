@@ -27,9 +27,7 @@ describe('Gotenberg - View Health request', () => {
   describe('when the request succeeds', () => {
     beforeEach(() => {
       response = {
-        statusCode: HTTP_STATUS_OK,
         body: {
-          status: 'up',
           details: {
             chromium: {
               status: 'up',
@@ -39,13 +37,15 @@ describe('Gotenberg - View Health request', () => {
               status: 'up',
               timestamp: '2025-08-26T23:21:08.772586125Z'
             }
-          }
-        }
+          },
+          status: 'up'
+        },
+        statusCode: HTTP_STATUS_OK
       }
 
       vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-        succeeded: true,
-        response
+        response,
+        succeeded: true
       }) // TODO: withArgs('http://localhost:8040/health', { responseType: 'json' }) not converted
     })
 
@@ -66,13 +66,13 @@ describe('Gotenberg - View Health request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         response = {
-          statusCode: HTTP_STATUS_NOT_FOUND,
-          body: 'Not Found'
+          body: 'Not Found',
+          statusCode: HTTP_STATUS_NOT_FOUND
         }
 
         vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
-          response
+          response,
+          succeeded: false
         }) // TODO: withArgs('http://localhost:8040/health', { responseType: 'json' }) not converted
       })
 

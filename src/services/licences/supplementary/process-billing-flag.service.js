@@ -5,8 +5,8 @@
 
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstraction-engine/lib/general.lib.js'
 
-import DetermineBillLicenceFlagsService from './determine-bill-licence-flags.service.js'
 import DetermineBillingYearsService from './determine-billing-years.service.js'
+import DetermineBillLicenceFlagsService from './determine-bill-licence-flags.service.js'
 import DetermineChargeVersionFlagsService from './determine-charge-version-flags.service.js'
 import DetermineExistingBillRunYearsService from './determine-existing-bill-run-years.service.js'
 import DetermineImportedLicenceFlagsService from './determine-imported-licence-flags.service.js'

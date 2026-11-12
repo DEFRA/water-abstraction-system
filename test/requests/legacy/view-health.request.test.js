@@ -23,16 +23,16 @@ describe('Legacy - View Health request', () => {
   describe('when the request succeeds', () => {
     beforeEach(() => {
       response = {
-        statusCode: HTTP_STATUS_OK,
         body: {
-          version: 'v2.36.1',
-          commit: 'f6d9d43deb8d3a600fa582143e8f4e55b7e0c372'
-        }
+          commit: 'f6d9d43deb8d3a600fa582143e8f4e55b7e0c372',
+          version: 'v2.36.1'
+        },
+        statusCode: HTTP_STATUS_OK
       }
 
       vi.spyOn(LegacyRequest, 'getRequest').mockResolvedValue({
-        succeeded: true,
-        response
+        response,
+        succeeded: true
       }) // TODO: withArgs(serviceName) not converted
     })
 
@@ -53,17 +53,17 @@ describe('Legacy - View Health request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         response = {
-          statusCode: HTTP_STATUS_NOT_FOUND,
           body: {
-            statusCode: HTTP_STATUS_NOT_FOUND,
             error: 'Not Found',
-            message: 'Not Found'
-          }
+            message: 'Not Found',
+            statusCode: HTTP_STATUS_NOT_FOUND
+          },
+          statusCode: HTTP_STATUS_NOT_FOUND
         }
 
         vi.spyOn(LegacyRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
-          response
+          response,
+          succeeded: false
         }) // TODO: withArgs(serviceName) not converted
       })
 

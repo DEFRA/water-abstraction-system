@@ -47,11 +47,11 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         licenceRef: licence.licenceRef,
         lines: [
           {
-            startDate: '2021-12-26T00:00:00.000Z',
             endDate: '2022-01-01T00:00:00.000Z',
             quantity: 4380,
             quantityCubicMetres: 4380,
-            reading: null
+            reading: null,
+            startDate: '2021-12-26T00:00:00.000Z'
           }
         ],
         meter10TimesDisplay: null,
@@ -59,10 +59,10 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         meterProvided: 'no',
         meterSerialNumber: null,
         nilReturn: false,
-        periodStartDay: returnLog.returnRequirement.abstractionPeriodStartDay,
-        periodStartMonth: returnLog.returnRequirement.abstractionPeriodStartMonth,
         periodEndDay: returnLog.returnRequirement.abstractionPeriodEndDay,
         periodEndMonth: returnLog.returnRequirement.abstractionPeriodEndMonth,
+        periodStartDay: returnLog.returnRequirement.abstractionPeriodStartDay,
+        periodStartMonth: returnLog.returnRequirement.abstractionPeriodStartMonth,
         purposes: ['Test description'],
         receivedDate: '2025-03-06T00:00:00.000Z',
         receivedDateDay: '6',
@@ -145,17 +145,17 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       beforeEach(() => {
         returnLog = _returnLog(licence, [
           _returnSubmission({
-            type: 'measured',
-            total: null,
-            units: 'm³',
-            method: 'oneMeter',
             meters: [
               {
                 manufacturer: 'METER_MAKE',
                 multiplier: 10,
                 serialNumber: 'METER_SERIAL_NUMBER'
               }
-            ]
+            ],
+            method: 'oneMeter',
+            total: null,
+            type: 'measured',
+            units: 'm³'
           })
         ])
 
@@ -312,9 +312,9 @@ function _getSessionId(url) {
 
 function _returnLog(licence, returnSubmissions = []) {
   return ReturnLogModel.fromJson({
-    id: generateUUID(),
     dueDate: null,
     endDate: new Date('2022-06-01'),
+    id: generateUUID(),
     licence,
     receivedDate: new Date('2025-03-06'),
     returnId: `v1:9:${licence.licenceRef}:10021668:2022-04-01:2022-06-01`,
@@ -343,10 +343,10 @@ function _returnSubmission(metadata, returnSubmissionLines = [], nilReturn = fal
 
 function _returnSubmissionLine(quantity = 4380) {
   return {
-    id: generateUUID(),
-    startDate: new Date('2021-12-26'),
     endDate: new Date('2022-01-01'),
+    id: generateUUID(),
     quantity,
+    startDate: new Date('2021-12-26'),
     userUnit: 'm³'
   }
 }

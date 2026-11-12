@@ -6,9 +6,9 @@ import RegionValidator from '../../../../src/validators/bill-runs/setup/region.v
 
 describe('Bill Runs Setup Region validator', () => {
   const regions = [
-    { id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28', displayName: 'Riverlands' },
-    { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'Stormlands' },
-    { id: '3334054e-03b6-4696-9d74-62b8b76a3c64', displayName: 'Westerlands' }
+    { displayName: 'Riverlands', id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28' },
+    { displayName: 'Stormlands', id: '19a027c6-4aad-47d3-80e3-3917a4579a5b' },
+    { displayName: 'Westerlands', id: '3334054e-03b6-4696-9d74-62b8b76a3c64' }
   ]
 
   describe('when valid data is provided', () => {

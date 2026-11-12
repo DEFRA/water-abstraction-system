@@ -20,23 +20,23 @@ describe('Return Versions Setup - Submit Reason service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
       requirements: [{}],
       startDateOptions: 'licenceStartDate'
     }
@@ -98,7 +98,7 @@ describe('Return Versions Setup - Submit Reason service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ titleText: 'Updated', text: 'Return version updated' })
+          expect(notification).toEqual({ text: 'Return version updated', titleText: 'Updated' })
         })
       })
     })
@@ -112,13 +112,13 @@ describe('Return Versions Setup - Submit Reason service', () => {
         const result = await SubmitReasonService(session.id, payload, yarStub)
 
         expect(result).toMatchObject({
-          pageTitle: 'Select the reason for the requirements for returns',
-          pageTitleCaption: `Licence ${session.licence.licenceRef}`,
           backLink: {
             href: `/system/return-versions/setup/${session.id}/start-date`,
             text: 'Back'
           },
           licenceRef: '01/ABC',
+          pageTitle: 'Select the reason for the requirements for returns',
+          pageTitleCaption: `Licence ${session.licence.licenceRef}`,
           reason: null
         })
       })

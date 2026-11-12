@@ -52,15 +52,15 @@ function _assemble(returnRequirements, returnVersions, licence, returnRequiremen
       abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
       externalId: returnRequirement.externalId,
       id: returnRequirement.id,
+      points: _assemblePoints(returnRequirement, returnRequirementPoints),
       reference: returnRequirement.reference,
       reportingFrequency: returnRequirement.reportingFrequency,
+      returnRequirementPurposes: _assembleReturnRequirementPurposes(returnRequirement, returnRequirementPurposes),
+      returnVersion: _assembleReturnVersion(returnRequirement, returnVersions, licence),
       returnVersionId: returnRequirement.returnVersionId,
       siteDescription: returnRequirement.siteDescription,
       summer: returnRequirement.summer,
-      twoPartTariff: returnRequirement.twoPartTariff,
-      returnVersion: _assembleReturnVersion(returnRequirement, returnVersions, licence),
-      points: _assemblePoints(returnRequirement, returnRequirementPoints),
-      returnRequirementPurposes: _assembleReturnRequirementPurposes(returnRequirement, returnRequirementPurposes)
+      twoPartTariff: returnRequirement.twoPartTariff
     }
   })
 }
@@ -117,22 +117,22 @@ function _assembleReturnVersion(returnRequirement, returnVersions, licence) {
   return {
     endDate: matchingReturnVersion.endDate,
     id: matchingReturnVersion.id,
-    reason: matchingReturnVersion.reason,
-    startDate: matchingReturnVersion.startDate,
-    quarterlyReturns: matchingReturnVersion.quarterlyReturns,
-    multipleUpload: matchingReturnVersion.multipleUpload,
     licence: {
+      areacode: licence.areacode,
       expiredDate: licence.expiredDate,
       id: licence.id,
       lapsedDate: licence.lapsedDate,
       licenceRef: licence.licenceRef,
-      revokedDate: licence.revokedDate,
-      areacode: licence.areacode,
       region: {
         id: licence.regionId,
         naldRegionId: licence.naldRegionId
-      }
-    }
+      },
+      revokedDate: licence.revokedDate
+    },
+    multipleUpload: matchingReturnVersion.multipleUpload,
+    quarterlyReturns: matchingReturnVersion.quarterlyReturns,
+    reason: matchingReturnVersion.reason,
+    startDate: matchingReturnVersion.startDate
   }
 }
 

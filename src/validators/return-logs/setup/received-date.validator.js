@@ -64,8 +64,8 @@ function _validate(payload, startDate) {
         'any.required': 'Enter a return received date',
         'date.base': 'Enter a return received date',
         'date.format': 'Enter a real received date',
-        'date.min': 'Received date must be the return period start date or after it',
-        'date.less': "Received date must be either today's date or in the past"
+        'date.less': "Received date must be either today's date or in the past",
+        'date.min': 'Received date must be the return period start date or after it'
       }),
       otherwise: Joi.string().optional()
     })

@@ -4,8 +4,8 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 // Test helpers
 import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
-import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import { yesterday } from 'water-abstraction-engine/test/general.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 
@@ -119,9 +119,9 @@ function _transformToResult(notification) {
     licenceMonitoringStationId: notification.licenceMonitoringStationId,
     messageRef: notification.messageRef,
     messageType: notification.messageType,
+    notifyError: notification.notifyError,
     notifyId: notification.notifyId,
     notifyStatus: notification.notifyStatus,
-    notifyError: notification.notifyError,
     personalisation: notification.personalisation,
     returnLogIds: notification.returnLogIds,
     status: notification.status

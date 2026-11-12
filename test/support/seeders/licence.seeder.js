@@ -16,9 +16,16 @@ export async function licenceHolderWithMultipleLicences() {
   const { company, licence, licenceVersion } = await licenceHolderWithSingleLicence()
 
   const licenceTwo = await LicenceHelper.add()
-  const licenceVersionTwo = await LicenceVersionHelper.add({ licenceId: licenceTwo.id, companyId: company.id })
+  const licenceVersionTwo = await LicenceVersionHelper.add({ companyId: company.id, licenceId: licenceTwo.id })
 
   return {
+    clean: async () => {
+      await company.$query().delete()
+      await licenceVersion.$query().delete()
+      await licenceVersionTwo.$query().delete()
+      await licence.$query().delete()
+      await licenceTwo.$query().delete()
+    },
     company,
     licenceOne: {
       licence,
@@ -27,13 +34,6 @@ export async function licenceHolderWithMultipleLicences() {
     licenceTwo: {
       licence: licenceTwo,
       licenceVersion: licenceVersionTwo
-    },
-    clean: async () => {
-      await company.$query().delete()
-      await licenceVersion.$query().delete()
-      await licenceVersionTwo.$query().delete()
-      await licence.$query().delete()
-      await licenceTwo.$query().delete()
     }
   }
 }
@@ -50,18 +50,18 @@ export async function exLicenceHolderWithSingleLicences() {
   const { clean, ...licenceHolder } = await licenceHolderWithSingleLicence()
 
   const newerLicenceVersion = await LicenceVersionHelper.add({
-    licenceId: licenceHolder.licence.id,
+    companyId: generateUUID(),
     issue: 2,
-    companyId: generateUUID()
+    licenceId: licenceHolder.licence.id
   })
 
   return {
     ...licenceHolder,
-    newerLicenceVersion,
     clean: async () => {
       await newerLicenceVersion.$query().delete()
       await clean()
-    }
+    },
+    newerLicenceVersion
   }
 }
 
@@ -76,16 +76,16 @@ export async function licenceHolderWithSingleLicence(data = {}) {
   const company = await CompanyHelper.add()
 
   const licence = await LicenceHelper.add(data)
-  const licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id, companyId: company.id })
+  const licenceVersion = await LicenceVersionHelper.add({ companyId: company.id, licenceId: licence.id })
 
   return {
-    company,
-    licence,
-    licenceVersion,
     clean: async () => {
       await licenceVersion.$query().delete()
       await licence.$query().delete()
       await company.$query().delete()
-    }
+    },
+    company,
+    licence,
+    licenceVersion
   }
 }

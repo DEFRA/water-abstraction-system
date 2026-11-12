@@ -3,50 +3,50 @@ import { index, submitIndex, submitView, view } from '../controllers/notices.con
 export default [
   {
     method: 'GET',
-    path: '/notices',
     options: {
-      handler: index,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
         }
-      }
-    }
+      },
+      handler: index
+    },
+    path: '/notices'
   },
   {
     method: 'POST',
-    path: '/notices',
     options: {
-      handler: submitIndex,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
         }
-      }
-    }
+      },
+      handler: submitIndex
+    },
+    path: '/notices'
   },
   {
     method: 'GET',
-    path: '/notices/{id}',
     options: {
-      handler: view,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
         }
-      }
-    }
+      },
+      handler: view
+    },
+    path: '/notices/{id}'
   },
   {
     method: 'POST',
-    path: '/notices/{id}',
     options: {
-      handler: submitView,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
         }
-      }
-    }
+      },
+      handler: submitView
+    },
+    path: '/notices/{id}'
   }
 ]

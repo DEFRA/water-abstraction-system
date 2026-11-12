@@ -20,8 +20,8 @@ export default function billsPresenter(bills, licence) {
 
   return {
     backLink: {
-      text: 'Go back to search',
-      href: '/'
+      href: '/',
+      text: 'Go back to search'
     },
     bills: _bills(licenceId, bills),
     pageTitle: 'Bills',
@@ -44,9 +44,9 @@ function _bills(licenceId, bills) {
 
     return {
       accountNumber,
+      billId,
       billingAccountId,
       billingAccountLink: `/system/billing-accounts/${billingAccountId}?licence-id=${licenceId}`,
-      billId,
       billNumber: _formatBillNumber(bill),
       billRunType: formatBillRunType(billRun.batchType, billRun.scheme, billRun.summer),
       credit,

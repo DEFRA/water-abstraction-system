@@ -67,10 +67,10 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
       const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
       expect(actualContact).toEqual({
-        id: companyContact.id,
         abstractionAlerts: true,
         contactId: companyContact.contact.id,
         email: 'eric@test.com',
+        id: companyContact.id,
         name: 'Eric',
         updatedBy: auth.credentials.user.id
       })
@@ -82,7 +82,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
       const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
-      expect(bannerMessage).toEqual({ titleText: 'Contact restored', text: `${session.name} was restored.` })
+      expect(bannerMessage).toEqual({ text: `${session.name} was restored.`, titleText: 'Contact restored' })
     })
 
     it('clears the session', async () => {

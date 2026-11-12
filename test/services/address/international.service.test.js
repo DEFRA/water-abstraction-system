@@ -19,7 +19,6 @@ describe('Address - International Service', () => {
 
   beforeEach(() => {
     sessionData = {
-      id: sessionId,
       addressJourney: {
         activeNavBar: 'manage',
         address: {},
@@ -28,7 +27,8 @@ describe('Address - International Service', () => {
           text: 'Back'
         },
         redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-      }
+      },
+      id: sessionId
     }
 
     session = SessionModelStub(sessionData)

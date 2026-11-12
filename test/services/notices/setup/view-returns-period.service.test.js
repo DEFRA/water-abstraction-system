@@ -19,7 +19,7 @@ describe('Notices - Setup - View Returns Period service', () => {
   beforeAll(async () => {
     referenceCode = generateNoticeReferenceCode('RINV-')
 
-    sessionData = { referenceCode, noticeType: 'invitations' }
+    sessionData = { noticeType: 'invitations', referenceCode }
 
     session = SessionModelStub(sessionData)
 

@@ -26,7 +26,7 @@ export default async function prepareReturnLogsService(licence, billingPeriod) {
 function _abstractionOutsidePeriod(returnAbstractionPeriods, returnLine) {
   const { startDate, endDate } = returnLine
 
-  return !periodsOverlap(returnAbstractionPeriods, [{ startDate, endDate }])
+  return !periodsOverlap(returnAbstractionPeriods, [{ endDate, startDate }])
 }
 
 async function _prepareReturnLogs(licence, billingPeriod) {

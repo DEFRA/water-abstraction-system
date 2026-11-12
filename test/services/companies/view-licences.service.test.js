@@ -28,14 +28,14 @@ describe('Companies - View Licences service', () => {
 
     licences = licences = [
       LicenceModel.fromJson({
+        currentLicenceHolder: company.name,
+        currentLicenceHolderId: company.id,
         expiredDate: null,
         id: generateUUID(),
         lapsedDate: null,
         licenceRef: generateLicenceRef(),
         revokedDate: null,
-        startDate: new Date('2022-01-01'),
-        currentLicenceHolderId: company.id,
-        currentLicenceHolder: company.name
+        startDate: new Date('2022-01-01')
       })
     ]
 

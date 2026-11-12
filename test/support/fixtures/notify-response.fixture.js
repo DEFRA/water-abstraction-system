@@ -1,5 +1,5 @@
-import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 import http2 from 'node:http2'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 
 const { HTTP_STATUS_OK } = http2.constants
 
@@ -13,9 +13,7 @@ const { HTTP_STATUS_OK } = http2.constants
 function successfulResponse(referenceCode) {
   return {
     email: {
-      succeeded: true,
       response: {
-        statusCode: HTTP_STATUS_OK,
         body: {
           content: {
             body: 'Dear licence holder,\r\n',
@@ -32,13 +30,13 @@ function successfulResponse(referenceCode) {
             version: 40
           },
           uri: 'https://api.notifications.service.gov.uk/v2/notifications/9a0a0ba0-9dc7-4322-9a68-cb370220d0c9'
-        }
-      }
+        },
+        statusCode: HTTP_STATUS_OK
+      },
+      succeeded: true
     },
     letter: {
-      succeeded: true,
       response: {
-        statusCode: HTTP_STATUS_OK,
         body: {
           content: {
             body: 'Dear Licence holder,\r\n',
@@ -53,18 +51,20 @@ function successfulResponse(referenceCode) {
             version: 32
           },
           uri: 'https://api.notifications.service.gov.uk/v2/notifications/fff6c2a9-77fc-4553-8265-546109a45044'
-        }
-      }
+        },
+        statusCode: HTTP_STATUS_OK
+      },
+      succeeded: true
     },
     pdf: {
-      succeeded: true,
       response: {
-        statusCode: HTTP_STATUS_OK,
         body: {
           id: 'fff6c2a9-77fc-4553-8265-546109a45044',
           reference: referenceCode
-        }
-      }
+        },
+        statusCode: HTTP_STATUS_OK
+      },
+      succeeded: true
     }
   }
 }

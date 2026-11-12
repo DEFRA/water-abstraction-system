@@ -4,8 +4,8 @@
  */
 
 import AbstractionPeriodService from '../services/return-versions/setup/abstraction-period.service.js'
-import AddService from '../services/return-versions/setup/add.service.js'
 import AdditionalSubmissionOptionsService from '../services/return-versions/setup/additional-submission-options.service.js'
+import AddService from '../services/return-versions/setup/add.service.js'
 import AgreementsExceptionsService from '../services/return-versions/setup/agreements-exceptions.service.js'
 import CancelService from '../services/return-versions/setup/cancel.service.js'
 import CheckService from '../services/return-versions/setup/check/check.service.js'
@@ -78,8 +78,8 @@ export async function approved(request, h) {
   const { licenceId } = request.params
 
   return h.view('return-versions/setup/approved.njk', {
-    pageTitle: 'Requirements for returns approved',
-    licenceId
+    licenceId,
+    pageTitle: 'Requirements for returns approved'
   })
 }
 

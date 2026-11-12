@@ -3,9 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import EventModel from 'water-abstraction-engine/models/event.model.js'
-import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
 import RecipientsFixture from 'water-abstraction-engine/test/fixtures/recipients.fixture.js'
+import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 import NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 
 // Things we need to stub
@@ -70,10 +70,10 @@ describe('Notices - Setup - Create Alternate Renewal Notice service', () => {
       contactType: 'licence holder',
       dueDate: null,
       eventId: result.notice.id,
-      licences: recipient.licence_refs,
       licenceMonitoringStationId: null,
-      messageType: 'letter',
+      licences: recipient.licence_refs,
       messageRef: 'renewal invitation',
+      messageType: 'letter',
       pdf: null,
       personalisation: {
         address_line_1: 'Renewal licence holder',

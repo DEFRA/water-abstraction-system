@@ -30,8 +30,8 @@ export default function abstractionPeriodValidator(payload) {
   const parsedEndDate = _parseDate(abstractionPeriodEndDay, abstractionPeriodEndMonth)
 
   return _validateAbstractionDate({
-    abstractionPeriodStart: parsedStartDate,
-    abstractionPeriodEnd: parsedEndDate
+    abstractionPeriodEnd: parsedEndDate,
+    abstractionPeriodStart: parsedStartDate
   })
 }
 

@@ -39,8 +39,8 @@ let otherLicence
 
 describe('Bill Runs - Match - Fetch Charge Versions service', () => {
   const billingPeriod = {
-    startDate: new Date('2023-04-01'),
-    endDate: new Date('2024-03-31')
+    endDate: new Date('2024-03-31'),
+    startDate: new Date('2023-04-01')
   }
   const region = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
 
@@ -87,8 +87,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         chargeReference = await ChargeReferenceHelper.add({
           adjustments: { s127: true },
-          chargeVersionId: chargeVersion.id,
-          chargeCategory: chargeCategory.id
+          chargeCategory: chargeCategory.id,
+          chargeVersionId: chargeVersion.id
         })
       })
 
@@ -113,8 +113,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         chargeReference = await ChargeReferenceHelper.add({
           adjustments: { s127: true },
-          chargeVersionId: chargeVersion.id,
-          chargeCategory: chargeCategory.id
+          chargeCategory: chargeCategory.id,
+          chargeVersionId: chargeVersion.id
         })
       })
 
@@ -139,8 +139,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         chargeReference = await ChargeReferenceHelper.add({
           adjustments: { s127: true },
-          chargeVersionId: chargeVersion.id,
-          chargeCategory: chargeCategory.id
+          chargeCategory: chargeCategory.id,
+          chargeVersionId: chargeVersion.id
         })
       })
 
@@ -165,8 +165,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         chargeReference = await ChargeReferenceHelper.add({
           adjustments: { s127: true },
-          chargeVersionId: chargeVersion.id,
-          chargeCategory: chargeCategory.id
+          chargeCategory: chargeCategory.id,
+          chargeVersionId: chargeVersion.id
         })
       })
 
@@ -187,8 +187,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         chargeReference = await ChargeReferenceHelper.add({
           adjustments: { s127: true },
-          chargeVersionId: chargeVersion.id,
-          chargeCategory: chargeCategory.id
+          chargeCategory: chargeCategory.id,
+          chargeVersionId: chargeVersion.id
         })
       })
 
@@ -209,8 +209,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         chargeReference = await ChargeReferenceHelper.add({
           adjustments: { s127: true },
-          chargeVersionId: chargeVersion.id,
-          chargeCategory: chargeCategory.id
+          chargeCategory: chargeCategory.id,
+          chargeVersionId: chargeVersion.id
         })
 
         await WorkflowHelper.add({ licenceId: licence.id })
@@ -240,8 +240,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         chargeReference = await ChargeReferenceHelper.add({
           adjustments: { s127: true },
-          chargeVersionId: chargeVersion.id,
-          chargeCategory: chargeCategory.id
+          chargeCategory: chargeCategory.id,
+          chargeVersionId: chargeVersion.id
         })
       })
 
@@ -256,7 +256,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       beforeEach(async () => {
         billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, scheme: 'sroc' })
 
-        licence = await LicenceHelper.add({ revokedDate: new Date('2023-06-01'), regionId: region.id })
+        licence = await LicenceHelper.add({ regionId: region.id, revokedDate: new Date('2023-06-01') })
 
         chargeVersion = await ChargeVersionHelper.add({
           licenceId: licence.id,
@@ -266,8 +266,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         chargeReference = await ChargeReferenceHelper.add({
           adjustments: { s127: true },
-          chargeVersionId: chargeVersion.id,
-          chargeCategory: chargeCategory.id
+          chargeCategory: chargeCategory.id,
+          chargeVersionId: chargeVersion.id
         })
       })
 
@@ -288,8 +288,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         chargeReference = await ChargeReferenceHelper.add({
           adjustments: { s127: true },
-          chargeVersionId: chargeVersion.id,
-          chargeCategory: chargeCategory.id
+          chargeCategory: chargeCategory.id,
+          chargeVersionId: chargeVersion.id
         })
       })
 
@@ -305,8 +305,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
         beforeEach(async () => {
           licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
             billRunId: billRun.id,
-            licenceId: licence.id,
-            financialYearEnd: billingPeriod.endDate.getFullYear() - 1
+            financialYearEnd: billingPeriod.endDate.getFullYear() - 1,
+            licenceId: licence.id
           })
         })
 
@@ -321,8 +321,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
         beforeEach(async () => {
           licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
             billRunId: '210d0685-5d61-44d3-9206-46ec037d8b73',
-            licenceId: licence.id,
-            financialYearEnd: billingPeriod.endDate.getFullYear()
+            financialYearEnd: billingPeriod.endDate.getFullYear(),
+            licenceId: licence.id
           })
         })
 
@@ -349,26 +349,26 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       chargeReference = await ChargeReferenceHelper.add({
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 3,
-        adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: 0.562114443 },
-        chargeVersionId: chargeVersion.id,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        adjustments: { aggregate: 0.562114443, charge: null, s126: null, s127: true, s130: false, winter: false },
         chargeCategoryId: chargeCategory.id,
+        chargeVersionId: chargeVersion.id,
         description: 'Charge reference 1 - Mineral washing',
         scheme: 'sroc'
       })
 
       chargeElement1 = await ChargeElementHelper.add({
-        chargeReferenceId: chargeReference.id,
         authorisedAnnualQuantity: 100,
+        chargeReferenceId: chargeReference.id,
         purposeId: purpose.id
       })
 
       chargeElement2 = await ChargeElementHelper.add({
-        chargeReferenceId: chargeReference.id,
         authorisedAnnualQuantity: 200,
+        chargeReferenceId: chargeReference.id,
         purposeId: purpose.id
       })
 
@@ -382,14 +382,14 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
         licenceRef: otherLicence.licence.licenceRef
       })
       otherChargeReference = await ChargeReferenceHelper.add({
-        chargeVersionId: otherChargeVersion.id,
+        adjustments: { s127: true },
         chargeCategoryId: chargeCategory.id,
-        adjustments: { s127: true }
+        chargeVersionId: otherChargeVersion.id
       })
 
       await ChargeElementHelper.add({
-        chargeReferenceId: otherChargeReference.id,
         authorisedAnnualQuantity: 100,
+        chargeReferenceId: otherChargeReference.id,
         purposeId: purpose.id
       })
     })
@@ -404,42 +404,12 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         expect(results).toHaveLength(2)
         expect(results[0]).toEqual({
-          id: chargeVersion.id,
-          startDate: new Date('2022-04-01'),
-          endDate: null,
-          status: 'current',
-          licence: {
-            id: licenceSeedData.licence.id,
-            licenceRef: licenceSeedData.licence.licenceRef,
-            startDate: new Date('2022-01-01'),
-            expiredDate: null,
-            lapsedDate: null,
-            revokedDate: null,
-            licenceVersions: [
-              {
-                id: licenceHolderDetails.licenceVersion.id,
-                issueDate: licenceHolderDetails.licenceVersion.issueDate,
-                licenceId: licenceHolderDetails.licenceVersion.licenceId,
-                startDate: licenceHolderDetails.licenceVersion.startDate,
-                status: licenceHolderDetails.licenceVersion.status,
-                company: {
-                  id: licenceHolderDetails.company.id,
-                  name: licenceHolderDetails.company.name,
-                  type: licenceHolderDetails.company.type
-                }
-              }
-            ]
+          changeReason: {
+            description: changeReason.description
           },
           chargeReferences: [
             {
-              id: chargeReference.id,
-              volume: 200,
-              description: 'Charge reference 1 - Mineral washing',
               aggregate: 0.562114443,
-              s126: null,
-              s127: 'true',
-              s130: 'false',
-              winter: 'false',
               charge: null,
               chargeCategory: {
                 reference: chargeCategory.reference,
@@ -448,39 +418,69 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
               },
               chargeElements: [
                 {
-                  id: chargeElement2.id,
-                  description: 'Mineral washing',
-                  abstractionPeriodStartDay: 1,
-                  abstractionPeriodStartMonth: 4,
                   abstractionPeriodEndDay: 31,
                   abstractionPeriodEndMonth: 3,
+                  abstractionPeriodStartDay: 1,
+                  abstractionPeriodStartMonth: 4,
                   authorisedAnnualQuantity: 200,
+                  description: 'Mineral washing',
+                  id: chargeElement2.id,
                   purpose: {
+                    description: purpose.description,
                     id: purpose.id,
-                    legacyId: purpose.legacyId,
-                    description: purpose.description
+                    legacyId: purpose.legacyId
                   }
                 },
                 {
-                  id: chargeElement1.id,
-                  description: 'Mineral washing',
-                  abstractionPeriodStartDay: 1,
-                  abstractionPeriodStartMonth: 4,
                   abstractionPeriodEndDay: 31,
                   abstractionPeriodEndMonth: 3,
+                  abstractionPeriodStartDay: 1,
+                  abstractionPeriodStartMonth: 4,
                   authorisedAnnualQuantity: 100,
+                  description: 'Mineral washing',
+                  id: chargeElement1.id,
                   purpose: {
+                    description: purpose.description,
                     id: purpose.id,
-                    legacyId: purpose.legacyId,
-                    description: purpose.description
+                    legacyId: purpose.legacyId
                   }
                 }
-              ]
+              ],
+              description: 'Charge reference 1 - Mineral washing',
+              id: chargeReference.id,
+              s126: null,
+              s127: 'true',
+              s130: 'false',
+              volume: 200,
+              winter: 'false'
             }
           ],
-          changeReason: {
-            description: changeReason.description
-          }
+          endDate: null,
+          id: chargeVersion.id,
+          licence: {
+            expiredDate: null,
+            id: licenceSeedData.licence.id,
+            lapsedDate: null,
+            licenceRef: licenceSeedData.licence.licenceRef,
+            licenceVersions: [
+              {
+                company: {
+                  id: licenceHolderDetails.company.id,
+                  name: licenceHolderDetails.company.name,
+                  type: licenceHolderDetails.company.type
+                },
+                id: licenceHolderDetails.licenceVersion.id,
+                issueDate: licenceHolderDetails.licenceVersion.issueDate,
+                licenceId: licenceHolderDetails.licenceVersion.licenceId,
+                startDate: licenceHolderDetails.licenceVersion.startDate,
+                status: licenceHolderDetails.licenceVersion.status
+              }
+            ],
+            revokedDate: null,
+            startDate: new Date('2022-01-01')
+          },
+          startDate: new Date('2022-04-01'),
+          status: 'current'
         })
       })
 
@@ -509,8 +509,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
           billRunId: billRun.id,
-          licenceId: licenceSeedData.licence.id,
-          financialYearEnd: billingPeriod.endDate.getFullYear()
+          financialYearEnd: billingPeriod.endDate.getFullYear(),
+          licenceId: licenceSeedData.licence.id
         })
       })
 

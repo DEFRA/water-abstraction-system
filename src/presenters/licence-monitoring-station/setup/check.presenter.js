@@ -50,11 +50,11 @@ function _links(sessionId) {
   const base = `/system/licence-monitoring-station/setup/${sessionId}`
 
   return {
-    threshold: `${base}/threshold-and-unit`,
-    type: `${base}/stop-or-reduce`,
-    licenceNumber: `${base}/licence-number`,
+    abstractionPeriod: `${base}/abstraction-period`,
     licenceCondition: `${base}/full-condition`,
-    abstractionPeriod: `${base}/abstraction-period`
+    licenceNumber: `${base}/licence-number`,
+    threshold: `${base}/threshold-and-unit`,
+    type: `${base}/stop-or-reduce`
   }
 }
 

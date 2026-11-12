@@ -173,8 +173,8 @@ async function _purposes() {
   })
 
   return {
-    purposes: { heatPumpId, sprayIrrigationDirectId, vegetableWashingId },
     primaryPurposes: { primaryAgricultureId, primaryElectricityId },
+    purposes: { heatPumpId, sprayIrrigationDirectId, vegetableWashingId },
     secondaryPurposes: { secondaryAgricultureId, secondaryElectricityId }
   }
 }

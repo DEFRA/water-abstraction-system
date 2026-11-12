@@ -50,6 +50,15 @@ describe('Notifications - Fetch Notification service', () => {
             },
             notification: {
               createdAt: notification.createdAt,
+              event: {
+                createdAt: notice.createdAt,
+                id: notice.id,
+                issuer: 'admin-internal@wrls.gov.uk',
+                referenceCode: notice.referenceCode,
+                sendingAlertType: null,
+                subtype: 'paperReturnForms'
+              },
+              hasPdf: true,
               id: notification.id,
               messageType: 'letter',
               notifyError: null,
@@ -58,16 +67,7 @@ describe('Notifications - Fetch Notification service', () => {
               plaintext: null,
               recipient: null,
               returnedAt: null,
-              status: 'sent',
-              hasPdf: true,
-              event: {
-                createdAt: notice.createdAt,
-                id: notice.id,
-                issuer: 'admin-internal@wrls.gov.uk',
-                referenceCode: notice.referenceCode,
-                subtype: 'paperReturnForms',
-                sendingAlertType: null
-              }
+              status: 'sent'
             }
           })
         })
@@ -101,24 +101,24 @@ describe('Notifications - Fetch Notification service', () => {
             },
             notification: {
               createdAt: notification.createdAt,
+              event: {
+                createdAt: notice.createdAt,
+                id: notice.id,
+                issuer: 'admin-internal@wrls.gov.uk',
+                referenceCode: notice.referenceCode,
+                sendingAlertType: null,
+                subtype: 'paperReturnForms'
+              },
+              hasPdf: false,
               id: notification.id,
               messageType: 'letter',
               notifyError: null,
               notifyStatus: 'received',
               personalisation: notification.personalisation,
               plaintext: notification.plaintext,
-              returnedAt: null,
               recipient: null,
-              status: 'sent',
-              hasPdf: false,
-              event: {
-                createdAt: notice.createdAt,
-                id: notice.id,
-                issuer: 'admin-internal@wrls.gov.uk',
-                referenceCode: notice.referenceCode,
-                subtype: 'paperReturnForms',
-                sendingAlertType: null
-              }
+              returnedAt: null,
+              status: 'sent'
             }
           })
         })
@@ -144,24 +144,24 @@ describe('Notifications - Fetch Notification service', () => {
             },
             notification: {
               createdAt: notification.createdAt,
+              event: {
+                createdAt: notice.createdAt,
+                id: notice.id,
+                issuer: 'admin-internal@wrls.gov.uk',
+                referenceCode: notice.referenceCode,
+                sendingAlertType: null,
+                subtype: 'paperReturnForms'
+              },
+              hasPdf: true,
               id: notification.id,
               messageType: 'letter',
               notifyError: notification.notifyError,
               notifyStatus: null,
               personalisation: notification.personalisation,
               plaintext: null,
-              returnedAt: null,
               recipient: null,
-              status: 'sent',
-              hasPdf: true,
-              event: {
-                createdAt: notice.createdAt,
-                id: notice.id,
-                issuer: 'admin-internal@wrls.gov.uk',
-                referenceCode: notice.referenceCode,
-                subtype: 'paperReturnForms',
-                sendingAlertType: null
-              }
+              returnedAt: null,
+              status: 'sent'
             }
           })
         })
@@ -185,24 +185,24 @@ describe('Notifications - Fetch Notification service', () => {
             },
             notification: {
               createdAt: notification.createdAt,
+              event: {
+                createdAt: notice.createdAt,
+                id: notice.id,
+                issuer: 'admin-internal@wrls.gov.uk',
+                referenceCode: notice.referenceCode,
+                sendingAlertType: null,
+                subtype: 'paperReturnForms'
+              },
+              hasPdf: true,
               id: notification.id,
               messageType: 'letter',
               notifyError: null,
               notifyStatus: 'permanent-failure',
               personalisation: notification.personalisation,
               plaintext: null,
-              returnedAt: null,
               recipient: null,
-              status: 'sent',
-              hasPdf: true,
-              event: {
-                createdAt: notice.createdAt,
-                id: notice.id,
-                issuer: 'admin-internal@wrls.gov.uk',
-                referenceCode: notice.referenceCode,
-                subtype: 'paperReturnForms',
-                sendingAlertType: null
-              }
+              returnedAt: null,
+              status: 'sent'
             }
           })
         })
@@ -221,6 +221,15 @@ describe('Notifications - Fetch Notification service', () => {
           licence: null,
           notification: {
             createdAt: notification.createdAt,
+            event: {
+              createdAt: notice.createdAt,
+              id: notice.id,
+              issuer: 'admin-internal@wrls.gov.uk',
+              referenceCode: notice.referenceCode,
+              sendingAlertType: null,
+              subtype: 'paperReturnForms'
+            },
+            hasPdf: true,
             id: notification.id,
             messageType: 'letter',
             notifyError: null,
@@ -229,16 +238,7 @@ describe('Notifications - Fetch Notification service', () => {
             plaintext: null,
             recipient: null,
             returnedAt: null,
-            status: 'sent',
-            hasPdf: true,
-            event: {
-              createdAt: notice.createdAt,
-              id: notice.id,
-              issuer: 'admin-internal@wrls.gov.uk',
-              referenceCode: notice.referenceCode,
-              subtype: 'paperReturnForms',
-              sendingAlertType: null
-            }
+            status: 'sent'
           }
         })
       })

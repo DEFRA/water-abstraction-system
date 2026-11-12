@@ -69,20 +69,20 @@ describe('Users - Internal - Create User DAL', () => {
       const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
 
       expect(event).toMatchObject({
-        referenceCode: null,
-        type: 'new-user',
-        subtype: 'internal',
+        entities: [],
         issuer: 'internal-user-creator@wrls.gov.uk',
         licences: [],
-        entities: [],
         metadata: {
           user: user.username,
           userId: user.userId
         },
-        status: null,
         overallStatus: null,
+        referenceCode: null,
+        status: null,
         statusCounts: null,
-        triggerNoticeId: null
+        subtype: 'internal',
+        triggerNoticeId: null,
+        type: 'new-user'
       })
       expect(event.createdAt).toBeInstanceOf(Date)
       expect(event.updatedAt).toBeInstanceOf(Date)

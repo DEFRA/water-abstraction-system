@@ -6,11 +6,11 @@ import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 import NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
-import * as ViewMessageDataRequest from 'water-abstraction-engine/requests/notify/view-message-data.request.js'
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 import LicenceMonitoringStationModel from 'water-abstraction-engine/models/licence-monitoring-station.model.js'
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
 import ReturnLogModel from 'water-abstraction-engine/models/return-log.model.js'
+import * as ViewMessageDataRequest from 'water-abstraction-engine/requests/notify/view-message-data.request.js'
 
 // Thing under test
 import CheckNotificationStatusService from '../../../src/services/notifications/check-notification-status.service.js'
@@ -27,14 +27,14 @@ describe('Notifications - Check Notification Status service', () => {
   beforeEach(() => {
     notificationPatchStub = vi.fn().mockReturnThis()
     vi.spyOn(NotificationModel, 'query').mockReturnValue({
-      patch: notificationPatchStub,
-      findById: vi.fn().mockResolvedValue()
+      findById: vi.fn().mockResolvedValue(),
+      patch: notificationPatchStub
     })
 
     licenceMonitoringStationPatchStub = vi.fn().mockReturnThis()
     vi.spyOn(LicenceMonitoringStationModel, 'query').mockReturnValue({
-      patch: licenceMonitoringStationPatchStub,
-      findById: vi.fn().mockResolvedValue()
+      findById: vi.fn().mockResolvedValue(),
+      patch: licenceMonitoringStationPatchStub
     })
 
     returnLogPatchStub = vi.fn().mockReturnThis()
@@ -62,13 +62,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "pending" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'accepted'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -84,13 +84,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns "sent" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'received'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -115,13 +115,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns "failed" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'validation-failed'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -145,13 +145,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'unrecognised'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -174,13 +174,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "pending" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'accepted'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -196,13 +196,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns "sent" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'delivered'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -227,13 +227,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns "failed" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'technical-failure'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -257,13 +257,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'unrecognised'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -297,13 +297,13 @@ describe('Notifications - Check Notification Status service', () => {
         // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
         // representation look at test/requests/notify/view-message-data.request.test.js
         vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: 200,
             body: {
               status: 'pending-virus-check'
-            }
-          }
+            },
+            statusCode: 200
+          },
+          succeeded: true
         })
       })
 
@@ -321,13 +321,13 @@ describe('Notifications - Check Notification Status service', () => {
         // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
         // representation look at test/requests/notify/view-message-data.request.test.js
         vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: 200,
             body: {
               status: 'received'
-            }
-          }
+            },
+            statusCode: 200
+          },
+          succeeded: true
         })
       })
 
@@ -376,13 +376,13 @@ describe('Notifications - Check Notification Status service', () => {
     describe('and Notify returns a "failed" status', () => {
       beforeEach(() => {
         vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: 200,
             body: {
               status: 'temporary-failure'
-            }
-          }
+            },
+            statusCode: 200
+          },
+          succeeded: true
         })
       })
 
@@ -400,13 +400,13 @@ describe('Notifications - Check Notification Status service', () => {
     describe('and Notify returns a "cancelled" status', () => {
       beforeEach(() => {
         vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: 200,
             body: {
               status: 'cancelled'
-            }
-          }
+            },
+            statusCode: 200
+          },
+          succeeded: true
         })
       })
 
@@ -424,13 +424,13 @@ describe('Notifications - Check Notification Status service', () => {
     describe('and Notify returns an "unknown" status', () => {
       beforeEach(() => {
         vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: 200,
             body: {
               status: 'unrecognised'
-            }
-          }
+            },
+            statusCode: 200
+          },
+          succeeded: true
         })
       })
 
@@ -467,13 +467,13 @@ describe('Notifications - Check Notification Status service', () => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'sending'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -491,13 +491,13 @@ describe('Notifications - Check Notification Status service', () => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'received'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -546,13 +546,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'temporary-failure'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -570,13 +570,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'unrecognised'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -599,13 +599,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "pending" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'created'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -621,13 +621,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "sent" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'delivered'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -676,13 +676,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'permanent-failure'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -700,13 +700,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'unrecognised'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -744,13 +744,13 @@ describe('Notifications - Check Notification Status service', () => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'sending'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -768,13 +768,13 @@ describe('Notifications - Check Notification Status service', () => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'received'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -823,13 +823,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'temporary-failure'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -847,13 +847,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'unrecognised'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -876,13 +876,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "pending" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'created'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -898,13 +898,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "sent" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'delivered'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -953,13 +953,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'permanent-failure'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -977,13 +977,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'unrecognised'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -1020,13 +1020,13 @@ describe('Notifications - Check Notification Status service', () => {
         // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
         // representation look at test/requests/notify/view-message-data.request.test.js
         vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: 200,
             body: {
               status: 'sending'
-            }
-          }
+            },
+            statusCode: 200
+          },
+          succeeded: true
         })
       })
 
@@ -1044,13 +1044,13 @@ describe('Notifications - Check Notification Status service', () => {
         // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
         // representation look at test/requests/notify/view-message-data.request.test.js
         vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: 200,
             body: {
               status: 'received'
-            }
-          }
+            },
+            statusCode: 200
+          },
+          succeeded: true
         })
       })
 
@@ -1099,13 +1099,13 @@ describe('Notifications - Check Notification Status service', () => {
     describe('and Notify returns a "failed" status', () => {
       beforeEach(() => {
         vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: 200,
             body: {
               status: 'temporary-failure'
-            }
-          }
+            },
+            statusCode: 200
+          },
+          succeeded: true
         })
       })
 
@@ -1123,13 +1123,13 @@ describe('Notifications - Check Notification Status service', () => {
     describe('and Notify returns an "unknown" status', () => {
       beforeEach(() => {
         vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: 200,
             body: {
               status: 'unrecognised'
-            }
-          }
+            },
+            statusCode: 200
+          },
+          succeeded: true
         })
       })
 
@@ -1159,13 +1159,13 @@ describe('Notifications - Check Notification Status service', () => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'sending'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -1183,13 +1183,13 @@ describe('Notifications - Check Notification Status service', () => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'received'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -1204,13 +1204,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'temporary-failure'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -1228,13 +1228,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'unrecognised'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -1257,13 +1257,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "pending" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'created'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -1279,13 +1279,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "sent" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'delivered'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -1300,13 +1300,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns a "failed" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'permanent-failure'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -1324,13 +1324,13 @@ describe('Notifications - Check Notification Status service', () => {
       describe('and Notify returns an "unknown" status', () => {
         beforeEach(() => {
           vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-            succeeded: true,
             response: {
-              statusCode: 200,
               body: {
                 status: 'unrecognised'
-              }
-            }
+              },
+              statusCode: 200
+            },
+            succeeded: true
           })
         })
 
@@ -1348,9 +1348,7 @@ describe('Notifications - Check Notification Status service', () => {
   describe('when checking the notification status fails', () => {
     beforeEach(() => {
       vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-        succeeded: false,
         response: {
-          statusCode: 404,
           body: {
             errors: [
               {
@@ -1359,8 +1357,10 @@ describe('Notifications - Check Notification Status service', () => {
               }
             ],
             status_code: 404
-          }
-        }
+          },
+          statusCode: 404
+        },
+        succeeded: false
       })
     })
 
@@ -1381,7 +1381,6 @@ describe('Notifications - Check Notification Status service', () => {
       expect(errorLogArgs[1]).toEqual({
         notifyId: notification.notifyId,
         response: {
-          statusCode: 404,
           body: {
             errors: [
               {
@@ -1390,7 +1389,8 @@ describe('Notifications - Check Notification Status service', () => {
               }
             ],
             status_code: 404
-          }
+          },
+          statusCode: 404
         }
       })
       expect(errorLogArgs[2]).toBeUndefined()
@@ -1406,13 +1406,13 @@ describe('Notifications - Check Notification Status service', () => {
       notification.status = 'pending'
 
       vi.spyOn(ViewMessageDataRequest, 'default').mockResolvedValue({
-        succeeded: true,
         response: {
-          statusCode: 200,
           body: {
             status: 'delivered'
-          }
-        }
+          },
+          statusCode: 200
+        },
+        succeeded: true
       })
 
       returnLogWhereInStub = vi.fn().mockRejectedValue(error)

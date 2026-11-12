@@ -17,8 +17,8 @@ export default async function determineLicenceMonitoringStationsService(id) {
   return {
     licenceMonitoringStations: _licenceMonitoringStations(licenceMonitoringStations),
     monitoringStationId: id,
-    monitoringStationRiverName: monitoringStation.riverName,
-    monitoringStationName: monitoringStation.label
+    monitoringStationName: monitoringStation.label,
+    monitoringStationRiverName: monitoringStation.riverName
   }
 }
 

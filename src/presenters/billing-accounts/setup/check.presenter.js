@@ -28,17 +28,17 @@ export default function checkPresenter(
     accountType: session.accountType ?? '',
     address: _address(session),
     addressSelected: _existingAddress(existingAddress),
-    companySearch: session.companySearch ?? '',
     companiesHouseName: companysHouseResult ? companysHouseResult.title : '',
+    companySearch: session.companySearch ?? '',
     contactName: session.contactName ?? '',
     contactSelected: _contactSelected(session, companyContacts),
     existingAccount: _existingAccount(session, companyContacts),
     fao: session.fao,
     impactedLicences,
+    individualName: session.individualName ?? '',
     links: _links(session),
     pageTitle: 'Check billing account details',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
-    individualName: session.individualName ?? '',
     searchInput: session.searchInput ?? ''
   }
 }
@@ -112,9 +112,9 @@ function _existingAccount(session, companyContacts) {
 
 function _links(session) {
   return {
-    address: `/system/address/${session.id}/postcode`,
     accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
     accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
+    address: `/system/address/${session.id}/postcode`,
     addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
     companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
     companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,

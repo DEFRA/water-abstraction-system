@@ -23,7 +23,6 @@ describe('Address - Select Presenter', () => {
     ]
 
     session = {
-      id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061',
       addressJourney: {
         activeNavBar: 'manage',
         address: { postcode: 'SW1A 1AA' },
@@ -32,7 +31,8 @@ describe('Address - Select Presenter', () => {
           text: 'Back'
         },
         redirectUrl: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
-      }
+      },
+      id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061'
     }
   })
 
@@ -43,9 +43,9 @@ describe('Address - Select Presenter', () => {
       activeNavBar: 'manage',
       addresses: [
         {
-          value: 'select',
           selected: true,
-          text: `2 addresses found`
+          text: `2 addresses found`,
+          value: 'select'
         },
         {
           text: 'address 1',
@@ -74,9 +74,9 @@ describe('Address - Select Presenter', () => {
 
         expect(result.addresses).toEqual([
           {
-            value: 'select',
             selected: true,
-            text: `2 addresses found`
+            text: `2 addresses found`,
+            value: 'select'
           },
           {
             text: 'address 1',
@@ -96,9 +96,9 @@ describe('Address - Select Presenter', () => {
 
         expect(result.addresses).toEqual([
           {
-            value: 'select',
             selected: true,
-            text: `1 address found`
+            text: `1 address found`,
+            value: 'select'
           },
           {
             text: 'address 1',

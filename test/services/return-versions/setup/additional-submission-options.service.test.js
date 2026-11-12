@@ -17,20 +17,20 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         startDate: '2022-04-01T00:00:00.000Z'
       },
       multipleUpload: false,
       noAdditionalOptions: undefined,
-      journey: 'returns-required',
+      reason: 'major-change',
       requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change'
+      startDateOptions: 'licenceStartDate'
     }
 
     session = SessionModelStub(sessionData)
@@ -53,18 +53,18 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
       const result = await AdditionalSubmissionOptionsService(session.id)
 
       expect(result).toMatchObject({
-        multipleUpload: false,
-        noAdditionalOptions: undefined,
-        quarterlyReturnSubmissions: false,
-        quarterlyReturns: undefined,
         backLink: {
           href: `/system/return-versions/setup/${session.id}/check`,
           text: 'Back'
         },
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
+        multipleUpload: false,
+        noAdditionalOptions: undefined,
         pageTitle: 'Select any additional submission options for the return requirements',
-        pageTitleCaption: 'Licence 01/ABC'
+        pageTitleCaption: 'Licence 01/ABC',
+        quarterlyReturns: undefined,
+        quarterlyReturnSubmissions: false
       })
     })
   })

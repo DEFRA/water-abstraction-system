@@ -71,9 +71,9 @@ describe('Licences - Fetch Summary service', () => {
     })
 
     licenceVersion = await LicenceVersionHelper.add({
+      companyId: company.id,
       criticalityCode: 'LC',
       criticalityDescription: 'Less Critical',
-      companyId: company.id,
       increment: 0,
       issue: 101,
       licenceId: licence.id,
@@ -100,8 +100,8 @@ describe('Licences - Fetch Summary service', () => {
     })
 
     licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
-      licenceVersionPurposeId: licenceVersionPurpose.id,
-      licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id
+      licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id,
+      licenceVersionPurposeId: licenceVersionPurpose.id
     })
 
     companyEntity = await LicenceEntityHelper.add({ name: company.name, type: 'company' })
@@ -124,8 +124,8 @@ describe('Licences - Fetch Summary service', () => {
     monitoringStation = await MonitoringStationHelper.add()
 
     licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
-      monitoringStationId: monitoringStation.id,
-      licenceId: licence.id
+      licenceId: licence.id,
+      monitoringStationId: monitoringStation.id
     })
 
     // We add two workflow records: one reflects that the licence is in workflow, so of that it previously was but
@@ -165,13 +165,11 @@ describe('Licences - Fetch Summary service', () => {
       const result = await FetchSummaryService(licence.id)
 
       expect(result).toEqual({
-        id: licence.id,
         expiredDate: null,
+        id: licence.id,
         issueDate: null,
-        startDate: new Date('2022-01-01'),
         licenceDocumentHeader: {
           id: licenceDocumentHeader.id,
-          licenceName: licenceDocumentHeader.licenceName,
           licenceEntityRoles: [
             {
               id: licenceEntityRole.id,
@@ -184,40 +182,49 @@ describe('Licences - Fetch Summary service', () => {
                 }
               }
             }
-          ]
+          ],
+          licenceName: licenceDocumentHeader.licenceName
         },
-        region: {
-          id: region.id,
-          displayName: region.displayName
-        },
+        licenceMonitoringStations: [
+          {
+            id: licenceMonitoringStation.id,
+            monitoringStation: {
+              id: monitoringStation.id,
+              label: 'MONITOR PLACE'
+            }
+          }
+        ],
         licenceVersions: [
           {
-            id: licenceVersion.id,
-            criticalityDescription: 'Less Critical',
-            issueDate: null,
-            licenceId: licence.id,
-            startDate: new Date('2022-05-01'),
-            status: 'current',
             company: {
               id: company.id,
               name: 'Example Trading Ltd',
               type: 'organisation'
             },
+            criticalityDescription: 'Less Critical',
+            id: licenceVersion.id,
+            issueDate: null,
+            licenceId: licence.id,
             licenceVersionPurposes: [
               {
-                id: licenceVersionPurpose.id,
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 1,
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3,
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 1,
                 annualQuantity: null,
                 dailyQuantity: null,
                 hourlyQuantity: null,
+                id: licenceVersionPurpose.id,
                 instantQuantity: null,
-                purpose: {
-                  id: purpose.id,
-                  description: purpose.description
-                },
+                licenceVersionPurposeConditions: [
+                  {
+                    id: licenceVersionPurposeCondition.id,
+                    licenceVersionPurposeConditionType: {
+                      displayTitle: 'Aggregate condition link between licences',
+                      id: licenceVersionPurposeConditionType.id
+                    }
+                  }
+                ],
                 points: [
                   {
                     description: point.description,
@@ -229,28 +236,21 @@ describe('Licences - Fetch Summary service', () => {
                     source: { description: source.description, id: source.id }
                   }
                 ],
-                licenceVersionPurposeConditions: [
-                  {
-                    id: licenceVersionPurposeCondition.id,
-                    licenceVersionPurposeConditionType: {
-                      id: licenceVersionPurposeConditionType.id,
-                      displayTitle: 'Aggregate condition link between licences'
-                    }
-                  }
-                ]
+                purpose: {
+                  description: purpose.description,
+                  id: purpose.id
+                }
               }
-            ]
+            ],
+            startDate: new Date('2022-05-01'),
+            status: 'current'
           }
         ],
-        licenceMonitoringStations: [
-          {
-            id: licenceMonitoringStation.id,
-            monitoringStation: {
-              id: monitoringStation.id,
-              label: 'MONITOR PLACE'
-            }
-          }
-        ],
+        region: {
+          displayName: region.displayName,
+          id: region.id
+        },
+        startDate: new Date('2022-01-01'),
         workflows: [
           {
             id: workflow.id,

@@ -14,11 +14,12 @@ import SendAlternateNoticesService from '../../../../src/services/jobs/notificat
 describe('Job - Notifications - Send Alternate Notices service', () => {
   let criticalNotices
   let notifications
+
   beforeEach(async () => {
     notifications = [
-      { id: generateUUID(), eventId: generateUUID() },
-      { id: generateUUID(), eventId: generateUUID() },
-      { id: generateUUID(), eventId: generateUUID() }
+      { eventId: generateUUID(), id: generateUUID() },
+      { eventId: generateUUID(), id: generateUUID() },
+      { eventId: generateUUID(), id: generateUUID() }
     ]
 
     vi.spyOn(SendAlternateNoticeService, 'default').mockResolvedValue()

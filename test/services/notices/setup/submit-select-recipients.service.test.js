@@ -40,7 +40,7 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
     vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipients.primaryUser])
 
     yarStub = YarStub()
-    yarStub.flash.mockReturnValue([{ title: 'Test', text: 'Notification' }])
+    yarStub.flash.mockReturnValue([{ text: 'Notification', title: 'Test' }])
   })
 
   afterEach(() => {

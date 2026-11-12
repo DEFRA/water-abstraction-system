@@ -6,8 +6,8 @@
 import { formatDateObjectToISO } from 'water-abstraction-engine/lib/dates.lib.js'
 
 const REPORTED = {
-  VOLUMES: 'abstractionVolumes',
-  READINGS: 'meterReadings'
+  READINGS: 'meterReadings',
+  VOLUMES: 'abstractionVolumes'
 }
 
 /**
@@ -26,9 +26,9 @@ export default function generateReturnSubmissionMetadataService(session) {
   return {
     meters: _determineMeters(session),
     method: session.reported === REPORTED.VOLUMES ? 'abstractionVolumes' : 'oneMeter',
-    units: session.unitSymbol,
     // Legacy code sets reported to `estimated` ONLY if we have volumes with no meter; otherwise it's `measured`
     type: session.reported === REPORTED.VOLUMES && session.meterProvided === 'no' ? 'estimated' : 'measured',
+    units: session.unitSymbol,
     ..._totalProperties(session)
   }
 }
@@ -38,6 +38,7 @@ function _formatReadings(lines) {
     const { startDate, endDate, reading } = line
 
     const key = `${formatDateObjectToISO(new Date(startDate))}_${formatDateObjectToISO(new Date(endDate))}`
+
     acc[key] = reading
 
     return acc
@@ -63,9 +64,9 @@ function _determineMeters(session) {
       }),
       // Units, readings and start reading are only set if this is a meter reading return
       ...(session.reported === REPORTED.READINGS && {
-        units: session.unitSymbol,
         readings: _formatReadings(session.lines),
-        startReading: session.startReading
+        startReading: session.startReading,
+        units: session.unitSymbol
       })
     }
   ]
@@ -79,17 +80,17 @@ function _totalProperties(session) {
   }
 
   const total = {
-    totalFlag: true,
     total: session.singleVolume ? session.singleVolumeQuantity : null,
-    totalCustomDates: session.singleVolume && session.periodDateUsedOptions === 'custom-dates'
+    totalCustomDates: session.singleVolume && session.periodDateUsedOptions === 'custom-dates',
+    totalFlag: true
   }
 
   return {
     ...total,
     // Custom date fields are only required if the custom date option has been selected
     ...(total.totalCustomDates && {
-      totalCustomDateStart: session.fromFullDate,
-      totalCustomDateEnd: session.toFullDate
+      totalCustomDateEnd: session.toFullDate,
+      totalCustomDateStart: session.fromFullDate
     })
   }
 }

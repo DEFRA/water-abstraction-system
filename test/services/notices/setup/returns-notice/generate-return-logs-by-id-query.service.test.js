@@ -91,10 +91,10 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
           due_date: returnLogs[0].dueDate,
           end_date: returnLogs[0].endDate,
           licence_ref: returnLogs[0].licenceRef,
+          quarterly: returnLogs[0].quarterly,
           return_log_id: returnLogs[0].id,
           return_reference: Number(returnLogs[0].returnReference),
-          start_date: returnLogs[0].startDate,
-          quarterly: returnLogs[0].quarterly
+          start_date: returnLogs[0].startDate
         }
       ])
     })
@@ -109,10 +109,10 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
             due_date: returnLogWithRequirement.dueDate,
             end_date: returnLogWithRequirement.endDate,
             licence_ref: returnLogWithRequirement.licenceRef,
+            quarterly: returnLogWithRequirement.quarterly,
             return_log_id: returnLogWithRequirement.id,
             return_reference: returnRequirement.reference,
-            start_date: returnLogWithRequirement.startDate,
-            quarterly: returnLogWithRequirement.quarterly
+            start_date: returnLogWithRequirement.startDate
           }
         ])
       })

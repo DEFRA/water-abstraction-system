@@ -9,12 +9,12 @@ import FetchLicencesService from '../../../../src/services/bill-runs/match/fetch
 
 describe('Bill Runs - Match - Fetch Licences service', () => {
   const billRun = {
-    regionId: '64924759-8142-4a08-9d1e-1e902cd9d316',
-    billingBatchId: '41be6d72-701b-4252-90d5-2d38614b6282'
+    billingBatchId: '41be6d72-701b-4252-90d5-2d38614b6282',
+    regionId: '64924759-8142-4a08-9d1e-1e902cd9d316'
   }
   const billingPeriod = {
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2023-03-31')
+    endDate: new Date('2023-03-31'),
+    startDate: new Date('2022-04-01')
   }
 
   afterEach(() => {
@@ -25,24 +25,24 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
     const licenceHolderStub = vi.fn().mockReturnValue('Mock Licence Holder')
 
     const licenceOne = {
-      id: '301d4ef9-41b9-4ec9-927b-0c78d9ece5ba',
-      licenceRef: '11/11/11/1111',
-      startDate: '1967-02-13T00:00:00.000Z',
+      $licenceHolder: licenceHolderStub,
       expiredDate: '2050-04-01T00:00:00.000Z',
+      id: '301d4ef9-41b9-4ec9-927b-0c78d9ece5ba',
       lapsedDate: null,
+      licenceRef: '11/11/11/1111',
       revokedDate: null,
-      $licenceHolder: licenceHolderStub
+      startDate: '1967-02-13T00:00:00.000Z'
     }
 
     describe('and there is a single licence linked to a single charge version', () => {
       beforeEach(() => {
         vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue([
           {
-            id: '9407b74d-816c-44a2-9926-73a89a9da985',
-            startDate: '2022-04-01T00:00:00.000Z',
             endDate: null,
-            status: 'current',
-            licence: licenceOne
+            id: '9407b74d-816c-44a2-9926-73a89a9da985',
+            licence: licenceOne,
+            startDate: '2022-04-01T00:00:00.000Z',
+            status: 'current'
           }
         ])
       })
@@ -70,37 +70,37 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
 
     describe('and there are two licences linked to three charge versions', () => {
       const licenceTwo = {
-        id: 'd561be9a-ddbb-4442-a361-757a4d1ef46c',
-        licenceRef: '22/22/22/2222',
-        startDate: '1971-02-13T00:00:00.000Z',
+        $licenceHolder: licenceHolderStub,
         expiredDate: null,
+        id: 'd561be9a-ddbb-4442-a361-757a4d1ef46c',
         lapsedDate: null,
+        licenceRef: '22/22/22/2222',
         revokedDate: null,
-        $licenceHolder: licenceHolderStub
+        startDate: '1971-02-13T00:00:00.000Z'
       }
 
       beforeEach(() => {
         vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue([
           {
+            endDate: null,
             id: '9407b74d-816c-44a2-9926-73a89a9da985',
+            licence: licenceOne,
             startDate: '2022-10-01T00:00:00.000Z',
-            endDate: null,
-            status: 'current',
-            licence: licenceOne
+            status: 'current'
           },
           {
-            id: 'cbab5668-21db-4fe5-9af8-9bb823d9294f',
-            startDate: '2022-04-01T00:00:00.000Z',
             endDate: '2022-09-30T00:00:00.000Z',
-            status: 'current',
-            licence: licenceOne
+            id: 'cbab5668-21db-4fe5-9af8-9bb823d9294f',
+            licence: licenceOne,
+            startDate: '2022-04-01T00:00:00.000Z',
+            status: 'current'
           },
           {
-            id: 'efe652ba-f42c-4113-a190-f3d9d829a640',
-            startDate: '2022-04-01T00:00:00.000Z',
             endDate: null,
-            status: 'current',
-            licence: licenceTwo
+            id: 'efe652ba-f42c-4113-a190-f3d9d829a640',
+            licence: licenceTwo,
+            startDate: '2022-04-01T00:00:00.000Z',
+            status: 'current'
           }
         ])
       })

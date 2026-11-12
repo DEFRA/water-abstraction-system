@@ -41,10 +41,10 @@ function _formatTableData(invalidAddresses) {
     }
 
     return {
-      licenceRef: invalidAddress.licence_ref,
-      licenceEnds: formatDateObjectToISO(invalidAddress.licence_ends),
+      addressLines,
       contactRole: invalidAddress.contact_role,
-      addressLines
+      licenceEnds: formatDateObjectToISO(invalidAddress.licence_ends),
+      licenceRef: invalidAddress.licence_ref
     }
   })
 }

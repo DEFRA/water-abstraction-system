@@ -16,6 +16,7 @@ describe('Bill Runs - Setup - Year service', () => {
 
   let session
   let sessionData
+
   beforeEach(() => {
     sessionData = { region: regionId, type: 'two_part_supplementary', year: 2024 }
 
@@ -39,10 +40,10 @@ describe('Bill Runs - Setup - Year service', () => {
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
         backlink: `/system/bill-runs/setup/${session.id}/region`,
-        financialYearsData: [{ text: '2023 to 2024', value: 2024, checked: true }],
+        financialYearsData: [{ checked: true, text: '2023 to 2024', value: 2024 }],
         pageTitle: 'Select the financial year',
-        sessionId: session.id,
-        selectedYear: 2024
+        selectedYear: 2024,
+        sessionId: session.id
       })
     })
   })

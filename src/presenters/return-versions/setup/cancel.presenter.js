@@ -30,8 +30,8 @@ export default function cancelPresenter(session) {
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     reason: returnRequirementReasons[reason],
     returnRequirements: _returnRequirements(journey, requirements),
-    startDate: _startDate(session),
-    sessionId
+    sessionId,
+    startDate: _startDate(session)
   }
 }
 

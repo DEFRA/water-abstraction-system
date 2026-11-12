@@ -4,9 +4,9 @@ import { beforeEach, describe, expect, it } from 'vitest'
 // Test helpers
 import AddressHelper from 'water-abstraction-engine/test/helpers/address.helper.js'
 import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
-import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import BillingAccountAddressHelper from 'water-abstraction-engine/test/helpers/billing-account-address.helper.js'
 import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import CompanyHelper from 'water-abstraction-engine/test/helpers/company.helper.js'
 import ContactHelper from 'water-abstraction-engine/test/helpers/contact.helper.js'
 
@@ -76,24 +76,19 @@ describe('Billing Accounts - Fetch View Billing Account service', () => {
 
       expect(result).toEqual({
         billingAccount: {
-          id: billingAccountId,
           accountNumber: billingAccount.accountNumber,
-          createdAt: billingAccount.createdAt,
-          lastTransactionFile: null,
-          lastTransactionFileCreatedAt: billingAccount.lastTransactionFileCreatedAt,
           billingAccountAddresses: [
             {
-              id: billingAccountAddress.id,
               address: {
-                id: address.id,
                 address1: 'ENVIRONMENT AGENCY',
                 address2: 'HORIZON HOUSE',
                 address3: 'DEANERY ROAD',
                 address4: 'BRISTOL',
                 address5: null,
                 address6: null,
-                postcode: 'BS1 5AH',
-                country: 'United Kingdom'
+                country: 'United Kingdom',
+                id: address.id,
+                postcode: 'BS1 5AH'
               },
               company: {
                 id: sendToCompany.id,
@@ -111,32 +106,37 @@ describe('Billing Accounts - Fetch View Billing Account service', () => {
                 middleInitials: null,
                 salutation: null,
                 suffix: null
-              }
+              },
+              id: billingAccountAddress.id
             }
           ],
           company: {
             id: primaryCompany.id,
             name: 'Example Trading Ltd',
             type: 'organisation'
-          }
+          },
+          createdAt: billingAccount.createdAt,
+          id: billingAccountId,
+          lastTransactionFile: null,
+          lastTransactionFileCreatedAt: billingAccount.lastTransactionFileCreatedAt
         },
         bills: [
           {
-            id: bill1.id,
-            createdAt: bill1.createdAt,
-            credit: bill1.credit,
-            invoiceNumber: bill1.invoiceNumber,
-            netAmount: bill1.netAmount,
-            financialYearEnding: bill1.financialYearEnding,
             billRun: {
-              id: billRun1.id,
               batchType: billRun1.batchType,
               billRunNumber: billRun1.billRunNumber,
+              id: billRun1.id,
               scheme: billRun1.scheme,
               source: billRun1.source,
               status: billRun1.status,
               summer: billRun1.summer
-            }
+            },
+            createdAt: bill1.createdAt,
+            credit: bill1.credit,
+            financialYearEnding: bill1.financialYearEnding,
+            id: bill1.id,
+            invoiceNumber: bill1.invoiceNumber,
+            netAmount: bill1.netAmount
           }
         ],
         totalNumber: 1

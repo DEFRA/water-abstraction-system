@@ -17,8 +17,8 @@ describe('Job - Notification Status - Update Notifications service', () => {
 
   beforeEach(async () => {
     const event = await EventHelper.add({
-      type: 'notification',
-      subtype: 'returnsInvitation'
+      subtype: 'returnsInvitation',
+      type: 'notification'
     })
 
     eventId = event.id
@@ -56,9 +56,9 @@ describe('Job - Notification Status - Update Notifications service', () => {
         id: notification.id,
         licenceMonitoringStationId: null,
         licences: null,
-        notifyError: null,
         messageRef: null,
         messageType: null,
+        notifyError: null,
         notifyId: null,
         notifyStatus: 'received',
         pdf: null,
@@ -111,9 +111,9 @@ describe('Job - Notification Status - Update Notifications service', () => {
         id: notification.id,
         licenceMonitoringStationId: null,
         licences: null,
-        notifyError: null,
         messageRef: null,
         messageType: null,
+        notifyError: null,
         notifyId: null,
         notifyStatus: 'received',
         pdf: null,
@@ -142,9 +142,9 @@ describe('Job - Notification Status - Update Notifications service', () => {
         id: notification2.id,
         licenceMonitoringStationId: null,
         licences: null,
-        notifyError: null,
         messageRef: null,
         messageType: null,
+        notifyError: null,
         notifyId: null,
         notifyStatus: null,
         pdf: null,

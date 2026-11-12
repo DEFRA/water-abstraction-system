@@ -21,8 +21,8 @@ export default function accountTypePresenter(session) {
       href: checkUrl(session, `/system/billing-accounts/setup/${session.id}/existing-account`),
       text: 'Back'
     },
+    individualName: session.individualName ?? null,
     pageTitle: 'Select the account type',
-    pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
-    individualName: session.individualName ?? null
+    pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
   }
 }

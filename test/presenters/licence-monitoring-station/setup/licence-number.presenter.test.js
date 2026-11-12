@@ -9,9 +9,9 @@ describe('Licence Monitoring Station Setup - Licence Number Presenter', () => {
 
   beforeEach(() => {
     session = {
+      id: 'd9afac37-9754-4bfa-95f7-87ab26824423',
       label: 'LABEL',
-      licenceRef: 'LICENCE_REF',
-      id: 'd9afac37-9754-4bfa-95f7-87ab26824423'
+      licenceRef: 'LICENCE_REF'
     }
   })
 

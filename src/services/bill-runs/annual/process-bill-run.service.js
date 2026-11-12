@@ -46,7 +46,7 @@ export default async function processBillRunService(billRun, billingPeriods) {
 
     await _processBillingPeriod(billingPeriod, billRun)
 
-    calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, batchType })
+    calculateAndLogTimeTaken(startTime, 'Process bill run complete', { batchType, billRunId })
   } catch (error) {
     await HandleErroredBillRunService(billRunId, error.code)
     globalThis.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)

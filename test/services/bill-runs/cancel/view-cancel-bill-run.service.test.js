@@ -17,9 +17,9 @@ describe('Bill Runs - View Cancel Bill Run service', () => {
 
     vi.spyOn(BillRunModel, 'query').mockReturnValue({
       findById: vi.fn().mockReturnThis(),
+      modifyGraph: billRunQueryStub,
       select: vi.fn().mockReturnThis(),
-      withGraphFetched: vi.fn().mockReturnThis(),
-      modifyGraph: billRunQueryStub
+      withGraphFetched: vi.fn().mockReturnThis()
     })
   })
 

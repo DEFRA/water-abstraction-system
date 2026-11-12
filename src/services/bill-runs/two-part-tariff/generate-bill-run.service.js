@@ -72,8 +72,8 @@ function _billingPeriod(billRun) {
   const { toFinancialYearEnding } = billRun
 
   return {
-    startDate: new Date(`${toFinancialYearEnding - 1}-04-01`),
-    endDate: new Date(`${toFinancialYearEnding}-03-31`)
+    endDate: new Date(`${toFinancialYearEnding}-03-31`),
+    startDate: new Date(`${toFinancialYearEnding - 1}-04-01`)
   }
 }
 

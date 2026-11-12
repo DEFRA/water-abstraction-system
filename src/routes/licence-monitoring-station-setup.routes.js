@@ -17,158 +17,158 @@ import {
 export default [
   {
     method: 'POST',
-    path: '/licence-monitoring-station/setup',
     options: {
-      handler: submitSetup,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: submitSetup
+    },
+    path: '/licence-monitoring-station/setup'
   },
   {
     method: 'GET',
-    path: '/licence-monitoring-station/setup/{sessionId}/threshold-and-unit',
     options: {
-      handler: thresholdAndUnit,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: thresholdAndUnit
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/threshold-and-unit'
   },
   {
     method: 'POST',
-    path: '/licence-monitoring-station/setup/{sessionId}/threshold-and-unit',
     options: {
-      handler: submitThresholdAndUnit,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: submitThresholdAndUnit
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/threshold-and-unit'
   },
   {
     method: 'GET',
-    path: '/licence-monitoring-station/setup/{sessionId}/stop-or-reduce',
     options: {
-      handler: stopOrReduce,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: stopOrReduce
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/stop-or-reduce'
   },
   {
     method: 'POST',
-    path: '/licence-monitoring-station/setup/{sessionId}/stop-or-reduce',
     options: {
-      handler: submitStopOrReduce,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: submitStopOrReduce
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/stop-or-reduce'
   },
   {
     method: 'GET',
-    path: '/licence-monitoring-station/setup/{sessionId}/licence-number',
     options: {
-      handler: licenceNumber,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: licenceNumber
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/licence-number'
   },
   {
     method: 'POST',
-    path: '/licence-monitoring-station/setup/{sessionId}/licence-number',
     options: {
-      handler: submitLicenceNumber,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: submitLicenceNumber
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/licence-number'
   },
   {
     method: 'GET',
-    path: '/licence-monitoring-station/setup/{sessionId}/full-condition',
     options: {
-      handler: fullCondition,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: fullCondition
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/full-condition'
   },
   {
     method: 'POST',
-    path: '/licence-monitoring-station/setup/{sessionId}/full-condition',
     options: {
-      handler: submitFullCondition,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: submitFullCondition
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/full-condition'
   },
   {
     method: 'GET',
-    path: '/licence-monitoring-station/setup/{sessionId}/abstraction-period',
     options: {
-      handler: abstractionPeriod,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: abstractionPeriod
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/abstraction-period'
   },
   {
     method: 'POST',
-    path: '/licence-monitoring-station/setup/{sessionId}/abstraction-period',
     options: {
-      handler: submitAbstractionPeriod,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: submitAbstractionPeriod
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/abstraction-period'
   },
   {
     method: 'GET',
-    path: '/licence-monitoring-station/setup/{sessionId}/check',
     options: {
-      handler: check,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: check
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/check'
   },
   {
     method: 'POST',
-    path: '/licence-monitoring-station/setup/{sessionId}/check',
     options: {
-      handler: submitCheck,
       auth: {
         access: {
           scope: ['manage_gauging_station_licence_links']
         }
-      }
-    }
+      },
+      handler: submitCheck
+    },
+    path: '/licence-monitoring-station/setup/{sessionId}/check'
   }
 ]

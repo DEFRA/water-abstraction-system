@@ -17,8 +17,8 @@ import { formatEmail } from 'water-abstraction-engine/presenters/base.presenter.
 export function formatCompanyContact(companyContact) {
   return {
     communicationType: _communicationType(companyContact),
-    name: companyContact.contact.$name(),
-    email: formatEmail(companyContact.contact.email)
+    email: formatEmail(companyContact.contact.email),
+    name: companyContact.contact.$name()
   }
 }
 

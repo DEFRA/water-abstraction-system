@@ -80,19 +80,19 @@ describe('Bill Runs Review - Submit Factors Service', () => {
           activeNavBar: 'bill-runs',
           amendedAggregate: 0.333333333,
           amendedChargeAdjustment: 1,
+          chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
+          chargePeriod: '1 April 2023 to 31 March 2024',
           error: {
+            amendedAggregate: { message: 'Enter an aggregate factor' },
+            amendedChargeAdjustment: { message: 'Enter a charge factor' },
             errorList: [
               { href: '#amended-aggregate', text: 'Enter an aggregate factor' },
               { href: '#amended-charge-adjustment', text: 'Enter a charge factor' }
-            ],
-            amendedAggregate: { message: 'Enter an aggregate factor' },
-            amendedChargeAdjustment: { message: 'Enter a charge factor' }
+            ]
           },
-          pageTitle: 'Set the adjustment factors',
-          chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
-          chargePeriod: '1 April 2023 to 31 March 2024',
           financialPeriod: '2023 to 2024',
           otherAdjustments: ['Two part tariff agreement'],
+          pageTitle: 'Set the adjustment factors',
           reviewChargeReferenceId: '6b3d11f2-d361-4eaa-bce2-5561283bd023'
         })
       })

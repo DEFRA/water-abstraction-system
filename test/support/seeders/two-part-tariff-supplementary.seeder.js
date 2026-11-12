@@ -2,8 +2,8 @@
  * @module TwoPartTariffSupplementarySeeder
  */
 
-import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import ChangeReasonHelper from 'water-abstraction-engine/test/helpers/change-reason.helper.js'
 import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
 import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
@@ -87,8 +87,8 @@ const MAJOR_CHANGE = 0
  */
 export async function seed(scenario) {
   const billingPeriod = {
-    startDate: new Date('2023-04-01'),
-    endDate: new Date('2024-03-31')
+    endDate: new Date('2024-03-31'),
+    startDate: new Date('2023-04-01')
   }
 
   const financialYear = billingPeriod.endDate.getFullYear()
@@ -175,6 +175,7 @@ async function _changeBillingAccount(billRun, chargeCategory) {
   // NOTE: We control the account numbers so we can both test the ordering FetchBillingAccountsService applies and
   // predict the result to more easily assert against
   let billingAccountNumber = generateAccountNumber()
+
   billingAccountNumber = billingAccountNumber.replace('T', 'W')
   const billingAccountA = await BillingAccountHelper.add({ accountNumber: billingAccountNumber })
 
@@ -189,9 +190,9 @@ async function _changeBillingAccount(billRun, chargeCategory) {
     startDate: new Date('2022-04-01')
   })
   const chargeReferenceA = await ChargeReferenceHelper.add({
-    adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: 0.562114443 },
-    chargeVersionId: chargeVersionA.id,
-    chargeCategoryId: chargeCategory.id
+    adjustments: { aggregate: 0.562114443, charge: null, s126: null, s127: true, s130: false, winter: false },
+    chargeCategoryId: chargeCategory.id,
+    chargeVersionId: chargeVersionA.id
   })
   const chargeElementA = await ChargeElementHelper.add({ chargeReferenceId: chargeReferenceA.id })
 
@@ -206,9 +207,9 @@ async function _changeBillingAccount(billRun, chargeCategory) {
     startDate: new Date('2023-04-01')
   })
   const chargeReferenceB = await ChargeReferenceHelper.add({
-    adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: 0.562114443 },
-    chargeVersionId: chargeVersionB.id,
-    chargeCategoryId: chargeCategory.id
+    adjustments: { aggregate: 0.562114443, charge: null, s126: null, s127: true, s130: false, winter: false },
+    chargeCategoryId: chargeCategory.id,
+    chargeVersionId: chargeVersionB.id
   })
   const chargeElementB = await ChargeElementHelper.add({ chargeReferenceId: chargeReferenceB.id })
 
@@ -270,9 +271,9 @@ async function _duplicate(billRun, chargeCategory) {
     startDate: new Date('2022-04-01')
   })
   const chargeReference = await ChargeReferenceHelper.add({
-    adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: 0.562114443 },
-    chargeVersionId: chargeVersion.id,
-    chargeCategoryId: chargeCategory.id
+    adjustments: { aggregate: 0.562114443, charge: null, s126: null, s127: true, s130: false, winter: false },
+    chargeCategoryId: chargeCategory.id,
+    chargeVersionId: chargeVersion.id
   })
   const chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
 
@@ -326,9 +327,9 @@ async function _nonChargeable(billRun, chargeCategory) {
     startDate: new Date('2022-04-01')
   })
   const chargeReferenceA = await ChargeReferenceHelper.add({
-    adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: 0.562114443 },
-    chargeVersionId: chargeVersionA.id,
-    chargeCategoryId: chargeCategory.id
+    adjustments: { aggregate: 0.562114443, charge: null, s126: null, s127: true, s130: false, winter: false },
+    chargeCategoryId: chargeCategory.id,
+    chargeVersionId: chargeVersionA.id
   })
   const chargeElementA = await ChargeElementHelper.add({ chargeReferenceId: chargeReferenceA.id })
 
@@ -376,9 +377,9 @@ async function _nonTwoPartTariff(billRun, chargeCategory) {
     startDate: new Date('2022-04-01')
   })
   const chargeReferenceA = await ChargeReferenceHelper.add({
-    adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: 0.562114443 },
-    chargeVersionId: chargeVersionA.id,
-    chargeCategoryId: chargeCategory.id
+    adjustments: { aggregate: 0.562114443, charge: null, s126: null, s127: true, s130: false, winter: false },
+    chargeCategoryId: chargeCategory.id,
+    chargeVersionId: chargeVersionA.id
   })
   const chargeElementA = await ChargeElementHelper.add({ chargeReferenceId: chargeReferenceA.id })
 
@@ -391,9 +392,9 @@ async function _nonTwoPartTariff(billRun, chargeCategory) {
     startDate: new Date('2023-04-01')
   })
   const chargeReferenceB = await ChargeReferenceHelper.add({
-    adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: 0.562114443 },
-    chargeVersionId: chargeVersionB.id,
-    chargeCategoryId: chargeCategory.id
+    adjustments: { aggregate: 0.562114443, charge: null, s126: null, s127: false, s130: false, winter: false },
+    chargeCategoryId: chargeCategory.id,
+    chargeVersionId: chargeVersionB.id
   })
   const chargeElementB = await ChargeElementHelper.add({ chargeReferenceId: chargeReferenceB.id })
 
@@ -432,9 +433,9 @@ async function _simple(billRun, chargeCategory) {
     startDate: new Date('2022-04-01')
   })
   const chargeReference = await ChargeReferenceHelper.add({
-    adjustments: { s126: null, s127: true, s130: false, charge: null, winter: false, aggregate: 0.562114443 },
-    chargeVersionId: chargeVersion.id,
-    chargeCategoryId: chargeCategory.id
+    adjustments: { aggregate: 0.562114443, charge: null, s126: null, s127: true, s130: false, winter: false },
+    chargeCategoryId: chargeCategory.id,
+    chargeVersionId: chargeVersion.id
   })
   const chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
 

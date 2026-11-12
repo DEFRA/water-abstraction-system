@@ -34,10 +34,10 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         // then changed their mind and went back and selected supplementary. Year and season are now irrelevant and
         // leaving them in confirms this.
         session = {
-          type: 'annual',
           region: regionId,
-          year: '2022',
-          season: 'summer'
+          season: 'summer',
+          type: 'annual',
+          year: '2022'
         }
       })
 
@@ -85,10 +85,10 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
     describe('and the user is intending to create a two-part tariff annual bill run', () => {
       beforeEach(() => {
         session = {
-          type: 'two_part_tariff',
           region: regionId,
-          year: 2023,
-          season: 'summer'
+          season: 'summer',
+          type: 'two_part_tariff',
+          year: 2023
         }
       })
 
@@ -139,10 +139,10 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         // then changed their mind and went back and selected supplementary. Year and season are now irrelevant and
         // leaving them in confirms this.
         session = {
-          type: 'supplementary',
           region: regionId,
-          year: '2022',
-          season: 'summer'
+          season: 'summer',
+          type: 'supplementary',
+          year: '2022'
         }
       })
 
@@ -230,8 +230,8 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
     describe('and the user is intending to create a two-part tariff supplementary bill run', () => {
       beforeEach(() => {
         session = {
-          type: 'two_part_supplementary',
           region: regionId,
+          type: 'two_part_supplementary',
           year: 2024
         }
       })

@@ -52,8 +52,8 @@ function _warning(companyContact) {
   if (abstractionAlerts && abstractionAlertsCount === 1) {
     return {
       warning: {
-        text: 'Removing this contact means the licence holder will receive future water abstraction alerts by post.',
-        iconFallbackText: 'Warning'
+        iconFallbackText: 'Warning',
+        text: 'Removing this contact means the licence holder will receive future water abstraction alerts by post.'
       }
     }
   }

@@ -21,7 +21,7 @@ export default async function downloadReturnLogService(returnLogId, version) {
 
   return {
     data,
-    type: 'text/csv',
-    filename
+    filename,
+    type: 'text/csv'
   }
 }

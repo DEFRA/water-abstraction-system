@@ -21,8 +21,8 @@ export default function permissionsValidator(payload) {
       .required()
       .valid(...Object.keys(userPermissions))
       .messages({
-        'any.required': 'Select permissions for the user',
-        'any.only': 'Select valid permissions for the user'
+        'any.only': 'Select valid permissions for the user',
+        'any.required': 'Select permissions for the user'
       })
   })
 

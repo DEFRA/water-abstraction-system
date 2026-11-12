@@ -247,14 +247,14 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
 function _licenceData(flagged, chargeVersions) {
   return {
-    id: 'aad74a3d-59ea-4c18-8091-02b0f8b0a147',
-    region_id: 'ff92e0b1-3934-430b-8b16-5b89a3ea258f',
     expired_date: null,
-    lapsed_date: null,
-    revoked_date: null,
     flagged_for_presroc: flagged,
     flagged_for_sroc: flagged,
+    id: 'aad74a3d-59ea-4c18-8091-02b0f8b0a147',
+    lapsed_date: null,
     pre_sroc_charge_versions: chargeVersions,
+    region_id: 'ff92e0b1-3934-430b-8b16-5b89a3ea258f',
+    revoked_date: null,
     sroc_charge_versions: chargeVersions,
     two_part_tariff_charge_versions: chargeVersions
   }

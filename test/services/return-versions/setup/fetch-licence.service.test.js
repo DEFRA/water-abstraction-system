@@ -105,40 +105,40 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
       const result = await FetchLicenceService(licence.id)
 
       expect(result).toEqual({
-        id: licence.id,
         expiredDate: null,
+        id: licence.id,
         lapsedDate: null,
         licenceRef: licence.licenceRef,
-        revokedDate: null,
-        startDate: licence.startDate,
-        waterUndertaker: false,
         licenceVersions: [
           {
-            id: licenceVersion.id,
-            licenceId: licence.id,
-            issueDate: licenceVersion.issueDate,
-            startDate: licenceVersion.startDate,
-            status: licenceVersion.status,
             company: {
               id: company.id,
               name: 'Example Trading Ltd',
               type: 'organisation'
-            }
+            },
+            id: licenceVersion.id,
+            issueDate: licenceVersion.issueDate,
+            licenceId: licence.id,
+            startDate: licenceVersion.startDate,
+            status: licenceVersion.status
           }
         ],
         returnVersions: [
           {
             id: returnVersion.id,
-            startDate: returnVersion.startDate,
-            reason: 'new-licence',
             modLogs: [
               {
                 id: modLog.id,
                 reasonDescription: 'Record Loaded During Migration'
               }
-            ]
+            ],
+            reason: 'new-licence',
+            startDate: returnVersion.startDate
           }
-        ]
+        ],
+        revokedDate: null,
+        startDate: licence.startDate,
+        waterUndertaker: false
       })
     })
 
@@ -189,16 +189,16 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
 
       expect(result.licenceVersions).toEqual([
         {
-          id: futureLicenceVersion.id,
-          licenceId: futureLicence.id,
-          issueDate: futureLicenceVersion.issueDate,
-          startDate: futureLicenceVersion.startDate,
-          status: futureLicenceVersion.status,
           company: {
             id: company.id,
             name: 'Example Trading Ltd',
             type: 'organisation'
-          }
+          },
+          id: futureLicenceVersion.id,
+          issueDate: futureLicenceVersion.issueDate,
+          licenceId: futureLicence.id,
+          startDate: futureLicenceVersion.startDate,
+          status: futureLicenceVersion.status
         }
       ])
     })

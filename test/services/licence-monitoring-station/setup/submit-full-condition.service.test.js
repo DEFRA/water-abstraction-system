@@ -33,9 +33,9 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
     const licenceVersionPurpose = await LicenceVersionPurposeHelper.add()
     const licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
       licenceVersionPurposeId: licenceVersionPurpose.id,
+      notes: 'NOTES',
       param1: 'PARAM_1',
-      param2: 'PARAM_2',
-      notes: 'NOTES'
+      param2: 'PARAM_2'
     })
 
     payload = {
@@ -45,10 +45,10 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
     vi.spyOn(FetchFullConditionDal, 'default').mockResolvedValue([
       {
         ...licenceVersionPurposeCondition,
-        abstractionPeriodStartDay: licenceVersionPurpose.abstractionPeriodStartDay,
-        abstractionPeriodStartMonth: licenceVersionPurpose.abstractionPeriodStartMonth,
         abstractionPeriodEndDay: licenceVersionPurpose.abstractionPeriodEndDay,
         abstractionPeriodEndMonth: licenceVersionPurpose.abstractionPeriodEndMonth,
+        abstractionPeriodStartDay: licenceVersionPurpose.abstractionPeriodStartDay,
+        abstractionPeriodStartMonth: licenceVersionPurpose.abstractionPeriodStartMonth,
         displayTitle: 'LICENCE_VERSION_CONDITION_TYPE_DISPLAY_TITLE'
       }
     ])

@@ -13,6 +13,7 @@ import SubmitContactNameService from '../../../../src/services/billing-accounts/
 
 describe('Billing Accounts - Setup - Contact Name Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
   let payload
   let session
   let sessionData
@@ -157,15 +158,15 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
         const result = await SubmitContactNameService(session.id, payload)
 
         expect(result.error).toEqual({
+          contactName: {
+            text: 'Enter a name for the contact'
+          },
           errorList: [
             {
               href: '#contactName',
               text: 'Enter a name for the contact'
             }
-          ],
-          contactName: {
-            text: 'Enter a name for the contact'
-          }
+          ]
         })
       })
     })
@@ -181,15 +182,15 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
         const result = await SubmitContactNameService(session.id, payload)
 
         expect(result.error).toEqual({
+          contactName: {
+            text: 'Name must be 100 characters or less'
+          },
           errorList: [
             {
               href: '#contactName',
               text: 'Name must be 100 characters or less'
             }
-          ],
-          contactName: {
-            text: 'Name must be 100 characters or less'
-          }
+          ]
         })
       })
     })

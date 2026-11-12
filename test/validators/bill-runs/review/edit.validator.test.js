@@ -10,7 +10,7 @@ describe('Bill Runs Review - Edit validator', () => {
   describe('when valid data is provided', () => {
     describe('because the user selected the authorised volume option', () => {
       beforeEach(() => {
-        payload = { quantityOptions: 25, authorisedVolume: 30 }
+        payload = { authorisedVolume: 30, quantityOptions: 25 }
       })
 
       it('confirms the data is valid', () => {
@@ -23,7 +23,7 @@ describe('Bill Runs Review - Edit validator', () => {
 
     describe('because the user entered a valid custom volume (less than the authorised volume but greater than 0)', () => {
       beforeEach(() => {
-        payload = { quantityOptions: 'customQuantity', customQuantity: 12, authorisedVolume: 30 }
+        payload = { authorisedVolume: 30, customQuantity: 12, quantityOptions: 'customQuantity' }
       })
 
       it('confirms the data is valid', () => {
@@ -51,7 +51,7 @@ describe('Bill Runs Review - Edit validator', () => {
     describe('because the user selected to enter a custom quantity', () => {
       describe('but entered no value', () => {
         beforeEach(() => {
-          payload = { quantityOptions: 'customQuantity', authorisedVolume: 25 }
+          payload = { authorisedVolume: 25, quantityOptions: 'customQuantity' }
         })
 
         it('fails validation with the message "Enter the billable quantity"', () => {
@@ -64,7 +64,7 @@ describe('Bill Runs Review - Edit validator', () => {
 
       describe('but entered text', () => {
         beforeEach(() => {
-          payload = { quantityOptions: 'customQuantity', customQuantity: 'Hello world', authorisedVolume: 25 }
+          payload = { authorisedVolume: 25, customQuantity: 'Hello world', quantityOptions: 'customQuantity' }
         })
 
         it('fails validation with the message "The quantity must be a number"', () => {
@@ -77,7 +77,7 @@ describe('Bill Runs Review - Edit validator', () => {
 
       describe('but entered a number with more than 6 decimal places', () => {
         beforeEach(() => {
-          payload = { quantityOptions: 'customQuantity', customQuantity: 12.3456789, authorisedVolume: 25 }
+          payload = { authorisedVolume: 25, customQuantity: 12.3456789, quantityOptions: 'customQuantity' }
         })
 
         it('fails validation with the message "The quantity must contain no more than 6 decimal places"', () => {
@@ -90,7 +90,7 @@ describe('Bill Runs Review - Edit validator', () => {
 
       describe('but entered a number less than 0', () => {
         beforeEach(() => {
-          payload = { quantityOptions: 'customQuantity', customQuantity: -0.1, authorisedVolume: 25 }
+          payload = { authorisedVolume: 25, customQuantity: -0.1, quantityOptions: 'customQuantity' }
         })
 
         it('fails validation with the message "The quantity must be zero or higher"', () => {
@@ -103,7 +103,7 @@ describe('Bill Runs Review - Edit validator', () => {
 
       describe('but entered a number greater than the authorised annual quantity', () => {
         beforeEach(() => {
-          payload = { quantityOptions: 'customQuantity', customQuantity: 40, authorisedVolume: 25 }
+          payload = { authorisedVolume: 25, customQuantity: 40, quantityOptions: 'customQuantity' }
         })
 
         it('fails validation with the message "The quantity must be the same as or less than the authorised amount"', () => {
@@ -120,7 +120,7 @@ describe('Bill Runs Review - Edit validator', () => {
         const MAX_SAFE_NUMBER = 9007199254740991
 
         beforeEach(() => {
-          payload = { quantityOptions: 'customQuantity', customQuantity: MAX_SAFE_NUMBER + 1, authorisedVolume: 25 }
+          payload = { authorisedVolume: 25, customQuantity: MAX_SAFE_NUMBER + 1, quantityOptions: 'customQuantity' }
         })
 
         it('fails validation with the message "The quantity must be between zero and the authorised amount"', () => {

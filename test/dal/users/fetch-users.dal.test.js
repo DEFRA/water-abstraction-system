@@ -48,10 +48,11 @@ describe('Users - Fetch Users DAL', () => {
     // returned when we filter by 'locked' status. We spotted that 'locked' users who had never managed to login were
     // appearing in the results for status 'Awaiting'.
     let licenceEntity = await LicenceEntityHelper.add()
+
     externalBasicAccessUser = await UserHelper.add({
       application: 'water_vml',
-      licenceEntityId: licenceEntity.id,
       lastLogin: null,
+      licenceEntityId: licenceEntity.id,
       password: 'VOID',
       username: licenceEntity.name
     })

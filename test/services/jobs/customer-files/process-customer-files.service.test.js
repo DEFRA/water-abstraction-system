@@ -47,34 +47,34 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
       })
 
       vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'default').mockResolvedValue({
-        succeeded: true,
         response: {
-          info: {
-            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1'
-          },
-          statusCode: HTTP_STATUS_OK,
           body: [
             {
-              id: '9523ff61-bd21-4800-aa7d-d97aa6c923aa',
-              fileReference: 'nalac50001',
-              status: 'exported',
               exportedAt: '2025-08-10T12:34:56.789Z',
               exportedCustomers: [
                 accountExportedOnce.accountNumber,
                 accountExportedTwice.accountNumber,
                 accountPreviouslyProcessed.accountNumber
-              ]
+              ],
+              fileReference: 'nalac50001',
+              id: '9523ff61-bd21-4800-aa7d-d97aa6c923aa',
+              status: 'exported'
             },
             {
-              id: 'aa271bc5-0e36-4aeb-b636-64d95482825f',
-              fileReference: 'nalac50002',
-              status: 'exported',
               exportedAt: '2025-08-11T13:57:24.680Z',
-              exportedCustomers: [accountExportedTwice.accountNumber]
+              exportedCustomers: [accountExportedTwice.accountNumber],
+              fileReference: 'nalac50002',
+              id: 'aa271bc5-0e36-4aeb-b636-64d95482825f',
+              status: 'exported'
             }
-          ]
-        }
+          ],
+          info: {
+            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1',
+            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
+          },
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 
@@ -120,15 +120,15 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
   describe('when the Charging Module API response is empty', () => {
     beforeEach(() => {
       vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'default').mockResolvedValue({
-        succeeded: true,
         response: {
+          body: [],
           info: {
-            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1'
+            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1',
+            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
           },
-          statusCode: HTTP_STATUS_OK,
-          body: []
-        }
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
 
       billRunQueryStub = vi.spyOn(BillingAccountModel, 'query').mockReturnValue({
@@ -159,15 +159,15 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
   describe('when the Charging Module API request fails', () => {
     beforeEach(() => {
       vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'default').mockResolvedValue({
-        succeeded: false,
         response: {
+          body: [],
           info: {
-            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1'
+            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1',
+            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
           },
-          statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
-          body: []
-        }
+          statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR
+        },
+        succeeded: false
       })
     })
 

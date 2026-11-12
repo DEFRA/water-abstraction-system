@@ -62,6 +62,7 @@ function _applyQuantityToLines(
   if (allocatedLineTotal !== Number(singleVolumeCubicMetres)) {
     const roundingError = Big(singleVolumeCubicMetres).minus(allocatedLineTotal).toNumber()
     const lastIndex = linesInsideAbstractionPeriod.length - 1
+
     linesInsideAbstractionPeriod[lastIndex].quantityCubicMetres = Big(individualLineQuantity.cubicMetres)
       .plus(roundingError)
       .toNumber()

@@ -25,8 +25,8 @@ export default async function createBillRunRequest(batchType, regionId, financia
   const body = {
     batchType,
     financialYearEnding,
-    regionId,
     isSummer: summer,
+    regionId,
     userEmail
   }
 

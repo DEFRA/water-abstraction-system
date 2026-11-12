@@ -42,7 +42,7 @@ describe('Bill Runs Review - Submit Edit Service', () => {
     describe('with a valid payload', () => {
       describe('where the user has selected the authorised quantity', () => {
         beforeEach(async () => {
-          payload = { quantityOptions: 25, authorisedVolume: 30 }
+          payload = { authorisedVolume: 30, quantityOptions: 25 }
         })
 
         it('saves the submitted value, adds a flash message and returns an empty object', async () => {
@@ -66,7 +66,7 @@ describe('Bill Runs Review - Submit Edit Service', () => {
 
       describe('where the user has a custom quantity', () => {
         beforeEach(async () => {
-          payload = { quantityOptions: 'customQuantity', customQuantity: 12, authorisedVolume: 30 }
+          payload = { authorisedVolume: 30, customQuantity: 12, quantityOptions: 'customQuantity' }
         })
 
         it('saves the submitted value, adds a flash message and returns an empty object', async () => {
@@ -107,8 +107,14 @@ describe('Bill Runs Review - Submit Edit Service', () => {
           // Check we return page data including error (controller knows POST failed so re-renders)
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
+            authorisedQuantity: 9.092,
+            billableReturns: 0,
+            chargeDescription: 'Spray Irrigation - Direct',
+            chargePeriod: '1 April 2023 to 31 March 2024',
+            chargePeriods: ['1 April 2023 to 30 September 2023'],
             customQuantitySelected: false,
             customQuantityValue: undefined,
+            elementIndex: 1,
             error: {
               errorList: [
                 {
@@ -118,14 +124,8 @@ describe('Bill Runs Review - Submit Edit Service', () => {
               ],
               quantityOptionsErrorMessage: { text: 'Select the billable quantity' }
             },
-            pageTitle: 'Set the billable returns quantity for this bill run',
-            authorisedQuantity: 9.092,
-            billableReturns: 0,
-            chargeDescription: 'Spray Irrigation - Direct',
-            chargePeriod: '1 April 2023 to 31 March 2024',
-            chargePeriods: ['1 April 2023 to 30 September 2023'],
-            elementIndex: 1,
             financialPeriod: '2023 to 2024',
+            pageTitle: 'Set the billable returns quantity for this bill run',
             reviewChargeElementId: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1'
           })
         })
@@ -133,7 +133,7 @@ describe('Bill Runs Review - Submit Edit Service', () => {
 
       describe('because the submitted an invalid custom quantity', () => {
         beforeEach(async () => {
-          payload = { quantityOptions: 'customQuantity', customQuantity: -0.1, authorisedVolume: 25 }
+          payload = { authorisedVolume: 25, customQuantity: -0.1, quantityOptions: 'customQuantity' }
         })
 
         it('does not save the submitted value or add a flash message, and returns the page data including an error', async () => {
@@ -148,25 +148,25 @@ describe('Bill Runs Review - Submit Edit Service', () => {
           // Check we return page data including error (controller knows POST failed so re-renders)
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
-            customQuantitySelected: true,
-            customQuantityValue: -0.1,
-            error: {
-              errorList: [
-                {
-                  href: '#custom-quantity',
-                  text: 'The quantity must be zero or higher'
-                }
-              ],
-              customQuantityErrorMessage: { text: 'The quantity must be zero or higher' }
-            },
-            pageTitle: 'Set the billable returns quantity for this bill run',
             authorisedQuantity: 9.092,
             billableReturns: 0,
             chargeDescription: 'Spray Irrigation - Direct',
             chargePeriod: '1 April 2023 to 31 March 2024',
             chargePeriods: ['1 April 2023 to 30 September 2023'],
+            customQuantitySelected: true,
+            customQuantityValue: -0.1,
             elementIndex: 1,
+            error: {
+              customQuantityErrorMessage: { text: 'The quantity must be zero or higher' },
+              errorList: [
+                {
+                  href: '#custom-quantity',
+                  text: 'The quantity must be zero or higher'
+                }
+              ]
+            },
             financialPeriod: '2023 to 2024',
+            pageTitle: 'Set the billable returns quantity for this bill run',
             reviewChargeElementId: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1'
           })
         })

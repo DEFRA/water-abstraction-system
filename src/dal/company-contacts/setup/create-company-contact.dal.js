@@ -23,17 +23,17 @@ export default async function createCompanyContactDal(companyId, companyContact)
 
 async function _create(companyId, companyContact) {
   return CompanyContactModel.query().insertGraph({
-    companyId,
-    startDate: today(),
-    licenceRoleId: LicenceRoleModel.query().where('name', 'additionalContact').select('id'),
     abstractionAlertLicences: companyContact.abstractionAlertLicences,
     abstractionAlerts: companyContact.abstractionAlerts,
-    createdBy: companyContact.createdBy,
+    companyId,
     contact: {
-      department: companyContact.name,
-      email: companyContact.email,
+      contactType: 'department',
       dataSource: 'wrls',
-      contactType: 'department'
-    }
+      department: companyContact.name,
+      email: companyContact.email
+    },
+    createdBy: companyContact.createdBy,
+    licenceRoleId: LicenceRoleModel.query().where('name', 'additionalContact').select('id'),
+    startDate: today()
   })
 }

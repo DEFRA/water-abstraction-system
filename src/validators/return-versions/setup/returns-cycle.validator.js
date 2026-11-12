@@ -25,7 +25,7 @@ export default function returnsCycleValidator(payload, session) {
     returnsCycle: Joi.string()
       .required()
       .valid(...VALID_VALUES)
-      .messages({ 'any.required': errorMessage, 'any.only': errorMessage, 'string.empty': errorMessage })
+      .messages({ 'any.only': errorMessage, 'any.required': errorMessage, 'string.empty': errorMessage })
   })
     .custom((value, helpers) => {
       return _noSummerCycleWithQuarterlyReturns(value, helpers, session)

@@ -15,21 +15,21 @@ describe('Licence Monitoring Station - Remove service', () => {
   beforeEach(() => {
     const licenceMonitoringStation = {
       id: licenceMonitoringStationId,
-      measureType: 'flow',
-      restrictionType: 'reduce',
-      thresholdUnit: 'm3/s',
-      thresholdValue: 100,
-      monitoringStation: {
-        id: monitoringStationId,
-        catchmentName: 'The Catchment',
-        label: 'The Monitoring Station',
-        riverName: 'The River'
-      },
       licence: {
         id: licenceId,
         licenceRef: '99/999/9999'
       },
-      licenceVersionPurposeCondition: null
+      licenceVersionPurposeCondition: null,
+      measureType: 'flow',
+      monitoringStation: {
+        catchmentName: 'The Catchment',
+        id: monitoringStationId,
+        label: 'The Monitoring Station',
+        riverName: 'The River'
+      },
+      restrictionType: 'reduce',
+      thresholdUnit: 'm3/s',
+      thresholdValue: 100
     }
 
     vi.spyOn(FetchLicenceMonitoringStationDal, 'default').mockResolvedValue(licenceMonitoringStation)

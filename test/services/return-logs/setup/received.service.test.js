@@ -47,9 +47,9 @@ describe('Return Logs - Setup - Received service', () => {
         },
         pageTitle: 'When was the return received?',
         pageTitleCaption: 'Return reference 12345',
-        receivedDateOption: null,
         receivedDateDay: null,
         receivedDateMonth: null,
+        receivedDateOption: null,
         receivedDateYear: null
       })
     })

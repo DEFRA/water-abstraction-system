@@ -43,12 +43,12 @@ function _parseResult(result) {
 
   if (body) {
     return {
-      succeeded: result.succeeded,
+      matches: body?.results || [],
       response: {
-        statusCode,
-        body
+        body,
+        statusCode
       },
-      matches: body?.results || []
+      succeeded: result.succeeded
     }
   }
 

@@ -20,8 +20,8 @@ export default function reminderPeriodPresenter(session, returnCycles) {
 
   return {
     backLink: _backLink(sessionId, checkPageVisited),
-    reminderPeriods: _reminderPeriods(returnCycles, savedReminderPeriod),
-    pageTitle: `Select the returns period for the reminders`
+    pageTitle: `Select the returns period for the reminders`,
+    reminderPeriods: _reminderPeriods(returnCycles, savedReminderPeriod)
   }
 }
 

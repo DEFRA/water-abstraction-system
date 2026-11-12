@@ -8,21 +8,21 @@ import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
 const EMAIL_DOMAIN_PATTERN = /^.+@environment-agency.gov.uk$/
 const MAX_ADDRESS_LENGTH = 300
 const MESSAGES = {
-  name: {
-    'string.max': 'Name must be 100 characters or less'
-  },
-  jobTitle: {
-    'string.max': 'Job title must be 100 characters or less'
+  address: {
+    'string.max': 'Address must be 300 characters or less'
   },
   email: {
     'string.email': 'Enter a valid email address',
     'string.pattern.name': 'Email address must be @environment-agency.gov.uk'
   },
+  jobTitle: {
+    'string.max': 'Job title must be 100 characters or less'
+  },
+  name: {
+    'string.max': 'Name must be 100 characters or less'
+  },
   tel: {
     'string.max': 'Telephone number must be 100 characters or less'
-  },
-  address: {
-    'string.max': 'Address must be 300 characters or less'
   }
 }
 

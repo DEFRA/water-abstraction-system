@@ -46,9 +46,9 @@ describe('CRM presenter', () => {
       describe('"abstraction-alerts"', () => {
         beforeEach(() => {
           contact = {
-            id: generateUUID(),
+            contactName: 'Rachael Tyrell',
             contactType: 'abstraction-alerts',
-            contactName: 'Rachael Tyrell'
+            id: generateUUID()
           }
         })
 
@@ -57,8 +57,8 @@ describe('CRM presenter', () => {
 
           expect(result).toEqual({
             link: `/system/company-contacts/${contact.id}/contact-details`,
-            type: 'Abstraction alerts',
-            name: 'Rachael Tyrell'
+            name: 'Rachael Tyrell',
+            type: 'Abstraction alerts'
           })
         })
       })
@@ -66,9 +66,9 @@ describe('CRM presenter', () => {
       describe('"additional-contact"', () => {
         beforeEach(() => {
           contact = {
-            id: generateUUID(),
+            contactName: 'Rachael Tyrell',
             contactType: 'additional-contact',
-            contactName: 'Rachael Tyrell'
+            id: generateUUID()
           }
         })
 
@@ -77,8 +77,8 @@ describe('CRM presenter', () => {
 
           expect(result).toEqual({
             link: `/system/company-contacts/${contact.id}/contact-details`,
-            type: 'Additional contact',
-            name: 'Rachael Tyrell'
+            name: 'Rachael Tyrell',
+            type: 'Additional contact'
           })
         })
       })
@@ -90,9 +90,9 @@ describe('CRM presenter', () => {
           }
 
           contact = {
-            id: generateUUID(),
+            contactName: 'Rachael Tyrell',
             contactType: 'billing',
-            contactName: 'Rachael Tyrell'
+            id: generateUUID()
           }
         })
 
@@ -101,8 +101,8 @@ describe('CRM presenter', () => {
 
           expect(result).toEqual({
             link: `/system/billing-accounts/${contact.id}?company-id=${billingQueryId}`,
-            type: 'Billing',
-            name: 'Rachael Tyrell'
+            name: 'Rachael Tyrell',
+            type: 'Billing'
           })
         })
       })
@@ -110,9 +110,9 @@ describe('CRM presenter', () => {
       describe('"basic-user"', () => {
         beforeEach(() => {
           contact = {
-            id: generateUUID(),
+            contactName: 'user@test.com',
             contactType: 'basic-user',
-            contactName: 'user@test.com'
+            id: generateUUID()
           }
         })
 
@@ -121,8 +121,8 @@ describe('CRM presenter', () => {
 
           expect(result).toEqual({
             link: `/system/users/external/${contact.id}/details?back=search`,
-            type: 'Basic user',
-            name: 'user@test.com'
+            name: 'user@test.com',
+            type: 'Basic user'
           })
         })
       })
@@ -130,9 +130,9 @@ describe('CRM presenter', () => {
       describe('"primary-user"', () => {
         beforeEach(() => {
           contact = {
-            id: generateUUID(),
+            contactName: 'user@test.com',
             contactType: 'primary-user',
-            contactName: 'user@test.com'
+            id: generateUUID()
           }
         })
 
@@ -141,8 +141,8 @@ describe('CRM presenter', () => {
 
           expect(result).toEqual({
             link: `/system/users/external/${contact.id}/details?back=search`,
-            type: 'Primary user',
-            name: 'user@test.com'
+            name: 'user@test.com',
+            type: 'Primary user'
           })
         })
       })
@@ -150,9 +150,9 @@ describe('CRM presenter', () => {
       describe('"returns-user"', () => {
         beforeEach(() => {
           contact = {
-            id: generateUUID(),
+            contactName: 'user@test.com',
             contactType: 'returns-user',
-            contactName: 'user@test.com'
+            id: generateUUID()
           }
         })
 
@@ -161,8 +161,8 @@ describe('CRM presenter', () => {
 
           expect(result).toEqual({
             link: `/system/users/external/${contact.id}/details?back=search`,
-            type: 'Returns user',
-            name: 'user@test.com'
+            name: 'user@test.com',
+            type: 'Returns user'
           })
         })
       })
@@ -174,9 +174,9 @@ describe('CRM presenter', () => {
           }
 
           contact = {
-            id: generateUUID(),
+            contactName: 'Rachael Tyrell',
             contactType: 'licence-holder',
-            contactName: 'Rachael Tyrell'
+            id: generateUUID()
           }
         })
 
@@ -186,8 +186,8 @@ describe('CRM presenter', () => {
 
             expect(result).toEqual({
               link: `/system/companies/${contact.id}/licence-holder`,
-              type: 'Licence holder',
-              name: 'Rachael Tyrell'
+              name: 'Rachael Tyrell',
+              type: 'Licence holder'
             })
           })
         })
@@ -202,8 +202,8 @@ describe('CRM presenter', () => {
 
             expect(result).toEqual({
               link: `/system/companies/${contact.id}/address/${contact.addressId}/licence-holder?licence-id=${billingQueryId}`,
-              type: 'Licence holder',
-              name: 'Rachael Tyrell'
+              name: 'Rachael Tyrell',
+              type: 'Licence holder'
             })
           })
         })
@@ -216,9 +216,9 @@ describe('CRM presenter', () => {
           }
 
           contact = {
-            id: generateUUID(),
+            contactName: 'Rachael Tyrell',
             contactType: 'returns-to',
-            contactName: 'Rachael Tyrell'
+            id: generateUUID()
           }
         })
 
@@ -228,8 +228,8 @@ describe('CRM presenter', () => {
 
             expect(result).toEqual({
               link: `/system/companies/${contact.id}/returns-to`,
-              type: 'Returns to',
-              name: 'Rachael Tyrell'
+              name: 'Rachael Tyrell',
+              type: 'Returns to'
             })
           })
         })
@@ -244,8 +244,8 @@ describe('CRM presenter', () => {
 
             expect(result).toEqual({
               link: `/system/companies/${contact.id}/address/${contact.addressId}/returns-to?licence-id=${billingQueryId}`,
-              type: 'Returns to',
-              name: 'Rachael Tyrell'
+              name: 'Rachael Tyrell',
+              type: 'Returns to'
             })
           })
         })

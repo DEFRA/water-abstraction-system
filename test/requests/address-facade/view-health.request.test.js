@@ -27,11 +27,11 @@ describe('Address Facade - View Health request', () => {
   describe('when the request succeeds', () => {
     beforeEach(() => {
       response = {
-        statusCode: HTTP_STATUS_OK,
-        body: 'hola'
+        body: 'hola',
+        statusCode: HTTP_STATUS_OK
       }
 
-      vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({ succeeded: true, response })
+      vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({ response, succeeded: true })
     })
 
     it('returns a "true" success status', async () => {
@@ -51,20 +51,20 @@ describe('Address Facade - View Health request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         response = {
-          statusCode: HTTP_STATUS_NOT_FOUND,
           body: {
-            facade_status_code: HTTP_STATUS_NOT_FOUND,
-            facade_error_message: 'HTTP 404 Not Found',
             facade_error_code: 'address_service_error_11',
-            supplier_was_called: null,
+            facade_error_message: 'HTTP 404 Not Found',
+            facade_status_code: HTTP_STATUS_NOT_FOUND,
+            supplier_response: null,
             supplier_status_code: null,
-            supplier_response: null
-          }
+            supplier_was_called: null
+          },
+          statusCode: HTTP_STATUS_NOT_FOUND
         }
 
         vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
-          response
+          response,
+          succeeded: false
         })
       })
 

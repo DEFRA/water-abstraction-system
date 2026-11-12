@@ -15,9 +15,9 @@ import { getRequest } from '../companies-house.request.js'
 export default async function searchCompaniesRequest(queryString) {
   const path = `search/companies`
   const searchParams = {
+    items_per_page: 15,
     q: queryString,
-    start_index: 0,
-    items_per_page: 15
+    start_index: 0
   }
 
   return getRequest(path, searchParams)

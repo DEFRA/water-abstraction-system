@@ -20,7 +20,7 @@ describe('Index Bill Runs service', () => {
     // It doesn't matter for these tests what busy state the service returns, only that it returns one.
     vi.spyOn(CheckBusyBillRunsService, 'default').mockResolvedValue('none')
     vi.spyOn(FetchRegionsService, 'default').mockResolvedValue([
-      { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }
+      { displayName: 'Anglian', id: '1d562e9a-2104-41d9-aa75-c008a7ec9059' }
     ])
   })
 
@@ -44,11 +44,10 @@ describe('Index Bill Runs service', () => {
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
-        filters: { number: null, regions: [], runTypes: [], statuses: [], yearCreated: null, openFilter: false },
         billRuns: [
           {
-            id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
             createdAt: '1 January 2024',
+            id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
             link: '/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b',
             number: 1002,
             numberOfBills: 7,
@@ -59,8 +58,8 @@ describe('Index Bill Runs service', () => {
             type: 'Supplementary'
           },
           {
-            id: 'dfdde4c9-9a0e-440d-b297-7143903c6734',
             createdAt: '1 October 2023',
+            id: 'dfdde4c9-9a0e-440d-b297-7143903c6734',
             link: '/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734',
             number: 1001,
             numberOfBills: 15,
@@ -71,6 +70,7 @@ describe('Index Bill Runs service', () => {
             type: 'Supplementary'
           }
         ],
+        filters: { number: null, openFilter: false, regions: [], runTypes: [], statuses: [], yearCreated: null },
         notification: null,
         pageSubHeading: 'View a bill run',
         pageTitle: 'Bill runs',
@@ -240,11 +240,11 @@ describe('Index Bill Runs service', () => {
 
         expect(result.filters).toEqual({
           number: null,
+          openFilter: false,
           regions: [],
           runTypes: [],
           statuses: [],
-          yearCreated: null,
-          openFilter: false
+          yearCreated: null
         })
       })
     })
@@ -260,11 +260,11 @@ describe('Index Bill Runs service', () => {
 
         expect(result.filters).toEqual({
           number: null,
+          openFilter: false,
           regions: [],
           runTypes: [],
           statuses: [],
-          yearCreated: null,
-          openFilter: false
+          yearCreated: null
         })
       })
     })
@@ -285,11 +285,11 @@ describe('Index Bill Runs service', () => {
 
         expect(result.filters).toEqual({
           number: null,
+          openFilter: true,
           regions: '1d562e9a-2104-41d9-aa75-c008a7ec9059',
           runTypes: [],
           statuses: [],
-          yearCreated: 2025,
-          openFilter: true
+          yearCreated: 2025
         })
       })
     })
@@ -309,28 +309,28 @@ function _billRunsFilter() {
 function _fetchedBillRuns() {
   return [
     {
-      id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
       batchType: 'supplementary',
       billRunNumber: 1002,
       createdAt: new Date('2024-01-01'),
+      id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
       netTotal: 20000,
+      numberOfBills: 7,
+      region: 'Avalon',
       scheme: 'sroc',
       status: 'ready',
-      summer: false,
-      numberOfBills: 7,
-      region: 'Avalon'
+      summer: false
     },
     {
-      id: 'dfdde4c9-9a0e-440d-b297-7143903c6734',
       batchType: 'supplementary',
       billRunNumber: 1001,
       createdAt: new Date('2023-10-01'),
+      id: 'dfdde4c9-9a0e-440d-b297-7143903c6734',
       netTotal: 30000,
+      numberOfBills: 15,
+      region: 'Albion',
       scheme: 'sroc',
       status: 'sent',
-      summer: false,
-      numberOfBills: 15,
-      region: 'Albion'
+      summer: false
     }
   ]
 }

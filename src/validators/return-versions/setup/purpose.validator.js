@@ -27,20 +27,20 @@ export default function purposeValidator(purposes, purposeIds) {
   const schema = Joi.object({
     purposes: Joi.array()
       .items({
-        id: Joi.string()
-          .valid(...purposeIds)
-          .required()
-          .messages({
-            'any.required': errorMessage,
-            'any.only': errorMessage
-          }),
         alias: Joi.string().max(100).optional().allow('').messages({
           'string.max': 'Purpose description must be 100 characters or less'
         }),
         // Description will not be persisted. It is simply to avoid having to fetch the purpose description again in
         // the /check page. But if we didn't match a selected ID to a description in the SubmitPurposeService then
         // something has gone wrong!
-        description: Joi.string()
+        description: Joi.string(),
+        id: Joi.string()
+          .valid(...purposeIds)
+          .required()
+          .messages({
+            'any.only': errorMessage,
+            'any.required': errorMessage
+          })
       })
       .min(1)
       .required()

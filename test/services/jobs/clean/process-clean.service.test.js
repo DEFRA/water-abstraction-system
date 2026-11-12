@@ -18,6 +18,7 @@ describe('Jobs - Clean - Process Clean service', () => {
   const expiredSessionsCount = 5
   const incompleteCompanyContactsCount = 6
   const orphanedContactsCount = 7
+
   let notifierStub
 
   beforeEach(async () => {

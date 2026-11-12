@@ -22,8 +22,8 @@ export default function contactTypeValidator(payload) {
     contactEmail: Joi.alternatives().conditional('contactType', {
       is: 'email',
       then: Joi.string().email().required().messages({
-        'string.email': 'Enter an email address in the correct format, like name@example.com',
-        'any.required': 'Enter an email address'
+        'any.required': 'Enter an email address',
+        'string.email': 'Enter an email address in the correct format, like name@example.com'
       }),
       otherwise: Joi.string().optional()
     }),

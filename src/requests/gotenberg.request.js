@@ -3,8 +3,8 @@
  * @module GotenbergRequest
  */
 
-import { postRequest as basePostRequest } from 'water-abstraction-engine/requests/base.request.js'
 import http2 from 'node:http2'
+import { postRequest as basePostRequest } from 'water-abstraction-engine/requests/base.request.js'
 import { pause } from 'water-abstraction-engine/lib/general.lib.js'
 
 import gotenbergConfig from '../config/gotenberg.config.js'
@@ -40,12 +40,12 @@ async function _sendRequest(path, method, formData) {
 
 function _requestOptions(formData) {
   return {
+    body: formData,
     prefixUrl: gotenbergConfig.url,
     responseType: 'buffer',
     timeout: {
       request: gotenbergConfig.timeout
-    },
-    body: formData
+    }
   }
 }
 
@@ -71,11 +71,11 @@ function _parseResult(result) {
     const bodyAsBuffer = Buffer.from(body)
 
     return {
-      succeeded: result.succeeded,
       response: {
-        statusCode,
-        body: statusCode === HTTP_STATUS_OK ? bodyAsBuffer : bodyAsBuffer.toString()
-      }
+        body: statusCode === HTTP_STATUS_OK ? bodyAsBuffer : bodyAsBuffer.toString(),
+        statusCode
+      },
+      succeeded: result.succeeded
     }
   }
 

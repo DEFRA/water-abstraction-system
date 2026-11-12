@@ -146,43 +146,43 @@ describe('View Bill Licence presenter', () => {
 
 function _testBillLicence() {
   return {
+    bill: {
+      accountNumber: 'W88898987A',
+      billRun: {
+        batchType: 'supplementary',
+        id: '0e61c36f-f22f-4534-8247-b73a97f551b5',
+        scheme: 'alcs',
+        source: 'wrls',
+        status: 'ready'
+      },
+      id: '5a5b313b-e707-490a-a693-799339941e4f'
+    },
     id: 'a4fbaa27-a91c-4328-a1b8-774ade11027b',
     licenceId: '2eaa831d-7bd6-4b0a-aaf1-3aacafec6bf2',
     licenceRef: 'WA/055/0017/013',
-    bill: {
-      id: '5a5b313b-e707-490a-a693-799339941e4f',
-      accountNumber: 'W88898987A',
-      billRun: {
-        id: '0e61c36f-f22f-4534-8247-b73a97f551b5',
-        batchType: 'supplementary',
-        scheme: 'alcs',
-        status: 'ready',
-        source: 'wrls'
-      }
-    },
     transactions: [
       {
-        id: '5858e36f-5a8e-4f5c-84b3-cbca26624d67',
         chargeType: 'standard',
         credit: false,
+        id: '5858e36f-5a8e-4f5c-84b3-cbca26624d67',
         netAmount: 29837
       },
       {
-        id: '5858e36f-5a8e-4f5c-84b3-cbca26624d67',
         chargeType: 'standard',
         credit: true,
+        id: '5858e36f-5a8e-4f5c-84b3-cbca26624d67',
         netAmount: -1000
       },
       {
-        id: '14d6d530-7f07-4e4b-ac17-b8ade9f5b21a',
         chargeType: 'compensation',
         credit: false,
+        id: '14d6d530-7f07-4e4b-ac17-b8ade9f5b21a',
         netAmount: 0
       },
       {
-        id: '23f43d51-8880-4e30-89da-40231cb8dea2',
         chargeType: 'minimum_charge',
         credit: false,
+        id: '23f43d51-8880-4e30-89da-40231cb8dea2',
         netAmount: 0
       }
     ]

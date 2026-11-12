@@ -61,7 +61,7 @@ export default async function submitPeriodUsedService(sessionId, payload) {
  */
 function _determineAbstractionPeriodDates(session, payload) {
   if (payload.periodDateUsedOptions === 'default') {
-    const returnPeriod = { startDate: new Date(session.startDate), endDate: new Date(session.endDate) }
+    const returnPeriod = { endDate: new Date(session.endDate), startDate: new Date(session.startDate) }
 
     const abstractionPeriods = determineAbstractionPeriods(
       returnPeriod,

@@ -32,8 +32,8 @@ export default async function processDownloadRecipientsService(sessionId) {
 
   return {
     data: formattedData,
-    type: 'text/csv',
-    filename: `${notificationType} - ${referenceCode}.csv`
+    filename: `${notificationType} - ${referenceCode}.csv`,
+    type: 'text/csv'
   }
 }
 

@@ -3,8 +3,8 @@
  * @module FetchAlternateReturnsRecipientsService
  */
 
-import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { db } from 'water-abstraction-engine/db/db.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
 import GenerateReturnLogsByIdQueryService from './generate-return-logs-by-id-query.service.js'

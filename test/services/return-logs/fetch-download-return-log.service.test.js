@@ -27,16 +27,16 @@ describe('Fetch Download Return Log service', () => {
 
       await Promise.all([
         ReturnSubmissionLineHelper.add({
-          returnSubmissionId: returnSubmissions[0].id,
-          startDate: '2023-02-01',
           endDate: '2023-02-28',
-          quantity: 10
+          quantity: 10,
+          returnSubmissionId: returnSubmissions[0].id,
+          startDate: '2023-02-01'
         }),
         ReturnSubmissionLineHelper.add({
-          returnSubmissionId: returnSubmissions[0].id,
-          startDate: '2023-01-01',
           endDate: '2023-01-31',
-          quantity: 5
+          quantity: 5,
+          returnSubmissionId: returnSubmissions[0].id,
+          startDate: '2023-01-01'
         })
       ])
     })
@@ -45,18 +45,18 @@ describe('Fetch Download Return Log service', () => {
       const result = await FetchDownloadReturnLogService(returnLog.id, 2)
 
       expect(result).toEqual({
+        endDate: returnLog.endDate,
         id: returnLog.id,
         returnReference: Number(returnLog.returnReference),
-        startDate: returnLog.startDate,
-        endDate: returnLog.endDate,
         returnSubmissions: [
           {
             id: returnSubmissions[1].id,
             metadata: {},
-            version: returnSubmissions[1].version,
-            returnSubmissionLines: []
+            returnSubmissionLines: [],
+            version: returnSubmissions[1].version
           }
-        ]
+        ],
+        startDate: returnLog.startDate
       })
     })
 
@@ -78,22 +78,22 @@ describe('Fetch Download Return Log service', () => {
 
       returnSubmissions = await ReturnSubmissionHelper.add({
         metadata: {
-          type: 'measured',
-          units: 'm³',
           meters: [
             {
-              units: 'm³',
+              meterDetailsProvided: false,
+              multiplier: 1,
               readings: {
                 '2023-01-01_2023-01-31': 100,
                 '2023-02-01_2023-02-28': 170
               },
-              multiplier: 1,
               startReading: 0,
-              meterDetailsProvided: false
+              units: 'm³'
             }
           ],
           method: 'oneMeter',
-          totalFlag: false
+          totalFlag: false,
+          type: 'measured',
+          units: 'm³'
         },
         returnLogId: returnLog.id,
         version: 1
@@ -101,16 +101,16 @@ describe('Fetch Download Return Log service', () => {
 
       await Promise.all([
         ReturnSubmissionLineHelper.add({
-          returnSubmissionId: returnSubmissions.id,
-          startDate: '2023-02-01',
           endDate: '2023-02-28',
-          quantity: 100
+          quantity: 100,
+          returnSubmissionId: returnSubmissions.id,
+          startDate: '2023-02-01'
         }),
         ReturnSubmissionLineHelper.add({
-          returnSubmissionId: returnSubmissions.id,
-          startDate: '2023-01-01',
           endDate: '2023-01-31',
-          quantity: 70
+          quantity: 70,
+          returnSubmissionId: returnSubmissions.id,
+          startDate: '2023-01-01'
         })
       ])
     })
@@ -144,18 +144,18 @@ describe('Fetch Download Return Log service', () => {
       const result = await FetchDownloadReturnLogService(returnLog.id, 1)
 
       expect(result).toEqual({
+        endDate: returnLog.endDate,
         id: returnLog.id,
         returnReference: returnRequirement.reference,
-        startDate: returnLog.startDate,
-        endDate: returnLog.endDate,
         returnSubmissions: [
           {
             id: returnSubmissions.id,
             metadata: {},
-            version: returnSubmissions.version,
-            returnSubmissionLines: []
+            returnSubmissionLines: [],
+            version: returnSubmissions.version
           }
-        ]
+        ],
+        startDate: returnLog.startDate
       })
     })
   })

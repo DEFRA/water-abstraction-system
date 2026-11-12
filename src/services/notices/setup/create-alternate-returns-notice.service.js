@@ -5,8 +5,8 @@
  */
 
 import EventModel from 'water-abstraction-engine/models/event.model.js'
-import { NoticeJourney, NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { generateNoticeReferenceCode, timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
+import { NoticeJourney, NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import CreateNotificationsService from './create-notifications.service.js'
 import FetchAlternateReturnsRecipientsService from './returns-notice/fetch-alternate-returns-recipients.service.js'

@@ -3,38 +3,38 @@ import { remove, submitRemove, view } from '../controllers/bill-licences.control
 export default [
   {
     method: 'GET',
-    path: '/bill-licences/{id}',
     options: {
-      handler: view,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: view
+    },
+    path: '/bill-licences/{id}'
   },
   {
     method: 'GET',
-    path: '/bill-licences/{id}/remove',
     options: {
-      handler: remove,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: remove
+    },
+    path: '/bill-licences/{id}/remove'
   },
   {
     method: 'POST',
-    path: '/bill-licences/{id}/remove',
     options: {
-      handler: submitRemove,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitRemove
+    },
+    path: '/bill-licences/{id}/remove'
   }
 ]

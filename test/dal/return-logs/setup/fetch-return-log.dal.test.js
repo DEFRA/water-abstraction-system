@@ -50,8 +50,8 @@ describe('Return Logs - Setup - Fetch Return Log DAL', () => {
 
     // NOTE: We add a superseded return submission to demonstrate only the current one is returned
     supersededReturnSubmission = await ReturnSubmissionHelper.add({
-      returnLogId: returnLog.id,
       current: false,
+      returnLogId: returnLog.id,
       version: 1
     })
 

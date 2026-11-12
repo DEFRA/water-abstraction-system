@@ -15,6 +15,7 @@ import ViewCheckService from '../../../../src/services/billing-accounts/setup/vi
 
 describe('Billing Accounts - Setup - View Check Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
   let session
   let sessionData
 
@@ -46,10 +47,12 @@ describe('Billing Accounts - Setup - View Check Service', () => {
         addressSelected: ['New'],
         companiesHouseName: '',
         companySearch: '',
-        contactSelected: null,
         contactName: '',
+        contactSelected: null,
         existingAccount: '',
         fao: 'no',
+        impactedLicences: [],
+        individualName: '',
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
@@ -57,15 +60,13 @@ describe('Billing Accounts - Setup - View Check Service', () => {
           addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
           companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
           companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
-          contactSelected: `/system/billing-accounts/setup/${session.id}/contact`,
           contactName: `/system/billing-accounts/setup/${session.id}/contact-name`,
+          contactSelected: `/system/billing-accounts/setup/${session.id}/contact`,
           existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
           fao: `/system/billing-accounts/setup/${session.id}/fao`
         },
         pageTitle: 'Check billing account details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-        impactedLicences: [],
-        individualName: '',
         searchInput: ''
       })
     })

@@ -38,11 +38,11 @@ describe('ReSP API Request', () => {
     describe('when the request succeeds', () => {
       beforeEach(() => {
         vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: HTTP_STATUS_OK,
-            body: { testObject: { test: 'yes' } }
-          }
+            body: { testObject: { test: 'yes' } },
+            statusCode: HTTP_STATUS_OK
+          },
+          succeeded: true
         })
       })
 
@@ -77,12 +77,12 @@ describe('ReSP API Request', () => {
     describe('when the request fails', () => {
       beforeEach(() => {
         vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
           response: {
+            body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
             statusCode: HTTP_STATUS_NOT_FOUND,
-            statusMessage: 'Not Found',
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
-          }
+            statusMessage: 'Not Found'
+          },
+          succeeded: false
         })
       })
 

@@ -21,8 +21,8 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
 
     sessionData = {
       dueReturns: [],
-      licenceRef: '01/123',
-      journey: 'adhoc'
+      journey: 'adhoc',
+      licenceRef: '01/123'
     }
   })
 
@@ -50,15 +50,6 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
         await SubmitCheckNoticeTypeService(sessionId)
 
         expect(session).toEqual({
-          dueReturns: [],
-          id: sessionId,
-          licenceRef: '01/123',
-          journey: 'adhoc',
-          name: 'Returns: invitation',
-          noticeType: 'invitations',
-          notificationType: 'Returns invitation',
-          referenceCode: sessionData.referenceCode,
-          subType: 'returnInvitation',
           addressJourney: {
             activeNavBar: 'notices',
             address: {},
@@ -68,7 +59,16 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
             },
             pageTitleCaption: `Notice ${sessionData.referenceCode}`,
             redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-          }
+          },
+          dueReturns: [],
+          id: sessionId,
+          journey: 'adhoc',
+          licenceRef: '01/123',
+          name: 'Returns: invitation',
+          noticeType: 'invitations',
+          notificationType: 'Returns invitation',
+          referenceCode: sessionData.referenceCode,
+          subType: 'returnInvitation'
         })
       })
     })
@@ -92,15 +92,6 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
         await SubmitCheckNoticeTypeService(sessionId)
 
         expect(session).toEqual({
-          dueReturns: [],
-          id: sessionId,
-          licenceRef: '01/123',
-          journey: 'adhoc',
-          name: 'Paper returns',
-          noticeType: 'paperReturn',
-          notificationType: 'Paper returns',
-          referenceCode: sessionData.referenceCode,
-          subType: 'paperReturnForms',
           addressJourney: {
             activeNavBar: 'notices',
             address: {},
@@ -110,7 +101,16 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
             },
             pageTitleCaption: `Notice ${sessionData.referenceCode}`,
             redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-          }
+          },
+          dueReturns: [],
+          id: sessionId,
+          journey: 'adhoc',
+          licenceRef: '01/123',
+          name: 'Paper returns',
+          noticeType: 'paperReturn',
+          notificationType: 'Paper returns',
+          referenceCode: sessionData.referenceCode,
+          subType: 'paperReturnForms'
         })
       })
     })

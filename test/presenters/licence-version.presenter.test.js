@@ -11,8 +11,8 @@ describe('Licence version presenter', () => {
     describe('when the licence version does not have an end date', () => {
       beforeEach(() => {
         licenceVersion = {
-          id: 'b38da465-2233-4008-8d89-af59c11dd141',
-          endDate: null
+          endDate: null,
+          id: 'b38da465-2233-4008-8d89-af59c11dd141'
         }
       })
 
@@ -29,8 +29,8 @@ describe('Licence version presenter', () => {
     describe('when the licence version has an end date', () => {
       beforeEach(() => {
         licenceVersion = {
-          id: 'b38da465-2233-4008-8d89-af59c11dd141',
-          endDate: new Date('2022-12-31')
+          endDate: new Date('2022-12-31'),
+          id: 'b38da465-2233-4008-8d89-af59c11dd141'
         }
       })
 

@@ -28,9 +28,9 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
           href: `/system/billing-accounts/setup/${session.id}/existing-account`,
           text: 'Back'
         },
+        individualName: null,
         pageTitle: 'Select the account type',
-        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-        individualName: null
+        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })
     })
   })

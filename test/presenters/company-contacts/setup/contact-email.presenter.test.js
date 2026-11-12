@@ -15,7 +15,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
   beforeEach(() => {
     company = CustomersFixtures.company()
 
-    session = { id: generateUUID(), company }
+    session = { company, id: generateUUID() }
   })
 
   describe('when called', () => {

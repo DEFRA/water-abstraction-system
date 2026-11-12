@@ -119,23 +119,23 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
 
 function _generatedTransaction(chargeCategoryCode, billableDays, testReference, changes = {}) {
   const defaultProperties = {
-    id: '61abdc15-7859-4783-9622-6cb8de7f2461',
-    billLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-    credit: false,
-    status: 'candidate',
-    chargeType: 'standard',
-    chargeCategoryCode,
+    adjustmentFactor: 1,
+    aggregateFactor: 1,
     billableDays,
+    billLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
+    chargeCategoryCode,
+    chargeType: 'standard',
+    credit: false,
+    id: '61abdc15-7859-4783-9622-6cb8de7f2461',
+    purposes: testReference,
     section126Factor: 1,
     section127Agreement: false,
     section130Agreement: false,
-    aggregateFactor: 1,
-    adjustmentFactor: 1,
-    winterOnly: false,
+    status: 'candidate',
     supportedSource: false,
     supportedSourceName: null,
     waterCompanyCharge: false,
-    purposes: testReference
+    winterOnly: false
   }
 
   return {
@@ -146,23 +146,23 @@ function _generatedTransaction(chargeCategoryCode, billableDays, testReference, 
 
 function _previousTransaction(chargeCategoryCode, billableDays, testReference, changes = {}) {
   const defaultProperties = {
-    id: '8d68eb26-d054-47a7-aee8-cd93a24fa860',
-    billLicenceId: 'a76b3ab3-d70d-4fb0-8d72-2e2cdd334729',
-    credit: false,
-    status: 'candidate',
-    chargeType: 'standard',
-    chargeCategoryCode,
+    adjustmentFactor: 1,
+    aggregateFactor: 1,
     billableDays,
+    billLicenceId: 'a76b3ab3-d70d-4fb0-8d72-2e2cdd334729',
+    chargeCategoryCode,
+    chargeType: 'standard',
+    credit: false,
+    id: '8d68eb26-d054-47a7-aee8-cd93a24fa860',
+    purposes: [testReference],
     section126Factor: 1,
     section127Agreement: false,
     section130Agreement: false,
-    aggregateFactor: 1,
-    adjustmentFactor: 1,
-    winterOnly: false,
+    status: 'candidate',
     supportedSource: false,
     supportedSourceName: null,
     waterCompanyCharge: false,
-    purposes: [testReference]
+    winterOnly: false
   }
 
   return {

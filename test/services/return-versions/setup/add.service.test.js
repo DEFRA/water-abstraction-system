@@ -17,18 +17,18 @@ describe('Return Versions Setup - Add service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
+      reason: 'major-change',
       requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change'
+      startDateOptions: 'licenceStartDate'
     }
 
     session = SessionModelStub(sessionData)

@@ -89,7 +89,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
           const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
-          expect(notification).toEqual({ titleText: 'Updated', text: 'Reporting details changed' })
+          expect(notification).toEqual({ text: 'Reporting details changed', titleText: 'Updated' })
         })
       })
     })
@@ -115,9 +115,9 @@ describe('Return Logs - Setup - Submit Received service', () => {
     describe('with a valid payload (custom received date)', () => {
       beforeEach(() => {
         payload = {
-          receivedDateOptions: 'customDate',
           receivedDateDay: '26',
           receivedDateMonth: '11',
+          receivedDateOptions: 'customDate',
           receivedDateYear: '2023'
         }
       })
@@ -149,16 +149,16 @@ describe('Return Logs - Setup - Submit Received service', () => {
         const result = await SubmitReceivedService(session.id, payload, yarStub)
 
         expect(result).toMatchObject({
-          pageTitle: 'When was the return received?',
-          receivedDateDay: null,
-          receivedDateMonth: null,
-          receivedDateYear: null,
-          receivedDateOption: null,
           backLink: {
             href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3/details',
             text: 'Back'
           },
-          pageTitleCaption: 'Return reference 12345'
+          pageTitle: 'When was the return received?',
+          pageTitleCaption: 'Return reference 12345',
+          receivedDateDay: null,
+          receivedDateMonth: null,
+          receivedDateOption: null,
+          receivedDateYear: null
         })
       })
 
@@ -181,9 +181,9 @@ describe('Return Logs - Setup - Submit Received service', () => {
       describe('because the user has selected custom received date and entered invalid data', () => {
         beforeEach(() => {
           payload = {
-            receivedDateOptions: 'customDate',
             receivedDateDay: 'a',
             receivedDateMonth: 'b',
+            receivedDateOptions: 'customDate',
             receivedDateYear: 'c'
           }
         })
@@ -192,13 +192,13 @@ describe('Return Logs - Setup - Submit Received service', () => {
           const result = await SubmitReceivedService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
+            date: { text: 'Enter a real received date' },
             errorList: [
               {
                 href: '#date',
                 text: 'Enter a real received date'
               }
-            ],
-            date: { text: 'Enter a real received date' }
+            ]
           })
         })
 

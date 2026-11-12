@@ -230,13 +230,13 @@ function transformToFetchUsersResult(user) {
   return UserModel.fromJson({
     application,
     enabled,
-    id,
     groups: groups.map((group) => {
       return GroupModel.fromJson({
         group: group.group,
         id: group.id
       })
     }),
+    id,
     lastLogin,
     licenceEntity: _transformLicenceEntity(licenceEntity),
     licenceEntityId,
@@ -308,6 +308,7 @@ function _licenceEntityAndRole(username, role) {
     licenceEntityId: entity.id,
     role: 'user'
   })
+
   entity.licenceEntityRoles.push(entityRole)
 
   if (role === 'user') {

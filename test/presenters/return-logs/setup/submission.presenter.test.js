@@ -10,8 +10,8 @@ describe('Return Logs Setup - Submission presenter', () => {
   describe('when provided with a populated session', () => {
     beforeEach(() => {
       session = {
-        id: 'e840675e-9fb9-4ce1-bf0a-d140f5c57f47',
         beenReceived: false,
+        id: 'e840675e-9fb9-4ce1-bf0a-d140f5c57f47',
         returnReference: 1234
       }
     })

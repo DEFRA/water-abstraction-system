@@ -48,14 +48,14 @@ function _groupByLicence(chargeVersions, uniqueLicenceIds) {
     const licenceHolder = matchedChargeVersions[0].licence.$licenceHolder()
 
     licences[i] = {
+      chargeVersions: matchedChargeVersions,
+      expiredDate,
       id: licenceId,
+      lapsedDate,
       licenceHolder,
       licenceRef,
-      startDate,
-      expiredDate,
-      lapsedDate,
       revokedDate,
-      chargeVersions: matchedChargeVersions
+      startDate
     }
   }
 

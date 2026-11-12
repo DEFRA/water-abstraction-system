@@ -55,16 +55,16 @@ describe('Return Versions - Setup - Fetch Purposes service', () => {
       const result = await FetchPurposesService(licenceVersion.id)
 
       expect(result[0]).toEqual({
-        id: purposes[1].id,
-        description: 'Heat Pump'
+        description: 'Heat Pump',
+        id: purposes[1].id
       })
       expect(result[1]).toEqual({
-        id: purposes[2].id,
-        description: 'Horticultural Watering'
+        description: 'Horticultural Watering',
+        id: purposes[2].id
       })
       expect(result[2]).toEqual({
-        id: purposes[0].id,
-        description: 'Large Garden Watering'
+        description: 'Large Garden Watering',
+        id: purposes[0].id
       })
     })
   })

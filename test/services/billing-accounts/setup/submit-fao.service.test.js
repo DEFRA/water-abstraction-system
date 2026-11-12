@@ -14,6 +14,7 @@ import SubmitFAOService from '../../../../src/services/billing-accounts/setup/su
 describe('Billing Accounts - Setup - Submit FAO Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   const billingAccountAddress = billingAccount.billingAccountAddresses[0].address
+
   let payload
   let session
   let sessionData

@@ -31,8 +31,8 @@ export default function meterDetailsValidator(payload) {
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': meter10TimesDisplayErrorMessage,
         'any.only': meter10TimesDisplayErrorMessage,
+        'any.required': meter10TimesDisplayErrorMessage,
         'string.empty': meter10TimesDisplayErrorMessage
       })
   })

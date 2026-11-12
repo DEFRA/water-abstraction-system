@@ -36,8 +36,8 @@ describe('Licences - Fetch Points service', () => {
       depth: 123,
       description: 'RIVER OUSE AT BLETSOE',
       hydroInterceptDistance: 8.01,
-      hydroReference: 'TL 14/133',
       hydroOffsetDistance: 5.56,
+      hydroReference: 'TL 14/133',
       locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
       ngr1: 'SD 963 193',
       ngr2: 'SD 963 193',
@@ -75,20 +75,20 @@ describe('Licences - Fetch Points service', () => {
           depth: 123,
           description: 'RIVER OUSE AT BLETSOE',
           hydroInterceptDistance: 8.01,
-          hydroReference: 'TL 14/133',
           hydroOffsetDistance: 5.56,
-          pointId: point.id,
+          hydroReference: 'TL 14/133',
           locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
           ngr1: 'SD 963 193',
           ngr2: 'SD 963 193',
           ngr3: 'SD 963 193',
           ngr4: 'SD 963 193',
           note: 'WELL IS SPRING-FED',
+          pointId: point.id,
           primaryType: 'Groundwater',
           secondaryType: 'Borehole',
-          wellReference: '81312',
           sourceDescription: source.description,
-          sourceType: source.sourceType
+          sourceType: source.sourceType,
+          wellReference: '81312'
         }
       ])
     })

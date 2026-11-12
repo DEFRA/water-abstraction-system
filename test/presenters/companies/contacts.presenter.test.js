@@ -17,9 +17,9 @@ describe('Companies - Contacts presenter', () => {
 
     contacts = [
       {
-        id: generateUUID(),
+        contactName: 'Rachael Tyrell',
         contactType: 'additional-contact',
-        contactName: 'Rachael Tyrell'
+        id: generateUUID()
       }
     ]
   })
@@ -36,8 +36,8 @@ describe('Companies - Contacts presenter', () => {
         contacts: [
           {
             link: `/system/company-contacts/${contacts[0].id}/contact-details`,
-            type: 'Additional contact',
-            name: 'Rachael Tyrell'
+            name: 'Rachael Tyrell',
+            type: 'Additional contact'
           }
         ],
         links: {
@@ -53,9 +53,9 @@ describe('Companies - Contacts presenter', () => {
         beforeEach(() => {
           contacts = [
             {
-              id: generateUUID(),
+              contactName: 'Rachael Tyrell',
               contactType: 'abstraction-alerts',
-              contactName: 'Rachael Tyrell'
+              id: generateUUID()
             }
           ]
         })
@@ -66,8 +66,8 @@ describe('Companies - Contacts presenter', () => {
           expect(result.contacts).toEqual([
             {
               link: `/system/company-contacts/${contacts[0].id}/contact-details`,
-              type: 'Abstraction alerts',
-              name: 'Rachael Tyrell'
+              name: 'Rachael Tyrell',
+              type: 'Abstraction alerts'
             }
           ])
         })
@@ -77,9 +77,9 @@ describe('Companies - Contacts presenter', () => {
         beforeEach(() => {
           contacts = [
             {
-              id: generateUUID(),
+              contactName: 'Rachael Tyrell',
               contactType: 'additional-contact',
-              contactName: 'Rachael Tyrell'
+              id: generateUUID()
             }
           ]
         })
@@ -90,8 +90,8 @@ describe('Companies - Contacts presenter', () => {
           expect(result.contacts).toEqual([
             {
               link: `/system/company-contacts/${contacts[0].id}/contact-details`,
-              type: 'Additional contact',
-              name: 'Rachael Tyrell'
+              name: 'Rachael Tyrell',
+              type: 'Additional contact'
             }
           ])
         })
@@ -101,9 +101,9 @@ describe('Companies - Contacts presenter', () => {
         beforeEach(() => {
           contacts = [
             {
-              id: generateUUID(),
+              contactName: 'Rachael Tyrell',
               contactType: 'billing',
-              contactName: 'Rachael Tyrell'
+              id: generateUUID()
             }
           ]
         })
@@ -114,8 +114,8 @@ describe('Companies - Contacts presenter', () => {
           expect(result.contacts).toEqual([
             {
               link: `/system/billing-accounts/${contacts[0].id}?company-id=${company.id}`,
-              type: 'Billing',
-              name: 'Rachael Tyrell'
+              name: 'Rachael Tyrell',
+              type: 'Billing'
             }
           ])
         })
@@ -125,9 +125,9 @@ describe('Companies - Contacts presenter', () => {
         beforeEach(() => {
           contacts = [
             {
-              id: generateUUID(),
+              contactName: 'user@test.com',
               contactType: 'basic-user',
-              contactName: 'user@test.com'
+              id: generateUUID()
             }
           ]
         })
@@ -138,8 +138,8 @@ describe('Companies - Contacts presenter', () => {
           expect(result.contacts).toEqual([
             {
               link: `/system/users/external/${contacts[0].id}/details?back=search`,
-              type: 'Basic user',
-              name: 'user@test.com'
+              name: 'user@test.com',
+              type: 'Basic user'
             }
           ])
         })
@@ -149,9 +149,9 @@ describe('Companies - Contacts presenter', () => {
         beforeEach(() => {
           contacts = [
             {
-              id: generateUUID(),
+              contactName: 'user@test.com',
               contactType: 'primary-user',
-              contactName: 'user@test.com'
+              id: generateUUID()
             }
           ]
         })
@@ -162,8 +162,8 @@ describe('Companies - Contacts presenter', () => {
           expect(result.contacts).toEqual([
             {
               link: `/system/users/external/${contacts[0].id}/details?back=search`,
-              type: 'Primary user',
-              name: 'user@test.com'
+              name: 'user@test.com',
+              type: 'Primary user'
             }
           ])
         })
@@ -173,9 +173,9 @@ describe('Companies - Contacts presenter', () => {
         beforeEach(() => {
           contacts = [
             {
-              id: generateUUID(),
+              contactName: 'user@test.com',
               contactType: 'returns-user',
-              contactName: 'user@test.com'
+              id: generateUUID()
             }
           ]
         })
@@ -186,8 +186,8 @@ describe('Companies - Contacts presenter', () => {
           expect(result.contacts).toEqual([
             {
               link: `/system/users/external/${contacts[0].id}/details?back=search`,
-              type: 'Returns user',
-              name: 'user@test.com'
+              name: 'user@test.com',
+              type: 'Returns user'
             }
           ])
         })
@@ -197,9 +197,9 @@ describe('Companies - Contacts presenter', () => {
         beforeEach(() => {
           contacts = [
             {
-              id: generateUUID(),
+              contactName: 'Rachael Tyrell',
               contactType: 'licence-holder',
-              contactName: 'Rachael Tyrell'
+              id: generateUUID()
             }
           ]
         })
@@ -210,8 +210,8 @@ describe('Companies - Contacts presenter', () => {
           expect(result.contacts).toEqual([
             {
               link: `/system/companies/${contacts[0].id}/licence-holder`,
-              type: 'Licence holder',
-              name: 'Rachael Tyrell'
+              name: 'Rachael Tyrell',
+              type: 'Licence holder'
             }
           ])
         })
@@ -221,9 +221,9 @@ describe('Companies - Contacts presenter', () => {
         beforeEach(() => {
           contacts = [
             {
-              id: generateUUID(),
+              contactName: 'Rachael Tyrell',
               contactType: 'returns-to',
-              contactName: 'Rachael Tyrell'
+              id: generateUUID()
             }
           ]
         })
@@ -234,8 +234,8 @@ describe('Companies - Contacts presenter', () => {
           expect(result.contacts).toEqual([
             {
               link: `/system/companies/${contacts[0].id}/returns-to`,
-              type: 'Returns to',
-              name: 'Rachael Tyrell'
+              name: 'Rachael Tyrell',
+              type: 'Returns to'
             }
           ])
         })

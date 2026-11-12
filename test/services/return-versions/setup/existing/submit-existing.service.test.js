@@ -19,42 +19,42 @@ describe('Return Versions - Setup - Submit Existing service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z',
         waterUndertaker: false
       },
-      multipleUpload: false,
-      journey: 'returns-required',
-      requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
       licenceVersion: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        endDate: null,
-        startDate: '2022-04-01T00:00:00.000Z',
         copyableReturnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
-        ]
+        ],
+        endDate: null,
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        startDate: '2022-04-01T00:00:00.000Z'
       },
-      reason: 'major-change'
+      multipleUpload: false,
+      reason: 'major-change',
+      requirements: [{}],
+      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
+      startDateOptions: 'licenceStartDate'
     }
 
     session = SessionModelStub(sessionData)
@@ -115,14 +115,14 @@ describe('Return Versions - Setup - Submit Existing service', () => {
         const result = await SubmitExistingService(session.id, payload)
 
         expect(result).toMatchObject({
-          pageTitle: 'Use previous requirements for returns',
-          pageTitleCaption: 'Licence 01/ABC',
           backLink: {
             href: `/system/return-versions/setup/${session.id}/method`,
             text: 'Back'
           },
-          existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
-          licenceRef: '01/ABC'
+          existingOptions: [{ text: '1 January 2023', value: '60b5d10d-1372-4fb2-b222-bfac81da69ab' }],
+          licenceRef: '01/ABC',
+          pageTitle: 'Use previous requirements for returns',
+          pageTitleCaption: 'Licence 01/ABC'
         })
       })
 
@@ -147,18 +147,18 @@ describe('Return Versions - Setup - Submit Existing service', () => {
 
 function _transformedReturnRequirement() {
   return {
-    points: ['1234'],
-    purposes: ['1a1a68cc-b1f5-43db-8d1a-3452425bcc68'],
-    returnsCycle: 'winter-and-all-year',
-    siteDescription: 'FIRST BOREHOLE AT AVALON',
     abstractionPeriod: {
       abstractionPeriodEndDay: '31',
       abstractionPeriodEndMonth: '3',
       abstractionPeriodStartDay: '1',
       abstractionPeriodStartMonth: '4'
     },
-    frequencyReported: 'week',
+    agreementsExceptions: ['none'],
     frequencyCollected: 'week',
-    agreementsExceptions: ['none']
+    frequencyReported: 'week',
+    points: ['1234'],
+    purposes: ['1a1a68cc-b1f5-43db-8d1a-3452425bcc68'],
+    returnsCycle: 'winter-and-all-year',
+    siteDescription: 'FIRST BOREHOLE AT AVALON'
   }
 }

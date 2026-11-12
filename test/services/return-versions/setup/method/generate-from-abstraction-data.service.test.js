@@ -39,6 +39,15 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
 
         expect(result).toEqual([
           {
+            abstractionPeriod: {
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 10,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4
+            },
+            agreementsExceptions: ['none'],
+            frequencyCollected: 'day',
+            frequencyReported: 'day',
             points: ['d60b0dfe-ef2b-4bc2-a963-b74b25433127', '6c664140-f7ee-4e98-aa88-74590d3fd8fb'],
             purposes: [
               {
@@ -48,18 +57,18 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
               }
             ],
             returnsCycle: 'summer',
-            siteDescription: 'INTAKE POINT',
-            abstractionPeriod: {
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 10,
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4
-            },
-            frequencyReported: 'day',
-            frequencyCollected: 'day',
-            agreementsExceptions: ['none']
+            siteDescription: 'INTAKE POINT'
           },
           {
+            abstractionPeriod: {
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 12,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 5
+            },
+            agreementsExceptions: ['two-part-tariff'],
+            frequencyCollected: 'month',
+            frequencyReported: 'month',
             points: ['554cd6c5-5bfe-4133-9828-2f10aa6ac5f8'],
             purposes: [
               {
@@ -69,18 +78,18 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
               }
             ],
             returnsCycle: 'winterAndAllYear',
-            siteDescription: 'MAIN INTAKE',
-            abstractionPeriod: {
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 12,
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 5
-            },
-            frequencyReported: 'month',
-            frequencyCollected: 'month',
-            agreementsExceptions: ['two-part-tariff']
+            siteDescription: 'MAIN INTAKE'
           },
           {
+            abstractionPeriod: {
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 11
+            },
+            agreementsExceptions: ['none'],
+            frequencyCollected: 'week',
+            frequencyReported: 'week',
             points: ['bf6a409e-7882-4c5d-9e49-2ebae2936576'],
             purposes: [
               {
@@ -90,16 +99,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
               }
             ],
             returnsCycle: 'winterAndAllYear',
-            siteDescription: 'SOUTH BOREHOLE',
-            abstractionPeriod: {
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 3,
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 11
-            },
-            frequencyReported: 'week',
-            frequencyCollected: 'week',
-            agreementsExceptions: ['none']
+            siteDescription: 'SOUTH BOREHOLE'
           }
         ])
       })
@@ -182,74 +182,74 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
 function _fetchAbstractionDataResult(licenceId) {
   return LicenceModel.fromJson({
     id: licenceId,
-    waterUndertaker: false,
     licenceVersions: [
       {
         id: 'f7a5ba6a-ceaa-41e9-a8b5-27f33f42d05e',
-        startDate: new Date('2022-05-01'),
-        status: 'current',
         licenceVersionPurposes: [
           // NOTE: We specifically create a model from JSON rather than just passing in the JSON directly because the
           // service needs to be able to call the model instances $electricityGeneration() method
           LicenceVersionPurposeModel.fromJson({
-            id: '3f140d82-bdfa-46cc-bfeb-920e7188f571',
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 10,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
             dailyQuantity: 455,
             externalId: '1:10065380',
-            primaryPurpose: { id: 'd7c327ce-246d-4370-a6fe-1f2c6ba7a22a', legacyId: 'P' },
-            purpose: {
-              id: '24939b40-a187-4bd1-9222-f552a3af6368',
-              description: 'Heat Pump',
-              legacyId: '200',
-              twoPartTariff: false
-            },
-            secondaryPurpose: { id: '235ed780-f535-4b8d-b367-b5438ac130e9', legacyId: 'ELC' },
+            id: '3f140d82-bdfa-46cc-bfeb-920e7188f571',
             points: [
               { description: 'INTAKE POINT', id: 'd60b0dfe-ef2b-4bc2-a963-b74b25433127' },
               { description: 'OUT TAKE POINT', id: '6c664140-f7ee-4e98-aa88-74590d3fd8fb' }
-            ]
+            ],
+            primaryPurpose: { id: 'd7c327ce-246d-4370-a6fe-1f2c6ba7a22a', legacyId: 'P' },
+            purpose: {
+              description: 'Heat Pump',
+              id: '24939b40-a187-4bd1-9222-f552a3af6368',
+              legacyId: '200',
+              twoPartTariff: false
+            },
+            secondaryPurpose: { id: '235ed780-f535-4b8d-b367-b5438ac130e9', legacyId: 'ELC' }
           }),
           LicenceVersionPurposeModel.fromJson({
-            id: 'c7a77631-4a85-4d7a-9aa7-e79aa66fbae5',
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 11,
             dailyQuantity: 2675,
             externalId: '1:10065381',
+            id: 'c7a77631-4a85-4d7a-9aa7-e79aa66fbae5',
+            points: [{ description: 'SOUTH BOREHOLE', id: 'bf6a409e-7882-4c5d-9e49-2ebae2936576' }],
             primaryPurpose: { id: 'd780c2a1-aad4-485c-90d8-47496ba2277e', legacyId: 'A' },
             purpose: {
-              id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f',
               description: 'Vegetable Washing',
+              id: 'e5b3b9bc-59c5-46d3-b019-5cf5467d4f0f',
               legacyId: '460',
               twoPartTariff: false
             },
-            secondaryPurpose: { id: '827f5181-1acc-452a-aea3-a1d72a21604b', legacyId: 'AGR' },
-            points: [{ description: 'SOUTH BOREHOLE', id: 'bf6a409e-7882-4c5d-9e49-2ebae2936576' }]
+            secondaryPurpose: { id: '827f5181-1acc-452a-aea3-a1d72a21604b', legacyId: 'AGR' }
           }),
           LicenceVersionPurposeModel.fromJson({
-            id: '1255bf65-fcfd-4b28-a48a-b8ec2e7820b0',
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 12,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 5,
             dailyQuantity: 300,
             externalId: '1:10065382',
+            id: '1255bf65-fcfd-4b28-a48a-b8ec2e7820b0',
+            points: [{ description: 'MAIN INTAKE', id: '554cd6c5-5bfe-4133-9828-2f10aa6ac5f8' }],
             primaryPurpose: { id: 'd780c2a1-aad4-485c-90d8-47496ba2277e', legacyId: 'A' },
             purpose: {
-              id: '76c8c08c-4fef-421a-83d6-16d8000311a4',
               description: 'Spray Irrigation - Direct',
+              id: '76c8c08c-4fef-421a-83d6-16d8000311a4',
               legacyId: '400',
               twoPartTariff: true
             },
-            secondaryPurpose: { id: '827f5181-1acc-452a-aea3-a1d72a21604b', legacyId: 'AGR' },
-            points: [{ description: 'MAIN INTAKE', id: '554cd6c5-5bfe-4133-9828-2f10aa6ac5f8' }]
+            secondaryPurpose: { id: '827f5181-1acc-452a-aea3-a1d72a21604b', legacyId: 'AGR' }
           })
-        ]
+        ],
+        startDate: new Date('2022-05-01'),
+        status: 'current'
       }
-    ]
+    ],
+    waterUndertaker: false
   })
 }

@@ -30,10 +30,10 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
+          endDate: null,
           id: '46c0fef8-70bb-41c8-bfa1-ace5c21ef739',
           licenceId,
-          startDate: new Date('2024-04-01'),
-          endDate: null
+          startDate: new Date('2024-04-01')
         }
       ])
     })
@@ -55,10 +55,10 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
+          endDate: new Date('2024-07-01'),
           id: '46c0fef8-70bb-41c8-bfa1-ace5c21ef739',
           licenceId,
-          startDate: new Date('2024-04-01'),
-          endDate: new Date('2024-07-01')
+          startDate: new Date('2024-04-01')
         }
       ])
     })
@@ -80,10 +80,10 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
+          endDate: null,
           id: '46c0fef8-70bb-41c8-bfa1-ace5c21ef739',
           licenceId,
-          startDate: new Date('2024-04-21'),
-          endDate: null
+          startDate: new Date('2024-04-21')
         }
       ])
     })
@@ -104,10 +104,10 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
+          endDate: null,
           id: '46c0fef8-70bb-41c8-bfa1-ace5c21ef739',
           licenceId,
-          startDate: new Date('2024-04-01'),
-          endDate: null
+          startDate: new Date('2024-04-01')
         }
       ])
     })
@@ -129,10 +129,10 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
+          endDate: new Date('2024-07-01'),
           id: '46c0fef8-70bb-41c8-bfa1-ace5c21ef739',
           licenceId,
-          startDate: new Date('2024-04-01'),
-          endDate: new Date('2024-07-01')
+          startDate: new Date('2024-04-01')
         }
       ])
     })
@@ -154,22 +154,22 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
+          endDate: new Date('2008-03-31'),
           id: 'c4738c45-f43c-440d-a353-823cc0148d68',
           licenceId,
-          startDate: new Date('1993-04-27'),
-          endDate: new Date('2008-03-31')
+          startDate: new Date('1993-04-27')
         },
         {
+          endDate: new Date('2025-05-11'),
           id: '46c0fef8-70bb-41c8-bfa1-ace5c21ef739',
           licenceId,
-          startDate: new Date('2008-04-01'),
-          endDate: new Date('2025-05-11')
+          startDate: new Date('2008-04-01')
         },
         {
+          endDate: null,
           id: '670d1781-4071-4010-ab80-56ddc525faff',
           licenceId,
-          startDate: new Date('2025-05-12'),
-          endDate: null
+          startDate: new Date('2025-05-12')
         }
       ])
     })

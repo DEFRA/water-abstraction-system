@@ -17,15 +17,15 @@ describe('Full Condition Presenter', () => {
 
     conditions = [
       {
-        id: 'fec6f0ac-e125-40e1-9926-ee4d8e0652ae',
         displayTitle: 'First condition title',
+        id: 'fec6f0ac-e125-40e1-9926-ee4d8e0652ae',
         notes: 'Some notes.',
         param1: 'P1',
         param2: 'P2'
       },
       {
-        id: '2c1fc38d-17fb-475a-8760-eb3370aae856',
         displayTitle: 'Second condition title',
+        id: '2c1fc38d-17fb-475a-8760-eb3370aae856',
         notes: 'More notes.',
         param1: 'P3',
         param2: 'P4'
@@ -75,28 +75,28 @@ describe('Full Condition Presenter', () => {
 
         expect(result.radioButtons).toEqual([
           {
-            value: 'fec6f0ac-e125-40e1-9926-ee4d8e0652ae',
-            text: 'First condition title 1',
+            checked: false,
             hint: {
               text: 'Some notes. (Additional information 1: P1) (Additional information 2: P2)'
             },
-            checked: false
+            text: 'First condition title 1',
+            value: 'fec6f0ac-e125-40e1-9926-ee4d8e0652ae'
           },
           {
-            value: '2c1fc38d-17fb-475a-8760-eb3370aae856',
-            text: 'Second condition title 2',
+            checked: false,
             hint: {
               text: 'More notes. (Additional information 1: P3) (Additional information 2: P4)'
             },
-            checked: false
+            text: 'Second condition title 2',
+            value: '2c1fc38d-17fb-475a-8760-eb3370aae856'
           },
           {
             divider: 'or'
           },
           {
-            value: 'no_condition',
+            checked: false,
             text: 'The condition is not listed for this licence',
-            checked: false
+            value: 'no_condition'
           }
         ])
       })
@@ -129,8 +129,8 @@ describe('Full Condition Presenter', () => {
         beforeEach(() => {
           conditions = [
             {
-              id: '03dd7ae6-607b-43bc-a195-3f1692678686',
               displayTitle: 'A null condition',
+              id: '03dd7ae6-607b-43bc-a195-3f1692678686',
               notes: null,
               param1: null,
               param2: null
@@ -142,12 +142,12 @@ describe('Full Condition Presenter', () => {
           const result = FullConditionPresenter(session, conditions)
 
           expect(result.radioButtons[0]).toEqual({
-            value: '03dd7ae6-607b-43bc-a195-3f1692678686',
-            text: 'A null condition 1',
+            checked: false,
             hint: {
               text: '(Additional information 1: None) (Additional information 2: None)'
             },
-            checked: false
+            text: 'A null condition 1',
+            value: '03dd7ae6-607b-43bc-a195-3f1692678686'
           })
         })
       })

@@ -53,8 +53,8 @@ describe('Return Versions - Setup - Fetch Points service', () => {
 
       expect(results).toContainEqual(
         PointModel.fromJson({
-          id: points[0].id,
           description: 'I am the shared point',
+          id: points[0].id,
           ngr1: points[0].ngr1,
           ngr2: null,
           ngr3: null,
@@ -64,8 +64,8 @@ describe('Return Versions - Setup - Fetch Points service', () => {
 
       expect(results).toContainEqual(
         PointModel.fromJson({
-          id: points[1].id,
           description: 'I am point 1',
+          id: points[1].id,
           ngr1: points[1].ngr1,
           ngr2: null,
           ngr3: null,
@@ -75,8 +75,8 @@ describe('Return Versions - Setup - Fetch Points service', () => {
 
       expect(results).toContainEqual(
         PointModel.fromJson({
-          id: points[2].id,
           description: 'I am point 2',
+          id: points[2].id,
           ngr1: points[2].ngr1,
           ngr2: null,
           ngr3: null,

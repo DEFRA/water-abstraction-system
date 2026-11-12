@@ -18,13 +18,14 @@ describe('Determine Bill Licence Flags Service', () => {
     let unflaggedLicence
 
     beforeAll(async () => {
-      flaggedLicence = await LicenceHelper.add({ includeInSrocBilling: true, includeInPresrocBilling: 'yes' })
+      flaggedLicence = await LicenceHelper.add({ includeInPresrocBilling: 'yes', includeInSrocBilling: true })
       unflaggedLicence = await LicenceHelper.add()
     })
 
     describe('being removed from a sroc two-part tariff bill run', () => {
       beforeAll(async () => {
         const billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', scheme: 'sroc' })
+
         bill = await BillHelper.add({ billRunId: billRun.id })
       })
 
@@ -32,8 +33,8 @@ describe('Determine Bill Licence Flags Service', () => {
         beforeAll(async () => {
           billLicence = await BillLicenceHelper.add({
             billId: bill.id,
-            licenceRef: flaggedLicence.licenceRef,
-            licenceId: flaggedLicence.id
+            licenceId: flaggedLicence.id,
+            licenceRef: flaggedLicence.licenceRef
           })
         })
 
@@ -59,8 +60,8 @@ describe('Determine Bill Licence Flags Service', () => {
         beforeAll(async () => {
           billLicence = await BillLicenceHelper.add({
             billId: bill.id,
-            licenceRef: unflaggedLicence.licenceRef,
-            licenceId: unflaggedLicence.id
+            licenceId: unflaggedLicence.id,
+            licenceRef: unflaggedLicence.licenceRef
           })
         })
 
@@ -90,6 +91,7 @@ describe('Determine Bill Licence Flags Service', () => {
           scheme: 'alcs',
           toFinancialYearEnding: '2021'
         })
+
         bill = await BillHelper.add({ billRunId: billRun.id })
       })
 
@@ -97,8 +99,8 @@ describe('Determine Bill Licence Flags Service', () => {
         beforeAll(async () => {
           billLicence = await BillLicenceHelper.add({
             billId: bill.id,
-            licenceRef: flaggedLicence.licenceRef,
-            licenceId: flaggedLicence.id
+            licenceId: flaggedLicence.id,
+            licenceRef: flaggedLicence.licenceRef
           })
         })
 
@@ -124,8 +126,8 @@ describe('Determine Bill Licence Flags Service', () => {
         beforeAll(async () => {
           billLicence = await BillLicenceHelper.add({
             billId: bill.id,
-            licenceRef: unflaggedLicence.licenceRef,
-            licenceId: unflaggedLicence.id
+            licenceId: unflaggedLicence.id,
+            licenceRef: unflaggedLicence.licenceRef
           })
         })
 
@@ -151,6 +153,7 @@ describe('Determine Bill Licence Flags Service', () => {
     describe('being removed from a sroc annual bill run', () => {
       beforeAll(async () => {
         const billRun = await BillRunHelper.add({ batchType: 'annual', scheme: 'sroc' })
+
         bill = await BillHelper.add({ billRunId: billRun.id })
       })
 
@@ -158,8 +161,8 @@ describe('Determine Bill Licence Flags Service', () => {
         beforeAll(async () => {
           billLicence = await BillLicenceHelper.add({
             billId: bill.id,
-            licenceRef: flaggedLicence.licenceRef,
-            licenceId: flaggedLicence.id
+            licenceId: flaggedLicence.id,
+            licenceRef: flaggedLicence.licenceRef
           })
         })
 
@@ -185,8 +188,8 @@ describe('Determine Bill Licence Flags Service', () => {
         beforeAll(async () => {
           billLicence = await BillLicenceHelper.add({
             billId: bill.id,
-            licenceRef: unflaggedLicence.licenceRef,
-            licenceId: unflaggedLicence.id
+            licenceId: unflaggedLicence.id,
+            licenceRef: unflaggedLicence.licenceRef
           })
         })
 
@@ -212,6 +215,7 @@ describe('Determine Bill Licence Flags Service', () => {
     describe('being removed from a pre-sroc bill run', () => {
       beforeAll(async () => {
         const billRun = await BillRunHelper.add({ batchType: 'annual', scheme: 'alcs', toFinancialYearEnding: '2021' })
+
         bill = await BillHelper.add({ billRunId: billRun.id })
       })
 
@@ -219,8 +223,8 @@ describe('Determine Bill Licence Flags Service', () => {
         beforeAll(async () => {
           billLicence = await BillLicenceHelper.add({
             billId: bill.id,
-            licenceRef: flaggedLicence.licenceRef,
-            licenceId: flaggedLicence.id
+            licenceId: flaggedLicence.id,
+            licenceRef: flaggedLicence.licenceRef
           })
         })
 
@@ -246,8 +250,8 @@ describe('Determine Bill Licence Flags Service', () => {
         beforeAll(async () => {
           billLicence = await BillLicenceHelper.add({
             billId: bill.id,
-            licenceRef: unflaggedLicence.licenceRef,
-            licenceId: unflaggedLicence.id
+            licenceId: unflaggedLicence.id,
+            licenceRef: unflaggedLicence.licenceRef
           })
         })
 

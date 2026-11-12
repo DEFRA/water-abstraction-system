@@ -32,10 +32,10 @@ export default async function createReturnVersionService(returnVersionData, trx)
 async function _persistReturnRequirements(returnRequirements, returnVersionId, trx) {
   for (const returnRequirement of returnRequirements) {
     const { id: returnRequirementId } = await ReturnRequirementModel.query(trx).insert({
-      abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
-      abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
       abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
       abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
+      abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
+      abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
       collectionFrequency: returnRequirement.collectionFrequency,
       fiftySixException: returnRequirement.fiftySixException,
       gravityFill: returnRequirement.gravityFill,

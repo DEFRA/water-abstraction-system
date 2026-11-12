@@ -3,9 +3,9 @@
  */
 
 import BillHelper from 'water-abstraction-engine/test/helpers/bill.helper.js'
+import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
 import BillLicenceHelper from 'water-abstraction-engine/test/helpers/bill-licence.helper.js'
 import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
-import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
 import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
 import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
@@ -122,24 +122,24 @@ async function _annual(seedData, batchType) {
     })
 
     const transaction = await TransactionHelper.add({
+      adjustmentFactor: 1,
+      aggregateFactor: 1,
+      billableDays: 365,
       billLicenceId: billLicence.id,
+      chargeCategoryCode: chargeCategory.reference,
+      chargeType: 'standard',
       credit: false,
       description,
-      startDate: new Date(`${toFinancialYearEnding - 1}-04-01`),
       endDate: new Date(`${toFinancialYearEnding}-03-31`),
-      chargeType: 'standard',
-      chargeCategoryCode: chargeCategory.reference,
-      billableDays: 365,
-      volume: 11,
       section126Factor: 1,
       section127Agreement: true,
       section130Agreement: 'false',
-      aggregateFactor: 1,
-      adjustmentFactor: 1,
-      winterOnly: false,
+      startDate: new Date(`${toFinancialYearEnding - 1}-04-01`),
       supportedSource: false,
       supportedSourceName: null,
-      waterCompanyCharge: false
+      volume: 11,
+      waterCompanyCharge: false,
+      winterOnly: false
     })
 
     billLicence.transactions = [transaction]
@@ -188,24 +188,24 @@ async function _supplementary(seedData, batchType) {
   }
 
   const creditTransaction = await TransactionHelper.add({
+    adjustmentFactor: 1,
+    aggregateFactor: 1,
+    billableDays: 365,
     billLicenceId: billLicence.id,
+    chargeCategoryCode: chargeCategory.reference,
+    chargeType: 'standard',
     credit: true,
     description,
-    startDate: new Date(`${toFinancialYearEnding - 1}-04-01`),
     endDate: new Date(`${toFinancialYearEnding}-03-31`),
-    chargeType: 'standard',
-    chargeCategoryCode: chargeCategory.reference,
-    billableDays: 365,
-    volume: 11,
     section126Factor: 1,
     section127Agreement: true,
     section130Agreement: 'false',
-    aggregateFactor: 1,
-    adjustmentFactor: 1,
-    winterOnly: false,
+    startDate: new Date(`${toFinancialYearEnding - 1}-04-01`),
     supportedSource: false,
     supportedSourceName: null,
-    waterCompanyCharge: false
+    volume: 11,
+    waterCompanyCharge: false,
+    winterOnly: false
   })
 
   if (batchType === 'two_part_supplementary') {
@@ -213,26 +213,26 @@ async function _supplementary(seedData, batchType) {
   }
 
   const debitTransaction = await TransactionHelper.add({
-    billLicenceId: billLicence.id,
-    credit: false,
-    description,
-    startDate: new Date(`${toFinancialYearEnding - 1}-04-01`),
-    endDate: new Date(`${toFinancialYearEnding}-03-31`),
-    chargeType: 'standard',
-    chargeCategoryCode: chargeCategory.reference,
+    adjustmentFactor: 1,
+    aggregateFactor: 1,
     // NOTE: If supplementary we want the billable days to differ from the annual transaction to represent a real reason
     // for generating a supplementary bill. Else we want the volume to be different to represent 2PT supplementary.
     billableDays: batchType === 'supplementary' ? 200 : 365,
-    volume: batchType === 'supplementary' ? 11 : 5,
+    billLicenceId: billLicence.id,
+    chargeCategoryCode: chargeCategory.reference,
+    chargeType: 'standard',
+    credit: false,
+    description,
+    endDate: new Date(`${toFinancialYearEnding}-03-31`),
     section126Factor: 1,
     section127Agreement: true,
     section130Agreement: 'false',
-    aggregateFactor: 1,
-    adjustmentFactor: 1,
-    winterOnly: false,
+    startDate: new Date(`${toFinancialYearEnding - 1}-04-01`),
     supportedSource: false,
     supportedSourceName: null,
-    waterCompanyCharge: false
+    volume: batchType === 'supplementary' ? 11 : 5,
+    waterCompanyCharge: false,
+    winterOnly: false
   })
 
   billLicence.transactions = [creditTransaction, debitTransaction]

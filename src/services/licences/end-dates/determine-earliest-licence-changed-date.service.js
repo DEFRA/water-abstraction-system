@@ -71,6 +71,7 @@ function _changedDates(licence) {
 
   // Expired
   let changedDate = _changedDate('expired', naldExpiredDate, wrlsExpiredDate)
+
   if (changedDate) {
     changedDates.push(changedDate)
   }

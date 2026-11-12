@@ -53,12 +53,12 @@ describe('Notifications controller', () => {
       describe('GET', () => {
         beforeEach(async () => {
           options = {
-            method: 'GET',
-            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['returns'] }
-            }
+              credentials: { scope: ['returns'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3'
           }
         })
 
@@ -71,6 +71,7 @@ describe('Notifications controller', () => {
 
             const notice = NoticesFixture.returnsInvitation()
             const notification = NotificationsFixture.returnsInvitationEmail(notice)
+
             notification.event = notice
 
             vi.spyOn(ViewNotificationService, 'default').mockResolvedValue({
@@ -84,8 +85,8 @@ describe('Notifications controller', () => {
               pageTitleCaption: `Licence ${licence.licenceRef}`,
               paperForm: null,
               reference: notice.referenceCode,
-              sentDate: '2 April 2025',
               sentBy: notice.issuer,
+              sentDate: '2 April 2025',
               sentTo: notification.recipient,
               status: notification.status
             })
@@ -107,12 +108,12 @@ describe('Notifications controller', () => {
       describe('GET', () => {
         beforeEach(async () => {
           options = {
-            method: 'GET',
-            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?id=LICENCE_ID',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['returns'] }
-            }
+              credentials: { scope: ['returns'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?id=LICENCE_ID'
           }
         })
 
@@ -125,6 +126,7 @@ describe('Notifications controller', () => {
 
             const notice = NoticesFixture.returnsInvitation()
             const notification = NotificationsFixture.returnsInvitationEmail(notice)
+
             notification.event = notice
 
             vi.spyOn(ViewNotificationService, 'default').mockResolvedValue({
@@ -138,8 +140,8 @@ describe('Notifications controller', () => {
               pageTitleCaption: `Licence ${licence.licenceRef}`,
               paperForm: null,
               reference: notice.referenceCode,
-              sentDate: '2 April 2025',
               sentBy: notice.issuer,
+              sentDate: '2 April 2025',
               sentTo: notification.recipient,
               status: notification.status
             })
@@ -161,12 +163,12 @@ describe('Notifications controller', () => {
       describe('GET', () => {
         beforeEach(async () => {
           options = {
-            method: 'GET',
-            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?return=RETURN_LOG_ID',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['returns'] }
-            }
+              credentials: { scope: ['returns'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?return=RETURN_LOG_ID'
           }
         })
 
@@ -180,6 +182,7 @@ describe('Notifications controller', () => {
             const returnLogId = generateUUID()
             const notice = NoticesFixture.returnsInvitation()
             const notification = NotificationsFixture.returnsInvitationEmail(notice)
+
             notification.event = notice
 
             vi.spyOn(ViewNotificationService, 'default').mockResolvedValue({
@@ -193,8 +196,8 @@ describe('Notifications controller', () => {
               pageTitleCaption: `Licence ${licence.licenceRef}`,
               paperForm: null,
               reference: notice.referenceCode,
-              sentDate: '2 April 2025',
               sentBy: notice.issuer,
+              sentDate: '2 April 2025',
               sentTo: notification.recipient,
               status: notification.status
             })
@@ -218,12 +221,12 @@ describe('Notifications controller', () => {
       describe('GET', () => {
         beforeEach(async () => {
           options = {
-            method: 'GET',
-            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3/download',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['returns'] }
-            }
+              credentials: { scope: ['returns'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3/download'
           }
 
           buffer = Buffer.from('mock file')

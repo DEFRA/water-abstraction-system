@@ -47,12 +47,12 @@ describe('Return Submissions controller', () => {
         })
 
         options = {
-          method: 'GET',
-          url: '/return-submissions/d1f4826a-a8b1-479a-ac25-07b491ebcddd/2025-02',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['billing'] }
-          }
+            credentials: { scope: ['billing'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/return-submissions/d1f4826a-a8b1-479a-ac25-07b491ebcddd/2025-02'
         }
       })
 

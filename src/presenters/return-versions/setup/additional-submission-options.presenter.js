@@ -31,10 +31,10 @@ export default function additionalSubmissionOptionsPresenter(session) {
     licenceRef,
     multipleUpload,
     noAdditionalOptions,
-    quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(returnVersionStartDate),
-    quarterlyReturns,
     pageTitle: 'Select any additional submission options for the return requirements',
     pageTitleCaption: `Licence ${licenceRef}`,
+    quarterlyReturns,
+    quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(returnVersionStartDate),
     sessionId
   }
 }

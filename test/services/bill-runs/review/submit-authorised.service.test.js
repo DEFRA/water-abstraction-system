@@ -79,11 +79,11 @@ describe('Bill Runs Review - Submit Authorised Service', () => {
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
           amendedAuthorisedVolume: 9.092,
-          error: { text: 'The authorised volume must be greater than 9.092' },
-          pageTitle: 'Set the authorised volume',
           chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
           chargePeriod: '1 April 2023 to 31 March 2024',
+          error: { text: 'The authorised volume must be greater than 9.092' },
           financialPeriod: '2023 to 2024',
+          pageTitle: 'Set the authorised volume',
           reviewChargeReferenceId: '6b3d11f2-d361-4eaa-bce2-5561283bd023',
           totalBillableReturns: 0
         })

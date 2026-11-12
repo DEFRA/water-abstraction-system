@@ -54,7 +54,6 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
         chargingModuleSendBillRunRequestStub.mockResolvedValue()
         chargingModuleViewBillRunRequestStub.mockResolvedValue({
-          succeeded: true,
           response: {
             body: {
               billRun: {
@@ -65,7 +64,8 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
                 transactionFileReference: 'nalwi50031'
               }
             }
-          }
+          },
+          succeeded: true
         })
 
         vi.spyOn(BillModel, 'query').mockReturnValue({

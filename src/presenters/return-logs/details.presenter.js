@@ -69,8 +69,8 @@ export default function detailsPresenter(returnLog, auth) {
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     purpose: formatPurposes(purposes),
     receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
-    returnReference,
     returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
+    returnReference,
     showUnderQuery: _showUnderQuery(formattedStatus),
     siteDescription,
     startReading: _startReading(selectedReturnSubmission),
@@ -132,15 +132,15 @@ function _actionButton(latest, auth, returnLogId, formattedStatus) {
   // You can only edit a completed return
   if (formattedStatus === 'complete') {
     return {
-      value: returnLogId,
-      text: 'Edit return'
+      text: 'Edit return',
+      value: returnLogId
     }
   }
 
   // Else you have a due or received return so can only submit the first return submission
   return {
-    value: returnLogId,
-    text: 'Submit return'
+    text: 'Submit return',
+    value: returnLogId
   }
 }
 
@@ -262,8 +262,8 @@ function _versions(returnLogId, selectedReturnSubmission, versions) {
       link: `/system/return-logs/${returnLogId}/details?version=${number}`,
       notes,
       selected: id === selectedReturnSubmission.id,
-      version: number,
-      user
+      user,
+      version: number
     }
   })
 }
@@ -271,15 +271,15 @@ function _versions(returnLogId, selectedReturnSubmission, versions) {
 function _warning(status, latest) {
   if (status === 'void') {
     return {
-      text: 'This return is void and has been replaced. Do not use this data.',
-      iconFallbackText: 'Warning'
+      iconFallbackText: 'Warning',
+      text: 'This return is void and has been replaced. Do not use this data.'
     }
   }
 
   if (!latest) {
     return {
-      text: 'You are viewing a previous version. This is not the latest submission data.',
-      iconFallbackText: 'Warning'
+      iconFallbackText: 'Warning',
+      text: 'You are viewing a previous version. This is not the latest submission data.'
     }
   }
 

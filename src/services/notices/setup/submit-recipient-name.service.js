@@ -34,8 +34,8 @@ export default async function submitRecipientNameService(sessionId, payload) {
   const pageData = RecipientNamePresenter(session)
 
   return {
-    error: validationResult,
     activeNavBar: 'notices',
+    error: validationResult,
     ...pageData
   }
 }

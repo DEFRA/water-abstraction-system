@@ -33,17 +33,17 @@ describe('Companies House Request', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
         searchParams = {
+          items_per_page: 15,
           q: 'Company name',
-          start_index: 0,
-          items_per_page: 15
+          start_index: 0
         }
 
         vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-          succeeded: true,
           response: {
-            statusCode: HTTP_STATUS_OK,
-            body: { items: [{ company_number: '12345678' }] }
-          }
+            body: { items: [{ company_number: '12345678' }] },
+            statusCode: HTTP_STATUS_OK
+          },
+          succeeded: true
         })
       })
 
@@ -80,12 +80,12 @@ describe('Companies House Request', () => {
       describe('but returns a body', () => {
         beforeEach(async () => {
           vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-            succeeded: false,
             response: {
+              body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
               statusCode: HTTP_STATUS_NOT_FOUND,
-              statusMessage: 'Not Found',
-              body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
-            }
+              statusMessage: 'Not Found'
+            },
+            succeeded: false
           })
         })
 
@@ -111,10 +111,10 @@ describe('Companies House Request', () => {
       describe('but does not return a body', () => {
         beforeEach(async () => {
           vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-            succeeded: false,
             response: {
               error: 'Something went wrong'
-            }
+            },
+            succeeded: false
           })
         })
 

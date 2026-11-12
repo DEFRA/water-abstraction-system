@@ -16,9 +16,10 @@ import SubmitExistingAddressService from '../../../../src/services/billing-accou
 describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   const companyAddresses = {
-    company: billingAccount.company,
-    addresses: _addresses()
+    addresses: _addresses(),
+    company: billingAccount.company
   }
+
   let payload
   let session
   let sessionData
@@ -162,8 +163,8 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     beforeEach(() => {
       sessionData = {
         accountSelected: 'another',
-        existingAccount: billingAccount.company.id,
-        billingAccount
+        billingAccount,
+        existingAccount: billingAccount.company.id
       }
 
       session = SessionModelStub(sessionData)
@@ -283,8 +284,8 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     beforeEach(() => {
       sessionData = {
         accountSelected: 'another',
-        existingAccount: billingAccount.company.id,
-        billingAccount
+        billingAccount,
+        existingAccount: billingAccount.company.id
       }
 
       session = SessionModelStub(sessionData)
@@ -298,13 +299,13 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       const result = await SubmitExistingAddressService(session.id, payload)
 
       expect(result.error).toEqual({
+        addressSelected: { text: `Select an existing address for ${companyAddresses.company.name}` },
         errorList: [
           {
             href: '#addressSelected',
             text: `Select an existing address for ${companyAddresses.company.name}`
           }
-        ],
-        addressSelected: { text: `Select an existing address for ${companyAddresses.company.name}` }
+        ]
       })
     })
   })
@@ -313,13 +314,13 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 function _addresses() {
   return [
     {
-      id: generateUUID(),
       address1: 'ENVIRONMENT AGENCY',
       address2: 'HORIZON HOUSE',
       address3: 'DEANERY ROAD',
       address4: 'BRISTOL',
       address5: 'BRISTOLSHIRE',
       address6: null,
+      id: generateUUID(),
       postcode: 'BS1 5AH'
     }
   ]

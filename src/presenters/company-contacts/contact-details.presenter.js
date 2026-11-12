@@ -85,7 +85,7 @@ function _warning(licences) {
   }
 
   return {
-    text: 'One or more licences for abstraction alerts have ended. No alerts will be sent for these.',
-    iconFallbackText: 'Warning'
+    iconFallbackText: 'Warning',
+    text: 'One or more licences for abstraction alerts have ended. No alerts will be sent for these.'
   }
 }

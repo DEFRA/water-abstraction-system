@@ -3,8 +3,8 @@
  * @module FetchSearchResultsDetailsService
  */
 
-import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
+import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import CompanyModel from 'water-abstraction-engine/models/company.model.js'
 import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
 import MonitoringStationModel from 'water-abstraction-engine/models/monitoring-station.model.js'
@@ -30,6 +30,7 @@ export default async function fetchSearchResultsDetailsService(idsByType) {
   const foundModels = await Promise.all(Object.values(finders))
 
   const modelsByType = {}
+
   Object.keys(idsByType).forEach((key, index) => {
     modelsByType[key] = foundModels[index]
   })

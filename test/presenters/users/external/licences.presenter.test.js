@@ -2,9 +2,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
-import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import { tomorrow } from 'water-abstraction-engine/test/general.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import LicenceFixture from '../../../support/fixtures/licence.fixture.js'
 import UsersFixture from '../../../support/fixtures/users.fixture.js'
 
@@ -39,8 +39,6 @@ describe('Users - External - Licences Presenter', () => {
       },
       backQueryString: '?back=users',
       displayLicenceEndedMessage: true,
-      pageTitle: 'Licences',
-      pageTitleCaption: user.username,
       licences: [
         {
           currentLicenceHolder: licences[0].licenceVersions[0].company.name,
@@ -67,6 +65,8 @@ describe('Users - External - Licences Presenter', () => {
           status: null
         }
       ],
+      pageTitle: 'Licences',
+      pageTitleCaption: user.username,
       unregisterActionLink: `/system/users/external/${user.id}/setup?back=${back}`
     })
   })
@@ -152,12 +152,12 @@ function _licence(licenceRef, expiredDate, role) {
 
   licence.licenceVersions = [
     {
+      company: { id: generateUUID(), name: 'Current Holder', type: 'organisation' },
       id: licenceVersionId,
       issueDate: null,
       licenceId: licence.id,
       startDate: new Date('2022-04-01'),
-      status: 'current',
-      company: { id: generateUUID(), name: 'Current Holder', type: 'organisation' }
+      status: 'current'
     }
   ]
 

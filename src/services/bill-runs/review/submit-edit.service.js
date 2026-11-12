@@ -59,8 +59,8 @@ function _validate(payload) {
 
   if (payload.quantityOptions === 'customQuantity') {
     return {
-      errorList: [{ href: '#custom-quantity', text: message }],
-      customQuantityErrorMessage: { text: message }
+      customQuantityErrorMessage: { text: message },
+      errorList: [{ href: '#custom-quantity', text: message }]
     }
   }
 

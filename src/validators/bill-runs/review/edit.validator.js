@@ -38,12 +38,12 @@ function _validateCustomQuantity(customQuantity, authorisedVolume) {
     .custom(maxDecimalPlaces(MAX_DECIMALS), 'maxDecimals')
     .required()
     .messages({
-      'number.unsafe': 'The quantity must be between zero and the authorised amount',
-      'number.base': 'The quantity must be a number',
-      'number.min': 'The quantity must be zero or higher',
-      'number.max': 'The quantity must be the same as or less than the authorised amount',
       'any.required': 'Enter the billable quantity',
-      'custom.maxDecimals': 'The quantity must contain no more than 6 decimal places'
+      'custom.maxDecimals': 'The quantity must contain no more than 6 decimal places',
+      'number.base': 'The quantity must be a number',
+      'number.max': 'The quantity must be the same as or less than the authorised amount',
+      'number.min': 'The quantity must be zero or higher',
+      'number.unsafe': 'The quantity must be between zero and the authorised amount'
     })
 
   return schema.validate(customQuantity, { abortEarly: true })

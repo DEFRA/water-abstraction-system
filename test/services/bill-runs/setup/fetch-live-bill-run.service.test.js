@@ -21,28 +21,28 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
 
   beforeAll(async () => {
     differentRegionBillRun = await BillRunHelper.add({
-      toFinancialYearEnding,
       regionId: differentRegion.id,
-      status: 'ready'
+      status: 'ready',
+      toFinancialYearEnding
     })
 
     matchingBillRun = await BillRunHelper.add({
-      toFinancialYearEnding,
       regionId: matchingRegion.id,
-      status: 'ready'
+      status: 'ready',
+      toFinancialYearEnding
     })
 
     notLiveBillRun = await BillRunHelper.add({
-      toFinancialYearEnding,
       regionId: matchingRegion.id,
-      status: 'sent'
+      status: 'sent',
+      toFinancialYearEnding
     })
 
     sameRegionBillRun = await BillRunHelper.add({
-      toFinancialYearEnding: 2022,
       regionId: matchingRegion.id,
       scheme: 'alcs',
-      status: 'ready'
+      status: 'ready',
+      toFinancialYearEnding: 2022
     })
 
     nonMatchingBillRunIds = [differentRegionBillRun.id, notLiveBillRun.id, sameRegionBillRun.id]
@@ -64,13 +64,13 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
           const result = await FetchLiveBillRunsService(matchingRegion.id, toFinancialYearEnding)
 
           expect(result).toEqual({
-            id: matchingBillRun.id,
             batchType: matchingBillRun.batchType,
             billRunNumber: matchingBillRun.billRunNumber,
             createdAt: matchingBillRun.createdAt,
+            id: matchingBillRun.id,
             region: {
-              id: matchingRegion.id,
-              displayName: matchingRegion.displayName
+              displayName: matchingRegion.displayName,
+              id: matchingRegion.id
             },
             scheme: matchingBillRun.scheme,
             status: matchingBillRun.status,

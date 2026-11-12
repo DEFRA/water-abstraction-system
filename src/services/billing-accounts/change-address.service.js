@@ -128,13 +128,13 @@ async function _persist(timestamp, billingAccount, address, company, contact) {
     persistedData.contact = await _persistContact(trx, contact)
 
     const billingAccountAddress = BillingAccountAddressModel.fromJson({
-      billingAccountId: billingAccount.id,
       addressId: persistedData.address.id,
+      billingAccountId: billingAccount.id,
       companyId: persistedData.company.id,
       contactId: persistedData.contact.id,
-      startDate: timestamp,
-      endDate: null,
       createdAt: timestamp,
+      endDate: null,
+      startDate: timestamp,
       updatedAt: timestamp
     })
 
@@ -315,16 +315,15 @@ function _response(persistedData) {
   const { address, company, contact, billingAccountAddress } = persistedData
 
   return {
-    billingAccountAddress: { ...billingAccountAddress },
     address: { ...address },
     agentCompany: company.id ? { ...company } : null,
+    billingAccountAddress: { ...billingAccountAddress },
     contact: contact.id ? { ...contact } : null
   }
 }
 
 function _transformAddress(timestamp, address) {
   return AddressModel.fromJson({
-    id: address.addressId,
     address1: address.addressLine1,
     address2: address.addressLine2,
     address3: address.addressLine3,
@@ -332,22 +331,23 @@ function _transformAddress(timestamp, address) {
     address5: address.town,
     address6: address.county,
     country: address.country,
-    postcode: address.postcode,
-    uprn: address.uprn,
-    dataSource: 'wrls',
     createdAt: timestamp,
-    updatedAt: timestamp
+    dataSource: 'wrls',
+    id: address.addressId,
+    postcode: address.postcode,
+    updatedAt: timestamp,
+    uprn: address.uprn
   })
 }
 
 function _transformCompany(timestamp, company) {
   return CompanyModel.fromJson({
-    id: company.companyId,
-    type: company.type,
-    name: company.name,
     companyNumber: company.companyNumber,
-    organisationType: company.organisationType,
     createdAt: timestamp,
+    id: company.companyId,
+    name: company.name,
+    organisationType: company.organisationType,
+    type: company.type,
     updatedAt: timestamp
   })
 }
@@ -355,14 +355,14 @@ function _transformCompany(timestamp, company) {
 function _transformContact(timestamp, contact) {
   return ContactModel.fromJson({
     contactType: contact.type,
-    salutation: contact.salutation,
-    firstName: contact.firstName,
-    middleInitials: contact.middleInitials,
-    lastName: contact.lastName,
-    suffix: contact.suffix,
-    department: contact.department,
-    dataSource: 'wrls',
     createdAt: timestamp,
+    dataSource: 'wrls',
+    department: contact.department,
+    firstName: contact.firstName,
+    lastName: contact.lastName,
+    middleInitials: contact.middleInitials,
+    salutation: contact.salutation,
+    suffix: contact.suffix,
     updatedAt: timestamp
   })
 }

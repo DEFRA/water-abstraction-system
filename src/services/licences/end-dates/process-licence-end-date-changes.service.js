@@ -48,7 +48,7 @@ export default async function processLicenceEndDateChangesService() {
 
 async function _billingFlag(licenceEndDateChange) {
   const { changeDate, dateType, licenceId, naldDate, wrlsDate } = licenceEndDateChange
-  const payload = { licenceId, changedDateDetails: { changeDate, dateType, naldDate, wrlsDate } }
+  const payload = { changedDateDetails: { changeDate, dateType, naldDate, wrlsDate }, licenceId }
 
   await ProcessBillingFlagService(payload)
 }

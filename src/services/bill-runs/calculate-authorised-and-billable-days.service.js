@@ -139,8 +139,8 @@ function _calculateAbstractionOverlapPeriod(referencePeriod, abstractionPeriod) 
   const earliestEndDateTimestamp = Math.min(abstractionPeriod.endDate, referencePeriod.endDate)
 
   return {
-    startDate: new Date(latestStartDateTimestamp),
-    endDate: new Date(earliestEndDateTimestamp)
+    endDate: new Date(earliestEndDateTimestamp),
+    startDate: new Date(latestStartDateTimestamp)
   }
 }
 

@@ -6,8 +6,8 @@
 import NotifyAddressPresenter from 'water-abstraction-engine/presenters/notices/setup/notify-address.presenter.js'
 import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
 import PreviousAndNextPresenter from 'water-abstraction-engine/presenters/previous-and-next.presenter.js'
-import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 import { formatLongDate, formatVersionReason } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 
 import { formatConditionTypes, formatLicencePoints, formatLicencePurposes } from '../licence.presenter.js'
 
@@ -116,8 +116,8 @@ function _notes(licenceVersion, billingAndDataRole) {
   }
 
   return {
-    firstNote: notes.shift(),
-    additionalNotes: notes
+    additionalNotes: notes,
+    firstNote: notes.shift()
   }
 }
 
@@ -138,17 +138,17 @@ function _pagination(licenceVersionsForPagination, licenceVersion) {
 
   if (previous) {
     pagination.previous = {
-      text: 'Previous version',
+      href: `/system/licence-versions/${previous.id}`,
       labelText: `Starting ${formatLongDate(previous.startDate)}`,
-      href: `/system/licence-versions/${previous.id}`
+      text: 'Previous version'
     }
   }
 
   if (next) {
     pagination.next = {
-      text: 'Next version',
+      href: `/system/licence-versions/${next.id}`,
       labelText: `Starting ${formatLongDate(next.startDate)}`,
-      href: `/system/licence-versions/${next.id}`
+      text: 'Next version'
     }
   }
 
@@ -208,7 +208,7 @@ function _removeDuplicatePointsById(points) {
 
 function _sortPointsByDescription(first, second) {
   return compareStrings(first.description, second.description, {
-    sensitivity: 'base',
-    ignorePunctuation: true
+    ignorePunctuation: true,
+    sensitivity: 'base'
   })
 }

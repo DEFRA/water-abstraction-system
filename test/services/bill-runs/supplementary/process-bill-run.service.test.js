@@ -19,8 +19,8 @@ import ProcessBillRunService from '../../../../src/services/bill-runs/supplement
 
 describe('Bill Runs - Supplementary - Process Bill Run service', () => {
   const billingPeriods = [
-    { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
-    { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
+    { endDate: new Date('2024-03-31'), startDate: new Date('2023-04-01') },
+    { endDate: new Date('2023-03-31'), startDate: new Date('2022-04-01') }
   ]
   const billRun = { id: '410c84a5-39d3-441a-97ca-6104e14d00a2' }
 

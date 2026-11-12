@@ -33,13 +33,13 @@ function _radioOptions(companies, companiesHouseNumber) {
 
   for (const company of companies) {
     items.push({
-      id: company.number,
+      checked: company.number === companiesHouseNumber,
       hint: {
         text: company.address
       },
+      id: company.number,
       text: company.title,
-      value: company.number,
-      checked: company.number === companiesHouseNumber
+      value: company.number
     })
   }
 

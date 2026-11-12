@@ -9,8 +9,8 @@ import { generateAccountNumber, generateLicenceRef, generateUUID } from 'water-a
  */
 function billRun(regionId) {
   return {
-    id: generateUUID(),
     externalId: generateUUID(),
+    id: generateUUID(),
     regionId
   }
 }
@@ -22,8 +22,8 @@ function billRun(regionId) {
  */
 function billingAccount() {
   return {
-    id: generateUUID(),
-    accountNumber: generateAccountNumber()
+    accountNumber: generateAccountNumber(),
+    id: generateUUID()
   }
 }
 
@@ -36,10 +36,10 @@ function billingAccount() {
  */
 function chargingModuleResponse(transactionId) {
   return {
-    succeeded: true,
     response: {
       body: { transaction: { id: transactionId } }
-    }
+    },
+    succeeded: true
   }
 }
 
@@ -63,24 +63,17 @@ function chargeVersion(billingAccountId, licence) {
   }
 
   return {
-    id: generateUUID(),
-    scheme: 'sroc',
-    startDate: new Date('2022-04-01'),
-    endDate: null,
     billingAccountId,
-    status: 'current',
-    licence,
     chargeReferences: [
       {
-        id: generateUUID(),
         additionalCharges: { isSupplyPublicWater: false },
         adjustments: {
+          aggregate: '0.562114443',
+          charge: null,
           s126: null,
           s127: false,
           s130: false,
-          charge: null,
-          winter: false,
-          aggregate: '0.562114443'
+          winter: false
         },
         chargeCategory: {
           id: 'b270718a-12c0-4fca-884b-3f8612dbe2f5',
@@ -89,38 +82,45 @@ function chargeVersion(billingAccountId, licence) {
         },
         chargeElements: [
           {
-            id: 'e6b98712-227a-40c2-b93a-c05e9047be8c',
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3,
-            reviewChargeElements: [{ id: '1d9050b2-09c8-4570-8173-7f55921437cc', amendedAllocated: 5 }],
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            id: 'e6b98712-227a-40c2-b93a-c05e9047be8c',
+            reviewChargeElements: [{ amendedAllocated: 5, id: '1d9050b2-09c8-4570-8173-7f55921437cc' }],
             toJSON
           },
           {
-            id: '9e6f3f64-78d5-441b-80fc-e01711b2f766',
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3,
-            reviewChargeElements: [{ id: '17f0c41e-e894-41d2-8a68-69dd2b39e9f9', amendedAllocated: 10 }],
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            id: '9e6f3f64-78d5-441b-80fc-e01711b2f766',
+            reviewChargeElements: [{ amendedAllocated: 10, id: '17f0c41e-e894-41d2-8a68-69dd2b39e9f9' }],
             toJSON
           }
         ],
         description: 'Lower Queenstown - Pittisham',
+        id: generateUUID(),
         loss: 'low',
         reviewChargeReferences: [
           {
-            id: '3dd04348-2c06-4559-9343-dd7dd76276ef',
             amendedAggregate: 0.75,
             amendedAuthorisedVolume: 20,
-            amendedChargeAdjustment: 0.6
+            amendedChargeAdjustment: 0.6,
+            id: '3dd04348-2c06-4559-9343-dd7dd76276ef'
           }
         ],
         source: 'non-tidal',
         volume: 20
       }
-    ]
+    ],
+    endDate: null,
+    id: generateUUID(),
+    licence,
+    scheme: 'sroc',
+    startDate: new Date('2022-04-01'),
+    status: 'current'
   }
 }
 
@@ -133,26 +133,26 @@ function chargeVersion(billingAccountId, licence) {
  */
 function licence(region) {
   return {
-    id: generateUUID(),
-    licenceRef: generateLicenceRef(),
-    waterUndertaker: true,
-    historicalAreaCode: 'SAAR',
-    regionalChargeArea: 'Southern',
-    startDate: new Date('2022-01-01'),
     expiredDate: null,
+    historicalAreaCode: 'SAAR',
+    id: generateUUID(),
     lapsedDate: null,
-    revokedDate: null,
+    licenceRef: generateLicenceRef(),
     region: {
-      id: region.id,
-      chargeRegionId: region.chargeRegionId
-    }
+      chargeRegionId: region.chargeRegionId,
+      id: region.id
+    },
+    regionalChargeArea: 'Southern',
+    revokedDate: null,
+    startDate: new Date('2022-01-01'),
+    waterUndertaker: true
   }
 }
 
 export default {
-  billRun,
   billingAccount,
-  chargingModuleResponse,
+  billRun,
   chargeVersion,
+  chargingModuleResponse,
   licence
 }

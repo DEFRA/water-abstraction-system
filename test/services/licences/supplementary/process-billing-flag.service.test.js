@@ -235,13 +235,13 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
     describe('with an importedLicence', () => {
       beforeAll(() => {
         payload = {
-          licenceId: 'b5f81330-bec5-4c3e-95dd-267c10836fea',
           changedDateDetails: {
             changeDate: new Date('2024-07-01'),
             dateType: 'revoked',
             naldDate: new Date('2024-07-01'),
             wrlsDate: null
-          }
+          },
+          licenceId: 'b5f81330-bec5-4c3e-95dd-267c10836fea'
         }
       })
 
@@ -330,6 +330,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
           const logDataArg = notifierStub.omg.mock.calls[0][1]
+
           expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
@@ -356,6 +357,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
           const logDataArg = notifierStub.omg.mock.calls[0][1]
+
           expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
@@ -451,22 +453,22 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
 function _licenceData(twoPartTariff) {
   return {
-    licenceId: 'aad74a3d-59ea-4c18-8091-02b0f8b0a147',
-    regionId: 'ff92e0b1-3934-430b-8b16-5b89a3ea258f',
-    startDate: new Date('2022-04-01'),
     endDate: null,
     flagForPreSrocSupplementary: false,
     flagForSrocSupplementary: true,
-    flagForTwoPartTariffSupplementary: twoPartTariff
+    flagForTwoPartTariffSupplementary: twoPartTariff,
+    licenceId: 'aad74a3d-59ea-4c18-8091-02b0f8b0a147',
+    regionId: 'ff92e0b1-3934-430b-8b16-5b89a3ea258f',
+    startDate: new Date('2022-04-01')
   }
 }
 
 function _srocLicenceData(sroc) {
   return {
-    licenceId: 'aad74a3d-59ea-4c18-8091-02b0f8b0a147',
-    regionId: 'ff92e0b1-3934-430b-8b16-5b89a3ea258f',
     flagForPreSrocSupplementary: false,
     flagForSrocSupplementary: sroc,
-    flagForTwoPartTariffSupplementary: false
+    flagForTwoPartTariffSupplementary: false,
+    licenceId: 'aad74a3d-59ea-4c18-8091-02b0f8b0a147',
+    regionId: 'ff92e0b1-3934-430b-8b16-5b89a3ea258f'
   }
 }

@@ -32,8 +32,8 @@ describe('Licences - Fetch Agreements service', () => {
         licenceAgreement = await LicenceAgreementHelper.add({
           endDate,
           financialAgreementId: financialAgreement.id,
-          startDate,
-          signedOn
+          signedOn,
+          startDate
         })
       })
 
@@ -43,11 +43,11 @@ describe('Licences - Fetch Agreements service', () => {
         expect(results[0]).toMatchObject({
           endDate,
           financialAgreement: {
-            id: financialAgreement.id,
-            code: financialAgreement.code
+            code: financialAgreement.code,
+            id: financialAgreement.id
           },
-          startDate,
-          signedOn
+          signedOn,
+          startDate
         })
       })
     })
@@ -55,11 +55,11 @@ describe('Licences - Fetch Agreements service', () => {
     describe('and the agreement has been deleted', () => {
       beforeEach(async () => {
         licenceAgreement = await LicenceAgreementHelper.add({
+          deletedAt: new Date(),
           endDate,
           financialAgreementId: financialAgreement.id,
-          startDate,
           signedOn,
-          deletedAt: new Date()
+          startDate
         })
       })
 

@@ -22,7 +22,7 @@ export default async function fetchCompanyAddressesService(companyId) {
     .distinct('addresses.id')
 
   return {
-    company,
-    addresses
+    addresses,
+    company
   }
 }

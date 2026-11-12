@@ -17,26 +17,26 @@ describe('Return Versions Setup - Note service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
+      reason: 'major-change',
       requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change'
+      startDateOptions: 'licenceStartDate'
     }
 
     session = SessionModelStub(sessionData)
@@ -59,14 +59,14 @@ describe('Return Versions Setup - Note service', () => {
       const result = await NoteService(session.id)
 
       expect(result).toMatchObject({
-        pageTitle: 'Add a note',
-        pageTitleCaption: 'Licence 01/ABC',
         backLink: {
           href: `/system/return-versions/setup/${session.id}/check`,
           text: 'Back'
         },
         licenceRef: '01/ABC',
-        note: null
+        note: null,
+        pageTitle: 'Add a note',
+        pageTitleCaption: 'Licence 01/ABC'
       })
     })
   })

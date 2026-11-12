@@ -5,29 +5,29 @@
 
 const KNOWN_ERRORS = [
   {
-    match: 'is required',
-    description: 'The notification was sent missing some data needed for the template'
+    description: 'The notification was sent missing some data needed for the template',
+    match: 'is required'
   },
   {
-    match: 'must not start',
-    description: String.raw`Address lines must not start with any of the following characters: @ ( ) = [ ] ” \\ / , < >`
+    description: String.raw`Address lines must not start with any of the following characters: @ ( ) = [ ] ” \\ / , < >`,
+    match: 'must not start'
   },
   {
-    match: 'real UK postcode',
-    description: 'The last line of address must be a real UK postcode or another country'
+    description: 'The last line of address must be a real UK postcode or another country',
+    match: 'real UK postcode'
   },
   {
-    match: 'PDF',
-    description: 'There was an error when generating the paper return'
+    description: 'There was an error when generating the paper return',
+    match: 'PDF'
   },
   {
-    match: 'system clock',
     description:
-      'Notify rejected the request because at the time the system clock was not accurate to within 30 seconds'
+      'Notify rejected the request because at the time the system clock was not accurate to within 30 seconds',
+    match: 'system clock'
   },
   {
-    match: 'team-only API key',
-    description: 'This notification was sent with a team-only API key'
+    description: 'This notification was sent with a team-only API key',
+    match: 'team-only API key'
   }
 ]
 
@@ -78,14 +78,14 @@ export default function notificationErrorPresenter(notification) {
 
   if (notifyStatus) {
     return {
-      status: notifyStatus,
-      description: NOTIFY_STATUS_DESCRIPTIONS[messageType][notifyStatus]
+      description: NOTIFY_STATUS_DESCRIPTIONS[messageType][notifyStatus],
+      status: notifyStatus
     }
   }
 
   return {
-    status: 'Failed to send to Notify',
-    description: _extractFromNotifyError(notifyError)
+    description: _extractFromNotifyError(notifyError),
+    status: 'Failed to send to Notify'
   }
 }
 

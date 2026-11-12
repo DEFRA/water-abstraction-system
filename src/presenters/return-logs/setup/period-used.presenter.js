@@ -32,7 +32,7 @@ export default function periodUsedPresenter(session) {
 
   // Determine the valid abstraction periods that overlap with the return period - this will be used to decide whether
   // or not the "default return period" option will be displayed
-  const returnPeriod = { startDate: new Date(session.startDate), endDate: new Date(session.endDate) }
+  const returnPeriod = { endDate: new Date(session.endDate), startDate: new Date(session.startDate) }
   const abstractionPeriods = determineAbstractionPeriods(
     returnPeriod,
     session.periodStartDay,

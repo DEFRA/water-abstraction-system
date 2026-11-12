@@ -25,7 +25,7 @@ export default async function preGenerateBillingDataService(chargeVersions, bill
   const bills = _preGenerateBills(billingAccounts, billRunId, billingPeriod)
   const billLicences = _preGenerateBillLicences(chargeVersions, bills)
 
-  return { bills, billLicences }
+  return { billLicences, bills }
 }
 
 function _generateBill(billingAccountId, accountNumber, billRunId, financialYearEnding) {
@@ -42,8 +42,8 @@ function _generateBill(billingAccountId, accountNumber, billRunId, financialYear
 
 function _generateBillLicence(billId, licenceId, licenceRef) {
   return {
-    id: generateUUID(),
     billId,
+    id: generateUUID(),
     licenceId,
     licenceRef
   }

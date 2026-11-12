@@ -29,9 +29,9 @@ describe('Create Licence Supplementary Years Service', () => {
 
         expect(result).toHaveLength(1)
         expect(result[0]).toMatchObject({
-          licenceId,
           billRunId: null,
           financialYearEnd: financialYearEnds[0],
+          licenceId,
           twoPartTariff
         })
       })
@@ -39,7 +39,7 @@ describe('Create Licence Supplementary Years Service', () => {
 
     describe('that already exist', () => {
       beforeEach(async () => {
-        await LicenceSupplementaryYearHelper.add({ licenceId, financialYearEnd: 2023, twoPartTariff: true })
+        await LicenceSupplementaryYearHelper.add({ financialYearEnd: 2023, licenceId, twoPartTariff: true })
       })
 
       describe('without the billRunId', () => {

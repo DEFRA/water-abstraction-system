@@ -39,8 +39,8 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
       purposes: [
         {
           primary: { code: 'A', description: 'Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
-          secondary: { code: 'AGR', description: 'General Agriculture' }
+          secondary: { code: 'AGR', description: 'General Agriculture' },
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
         }
       ],
       returnId: returnLog.returnId,
@@ -67,72 +67,72 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
       const result = await FetchReviewChargeElementService(reviewChargeElement.id)
 
       expect(result).toEqual({
-        id: reviewChargeElement.id,
         amendedAllocated: 0,
-        issues: '',
-        status: 'ready',
         chargeElement: {
-          id: chargeElement.id,
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3,
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 4,
           authorisedAnnualQuantity: 200,
-          description: 'Mineral washing'
+          description: 'Mineral washing',
+          id: chargeElement.id
         },
+        id: reviewChargeElement.id,
+        issues: '',
         reviewChargeReference: {
-          id: reviewChargeReference.id,
           amendedAuthorisedVolume: 0,
+          id: reviewChargeReference.id,
           reviewChargeElements: [
             {
               id: reviewChargeElement.id
             }
           ],
           reviewChargeVersion: {
-            id: reviewChargeVersion.id,
-            chargePeriodStartDate: new Date('2022-04-01'),
             chargePeriodEndDate: new Date('2022-06-05'),
+            chargePeriodStartDate: new Date('2022-04-01'),
+            id: reviewChargeVersion.id,
             reviewLicence: {
-              id: reviewLicence.id,
-              licenceId: reviewLicence.licenceId,
               billRun: {
                 id: billRun.id,
                 toFinancialYearEnding: 2023
-              }
+              },
+              id: reviewLicence.id,
+              licenceId: reviewLicence.licenceId
             }
           }
         },
         reviewReturns: [
           {
-            id: reviewReturn.id,
             allocated: 0,
             description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
             endDate: new Date('2022-05-06'),
+            id: reviewReturn.id,
             issues: '',
-            quantity: 0,
             purposes: [
               {
                 primary: { code: 'A', description: 'Agriculture' },
-                tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
-                secondary: { code: 'AGR', description: 'General Agriculture' }
+                secondary: { code: 'AGR', description: 'General Agriculture' },
+                tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
               }
             ],
+            quantity: 0,
             returnId: reviewReturn.returnId,
+            returnLog: {
+              id: returnLog.id,
+              periodEndDay: 28,
+              periodEndMonth: 4,
+              periodStartDay: 1,
+              periodStartMonth: 4,
+              returnId: returnLog.returnId
+            },
             returnLogId: reviewReturn.returnLogId,
             returnReference: reviewReturn.returnReference,
             returnStatus: 'completed',
             startDate: new Date('2022-04-01'),
-            underQuery: false,
-            returnLog: {
-              id: returnLog.id,
-              periodStartDay: 1,
-              periodStartMonth: 4,
-              periodEndDay: 28,
-              periodEndMonth: 4,
-              returnId: returnLog.returnId
-            }
+            underQuery: false
           }
-        ]
+        ],
+        status: 'ready'
       })
     })
   })

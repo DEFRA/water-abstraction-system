@@ -16,8 +16,8 @@ const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.
 
 describe('Charging Module Request', () => {
   const headers = {
-    'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39',
-    'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+    'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+    'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39'
   }
   const testRoute = 'TEST_ROUTE'
 
@@ -52,12 +52,12 @@ describe('Charging Module Request', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'deleteRequest').mockResolvedValue({
-          succeeded: true,
           response: {
+            body: {},
             headers,
-            statusCode: HTTP_STATUS_NO_CONTENT,
-            body: {}
-          }
+            statusCode: HTTP_STATUS_NO_CONTENT
+          },
+          succeeded: true
         })
       })
 
@@ -100,8 +100,8 @@ describe('Charging Module Request', () => {
         const result = await ChargingModuleRequest.deleteRequest(testRoute)
 
         expect(result.response.info).toEqual({
-          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
         })
       })
     })
@@ -109,13 +109,13 @@ describe('Charging Module Request', () => {
     describe('when the request fails', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'deleteRequest').mockResolvedValue({
-          succeeded: false,
           response: {
+            body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
             headers,
             statusCode: HTTP_STATUS_NOT_FOUND,
-            statusMessage: 'Not Found',
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
-          }
+            statusMessage: 'Not Found'
+          },
+          succeeded: false
         })
       })
 
@@ -141,8 +141,8 @@ describe('Charging Module Request', () => {
         const result = await ChargingModuleRequest.deleteRequest(testRoute)
 
         expect(result.response.info).toEqual({
-          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
         })
       })
     })
@@ -152,12 +152,12 @@ describe('Charging Module Request', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-          succeeded: true,
           response: {
+            body: { testObject: { test: 'yes' } },
             headers,
-            statusCode: HTTP_STATUS_OK,
-            body: { testObject: { test: 'yes' } }
-          }
+            statusCode: HTTP_STATUS_OK
+          },
+          succeeded: true
         })
       })
 
@@ -200,8 +200,8 @@ describe('Charging Module Request', () => {
         const result = await ChargingModuleRequest.getRequest(testRoute)
 
         expect(result.response.info).toEqual({
-          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
         })
       })
     })
@@ -209,13 +209,13 @@ describe('Charging Module Request', () => {
     describe('when the request fails', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
           response: {
+            body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
             headers,
             statusCode: HTTP_STATUS_NOT_FOUND,
-            statusMessage: 'Not Found',
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
-          }
+            statusMessage: 'Not Found'
+          },
+          succeeded: false
         })
       })
 
@@ -241,8 +241,8 @@ describe('Charging Module Request', () => {
         const result = await ChargingModuleRequest.getRequest(testRoute)
 
         expect(result.response.info).toEqual({
-          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
         })
       })
     })
@@ -252,12 +252,12 @@ describe('Charging Module Request', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'patchRequest').mockResolvedValue({
-          succeeded: true,
           response: {
+            body: {},
             headers,
-            statusCode: HTTP_STATUS_NO_CONTENT,
-            body: {}
-          }
+            statusCode: HTTP_STATUS_NO_CONTENT
+          },
+          succeeded: true
         })
       })
 
@@ -300,8 +300,8 @@ describe('Charging Module Request', () => {
         const result = await ChargingModuleRequest.patchRequest(testRoute)
 
         expect(result.response.info).toEqual({
-          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
         })
       })
     })
@@ -309,13 +309,13 @@ describe('Charging Module Request', () => {
     describe('when the request fails', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'patchRequest').mockResolvedValue({
-          succeeded: false,
           response: {
+            body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
             headers,
             statusCode: HTTP_STATUS_NOT_FOUND,
-            statusMessage: 'Not Found',
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
-          }
+            statusMessage: 'Not Found'
+          },
+          succeeded: false
         })
       })
 
@@ -341,8 +341,8 @@ describe('Charging Module Request', () => {
         const result = await ChargingModuleRequest.patchRequest(testRoute)
 
         expect(result.response.info).toEqual({
-          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
         })
       })
     })
@@ -352,12 +352,12 @@ describe('Charging Module Request', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
-          succeeded: true,
           response: {
+            body: { testObject: { test: 'yes' } },
             headers,
-            statusCode: HTTP_STATUS_OK,
-            body: { testObject: { test: 'yes' } }
-          }
+            statusCode: HTTP_STATUS_OK
+          },
+          succeeded: true
         })
       })
 
@@ -401,8 +401,8 @@ describe('Charging Module Request', () => {
         const result = await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.response.info).toEqual({
-          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
         })
       })
     })
@@ -410,13 +410,13 @@ describe('Charging Module Request', () => {
     describe('when the request fails', () => {
       beforeEach(async () => {
         vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
-          succeeded: false,
           response: {
+            body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
             headers,
             statusCode: HTTP_STATUS_NOT_FOUND,
-            statusMessage: 'Not Found',
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
-          }
+            statusMessage: 'Not Found'
+          },
+          succeeded: false
         })
       })
 
@@ -442,8 +442,8 @@ describe('Charging Module Request', () => {
         const result = await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
         expect(result.response.info).toEqual({
-          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
         })
       })
     })

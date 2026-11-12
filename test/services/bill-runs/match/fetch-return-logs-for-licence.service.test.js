@@ -14,7 +14,7 @@ import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notif
 import FetchReturnLogsForLicenceService from '../../../../src/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
 
 describe('Fetch Return Logs for Licence service', () => {
-  const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
+  const billingPeriod = { endDate: new Date('2023-03-31'), startDate: new Date('2022-04-01') }
 
   let notifierStub
   let returnLogRecord
@@ -48,16 +48,16 @@ describe('Fetch Return Logs for Licence service', () => {
         const { id: returnSubmissionId } = await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
 
         await ReturnSubmissionLineHelper.add({
-          returnSubmissionId,
-          startDate: new Date('2022-05-01'),
           endDate: new Date('2022-05-07'),
-          quantity: 1234
+          quantity: 1234,
+          returnSubmissionId,
+          startDate: new Date('2022-05-01')
         })
         await ReturnSubmissionLineHelper.add({
-          returnSubmissionId,
-          startDate: new Date('2022-05-08'),
           endDate: new Date('2022-05-14'),
-          quantity: 5678
+          quantity: 5678,
+          returnSubmissionId,
+          startDate: new Date('2022-05-08')
         })
       })
 
@@ -112,16 +112,16 @@ describe('Fetch Return Logs for Licence service', () => {
         const { id: returnSubmissionId } = await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
 
         await ReturnSubmissionLineHelper.add({
-          returnSubmissionId,
-          startDate: new Date('2023-05-01'),
           endDate: new Date('2023-05-07'),
-          quantity: 1234
+          quantity: 1234,
+          returnSubmissionId,
+          startDate: new Date('2023-05-01')
         })
         await ReturnSubmissionLineHelper.add({
-          returnSubmissionId,
-          startDate: new Date('2023-05-08'),
           endDate: new Date('2023-05-14'),
-          quantity: 5678
+          quantity: 5678,
+          returnSubmissionId,
+          startDate: new Date('2023-05-08')
         })
       })
 
@@ -137,7 +137,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
     describe('which is a nil return', () => {
       beforeEach(async () => {
-        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id, nilReturn: true })
+        await ReturnSubmissionHelper.add({ nilReturn: true, returnLogId: returnLogRecord.id })
       })
 
       it('returns the return log with "nilreturn" set to "true" and no return submission lines', async () => {
@@ -156,8 +156,8 @@ describe('Fetch Return Logs for Licence service', () => {
     describe('where the return logs start date is outside the billing period but the end date is inside', () => {
       beforeEach(async () => {
         await ReturnLogHelper.add({
-          startDate: new Date('2022-01-01'),
-          endDate: new Date('2022-12-31')
+          endDate: new Date('2022-12-31'),
+          startDate: new Date('2022-01-01')
         })
         await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
       })
@@ -177,8 +177,8 @@ describe('Fetch Return Logs for Licence service', () => {
     describe('because the return log is fully outside the billing period', () => {
       beforeEach(async () => {
         returnLogRecord = await ReturnLogHelper.add({
-          startDate: new Date('2023-04-01'),
-          endDate: new Date('2024-03-31')
+          endDate: new Date('2024-03-31'),
+          startDate: new Date('2023-04-01')
         })
         await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
       })
@@ -194,8 +194,8 @@ describe('Fetch Return Logs for Licence service', () => {
     describe('because the return logs start date is inside the billing period but end date is outside', () => {
       beforeEach(async () => {
         returnLogRecord = await ReturnLogHelper.add({
-          startDate: new Date('2023-01-01'),
-          endDate: new Date('2023-12-31')
+          endDate: new Date('2023-12-31'),
+          startDate: new Date('2023-01-01')
         })
         await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
       })
@@ -253,6 +253,7 @@ describe('Fetch Return Logs for Licence service', () => {
   describe('when fetch errors because the return log is missing abstraction data', () => {
     beforeEach(async () => {
       const metadata = _metadata(true)
+
       metadata.nald.periodEndDay = 'null'
       metadata.nald.periodEndMonth = 'null'
       metadata.nald.periodStartDay = 'null'
@@ -273,13 +274,15 @@ describe('Fetch Return Logs for Licence service', () => {
         expect.any(Object),
         expect.any(Error)
       )
-      expect(logDataArg).toEqual({ licenceRef, billingPeriod })
+      expect(logDataArg).toEqual({ billingPeriod, licenceRef })
     })
   })
 })
 
 function _metadata(isTwoPartTariff) {
   return {
+    description: 'The Description',
+    isTwoPartTariff,
     nald: {
       periodEndDay: '31',
       periodEndMonth: '3',
@@ -293,8 +296,6 @@ function _metadata(isTwoPartTariff) {
           description: 'Spray Irrigation - Direct'
         }
       }
-    ],
-    description: 'The Description',
-    isTwoPartTariff
+    ]
   }
 }

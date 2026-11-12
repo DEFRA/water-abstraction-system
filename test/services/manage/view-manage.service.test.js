@@ -19,15 +19,15 @@ describe('Manage - View Manage service', () => {
         activeNavBar: 'manage',
         pageTitle: 'Manage',
         viewReports: {
-          show: true,
           links: {
             digitise: false,
             invalidAddresses: true,
             kpis: true,
             returnsCycles: false
-          }
+          },
+          show: true
         },
-        viewWorkflow: { show: false, links: { checkLicences: false } }
+        viewWorkflow: { links: { checkLicences: false }, show: false }
       })
     })
   })

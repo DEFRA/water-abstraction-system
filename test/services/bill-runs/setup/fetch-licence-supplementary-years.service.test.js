@@ -27,9 +27,9 @@ describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => 
     beforeEach(async () => {
       twoPartTariff = true
 
-      await LicenceSupplementaryYearHelper.add({ licenceId: licence.id, financialYearEnd: 2023, twoPartTariff: true })
-      await LicenceSupplementaryYearHelper.add({ licenceId: licence.id, financialYearEnd: 2024, twoPartTariff: true })
-      await LicenceSupplementaryYearHelper.add({ licenceId: licence.id, financialYearEnd: 2022, twoPartTariff: true })
+      await LicenceSupplementaryYearHelper.add({ financialYearEnd: 2023, licenceId: licence.id, twoPartTariff: true })
+      await LicenceSupplementaryYearHelper.add({ financialYearEnd: 2024, licenceId: licence.id, twoPartTariff: true })
+      await LicenceSupplementaryYearHelper.add({ financialYearEnd: 2022, licenceId: licence.id, twoPartTariff: true })
     })
 
     afterEach(async () => {
@@ -47,7 +47,7 @@ describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => 
     beforeEach(async () => {
       twoPartTariff = false
 
-      await LicenceSupplementaryYearHelper.add({ licenceId: licence.id, financialYearEnd: 2022, twoPartTariff: true })
+      await LicenceSupplementaryYearHelper.add({ financialYearEnd: 2022, licenceId: licence.id, twoPartTariff: true })
     })
 
     afterEach(async () => {

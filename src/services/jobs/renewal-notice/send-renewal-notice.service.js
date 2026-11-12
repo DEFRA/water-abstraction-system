@@ -4,9 +4,9 @@
  */
 
 import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
+import { renewalExpiryDate, renewalNoticeDate } from 'water-abstraction-engine/lib/dates.lib.js'
 import { generateNoticeReferenceCode } from 'water-abstraction-engine/lib/general.lib.js'
 import { NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
-import { renewalExpiryDate, renewalNoticeDate } from 'water-abstraction-engine/lib/dates.lib.js'
 
 import CreateNoticeService from '../../notices/setup/create-notice.service.js'
 import CreateNotificationsService from '../../notices/setup/create-notifications.service.js'

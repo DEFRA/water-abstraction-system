@@ -2,9 +2,9 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import BillingAccountHelper from 'water-abstraction-engine/test/helpers/billing-account.helper.js'
 import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
+import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper.js'
 import ChargeCategoryHelper from 'water-abstraction-engine/test/helpers/charge-category.helper.js'
 import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
 import ChargeReferenceHelper from 'water-abstraction-engine/test/helpers/charge-reference.helper.js'
@@ -48,10 +48,10 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
     const { id: reviewLicenceId } = reviewLicence
 
     chargeVersion = await ChargeVersionHelper.add({
-      startDate: new Date('2023-11-01'),
       billingAccountId: billingAccount.id,
       licenceId: licence.id,
-      licenceRef: licence.licenceRef
+      licenceRef: licence.licenceRef,
+      startDate: new Date('2023-11-01')
     })
     const { id: chargeVersionId } = chargeVersion
 
@@ -62,13 +62,13 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
     const { id: chargeCategoryId } = chargeCategory
 
     chargeReference = await ChargeReferenceHelper.add({
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 4,
       abstractionPeriodEndDay: 31,
       abstractionPeriodEndMonth: 3,
+      abstractionPeriodStartDay: 1,
+      abstractionPeriodStartMonth: 4,
       adjustments: {},
-      chargeVersionId,
       chargeCategoryId,
+      chargeVersionId,
       description: 'Charge reference 1 - Mineral washing',
       scheme: 'sroc'
     })
@@ -125,8 +125,8 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
             expect(licence.historicalAreaCode).toEqual('SAAR')
             expect(licence.regionalChargeArea).toEqual('Southern')
             expect(licence.region).toEqual({
-              id: region.id,
-              chargeRegionId: region.chargeRegionId
+              chargeRegionId: region.chargeRegionId,
+              id: region.id
             })
           })
 

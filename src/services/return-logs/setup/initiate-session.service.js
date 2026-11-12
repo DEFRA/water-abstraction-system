@@ -4,8 +4,8 @@
  */
 
 import CreateSessionDal from 'water-abstraction-engine/dal/create-session.dal.js'
-import { convertFromCubicMetres } from 'water-abstraction-engine/lib/general.lib.js'
 import { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } from 'water-abstraction-engine/lib/dates.lib.js'
+import { convertFromCubicMetres } from 'water-abstraction-engine/lib/general.lib.js'
 import { returnUnits, unitNames } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import FetchReturnLogDal from '../../../dal/return-logs/setup/fetch-return-log.dal.js'
@@ -62,6 +62,7 @@ function _meter(meter) {
   const multiplier = meter?.multiplier ? Number.parseInt(meter?.multiplier) : null
 
   let meter10TimesDisplay = null
+
   if (multiplier === 10) {
     meter10TimesDisplay = 'yes'
   }
@@ -146,14 +147,14 @@ function _submissionData(lines, returnLog) {
   return {
     journey: nilReturn ? 'nilReturn' : 'enterReturn',
     lines: nilReturn ? lines : _submissionLines(returnSubmissionLines),
-    nilReturn,
     meter10TimesDisplay: meter.meter10TimesDisplay,
     meterMake: meter.meterMake,
     meterProvided: meter.meterProvided,
     meterSerialNumber: meter.meterSerialNumber,
-    receivedDateOptions: returnLog.receivedDate && 'custom-date',
+    nilReturn,
     receivedDateDay: returnLog.receivedDate && `${returnLog.receivedDate.getDate()}`,
     receivedDateMonth: returnLog.receivedDate && `${returnLog.receivedDate.getMonth() + 1}`,
+    receivedDateOptions: returnLog.receivedDate && 'custom-date',
     receivedDateYear: returnLog.receivedDate && `${returnLog.receivedDate.getFullYear()}`,
     reported: method === 'oneMeter' ? 'meterReadings' : 'abstractionVolumes',
     startReading: meter.startReading,

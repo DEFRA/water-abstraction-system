@@ -30,9 +30,6 @@ describe('Reports - View invalid addresses presenter', () => {
         backLink: { href: '/system/manage', text: 'Go back to manage' },
         invalidAddresses: [
           {
-            licenceRef: '03/28/01/0165',
-            licenceEnds: null,
-            contactRole: 'Licence holder',
             addressLines: [
               'Address Line 1: ENVIRONMENT AGENCY',
               'Address Line 2: HORIZON HOUSE',
@@ -40,12 +37,12 @@ describe('Reports - View invalid addresses presenter', () => {
               'Address Line 4: ',
               'Town: BRISTOL',
               'County: AVON'
-            ]
+            ],
+            contactRole: 'Licence holder',
+            licenceEnds: null,
+            licenceRef: '03/28/01/0165'
           },
           {
-            licenceRef: '03/28/01/0166',
-            licenceEnds: formatDateObjectToISO(tomorrow()),
-            contactRole: 'Licence holder',
             addressLines: [
               'Address Line 1: ENVIRONMENT AGENCY',
               'Address Line 2: HORIZON HOUSE',
@@ -53,12 +50,12 @@ describe('Reports - View invalid addresses presenter', () => {
               'Address Line 4: DEANERY ROAD',
               'Town: BRISTOL',
               'County: '
-            ]
+            ],
+            contactRole: 'Licence holder',
+            licenceEnds: formatDateObjectToISO(tomorrow()),
+            licenceRef: '03/28/01/0166'
           },
           {
-            licenceRef: '03/28/01/0167',
-            licenceEnds: formatDateObjectToISO(tomorrow()),
-            contactRole: 'Returns to',
             addressLines: [
               'Address Line 1: ENVIRONMENT AGENCY',
               'Address Line 2: ',
@@ -66,12 +63,12 @@ describe('Reports - View invalid addresses presenter', () => {
               'Address Line 4: DEANERY ROAD',
               'Town: ',
               'County: AVON'
-            ]
+            ],
+            contactRole: 'Returns to',
+            licenceEnds: formatDateObjectToISO(tomorrow()),
+            licenceRef: '03/28/01/0167'
           },
           {
-            licenceRef: '03/28/01/0168',
-            licenceEnds: formatDateObjectToISO(tomorrow()),
-            contactRole: 'Returns to',
             addressLines: [
               'Address Line 1: ',
               'Address Line 2: ',
@@ -79,12 +76,12 @@ describe('Reports - View invalid addresses presenter', () => {
               'Address Line 4: DEANERY ROAD',
               'Town: ',
               'County: '
-            ]
+            ],
+            contactRole: 'Returns to',
+            licenceEnds: formatDateObjectToISO(tomorrow()),
+            licenceRef: '03/28/01/0168'
           },
           {
-            licenceRef: '03/28/01/0170',
-            licenceEnds: null,
-            contactRole: 'Returns to',
             addressLines: [
               'Address Line 1: ENVIRONMENT AGENCY',
               'Address Line 2: (Facilities) HORIZON HOUSE',
@@ -94,7 +91,10 @@ describe('Reports - View invalid addresses presenter', () => {
               'County: AVON',
               'Postcode: BS1 5AH',
               'Country: United Kingdom'
-            ]
+            ],
+            contactRole: 'Returns to',
+            licenceEnds: null,
+            licenceRef: '03/28/01/0170'
           }
         ],
         pageTitle: 'Invalid addresses',
@@ -107,69 +107,69 @@ describe('Reports - View invalid addresses presenter', () => {
 function _invalidAddresses() {
   return [
     {
-      licence_ref: '03/28/01/0165',
-      licence_ends: null,
-      contact_role: 'Licence holder',
       address_line_1: 'ENVIRONMENT AGENCY',
       address_line_2: 'HORIZON HOUSE',
       address_line_3: 'DEANERY ROAD',
       address_line_4: null,
-      town: 'BRISTOL',
+      contact_role: 'Licence holder',
+      country: null,
       county: 'AVON',
+      licence_ends: null,
+      licence_ref: '03/28/01/0165',
       postcode: null,
-      country: null
+      town: 'BRISTOL'
     },
     {
-      licence_ref: '03/28/01/0166',
-      licence_ends: tomorrow(),
-      contact_role: 'Licence holder',
       address_line_1: 'ENVIRONMENT AGENCY',
       address_line_2: 'HORIZON HOUSE',
       address_line_3: null,
       address_line_4: 'DEANERY ROAD',
-      town: 'BRISTOL',
+      contact_role: 'Licence holder',
+      country: null,
       county: null,
+      licence_ends: tomorrow(),
+      licence_ref: '03/28/01/0166',
       postcode: null,
-      country: null
+      town: 'BRISTOL'
     },
     {
-      licence_ref: '03/28/01/0167',
-      licence_ends: tomorrow(),
-      contact_role: 'Returns to',
       address_line_1: 'ENVIRONMENT AGENCY',
       address_line_2: null,
       address_line_3: 'HORIZON HOUSE',
       address_line_4: 'DEANERY ROAD',
-      town: null,
+      contact_role: 'Returns to',
+      country: null,
       county: 'AVON',
+      licence_ends: tomorrow(),
+      licence_ref: '03/28/01/0167',
       postcode: null,
-      country: null
+      town: null
     },
     {
-      licence_ref: '03/28/01/0168',
-      licence_ends: tomorrow(),
-      contact_role: 'Returns to',
       address_line_1: null,
       address_line_2: null,
       address_line_3: 'ENVIRONMENT AGENCY',
       address_line_4: 'DEANERY ROAD',
-      town: null,
+      contact_role: 'Returns to',
+      country: null,
       county: null,
+      licence_ends: tomorrow(),
+      licence_ref: '03/28/01/0168',
       postcode: null,
-      country: null
+      town: null
     },
     {
-      licence_ref: '03/28/01/0170',
-      licence_ends: null,
-      contact_role: 'Returns to',
       address_line_1: 'ENVIRONMENT AGENCY',
       address_line_2: '(Facilities) HORIZON HOUSE',
       address_line_3: 'DEANERY ROAD',
       address_line_4: null,
-      town: 'BRISTOL',
+      contact_role: 'Returns to',
+      country: 'United Kingdom',
       county: 'AVON',
+      licence_ends: null,
+      licence_ref: '03/28/01/0170',
       postcode: 'BS1 5AH',
-      country: 'United Kingdom'
+      town: 'BRISTOL'
     }
   ]
 }

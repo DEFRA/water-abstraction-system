@@ -24,10 +24,10 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
     summer = false
 
     match = {
-      id: 'aadb1af8-16d5-46c3-9b80-00a6201b8196',
       batchType: 'two_part_tariff',
       billRunNumber: 1045,
       createdAt: new Date('2023-04-11'),
+      id: 'aadb1af8-16d5-46c3-9b80-00a6201b8196',
       scheme: 'sroc',
       status: 'sent',
       summer,
@@ -35,13 +35,13 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
     }
 
     billRunQueryStub = {
+      limit: vi.fn().mockReturnThis(),
+      modifyGraph: vi.fn().mockReturnThis(),
+      orderBy: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis(),
       where: vi.fn().mockReturnThis(),
       whereNotIn: vi.fn().mockReturnThis(),
-      orderBy: vi.fn().mockReturnThis(),
-      withGraphFetched: vi.fn().mockReturnThis(),
-      modifyGraph: vi.fn().mockReturnThis(),
-      limit: vi.fn().mockReturnThis()
+      withGraphFetched: vi.fn().mockReturnThis()
     }
   })
 

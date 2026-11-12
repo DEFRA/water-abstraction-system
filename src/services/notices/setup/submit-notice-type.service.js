@@ -6,11 +6,12 @@
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
-import { NoticeJourney, NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { flashNotification, generateNoticeReferenceCode } from 'water-abstraction-engine/lib/general.lib.js'
+import { NoticeJourney, NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import NoticeTypePresenter from '../../../presenters/notices/setup/notice-type.presenter.js'
 import NoticeTypeValidator from '../../../validators/notices/setup/notice-type.validator.js'
+
 import featureFlagsConfig from '../../../config/feature-flags.config.js'
 
 /**

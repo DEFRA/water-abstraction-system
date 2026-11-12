@@ -4,9 +4,9 @@
  */
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
-import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
 import { isQuarterlyReturnSubmissions, sameDate } from 'water-abstraction-engine/lib/dates.lib.js'
+import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
 
 import DetermineRelevantLicenceVersionService from './determine-relevant-licence-version.service.js'
 import StartDatePresenter from '../../../presenters/return-versions/setup/start-date.presenter.js'

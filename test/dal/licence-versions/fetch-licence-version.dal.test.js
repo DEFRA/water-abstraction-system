@@ -36,15 +36,15 @@ describe('Licence Versions - Fetch licence version dal', () => {
 
       // Add additional licence for the pagination array
       additionalLicenceVersionOne = await LicenceVersionHelper.add({
+        endDate: new Date('2021-12-31'),
         licenceId: licence.id,
-        startDate: new Date('2021-01-01'),
-        endDate: new Date('2021-12-31')
+        startDate: new Date('2021-01-01')
       })
 
       additionalLicenceVersionTwo = await LicenceVersionHelper.add({
+        endDate: new Date('2021-12-31'),
         licenceId: licence.id,
-        startDate: new Date('2019-01-01'),
-        endDate: new Date('2021-12-31')
+        startDate: new Date('2019-01-01')
       })
 
       purpose = PurposeHelper.select()

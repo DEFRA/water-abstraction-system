@@ -14,6 +14,7 @@ import SubmitConfirmedService from '../../../../src/services/return-logs/setup/s
 describe('Return Logs Setup - Submit Confirmed service', () => {
   let licence
   let returnLog
+
   beforeEach(async () => {
     licence = await LicenceHelper.add()
 

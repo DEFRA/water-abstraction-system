@@ -43,11 +43,6 @@ describe('Users - External - View Communications service', () => {
       expect(result).toEqual({
         activeNavBar: 'users',
         activeSecondaryNav: 'communications',
-        pagination: {
-          currentPageNumber: 1,
-          numberOfPages: 0,
-          showingMessage: 'Showing all 0 communications'
-        },
         backLink: {
           href: '/system/users',
           text: 'Go back to users'
@@ -55,7 +50,12 @@ describe('Users - External - View Communications service', () => {
         backQueryString: '?back=users',
         notifications: [],
         pageTitle: 'Communications',
-        pageTitleCaption: user.username
+        pageTitleCaption: user.username,
+        pagination: {
+          currentPageNumber: 1,
+          numberOfPages: 0,
+          showingMessage: 'Showing all 0 communications'
+        }
       })
     })
   })

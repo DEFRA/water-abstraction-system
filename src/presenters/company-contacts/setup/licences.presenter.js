@@ -27,9 +27,9 @@ export default function licencesPresenter(session) {
 function _licences(licences, abstractionAlertLicences) {
   return licences.map((licence) => {
     return {
-      value: licence.id,
+      checked: abstractionAlertLicences?.includes(licence.id) || false,
       text: licence.licenceRef,
-      checked: abstractionAlertLicences?.includes(licence.id) || false
+      value: licence.id
     }
   })
 }

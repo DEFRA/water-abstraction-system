@@ -31,7 +31,7 @@ describe('Company Contacts - View Contact Details Service', () => {
     vi.spyOn(FetchCompanyContactDetailsDal, 'default').mockResolvedValue(companyContact)
 
     yarStub = YarStub()
-    yarStub.flash.mockReturnValue([{ titleText: 'Updated', text: 'Contact details updated.' }])
+    yarStub.flash.mockReturnValue([{ text: 'Contact details updated.', titleText: 'Updated' }])
   })
 
   afterEach(() => {

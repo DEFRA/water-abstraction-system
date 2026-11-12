@@ -31,11 +31,11 @@ describe('Company Contacts - Fetch Abstraction Alert Licences Dal', () => {
 
       expect(result).toEqual([
         {
+          expiredDate: null,
           id: licence.id,
-          licenceRef: licence.licenceRef,
-          revokedDate: null,
           lapsedDate: null,
-          expiredDate: null
+          licenceRef: licence.licenceRef,
+          revokedDate: null
         }
       ])
     })
@@ -47,18 +47,18 @@ describe('Company Contacts - Fetch Abstraction Alert Licences Dal', () => {
 
       expect(result).toEqual([
         {
+          expiredDate: null,
           id: licenceA.id,
-          licenceRef: licenceA.licenceRef,
-          revokedDate: null,
           lapsedDate: null,
-          expiredDate: null
+          licenceRef: licenceA.licenceRef,
+          revokedDate: null
         },
         {
+          expiredDate: null,
           id: licenceB.id,
-          licenceRef: licenceB.licenceRef,
-          revokedDate: null,
           lapsedDate: null,
-          expiredDate: null
+          licenceRef: licenceB.licenceRef,
+          revokedDate: null
         }
       ])
     })

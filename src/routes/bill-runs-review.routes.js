@@ -19,182 +19,182 @@ import {
 export default [
   {
     method: 'GET',
-    path: '/bill-runs/review/{billRunId}',
     options: {
-      handler: viewReview,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: viewReview
+    },
+    path: '/bill-runs/review/{billRunId}'
   },
   {
     method: 'POST',
-    path: '/bill-runs/review/{billRunId}',
     options: {
-      handler: submitReview,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitReview
+    },
+    path: '/bill-runs/review/{billRunId}'
   },
   {
     method: 'GET',
-    path: '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}',
     options: {
-      handler: viewReviewChargeElement,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: viewReviewChargeElement
+    },
+    path: '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}'
   },
   {
     method: 'GET',
-    path: '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}/edit',
     options: {
-      handler: viewEdit,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: viewEdit
+    },
+    path: '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}/edit'
   },
   {
     method: 'POST',
-    path: '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}/edit',
     options: {
-      handler: submitEdit,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitEdit
+    },
+    path: '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}/edit'
   },
   {
     method: 'GET',
-    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}',
     options: {
-      handler: viewReviewChargeReference,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: viewReviewChargeReference
+    },
+    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}'
   },
   {
     method: 'GET',
-    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/authorised',
     options: {
-      handler: viewAuthorised,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: viewAuthorised
+    },
+    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/authorised'
   },
   {
     method: 'POST',
-    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/authorised',
     options: {
-      handler: submitAuthorised,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitAuthorised
+    },
+    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/authorised'
   },
   {
     method: 'GET',
-    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/factors',
     options: {
-      handler: viewFactors,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: viewFactors
+    },
+    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/factors'
   },
   {
     method: 'POST',
-    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/factors',
     options: {
-      handler: submitFactors,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitFactors
+    },
+    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/factors'
   },
   {
     method: 'GET',
-    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/preview',
     options: {
-      handler: preview,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: preview
+    },
+    path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/preview'
   },
   {
     method: 'GET',
-    path: '/bill-runs/review/licence/{reviewLicenceId}',
     options: {
-      handler: viewReviewLicence,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: viewReviewLicence
+    },
+    path: '/bill-runs/review/licence/{reviewLicenceId}'
   },
   {
     method: 'POST',
-    path: '/bill-runs/review/licence/{reviewLicenceId}',
     options: {
-      handler: submitReviewLicence,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitReviewLicence
+    },
+    path: '/bill-runs/review/licence/{reviewLicenceId}'
   },
   {
     method: 'GET',
-    path: '/bill-runs/review/licence/{reviewLicenceId}/remove',
     options: {
-      handler: viewRemove,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: viewRemove
+    },
+    path: '/bill-runs/review/licence/{reviewLicenceId}/remove'
   },
   {
     method: 'POST',
-    path: '/bill-runs/review/licence/{reviewLicenceId}/remove',
     options: {
-      handler: submitRemove,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitRemove
+    },
+    path: '/bill-runs/review/licence/{reviewLicenceId}/remove'
   }
 ]

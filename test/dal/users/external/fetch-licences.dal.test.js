@@ -53,18 +53,6 @@ describe('Users - External - Fetch Licences DAL', () => {
             expiredDate: licenceData1.licence.expiredDate,
             id: licenceData1.licence.id,
             lapsedDate: licenceData1.licence.lapsedDate,
-            licenceRef: licenceData1.licence.licenceRef,
-            revokedDate: licenceData1.licence.revokedDate,
-            licenceVersions: [
-              {
-                id: licenceData1.licenceVersion.id,
-                issueDate: null,
-                licenceId: licenceData1.licence.id,
-                startDate: licenceData1.licenceVersion.startDate,
-                status: 'current',
-                company: { id: licenceData1.company.id, name: licenceData1.company.name, type: 'organisation' }
-              }
-            ],
             licenceDocumentHeader: {
               id: licenceData1.licenceDocumentHeader.id,
               licenceEntityRoles: [
@@ -74,24 +62,24 @@ describe('Users - External - Fetch Licences DAL', () => {
                 }
               ],
               licenceRef: licenceData1.licenceDocumentHeader.licenceRef
-            }
+            },
+            licenceRef: licenceData1.licence.licenceRef,
+            licenceVersions: [
+              {
+                company: { id: licenceData1.company.id, name: licenceData1.company.name, type: 'organisation' },
+                id: licenceData1.licenceVersion.id,
+                issueDate: null,
+                licenceId: licenceData1.licence.id,
+                startDate: licenceData1.licenceVersion.startDate,
+                status: 'current'
+              }
+            ],
+            revokedDate: licenceData1.licence.revokedDate
           },
           {
             expiredDate: licenceData3.licence.expiredDate,
             id: licenceData3.licence.id,
             lapsedDate: licenceData3.licence.lapsedDate,
-            licenceRef: licenceData3.licence.licenceRef,
-            revokedDate: licenceData3.licence.revokedDate,
-            licenceVersions: [
-              {
-                id: licenceData3.licenceVersion.id,
-                issueDate: null,
-                licenceId: licenceData3.licence.id,
-                startDate: licenceData3.licenceVersion.startDate,
-                status: 'current',
-                company: { id: licenceData3.company.id, name: licenceData3.company.name, type: 'organisation' }
-              }
-            ],
             licenceDocumentHeader: {
               id: licenceData3.licenceDocumentHeader.id,
               licenceEntityRoles: [
@@ -101,24 +89,24 @@ describe('Users - External - Fetch Licences DAL', () => {
                 }
               ],
               licenceRef: licenceData3.licenceDocumentHeader.licenceRef
-            }
+            },
+            licenceRef: licenceData3.licence.licenceRef,
+            licenceVersions: [
+              {
+                company: { id: licenceData3.company.id, name: licenceData3.company.name, type: 'organisation' },
+                id: licenceData3.licenceVersion.id,
+                issueDate: null,
+                licenceId: licenceData3.licence.id,
+                startDate: licenceData3.licenceVersion.startDate,
+                status: 'current'
+              }
+            ],
+            revokedDate: licenceData3.licence.revokedDate
           },
           {
             expiredDate: licenceData4.licence.expiredDate,
             id: licenceData4.licence.id,
             lapsedDate: licenceData4.licence.lapsedDate,
-            licenceRef: licenceData4.licence.licenceRef,
-            revokedDate: licenceData4.licence.revokedDate,
-            licenceVersions: [
-              {
-                id: licenceData4.licenceVersion.id,
-                issueDate: null,
-                licenceId: licenceData4.licence.id,
-                startDate: licenceData4.licenceVersion.startDate,
-                status: 'current',
-                company: { id: licenceData4.company.id, name: licenceData4.company.name, type: 'organisation' }
-              }
-            ],
             licenceDocumentHeader: {
               id: licenceData4.licenceDocumentHeader.id,
               licenceEntityRoles: [
@@ -132,7 +120,19 @@ describe('Users - External - Fetch Licences DAL', () => {
                 }
               ],
               licenceRef: licenceData4.licenceDocumentHeader.licenceRef
-            }
+            },
+            licenceRef: licenceData4.licence.licenceRef,
+            licenceVersions: [
+              {
+                company: { id: licenceData4.company.id, name: licenceData4.company.name, type: 'organisation' },
+                id: licenceData4.licenceVersion.id,
+                issueDate: null,
+                licenceId: licenceData4.licence.id,
+                startDate: licenceData4.licenceVersion.startDate,
+                status: 'current'
+              }
+            ],
+            revokedDate: licenceData4.licence.revokedDate
           }
         ],
         totalNumber: 3
@@ -166,11 +166,6 @@ async function _licenceData(userEntity, licenceRef, role) {
   })
 
   return {
-    company: currentCompany,
-    licence,
-    licenceEntityRoles,
-    licenceDocumentHeader,
-    licenceVersion: licenceVersionCurrent,
     clean: async () => {
       await supersededCompany.$query().delete()
       await currentCompany.$query().delete()
@@ -183,7 +178,12 @@ async function _licenceData(userEntity, licenceRef, role) {
       for (const licenceEntityRole of licenceEntityRoles) {
         await licenceEntityRole.$query().delete()
       }
-    }
+    },
+    company: currentCompany,
+    licence,
+    licenceDocumentHeader,
+    licenceEntityRoles,
+    licenceVersion: licenceVersionCurrent
   }
 }
 

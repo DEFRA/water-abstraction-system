@@ -31,7 +31,6 @@ describe('Bill Runs - Review - View Edit Service', () => {
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
-        pageTitle: 'Set the billable returns quantity for this bill run',
         authorisedQuantity: 9.092,
         billableReturns: 0,
         chargeDescription: 'Spray Irrigation - Direct',
@@ -39,6 +38,7 @@ describe('Bill Runs - Review - View Edit Service', () => {
         chargePeriods: ['1 April 2023 to 30 September 2023'],
         elementIndex: 1,
         financialPeriod: '2023 to 2024',
+        pageTitle: 'Set the billable returns quantity for this bill run',
         reviewChargeElementId: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1'
       })
     })

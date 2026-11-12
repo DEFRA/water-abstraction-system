@@ -16,23 +16,23 @@ describe('Bill Runs - Review - Review presenter', () => {
     const { id: regionId, displayName } = RegionHelper.select()
 
     billRun = {
-      id: generateUUID(),
       batchType: 'two_part_tariff',
       createdAt: new Date('2025-04-10T16:19:14.012Z'),
-      scheme: 'sroc',
-      status: 'review',
-      summer: false,
-      toFinancialYearEnding: 2025,
+      id: generateUUID(),
       region: {
-        id: regionId,
-        displayName
+        displayName,
+        id: regionId
       },
       reviewLicences: [
         {
-          totalNumberOfLicences: 3,
-          numberOfLicencesToReview: 1
+          numberOfLicencesToReview: 1,
+          totalNumberOfLicences: 3
         }
-      ]
+      ],
+      scheme: 'sroc',
+      status: 'review',
+      summer: false,
+      toFinancialYearEnding: 2025
     }
 
     licences = [
@@ -40,8 +40,8 @@ describe('Bill Runs - Review - Review presenter', () => {
       {
         id: generateUUID(),
         issues: 'Abstraction outside period, Over abstraction, Overlap of charge dates',
-        licenceId: generateUUID(),
         licenceHolder: 'Farmer Palmer',
+        licenceId: generateUUID(),
         licenceRef: `02/${generateRandomInteger(100, 999)}`,
         progress: false,
         status: 'review'
@@ -50,8 +50,8 @@ describe('Bill Runs - Review - Review presenter', () => {
       {
         id: generateUUID(),
         issues: '',
-        licenceId: generateUUID(),
         licenceHolder: 'Big Farm Ltd',
+        licenceId: generateUUID(),
         licenceRef: `01/${generateRandomInteger(100, 999)}`,
         progress: false,
         status: 'ready'
@@ -60,8 +60,8 @@ describe('Bill Runs - Review - Review presenter', () => {
       {
         id: generateUUID(),
         issues: 'Abstraction outside period',
-        licenceId: generateUUID(),
         licenceHolder: 'Bob Bobbles',
+        licenceId: generateUUID(),
         licenceRef: `03/${generateRandomInteger(100, 999)}`,
         progress: true,
         status: 'ready'

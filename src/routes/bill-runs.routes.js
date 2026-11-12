@@ -12,98 +12,98 @@ import {
 export default [
   {
     method: 'GET',
-    path: '/bill-runs',
     options: {
-      handler: index,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: index
+    },
+    path: '/bill-runs'
   },
   {
     method: 'POST',
-    path: '/bill-runs',
     options: {
-      handler: submitIndex,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitIndex
+    },
+    path: '/bill-runs'
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}',
     options: {
-      handler: view,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: view
+    },
+    path: '/bill-runs/{id}'
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/cancel',
     options: {
-      handler: cancel,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: cancel
+    },
+    path: '/bill-runs/{id}/cancel'
   },
   {
     method: 'POST',
-    path: '/bill-runs/{id}/cancel',
     options: {
-      handler: submitCancel,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitCancel
+    },
+    path: '/bill-runs/{id}/cancel'
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/send',
     options: {
-      handler: send,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: send
+    },
+    path: '/bill-runs/{id}/send'
   },
   {
     method: 'POST',
-    path: '/bill-runs/{id}/send',
     options: {
-      handler: submitSend,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: submitSend
+    },
+    path: '/bill-runs/{id}/send'
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/two-part-tariff',
     options: {
-      handler: twoPartTariff,
       auth: {
         access: {
           scope: ['billing']
         }
-      }
-    }
+      },
+      handler: twoPartTariff
+    },
+    path: '/bill-runs/{id}/two-part-tariff'
   }
 ]

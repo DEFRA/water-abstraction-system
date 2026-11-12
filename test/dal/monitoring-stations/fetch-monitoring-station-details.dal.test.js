@@ -112,10 +112,6 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
             abstractionPeriodStartDay: null,
             abstractionPeriodStartMonth: null,
             id: licenceMonitoringStationThree.id,
-            measureType: 'flow',
-            restrictionType: 'reduce',
-            thresholdUnit: 'm3/s',
-            thresholdValue: 150,
             latestNotification: null,
             licence: {
               expiredDate: null,
@@ -124,7 +120,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
               licenceRef: licenceTwo.licence.licenceRef,
               revokedDate: null
             },
-            licenceVersionPurposeCondition: null
+            licenceVersionPurposeCondition: null,
+            measureType: 'flow',
+            restrictionType: 'reduce',
+            thresholdUnit: 'm3/s',
+            thresholdValue: 150
           },
           {
             abstractionPeriodEndDay: null,
@@ -132,10 +132,6 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
             abstractionPeriodStartDay: null,
             abstractionPeriodStartMonth: null,
             id: licenceMonitoringStationTwo.id,
-            measureType: 'flow',
-            restrictionType: 'reduce',
-            thresholdUnit: 'm3/s',
-            thresholdValue: 100,
             latestNotification: {
               createdAt: '2025-09-10T00:00:00',
               id: licenceMonitoringStationTwoNotification.id,
@@ -148,7 +144,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
               licenceRef: licenceTwo.licence.licenceRef,
               revokedDate: null
             },
-            licenceVersionPurposeCondition: null
+            licenceVersionPurposeCondition: null,
+            measureType: 'flow',
+            restrictionType: 'reduce',
+            thresholdUnit: 'm3/s',
+            thresholdValue: 100
           },
           {
             abstractionPeriodEndDay: null,
@@ -156,10 +156,6 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
             abstractionPeriodStartDay: null,
             abstractionPeriodStartMonth: null,
             id: licenceMonitoringStationOne.id,
-            measureType: 'flow',
-            restrictionType: 'reduce',
-            thresholdUnit: 'm3/s',
-            thresholdValue: 100,
             latestNotification: null,
             licence: {
               expiredDate: null,
@@ -171,7 +167,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
             licenceVersionPurposeCondition: {
               id: licenceOne.purposeCondition.id,
               notes: 'Pick up milk'
-            }
+            },
+            measureType: 'flow',
+            restrictionType: 'reduce',
+            thresholdUnit: 'm3/s',
+            thresholdValue: 100
           }
         ])
       })

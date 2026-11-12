@@ -19,7 +19,7 @@ describe('Notifications - Notify Error presenter', () => {
     const result = NotifyErrorPresenter(statusCode, message, errors)
 
     expect(result).toEqual({
-      notifyError: '{"status":"ENOTFOUND","message":"An error occurred","errors":["a specific error"]}',
+      notifyError: '{"errors":["a specific error"],"message":"An error occurred","status":"ENOTFOUND"}',
       status: 'error'
     })
   })

@@ -21,26 +21,26 @@ describe('Charging Module Calculate Charge request', () => {
   describe('when the charge can be calculated', () => {
     beforeEach(async () => {
       vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
-        succeeded: true,
         response: {
-          info: {
-            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
-          },
-          statusCode: HTTP_STATUS_OK,
           body: {
             calculation: {
-              chargeValue: 7000,
               baseCharge: 9700,
-              waterCompanyChargeValue: 800,
-              supportedSourceValue: 3500,
-              winterOnlyFactor: null,
-              section130Factor: null,
+              chargeValue: 7000,
+              compensationChargePercent: null,
               section127Factor: 0.5,
-              compensationChargePercent: null
+              section130Factor: null,
+              supportedSourceValue: 3500,
+              waterCompanyChargeValue: 800,
+              winterOnlyFactor: null
             }
-          }
-        }
+          },
+          info: {
+            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
+          },
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 
@@ -68,20 +68,20 @@ describe('Charging Module Calculate Charge request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
-          succeeded: false,
           response: {
-            info: {
-              gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-              dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
-            },
-            statusCode: HTTP_STATUS_UNAUTHORIZED,
             body: {
-              statusCode: HTTP_STATUS_UNAUTHORIZED,
+              attributes: { error: 'Invalid JWT: Token format not valid' },
               error: 'Unauthorized',
               message: 'Invalid JWT: Token format not valid',
-              attributes: { error: 'Invalid JWT: Token format not valid' }
-            }
-          }
+              statusCode: HTTP_STATUS_UNAUTHORIZED
+            },
+            info: {
+              dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+              gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
+            },
+            statusCode: HTTP_STATUS_UNAUTHORIZED
+          },
+          succeeded: false
         })
       })
 
@@ -103,8 +103,8 @@ describe('Charging Module Calculate Charge request', () => {
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
         vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
-          succeeded: false,
-          response: new Error("Timeout awaiting 'request' for 5000ms")
+          response: new Error("Timeout awaiting 'request' for 5000ms"),
+          succeeded: false
         })
       })
 
@@ -138,8 +138,8 @@ function _transactionData() {
     compensationCharge: false,
     credit: false,
     loss: 'Low',
-    periodStart: '01-APR-2022',
     periodEnd: '31-MAR-2023',
+    periodStart: '01-APR-2022',
     ruleset: 'sroc',
     section127Agreement: true,
     section130Agreement: false,

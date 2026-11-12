@@ -224,5 +224,5 @@ export function formatReturnTotals(reviewReturn) {
 function _chargePeriod(reviewChargeVersion) {
   const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeVersion
 
-  return { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
+  return { endDate: chargePeriodEndDate, startDate: chargePeriodStartDate }
 }

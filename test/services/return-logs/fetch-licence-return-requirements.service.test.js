@@ -12,8 +12,8 @@ import ReturnRequirementPointHelper from 'water-abstraction-engine/test/helpers/
 import ReturnRequirementPurposeHelper from 'water-abstraction-engine/test/helpers/return-requirement-purpose.helper.js'
 import ReturnVersionHelper from 'water-abstraction-engine/test/helpers/return-version.helper.js'
 import SecondaryPurposeHelper from 'water-abstraction-engine/test/helpers/secondary-purpose.helper.js'
-import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import { tomorrow, yesterday } from 'water-abstraction-engine/test/general.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
 import FetchLicenceReturnRequirementsService from '../../../src/services/return-logs/fetch-licence-return-requirements.service.js'
@@ -232,17 +232,17 @@ async function _seedReturnVersionChildData(returnVersion) {
 
   returnRequirement.returnRequirementPurposes = [
     await ReturnRequirementPurposeHelper.add({
-      returnRequirementId: returnRequirement.id,
       primaryPurposeId: primaryPurpose.id,
       purposeId: purpose.id,
+      returnRequirementId: returnRequirement.id,
       secondaryPurposeId: secondaryPurpose.id
     })
   ]
 
   returnRequirement.returnRequirementPoints = [
     await ReturnRequirementPointHelper.add({
-      returnRequirementId: returnRequirement.id,
-      pointId: point.id
+      pointId: point.id,
+      returnRequirementId: returnRequirement.id
     })
   ]
 
@@ -260,29 +260,6 @@ function _transformReturnVersionToResult(returnVersion) {
     abstractionPeriodStartMonth: returnRequirements[0].abstractionPeriodStartMonth,
     externalId: returnRequirements[0].externalId,
     id: returnRequirements[0].id,
-    reference: returnRequirements[0].reference,
-    reportingFrequency: returnRequirements[0].reportingFrequency,
-    returnVersionId: returnRequirements[0].returnVersionId,
-    siteDescription: returnRequirements[0].siteDescription,
-    summer: returnRequirements[0].summer,
-    twoPartTariff: returnRequirements[0].twoPartTariff,
-    returnVersion: {
-      endDate: returnVersion.endDate,
-      id: returnVersion.id,
-      reason: returnVersion.reason,
-      startDate: returnVersion.startDate,
-      quarterlyReturns: returnVersion.quarterlyReturns,
-      multipleUpload: returnVersion.multipleUpload,
-      licence: {
-        expiredDate: licence.expiredDate,
-        id: licence.id,
-        lapsedDate: licence.lapsedDate,
-        licenceRef: licence.licenceRef,
-        revokedDate: licence.revokedDate,
-        areacode: 'SAAR',
-        region: { id: region.id, naldRegionId: region.naldRegionId }
-      }
-    },
     points: [
       {
         description: point.description,
@@ -292,6 +269,8 @@ function _transformReturnVersionToResult(returnVersion) {
         ngr4: point.ngr4
       }
     ],
+    reference: returnRequirements[0].reference,
+    reportingFrequency: returnRequirements[0].reportingFrequency,
     returnRequirementPurposes: [
       {
         alias: returnRequirementPurposes[0].alias,
@@ -312,6 +291,27 @@ function _transformReturnVersionToResult(returnVersion) {
           legacyId: secondaryPurpose.legacyId
         }
       }
-    ]
+    ],
+    returnVersion: {
+      endDate: returnVersion.endDate,
+      id: returnVersion.id,
+      licence: {
+        areacode: 'SAAR',
+        expiredDate: licence.expiredDate,
+        id: licence.id,
+        lapsedDate: licence.lapsedDate,
+        licenceRef: licence.licenceRef,
+        region: { id: region.id, naldRegionId: region.naldRegionId },
+        revokedDate: licence.revokedDate
+      },
+      multipleUpload: returnVersion.multipleUpload,
+      quarterlyReturns: returnVersion.quarterlyReturns,
+      reason: returnVersion.reason,
+      startDate: returnVersion.startDate
+    },
+    returnVersionId: returnRequirements[0].returnVersionId,
+    siteDescription: returnRequirements[0].siteDescription,
+    summer: returnRequirements[0].summer,
+    twoPartTariff: returnRequirements[0].twoPartTariff
   }
 }

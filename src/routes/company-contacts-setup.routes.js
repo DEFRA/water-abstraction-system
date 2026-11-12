@@ -20,194 +20,194 @@ import {
 export default [
   {
     method: 'GET',
-    path: '/company-contacts/setup/{companyId}',
     options: {
-      handler: setup,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: setup
+    },
+    path: '/company-contacts/setup/{companyId}'
   },
   {
     method: 'GET',
-    path: '/company-contacts/setup/{companyContactId}/edit',
     options: {
-      handler: setupEdit,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: setupEdit
+    },
+    path: '/company-contacts/setup/{companyContactId}/edit'
   },
   {
     method: 'GET',
-    path: '/company-contacts/setup/{sessionId}/abstraction-alerts',
     options: {
-      handler: viewAbstractionAlerts,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewAbstractionAlerts
+    },
+    path: '/company-contacts/setup/{sessionId}/abstraction-alerts'
   },
   {
     method: 'POST',
-    path: '/company-contacts/setup/{sessionId}/abstraction-alerts',
     options: {
-      handler: submitAbstractionAlerts,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitAbstractionAlerts
+    },
+    path: '/company-contacts/setup/{sessionId}/abstraction-alerts'
   },
   {
     method: 'GET',
-    path: '/company-contacts/setup/{sessionId}/cancel',
     options: {
-      handler: viewCancel,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewCancel
+    },
+    path: '/company-contacts/setup/{sessionId}/cancel'
   },
   {
     method: 'POST',
-    path: '/company-contacts/setup/{sessionId}/cancel',
     options: {
-      handler: submitCancel,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitCancel
+    },
+    path: '/company-contacts/setup/{sessionId}/cancel'
   },
   {
     method: 'GET',
-    path: '/company-contacts/setup/{sessionId}/check',
     options: {
-      handler: viewCheck,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewCheck
+    },
+    path: '/company-contacts/setup/{sessionId}/check'
   },
   {
     method: 'POST',
-    path: '/company-contacts/setup/{sessionId}/check',
     options: {
-      handler: submitCheck,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitCheck
+    },
+    path: '/company-contacts/setup/{sessionId}/check'
   },
   {
     method: 'GET',
-    path: '/company-contacts/setup/{sessionId}/contact-email',
     options: {
-      handler: viewContactEmail,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewContactEmail
+    },
+    path: '/company-contacts/setup/{sessionId}/contact-email'
   },
   {
     method: 'POST',
-    path: '/company-contacts/setup/{sessionId}/contact-email',
     options: {
-      handler: submitContactEmail,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitContactEmail
+    },
+    path: '/company-contacts/setup/{sessionId}/contact-email'
   },
   {
     method: 'GET',
-    path: '/company-contacts/setup/{sessionId}/contact-name',
     options: {
-      handler: viewContactName,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewContactName
+    },
+    path: '/company-contacts/setup/{sessionId}/contact-name'
   },
   {
     method: 'POST',
-    path: '/company-contacts/setup/{sessionId}/contact-name',
     options: {
-      handler: submitContactName,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitContactName
+    },
+    path: '/company-contacts/setup/{sessionId}/contact-name'
   },
   {
     method: 'GET',
-    path: '/company-contacts/setup/{sessionId}/licences',
     options: {
-      handler: viewLicences,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewLicences
+    },
+    path: '/company-contacts/setup/{sessionId}/licences'
   },
   {
     method: 'POST',
-    path: '/company-contacts/setup/{sessionId}/licences',
     options: {
-      handler: submitLicences,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitLicences
+    },
+    path: '/company-contacts/setup/{sessionId}/licences'
   },
   {
     method: 'GET',
-    path: '/company-contacts/setup/{sessionId}/restore',
     options: {
-      handler: viewRestore,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: viewRestore
+    },
+    path: '/company-contacts/setup/{sessionId}/restore'
   },
   {
     method: 'POST',
-    path: '/company-contacts/setup/{sessionId}/restore',
     options: {
-      handler: submitRestore,
       auth: {
         access: {
           scope: ['hof_notifications']
         }
-      }
-    }
+      },
+      handler: submitRestore
+    },
+    path: '/company-contacts/setup/{sessionId}/restore'
   }
 ]

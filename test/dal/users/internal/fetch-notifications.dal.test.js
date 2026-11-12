@@ -3,8 +3,8 @@ import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Test helpers
 import NotificationHelper from 'water-abstraction-engine/test/helpers/notification.helper.js'
-import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import { yesterday } from 'water-abstraction-engine/test/general.js'
+import { today } from 'water-abstraction-engine/lib/general.lib.js'
 import NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 import UsersFixture from '../../../support/fixtures/users.fixture.js'
 

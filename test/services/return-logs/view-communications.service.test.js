@@ -42,18 +42,18 @@ describe('Return Logs - View Communications Service', () => {
 
       expect(result).toEqual({
         activeSecondaryNav: 'communications',
-        pagination: {
-          currentPageNumber: 1,
-          numberOfPages: 0,
-          showingMessage: 'Showing all 0 communications'
-        },
         backLink: {
           href: `/system/licences/${returnLog.licence.id}/returns`,
           text: 'Go back to returns'
         },
         notifications: [],
         pageTitle: 'Communications',
-        pageTitleCaption: `Licence ${returnLog.licence.licenceRef}`
+        pageTitleCaption: `Licence ${returnLog.licence.licenceRef}`,
+        pagination: {
+          currentPageNumber: 1,
+          numberOfPages: 0,
+          showingMessage: 'Showing all 0 communications'
+        }
       })
     })
   })

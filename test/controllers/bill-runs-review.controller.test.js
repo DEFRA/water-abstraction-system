@@ -63,48 +63,48 @@ describe('Bill Runs Review controller', () => {
       beforeEach(() => {
         vi.spyOn(ViewReviewService, 'default').mockResolvedValue({
           activeNavBar: 'bill-runs',
-          filters: {
-            issues: [],
-            licenceHolderNumber: null,
-            licenceStatus: null,
-            progress: [],
-            openFilter: false
-          },
-          notification: null,
           backLink: { href: '/system/bill-runs', text: 'Go back to bill runs' },
           billRunId: '8cf82f30-24b8-4647-9707-726c5950b723',
           billRunType: 'two-part tariff',
           chargeScheme: 'Current',
           dateCreated: '10 April 2025',
+          filters: {
+            issues: [],
+            licenceHolderNumber: null,
+            licenceStatus: null,
+            openFilter: false,
+            progress: []
+          },
           financialYear: '2024 to 2025',
-          preparedLicences: [
-            {
-              licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
-              licenceRef: '1/11/11/*1/1111',
-              licenceHolder: 'Big Farm Ltd',
-              status: 'review',
-              issue: 'Multiple Issues'
-            },
-            {
-              licenceId: '9442527a-64f3-471a-a3e4-fa0683a3d505',
-              licenceRef: '2/22/22/*2/2222',
-              licenceHolder: 'Small Farm Ltd',
-              status: 'ready',
-              issue: 'Multiple Issues'
-            }
-          ],
+          notification: null,
           numberOfLicencesToReview: 1,
           pageTitle: 'Review licences',
           pageTitleCaption: 'Southern (Test Replica) two-part tariff',
-          region: 'Southern (Test replica)',
-          reviewMessage:
-            'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
-          status: 'review',
           pagination: {
             currentPageNumber: 1,
             numberOfPages: 1,
             showingMessage: 'Showing all 2 licences'
-          }
+          },
+          preparedLicences: [
+            {
+              issue: 'Multiple Issues',
+              licenceHolder: 'Big Farm Ltd',
+              licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
+              licenceRef: '1/11/11/*1/1111',
+              status: 'review'
+            },
+            {
+              issue: 'Multiple Issues',
+              licenceHolder: 'Small Farm Ltd',
+              licenceId: '9442527a-64f3-471a-a3e4-fa0683a3d505',
+              licenceRef: '2/22/22/*2/2222',
+              status: 'ready'
+            }
+          ],
+          region: 'Southern (Test replica)',
+          reviewMessage:
+            'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
+          status: 'review'
         })
       })
 
@@ -222,7 +222,6 @@ describe('Bill Runs Review controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           vi.spyOn(ViewEditService, 'default').mockResolvedValue({
-            pageTitle: 'Set the billable returns quantity for this bill run',
             authorisedQuantity: 9.092,
             billableReturns: 0,
             chargeDescription: 'Spray Irrigation - Direct',
@@ -230,6 +229,7 @@ describe('Bill Runs Review controller', () => {
             chargePeriods: ['1 April 2023 to 30 September 2023'],
             elementIndex: '1',
             financialPeriod: '2023 to 2024',
+            pageTitle: 'Set the billable returns quantity for this bill run',
             reviewChargeElementId: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1'
           })
         })
@@ -268,20 +268,20 @@ describe('Bill Runs Review controller', () => {
       describe('when a request is invalid', () => {
         beforeEach(async () => {
           vi.spyOn(SubmitEditService, 'default').mockResolvedValue({
-            customQuantitySelected: false,
-            customQuantityValue: undefined,
-            error: {
-              errorList: [{ href: '#quantityOptions-error', text: 'Select the billable quantity' }],
-              quantityOptionsErrorMessage: { text: 'Select the billable quantity' }
-            },
-            pageTitle: 'Set the billable returns quantity for this bill run',
             authorisedQuantity: 9.092,
             billableReturns: 0,
             chargeDescription: 'Spray Irrigation - Direct',
             chargePeriod: '1 April 2023 to 31 March 2024',
             chargePeriods: ['1 April 2023 to 30 September 2023'],
+            customQuantitySelected: false,
+            customQuantityValue: undefined,
             elementIndex: '1',
+            error: {
+              errorList: [{ href: '#quantityOptions-error', text: 'Select the billable quantity' }],
+              quantityOptionsErrorMessage: { text: 'Select the billable quantity' }
+            },
             financialPeriod: '2023 to 2024',
+            pageTitle: 'Set the billable returns quantity for this bill run',
             reviewChargeElementId: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1'
           })
         })
@@ -354,9 +354,9 @@ describe('Bill Runs Review controller', () => {
             chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
             chargePeriod: '1 April 2023 to 31 March 2024',
             financialPeriod: '2023 to 2024',
+            pageTitle: 'Set the authorised volume',
             reviewChargeReferenceId: '7c09753d-f606-4deb-a929-4bc8aa7acb8d',
-            totalBillableReturns: 0,
-            pageTitle: 'Set the authorised volume'
+            totalBillableReturns: 0
           })
         })
 
@@ -397,11 +397,11 @@ describe('Bill Runs Review controller', () => {
         beforeEach(async () => {
           vi.spyOn(SubmitAuthorisedService, 'default').mockResolvedValue({
             amendedAuthorisedVolume: 'foo',
-            error: { text: 'The authorised volume must be a number' },
-            pageTitle: 'Set the authorised volume',
             chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
             chargePeriod: '1 April 2023 to 31 March 2024',
+            error: { text: 'The authorised volume must be a number' },
             financialPeriod: '2023 to 2024',
+            pageTitle: 'Set the authorised volume',
             reviewChargeReferenceId: '7c09753d-f606-4deb-a929-4bc8aa7acb8d',
             totalBillableReturns: 0
           })
@@ -438,8 +438,8 @@ describe('Bill Runs Review controller', () => {
             chargePeriod: '1 April 2023 to 31 March 2024',
             financialPeriod: '2023 to 2024',
             otherAdjustments: ['Two part tariff agreement'],
-            reviewChargeReferenceId: '7c09753d-f606-4deb-a929-4bc8aa7acb8d',
-            pageTitle: 'Set the adjustment factors'
+            pageTitle: 'Set the adjustment factors',
+            reviewChargeReferenceId: '7c09753d-f606-4deb-a929-4bc8aa7acb8d'
           })
         })
 
@@ -480,15 +480,15 @@ describe('Bill Runs Review controller', () => {
           vi.spyOn(SubmitFactorsService, 'default').mockResolvedValue({
             amendedAggregate: 'foo',
             amendedChargeAdjustment: '1',
-            error: {
-              errorList: [{ href: '#amended-aggregate', text: 'The aggregate factor must be a number' }],
-              amendedAggregate: { message: 'The aggregate factor must be a number' }
-            },
-            pageTitle: 'Set the adjustment factors',
             chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
             chargePeriod: '1 April 2023 to 31 March 2024',
+            error: {
+              amendedAggregate: { message: 'The aggregate factor must be a number' },
+              errorList: [{ href: '#amended-aggregate', text: 'The aggregate factor must be a number' }]
+            },
             financialPeriod: '2023 to 2024',
             otherAdjustments: ['Two part tariff agreement'],
+            pageTitle: 'Set the adjustment factors',
             reviewChargeReferenceId: '7c09753d-f606-4deb-a929-4bc8aa7acb8d'
           })
         })
@@ -545,11 +545,11 @@ describe('Bill Runs Review controller', () => {
             {
               billingAccountDetails: [
                 {
-                  billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
-                  accountNumber: 'E99999999A',
                   accountName: 'Mr B Blobby',
-                  contactName: null,
-                  addressLines: ['C/O Noel Edmonds', 'Crinkley Bottom', 'Cricket St Thomas', 'Somerset', 'TA20 1KL']
+                  accountNumber: 'E99999999A',
+                  addressLines: ['C/O Noel Edmonds', 'Crinkley Bottom', 'Cricket St Thomas', 'Somerset', 'TA20 1KL'],
+                  billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+                  contactName: null
                 }
               ],
               chargePeriod: '1 April 2023 to 31 March 2024',
@@ -559,22 +559,22 @@ describe('Bill Runs Review controller', () => {
                   chargeCategory: 'Charge reference 4.6.5',
                   chargeDescription:
                     'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
-                  id: '7c09753d-f606-4deb-a929-4bc8aa7acb8d',
                   chargeElements: [
                     {
                       billableReturns: '0 ML / 9.092 ML',
                       chargePeriods: ['1 April 2023 to 30 September 2023'],
-                      returnVolumes: ['0 ML (11142960)'],
                       description: 'Spray Irrigation - Direct',
                       elementCount: 1,
                       elementIndex: 1,
-                      status: 'review',
                       id: 'a1840523-a04c-4c64-bff7-4a515e8ba1c1',
                       issues: ['Aggregate'],
-                      purpose: 'Spray Irrigation - Direct'
+                      purpose: 'Spray Irrigation - Direct',
+                      returnVolumes: ['0 ML (11142960)'],
+                      status: 'review'
                     }
                   ],
                   chargeReferenceLinkTitle: 'Change details',
+                  id: '7c09753d-f606-4deb-a929-4bc8aa7acb8d',
                   totalBillableReturns: '0 ML / 9.092 ML'
                 }
               ],
@@ -724,12 +724,12 @@ function _getRequestOptions(path, query = null) {
   const url = query ? `${rootPath}?${query}` : rootPath
 
   return {
-    method: 'GET',
-    url,
     auth: {
-      strategy: 'session',
-      credentials: { scope: ['billing'] }
-    }
+      credentials: { scope: ['billing'] },
+      strategy: 'session'
+    },
+    method: 'GET',
+    url
   }
 }
 

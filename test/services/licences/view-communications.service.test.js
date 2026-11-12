@@ -40,15 +40,15 @@ describe('Licences - View Communications service', () => {
 
     notification = {
       createdAt,
-      id,
-      messageType,
-      status,
       event: {
         id: notice.id,
         issuer: notice.issuer,
-        subtype: notice.subtype,
-        sendingAlertType: notice.metadata.options.sendingAlertType
-      }
+        sendingAlertType: notice.metadata.options.sendingAlertType,
+        subtype: notice.subtype
+      },
+      id,
+      messageType,
+      status
     }
 
     vi.spyOn(FetchLicenceDal, 'default').mockResolvedValue({

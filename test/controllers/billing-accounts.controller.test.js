@@ -56,12 +56,12 @@ describe('Billing Accounts controller', () => {
       describe('when a chargeVersionId and licenceId is passed as query parameters', () => {
         beforeEach(() => {
           options = {
-            method: 'GET',
-            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018?licence-id=9a437fad-86b7-4495-8b26-061662cf8037&charge-version-id=0defacc2-6db7-4fdc-90e5-70a6d8f65235',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['billing'] }
-            }
+              credentials: { scope: ['billing'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018?licence-id=9a437fad-86b7-4495-8b26-061662cf8037&charge-version-id=0defacc2-6db7-4fdc-90e5-70a6d8f65235'
           }
         })
 
@@ -82,12 +82,12 @@ describe('Billing Accounts controller', () => {
       describe('when a licenceId is passed as a query parameter', () => {
         beforeEach(() => {
           options = {
-            method: 'GET',
-            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018?licence-id=9a437fad-86b7-4495-8b26-061662cf8037',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['billing'] }
-            }
+              credentials: { scope: ['billing'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018?licence-id=9a437fad-86b7-4495-8b26-061662cf8037'
           }
         })
 
@@ -108,12 +108,12 @@ describe('Billing Accounts controller', () => {
       describe('when no licenceId is passed as a query parameter', () => {
         beforeEach(() => {
           options = {
-            method: 'GET',
-            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018',
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['billing'] }
-            }
+              credentials: { scope: ['billing'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: '/billing-accounts/2e71429d-3fd1-4ed1-a45e-eb5616873018'
           }
         })
 
@@ -136,20 +136,20 @@ describe('Billing Accounts controller', () => {
   describe('POST /billing-accounts/{billingAccountId}/change-address', () => {
     beforeEach(() => {
       options = {
-        method: 'POST',
-        url: '/billing-accounts/7fa2f044-b29e-483a-99b6-e16db0db0f58/change-address',
         auth: {
-          strategy: 'session',
-          credentials: { scope: ['manage_billing_accounts'] }
-        }
+          credentials: { scope: ['manage_billing_accounts'] },
+          strategy: 'session'
+        },
+        method: 'POST',
+        url: '/billing-accounts/7fa2f044-b29e-483a-99b6-e16db0db0f58/change-address'
       }
     })
 
     describe('when a request is valid', () => {
       const validResponse = {
-        billingAccountAddress: {},
         address: {},
         agentCompany: {},
+        billingAccountAddress: {},
         contact: {}
       }
 
@@ -223,6 +223,10 @@ function _viewBillingAccount() {
       'Kent',
       'Me15 0ne'
     ],
+    backLink: {
+      link: `/system/licences/9a437fad-86b7-4495-8b26-061662cf8037/bills`,
+      title: 'Go back to bills'
+    },
     billingAccountId: '9b03843e-848b-497e-878e-4a6628d4f683',
     bills: [
       {
@@ -238,10 +242,6 @@ function _viewBillingAccount() {
     createdDate: '14 December 2023',
     customerFile: 'naltc0001',
     lastUpdated: '6 May 2025',
-    backLink: {
-      title: 'Go back to bills',
-      link: `/system/licences/9a437fad-86b7-4495-8b26-061662cf8037/bills`
-    },
     pageTitle: 'Billing account for Ferns Surfacing Limited',
     pagination: { numberOfPages: 1 }
   }

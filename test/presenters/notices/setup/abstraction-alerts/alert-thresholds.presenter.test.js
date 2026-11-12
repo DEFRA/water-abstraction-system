@@ -53,9 +53,9 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
           expect(result.thresholdOptions).toEqual([
             {
               checked: true,
-              value: licenceMonitoringStations.two.thresholdGroup,
+              hint: { text: 'Flow threshold' },
               text: '100m3/s',
-              hint: { text: 'Flow threshold' }
+              value: licenceMonitoringStations.two.thresholdGroup
             }
           ])
         })
@@ -72,9 +72,9 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
           expect(result.thresholdOptions).toEqual([
             {
               checked: false,
-              value: licenceMonitoringStations.two.thresholdGroup,
+              hint: { text: 'Flow threshold' },
               text: '100m3/s',
-              hint: { text: 'Flow threshold' }
+              value: licenceMonitoringStations.two.thresholdGroup
             }
           ])
         })
@@ -117,15 +117,15 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
           expect(result.thresholdOptions).toEqual([
             {
               checked: false,
-              value: licenceMonitoringStations.one.thresholdGroup,
+              hint: { text: 'Level threshold' },
               text: '1000m',
-              hint: { text: 'Level threshold' }
+              value: licenceMonitoringStations.one.thresholdGroup
             },
             {
               checked: false,
-              value: licenceMonitoringStations.three.thresholdGroup,
+              hint: { text: 'Level threshold' },
               text: '100m',
-              hint: { text: 'Level threshold' }
+              value: licenceMonitoringStations.three.thresholdGroup
             }
           ])
         })
@@ -177,21 +177,21 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
           expect(result.thresholdOptions).toEqual([
             {
               checked: false,
-              value: licenceMonitoringStations.two.thresholdGroup,
+              hint: { text: 'Flow threshold' },
               text: '100m3/s',
-              hint: { text: 'Flow threshold' }
+              value: licenceMonitoringStations.two.thresholdGroup
             },
             {
               checked: false,
-              value: licenceMonitoringStations.one.thresholdGroup,
+              hint: { text: 'Level threshold' },
               text: '1000m',
-              hint: { text: 'Level threshold' }
+              value: licenceMonitoringStations.one.thresholdGroup
             },
             {
               checked: false,
-              value: licenceMonitoringStations.three.thresholdGroup,
+              hint: { text: 'Level threshold' },
               text: '100m',
-              hint: { text: 'Level threshold' }
+              value: licenceMonitoringStations.three.thresholdGroup
             }
           ])
         })
@@ -240,57 +240,57 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
           expect(result.thresholdOptions).toEqual([
             {
               checked: false,
-              value: 'flow-100-m3/s',
+              hint: { text: 'Flow threshold' },
               text: '100m3/s',
-              hint: { text: 'Flow threshold' }
+              value: 'flow-100-m3/s'
             },
             {
               checked: false,
-              value: 'flow-1-Mgpd',
+              hint: { text: 'Flow threshold' },
               text: '1Mgpd',
-              hint: { text: 'Flow threshold' }
+              value: 'flow-1-Mgpd'
             },
             {
               checked: false,
-              value: 'flow-10-l/s',
+              hint: { text: 'Flow threshold' },
               text: '10l/s',
-              hint: { text: 'Flow threshold' }
+              value: 'flow-10-l/s'
             },
             {
               checked: false,
-              value: 'flow-0.5-Ml/d',
+              hint: { text: 'Flow threshold' },
               text: '0.5Ml/d',
-              hint: { text: 'Flow threshold' }
+              value: 'flow-0.5-Ml/d'
             },
             {
               checked: false,
-              value: 'flow-5000-gpd',
+              hint: { text: 'Flow threshold' },
               text: '5000gpd',
-              hint: { text: 'Flow threshold' }
+              value: 'flow-5000-gpd'
             },
             {
               checked: false,
-              value: 'level-1000-m',
+              hint: { text: 'Level threshold' },
               text: '1000m',
-              hint: { text: 'Level threshold' }
+              value: 'level-1000-m'
             },
             {
               checked: false,
-              value: 'level-100-m',
+              hint: { text: 'Level threshold' },
               text: '100m',
-              hint: { text: 'Level threshold' }
+              value: 'level-100-m'
             },
             {
               checked: false,
-              value: 'level-50-SLD',
+              hint: { text: 'Level threshold' },
               text: '50SLD',
-              hint: { text: 'Level threshold' }
+              value: 'level-50-SLD'
             },
             {
               checked: false,
-              value: 'level-2-mBOD',
+              hint: { text: 'Level threshold' },
               text: '2mBOD',
-              hint: { text: 'Level threshold' }
+              value: 'level-2-mBOD'
             }
           ])
         })

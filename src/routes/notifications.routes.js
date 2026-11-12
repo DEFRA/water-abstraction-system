@@ -3,21 +3,20 @@ import { download, returnedLetter, view } from '../controllers/notifications.con
 export default [
   {
     method: 'GET',
-    path: '/notifications/{id}/download',
     options: {
       handler: download
-    }
+    },
+    path: '/notifications/{id}/download'
   },
   {
     method: 'GET',
-    path: '/notifications/{id}',
     options: {
       handler: view
-    }
+    },
+    path: '/notifications/{id}'
   },
   {
     method: 'POST',
-    path: '/notifications/callbacks/letters',
     options: {
       app: {
         plainOutput: true
@@ -27,6 +26,7 @@ export default [
       plugins: {
         crumb: false
       }
-    }
+    },
+    path: '/notifications/callbacks/letters'
   }
 ]

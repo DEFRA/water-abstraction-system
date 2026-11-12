@@ -27,8 +27,8 @@ export default async function createBillRunService(regionId, financialYearEnding
 
   const billRun = await BillRunModel.query()
     .insert({
-      regionId,
       fromFinancialYearEnding,
+      regionId,
       toFinancialYearEnding,
       ...optionsData
     })
@@ -41,11 +41,11 @@ export default async function createBillRunService(regionId, financialYearEnding
 function _defaultOptions(option) {
   const defaults = {
     batchType: 'supplementary',
+    errorCode: null,
+    externalId: null,
     scheme: 'sroc',
     source: 'wrls',
-    externalId: null,
-    status: 'queued',
-    errorCode: null
+    status: 'queued'
   }
 
   return {

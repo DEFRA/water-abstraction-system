@@ -6,7 +6,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import util from 'node:util'
-import { Transform, pipeline } from 'node:stream'
+import { pipeline, Transform } from 'node:stream'
 
 import { transformArrayToCSVRow } from '../../../lib/transform-to-csv.lib.js'
 

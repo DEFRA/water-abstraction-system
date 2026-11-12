@@ -15,8 +15,10 @@ import CleanEmptyBillRunsService from '../../../../src/services/jobs/clean/clean
 
 describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
   const emptyBillRuns = [{ id: 'b1c10417-77bb-421e-a9ef-15a0d1bc05d8' }, { id: 'ddc7f25f-8b83-4ef1-9b10-bf1d968e2f13' }]
+
   let emptyBillRunFetchStub
   let notifierStub
+
   beforeEach(async () => {
     emptyBillRunFetchStub = vi.fn()
 
@@ -68,13 +70,13 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       beforeEach(() => {
         vi.spyOn(CancelBillRunService, 'default')
           .mockResolvedValueOnce({
-            id: emptyBillRuns[0].id,
             externalId: 'd704cb32-a309-4a04-9b0e-f316614a5927',
+            id: emptyBillRuns[0].id,
             status: 'cancel'
           })
           .mockResolvedValueOnce({
-            id: emptyBillRuns[1].id,
             externalId: '4f64f905-94b4-460d-aefc-098f57834085',
+            id: emptyBillRuns[1].id,
             status: 'cancel'
           })
       })
@@ -100,13 +102,13 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       beforeEach(() => {
         vi.spyOn(CancelBillRunService, 'default')
           .mockResolvedValueOnce({
-            id: emptyBillRuns[0].id,
             externalId: 'd704cb32-a309-4a04-9b0e-f316614a5927',
+            id: emptyBillRuns[0].id,
             status: 'cancel'
           })
           .mockResolvedValueOnce({
-            id: emptyBillRuns[1].id,
             externalId: '4f64f905-94b4-460d-aefc-098f57834085',
+            id: emptyBillRuns[1].id,
             status: 'sending'
           })
       })

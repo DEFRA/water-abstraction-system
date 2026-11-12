@@ -28,8 +28,8 @@ describe('Notices - Setup - Determine Returns Period service', () => {
           dueDate: new Date('2025-04-28'),
           endDate: new Date('2025-03-31'),
           name: 'quarterFour',
-          startDate: new Date('2025-01-01'),
-          quarterly: true
+          quarterly: true,
+          startDate: new Date('2025-01-01')
         },
         summer: 'false'
       })
@@ -49,8 +49,8 @@ describe('Notices - Setup - Determine Returns Period service', () => {
           dueDate: new Date('2025-11-28'),
           endDate: new Date('2025-10-31'),
           name: 'summer',
-          startDate: new Date('2024-11-01'),
-          quarterly: false
+          quarterly: false,
+          startDate: new Date('2024-11-01')
         },
         summer: 'true'
       })

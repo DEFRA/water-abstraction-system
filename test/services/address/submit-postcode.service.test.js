@@ -21,7 +21,6 @@ describe('Address - Submit Postcode Service', () => {
     sessionId = generateUUID()
 
     sessionData = {
-      id: sessionId,
       addressJourney: {
         activeNavBar: 'manage',
         address: {},
@@ -30,7 +29,8 @@ describe('Address - Submit Postcode Service', () => {
           text: 'Back'
         },
         redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-      }
+      },
+      id: sessionId
     }
 
     session = SessionModelStub(sessionData)
@@ -68,6 +68,11 @@ describe('Address - Submit Postcode Service', () => {
           const result = await SubmitPostcodeService(sessionId, payload)
 
           expect(result).toEqual({
+            activeNavBar: 'manage',
+            backLink: {
+              href: `/system/notices/setup/${sessionId}/contact-type`,
+              text: 'Back'
+            },
             error: {
               errorList: [
                 {
@@ -76,11 +81,6 @@ describe('Address - Submit Postcode Service', () => {
                 }
               ],
               postcode: { text: 'Enter a UK postcode' }
-            },
-            activeNavBar: 'manage',
-            backLink: {
-              href: `/system/notices/setup/${sessionId}/contact-type`,
-              text: 'Back'
             },
             internationalLink: `/system/address/${sessionId}/international`,
             pageTitle: 'Enter a UK postcode',
@@ -99,6 +99,11 @@ describe('Address - Submit Postcode Service', () => {
           const result = await SubmitPostcodeService(sessionId, payload)
 
           expect(result).toEqual({
+            activeNavBar: 'manage',
+            backLink: {
+              href: `/system/notices/setup/${sessionId}/contact-type`,
+              text: 'Back'
+            },
             error: {
               errorList: [
                 {
@@ -107,11 +112,6 @@ describe('Address - Submit Postcode Service', () => {
                 }
               ],
               postcode: { text: 'Enter a valid UK postcode' }
-            },
-            activeNavBar: 'manage',
-            backLink: {
-              href: `/system/notices/setup/${sessionId}/contact-type`,
-              text: 'Back'
             },
             internationalLink: `/system/address/${sessionId}/international`,
             pageTitle: 'Enter a UK postcode',

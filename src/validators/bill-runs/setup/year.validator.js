@@ -21,8 +21,8 @@ export default function yearValidator(payload) {
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': 'Select the financial year',
         'any.only': 'Select the financial year',
+        'any.required': 'Select the financial year',
         'string.empty': 'Select the financial year'
       })
   })

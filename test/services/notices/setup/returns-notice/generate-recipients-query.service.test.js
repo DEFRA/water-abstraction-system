@@ -2,9 +2,9 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Test helpers
-import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
 import { db } from 'water-abstraction-engine/db/db.js'
+import { NoticeType } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test

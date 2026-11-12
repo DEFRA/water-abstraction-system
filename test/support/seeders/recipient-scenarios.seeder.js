@@ -40,7 +40,7 @@ export async function additionalContactRecipient(
 
   const additionalContactRecipient = await RecipientsFormatter.additionalContact(licence, additionalContact)
 
-  return { licenceHolderRecipient, additionalContactRecipient }
+  return { additionalContactRecipient, licenceHolderRecipient }
 }
 
 /**

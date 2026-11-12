@@ -99,12 +99,12 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: '/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['returns'] }
-          }
+            credentials: { scope: ['returns'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88'
         }
       })
 
@@ -159,12 +159,12 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: '/return-logs/setup/guidance',
           auth: {
-            strategy: 'session',
-            credentials: { scope: ['returns'] }
-          }
+            credentials: { scope: ['returns'] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: '/return-logs/setup/guidance'
         }
       })
 
@@ -292,8 +292,8 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         vi.spyOn(DeleteNoteService, 'default').mockResolvedValue({
-          title: 'Removed',
-          text: 'Note removed'
+          text: 'Note removed',
+          title: 'Removed'
         })
       })
 
@@ -313,9 +313,9 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           vi.spyOn(MeterProvidedService, 'default').mockResolvedValue({
-            sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
-            pageTitle: 'Have meter details been provided?'
+            pageTitle: 'Have meter details been provided?',
+            sessionId
           })
         })
 
@@ -423,8 +423,8 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           vi.spyOn(MeterDetailsService, 'default').mockResolvedValue({
-            sessionId,
-            pageTitle: 'Meter details'
+            pageTitle: 'Meter details',
+            sessionId
           })
         })
 
@@ -442,9 +442,9 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the page has not been visited previously', () => {
           beforeEach(() => {
             vi.spyOn(SubmitMeterDetailsService, 'default').mockResolvedValue({
+              meter10TimesDisplay: 'no',
               meterMake: 'Meter',
-              meterSerialNumber: '1234',
-              meter10TimesDisplay: 'no'
+              meterSerialNumber: '1234'
             })
           })
 
@@ -460,9 +460,9 @@ describe('Return Logs - Setup - Controller', () => {
           beforeEach(() => {
             vi.spyOn(SubmitMeterDetailsService, 'default').mockResolvedValue({
               checkPageVisited: true,
+              meter10TimesDisplay: 'no',
               meterMake: 'Meter',
-              meterSerialNumber: '1234',
-              meter10TimesDisplay: 'no'
+              meterSerialNumber: '1234'
             })
           })
 
@@ -477,10 +477,10 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the reporting type is "abstractionVolumes"', () => {
           beforeEach(() => {
             vi.spyOn(SubmitMeterDetailsService, 'default').mockResolvedValue({
-              reported: 'abstractionVolumes',
+              meter10TimesDisplay: 'no',
               meterMake: 'Meter',
               meterSerialNumber: '1234',
-              meter10TimesDisplay: 'no'
+              reported: 'abstractionVolumes'
             })
           })
 
@@ -525,9 +525,9 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           vi.spyOn(MultipleEntriesService, 'default').mockResolvedValue({
-            sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
-            pageTitle: 'Enter multiple daily volumes'
+            pageTitle: 'Enter multiple daily volumes',
+            sessionId
           })
         })
 
@@ -639,9 +639,9 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           vi.spyOn(PeriodUsedService, 'default').mockResolvedValue({
-            sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
-            pageTitle: 'What period was used for this volume?'
+            pageTitle: 'What period was used for this volume?',
+            sessionId
           })
         })
 
@@ -762,9 +762,9 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           vi.spyOn(ReceivedService, 'default').mockResolvedValue({
-            sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
-            pageTitle: 'When was the return received?'
+            pageTitle: 'When was the return received?',
+            sessionId
           })
         })
 
@@ -841,9 +841,9 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           vi.spyOn(ReportedService, 'default').mockResolvedValue({
-            sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
-            pageTitle: 'How was this return reported?'
+            pageTitle: 'How was this return reported?',
+            sessionId
           })
         })
 
@@ -1033,8 +1033,8 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
           vi.spyOn(SingleVolumeService, 'default').mockResolvedValue({
-            sessionId,
-            pageTitle: 'Is it a single volume?'
+            pageTitle: 'Is it a single volume?',
+            sessionId
           })
         })
 
@@ -1115,8 +1115,8 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
           vi.spyOn(StartReadingService, 'default').mockResolvedValue({
-            sessionId,
-            pageTitle: 'Enter the start meter reading'
+            pageTitle: 'Enter the start meter reading',
+            sessionId
           })
         })
 
@@ -1162,7 +1162,7 @@ describe('Return Logs - Setup - Controller', () => {
         beforeEach(() => {
           vi.spyOn(SubmitStartReadingService, 'default').mockResolvedValue({
             error: {
-              errorList: [{ text: 'Enter a start meter reading', href: '#startReading' }]
+              errorList: [{ href: '#startReading', text: 'Enter a start meter reading' }]
             },
             pageTitle: 'Enter the start meter reading',
             sessionId
@@ -1187,9 +1187,9 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
           vi.spyOn(UnitsService, 'default').mockResolvedValue({
-            sessionId,
             licenceId: '3154ea03-e232-4c66-a711-a72956b7de61',
-            pageTitle: 'Which units were used?'
+            pageTitle: 'Which units were used?',
+            sessionId
           })
         })
 
@@ -1291,13 +1291,13 @@ describe('Return Logs - Setup - Controller', () => {
           beforeEach(() => {
             vi.spyOn(SubmitVolumesService, 'default').mockResolvedValue({
               error: {
+                '2023-04-30T00:00:00.000Z': { text: 'Volume must be a number or blank' },
                 errorList: [
                   {
                     href: '#2023-04-30T00:00:00.000Z',
                     text: 'Volume must be a number or blank'
                   }
-                ],
-                '2023-04-30T00:00:00.000Z': { text: 'Volume must be a number or blank' }
+                ]
               },
               pageTitle: 'Water abstracted April 2023'
             })
@@ -1321,12 +1321,12 @@ function _getOptions(path) {
   const url = `/return-logs/setup/${sessionId}/${path}`
 
   return {
-    method: 'GET',
-    url,
     auth: {
-      strategy: 'session',
-      credentials: { scope: ['returns'] }
-    }
+      credentials: { scope: ['returns'] },
+      strategy: 'session'
+    },
+    method: 'GET',
+    url
   }
 }
 

@@ -123,16 +123,16 @@ describe('Charging Module Wait For Status request', () => {
   describe('when a request to get the bill run status fails', () => {
     beforeEach(() => {
       chargingModuleViewBillRunStatusRequestStub.mockResolvedValue({
-        succeeded: false,
         response: {
+          body: { error: 'Not Found', message: 'Not Found', statusCode: HTTP_STATUS_NOT_FOUND },
           headers: {
-            'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39',
-            'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+            'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+            'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39'
           },
           statusCode: HTTP_STATUS_NOT_FOUND,
-          statusMessage: 'Not Found',
-          body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
-        }
+          statusMessage: 'Not Found'
+        },
+        succeeded: false
       })
     })
 
@@ -145,9 +145,9 @@ describe('Charging Module Wait For Status request', () => {
       expect(error.message).toEqual('Charging Module wait for status request failed')
       expect(error.billRunExternalId).toEqual(billRunId)
       expect(error.responseBody).toEqual({
-        statusCode: HTTP_STATUS_NOT_FOUND,
         error: 'Not Found',
-        message: 'Not Found'
+        message: 'Not Found',
+        statusCode: HTTP_STATUS_NOT_FOUND
       })
     })
   })
@@ -155,16 +155,16 @@ describe('Charging Module Wait For Status request', () => {
 
 function _testResponse(status = 'processing') {
   return {
-    succeeded: true,
     response: {
-      info: {
-        gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-        dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
-      },
-      statusCode: HTTP_STATUS_OK,
       body: {
         status
-      }
-    }
+      },
+      info: {
+        dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+        gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
+      },
+      statusCode: HTTP_STATUS_OK
+    },
+    succeeded: true
   }
 }

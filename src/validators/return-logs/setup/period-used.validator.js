@@ -54,8 +54,8 @@ function _validateDate(payload, startDate, endDate) {
       then: Joi.date().format(['YYYY-MM-DD']).min(startDate).less(Joi.ref('toFullDate')).required().messages({
         'date.base': 'Enter a valid from date',
         'date.format': 'Enter a valid from date',
-        'date.min': 'The from date must be within the return period start date',
-        'date.less': 'The from date must be before the to date'
+        'date.less': 'The from date must be before the to date',
+        'date.min': 'The from date must be within the return period start date'
       }),
       otherwise: Joi.optional() // Ensures this field is ignored if not using 'customDates'
     }),

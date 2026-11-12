@@ -16,7 +16,7 @@ export default function regionPresenter(session, regions) {
     backlink: `/system/bill-runs/setup/${session.id}/type`,
     pageTitle: 'Select the region',
     regions,
-    sessionId: session.id,
-    selectedRegion: session.region ? session.region : null
+    selectedRegion: session.region ? session.region : null,
+    sessionId: session.id
   }
 }

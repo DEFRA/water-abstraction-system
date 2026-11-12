@@ -37,8 +37,8 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
           regionId
         })
         presrocSupplementary.workflow = await WorkflowHelper.add({
-          licenceId: presrocSupplementary.licenceInWorkflow.id,
-          deletedAt: null
+          deletedAt: null,
+          licenceId: presrocSupplementary.licenceInWorkflow.id
         })
 
         // We have to instantiate the bill run createdAt date after the others but before the last licence to ensure the
@@ -129,8 +129,8 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
           regionId
         })
         srocSupplementary.workflow = await WorkflowHelper.add({
-          licenceId: srocSupplementary.licenceInWorkflow.id,
-          deletedAt: null
+          deletedAt: null,
+          licenceId: srocSupplementary.licenceInWorkflow.id
         })
 
         srocSupplementary.licenceFlaggedAfterBillRunCreated = await LicenceHelper.add({
@@ -227,8 +227,8 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
         financialYearEnd: billRun.toFinancialYearEnding
       })
       tptSupplementary.workflow = await WorkflowHelper.add({
-        licenceId: tptSupplementary.licenceInWorkflowSupYear.licenceId,
-        deletedAt: null
+        deletedAt: null,
+        licenceId: tptSupplementary.licenceInWorkflowSupYear.licenceId
       })
 
       // NOTE: Unlike standard where we used a different licence, we can confirm with TpT that if a licence that _is_
@@ -236,8 +236,8 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
       // entry because the licence was changed after the bill run was created, that we don't delete _that_ record.
       tptSupplementary.licenceInBillRunButUpdatedSupYear = await LicenceSupplementaryYearHelper.add({
         billRunId: null,
-        licenceId: tptSupplementary.licenceToBeUnflaggedSupYear.licenceId,
-        financialYearEnd: billRun.toFinancialYearEnding
+        financialYearEnd: billRun.toFinancialYearEnding,
+        licenceId: tptSupplementary.licenceToBeUnflaggedSupYear.licenceId
       })
 
       billRun.batchType = 'two_part_supplementary'

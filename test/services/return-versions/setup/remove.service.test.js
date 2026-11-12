@@ -19,38 +19,38 @@ describe('Return Versions Setup - Remove service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
       requirements: [
         {
-          points: ['At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'],
-          purposes: [{ alias: '', description: 'Mineral Washing', id: '3a865331-d2f3-4acc-ac85-527fa2b0d2dd' }],
-          returnsCycle: 'winter-and-all-year',
-          siteDescription: 'Bore hole in rear field',
           abstractionPeriod: {
             abstractionPeriodEndDay: '31',
             abstractionPeriodEndMonth: '10',
             abstractionPeriodStartDay: '01',
             abstractionPeriodStartMonth: '04'
           },
-          frequencyReported: 'month',
+          agreementsExceptions: ['none'],
           frequencyCollected: 'month',
-          agreementsExceptions: ['none']
+          frequencyReported: 'month',
+          points: ['At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'],
+          purposes: [{ alias: '', description: 'Mineral Washing', id: '3a865331-d2f3-4acc-ac85-527fa2b0d2dd' }],
+          returnsCycle: 'winter-and-all-year',
+          siteDescription: 'Bore hole in rear field'
         }
       ],
       startDateOptions: 'licenceStartDate'

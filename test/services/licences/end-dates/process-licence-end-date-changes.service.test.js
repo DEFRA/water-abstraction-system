@@ -16,6 +16,7 @@ import ProcessLicenceEndDateChangesService from '../../../../src/services/licenc
 describe('Licences - End Dates - Process Licence End Date Changes service', () => {
   let licenceEndDateChange
   let notifierStub
+
   beforeEach(async () => {
     licenceEndDateChange = await LicenceEndDateChangeHelper.add()
 
@@ -67,10 +68,10 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         expect(notifierStub.omg).toHaveBeenCalledWith('Process licence end date change complete', expect.any(Object))
         expect(logDataArg).toEqual({
+          changeDate: licenceEndDateChange.changeDate,
+          dateType: licenceEndDateChange.dateType,
           id: licenceEndDateChange.id,
           licenceId: licenceEndDateChange.licenceId,
-          dateType: licenceEndDateChange.dateType,
-          changeDate: licenceEndDateChange.changeDate,
           naldDate: licenceEndDateChange.naldDate,
           wrlsDate: licenceEndDateChange.wrlsDate
         })
@@ -106,10 +107,10 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
           expect.any(Error)
         )
         expect(errorLogArgs[1]).toEqual({
+          changeDate: licenceEndDateChange.changeDate,
+          dateType: licenceEndDateChange.dateType,
           id: licenceEndDateChange.id,
           licenceId: licenceEndDateChange.licenceId,
-          dateType: licenceEndDateChange.dateType,
-          changeDate: licenceEndDateChange.changeDate,
           naldDate: licenceEndDateChange.naldDate,
           wrlsDate: licenceEndDateChange.wrlsDate
         })

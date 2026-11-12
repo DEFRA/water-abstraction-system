@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things to stub
-import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
+import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import CompanyModel from 'water-abstraction-engine/models/company.model.js'
 import LicenceModel from 'water-abstraction-engine/models/licence.model.js'
 import MonitoringStationModel from 'water-abstraction-engine/models/monitoring-station.model.js'
@@ -28,8 +28,8 @@ describe('Search - Fetch Search Results Details service', () => {
     idsByType = {
       bill: [1, 2],
       billingAccount: [3, 4],
-      licenceHolder: [5, 6],
       licence: [7, 8],
+      licenceHolder: [5, 6],
       monitoringStation: [9, 10],
       returnLog: [11, 12],
       user: [13, 14]
@@ -99,8 +99,8 @@ describe('Search - Fetch Search Results Details service', () => {
       expect(result).toEqual({
         bill: [],
         billingAccount: [],
-        licenceHolder: [],
         licence: [],
+        licenceHolder: [],
         monitoringStation: [],
         returnLog: [],
         user: []

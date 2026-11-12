@@ -14,7 +14,7 @@ describe('Determine Licence Flags Service', () => {
 
     describe('for a licence that already has a pre-sroc and sroc flag', () => {
       beforeAll(async () => {
-        licence = await LicenceHelper.add({ includeInSrocBilling: true, includeInPresrocBilling: 'yes' })
+        licence = await LicenceHelper.add({ includeInPresrocBilling: 'yes', includeInSrocBilling: true })
       })
 
       describe("and a charging scheme of 'sroc'", () => {

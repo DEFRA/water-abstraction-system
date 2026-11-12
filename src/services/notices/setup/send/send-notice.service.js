@@ -3,8 +3,8 @@
  * @module SendNoticeService
  */
 
-import { NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstraction-engine/lib/general.lib.js'
+import { NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 import SendAlternateNoticeService from './send-alternate-notice.service.js'
 import SendMainNoticeService from './send-main-notice.service.js'

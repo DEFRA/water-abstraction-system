@@ -97,7 +97,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
               const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
               expect(flashType).toEqual('notification')
-              expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Email address updated' })
+              expect(bannerMessage).toEqual({ text: 'Email address updated', titleText: 'Updated' })
             })
           })
         })

@@ -3,8 +3,8 @@
  * @module ContactEmailPresenter
  */
 
-import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 import { formatEmail } from 'water-abstraction-engine/presenters/base.presenter.js'
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/contact-email' page
@@ -21,8 +21,8 @@ export default function contactEmailPresenter(session) {
       href: checkUrl(session, `/system/company-contacts/setup/${sessionId}/contact-name`),
       text: 'Back'
     },
+    email: formatEmail(session.email),
     pageTitle: 'Enter an email address for the contact',
-    pageTitleCaption: company.name,
-    email: formatEmail(session.email)
+    pageTitleCaption: company.name
   }
 }

@@ -38,12 +38,12 @@ function _backLink(session) {
 function _units(sessionUnit) {
   return Object.entries(thresholdUnits).map(([_key, { label, value }]) => {
     return {
+      checked: sessionUnit === value,
       hint: {
         text: label
       },
-      value,
-      checked: sessionUnit === value,
-      text: value
+      text: value,
+      value
     }
   })
 }

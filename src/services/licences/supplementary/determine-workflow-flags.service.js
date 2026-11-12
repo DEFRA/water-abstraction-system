@@ -45,13 +45,13 @@ export default async function determineWorkflowFlagsService(workflowId) {
   // Since the database returns the licence data in snake_case, we need to convert these references to camelCase
   // to ensure compatibility with other services that use this result.
   const result = {
-    licenceId: licence.id,
-    regionId: licence.region_id,
-    startDate: licence.created_at,
     endDate,
     flagForPreSrocSupplementary: licence.include_in_presroc_billing === 'yes',
     flagForSrocSupplementary: licence.include_in_sroc_billing,
-    flagForTwoPartTariffSupplementary: licence.ended ? false : licence.two_part_tariff_charge_versions
+    flagForTwoPartTariffSupplementary: licence.ended ? false : licence.two_part_tariff_charge_versions,
+    licenceId: licence.id,
+    regionId: licence.region_id,
+    startDate: licence.created_at
   }
 
   // If the licence has ended then we don't want to add any new flags

@@ -20,10 +20,10 @@ describe('Notices - Setup - Preview - View Preview Check Paper Return service', 
 
   beforeEach(() => {
     dueReturn = {
-      siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
       returnLogId: generateUUID(),
       returnReference: '3135',
+      siteDescription: 'Potable Water Supply - Direct',
       startDate: '2002-04-01'
     }
 

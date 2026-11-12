@@ -86,8 +86,8 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
           backLink: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,
           monitoringStationLabel: 'Monitoring Station Label',
           pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
-          stopOrReduce: null,
-          reduceAtThreshold: null
+          reduceAtThreshold: null,
+          stopOrReduce: null
         })
       })
 
@@ -97,10 +97,10 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
 
           expect(result.error).toEqual({
             message: 'Select if the licence holder needs to stop or reduce',
+            reduceAtThresholdRadioElement: null,
             stopOrReduceRadioElement: {
               text: 'Select if the licence holder needs to stop or reduce'
-            },
-            reduceAtThresholdRadioElement: null
+            }
           })
         })
       })
@@ -117,10 +117,10 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
 
           expect(result.error).toEqual({
             message: 'Select if the licence holder needs to stop abstraction when they reach a certain amount',
-            stopOrReduceRadioElement: null,
             reduceAtThresholdRadioElement: {
               text: 'Select if the licence holder needs to stop abstraction when they reach a certain amount'
-            }
+            },
+            stopOrReduceRadioElement: null
           })
         })
       })

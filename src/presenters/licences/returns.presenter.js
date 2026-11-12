@@ -25,13 +25,13 @@ export default function returnsPresenter(returnLogs, hasRequirements, licence) {
 
   return {
     backLink: {
-      text: 'Go back to search',
-      href: '/'
+      href: '/',
+      text: 'Go back to search'
     },
-    returns,
     noReturnsMessage: _noReturnsMessage(hasReturns, hasRequirements),
     pageTitle: 'Returns',
-    pageTitleCaption: `Licence ${licenceRef}`
+    pageTitleCaption: `Licence ${licenceRef}`,
+    returns
   }
 }
 

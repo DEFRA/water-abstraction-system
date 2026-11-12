@@ -5,9 +5,9 @@
  */
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
+import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
 import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 import { flashNotification } from 'water-abstraction-engine/lib/general.lib.js'
-import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
 
 import ContactNamePresenter from '../../../presenters/company-contacts/setup/contact-name.presenter.js'
 import ContactNameValidator from '../../../validators/company-contacts/setup/contact-name.validator.js'

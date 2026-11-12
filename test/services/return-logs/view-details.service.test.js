@@ -40,12 +40,12 @@ describe('Return Logs - View Details service', () => {
     const result = await ViewDetailsService(returnLog.id, { credentials: { scope: ['returns'] } }, 'RETURN_ID', 0)
 
     expect(result).toEqual({
-      activeSecondaryNav: 'details',
       abstractionPeriod: '',
       actionButton: {
-        value: returnLog.id,
-        text: 'Submit return'
+        text: 'Submit return',
+        value: returnLog.id
       },
+      activeSecondaryNav: 'details',
       backLink: {
         href: `/system/licences/${returnLog.licence.id}/returns`,
         text: 'Go back to returns'
@@ -63,8 +63,8 @@ describe('Return Logs - View Details service', () => {
       pageTitleCaption: `Licence ${returnLog.licence.licenceRef}`,
       purpose: ['Mineral Washing'],
       receivedDate: null,
-      returnReference: returnLog.returnReference,
       returnPeriod: '1 April 2022 to 31 March 2023',
+      returnReference: returnLog.returnReference,
       showUnderQuery: true,
       siteDescription: returnLog.siteDescription,
       startReading: null,

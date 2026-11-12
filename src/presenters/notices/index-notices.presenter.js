@@ -48,15 +48,15 @@ function _links(scope) {
 
   if (scope.includes('bulk_return_notifications') || scope.includes('renewal_notifications')) {
     links.adhoc = {
-      text: 'Create an ad-hoc notice',
-      href: '/system/notices/setup/adhoc'
+      href: '/system/notices/setup/adhoc',
+      text: 'Create an ad-hoc notice'
     }
   }
 
   if (scope.includes('bulk_return_notifications')) {
     links.notice = {
-      text: 'Create a standard notice',
-      href: '/system/notices/setup/standard'
+      href: '/system/notices/setup/standard',
+      text: 'Create a standard notice'
     }
   }
 

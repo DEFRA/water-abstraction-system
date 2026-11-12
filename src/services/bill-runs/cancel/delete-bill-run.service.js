@@ -11,8 +11,8 @@ import BillRunVolumeModel from 'water-abstraction-engine/models/bill-run-volume.
 import ReviewChargeVersionModel from 'water-abstraction-engine/models/review-charge-version.model.js'
 import ReviewLicenceModel from 'water-abstraction-engine/models/review-licence.model.js'
 import ReviewReturnModel from 'water-abstraction-engine/models/review-return.model.js'
-import { calculateAndLogTimeTaken } from 'water-abstraction-engine/lib/general.lib.js'
 import { db } from 'water-abstraction-engine/db/db.js'
+import { calculateAndLogTimeTaken } from 'water-abstraction-engine/lib/general.lib.js'
 
 import DeleteBillRunRequest from '../../../requests/charging-module/delete-bill-run.request.js'
 

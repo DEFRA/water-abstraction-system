@@ -3,16 +3,16 @@ import { submitSearch, viewSearch } from '../controllers/search.controller.js'
 export default [
   {
     method: 'GET',
-    path: '/search',
     options: {
       handler: viewSearch
-    }
+    },
+    path: '/search'
   },
   {
     method: 'POST',
-    path: '/search',
     options: {
       handler: submitSearch
-    }
+    },
+    path: '/search'
   }
 ]

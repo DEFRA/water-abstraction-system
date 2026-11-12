@@ -21,21 +21,21 @@ describe('Charging Module View Bill Run request', () => {
   describe('when the service can view a bill run', () => {
     beforeEach(async () => {
       vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
-        succeeded: true,
         response: {
-          info: {
-            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
-          },
-          statusCode: HTTP_STATUS_OK,
           body: {
             // truncated invoice, see CM docs for full invoice https://defra.github.io/sroc-charging-module-api-docs
             invoice: {
-              id: '8e32a958-13f3-4ea3-a92d-651b764c2cbe',
-              billRunId
+              billRunId,
+              id: '8e32a958-13f3-4ea3-a92d-651b764c2cbe'
             }
-          }
-        }
+          },
+          info: {
+            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
+          },
+          statusCode: HTTP_STATUS_OK
+        },
+        succeeded: true
       })
     })
 
@@ -63,20 +63,20 @@ describe('Charging Module View Bill Run request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
           response: {
-            info: {
-              gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
-              dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
-            },
-            statusCode: HTTP_STATUS_UNAUTHORIZED,
             body: {
-              statusCode: HTTP_STATUS_UNAUTHORIZED,
+              attributes: { error: 'Invalid JWT: Token format not valid' },
               error: 'Unauthorized',
               message: 'Invalid JWT: Token format not valid',
-              attributes: { error: 'Invalid JWT: Token format not valid' }
-            }
-          }
+              statusCode: HTTP_STATUS_UNAUTHORIZED
+            },
+            info: {
+              dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+              gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39'
+            },
+            statusCode: HTTP_STATUS_UNAUTHORIZED
+          },
+          succeeded: false
         })
       })
 
@@ -98,8 +98,8 @@ describe('Charging Module View Bill Run request', () => {
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
         vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
-          succeeded: false,
-          response: new Error("Timeout awaiting 'request' for 5000ms")
+          response: new Error("Timeout awaiting 'request' for 5000ms"),
+          succeeded: false
         })
       })
 

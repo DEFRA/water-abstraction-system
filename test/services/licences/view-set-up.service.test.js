@@ -28,9 +28,9 @@ describe('Licences - View Set Up service', () => {
     licence = ViewLicencesFixture.licence()
 
     auth = {
-      isValid: true,
       credentials: {
-        user: { id: 123 },
+        groups: [],
+        permissions: { abstractionReform: false, billRuns: true, manage: true },
         roles: [
           {
             role: 'billing'
@@ -39,49 +39,49 @@ describe('Licences - View Set Up service', () => {
             role: 'charge_version_workflow_editor'
           }
         ],
-        groups: [],
         scope: ['billing', 'charge_version_workflow_editor'],
-        permissions: { abstractionReform: false, billRuns: true, manage: true }
-      }
+        user: { id: 123 }
+      },
+      isValid: true
     }
 
     agreement = {
-      id: generateUUID(),
-      startDate: new Date('2020-01-01'),
       endDate: null,
+      financialAgreement: { code: 'S127', id: generateUUID() },
+      id: generateUUID(),
       signedOn: null,
-      financialAgreement: { id: generateUUID(), code: 'S127' }
+      startDate: new Date('2020-01-01')
     }
 
     chargeVersion = {
-      id: generateUUID(),
-      startDate: new Date('2020-01-01'),
-      endDate: new Date('2020-09-01'),
-      status: 'current',
       changeReason: { description: 'Missing thing' },
-      licenceId: licence.id
+      endDate: new Date('2020-09-01'),
+      id: generateUUID(),
+      licenceId: licence.id,
+      startDate: new Date('2020-01-01'),
+      status: 'current'
     }
 
     returnVersion = ReturnVersionModel.fromJson({
-      id: generateUUID(),
-      startDate: new Date('2025-01-01'),
       endDate: new Date('2025-02-01'),
-      status: 'current',
+      id: generateUUID(),
+      modLogs: [],
       reason: 'change-to-special-agreement',
-      modLogs: []
+      startDate: new Date('2025-01-01'),
+      status: 'current'
     })
 
     workflow = {
-      id: generateUUID(),
       createdAt: new Date('2020-01-01'),
-      status: 'review',
       data: {
         chargeVersion: {
           changeReason: { description: 'changed something' },
           dateRange: { startDate: '2022-04-01' }
         }
       },
-      licenceId: licence.id
+      id: generateUUID(),
+      licenceId: licence.id,
+      status: 'review'
     }
 
     vi.spyOn(FetchAgreementsService, 'default').mockReturnValue([agreement])
@@ -105,19 +105,19 @@ describe('Licences - View Set Up service', () => {
 
       expect(result).toEqual({
         activeSecondaryNav: 'set-up',
+        agreements: [
+          {
+            action: [],
+            description: 'Two-part tariff',
+            endDate: '',
+            signedOn: '',
+            startDate: '1 January 2020'
+          }
+        ],
         backLink: {
           href: '/',
           text: 'Go back to search'
         },
-        agreements: [
-          {
-            action: [],
-            signedOn: '',
-            description: 'Two-part tariff',
-            endDate: '',
-            startDate: '1 January 2020'
-          }
-        ],
         chargeInformation: [
           {
             action: [],

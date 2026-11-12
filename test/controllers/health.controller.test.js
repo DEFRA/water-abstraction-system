@@ -43,15 +43,15 @@ describe('Health controller', () => {
   describe('GET /health/info', () => {
     beforeEach(() => {
       info = {
-        pageTitle: 'Info',
         addressFacadeData: 'hola',
         appData: {
+          commit: 'e5186e106ac8d7a2873faf5ae09f963fc5db8a1c',
           name: 'Service - foreground',
           url: 'http://localhost:8001',
-          version: '3.1.2',
-          commit: 'e5186e106ac8d7a2873faf5ae09f963fc5db8a1c'
+          version: '3.1.2'
         },
         chargingModuleData: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0',
+        pageTitle: 'Info',
         redisConnectivityData: 'ERROR: Command failed: redis-server --version /bin/sh: 1: redis-server: not found',
         virusScannerData: 'ClamAV 0.103.6/26738/Fri Dec 2 11:12:06 2022'
       }

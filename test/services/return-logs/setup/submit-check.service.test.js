@@ -25,6 +25,7 @@ describe('Return Logs Setup - Submit Check service', () => {
   let session
   let sessionData
   let user
+
   const mockGeneratedMetadata = {
     generated: 'metadata',
     source: 'test-stub'
@@ -45,36 +46,36 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
 
     sessionData = {
+      endDate: '2023-12-31',
+      journey: 'enterReturn',
       licenceId: licence.id,
       licenceRef: licence.licenceRef,
-      purposes: ['test purpose'],
-      reported: 'abstractionVolumes',
-      returnId: returnLog.returnId,
-      returnReference: Number(returnLog.returnReference),
-      returnLogId: returnLog.id,
-      returnSubmissionId: initialReturnSubmission.id,
-      startDate: '2023-01-01',
-      endDate: '2023-12-31',
-      receivedDate: '2024-01-01',
-      journey: 'enterReturn',
       lines: [
         {
-          startDate: '2023-01-01T00:00:00.000Z',
           endDate: '2023-01-31T00:00:00.000Z',
           quantity: 100,
-          reading: null
+          reading: null,
+          startDate: '2023-01-01T00:00:00.000Z'
         },
         {
-          startDate: '2023-02-01T00:00:00.000Z',
           endDate: '2023-02-28T00:00:00.000Z',
           quantity: 200,
-          reading: null
+          reading: null,
+          startDate: '2023-02-01T00:00:00.000Z'
         }
       ],
+      meterProvided: false,
+      purposes: ['test purpose'],
+      receivedDate: '2024-01-01',
+      reported: 'abstractionVolumes',
+      returnId: returnLog.returnId,
+      returnLogId: returnLog.id,
+      returnReference: Number(returnLog.returnReference),
       returnsFrequency: 'month',
+      returnSubmissionId: initialReturnSubmission.id,
+      startDate: '2023-01-01',
       units: 'cubicMetres',
-      unitSymbol: 'm³',
-      meterProvided: false
+      unitSymbol: 'm³'
     }
 
     vi.spyOn(GenerateReturnSubmissionMetadata, 'default').mockReturnValue(mockGeneratedMetadata)
@@ -99,6 +100,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       await SubmitCheckService(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
+
       expect(updatedReturnLog.status).toEqual('completed')
     })
 
@@ -106,6 +108,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       await SubmitCheckService(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
+
       expect(updatedReturnLog.receivedDate).toEqual(new Date('2024-01-01'))
     })
 
@@ -113,6 +116,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       await SubmitCheckService(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
+
       expect(updatedReturnLog.updatedAt).not.toEqual(returnLog.updatedAt)
     })
 
@@ -120,6 +124,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       await SubmitCheckService(session.id, user)
 
       const deletedSession = await SessionModel.query().findById(session.id)
+
       expect(deletedSession).toBeUndefined()
     })
 
@@ -127,6 +132,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       await SubmitCheckService(session.id, user)
 
       const callArgs = GenerateReturnSubmissionMetadata.default.mock.calls[0]
+
       expect(callArgs[0]).toBeInstanceOf(SessionModel)
     })
 
@@ -134,6 +140,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       await SubmitCheckService(session.id, user)
 
       const callArgs = CreateReturnSubmissionService.default.mock.calls[0]
+
       expect(callArgs[0]).toEqual(mockGeneratedMetadata)
       expect(callArgs[1]).toBeInstanceOf(SessionModel)
       expect(callArgs[3]).toEqual(user)
@@ -143,6 +150,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       await SubmitCheckService(session.id, user)
 
       const callArgs = CreateReturnLinesService.default.mock.calls[0]
+
       expect(callArgs[0]).toEqual(mockNewReturnSubmissionId)
       expect(callArgs[1]).toBeInstanceOf(SessionModel)
     })
@@ -158,14 +166,14 @@ describe('Return Logs Setup - Submit Check service', () => {
         sessionData.journey = 'nilReturn'
         sessionData.lines = [
           {
-            startDate: '2023-01-01T00:00:00.000Z',
             endDate: '2023-01-31T00:00:00.000Z',
             quantity: null,
-            reading: null
+            reading: null,
+            startDate: '2023-01-01T00:00:00.000Z'
           },
           {
-            startDate: '2023-02-01T00:00:00.000Z',
-            endDate: '2023-02-28T00:00:00.000Z'
+            endDate: '2023-02-28T00:00:00.000Z',
+            startDate: '2023-02-01T00:00:00.000Z'
           }
         ]
 
@@ -186,14 +194,14 @@ describe('Return Logs Setup - Submit Check service', () => {
     beforeEach(() => {
       sessionData.lines = [
         {
-          startDate: '2023-01-01T00:00:00.000Z',
           endDate: '2023-01-31T00:00:00.000Z',
           quantity: null,
-          reading: null
+          reading: null,
+          startDate: '2023-01-01T00:00:00.000Z'
         },
         {
-          startDate: '2023-02-01T00:00:00.000Z',
-          endDate: '2023-02-28T00:00:00.000Z'
+          endDate: '2023-02-28T00:00:00.000Z',
+          startDate: '2023-02-01T00:00:00.000Z'
         }
       ]
 
@@ -233,7 +241,7 @@ describe('Return Logs Setup - Submit Check service', () => {
         meterSerialNumber: undefined,
         nilReturn: 'No',
         note: {
-          actions: [{ text: 'Add a note', href: 'note' }],
+          actions: [{ href: 'note', text: 'Add a note' }],
           text: 'No notes added'
         },
         pageTitle: 'Check details and enter new volumes or readings',
@@ -247,8 +255,8 @@ describe('Return Logs Setup - Submit Check service', () => {
         summaryTableData: {
           headers: [
             { text: 'Month' },
-            { text: 'Cubic metres', format: 'numeric' },
-            { text: 'Details', format: 'numeric' }
+            { format: 'numeric', text: 'Cubic metres' },
+            { format: 'numeric', text: 'Details' }
           ],
           rows: [
             {

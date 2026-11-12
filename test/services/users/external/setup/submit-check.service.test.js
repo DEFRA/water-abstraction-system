@@ -68,8 +68,8 @@ describe('Users - External - Setup - Submit Check Service', () => {
 
       expect(flashType).toEqual('notification')
       expect(notificationData).toEqual({
-        titleText: 'Updated',
-        text: 'Licences unregistered.'
+        text: 'Licences unregistered.',
+        titleText: 'Updated'
       })
     })
   })

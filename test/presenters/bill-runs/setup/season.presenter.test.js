@@ -10,8 +10,8 @@ describe('Bill Runs - Setup - Season presenter', () => {
   describe('when provided with a bill run setup session record', () => {
     beforeEach(() => {
       session = {
-        id: '98ad3a1f-8e4f-490a-be05-0aece6755466',
-        data: {}
+        data: {},
+        id: '98ad3a1f-8e4f-490a-be05-0aece6755466'
       }
     })
 
@@ -22,8 +22,8 @@ describe('Bill Runs - Setup - Season presenter', () => {
         expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/year`,
           pageTitle: 'Select the season',
-          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
-          selectedSeason: null
+          selectedSeason: null,
+          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466'
         })
       })
     })
@@ -39,8 +39,8 @@ describe('Bill Runs - Setup - Season presenter', () => {
         expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/year`,
           pageTitle: 'Select the season',
-          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466',
-          selectedSeason: 'summer'
+          selectedSeason: 'summer',
+          sessionId: '98ad3a1f-8e4f-490a-be05-0aece6755466'
         })
       })
     })

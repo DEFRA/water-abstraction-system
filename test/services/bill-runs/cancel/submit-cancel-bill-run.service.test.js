@@ -14,7 +14,9 @@ import SubmitCancelBillBunService from '../../../../src/services/bill-runs/cance
 
 describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
   const billRunId = '800b8ff7-80e6-4855-a394-c79550115265'
+
   let deleteDoneFake
+
   beforeEach(async () => {
     deleteDoneFake = vi.fn()
     vi.spyOn(DeleteBillRunService, 'default').mockImplementation(async () => {
@@ -32,7 +34,7 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
   describe('when called', () => {
     describe('and the CancelBillRunService succeeds', () => {
       beforeEach(() => {
-        const billRun = { id: billRunId, externalId: '917aaad6-1e7b-4848-8713-1fe1d9fc1e30', status: 'cancel' }
+        const billRun = { externalId: '917aaad6-1e7b-4848-8713-1fe1d9fc1e30', id: billRunId, status: 'cancel' }
 
         vi.spyOn(CancelBillRunService, 'default').mockResolvedValue(billRun)
       })

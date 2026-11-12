@@ -44,8 +44,8 @@ export default async function viewContactsService(companyId, auth, page, yar) {
   return {
     ...pageData,
     activeSecondaryNav: 'contacts',
+    notification,
     pagination,
-    roles,
-    notification
+    roles
   }
 }

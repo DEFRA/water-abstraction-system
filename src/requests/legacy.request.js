@@ -15,48 +15,48 @@ const services = {
   // REPO-NAME - PM2 NAME
   // water-abstraction-service - service-background
   background: {
-    base: legacyConfig.serviceBackground.url,
-    api: 'water/1.0'
+    api: 'water/1.0',
+    base: legacyConfig.serviceBackground.url
   },
   // water-abstraction-tactical-crm - tactical-crm
   crm: {
-    base: legacyConfig.tacticalCrm.url,
-    api: 'crm/1.0'
+    api: 'crm/1.0',
+    base: legacyConfig.tacticalCrm.url
   },
   // water-abstraction-ui - ui
   external: {
-    base: legacyConfig.externalUi.url,
-    api: ''
+    api: '',
+    base: legacyConfig.externalUi.url
   },
   // water-abstraction-tactical-idm - tactical-idm
   idm: {
-    base: legacyConfig.tacticalIdm.url,
-    api: 'idm/1.0'
+    api: 'idm/1.0',
+    base: legacyConfig.tacticalIdm.url
   },
   // water-abstraction-import - import
   import: {
-    base: legacyConfig.import.url,
-    api: 'import/1.0'
+    api: 'import/1.0',
+    base: legacyConfig.import.url
   },
   // water-abstraction-ui - internal-ui
   internal: {
-    base: legacyConfig.internalUi.url,
-    api: ''
+    api: '',
+    base: legacyConfig.internalUi.url
   },
   // water-abstraction-permit-repository - permit-repository
   permits: {
-    base: legacyConfig.permitRepository.url,
-    api: 'API/1.0/'
+    api: 'API/1.0/',
+    base: legacyConfig.permitRepository.url
   },
   // water-abstraction-returns - returns
   returns: {
-    base: legacyConfig.returns.url,
-    api: 'returns/1.0'
+    api: 'returns/1.0',
+    base: legacyConfig.returns.url
   },
   // water-abstraction-service - water-api
   water: {
-    base: legacyConfig.serviceForeground.url,
-    api: 'water/1.0'
+    api: 'water/1.0',
+    base: legacyConfig.serviceForeground.url
   }
 }
 
@@ -173,10 +173,10 @@ function _requestOptions(service, userId, apiRequest, body) {
   }
 
   return {
-    prefixUrl,
     headers,
-    responseType: 'json',
-    json: body
+    json: body,
+    prefixUrl,
+    responseType: 'json'
   }
 }
 
@@ -190,11 +190,11 @@ function _parseResult(result) {
 
   if (body) {
     return {
-      succeeded: result.succeeded,
       response: {
-        statusCode,
-        body
-      }
+        body,
+        statusCode
+      },
+      succeeded: result.succeeded
     }
   }
 

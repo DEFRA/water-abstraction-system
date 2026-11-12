@@ -28,18 +28,18 @@ export default function thresholdAndUnitValidator(payload) {
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': 'Select which units to use',
-        'any.only': 'Select which units to use'
+        'any.only': 'Select which units to use',
+        'any.required': 'Select which units to use'
       }),
     threshold: Joi.number()
       .required()
       .positive()
       .max(MAX_VALUE)
       .messages({
-        'any.required': thresholdErrorMessage,
         'any.only': thresholdErrorMessage,
-        'number.max': `Enter a threshold less than or equal to ${MAX_VALUE}`,
+        'any.required': thresholdErrorMessage,
         'number.base': thresholdErrorMessage,
+        'number.max': `Enter a threshold less than or equal to ${MAX_VALUE}`,
         'number.positive': 'Enter a threshold of 0 or greater',
         'number.unsafe': `Enter a threshold between 0 and ${MAX_VALUE}`
       })

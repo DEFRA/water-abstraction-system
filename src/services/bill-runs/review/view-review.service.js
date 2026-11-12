@@ -4,8 +4,8 @@
  */
 
 import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.presenter.js'
-import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
 import { readFlashNotification } from 'water-abstraction-engine/lib/general.lib.js'
+import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
 import FetchBillRunLicencesService from './fetch-bill-run-licences.service.js'
 import ReviewPresenter from '../../../presenters/bill-runs/review/review.presenter.js'

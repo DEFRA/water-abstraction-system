@@ -44,8 +44,8 @@ describe('Bill Runs - Setup - Region service', () => {
         backlink: `/system/bill-runs/setup/${session.id}/type`,
         pageTitle: 'Select the region',
         regions,
-        sessionId: session.id,
-        selectedRegion: region.id
+        selectedRegion: region.id,
+        sessionId: session.id
       })
     })
   })

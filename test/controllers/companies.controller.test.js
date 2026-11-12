@@ -51,12 +51,12 @@ describe('Companies controller', () => {
 
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/companies/${generateUUID()}/${role}`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/companies/${generateUUID()}/${role}`
         }
 
         vi.spyOn(ViewCompanyService, 'default').mockReturnValue({ pageTitle: 'Licence holder' })
@@ -77,12 +77,12 @@ describe('Companies controller', () => {
 
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/companies/${generateUUID()}/address/${generateUUID()}/${role}`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/companies/${generateUUID()}/address/${generateUUID()}/${role}`
         }
 
         vi.spyOn(ViewCompanyWithAddressService, 'default').mockReturnValue({ pageTitle: 'Licence holder' })
@@ -102,12 +102,12 @@ describe('Companies controller', () => {
       describe('When the user has the correct permissions to view the page', () => {
         beforeEach(() => {
           options = {
-            method: 'GET',
-            url: `/companies/${generateUUID()}/billing-accounts`,
             auth: {
-              strategy: 'session',
-              credentials: { scope: ['billing'] }
-            }
+              credentials: { scope: ['billing'] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: `/companies/${generateUUID()}/billing-accounts`
           }
 
           vi.spyOn(ViewBillingAccountsService, 'default').mockReturnValue({
@@ -127,12 +127,12 @@ describe('Companies controller', () => {
       describe('When the user does not have the correct permissions to view the page', () => {
         beforeEach(() => {
           options = {
-            method: 'GET',
-            url: `/companies/${generateUUID()}/billing-accounts`,
             auth: {
-              strategy: 'session',
-              credentials: { scope: [] }
-            }
+              credentials: { scope: [] },
+              strategy: 'session'
+            },
+            method: 'GET',
+            url: `/companies/${generateUUID()}/billing-accounts`
           }
 
           vi.spyOn(ViewBillingAccountsService, 'default').mockReturnValue({ pageTitle: 'Billing accounts', roles: [] })
@@ -152,12 +152,12 @@ describe('Companies controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/companies/${generateUUID()}/contacts`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/companies/${generateUUID()}/contacts`
         }
 
         vi.spyOn(ViewContactsService, 'default').mockReturnValue({ pageTitle: 'Contacts', roles: [] })
@@ -176,12 +176,12 @@ describe('Companies controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/companies/${generateUUID()}/history`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/companies/${generateUUID()}/history`
         }
 
         vi.spyOn(ViewHistoryService, 'default').mockReturnValue({ pageTitle: 'History', roles: [] })
@@ -200,12 +200,12 @@ describe('Companies controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
-          method: 'GET',
-          url: `/companies/${generateUUID()}/licences`,
           auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
+            credentials: { scope: [] },
+            strategy: 'session'
+          },
+          method: 'GET',
+          url: `/companies/${generateUUID()}/licences`
         }
 
         vi.spyOn(ViewLicencesService, 'default').mockReturnValue({ pageTitle: 'Licences', roles: [] })

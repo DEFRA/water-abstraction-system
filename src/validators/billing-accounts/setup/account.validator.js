@@ -22,8 +22,8 @@ export default function accountValidator(payload) {
 
   const schema = Joi.object({
     accountSelected: Joi.alternatives().try(Joi.string().valid('another'), Joi.string().uuid()).required().messages({
-      'any.required': errorMessage,
       'any.only': errorMessage,
+      'any.required': errorMessage,
       'string.empty': errorMessage
     }),
     searchInput: Joi.alternatives().conditional('accountSelected', {

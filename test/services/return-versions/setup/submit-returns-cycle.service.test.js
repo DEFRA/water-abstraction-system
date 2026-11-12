@@ -13,6 +13,7 @@ import SubmitReturnsCycleService from '../../../../src/services/return-versions/
 
 describe('Return Versions Setup - Submit Returns Cycle service', () => {
   const requirementIndex = 0
+
   let payload
   let session
   let sessionData
@@ -21,26 +22,26 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
   beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         returnVersions: [
           {
             id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-            startDate: '2023-01-01T00:00:00.000Z',
+            modLogs: [],
             reason: null,
-            modLogs: []
+            startDate: '2023-01-01T00:00:00.000Z'
           }
         ],
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
+      reason: 'major-change',
       requirements: [{}],
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change'
+      startDateOptions: 'licenceStartDate'
     }
 
     session = SessionModelStub(sessionData)
@@ -102,8 +103,8 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({
-            titleText: 'Updated',
-            text: 'Requirements for returns updated'
+            text: 'Requirements for returns updated',
+            titleText: 'Updated'
           })
         })
       })
@@ -118,14 +119,14 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
         const result = await SubmitReturnsCycleService(session.id, requirementIndex, payload, yarStub)
 
         expect(result).toMatchObject({
-          pageTitle: 'Select the returns cycle for the requirements for returns',
-          pageTitleCaption: 'Licence 01/ABC',
           backLink: {
             href: `/system/return-versions/setup/${session.id}/abstraction-period/0`,
             text: 'Back'
           },
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
+          pageTitle: 'Select the returns cycle for the requirements for returns',
+          pageTitleCaption: 'Licence 01/ABC',
           returnsCycle: null
         })
       })

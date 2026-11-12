@@ -14,7 +14,7 @@ describe('Notices - Setup - Reminder Period presenter', () => {
 
   beforeEach(() => {
     referenceCode = generateNoticeReferenceCode('RREM-')
-    session = { referenceCode, noticeType: 'reminders', id: generateUUID() }
+    session = { id: generateUUID(), noticeType: 'reminders', referenceCode }
 
     returnCycles = [
       {
@@ -41,6 +41,7 @@ describe('Notices - Setup - Reminder Period presenter', () => {
           href: `/system/notices/setup/${session.id}/notice-type`,
           text: 'Back'
         },
+        pageTitle: 'Select the returns period for the reminders',
         reminderPeriods: [
           {
             checked: false,
@@ -52,8 +53,7 @@ describe('Notices - Setup - Reminder Period presenter', () => {
             text: 'Winter 1 April 2025 to 31 March 2026',
             value: returnCycles[1].id
           }
-        ],
-        pageTitle: 'Select the returns period for the reminders'
+        ]
       })
     })
 

@@ -16,11 +16,11 @@ describe('Return Logs Setup - Period used service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: 12345,
+      periodEndDay: '31',
+      periodEndMonth: '03',
       periodStartDay: '01',
       periodStartMonth: '04',
-      periodEndDay: '31',
-      periodEndMonth: '03'
+      returnReference: 12345
     }
 
     session = SessionModelStub(sessionData)

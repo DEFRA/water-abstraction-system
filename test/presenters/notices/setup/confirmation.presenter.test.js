@@ -15,9 +15,9 @@ describe('Notices - Setup - Confirmation presenter', () => {
   beforeEach(() => {
     event = {
       id: generateUUID(),
-      subtype: 'returnInvitation',
+      metadata: {},
       referenceCode,
-      metadata: {}
+      subtype: 'returnInvitation'
     }
   })
 

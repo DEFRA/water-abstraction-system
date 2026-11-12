@@ -9,7 +9,6 @@ describe('Address - Manual Presenter', () => {
 
   beforeEach(async () => {
     session = {
-      id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061',
       addressJourney: {
         activeNavBar: 'manage',
         address: { postcode: 'SW1A 1AA' },
@@ -18,7 +17,8 @@ describe('Address - Manual Presenter', () => {
           text: 'Back'
         },
         redirectUrl: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
-      }
+      },
+      id: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061'
     }
   })
 

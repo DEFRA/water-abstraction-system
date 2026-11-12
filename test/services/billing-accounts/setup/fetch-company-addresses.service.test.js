@@ -44,22 +44,22 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
       const result = await FetchCompanyAddressesService(company.id)
 
       expect(result).toEqual({
-        company: {
-          id: company.id,
-          name: company.name
-        },
         addresses: [
           {
-            id: address.id,
             address1: address.address1,
             address2: address.address2,
             address3: address.address3,
             address4: address.address4,
             address5: address.address5,
             address6: address.address6,
+            id: address.id,
             postcode: address.postcode
           }
-        ]
+        ],
+        company: {
+          id: company.id,
+          name: company.name
+        }
       })
     })
   })
@@ -69,11 +69,11 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
       const result = await FetchCompanyAddressesService(companyWithNoAddress.id)
 
       expect(result).toEqual({
+        addresses: [],
         company: {
           id: companyWithNoAddress.id,
           name: companyWithNoAddress.name
-        },
-        addresses: []
+        }
       })
     })
   })

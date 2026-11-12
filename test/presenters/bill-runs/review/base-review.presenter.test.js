@@ -153,8 +153,8 @@ describe('Bill Runs Review - Base Review presenter', () => {
 
   describe('#formatChargePeriod()', () => {
     const reviewChargeVersion = {
-      chargePeriodStartDate: new Date('2024-04-01'),
-      chargePeriodEndDate: new Date('2024-09-30')
+      chargePeriodEndDate: new Date('2024-09-30'),
+      chargePeriodStartDate: new Date('2024-04-01')
     }
 
     it("returns the review charge version's charge period formatted for display", () => {
@@ -166,10 +166,10 @@ describe('Bill Runs Review - Base Review presenter', () => {
 
   describe('#formatChargePeriods()', () => {
     const chargeElement = {
-      abstractionPeriodStartDay: 1,
-      abstractionPeriodStartMonth: 1,
       abstractionPeriodEndDay: 31,
-      abstractionPeriodEndMonth: 12
+      abstractionPeriodEndMonth: 12,
+      abstractionPeriodStartDay: 1,
+      abstractionPeriodStartMonth: 1
     }
 
     let reviewChargeElement
@@ -180,8 +180,8 @@ describe('Bill Runs Review - Base Review presenter', () => {
           chargeElement,
           reviewChargeReference: {
             reviewChargeVersion: {
-              chargePeriodStartDate: new Date('2023-05-24'),
-              chargePeriodEndDate: new Date('2024-03-31')
+              chargePeriodEndDate: new Date('2024-03-31'),
+              chargePeriodStartDate: new Date('2023-05-24')
             }
           }
         }
@@ -195,7 +195,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
     })
 
     describe('when a charge period is provided', () => {
-      const chargePeriod = { startDate: new Date('2023-05-24'), endDate: new Date('2024-03-31') }
+      const chargePeriod = { endDate: new Date('2024-03-31'), startDate: new Date('2023-05-24') }
 
       beforeEach(() => {
         reviewChargeElement = { chargeElement }

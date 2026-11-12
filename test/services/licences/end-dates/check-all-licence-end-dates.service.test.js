@@ -3,8 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
-import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import { pause } from 'water-abstraction-engine/lib/general.lib.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 import * as CheckLicenceEndDatesService from '../../../../src/services/licences/end-dates/check-licence-end-dates.service.js'
 import * as FetchLicencesService from '../../../../src/services/licences/end-dates/fetch-licences.service.js'
@@ -18,6 +18,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
 
   let licences
   let notifierStub
+
   beforeEach(() => {
     licences = _licences()
 

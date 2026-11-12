@@ -41,13 +41,13 @@ describe('Licences - Fetch Bills service', () => {
         await BillRunHelper.add({ id: billRunId, status: 'sent' })
 
         await BillHelper.add({
-          id: billLicence.billId,
-          billRunId,
-          invoiceNumber: '123',
           accountNumber: 'T21404193A',
-          netAmount: 12345,
           billingAccountId,
-          createdAt: createdDate
+          billRunId,
+          createdAt: createdDate,
+          id: billLicence.billId,
+          invoiceNumber: '123',
+          netAmount: 12345
         })
 
         // Add an extra bill linked to the same bill run to test only bills for the licence are retrieved
@@ -61,13 +61,13 @@ describe('Licences - Fetch Bills service', () => {
           bills: [
             {
               accountNumber: 'T21404193A',
+              billingAccountId,
               billRun: {
-                id: billRunId,
                 batchType: 'supplementary',
+                id: billRunId,
                 scheme: 'sroc',
                 summer: false
               },
-              billingAccountId,
               createdAt: createdDate,
               credit: null,
               deminimis: false,
@@ -88,13 +88,13 @@ describe('Licences - Fetch Bills service', () => {
         await BillRunHelper.add({ id: billRunId })
 
         await BillHelper.add({
-          id: billLicence.billId,
-          billRunId,
-          invoiceNumber: '123',
           accountNumber: 'T21404193A',
-          netAmount: 12345,
           billingAccountId,
-          createdAt: createdDate
+          billRunId,
+          createdAt: createdDate,
+          id: billLicence.billId,
+          invoiceNumber: '123',
+          netAmount: 12345
         })
 
         // Add an extra bill linked to the same bill run to test only bills for the licence are retrieved
@@ -115,7 +115,7 @@ describe('Licences - Fetch Bills service', () => {
   describe('when the licence has no bills', () => {
     beforeEach(async () => {
       await BillRunHelper.add({ id: billRunId, status: 'sent' })
-      await BillHelper.add({ id: billLicence.id, billRunId })
+      await BillHelper.add({ billRunId, id: billLicence.id })
     })
 
     it('returns no results', async () => {

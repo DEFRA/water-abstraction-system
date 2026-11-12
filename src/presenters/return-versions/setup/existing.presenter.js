@@ -40,8 +40,8 @@ function _existingOptions(returnVersions) {
     const formattedStartDate = formatLongDate(dateObj)
 
     return {
-      value: id,
-      text: reason ? `${formattedStartDate} - ${reason}` : formattedStartDate
+      text: reason ? `${formattedStartDate} - ${reason}` : formattedStartDate,
+      value: id
     }
   })
 }

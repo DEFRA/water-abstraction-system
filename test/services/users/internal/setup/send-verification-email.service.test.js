@@ -23,24 +23,26 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     '\r\n' +
     'To complete your account set up, visit:\r\n' +
     'https://internal.com/reset_password_change_password?resetGuid=6e7a6b97-f5c4-4c30-965e-ee67ee6d9f25\r\n'
+
   let createEmailRequestStub
   let notification
   let notifierStub
   let pauseStub
+
   beforeEach(() => {
     vi.spyOn(CheckNotificationStatusService, 'default').mockResolvedValue()
 
     createEmailRequestStub = vi.spyOn(CreateEmailRequest, 'default').mockResolvedValue({
-      succeeded: true,
       response: {
-        statusCode: 200,
         body: {
-          id: notifyId,
           content: {
             body: verificationEmailPlaintext
-          }
-        }
-      }
+          },
+          id: notifyId
+        },
+        statusCode: 200
+      },
+      succeeded: true
     })
 
     notification = {

@@ -11,36 +11,36 @@ describe('Return Versions Setup - Remove presenter', () => {
 
   beforeEach(() => {
     session = {
-      id: '61e07498-f309-4829-96a9-72084a54996d',
       checkPageVisited: false,
+      id: '61e07498-f309-4829-96a9-72084a54996d',
+      journey: 'returns-required',
       licence: {
-        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
         endDate: null,
-        licenceRef: '01/ABC',
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceHolder: 'Turbo Kid',
+        licenceRef: '01/ABC',
         startDate: '2022-04-01T00:00:00.000Z'
       },
-      journey: 'returns-required',
+      reason: 'major-change',
       requirements: [
         {
-          points: ['At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'],
-          purposes: ['Mineral Washing'],
-          returnsCycle: 'winter-and-all-year',
-          siteDescription: 'Bore hole in rear field',
           abstractionPeriod: {
             abstractionPeriodEndDay: '31',
             abstractionPeriodEndMonth: '10',
             abstractionPeriodStartDay: '1',
             abstractionPeriodStartMonth: '4'
           },
-          frequencyReported: 'month',
+          agreementsExceptions: ['none'],
           frequencyCollected: 'month',
-          agreementsExceptions: ['none']
+          frequencyReported: 'month',
+          points: ['At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'],
+          purposes: ['Mineral Washing'],
+          returnsCycle: 'winter-and-all-year',
+          siteDescription: 'Bore hole in rear field'
         }
       ],
-      startDateOptions: 'licenceStartDate',
-      reason: 'major-change'
+      startDateOptions: 'licenceStartDate'
     }
   })
 
@@ -79,19 +79,19 @@ describe('Return Versions Setup - Remove presenter', () => {
     describe('when the user has completed the return requirements journey', () => {
       beforeEach(() => {
         session.requirements[0] = {
-          points: ['At National Grid Reference TQ 71266 38507 (RIVER TEISE AT SMALLBRIDGE INTAKE)'],
-          purposes: ['Potable Water Supply - Direct'],
-          returnsCycle: 'summer',
-          siteDescription: 'This is a valid return requirements description',
           abstractionPeriod: {
             abstractionPeriodEndDay: '12',
             abstractionPeriodEndMonth: '09',
             abstractionPeriodStartDay: '12',
             abstractionPeriodStartMonth: '07'
           },
-          frequencyReported: 'month',
+          agreementsExceptions: ['transfer-re-abstraction-scheme', 'two-part-tariff'],
           frequencyCollected: 'week',
-          agreementsExceptions: ['transfer-re-abstraction-scheme', 'two-part-tariff']
+          frequencyReported: 'month',
+          points: ['At National Grid Reference TQ 71266 38507 (RIVER TEISE AT SMALLBRIDGE INTAKE)'],
+          purposes: ['Potable Water Supply - Direct'],
+          returnsCycle: 'summer',
+          siteDescription: 'This is a valid return requirements description'
         }
       })
 

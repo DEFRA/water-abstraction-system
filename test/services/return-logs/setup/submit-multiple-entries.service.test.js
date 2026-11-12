@@ -19,13 +19,13 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
 
   beforeEach(() => {
     sessionData = {
-      returnReference: 12345,
       lines: [
-        { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
-        { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
+        { endDate: new Date('2023-04-30').toISOString(), startDate: new Date('2023-04-01').toISOString() },
+        { endDate: new Date('2023-05-31').toISOString(), startDate: new Date('2023-05-01').toISOString() }
       ],
-      returnsFrequency: 'month',
       reported: 'abstractionVolumes',
+      returnReference: 12345,
+      returnsFrequency: 'month',
       unitSymbol: 'Ml'
     }
 
@@ -65,8 +65,8 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({
-            title: 'Updated',
-            text: '2 monthly volumes have been updated'
+            text: '2 monthly volumes have been updated',
+            title: 'Updated'
           })
         })
       })
@@ -74,13 +74,13 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
       describe('and the user has previously selected "meterReadings" as the reported type', () => {
         beforeEach(() => {
           sessionData = {
-            returnReference: 12345,
             lines: [
-              { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
-              { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
+              { endDate: new Date('2023-04-30').toISOString(), startDate: new Date('2023-04-01').toISOString() },
+              { endDate: new Date('2023-05-31').toISOString(), startDate: new Date('2023-05-01').toISOString() }
             ],
-            returnsFrequency: 'month',
-            reported: 'meterReadings'
+            reported: 'meterReadings',
+            returnReference: 12345,
+            returnsFrequency: 'month'
           }
 
           session = SessionModelStub(sessionData)
@@ -103,8 +103,8 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({
-            title: 'Updated',
-            text: '2 monthly meter readings have been updated'
+            text: '2 monthly meter readings have been updated',
+            title: 'Updated'
           })
         })
       })

@@ -16,8 +16,8 @@ describe('Bill Runs - Generate Two Part Tariff Transaction service', () => {
     chargeReference = _chargeReference(billLicenceId)
 
     chargePeriod = {
-      startDate: new Date('2022-04-01'),
-      endDate: new Date('2022-10-31')
+      endDate: new Date('2022-10-31'),
+      startDate: new Date('2022-04-01')
     }
     newLicence = false
     waterUndertaker = false
@@ -35,37 +35,37 @@ describe('Bill Runs - Generate Two Part Tariff Transaction service', () => {
         )
 
         expect(result).toMatchObject({
-          billLicenceId,
-          authorisedDays: 0,
-          billableDays: 0,
-          newLicence,
-          waterUndertaker,
-          chargeReferenceId: '89450220-0f7f-4280-a946-1fdbe9b789c1',
-          startDate: chargePeriod.startDate,
-          endDate: chargePeriod.endDate,
-          source: 'non-tidal',
-          season: 'all year',
-          loss: 'low',
-          credit: false,
-          chargeType: 'standard',
-          authorisedQuantity: 20,
-          billableQuantity: 15,
-          status: 'candidate',
-          description: 'Water abstraction charge: Lower Queenstown - Pittisham',
-          volume: 15,
-          section126Factor: 1,
-          section127Agreement: false,
-          section130Agreement: false,
-          secondPartCharge: true,
-          scheme: 'sroc',
-          aggregateFactor: 0.75,
           adjustmentFactor: 0.6,
+          aggregateFactor: 0.75,
+          authorisedDays: 0,
+          authorisedQuantity: 20,
+          billableDays: 0,
+          billableQuantity: 15,
+          billLicenceId,
           chargeCategoryCode: '4.4.5',
           chargeCategoryDescription:
             'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+          chargeReferenceId: '89450220-0f7f-4280-a946-1fdbe9b789c1',
+          chargeType: 'standard',
+          credit: false,
+          description: 'Water abstraction charge: Lower Queenstown - Pittisham',
+          endDate: chargePeriod.endDate,
+          loss: 'low',
+          newLicence,
+          scheme: 'sroc',
+          season: 'all year',
+          secondPartCharge: true,
+          section126Factor: 1,
+          section127Agreement: false,
+          section130Agreement: false,
+          source: 'non-tidal',
+          startDate: chargePeriod.startDate,
+          status: 'candidate',
           supportedSource: false,
           supportedSourceName: null,
+          volume: 15,
           waterCompanyCharge: false,
+          waterUndertaker,
           winterOnly: false
         })
       })
@@ -120,15 +120,14 @@ function _chargeReference() {
   }
 
   return {
-    id: '89450220-0f7f-4280-a946-1fdbe9b789c1',
     additionalCharges: { isSupplyPublicWater: false },
     adjustments: {
+      aggregate: '0.562114443',
+      charge: null,
       s126: null,
       s127: false,
       s130: false,
-      charge: null,
-      winter: false,
-      aggregate: '0.562114443'
+      winter: false
     },
     chargeCategory: {
       id: 'b270718a-12c0-4fca-884b-3f8612dbe2f5',
@@ -137,32 +136,33 @@ function _chargeReference() {
     },
     chargeElements: [
       {
-        id: 'e6b98712-227a-40c2-b93a-c05e9047be8c',
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 3,
-        reviewChargeElements: [{ id: '1d9050b2-09c8-4570-8173-7f55921437cc', amendedAllocated: 5 }],
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        id: 'e6b98712-227a-40c2-b93a-c05e9047be8c',
+        reviewChargeElements: [{ amendedAllocated: 5, id: '1d9050b2-09c8-4570-8173-7f55921437cc' }],
         toJSON
       },
       {
-        id: '9e6f3f64-78d5-441b-80fc-e01711b2f766',
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 4,
         abstractionPeriodEndDay: 31,
         abstractionPeriodEndMonth: 3,
-        reviewChargeElements: [{ id: '17f0c41e-e894-41d2-8a68-69dd2b39e9f9', amendedAllocated: 10 }],
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4,
+        id: '9e6f3f64-78d5-441b-80fc-e01711b2f766',
+        reviewChargeElements: [{ amendedAllocated: 10, id: '17f0c41e-e894-41d2-8a68-69dd2b39e9f9' }],
         toJSON
       }
     ],
     description: 'Lower Queenstown - Pittisham',
+    id: '89450220-0f7f-4280-a946-1fdbe9b789c1',
     loss: 'low',
     reviewChargeReferences: [
       {
-        id: '3dd04348-2c06-4559-9343-dd7dd76276ef',
         amendedAggregate: 0.75,
         amendedAuthorisedVolume: 20,
-        amendedChargeAdjustment: 0.6
+        amendedChargeAdjustment: 0.6,
+        id: '3dd04348-2c06-4559-9343-dd7dd76276ef'
       }
     ],
     source: 'non-tidal',

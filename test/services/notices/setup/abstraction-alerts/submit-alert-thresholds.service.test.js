@@ -113,6 +113,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
         const result = await SubmitAlertThresholdsService(session.id, payload, yarStub)
 
         expect(result).toEqual({
+          backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
           error: {
             alertThresholds: {
               text: 'Select applicable threshold(s)'
@@ -124,9 +125,8 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
               }
             ]
           },
-          backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
-          pageTitleCaption: 'Death star',
           pageTitle: 'Which thresholds do you need to send an alert for?',
+          pageTitleCaption: 'Death star',
           thresholdOptions: [
             {
               checked: false,
@@ -256,6 +256,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
         const result = await SubmitAlertThresholdsService(session.id, payload, yarStub)
 
         expect(result).toEqual({
+          backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
           error: {
             alertThresholds: {
               text: 'Select applicable threshold(s)'
@@ -267,9 +268,8 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
               }
             ]
           },
-          backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
-          pageTitleCaption: 'Death star',
           pageTitle: 'Which thresholds do you need to send an alert for?',
+          pageTitleCaption: 'Death star',
           thresholdOptions: [
             {
               checked: false,

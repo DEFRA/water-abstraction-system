@@ -55,10 +55,10 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
     }
 
     vi.spyOn(GeneratePaperReturnRequest, 'default').mockResolvedValue({
-      succeeded: true,
       response: {
         body: buffer
-      }
+      },
+      succeeded: true
     })
 
     notifierStub = GlobalNotifierStub()
@@ -96,6 +96,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
       expect(GeneratePaperReturnRequest.default).toHaveBeenCalledOnce()
 
       const actualCallArgs = GeneratePaperReturnRequest.default.mock.calls[0][0]
+
       expect(actualCallArgs).toEqual({
         address: {
           address_line_1: 'Harry Potter',
@@ -116,8 +117,8 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
         regionAndArea: 'North West / Lower Trent',
         regionCode: '1',
         returnLogId: dueReturnLog.returnLogId,
-        returnsFrequency: 'month',
         returnReference: dueReturnLog.returnReference,
+        returnsFrequency: 'month',
         siteDescription: 'BOREHOLE AT AVALON',
         startDate: '1 April 2022',
         twoPartTariff: false

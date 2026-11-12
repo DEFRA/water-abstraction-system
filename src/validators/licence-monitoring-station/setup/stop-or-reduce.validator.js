@@ -20,16 +20,16 @@ export default function stopOrReduceValidator(payload) {
 
   const schema = Joi.object({
     stopOrReduce: Joi.string().required().valid('reduce', 'stop').messages({
-      'any.required': stopOrReduceErrorMessage,
       'any.only': stopOrReduceErrorMessage,
+      'any.required': stopOrReduceErrorMessage,
       'string.empty': stopOrReduceErrorMessage
     }),
     reduceAtThreshold: Joi.string()
       .valid('yes', 'no')
       .when('stopOrReduce', { is: 'reduce', then: Joi.required() })
       .messages({
-        'any.required': reduceAtThresholdError,
         'any.only': reduceAtThresholdError,
+        'any.required': reduceAtThresholdError,
         'string.empty': reduceAtThresholdError
       })
   })
