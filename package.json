@@ -16,6 +16,7 @@
     "build": "bin/build",
     "docs": "jsdoc -c .jsdoc.json",
     "lint": "eslint .",
+    "lint:file": "eslint --",
     "migrate": "water-knex migrate:latest",
     "migrate:test": "NODE_ENV=test node node_modules/water-abstraction-engine/db/wipe.database.js && NODE_ENV=test water-knex migrate:latest",
     "migrate:wipe": "NODE_ENV=test node node_modules/water-abstraction-engine/db/wipe.database.js",
