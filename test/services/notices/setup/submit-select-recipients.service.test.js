@@ -63,7 +63,7 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
 
       expect(flashType).toEqual('notification')
       expect(bannerMessage).toEqual({
-        text: 'The recipients have been changed. Check details before sending invitations.',
+        text: 'The recipients have been changed. Check details before sending.',
         titleText: 'Updated'
       })
     })

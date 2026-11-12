@@ -32,7 +32,7 @@ export default async function submitSelectRecipientsService(sessionId, payload, 
   if (!error) {
     await _save(session, payload)
 
-    flashNotification(yar, 'Updated', 'The recipients have been changed. Check details before sending invitations.')
+    flashNotification(yar, 'Updated', 'The recipients have been changed. Check details before sending.')
 
     return {}
   }
