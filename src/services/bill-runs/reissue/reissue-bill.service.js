@@ -97,13 +97,13 @@ export default async function reissueBillService(sourceBill, reissueBillRun) {
 
 function _generateBill(billingAccountId, accountNumber, billRunId, financialYearEnding) {
   return {
-    id: generateUUID(),
     accountNumber,
     address: {}, // Address is set to an empty object for SROC billing invoices
     billingAccountId,
     billRunId,
     credit: false,
-    financialYearEnding
+    financialYearEnding,
+    id: generateUUID()
   }
 }
 

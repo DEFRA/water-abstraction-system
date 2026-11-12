@@ -257,13 +257,13 @@ async function _processBillingAccount(billingAccount, billRun, billingPeriod) {
   const { id: billRunId, externalId: billRunExternalId } = billRun
 
   const bill = {
-    id: generateUUID(),
     accountNumber,
     address: {}, // Address is set to an empty object for SROC billing invoices
     billingAccountId,
     billRunId,
     credit: false,
-    financialYearEnding: billingPeriod.endDate.getFullYear()
+    financialYearEnding: billingPeriod.endDate.getFullYear(),
+    id: generateUUID()
   }
 
   const billData = await _createBillLicencesAndTransactions(bill.id, billingAccount, billRunExternalId, billingPeriod)
