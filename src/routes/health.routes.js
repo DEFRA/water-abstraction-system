@@ -1,3 +1,9 @@
+/**
+ * Routes for the /health endpoints
+ *
+ * @module HealthRoutes
+ */
+
 import { viewInfo } from '../controllers/health.controller.js'
 
 export default [

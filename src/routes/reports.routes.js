@@ -1,3 +1,9 @@
+/**
+ * Routes for the /reports endpoints
+ *
+ * @module ReportsRoutes
+ */
+
 import { invalidAddresses } from '../controllers/reports.controller.js'
 
 export default [

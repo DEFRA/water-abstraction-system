@@ -1,3 +1,9 @@
+/**
+ * Routes for the /licences/end-dates endpoints
+ *
+ * @module LicencesEndDatesRoutes
+ */
+
 import { check, process } from '../controllers/licences-end-dates.controller.js'
 
 export default [

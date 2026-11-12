@@ -1,3 +1,9 @@
+/**
+ * Routes for the /bill-runs/review endpoints
+ *
+ * @module BillRunsReviewRoutes
+ */
+
 import {
   preview,
   submitAuthorised,

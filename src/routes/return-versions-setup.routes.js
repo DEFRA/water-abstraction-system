@@ -1,3 +1,9 @@
+/**
+ * Routes for the /return-versions/setup endpoints
+ *
+ * @module ReturnVersionsSetupRoutes
+ */
+
 import {
   abstractionPeriod,
   add,

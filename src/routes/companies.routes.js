@@ -1,3 +1,9 @@
+/**
+ * Routes for the /companies endpoints
+ *
+ * @module CompaniesRoutes
+ */
+
 import {
   viewBillingAccounts,
   viewCompany,

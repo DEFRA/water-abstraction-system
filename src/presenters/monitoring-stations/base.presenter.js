@@ -1,3 +1,9 @@
+/**
+ * Formatting functions shared by the monitoring station presenters
+ *
+ * @module MonitoringStationsBasePresenter
+ */
+
 import {
   formatAbstractionPeriod,
   formatLongDate,

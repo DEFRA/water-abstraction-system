@@ -1,3 +1,9 @@
+/**
+ * Routes for the /company-contacts endpoints
+ *
+ * @module CompanyContactsRoutes
+ */
+
 import {
   submitRemoveCompanyContact,
   viewCommunications,

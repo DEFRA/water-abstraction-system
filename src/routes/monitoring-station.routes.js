@@ -1,3 +1,9 @@
+/**
+ * Routes for the /monitoring-stations endpoints
+ *
+ * @module MonitoringStationRoutes
+ */
+
 import { licence, view } from '../controllers/monitoring-stations.controller.js'
 
 export default [

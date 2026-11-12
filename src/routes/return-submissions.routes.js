@@ -1,3 +1,9 @@
+/**
+ * Routes for the /return-submissions endpoints
+ *
+ * @module ReturnSubmissionsRoutes
+ */
+
 import { view } from '../controllers/return-submissions.controller.js'
 
 export default [

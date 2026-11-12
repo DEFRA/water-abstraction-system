@@ -1,3 +1,9 @@
+/**
+ * Routes for the /return-logs/setup endpoints
+ *
+ * @module ReturnLogsSetupRoutes
+ */
+
 import {
   cancel,
   check,

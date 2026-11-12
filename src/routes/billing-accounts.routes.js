@@ -1,3 +1,9 @@
+/**
+ * Routes for the /billing-accounts endpoints
+ *
+ * @module BillingAccountsRoutes
+ */
+
 import { changeAddress, view } from '../controllers/billing-accounts.controller.js'
 
 export default [

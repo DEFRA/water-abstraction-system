@@ -1,3 +1,9 @@
+/**
+ * Routes for the /jobs endpoints
+ *
+ * @module JobsRoutes
+ */
+
 import {
   clean,
   customerFiles,

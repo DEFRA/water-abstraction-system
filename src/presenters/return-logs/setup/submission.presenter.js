@@ -1,9 +1,9 @@
-import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
-
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/submission` page
  * @module SubmissionPresenter
  */
+
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/submission` page

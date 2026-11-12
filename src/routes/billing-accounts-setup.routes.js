@@ -1,3 +1,9 @@
+/**
+ * Routes for the /billing-accounts/setup endpoints
+ *
+ * @module BillingAccountsSetupRoutes
+ */
+
 import {
   setup,
   submitAccount,

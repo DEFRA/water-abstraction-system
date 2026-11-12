@@ -1,3 +1,9 @@
+/**
+ * Routes for the /company-contacts/setup endpoints
+ *
+ * @module CompanyContactsSetupRoutes
+ */
+
 import {
   setup,
   setupEdit,

@@ -1,3 +1,9 @@
+/**
+ * Formatting functions for CRM data, such as contacts and abstraction alerts
+ *
+ * @module CrmPresenter
+ */
+
 import { roles } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 /**

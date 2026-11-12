@@ -1,3 +1,9 @@
+/**
+ * Routes for the /search endpoints
+ *
+ * @module SearchRoutes
+ */
+
 import { submitSearch, viewSearch } from '../controllers/search.controller.js'
 
 export default [

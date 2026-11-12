@@ -1,3 +1,9 @@
+/**
+ * Routes for the /licence-monitoring-station endpoints
+ *
+ * @module LicenceMonitoringStationRoutes
+ */
+
 import { remove, submitRemove } from '../controllers/licence-monitoring-station.controller.js'
 
 export default [

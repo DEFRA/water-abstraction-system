@@ -1,3 +1,9 @@
+/**
+ * Routes for the /bill-runs/setup endpoints
+ *
+ * @module BillRunsSetupRoutes
+ */
+
 import {
   check,
   noLicences,

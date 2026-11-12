@@ -1,3 +1,9 @@
+/**
+ * Routes for the /bill-licences endpoints
+ *
+ * @module BillLicencesRoutes
+ */
+
 import { remove, submitRemove, view } from '../controllers/bill-licences.controller.js'
 
 export default [

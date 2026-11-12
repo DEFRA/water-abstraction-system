@@ -1,3 +1,9 @@
+/**
+ * Formatting functions shared by the bill run review presenters
+ *
+ * @module BaseReviewPresenter
+ */
+
 import Big from 'water-abstraction-engine/wrappers/big.wrapper.js'
 import { determineAbstractionPeriods } from 'water-abstraction-engine/lib/abstraction-period.lib.js'
 import { formatLongDate } from 'water-abstraction-engine/presenters/base.presenter.js'

@@ -1,3 +1,9 @@
+/**
+ * Routes for the /licence-monitoring-station/setup endpoints
+ *
+ * @module LicenceMonitoringStationSetupRoutes
+ */
+
 import {
   abstractionPeriod,
   check,

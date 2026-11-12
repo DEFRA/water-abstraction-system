@@ -1,10 +1,10 @@
-import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
-
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @module FullConditionPresenter
  */
+
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/full-condition`

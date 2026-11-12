@@ -1,3 +1,9 @@
+/**
+ * Routes for the /notifications endpoints
+ *
+ * @module NotificationsRoutes
+ */
+
 import { download, returnedLetter, view } from '../controllers/notifications.controller.js'
 
 export default [

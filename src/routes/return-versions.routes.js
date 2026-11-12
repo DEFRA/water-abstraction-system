@@ -1,3 +1,9 @@
+/**
+ * Routes for the /return-versions endpoints
+ *
+ * @module ReturnVersionsRoutes
+ */
+
 import { view } from '../controllers/return-versions.controller.js'
 
 export default [

@@ -1,3 +1,9 @@
+/**
+ * Formatting functions shared by the address presenters
+ *
+ * @module BaseAddressPresenter
+ */
+
 import { countries } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
 /**

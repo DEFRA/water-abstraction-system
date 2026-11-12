@@ -1,3 +1,9 @@
+/**
+ * Routes for the /users endpoints
+ *
+ * @module UsersRoutes
+ */
+
 import {
   index,
   submitIndex,

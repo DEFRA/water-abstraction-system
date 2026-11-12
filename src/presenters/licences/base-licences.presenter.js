@@ -1,3 +1,9 @@
+/**
+ * Formatting functions shared by the licence presenters
+ *
+ * @module BaseLicencesPresenter
+ */
+
 import { formatNumber } from 'water-abstraction-engine/presenters/base.presenter.js'
 
 /**

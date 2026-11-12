@@ -1,5 +1,3 @@
-import tokenRequest from '../requests/resp/token.request.js'
-
 /**
  * Adds a server method which returns a Azure AD token for the ReSP API.
  *
@@ -7,6 +5,8 @@ import tokenRequest from '../requests/resp/token.request.js'
  *
  * @module RespTokenCachePlugin
  */
+
+import tokenRequest from '../requests/resp/token.request.js'
 
 const ONE_HOUR_IN_MS = 60 * 60 * 1000
 const ONE_MINUTE_IN_MS = 60 * 1000

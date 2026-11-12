@@ -1,3 +1,9 @@
+/**
+ * Vitest config for running the app's unit tests
+ *
+ * @module VitestConfig
+ */
+
 const ci = String(process.env.CI) === 'true' || false
 
 export default {

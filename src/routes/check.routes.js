@@ -1,3 +1,9 @@
+/**
+ * Routes for the /check endpoints
+ *
+ * @module CheckRoutes
+ */
+
 import { placeholder } from '../controllers/check.controller.js'
 
 export default [

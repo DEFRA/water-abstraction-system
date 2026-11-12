@@ -1,4 +1,10 @@
 /**
+ * SQL fragments shared by the notice recipient queries
+ *
+ * @module RecipientQueriesDal
+ */
+
+/**
  * SQL join fragment for fetching the current licence version
  *
  * Consumers must include `FROM public.licences l` before this fragment.

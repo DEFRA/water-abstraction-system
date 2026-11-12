@@ -1,3 +1,9 @@
+/**
+ * Routes for the /notices/setup endpoints
+ *
+ * @module NoticesSetupRoutes
+ */
+
 import {
   processAddRecipient,
   processDownloadRecipients,

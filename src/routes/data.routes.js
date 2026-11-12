@@ -1,3 +1,9 @@
+/**
+ * Routes for the /data endpoints
+ *
+ * @module DataRoutes
+ */
+
 import { seed } from '../controllers/data.controller.js'
 
 export default [

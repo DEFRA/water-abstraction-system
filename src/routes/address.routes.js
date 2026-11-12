@@ -1,3 +1,9 @@
+/**
+ * Routes for the /address endpoints
+ *
+ * @module AddressRoutes
+ */
+
 import {
   submitInternational,
   submitManual,

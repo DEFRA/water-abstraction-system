@@ -1,9 +1,9 @@
-import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/no-returns-required` page
  * @module NoReturnsRequiredPresenter
  */
+
+import { checkUrl } from 'water-abstraction-engine/lib/check-page.lib.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/no-returns-required` page

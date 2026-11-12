@@ -1,3 +1,9 @@
+/**
+ * Routes for the /return-logs endpoints
+ *
+ * @module ReturnLogsRoutes
+ */
+
 import { download, submitDetails, viewCommunications, viewDetails } from '../controllers/return-logs.controller.js'
 
 export default [

@@ -1,3 +1,9 @@
+/**
+ * Routes for the /manage endpoints
+ *
+ * @module ManageRoutes
+ */
+
 import { view } from '../controllers/manage.controller.js'
 
 export default [

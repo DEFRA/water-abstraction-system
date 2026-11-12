@@ -1,3 +1,9 @@
+/**
+ * Routes for setting up internal and external users
+ *
+ * @module UsersSetupRoutes
+ */
+
 import {
   setupExternal,
   setupInternal,

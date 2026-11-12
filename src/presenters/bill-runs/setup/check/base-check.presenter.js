@@ -1,4 +1,10 @@
 /**
+ * Formatting functions shared by the bill run setup check presenters
+ *
+ * @module BaseCheckPresenter
+ */
+
+/**
  * Given a bill run setup session, returns the URL for the 'Back' link on the /check page.
  *
  * @param {object} session - The bill run setup session

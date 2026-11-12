@@ -1,3 +1,9 @@
+/**
+ * Routes for the /bills endpoints
+ *
+ * @module BillsRoutes
+ */
+
 import { remove, submitRemove, view } from '../controllers/bills.controller.js'
 
 export default [

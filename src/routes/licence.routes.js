@@ -1,3 +1,9 @@
+/**
+ * Routes for the /licences endpoints
+ *
+ * @module LicenceRoutes
+ */
+
 import {
   markedForSupplementaryBilling,
   markForSupplementaryBilling,

@@ -1,3 +1,9 @@
+/**
+ * Routes for the /bill-runs endpoints
+ *
+ * @module BillRunsRoutes
+ */
+
 import {
   cancel,
   index,

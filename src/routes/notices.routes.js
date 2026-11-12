@@ -1,3 +1,9 @@
+/**
+ * Routes for the /notices endpoints
+ *
+ * @module NoticesRoutes
+ */
+
 import { index, submitIndex, submitView, view } from '../controllers/notices.controller.js'
 
 export default [

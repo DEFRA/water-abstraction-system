@@ -1,3 +1,9 @@
+/**
+ * Formatting functions shared by the return log presenters
+ *
+ * @module BaseReturnLogsPresenter
+ */
+
 import Big from 'water-abstraction-engine/wrappers/big.wrapper.js'
 import { formatNumber, sentenceCase } from 'water-abstraction-engine/presenters/base.presenter.js'
 import { convertFromCubicMetres } from 'water-abstraction-engine/lib/general.lib.js'
