@@ -17,6 +17,7 @@ export default async function fetchReturnsInvitationPeriods() {
     .whereExists(
       ReturnCycleModel.relatedQuery('returnLogs')
         .where('status', 'due')
+        .whereJsonPath('metadata', '$.isCurrent', '=', true)
         .where('endDate', '<', today())
         .whereNull('dueDate')
     )

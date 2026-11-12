@@ -39,9 +39,16 @@ describe('Notices - Setup - Fetch Returns Invitation Periods DAL', () => {
     previousSummerLogs = [
       await ReturnLogHelper.add({ returnCycleId: previousSummerCycle.id, dueDate: yesterday(), status: 'due' })
     ]
-    // This should be returned because it has a non-void return log with a null "due date"
+    // This should be returned because the linked return logs have a non-void return log with a null "due date" or
+    // are not current
     previousWinterReturnLogs = [
-      await ReturnLogHelper.add({ returnCycleId: previousWinterCycle.id, dueDate: null, status: 'due' })
+      await ReturnLogHelper.add({ returnCycleId: previousWinterCycle.id, dueDate: null, status: 'due' }),
+      await ReturnLogHelper.add({
+        returnCycleId: previousWinterCycle.id,
+        dueDate: yesterday(),
+        metadata: { isCurrent: false },
+        status: 'due'
+      })
     ]
   })
 
@@ -64,7 +71,7 @@ describe('Notices - Setup - Fetch Returns Invitation Periods DAL', () => {
   })
 
   describe('when called', () => {
-    it('returns only those return cycles linked to non-void return logs with a null "due date"', async () => {
+    it('returns only those return cycles linked to non-void "current" return logs with a null "due date"', async () => {
       const results = await FetchReturnsInvitationPeriods()
 
       expect(results).toEqual([
