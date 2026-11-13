@@ -10,7 +10,6 @@ import {
 } from 'water-abstraction-engine/presenters/base.presenter.js'
 
 import { formatPurposes } from '../../return-logs/base-return-logs.presenter.js'
-import { generateBillRunTitle } from '../../billing.presenter.js'
 import {
   calculateTotalBillableReturns,
   formatChargePeriod,
@@ -19,6 +18,7 @@ import {
   formatReturnStatus,
   formatReturnTotals
 } from './base-review.presenter.js'
+import { generateBillRunTitle } from '../../billing.presenter.js'
 
 /**
  * Formats the review licence data ready for presenting in the review licence page
@@ -61,11 +61,11 @@ export default function reviewLicencePresenter(reviewLicence) {
 
 function _billingAccountDetails(billingAccount) {
   return {
-    billingAccountId: billingAccount.id,
-    accountNumber: billingAccount.accountNumber,
     accountName: billingAccount.$accountName(),
-    contactName: billingAccount.$contactName(),
-    addressLines: billingAccount.$addressLines()
+    accountNumber: billingAccount.accountNumber,
+    addressLines: billingAccount.$addressLines(),
+    billingAccountId: billingAccount.id,
+    contactName: billingAccount.$contactName()
   }
 }
 
@@ -78,14 +78,14 @@ function _chargeElements(reviewChargeElements, chargePeriod) {
     return {
       billableReturns: `${amendedAllocated} ML / ${chargeElement.authorisedAnnualQuantity} ML`,
       chargePeriods: formatChargePeriods(reviewChargeElement, chargePeriod),
-      returnVolumes: _chargeElementReturnVolumes(reviewReturns),
       description: chargeElement.description,
       elementCount: numberOfElements,
       elementIndex: index + 1,
-      status,
       id,
       issues: formatIssues(issues),
-      purpose: chargeElement.purpose.description
+      purpose: chargeElement.purpose.description,
+      returnVolumes: _chargeElementReturnVolumes(reviewReturns),
+      status
     }
   })
 }
@@ -111,9 +111,9 @@ function _chargeReferences(reviewChargeReferences, chargePeriod) {
       billableReturnsWarning: totalAllocated > amendedAuthorisedVolume,
       chargeCategory: `Charge reference ${chargeReference.chargeCategory.reference}`,
       chargeDescription: chargeReference.chargeCategory.shortDescription,
-      id,
       chargeElements: _chargeElements(reviewChargeElements, chargePeriod),
       chargeReferenceLinkTitle: _chargeReferenceLinkTitle(reviewChargeReference),
+      id,
       totalBillableReturns: `${totalAllocated} ML / ${amendedAuthorisedVolume} ML`
     }
   })
@@ -144,7 +144,7 @@ function _chargeVersionDescription(reviewChargeReferences) {
 function _chargeVersions(reviewChargeVersions, toFinancialYearEnding) {
   return reviewChargeVersions.map((reviewChargeVersion) => {
     const { chargePeriodStartDate, chargePeriodEndDate, chargeVersion, reviewChargeReferences } = reviewChargeVersion
-    const chargePeriod = { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
+    const chargePeriod = { endDate: chargePeriodEndDate, startDate: chargePeriodStartDate }
 
     return {
       billingAccountDetails: _billingAccountDetails(chargeVersion.billingAccount),
