@@ -67,7 +67,7 @@ function _matchedReturns(reviewReturns) {
       abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
       description,
       issues: formatIssues(issues),
-      purpose: purposes[0].tertiary.description,
+      purpose: purposes[0].description,
       reference: returnReference,
       returnLink: `/system/return-logs/${returnLog.id}/details`,
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,

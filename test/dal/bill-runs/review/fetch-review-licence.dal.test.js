@@ -16,6 +16,7 @@ import LicenceHelper from 'water-abstraction-engine/test/helpers/licence.helper.
 import PurposeHelper from 'water-abstraction-engine/test/helpers/purpose.helper.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import ReviewChargeElementHelper from 'water-abstraction-engine/test/helpers/review-charge-element.helper.js'
 import ReviewChargeElementReturnHelper from 'water-abstraction-engine/test/helpers/review-charge-element-return.helper.js'
 import ReviewChargeReferenceHelper from 'water-abstraction-engine/test/helpers/review-charge-reference.helper.js'
@@ -24,9 +25,9 @@ import ReviewLicenceHelper from 'water-abstraction-engine/test/helpers/review-li
 import ReviewReturnHelper from 'water-abstraction-engine/test/helpers/review-return.helper.js'
 
 // Thing under test
-import FetchReviewLicenceService from '../../../../src/services/bill-runs/review/fetch-review-licence.service.js'
+import FetchReviewLicenceDal from '../../../../src/dal/bill-runs/review/fetch-review-licence.dal.js'
 
-describe('Bill Runs Review - Fetch Review Licence service', () => {
+describe('Bill Runs - Review - Fetch Review Licence dal', () => {
   let address
   let billingAccount
   let billingAccountAddress
@@ -41,6 +42,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
   let purpose
   let region
   let returnLog
+  let returnRequirement
   let reviewChargeElement
   let reviewChargeVersion
   let reviewChargeReference
@@ -64,7 +66,8 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
     billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, status: 'review' })
 
     licence = await LicenceHelper.add()
-    returnLog = await ReturnLogHelper.add()
+    returnRequirement = await ReturnRequirementHelper.add()
+    returnLog = await ReturnLogHelper.add({ returnRequirementId: returnRequirement.id })
 
     chargeVersion = await ChargeVersionHelper.add({
       billingAccountId: billingAccount.id,
@@ -87,9 +90,9 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
     reviewReturn = await ReviewReturnHelper.add({
       purposes: [
         {
-          primary: { code: 'A', description: 'Agriculture' },
-          secondary: { code: 'AGR', description: 'General Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
+          alias: null,
+          code: '400',
+          description: 'Spray Irrigation - Direct'
         }
       ],
       returnId: returnLog.returnId,
@@ -118,7 +121,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
 
   describe('when a matching review licence exists', () => {
     it('returns the match', async () => {
-      const result = await FetchReviewLicenceService(reviewLicence.id)
+      const result = await FetchReviewLicenceDal(reviewLicence.id)
 
       expect(result).toEqual({
         billRun: {
@@ -244,17 +247,17 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
             issues: '',
             purposes: [
               {
-                primary: { code: 'A', description: 'Agriculture' },
-                secondary: { code: 'AGR', description: 'General Agriculture' },
-                tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
+                alias: null,
+                code: '400',
+                description: 'Spray Irrigation - Direct'
               }
             ],
             quantity: 0,
             returnId: reviewReturn.returnId,
             returnLog: {
               id: returnLog.id,
-              periodEndDay: 28,
-              periodEndMonth: 4,
+              periodEndDay: 31,
+              periodEndMonth: 3,
               periodStartDay: 1,
               periodStartMonth: 4,
               returnId: returnLog.returnId
@@ -278,7 +281,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
 
   describe('when no matching review licence exists', () => {
     it('returns nothing', async () => {
-      const result = await FetchReviewLicenceService('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchReviewLicenceDal('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result).toBeUndefined()
     })

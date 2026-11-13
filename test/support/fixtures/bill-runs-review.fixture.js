@@ -71,9 +71,9 @@ function reviewChargeElement() {
         issues: '',
         purposes: [
           {
-            primary: { code: 'A', description: 'Agriculture' },
-            secondary: { code: 'AGR', description: 'General Agriculture' },
-            tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
+            alias: null,
+            code: '400',
+            description: 'Spray Irrigation - Direct'
           }
         ],
         quantity: 0,
@@ -267,9 +267,9 @@ function reviewLicence() {
         issues: '',
         purposes: [
           {
-            primary: { code: 'A', description: 'Agriculture' },
-            secondary: { code: 'AGR', description: 'General Agriculture' },
-            tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
+            alias: null,
+            code: '400',
+            description: 'Spray Irrigation - Direct'
           }
         ],
         quantity: 0,
@@ -310,9 +310,9 @@ function reviewLicence() {
         issues: '',
         purposes: [
           {
-            primary: { code: 'A', description: 'Agriculture' },
-            secondary: { code: 'AGR', description: 'General Agriculture' },
-            tertiary: { code: '420', description: 'Spray Irrigation - Storage' }
+            alias: null,
+            code: '420',
+            description: 'Spray Irrigation - Storage'
           }
         ],
         quantity: 0,

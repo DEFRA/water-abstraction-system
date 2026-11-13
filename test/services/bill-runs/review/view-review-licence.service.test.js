@@ -6,7 +6,7 @@ import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Things we need to stub
-import * as FetchReviewLicenceService from '../../../../src/services/bill-runs/review/fetch-review-licence.service.js'
+import * as FetchReviewLicenceDal from '../../../../src/dal/bill-runs/review/fetch-review-licence.dal.js'
 
 // Thing under test
 import ViewReviewLicenceService from '../../../../src/services/bill-runs/review/view-review-licence.service.js'
@@ -19,7 +19,7 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
   beforeEach(() => {
     reviewLicence = BillRunsReviewFixture.reviewLicence()
 
-    vi.spyOn(FetchReviewLicenceService, 'default').mockResolvedValue(reviewLicence)
+    vi.spyOn(FetchReviewLicenceDal, 'default').mockResolvedValue(reviewLicence)
   })
 
   afterEach(() => {

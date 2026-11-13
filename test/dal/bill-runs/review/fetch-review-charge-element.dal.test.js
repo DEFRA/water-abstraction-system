@@ -6,6 +6,7 @@ import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper
 import ChargeElementHelper from 'water-abstraction-engine/test/helpers/charge-element.helper.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
+import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
 import ReviewChargeElementHelper from 'water-abstraction-engine/test/helpers/review-charge-element.helper.js'
 import ReviewChargeElementReturnHelper from 'water-abstraction-engine/test/helpers/review-charge-element-return.helper.js'
 import ReviewChargeReferenceHelper from 'water-abstraction-engine/test/helpers/review-charge-reference.helper.js'
@@ -14,12 +15,13 @@ import ReviewLicenceHelper from 'water-abstraction-engine/test/helpers/review-li
 import ReviewReturnHelper from 'water-abstraction-engine/test/helpers/review-return.helper.js'
 
 // Thing under test
-import FetchReviewChargeElementService from '../../../../src/services/bill-runs/review/fetch-review-charge-element.service.js'
+import FetchReviewChargeElementDal from '../../../../src/dal/bill-runs/review/fetch-review-charge-element.dal.js'
 
-describe('Bill Runs Review - Fetch Review Charge Element service', () => {
+describe('Bill Runs - Review - Fetch Review Charge Element dal', () => {
   let billRun
   let chargeElement
   let returnLog
+  let returnRequirement
   let reviewChargeElement
   let reviewChargeVersion
   let reviewChargeReference
@@ -31,16 +33,17 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
 
     billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, status: 'review' })
 
-    returnLog = await ReturnLogHelper.add()
+    returnRequirement = await ReturnRequirementHelper.add()
+    returnLog = await ReturnLogHelper.add({ returnRequirementId: returnRequirement.id })
     chargeElement = await ChargeElementHelper.add()
 
     reviewLicence = await ReviewLicenceHelper.add({ billRunId: billRun.id })
     reviewReturn = await ReviewReturnHelper.add({
       purposes: [
         {
-          primary: { code: 'A', description: 'Agriculture' },
-          secondary: { code: 'AGR', description: 'General Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
+          alias: null,
+          code: '400',
+          description: 'Spray Irrigation - Direct'
         }
       ],
       returnId: returnLog.returnId,
@@ -64,7 +67,7 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
 
   describe('when a matching review charge element exists', () => {
     it('returns the match', async () => {
-      const result = await FetchReviewChargeElementService(reviewChargeElement.id)
+      const result = await FetchReviewChargeElementDal(reviewChargeElement.id)
 
       expect(result).toEqual({
         amendedAllocated: 0,
@@ -110,17 +113,17 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
             issues: '',
             purposes: [
               {
-                primary: { code: 'A', description: 'Agriculture' },
-                secondary: { code: 'AGR', description: 'General Agriculture' },
-                tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
+                alias: null,
+                code: '400',
+                description: 'Spray Irrigation - Direct'
               }
             ],
             quantity: 0,
             returnId: reviewReturn.returnId,
             returnLog: {
               id: returnLog.id,
-              periodEndDay: 28,
-              periodEndMonth: 4,
+              periodEndDay: 31,
+              periodEndMonth: 3,
               periodStartDay: 1,
               periodStartMonth: 4,
               returnId: returnLog.returnId
@@ -139,7 +142,7 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
 
   describe('when no matching review charge element exists', () => {
     it('returns nothing', async () => {
-      const result = await FetchReviewChargeElementService('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchReviewChargeElementDal('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result).toBeUndefined()
     })

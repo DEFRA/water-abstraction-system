@@ -1,26 +1,21 @@
 /**
  * Fetches the selected review charge element instance and related data for the 2PT review charge element pages
- * @module FetchReviewChargeReferenceService
+ * @module FetchReviewChargeElementDal
  */
 
-import Objection from 'water-abstraction-engine/wrappers/objection.wrapper.js'
 import ReviewChargeElementModel from 'water-abstraction-engine/models/review-charge-element.model.js'
 
 /**
  * Fetches the selected review charge element instance and related data for the 2PT review charge element pages
  *
- * This fetch service fetches the data needed for the main review charge element page, but also the edit page/service.
+ * This DAL fetches the data needed for the main review charge element page, but also the edit page/service.
  *
  * @param {string} reviewChargeElementId - The UUID of the review charge element being viewed
  *
  * @returns {Promise<object>} the matching `ReviewChargeElementModel` instance and related data needed for the
  * two-part tariff review charge element page
  */
-export default async function fetchReviewChargeElementService(reviewChargeElementId) {
-  return _fetch(reviewChargeElementId)
-}
-
-async function _fetch(reviewChargeElementId) {
+export default async function fetchReviewChargeElementDal(reviewChargeElementId) {
   return ReviewChargeElementModel.query()
     .findById(reviewChargeElementId)
     .select(['id', 'amendedAllocated', 'issues', 'status'])
@@ -80,14 +75,16 @@ async function _fetch(reviewChargeElementId) {
         .orderBy('reviewReturns.startDate', 'asc')
         .withGraphFetched('returnLog')
         .modifyGraph('returnLog', (returnLogBuilder) => {
-          returnLogBuilder.select([
-            'id',
-            'returnId',
-            Objection.ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
-            Objection.ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
-            Objection.ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
-            Objection.ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth')
-          ])
+          returnLogBuilder
+            .select([
+              'returnLogs.id',
+              'returnLogs.returnId',
+              'returnRequirement.abstractionPeriodStartDay AS periodStartDay',
+              'returnRequirement.abstractionPeriodStartMonth AS periodStartMonth',
+              'returnRequirement.abstractionPeriodEndDay AS periodEndDay',
+              'returnRequirement.abstractionPeriodEndMonth AS periodEndMonth'
+            ])
+            .innerJoinRelated('returnRequirement')
         })
     })
 }

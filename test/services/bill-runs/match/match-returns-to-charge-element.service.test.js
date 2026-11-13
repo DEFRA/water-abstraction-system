@@ -79,7 +79,7 @@ describe('Match Returns To Charge Element Service', () => {
     describe('because the purposes are different', () => {
       beforeEach(() => {
         returnLogs = _testReturnLogs()
-        returnLogs[1].purposes[0].tertiary.code = '600'
+        returnLogs[1].purposes[0].code = '600'
       })
 
       it('records only the matching return logs against the charge element', () => {
@@ -132,8 +132,8 @@ describe('Match Returns To Charge Element Service', () => {
   describe('when no return logs match', () => {
     beforeEach(() => {
       returnLogs = _testReturnLogs()
-      returnLogs[0].purposes[0].tertiary.code = '600'
-      returnLogs[1].purposes[0].tertiary.code = '600'
+      returnLogs[0].purposes[0].code = '600'
+      returnLogs[1].purposes[0].code = '600'
     })
 
     it('adds no matching return logs to the charge element', () => {
@@ -166,9 +166,8 @@ function _testReturnLogs() {
       purposes: [
         {
           alias: 'Spray Irrigation - Direct',
-          primary: { code: 'A', description: 'Agriculture' },
-          secondary: { code: 'AGR', description: 'General Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
+          code: '400',
+          description: 'Spray Irrigation - Direct'
         }
       ],
       reviewReturnId: '5f86823b-2384-48ca-b20f-e0f178122a0f'
@@ -185,9 +184,8 @@ function _testReturnLogs() {
       purposes: [
         {
           alias: 'Spray Irrigation - Direct',
-          primary: { code: 'A', description: 'Agriculture' },
-          secondary: { code: 'AGR', description: 'General Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
+          code: '400',
+          description: 'Spray Irrigation - Direct'
         }
       ]
     }

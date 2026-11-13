@@ -54,7 +54,7 @@ describe('Bill Runs Review - Review Charge Element presenter', () => {
 
   describe('the "matchedReturns" property', () => {
     describe('the "purpose" property', () => {
-      it("returns the matched return's tertiary purpose description", () => {
+      it("returns the matched return's purpose description", () => {
         const result = ReviewChargeElementPresenter(reviewChargeElement, elementIndex)
 
         expect(result.matchedReturns[0].purpose).toEqual('Spray Irrigation - Direct')

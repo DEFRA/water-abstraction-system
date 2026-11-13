@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Things we need to stub
-import * as FetchReviewChargeElementService from '../../../../src/services/bill-runs/review/fetch-review-charge-element.service.js'
+import * as FetchReviewChargeElementDal from '../../../../src/dal/bill-runs/review/fetch-review-charge-element.dal.js'
 
 // Thing under test
 import ViewEditService from '../../../../src/services/bill-runs/review/view-edit.service.js'
@@ -18,7 +18,7 @@ describe('Bill Runs - Review - View Edit Service', () => {
   beforeEach(() => {
     reviewChargeElement = BillRunsReviewFixture.reviewChargeElement()
 
-    vi.spyOn(FetchReviewChargeElementService, 'default').mockResolvedValue(reviewChargeElement)
+    vi.spyOn(FetchReviewChargeElementDal, 'default').mockResolvedValue(reviewChargeElement)
   })
 
   afterEach(() => {

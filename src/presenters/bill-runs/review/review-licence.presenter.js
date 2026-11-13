@@ -6,10 +6,10 @@
 import {
   formatAbstractionPeriod,
   formatFinancialYear,
-  formatLongDate,
-  formatPurposes
+  formatLongDate
 } from 'water-abstraction-engine/presenters/base.presenter.js'
 
+import { formatPurposes } from '../../return-logs/base-return-logs.presenter.js'
 import {
   calculateTotalBillableReturns,
   formatChargePeriod,

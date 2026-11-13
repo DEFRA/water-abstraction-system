@@ -2,26 +2,35 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
-import ReturnLogHelper from 'water-abstraction-engine/test/helpers/return-log.helper.js'
-import ReturnRequirementHelper from 'water-abstraction-engine/test/helpers/return-requirement.helper.js'
-import ReturnSubmissionHelper from 'water-abstraction-engine/test/helpers/return-submission.helper.js'
-import ReturnSubmissionLineHelper from 'water-abstraction-engine/test/helpers/return-submission-line.helper.js'
+import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import { generateLicenceRef, generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
+import * as FetchReturnLogsForLicenceDal from '../../../../src/dal/bill-runs/match/fetch-return-logs-for-licence.dal.js'
 
 // Thing under test
 import FetchReturnLogsForLicenceService from '../../../../src/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
 
-describe('Fetch Return Logs for Licence service', () => {
+describe('Bill Runs - Match - Fetch Return Logs For Licence service', () => {
   const billingPeriod = { endDate: new Date('2023-03-31'), startDate: new Date('2022-04-01') }
 
+  let licenceRef
   let notifierStub
-  let returnLogRecord
-  let returnRequirementRecord
-  let unlinkedReturnLogRecord
+  let returnLogs
 
   beforeEach(() => {
+    licenceRef = generateLicenceRef()
+
+    returnLogs = [
+      {
+        id: generateUUID(),
+        periodEndDay: 31,
+        periodEndMonth: 3,
+        periodStartDay: 1,
+        periodStartMonth: 4
+      }
+    ]
+
     // This depends on the GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -34,268 +43,40 @@ describe('Fetch Return Logs for Licence service', () => {
     delete globalThis.GlobalNotifier
   })
 
-  describe('when there are valid return logs that should be considered', () => {
-    beforeEach(async () => {
-      returnRequirementRecord = await ReturnRequirementHelper.add()
-      returnLogRecord = await ReturnLogHelper.add({
-        metadata: _metadata(true),
-        returnRequirementId: returnRequirementRecord.id
-      })
+  describe('when the return logs have an abstraction period', () => {
+    beforeEach(() => {
+      vi.spyOn(FetchReturnLogsForLicenceDal, 'default').mockResolvedValue(returnLogs)
     })
 
-    describe('which have return submission lines within the billing period', () => {
-      beforeEach(async () => {
-        const { id: returnSubmissionId } = await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
+    it('returns the return logs', async () => {
+      const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
 
-        await ReturnSubmissionLineHelper.add({
-          endDate: new Date('2022-05-07'),
-          quantity: 1234,
-          returnSubmissionId,
-          startDate: new Date('2022-05-01')
-        })
-        await ReturnSubmissionLineHelper.add({
-          endDate: new Date('2022-05-14'),
-          quantity: 5678,
-          returnSubmissionId,
-          startDate: new Date('2022-05-08')
-        })
-      })
-
-      it('returns the return log and return submission lines that are applicable', async () => {
-        const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
-
-        expect(result).toHaveLength(1)
-        expect(result[0].id).toEqual(returnLogRecord.id)
-        expect(result[0].returnId).toEqual(returnLogRecord.returnId)
-        expect(result[0].returnReference).toEqual(returnRequirementRecord.reference)
-        expect(result[0].description).toEqual('The Description')
-        expect(result[0].startDate).toEqual(new Date('2022-04-01'))
-        expect(result[0].endDate).toEqual(new Date('2023-03-31'))
-        expect(result[0].periodStartDay).toEqual(1)
-        expect(result[0].periodStartMonth).toEqual(4)
-        expect(result[0].periodEndDay).toEqual(31)
-        expect(result[0].periodEndMonth).toEqual(3)
-
-        expect(result[0].purposes).toHaveLength(1)
-        expect(result[0].purposes[0].tertiary.code).toEqual('400')
-        expect(result[0].purposes[0].tertiary.description).toEqual('Spray Irrigation - Direct')
-
-        expect(result[0].returnSubmissions).toHaveLength(1)
-        expect(result[0].returnSubmissions[0].nilReturn).toEqual(false)
-
-        expect(result[0].returnSubmissions[0].returnSubmissionLines).toHaveLength(2)
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[0].startDate).toEqual(new Date('2022-05-01'))
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[0].endDate).toEqual(new Date('2022-05-07'))
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[0].quantity).toEqual(1234)
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[1].startDate).toEqual(new Date('2022-05-08'))
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[1].endDate).toEqual(new Date('2022-05-14'))
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[1].quantity).toEqual(5678)
-      })
-    })
-
-    describe('and the return log is not linked to a return requirement', () => {
-      beforeEach(async () => {
-        unlinkedReturnLogRecord = await ReturnLogHelper.add({ metadata: _metadata(true), returnRequirementId: null })
-      })
-
-      it('falls back to the reference held against the return log', async () => {
-        const { licenceRef } = unlinkedReturnLogRecord
-        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
-
-        expect(result[0].returnReference).toEqual(Number(unlinkedReturnLogRecord.returnReference))
-      })
-    })
-
-    describe('which have NO return submission lines within the billing period', () => {
-      beforeEach(async () => {
-        const { id: returnSubmissionId } = await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
-
-        await ReturnSubmissionLineHelper.add({
-          endDate: new Date('2023-05-07'),
-          quantity: 1234,
-          returnSubmissionId,
-          startDate: new Date('2023-05-01')
-        })
-        await ReturnSubmissionLineHelper.add({
-          endDate: new Date('2023-05-14'),
-          quantity: 5678,
-          returnSubmissionId,
-          startDate: new Date('2023-05-08')
-        })
-      })
-
-      it('returns the return log with no return submission lines', async () => {
-        const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
-
-        expect(result).toHaveLength(1)
-
-        expect(result[0].returnSubmissions[0].returnSubmissionLines).toHaveLength(0)
-      })
-    })
-
-    describe('which is a nil return', () => {
-      beforeEach(async () => {
-        await ReturnSubmissionHelper.add({ nilReturn: true, returnLogId: returnLogRecord.id })
-      })
-
-      it('returns the return log with "nilreturn" set to "true" and no return submission lines', async () => {
-        const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
-
-        expect(result).toHaveLength(1)
-
-        expect(result[0].returnSubmissions).toHaveLength(1)
-        expect(result[0].returnSubmissions[0].nilReturn).toEqual(true)
-
-        expect(result[0].returnSubmissions[0].returnSubmissionLines).toHaveLength(0)
-      })
-    })
-
-    describe('where the return logs start date is outside the billing period but the end date is inside', () => {
-      beforeEach(async () => {
-        await ReturnLogHelper.add({
-          endDate: new Date('2022-12-31'),
-          startDate: new Date('2022-01-01')
-        })
-        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
-      })
-
-      it('returns the return log and return submission lines that are applicable', async () => {
-        const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
-
-        expect(result).toHaveLength(1)
-        expect(result[0].id).toEqual(returnLogRecord.id)
-        expect(result[0].description).toEqual('The Description')
-      })
-    })
-  })
-
-  describe('when there are NO valid return logs that should be considered', () => {
-    describe('because the return log is fully outside the billing period', () => {
-      beforeEach(async () => {
-        returnLogRecord = await ReturnLogHelper.add({
-          endDate: new Date('2024-03-31'),
-          startDate: new Date('2023-04-01')
-        })
-        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
-      })
-
-      it('returns no records', async () => {
-        const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
-
-        expect(result).toHaveLength(0)
-      })
-    })
-
-    describe('because the return logs start date is inside the billing period but end date is outside', () => {
-      beforeEach(async () => {
-        returnLogRecord = await ReturnLogHelper.add({
-          endDate: new Date('2023-12-31'),
-          startDate: new Date('2023-01-01')
-        })
-        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
-      })
-
-      it('returns no records', async () => {
-        const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
-
-        expect(result).toHaveLength(0)
-      })
-    })
-
-    describe('because the return log is not two-part-tariff', () => {
-      beforeEach(async () => {
-        returnLogRecord = await ReturnLogHelper.add({ metadata: _metadata(false) })
-
-        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
-      })
-
-      it('returns no records', async () => {
-        const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
-
-        expect(result).toHaveLength(0)
-      })
-    })
-
-    describe('because there are no return logs', () => {
-      it('returns no records', async () => {
-        const result = await FetchReturnLogsForLicenceService('LicenceRefWithNoReturnLogs', billingPeriod)
-
-        expect(result).toHaveLength(0)
-      })
-    })
-
-    describe('because the return is void', () => {
-      beforeEach(async () => {
-        returnLogRecord = await ReturnLogHelper.add({ metadata: _metadata(true), status: 'void' })
-
-        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
-      })
-
-      it('returns no records', async () => {
-        const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
-
-        expect(result).toHaveLength(0)
-      })
+      expect(result).toEqual(returnLogs)
     })
   })
 
   // NOTE: Added after we had a bill run error because a licence was linked to a return log where the abstraction period
   // data was all set to "null". It was set like this because the period had not been set against the return requirement
   // the return log was generated from.
-  describe('when fetch errors because the return log is missing abstraction data', () => {
-    beforeEach(async () => {
-      const metadata = _metadata(true)
+  describe('when a return log is missing its abstraction period', () => {
+    beforeEach(() => {
+      returnLogs[0].periodEndDay = null
+      returnLogs[0].periodEndMonth = null
+      returnLogs[0].periodStartDay = null
+      returnLogs[0].periodStartMonth = null
 
-      metadata.nald.periodEndDay = 'null'
-      metadata.nald.periodEndMonth = 'null'
-      metadata.nald.periodStartDay = 'null'
-      metadata.nald.periodStartMonth = 'null'
-
-      returnLogRecord = await ReturnLogHelper.add({ metadata })
+      vi.spyOn(FetchReturnLogsForLicenceDal, 'default').mockResolvedValue(returnLogs)
     })
 
-    it('logs and records the error then rethrows it', async () => {
-      const { licenceRef } = returnLogRecord
-
-      await expect(FetchReturnLogsForLicenceService(licenceRef, billingPeriod)).rejects.toThrow()
-
-      const logDataArg = notifierStub.omfg.mock.calls[0][1]
-
-      expect(notifierStub.omfg).toHaveBeenCalledWith(
-        'Bill run process fetch return logs for licence failed',
-        expect.any(Object),
-        expect.any(Error)
+    it('logs the error and throws it', async () => {
+      await expect(FetchReturnLogsForLicenceService(licenceRef, billingPeriod)).rejects.toThrow(
+        `Return log is missing abstraction period data for licence ${licenceRef}`
       )
-      expect(logDataArg).toEqual({ billingPeriod, licenceRef })
+
+      expect(notifierStub.omg).toHaveBeenCalledWith(
+        `Bill run fetch return logs for licence failed for licence ${licenceRef} due to missing abstraction period`,
+        { returnLogs }
+      )
     })
   })
 })
-
-function _metadata(isTwoPartTariff) {
-  return {
-    description: 'The Description',
-    isTwoPartTariff,
-    nald: {
-      periodEndDay: '31',
-      periodEndMonth: '3',
-      periodStartDay: '1',
-      periodStartMonth: '4'
-    },
-    purposes: [
-      {
-        tertiary: {
-          code: '400',
-          description: 'Spray Irrigation - Direct'
-        }
-      }
-    ]
-  }
-}
