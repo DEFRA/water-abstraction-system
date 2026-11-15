@@ -5,7 +5,7 @@
  */
 
 import Joi from 'water-abstraction-engine/wrappers/joi.wrapper.js'
-import { countries } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+import { Countries } from 'water-abstraction-engine/lib/countries.lib.js'
 
 import { addressLineValidator } from './addressLine.validator.js'
 
@@ -22,7 +22,7 @@ export default function internationalValidator(payload) {
     ...addressLineValidator(),
     country: Joi.string()
       .required()
-      .valid(...countries)
+      .valid(...Countries)
       .messages({
         'any.only': 'Select a country',
         'any.required': 'Select a country'

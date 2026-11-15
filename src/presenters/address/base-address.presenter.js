@@ -4,7 +4,7 @@
  * @module BaseAddressPresenter
  */
 
-import { countries } from 'water-abstraction-engine/lib/static-lookups.lib.js'
+import { Countries } from 'water-abstraction-engine/lib/countries.lib.js'
 
 /**
  * Generate a list of countries in a format suitable for a select box, with the specified country selected
@@ -25,7 +25,7 @@ export function countryLookup(selectedCountry = 'select') {
     }
   ]
 
-  for (const country of countries) {
+  for (const country of Countries) {
     displayCountries.push({
       selected: selectedCountry === country,
       text: country,
