@@ -6,7 +6,7 @@
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstraction-engine/lib/general.lib.js'
 
-import AssignBillRunToLicencesService from '../assign-bill-run-to-licences.service.js'
+import AssignBillRunToLicencesDal from '../../../dal/bill-runs/assign-bill-run-to-licences.dal.js'
 import GenerateBillRunService from '../tpt-supplementary/generate-bill-run.service.js'
 import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
 import MatchAndAllocateService from '../match/match-and-allocate.service.js'
@@ -38,7 +38,7 @@ export default async function processBillRunService(billRun, billingPeriods) {
 
     await _updateStatus(billRunId, 'processing')
 
-    await AssignBillRunToLicencesService(billRunId)
+    await AssignBillRunToLicencesDal(billRunId)
 
     const populated = await MatchAndAllocateService(billRun, billingPeriod)
 

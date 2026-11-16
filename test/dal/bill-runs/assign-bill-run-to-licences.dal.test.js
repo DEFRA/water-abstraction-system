@@ -10,7 +10,7 @@ import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helpe
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Thing under test
-import AssignBillRunToLicencesService from '../../../src/services/bill-runs/assign-bill-run-to-licences.service.js'
+import AssignBillRunToLicencesDal from '../../../src/dal/bill-runs/assign-bill-run-to-licences.dal.js'
 
 // NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
 let billRun
@@ -21,7 +21,7 @@ let unassignedDifferentRegionSameYear
 let unassignedSameRegionAndYearNonTpt
 let workflow
 
-describe('Bill Runs - Assign Bill Run To Licences service', () => {
+describe('Bill Runs - Assign Bill Run To Licences dal', () => {
   let region
 
   beforeEach(async () => {
@@ -70,7 +70,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
 
           describe('and the licences are not in workflow', () => {
             it('assigns the bill run to the supplementary year records', async () => {
-              await AssignBillRunToLicencesService(billRun.id)
+              await AssignBillRunToLicencesDal(billRun.id)
 
               const result = await unassignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
 
@@ -84,7 +84,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
             })
 
             it('does not assign the bill run to the supplementary year records', async () => {
-              await AssignBillRunToLicencesService(billRun.id)
+              await AssignBillRunToLicencesDal(billRun.id)
 
               const result = await unassignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
 
@@ -107,7 +107,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
           })
 
           it('does not assign the bill run to the supplementary year records', async () => {
-            await AssignBillRunToLicencesService(billRun.id)
+            await AssignBillRunToLicencesDal(billRun.id)
 
             const result = await unassignedDifferentRegionSameYear.licenceSupplementaryYear.$query().select()
 
@@ -130,7 +130,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
         })
 
         it('does not assign the bill run to the supplementary year records', async () => {
-          await AssignBillRunToLicencesService(billRun.id)
+          await AssignBillRunToLicencesDal(billRun.id)
 
           const result = await unassignedSameRegionAndYearNonTpt.licenceSupplementaryYear.$query().select()
 
@@ -153,7 +153,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
       })
 
       it('does not assign the bill run to the supplementary year records', async () => {
-        await AssignBillRunToLicencesService(billRun.id)
+        await AssignBillRunToLicencesDal(billRun.id)
 
         const result = await unassignedSameRegionDifferentYear.licenceSupplementaryYear.$query().select()
 
@@ -177,7 +177,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
     })
 
     it('does not assign the bill run to the supplementary year records', async () => {
-      await AssignBillRunToLicencesService(billRun.id)
+      await AssignBillRunToLicencesDal(billRun.id)
 
       const result = await assignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
 
