@@ -8,9 +8,9 @@ import EventModel from 'water-abstraction-engine/models/event.model.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Thing under test
-import CreateBillRunEventService from '../../../src/services/bill-runs/create-bill-run-event.service.js'
+import CreateBillRunEventDal from '../../../src/dal/bill-runs/create-bill-run-event.dal.js'
 
-describe('Create Bill Run Event service', () => {
+describe('Bill Runs - Create Bill Run Event dal', () => {
   let testDate
 
   beforeEach(async () => {
@@ -36,7 +36,7 @@ describe('Create Bill Run Event service', () => {
     })
 
     it('creates an event record', async () => {
-      const result = await CreateBillRunEventService(billRun, issuer)
+      const result = await CreateBillRunEventDal(billRun, issuer)
 
       expect(result).toBeInstanceOf(EventModel)
 

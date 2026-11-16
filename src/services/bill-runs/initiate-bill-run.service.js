@@ -5,7 +5,7 @@
 
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 
-import CreateBillRunEventService from './create-bill-run-event.service.js'
+import CreateBillRunEventDal from '../../dal/bill-runs/create-bill-run-event.dal.js'
 import CreateBillRunRequest from '../../requests/charging-module/create-bill-run.request.js'
 import CreateBillRunService from './create-bill-run.service.js'
 
@@ -28,7 +28,7 @@ export default async function initiateBillRunService(financialYearEndings, regio
   const billRunOptions = _billRunOptions(chargingModuleResult, batchType)
   const billRun = await CreateBillRunService(regionId, financialYearEndings, billRunOptions)
 
-  await CreateBillRunEventService(billRun, userEmail)
+  await CreateBillRunEventDal(billRun, userEmail)
 
   return billRun
 }
