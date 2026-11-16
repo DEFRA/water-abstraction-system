@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things to stub
 import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
-import * as CheckBusyBillRunsService from '../../../src/services/bill-runs/check-busy-bill-runs.service.js'
+import * as CheckBusyBillRunsDal from '../../../src/dal/bill-runs/check-busy-bill-runs.dal.js'
 import * as FetchBillRunsService from '../../../src/services/bill-runs/fetch-bill-runs.service.js'
 import * as FetchRegionsService from '../../../src/services/bill-runs/setup/fetch-regions.service.js'
 
@@ -15,7 +15,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
   let yarStub
 
   beforeEach(() => {
-    vi.spyOn(CheckBusyBillRunsService, 'default').mockResolvedValue('none')
+    vi.spyOn(CheckBusyBillRunsDal, 'default').mockResolvedValue('none')
     vi.spyOn(FetchRegionsService, 'default').mockResolvedValue([
       { displayName: 'Anglian', id: '1d562e9a-2104-41d9-aa75-c008a7ec9059' },
       { displayName: 'Midlands', id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233' }

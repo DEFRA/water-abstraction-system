@@ -5,9 +5,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { db } from 'water-abstraction-engine/db/db.js'
 
 // Thing under test
-import CheckBusyBillRunsService from '../../../src/services/bill-runs/check-busy-bill-runs.service.js'
+import CheckBusyBillRunsDal from '../../../src/dal/bill-runs/check-busy-bill-runs.dal.js'
 
-describe('Check Busy Bill Runs service', () => {
+describe('Bill Runs - Check Busy Bill Runs dal', () => {
   afterEach(async () => {
     vi.restoreAllMocks()
   })
@@ -18,7 +18,7 @@ describe('Check Busy Bill Runs service', () => {
     })
 
     it('returns "both"', async () => {
-      const result = await CheckBusyBillRunsService()
+      const result = await CheckBusyBillRunsDal()
 
       expect(result).toEqual('both')
     })
@@ -30,7 +30,7 @@ describe('Check Busy Bill Runs service', () => {
     })
 
     it('returns "cancelling"', async () => {
-      const result = await CheckBusyBillRunsService()
+      const result = await CheckBusyBillRunsDal()
 
       expect(result).toEqual('cancelling')
     })
@@ -42,7 +42,7 @@ describe('Check Busy Bill Runs service', () => {
     })
 
     it('returns "building"', async () => {
-      const result = await CheckBusyBillRunsService()
+      const result = await CheckBusyBillRunsDal()
 
       expect(result).toEqual('building')
     })
@@ -54,7 +54,7 @@ describe('Check Busy Bill Runs service', () => {
     })
 
     it('returns "none"', async () => {
-      const result = await CheckBusyBillRunsService()
+      const result = await CheckBusyBillRunsDal()
 
       expect(result).toEqual('none')
     })

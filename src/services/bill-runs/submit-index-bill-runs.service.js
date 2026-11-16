@@ -7,7 +7,7 @@ import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.pr
 import { formatValidationResult } from 'water-abstraction-engine/presenters/base.presenter.js'
 import { clearFilters, handleOneOptionSelected } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
-import CheckBusyBillRunsService from './check-busy-bill-runs.service.js'
+import CheckBusyBillRunsDal from '../../dal/bill-runs/check-busy-bill-runs.dal.js'
 import FetchBillRunsService from './fetch-bill-runs.service.js'
 import FetchRegionsService from './setup/fetch-regions.service.js'
 import IndexBillRunsPresenter from '../../presenters/bill-runs/index-bill-runs.presenter.js'
@@ -57,7 +57,7 @@ async function _replayView(payload, error, page, regions, savedFilters) {
   // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
   // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
   const [busyResult, { results: billRuns, total: totalNumber }] = await Promise.all([
-    CheckBusyBillRunsService(),
+    CheckBusyBillRunsDal(),
     FetchBillRunsService(savedFilters, page)
   ])
 
