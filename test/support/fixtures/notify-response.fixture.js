@@ -115,6 +115,16 @@ function sendPdfSuccessfulResponse(referenceCode) {
   }
 }
 
+/**
+ * Represents an error response from the Notify API for a status request
+ *
+ * > This and `sendErrorResponse()` are essentially the same. However, the error messages they contain reflect the
+ * > different request types to give a more realistic test response.
+ *
+ * @param {number} [statusCode=400] - the HTTP status code to use for the error response
+ *
+ * @returns {object} an object representing the error response from the Notify API
+ */
 function statusErrorResponse(statusCode = 400) {
   return {
     response: {
@@ -133,6 +143,14 @@ function statusErrorResponse(statusCode = 400) {
   }
 }
 
+/**
+ * Represents a successful response from the Notify API to requesting the status of an email notification
+ *
+ * @param {string} referenceCode - the unique generated reference code
+ * @param {string} [notifyStatus='delivered'] - the status of the notification in Notify
+ *
+ * @returns {object} an object representing the successful response from the Notify API
+ */
 function statusEmailSuccessfulResponse(referenceCode, notifyStatus = 'delivered') {
   return {
     response: {
