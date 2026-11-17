@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Things to stub
 import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 import * as CheckBusyBillRunsDal from '../../../src/dal/bill-runs/check-busy-bill-runs.dal.js'
-import * as FetchBillRunsService from '../../../src/services/bill-runs/fetch-bill-runs.service.js'
+import * as FetchBillRunsDal from '../../../src/dal/bill-runs/fetch-bill-runs.dal.js'
 import * as FetchRegionsService from '../../../src/services/bill-runs/setup/fetch-regions.service.js'
 
 // Thing under test
@@ -230,7 +230,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
+          vi.spyOn(FetchBillRunsDal, 'default').mockResolvedValue({
             results: _fetchedBillRuns(),
             total: 70
           })
@@ -405,7 +405,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
+          vi.spyOn(FetchBillRunsDal, 'default').mockResolvedValue({
             results: _fetchedBillRuns(),
             total: 2
           })

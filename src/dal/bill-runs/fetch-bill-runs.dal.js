@@ -1,6 +1,6 @@
 /**
  * Fetches a summary of each bill run for the selected page for /bill-runs
- * @module FetchBillRunsService
+ * @module FetchBillRunsDal
  */
 
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
@@ -23,7 +23,7 @@ import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
  *
  * @returns {Promise<module:BillRunModel[]>} An array of bill runs that match the selected 'page in the data
  */
-export default async function fetchBillRunsService(filters, page = '1') {
+export default async function fetchBillRunsDal(filters, page = '1') {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)

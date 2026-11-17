@@ -8,7 +8,7 @@ import { formatValidationResult } from 'water-abstraction-engine/presenters/base
 import { clearFilters, handleOneOptionSelected } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
 import CheckBusyBillRunsDal from '../../dal/bill-runs/check-busy-bill-runs.dal.js'
-import FetchBillRunsService from './fetch-bill-runs.service.js'
+import FetchBillRunsDal from '../../dal/bill-runs/fetch-bill-runs.dal.js'
 import FetchRegionsService from './setup/fetch-regions.service.js'
 import IndexBillRunsPresenter from '../../presenters/bill-runs/index-bill-runs.presenter.js'
 import IndexValidator from '../../validators/bill-runs/index.validator.js'
@@ -54,11 +54,11 @@ async function _replayView(payload, error, page, regions, savedFilters) {
   // When the page comes from the request via the controller then it will be a string. For consistency we want it as a
   // number
 
-  // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
-  // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
+  // We expect the FetchBillRunsDal to take the longest to complete. But running them together means we are only waiting
+  // as long as it takes FetchBillRunsDal to complete rather than their combined time
   const [busyResult, { results: billRuns, total: totalNumber }] = await Promise.all([
     CheckBusyBillRunsDal(),
-    FetchBillRunsService(savedFilters, page)
+    FetchBillRunsDal(savedFilters, page)
   ])
 
   const pagination = PaginatorPresenter(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
