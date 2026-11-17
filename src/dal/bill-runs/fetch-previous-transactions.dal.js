@@ -1,6 +1,6 @@
 /**
  * Fetches the previously billed transactions that match, removing any debits which cancelled out by previous credits
- * @module FetchPreviousTransactionsService
+ * @module FetchPreviousTransactionsDal
  */
 
 import TransactionModel from 'water-abstraction-engine/models/transaction.model.js'
@@ -18,7 +18,7 @@ import { transactionsMatch } from 'water-abstraction-engine/lib/general.lib.js'
  *
  * @returns {Promise<object[]>} The resulting matched transactions
  */
-export default async function fetchPreviousTransactionsService(
+export default async function fetchPreviousTransactionsDal(
   billingAccountId,
   licenceId,
   financialYearEnding,

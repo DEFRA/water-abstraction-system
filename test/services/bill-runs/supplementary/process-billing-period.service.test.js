@@ -17,7 +17,7 @@ import FetchChargeVersionsService from '../../../../src/services/bill-runs/suppl
 
 // Things we need to stub
 import * as ChargingModuleGenerateBillRunRequest from '../../../../src/requests/charging-module/generate-bill-run.request.js'
-import * as FetchPreviousTransactionsService from '../../../../src/services/bill-runs/fetch-previous-transactions.service.js'
+import * as FetchPreviousTransactionsDal from '../../../../src/dal/bill-runs/fetch-previous-transactions.dal.js'
 import * as GenerateTransactionsService from '../../../../src/services/bill-runs/generate-transactions.service.js'
 import * as SendTransactionsService from '../../../../src/services/bill-runs/send-transactions.service.js'
 
@@ -54,7 +54,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
     billRun = await BillRunHelper.add({ regionId: region.id })
 
-    vi.spyOn(FetchPreviousTransactionsService, 'default').mockResolvedValue([])
+    vi.spyOn(FetchPreviousTransactionsDal, 'default').mockResolvedValue([])
   })
 
   afterEach(async () => {

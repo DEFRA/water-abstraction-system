@@ -11,7 +11,7 @@ import TransactionModel from 'water-abstraction-engine/models/transaction.model.
 import BillRunError from '../../../errors/bill-run.error.js'
 import DetermineChargePeriodService from '../determine-charge-period.service.js'
 import DetermineMinimumChargeService from '../determine-minimum-charge.service.js'
-import FetchPreviousTransactionsService from '../fetch-previous-transactions.service.js'
+import FetchPreviousTransactionsDal from '../../../dal/bill-runs/fetch-previous-transactions.dal.js'
 import GenerateTransactionsService from '../generate-transactions.service.js'
 import PreGenerateBillingDataService from './pre-generate-billing-data.service.js'
 import ProcessSupplementaryTransactionsService from '../process-supplementary-transactions.service.js'
@@ -179,7 +179,7 @@ async function _cleanseTransactions(currentBillingData, billingPeriod) {
     return []
   }
 
-  const previousTransactions = await FetchPreviousTransactionsService(
+  const previousTransactions = await FetchPreviousTransactionsDal(
     currentBillingData.bill.billingAccountId,
     currentBillingData.billLicence.licenceId,
     billingPeriod.endDate.getFullYear(),
