@@ -3,11 +3,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import ExpandedErrorError from 'water-abstraction-engine/errors/expanded.error.js'
+import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
-import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import * as FetchBillRunDal from '../../../src/dal/bill-runs/fetch-bill-run.dal.js'
 import * as GenerateAnnualBillRunService from '../../../src/services/bill-runs/two-part-tariff/generate-bill-run.service.js'
 import * as GenerateSupplementaryBillRunService from '../../../src/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
+import * as MarkAsProcessingDal from '../../../src/dal/bill-runs/mark-as-processing.dal.js'
 
 // Thing under test
 import GenerateTwoPartTariffBillRunService from '../../../src/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
@@ -15,26 +17,20 @@ import GenerateTwoPartTariffBillRunService from '../../../src/services/bill-runs
 describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
   const billRunDetails = {
     fromFinancialYearEnding: 2023,
-    id: '8aaaf207-fd0e-4a10-9ac6-b89f68250e0f',
+    id: generateUUID(),
     toFinancialYearEnding: 2023
   }
 
   let billRun
-  let billRunPatchStub
-  let billRunSelectStub
+  let fetchBillRunDalStub
+  let markAsProcessingDalStub
 
   beforeEach(async () => {
-    billRunPatchStub = vi.fn().mockResolvedValue()
-    billRunSelectStub = vi.fn()
+    fetchBillRunDalStub = vi.spyOn(FetchBillRunDal, 'default')
+    markAsProcessingDalStub = vi.spyOn(MarkAsProcessingDal, 'default').mockResolvedValue()
 
     vi.spyOn(GenerateAnnualBillRunService, 'default').mockResolvedValue()
     vi.spyOn(GenerateSupplementaryBillRunService, 'default').mockResolvedValue()
-
-    vi.spyOn(BillRunModel, 'query').mockReturnValue({
-      findById: vi.fn().mockReturnThis(),
-      patch: billRunPatchStub,
-      select: billRunSelectStub
-    })
   })
 
   afterEach(() => {
@@ -51,7 +47,7 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       describe('and the bill run does not have a status of "review"', () => {
         beforeEach(async () => {
           billRun.status = 'processing'
-          billRunSelectStub.mockResolvedValue(billRun)
+          fetchBillRunDalStub.mockResolvedValue(billRun)
         })
 
         it('throws an error', async () => {
@@ -70,14 +66,13 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       describe('and the bill run has a status of "review"', () => {
         beforeEach(() => {
           billRun.status = 'review'
-          billRunSelectStub.mockResolvedValue(billRun)
+          fetchBillRunDalStub.mockResolvedValue(billRun)
         })
 
         it('sets the bill run status to "processing"', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(billRunPatchStub).toHaveBeenCalledOnce()
-          expect(billRunPatchStub.mock.calls[0][0]).toMatchObject({ status: 'processing' })
+          expect(markAsProcessingDalStub).toHaveBeenCalledExactlyOnceWith(billRun.id)
         })
 
         it('triggers the "generate annual bill run" service', async () => {
@@ -97,7 +92,7 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       describe('and the bill run does not have a status of "review" or "processing"', () => {
         beforeEach(async () => {
           billRun.status = 'ready'
-          billRunSelectStub.mockResolvedValue(billRun)
+          fetchBillRunDalStub.mockResolvedValue(billRun)
         })
 
         it('throws an error', async () => {
@@ -116,14 +111,13 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       describe('and the bill run has a status of "review"', () => {
         beforeEach(() => {
           billRun.status = 'review'
-          billRunSelectStub.mockResolvedValue(billRun)
+          fetchBillRunDalStub.mockResolvedValue(billRun)
         })
 
         it('sets the bill run status to "processing"', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(billRunPatchStub).toHaveBeenCalledOnce()
-          expect(billRunPatchStub.mock.calls[0][0]).toMatchObject({ status: 'processing' })
+          expect(markAsProcessingDalStub).toHaveBeenCalledExactlyOnceWith(billRun.id)
         })
 
         it('triggers the "generate supplementary bill run" service', async () => {
@@ -137,13 +131,13 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       describe('and the bill run has a status of "processing"', () => {
         beforeEach(() => {
           billRun.status = 'processing'
-          billRunSelectStub.mockResolvedValue(billRun)
+          fetchBillRunDalStub.mockResolvedValue(billRun)
         })
 
         it('does not update the bill run status', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(billRunPatchStub).not.toHaveBeenCalled()
+          expect(markAsProcessingDalStub).not.toHaveBeenCalled()
         })
 
         it('triggers the "generate supplementary bill run" service', async () => {
