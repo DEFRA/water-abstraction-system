@@ -4,68 +4,114 @@ import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.
 const { HTTP_STATUS_OK } = http2.constants
 
 /**
- * Represents a successful response from the Notify API
+ * Represents a successful response from the Notify API to sending an email notification
  *
  * @param {string} referenceCode - the unique generated reference code
  *
  * @returns {object} an object representing the successful response from the Notify API
  */
-function successfulResponse(referenceCode) {
+function sendEmailSuccessfulResponse(referenceCode) {
   return {
-    email: {
-      response: {
-        body: {
-          content: {
-            body: 'Dear licence holder,\r\n',
-            from_email: 'environment.agency.water.resources.licensing.service@notifications.service.gov.uk',
-            one_click_unsubscribe_url: null,
-            subject: 'Submit your water abstraction returns by 28th April 2025'
-          },
-          id: '9a0a0ba0-9dc7-4322-9a68-cb370220d0c9',
-          reference: referenceCode,
-          scheduled_for: null,
-          template: {
-            id: NOTIFY_TEMPLATES.invitations.standard.email['returns user'],
-            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${NOTIFY_TEMPLATES.invitations.standard.email['returns user']}`,
-            version: 40
-          },
-          uri: 'https://api.notifications.service.gov.uk/v2/notifications/9a0a0ba0-9dc7-4322-9a68-cb370220d0c9'
+    response: {
+      body: {
+        content: {
+          body: 'Dear licence holder,\r\n',
+          from_email: 'environment.agency.water.resources.licensing.service@notifications.service.gov.uk',
+          one_click_unsubscribe_url: null,
+          subject: 'Submit your water abstraction returns by 28th April 2025'
         },
-        statusCode: HTTP_STATUS_OK
+        id: '9a0a0ba0-9dc7-4322-9a68-cb370220d0c9',
+        reference: referenceCode,
+        scheduled_for: null,
+        template: {
+          id: NOTIFY_TEMPLATES.invitations.standard.email['returns user'],
+          uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${NOTIFY_TEMPLATES.invitations.standard.email['returns user']}`,
+          version: 40
+        },
+        uri: 'https://api.notifications.service.gov.uk/v2/notifications/9a0a0ba0-9dc7-4322-9a68-cb370220d0c9'
       },
-      succeeded: true
+      statusCode: HTTP_STATUS_OK
     },
-    letter: {
-      response: {
-        body: {
-          content: {
-            body: 'Dear Licence holder,\r\n',
-            subject: 'Submit your water abstraction returns by 28th April 2025'
-          },
-          id: 'fff6c2a9-77fc-4553-8265-546109a45044',
-          reference: referenceCode,
-          scheduled_for: null,
-          template: {
-            id: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder'],
-            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']}`,
-            version: 32
-          },
-          uri: 'https://api.notifications.service.gov.uk/v2/notifications/fff6c2a9-77fc-4553-8265-546109a45044'
-        },
-        statusCode: HTTP_STATUS_OK
+    succeeded: true
+  }
+}
+
+/**
+ * Represents an error response from the Notify API for a send notification request
+ *
+ * > This and `statusErrorResponse()` are essentially the same. However, the error messages they contain reflect the
+ * > different request types to give a more realistic test response.
+ *
+ * @param {number} [statusCode=400] - the HTTP status code to use for the error response
+ *
+ * @returns {object} an object representing the error response from the Notify API
+ */
+function sendErrorResponse(statusCode = 400) {
+  return {
+    response: {
+      body: {
+        errors: [
+          {
+            error: 'BadRequestError',
+            message: 'Missing personalisation: returnDueDate'
+          }
+        ],
+        status_code: statusCode
       },
-      succeeded: true
+      statusCode
     },
-    pdf: {
-      response: {
-        body: {
-          id: 'fff6c2a9-77fc-4553-8265-546109a45044',
-          reference: referenceCode
+    succeeded: false
+  }
+}
+
+/**
+ * Represents a successful response from the Notify API to sending a letter notification
+ *
+ * @param {string} referenceCode - the unique generated reference code
+ *
+ * @returns {object} an object representing the successful response from the Notify API
+ */
+function sendLetterSuccessfulResponse(referenceCode) {
+  return {
+    response: {
+      body: {
+        content: {
+          body: 'Dear Licence holder,\r\n',
+          subject: 'Submit your water abstraction returns by 28th April 2025'
         },
-        statusCode: HTTP_STATUS_OK
+        id: 'fff6c2a9-77fc-4553-8265-546109a45044',
+        reference: referenceCode,
+        scheduled_for: null,
+        template: {
+          id: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder'],
+          uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']}`,
+          version: 32
+        },
+        uri: 'https://api.notifications.service.gov.uk/v2/notifications/fff6c2a9-77fc-4553-8265-546109a45044'
       },
-      succeeded: true
-    }
+      statusCode: HTTP_STATUS_OK
+    },
+    succeeded: true
+  }
+}
+
+/**
+ * Represents a successful response from the Notify API to sending a PDF notification
+ *
+ * @param {string} referenceCode - the unique generated reference code
+ *
+ * @returns {object} an object representing the successful response from the Notify API
+ */
+function sendPdfSuccessfulResponse(referenceCode) {
+  return {
+    response: {
+      body: {
+        id: 'fff6c2a9-77fc-4553-8265-546109a45044',
+        reference: referenceCode
+      },
+      statusCode: HTTP_STATUS_OK
+    },
+    succeeded: true
   }
 }
 
@@ -182,6 +228,10 @@ function _statusLetterBody(referenceCode, notifyStatus) {
 }
 
 export default {
+  sendEmailSuccessfulResponse,
+  sendErrorResponse,
+  sendLetterSuccessfulResponse,
+  sendPdfSuccessfulResponse,
   statusEmailSuccessfulResponse,
   statusErrorResponse,
   statusLetterSuccessfulResponse,
