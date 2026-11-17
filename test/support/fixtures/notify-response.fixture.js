@@ -69,6 +69,121 @@ function successfulResponse(referenceCode) {
   }
 }
 
+function statusErrorResponse(statusCode = 400) {
+  return {
+    response: {
+      body: {
+        errors: [
+          {
+            error: 'ValidationError',
+            message: 'notification_id is not a valid UUID'
+          }
+        ],
+        status_code: statusCode
+      },
+      statusCode
+    },
+    succeeded: false
+  }
+}
+
+function statusEmailSuccessfulResponse(referenceCode, notifyStatus = 'delivered') {
+  return {
+    response: {
+      body: _statusEmailBody(referenceCode, notifyStatus),
+      statusCode: HTTP_STATUS_OK
+    },
+    succeeded: true
+  }
+}
+
+function statusLetterSuccessfulResponse(referenceCode, notifyStatus = 'received') {
+  return {
+    response: {
+      body: _statusLetterBody(referenceCode, notifyStatus),
+      statusCode: HTTP_STATUS_OK
+    },
+    succeeded: true
+  }
+}
+
+function _statusEmailBody(referenceCode, notifyStatus) {
+  return {
+    body: 'Dear licence contact,\r\n',
+    completed_at: '2026-11-11T10:02:49.098868Z',
+    cost_details: {},
+    cost_in_pounds: 0.0,
+    created_at: '2026-11-11T10:02:48.989458Z',
+    created_by_name: null,
+    email_address: 'carol.shaw@atari.com',
+    id: '9949f0e2-da5e-44b9-8897-629dfda098d2',
+    is_cost_data_ready: true,
+    line_1: null,
+    line_2: null,
+    line_3: null,
+    line_4: null,
+    line_5: null,
+    line_6: null,
+    one_click_unsubscribe_url: null,
+    phone_number: null,
+    postage: null,
+    postcode: null,
+    reference: referenceCode,
+    scheduled_for: null,
+    sent_at: '2026-11-11T10:02:49.049377Z',
+    status: notifyStatus,
+    subject: 'We have not received your water abstraction returns',
+    template: {
+      id: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836',
+      uri: 'https://api.notifications.service.gov.uk/v2/template/f1144bc7-8bdc-4e82-87cb-1a6c69445836/version/27',
+      version: 27
+    },
+    type: 'email'
+  }
+}
+
+function _statusLetterBody(referenceCode, notifyStatus) {
+  return {
+    body: 'Dear Licence holder,\r\n',
+    completed_at: '2026-11-11T10:02:49.098868Z',
+    cost_details: {
+      billable_sheets_of_paper: 0,
+      postage: 'second'
+    },
+    cost_in_pounds: 0.0,
+    created_at: '2026-11-11T10:02:48.989458Z',
+    created_by_name: null,
+    email_address: null,
+    estimated_delivery: '2026-11-19T16:00:54.818091Z',
+    id: '763692a1-26ad-43b0-a133-b03ef115879b',
+    is_cost_data_ready: true,
+    line_1: 'ENVIRONMENT AGENCY',
+    line_2: 'HORIZON HOUSE',
+    line_3: 'DEANERY LANE',
+    line_4: 'BRISTOL',
+    line_5: 'BS1 5AH',
+    line_6: null,
+    one_click_unsubscribe_url: null,
+    phone_number: null,
+    postage: 'second',
+    postcode: null,
+    reference: referenceCode,
+    scheduled_for: null,
+    sent_at: '2026-11-11T10:02:49.049377Z',
+    status: notifyStatus,
+    subject: 'We have not received your water abstraction returns',
+    template: {
+      id: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba',
+      uri: 'https://api.notifications.service.gov.uk/v2/template/c01c808b-094b-4a3a-ab9f-a6e86bad36ba/version/19',
+      version: 19
+    },
+    type: 'letter'
+  }
+}
+
 export default {
+  statusEmailSuccessfulResponse,
+  statusErrorResponse,
+  statusLetterSuccessfulResponse,
   successfulResponse
 }
