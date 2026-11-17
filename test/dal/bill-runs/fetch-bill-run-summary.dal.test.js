@@ -16,7 +16,7 @@ import RegionModel from 'water-abstraction-engine/models/region.model.js'
 import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import FetchBillRunDal from '../../../src/dal/bill-runs/fetch-bill-run.dal.js'
+import FetchBillRunSummaryDal from '../../../src/dal/bill-runs/fetch-bill-run-summary.dal.js'
 
 describe('Bill Runs - Fetch Bill Run dal', () => {
   let linkedBillingAccounts
@@ -115,14 +115,14 @@ describe('Bill Runs - Fetch Bill Run dal', () => {
 
   describe('when a bill run with a matching ID exists', () => {
     it('returns the matching instance of BillRunModel', async () => {
-      const { billRun: result } = await FetchBillRunDal(testBillRun.id)
+      const { billRun: result } = await FetchBillRunSummaryDal(testBillRun.id)
 
       expect(result.id).toEqual(testBillRun.id)
       expect(result).toBeInstanceOf(BillRunModel)
     })
 
     it('returns the matching bill run including the linked region', async () => {
-      const { billRun: result } = await FetchBillRunDal(testBillRun.id)
+      const { billRun: result } = await FetchBillRunSummaryDal(testBillRun.id)
       const { region: returnedRegion } = result
 
       expect(result.id).toEqual(testBillRun.id)
@@ -133,7 +133,7 @@ describe('Bill Runs - Fetch Bill Run dal', () => {
     })
 
     it('returns a bill summary for each bill linked to the bill run', async () => {
-      const { billSummaries: result } = await FetchBillRunDal(testBillRun.id)
+      const { billSummaries: result } = await FetchBillRunSummaryDal(testBillRun.id)
 
       // NOTE: When we create the licences the helper will generate random licence references. When the service returns
       // them for the first bill though, they are expected to be in ascending order. So, we need to sort them first to
@@ -172,7 +172,7 @@ describe('Bill Runs - Fetch Bill Run dal', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('returns a result with no values set', async () => {
-      const result = await FetchBillRunDal('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillRunSummaryDal('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeDefined()
       expect(result.billRun).toBeUndefined()

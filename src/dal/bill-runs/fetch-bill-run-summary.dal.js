@@ -1,6 +1,6 @@
 /**
  * Fetches data needed for the bill run page which includes a summary for each bill linked to the bill run
- * @module FetchBillRunDal
+ * @module FetchBillRunSummaryDal
  */
 
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
@@ -16,7 +16,7 @@ import { db } from 'water-abstraction-engine/db/db.js'
  * @returns {Promise<object>} the matching instance of BillRunModel plus a summary (Billing account number and contact,
  * licence, numbers, financial year and total net amount) for each bill linked to the bill run
  */
-export default async function fetchBillRunDal(id) {
+export default async function fetchBillRunSummaryDal(id) {
   const billRun = await _fetchBillRun(id)
   const billSummaries = await _fetchBillSummaries(id)
 
