@@ -15,7 +15,7 @@ import UpdateStatusDal from '../../dal/notifications/update-status.dal.js'
 /**
  * Check the status of a pending notification with Notify and records the result if its been sent or failed to send
  *
- * @param {object} notification
+ * @param {object} notification - The notification to check the status for
  */
 export default async function checkNotificationStatusService(notification) {
   try {
