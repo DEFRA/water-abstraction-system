@@ -15,12 +15,6 @@ describe('Notifications - Record Notify Error DAL', () => {
 
   beforeEach(async () => {
     notification = await NotificationHelper.add({ status: 'pending' })
-    notifyRequestResult = {
-      id: notification.id,
-      notifyError:
-        '{"errors":[{"error":"ValidationError","message":"notification_id is not a valid UUID"}],"message":"Request failed with status code 400","status":400}',
-      status: 'error'
-    }
   })
 
   afterEach(async () => {
