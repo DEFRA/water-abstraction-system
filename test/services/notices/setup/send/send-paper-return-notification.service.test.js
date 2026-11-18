@@ -24,7 +24,7 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
     referenceCode = generateNoticeReferenceCode('RINV-')
     notification = NotificationsFixture.notification().notification
 
-    notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).pdf
+    notifyResponse = NotifyResponseFixture.sendPdfSuccessfulResponse(referenceCode)
 
     vi.spyOn(CreatePrecompiledFileRequest, 'default').mockResolvedValue(notifyResponse)
 
