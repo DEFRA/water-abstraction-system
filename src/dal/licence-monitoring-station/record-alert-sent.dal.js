@@ -18,7 +18,7 @@ import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.j
  *
  * @param {string} licenceMonitoringStationId - the UUID of the licence monitoring station to update
  * @param {string} status - the status to set for the licence monitoring station
- * @param {string} statusUpdatedAt - the timestamp when the abstraction alert was created
+ * @param {Date} statusUpdatedAt - the timestamp when the abstraction alert was created
  * @param {object} trx - Database transaction object to ensure all DB changes are applied, or none at all
  */
 export default async function recordAlertSentDal(licenceMonitoringStationId, status, statusUpdatedAt, trx) {

@@ -48,11 +48,10 @@ export default async function recordInviteSentDal(returnLogIds, dueDate, sentDat
  *
  * The due date passed in is from the letter notification, and we want to override the existing 'due date'.
  *
- * Just to be sure, we only want to update return logs linked to the notification that have the 'email' due date,
- * which is always one day less than the letter due date.
+ * Just to be sure, we only want to update return logs linked to the notification that have the 'email' due date, which
+ * is always one day less than the letter due date.
  *
- * So, this function works out the what the email due date would be (due date minus one day) for the update's WHERE
- * clause.
+ * So, this function works out what the email due date would be (due date minus one day) for the update's WHERE clause.
  *
  * @private
  */
