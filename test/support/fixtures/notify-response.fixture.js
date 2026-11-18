@@ -244,6 +244,57 @@ function statusLetterSuccessfulResponse(referenceCode, notifyStatus = 'received'
     succeeded: true
   }
 }
+
+/**
+ * Represents a successful response from the Notify API to requesting the status of a PDF notification
+ *
+ * @param {string} referenceCode - the unique generated reference code
+ * @param {string} [notifyStatus='delivered'] - the status of the notification in Notify
+ *
+ * @returns {object} an object representing the successful response from the Notify API
+ */
+function statusPdfSuccessfulResponse(referenceCode, notifyStatus = 'received') {
+  return {
+    response: {
+      body: {
+        body: 'Dear Licence holder,\r\n',
+        completed_at: '2026-11-11T10:02:49.098868Z',
+        cost_details: {
+          billable_sheets_of_paper: 3,
+          postage: 'first'
+        },
+        cost_in_pounds: 1.66,
+        created_at: '2026-11-11T10:02:48.989458Z',
+        created_by_name: null,
+        email_address: null,
+        estimated_delivery: '2026-11-19T16:00:54.818091Z',
+        id: '33f0c45e-b1c4-424d-8e24-dd4a5b80b1f6',
+        is_cost_data_ready: true,
+        line_1: 'Provided as PDF',
+        line_2: null,
+        line_3: null,
+        line_4: null,
+        line_5: null,
+        line_6: null,
+        one_click_unsubscribe_url: null,
+        phone_number: null,
+        postage: 'first',
+        postcode: null,
+        reference: referenceCode,
+        scheduled_for: null,
+        sent_at: '2026-11-11T10:02:49.049377Z',
+        status: notifyStatus,
+        subject: 'Pre-compiled PDF',
+        template: {
+          id: 'abaecccb-433c-4d25-917a-026f43906d73',
+          uri: 'https://api.notifications.service.gov.uk/v2/template/abaecccb-433c-4d25-917a-026f43906d73/version/1',
+          version: 1
+        },
+        type: 'letter'
+      },
+      statusCode: HTTP_STATUS_OK
+    },
+    succeeded: true
   }
 }
 
@@ -255,5 +306,5 @@ export default {
   statusEmailSuccessfulResponse,
   statusErrorResponse,
   statusLetterSuccessfulResponse,
-  successfulResponse
+  statusPdfSuccessfulResponse
 }
