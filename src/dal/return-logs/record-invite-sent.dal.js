@@ -9,7 +9,7 @@ import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.j
 /**
  * Record the returns invite was sent successfully by setting the 'due' and 'sent' dates on the linked return logs
  *
- * After checking the status of an abstraction alert with
+ * After checking the status of a returns invite with
  * {@link https://www.notifications.service.gov.uk/|GOV.UK Notify}, if the _request_ succeeded, and **Notify** confirms
  * the notification as 'sent', then we can set the 'due' and 'sent' date of the linked return logs, i.e. record the
  * returns invitation has been sent.
