@@ -3,10 +3,13 @@
  * @module SendStatusRequestService
  */
 
+import http2 from 'http2'
 import ViewMessageDataRequest from 'water-abstraction-engine/requests/notify/view-message-data.request.js'
 import { EMAIL_STATUS, LETTER_STATUS, NOTIFICATIONS_STATUS } from 'water-abstraction-engine/lib/notifications.lib.js'
 
 import NotifyErrorPresenter from '../../presenters/notifications/notify-error.presenter.js'
+
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR } = http2.constants
 
 /**
  * Send a request to Notify to get the status of a pending notification
@@ -36,7 +39,7 @@ export default async function sendStatusRequestService(notification) {
 
   // If Notify returns a 5xx server error, it's likely a temporary issue. Return 'pending' so the status can be checked
   // again the next time the job runs.
-  if (response.statusCode >= 500) {
+  if (response.statusCode >= HTTP_STATUS_INTERNAL_SERVER_ERROR) {
     return { id: notification.id, status: NOTIFICATIONS_STATUS.pending }
   }
 
