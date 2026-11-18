@@ -4,19 +4,13 @@
  */
 
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
+import { NOTIFICATIONS_STATUS } from 'water-abstraction-engine/lib/notifications.lib.js'
 
 import RecordAlertSentDal from '../../dal/licence-monitoring-station/record-alert-sent.dal.js'
 import RecordInviteSentDal from '../../dal/return-logs/record-invite-sent.dal.js'
 import RecordNotifyErrorDal from '../../dal/notifications/record-notify-error.dal.js'
 import SendStatusRequestService from './send-status-request.service.js'
 import UpdateStatusDal from '../../dal/notifications/update-status.dal.js'
-
-const NOTIFICATIONS_STATUS = {
-  cancelled: 'cancelled',
-  error: 'error',
-  pending: 'pending',
-  sent: 'sent'
-}
 
 /**
  * Check the status of a pending notification with Notify and records the result if its been sent or failed to send
