@@ -6,7 +6,7 @@ import NotificationHelper from 'water-abstraction-engine/test/helpers/notificati
 import NotificationModel from 'water-abstraction-engine/models/notification.model.js'
 
 // Thing under test
-import RecordNotifyErrorResultDal from '../../../src/dal/notifications/record-notify-error.dal.js'
+import RecordNotifyErrorDal from '../../../src/dal/notifications/record-notify-error.dal.js'
 
 describe('Notifications - Record Notify Error DAL', () => {
   let notification
@@ -40,7 +40,7 @@ describe('Notifications - Record Notify Error DAL', () => {
         })
 
         it('records the error details against the notification', async () => {
-          await RecordNotifyErrorResultDal(notifyRequestResult, trx)
+          await RecordNotifyErrorDal(notifyRequestResult, trx)
 
           const updatedNotification = await notification.$query().findById(notification.id)
 
@@ -61,7 +61,7 @@ describe('Notifications - Record Notify Error DAL', () => {
         })
 
         it('records the error details against the notification', async () => {
-          await RecordNotifyErrorResultDal(notifyRequestResult, trx)
+          await RecordNotifyErrorDal(notifyRequestResult, trx)
 
           const updatedNotification = await notification.$query().findById(notification.id)
 
@@ -94,7 +94,7 @@ describe('Notifications - Record Notify Error DAL', () => {
         })
 
         it('records the error details against the notification', async () => {
-          await RecordNotifyErrorResultDal(notifyRequestResult, trx)
+          await RecordNotifyErrorDal(notifyRequestResult, trx)
           await trx.commit()
 
           const updatedNotification = await notification.$query().findById(notification.id)
@@ -116,7 +116,7 @@ describe('Notifications - Record Notify Error DAL', () => {
         })
 
         it('records the error details against the notification', async () => {
-          await RecordNotifyErrorResultDal(notifyRequestResult, trx)
+          await RecordNotifyErrorDal(notifyRequestResult, trx)
           await trx.commit()
 
           const updatedNotification = await notification.$query().findById(notification.id)

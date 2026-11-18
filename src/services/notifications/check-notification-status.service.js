@@ -7,7 +7,7 @@ import NotificationModel from 'water-abstraction-engine/models/notification.mode
 
 import RecordAlertSentDal from '../../dal/licence-monitoring-station/record-alert-sent.dal.js'
 import RecordInviteSentDal from '../../dal/return-logs/record-invite-sent.dal.js'
-import RecordNotifyErrorResultDal from '../../dal/notifications/record-notify-error.dal.js'
+import RecordNotifyErrorDal from '../../dal/notifications/record-notify-error.dal.js'
 import SendStatusRequestService from './send-status-request.service.js'
 import UpdateStatusDal from '../../dal/notifications/update-status.dal.js'
 
@@ -32,7 +32,7 @@ export default async function checkNotificationStatusService(notification) {
     }
 
     if (notifyResult.status === NOTIFICATIONS_STATUS.error) {
-      await RecordNotifyErrorResultDal(notifyResult)
+      await RecordNotifyErrorDal(notifyResult)
 
       return
     }

@@ -43,7 +43,7 @@ import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.j
  * @param {object} notifyRequestResult - the error result from Notify to record against the notification
  * @param {object} trx - Database transaction object to ensure all DB changes are applied, or none at all
  */
-export default async function recordNotifyErrorResultDal(notifyRequestResult, trx) {
+export default async function recordNotifyErrorDal(notifyRequestResult, trx) {
   const { id, notifyError, notifyStatus, status } = notifyRequestResult
 
   await NotificationModel.query(trx)

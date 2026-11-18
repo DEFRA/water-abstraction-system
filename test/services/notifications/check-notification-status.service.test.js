@@ -15,7 +15,7 @@ import * as ViewMessageDataRequest from 'water-abstraction-engine/requests/notif
 
 import * as RecordAlertSentDal from '../../../src/dal/licence-monitoring-station/record-alert-sent.dal.js'
 import * as RecordInviteSentDal from '../../../src/dal/return-logs/record-invite-sent.dal.js'
-import * as RecordNotifyErrorResultDal from '../../../src/dal/notifications/record-notify-error.dal.js'
+import * as RecordNotifyErrorDal from '../../../src/dal/notifications/record-notify-error.dal.js'
 import * as UpdateStatusDal from '../../../src/dal/notifications/update-status.dal.js'
 
 // Thing under test
@@ -36,7 +36,7 @@ describe('Notifications - Check Notification Status service', () => {
 
     vi.spyOn(RecordAlertSentDal, 'default').mockResolvedValue()
     vi.spyOn(RecordInviteSentDal, 'default').mockResolvedValue()
-    vi.spyOn(RecordNotifyErrorResultDal, 'default').mockResolvedValue()
+    vi.spyOn(RecordNotifyErrorDal, 'default').mockResolvedValue()
     vi.spyOn(UpdateStatusDal, 'default').mockResolvedValue()
 
     notifierStub = GlobalNotifierStub()
@@ -68,7 +68,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -112,7 +112,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyId: notifyResponse.response.body.id,
           notifyStatus: notifyResponse.response.body.status,
@@ -140,7 +140,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -154,7 +154,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyError:
             '{"errors":[{"error":"ValidationError","message":"notification_id is not a valid UUID"}],"message":"Request failed with status code 400","status":400}',
@@ -182,7 +182,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -199,7 +199,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
   })
@@ -224,7 +224,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -352,7 +352,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyId: notifyResponse.response.body.id,
           notifyStatus: notifyResponse.response.body.status,
@@ -380,7 +380,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -394,7 +394,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyError:
             '{"errors":[{"error":"ValidationError","message":"notification_id is not a valid UUID"}],"message":"Request failed with status code 400","status":400}',
@@ -422,7 +422,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -439,7 +439,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
   })
@@ -464,7 +464,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -592,7 +592,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyId: notifyResponse.response.body.id,
           notifyStatus: notifyResponse.response.body.status,
@@ -620,7 +620,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -634,7 +634,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyError:
             '{"errors":[{"error":"ValidationError","message":"notification_id is not a valid UUID"}],"message":"Request failed with status code 400","status":400}',
@@ -662,7 +662,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -679,7 +679,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
   })
@@ -704,7 +704,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -832,7 +832,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyId: notifyResponse.response.body.id,
           notifyStatus: notifyResponse.response.body.status,
@@ -860,7 +860,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -874,7 +874,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyError:
             '{"errors":[{"error":"ValidationError","message":"notification_id is not a valid UUID"}],"message":"Request failed with status code 400","status":400}',
@@ -902,7 +902,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -919,7 +919,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
   })
@@ -944,7 +944,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -1072,7 +1072,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyId: notifyResponse.response.body.id,
           notifyStatus: notifyResponse.response.body.status,
@@ -1100,7 +1100,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -1114,7 +1114,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyError:
             '{"errors":[{"error":"ValidationError","message":"notification_id is not a valid UUID"}],"message":"Request failed with status code 400","status":400}',
@@ -1142,7 +1142,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -1159,7 +1159,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
   })
@@ -1184,7 +1184,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -1223,7 +1223,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyId: notifyResponse.response.body.id,
           notifyStatus: notifyResponse.response.body.status,
@@ -1251,7 +1251,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -1265,7 +1265,7 @@ describe('Notifications - Check Notification Status service', () => {
       it('updates the status of the notification to "error" and records the error', async () => {
         await CheckNotificationStatusService(notification)
 
-        expect(RecordNotifyErrorResultDal.default).toHaveBeenCalledWith({
+        expect(RecordNotifyErrorDal.default).toHaveBeenCalledWith({
           id: notification.id,
           notifyError:
             '{"errors":[{"error":"ValidationError","message":"notification_id is not a valid UUID"}],"message":"Request failed with status code 400","status":400}',
@@ -1293,7 +1293,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
 
@@ -1310,7 +1310,7 @@ describe('Notifications - Check Notification Status service', () => {
         expect(UpdateStatusDal.default).not.toHaveBeenCalled()
         expect(RecordAlertSentDal.default).not.toHaveBeenCalled()
         expect(RecordInviteSentDal.default).not.toHaveBeenCalled()
-        expect(RecordNotifyErrorResultDal.default).not.toHaveBeenCalled()
+        expect(RecordNotifyErrorDal.default).not.toHaveBeenCalled()
       })
     })
   })
