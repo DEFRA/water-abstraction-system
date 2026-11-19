@@ -7,7 +7,7 @@ import BillModel from 'water-abstraction-engine/models/bill.model.js'
 
 import DeleteBillRequest from '../../requests/legacy/delete-bill.request.js'
 import ProcessBillingFlagService from '../licences/supplementary/process-billing-flag.service.js'
-import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-bill-run.service.js'
+import UnassignLicencesToBillRunDal from '../../dal/bill-runs/unassign-licences-to-bill-run.dal.js'
 
 /**
  * Orchestrates the removing of a bill from a bill run
@@ -54,5 +54,5 @@ async function _unassignLicencesToBillRun(billRunId, billLicences) {
     return billLicence.licenceId
   })
 
-  await UnassignLicencesToBillRunService(licenceIds, billRunId)
+  await UnassignLicencesToBillRunDal(licenceIds, billRunId)
 }

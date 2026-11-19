@@ -9,7 +9,7 @@ import CreateLicenceSupplementaryYearService from '../../licences/supplementary/
 import FetchRemoveReviewLicenceModel from './fetch-remove-review-licence.service.js'
 import ProcessBillRunPostRemove from './process-bill-run-post-remove.service.js'
 import RemoveReviewLicenceService from './remove-review-licence.service.js'
-import UnassignLicencesToBillRunService from '../unassign-licences-to-bill-run.service.js'
+import UnassignLicencesToBillRunDal from '../../../dal/bill-runs/unassign-licences-to-bill-run.dal.js'
 
 /**
  * Orchestrates removing a review licence from a two-part tariff bill run whilst it is at the review stage
@@ -61,7 +61,7 @@ async function _flagForSupplementaryBilling(reviewLicence) {
   // caused it to be included in the bill run. If we are removing the licence, we need to unassign it so that it will
   // be processed by the next TPT supplementary bill run.
   if (billRun.batchType === 'two_part_supplementary') {
-    await UnassignLicencesToBillRunService([licenceId], billRun.id)
+    await UnassignLicencesToBillRunDal([licenceId], billRun.id)
 
     return
   }

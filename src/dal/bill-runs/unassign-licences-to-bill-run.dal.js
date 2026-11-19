@@ -1,6 +1,6 @@
 /**
  * Unassigns licences from a supplementary bill run
- * @module UnassignLicencesToBillRunService
+ * @module UnassignLicencesToBillRunDal
  */
 
 import LicenceSupplementaryYearModel from 'water-abstraction-engine/models/licence-supplementary-year.model.js'
@@ -15,7 +15,7 @@ import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.j
  * @param {string[]} licenceIds - The UUIDs of the licences to be unassigned from a bill run
  * @param {string} billRunId - The UUID of the bill run to be unassigned from the licences
  */
-export default async function unassignLicencesToBillRunService(licenceIds, billRunId) {
+export default async function unassignLicencesToBillRunDal(licenceIds, billRunId) {
   await LicenceSupplementaryYearModel.query()
     .patch({ billRunId: null, updatedAt: timestampForPostgres() })
     .whereIn('licenceId', licenceIds)
