@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 // Things we need to stub
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
-import * as HandleErroredBillRunService from '../../../../src/services/bill-runs/handle-errored-bill-run.service.js'
+import * as ErrorBillRunDal from '../../../../src/dal/bill-runs/error-bill-run.dal.js'
 import * as MatchAndAllocateService from '../../../../src/services/bill-runs/match/match-and-allocate.service.js'
 
 // Thing under test
@@ -30,7 +30,7 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
-    vi.spyOn(HandleErroredBillRunService, 'default').mockResolvedValue()
+    vi.spyOn(ErrorBillRunDal, 'default').mockResolvedValue()
   })
 
   describe('when the service is called', () => {
@@ -93,10 +93,10 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
         )
       })
 
-      it('calls HandleErroredBillRunService', async () => {
+      it('calls ErrorBillRunDal', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.default).toHaveBeenCalled()
+        expect(ErrorBillRunDal.default).toHaveBeenCalled()
       })
 
       it('logs the error', async () => {

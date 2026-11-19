@@ -7,9 +7,9 @@ import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstraction-engine/lib/general.lib.js'
 
 import BillRunError from '../../../errors/bill-run.error.js'
+import ErrorBillRunDal from '../../../dal/bill-runs/error-bill-run.dal.js'
 import FetchChargeVersionsService from './fetch-charge-versions.service.js'
 import GenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
-import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
 import ProcessBillingPeriodService from './process-billing-period.service.js'
 import RefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
 import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-supplementary-licences.service.js'
@@ -33,7 +33,7 @@ export default async function processBillRunService(billRun, billingPeriods) {
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'supplementary' })
   } catch (error) {
-    await HandleErroredBillRunService(billRunId, error.code)
+    await ErrorBillRunDal(billRunId, error.code)
     _logError(billRun, error)
   }
 }

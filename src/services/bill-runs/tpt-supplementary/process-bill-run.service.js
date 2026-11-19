@@ -7,8 +7,8 @@ import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstraction-engine/lib/general.lib.js'
 
 import AssignBillRunToLicencesDal from '../../../dal/bill-runs/assign-bill-run-to-licences.dal.js'
+import ErrorBillRunDal from '../../../dal/bill-runs/error-bill-run.dal.js'
 import GenerateBillRunService from '../tpt-supplementary/generate-bill-run.service.js'
-import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
 import MatchAndAllocateService from '../match/match-and-allocate.service.js'
 
 /**
@@ -61,7 +61,7 @@ export default async function processBillRunService(billRun, billingPeriods) {
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'two_part_supplementary' })
   } catch (error) {
-    await HandleErroredBillRunService(billRunId)
+    await ErrorBillRunDal(billRunId)
     globalThis.GlobalNotifier.omfg('Process bill run failed', { billRun }, error)
   }
 }
