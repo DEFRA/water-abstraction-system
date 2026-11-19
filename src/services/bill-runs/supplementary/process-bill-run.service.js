@@ -12,7 +12,7 @@ import FetchChargeVersionsService from './fetch-charge-versions.service.js'
 import GenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
 import ProcessBillingPeriodService from './process-billing-period.service.js'
 import RefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
-import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-supplementary-licences.service.js'
+import UnflagUnbilledSupplementaryLicencesDal from '../../../dal/bill-runs/unflag-unbilled-supplementary-licences.dal.js'
 
 /**
  * Process a given bill run for the given billing periods. In this case, "process" means that we create the
@@ -80,7 +80,7 @@ async function _finaliseBillRun(billRun, accumulatedLicenceIds, resultsOfProcess
   // .findByIds() so we spread it into an array
   const allLicenceIds = [...new Set(accumulatedLicenceIds)]
 
-  await UnflagUnbilledSupplementaryLicencesService(billRun, allLicenceIds)
+  await UnflagUnbilledSupplementaryLicencesDal(billRun, allLicenceIds)
 
   // We set `isPopulated` to `true` if at least one processing result was truthy
   const isPopulated = resultsOfProcessing.some(Boolean)

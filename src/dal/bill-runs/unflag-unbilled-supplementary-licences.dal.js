@@ -1,6 +1,6 @@
 /**
  * Unflag all licences in a bill run that did not result in a billing invoice (they are unbilled)
- * @module UnflagUnbilledSupplementaryLicencesService
+ * @module UnflagUnbilledSupplementaryLicencesDal
  */
 
 import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model.js'
@@ -43,7 +43,7 @@ import WorkflowModel from 'water-abstraction-engine/models/workflow.model.js'
  * @param {module:BillRunModel} billRun - Instance of the bill run being processed
  * @param {string[]} [allLicenceIds=[]] - If a standard supplementary all licence UUIDs being processed in the bill run
  */
-export default async function unflagUnbilledSupplementaryLicencesService(billRun, allLicenceIds = []) {
+export default async function unflagUnbilledSupplementaryLicencesDal(billRun, allLicenceIds = []) {
   if (billRun.batchType === 'two_part_supplementary') {
     await _unflagTwoPartTariff(billRun)
 

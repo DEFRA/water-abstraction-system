@@ -12,7 +12,7 @@ import * as ErrorBillRunDal from '../../../../src/dal/bill-runs/error-bill-run.d
 import * as FetchChargeVersionsService from '../../../../src/services/bill-runs/supplementary/fetch-charge-versions.service.js'
 import * as LegacyRefreshBillRunRequest from '../../../../src/requests/legacy/refresh-bill-run.request.js'
 import * as ProcessBillingPeriodService from '../../../../src/services/bill-runs/supplementary/process-billing-period.service.js'
-import * as UnflagUnbilledSupplementaryLicencesService from '../../../../src/services/bill-runs/unflag-unbilled-supplementary-licences.service.js'
+import * as UnflagUnbilledSupplementaryLicencesDal from '../../../../src/dal/bill-runs/unflag-unbilled-supplementary-licences.dal.js'
 
 // Thing under test
 import ProcessBillRunService from '../../../../src/services/bill-runs/supplementary/process-bill-run.service.js'
@@ -58,7 +58,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
   describe('when the service is called', () => {
     beforeEach(() => {
       vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue({ chargeVersions: [], licenceIdsForPeriod: [] })
-      vi.spyOn(UnflagUnbilledSupplementaryLicencesService, 'default').mockResolvedValue()
+      vi.spyOn(UnflagUnbilledSupplementaryLicencesDal, 'default').mockResolvedValue()
     })
 
     describe('and nothing is billed', () => {
@@ -198,7 +198,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
           licenceIdsForPeriod: []
         })
         vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(false)
-        vi.spyOn(UnflagUnbilledSupplementaryLicencesService, 'default').mockRejectedValue(thrownError)
+        vi.spyOn(UnflagUnbilledSupplementaryLicencesDal, 'default').mockRejectedValue(thrownError)
       })
 
       it('calls ErrorBillRunDal without an error code', async () => {

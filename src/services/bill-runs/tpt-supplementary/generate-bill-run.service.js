@@ -16,7 +16,7 @@ import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
 import GenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
 import ProcessBillingPeriodService from './process-billing-period.service.js'
 import RefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
-import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-supplementary-licences.service.js'
+import UnflagUnbilledSupplementaryLicencesDal from '../../../dal/bill-runs/unflag-unbilled-supplementary-licences.dal.js'
 
 /**
  * Generates a supplementary two-part tariff bill run
@@ -107,7 +107,7 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
   // will be flagged as errored and the unassigned from the licences. They can then be processed again. If we get to
   // here though, we're removing the licence supplementary year record, because we are saying the licence has been
   // processed and no new bill was needed.
-  await UnflagUnbilledSupplementaryLicencesService(billRun)
+  await UnflagUnbilledSupplementaryLicencesDal(billRun)
 }
 
 async function _processBillingPeriod(billingPeriod, billRun) {
