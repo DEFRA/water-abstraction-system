@@ -10,7 +10,7 @@ import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 import * as ChargingModuleSendBillRunRequest from '../../../../src/requests/charging-module/send-bill-run.request.js'
 import * as ChargingModuleViewBillRunRequest from '../../../../src/requests/charging-module/view-bill-run.request.js'
-import * as UnflagBilledSupplementaryLicencesService from '../../../../src/services/bill-runs/unflag-billed-supplementary-licences.service.js'
+import * as UnflagBilledSupplementaryLicencesDal from '../../../../src/dal/bill-runs/unflag-billed-supplementary-licences.dal.js'
 
 // Thing under test
 import UpdateInvoiceNumbersService from '../../../../src/services/bill-runs/send/update-invoice-numbers.service.js'
@@ -30,7 +30,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
     chargingModuleViewBillRunRequestStub = vi
       .spyOn(ChargingModuleViewBillRunRequest, 'default')
       .mockImplementation(() => {})
-    vi.spyOn(UnflagBilledSupplementaryLicencesService, 'default').mockResolvedValue()
+    vi.spyOn(UnflagBilledSupplementaryLicencesDal, 'default').mockResolvedValue()
 
     billPatchStub = vi.fn().mockResolvedValue()
     billRunPatchStub = vi.fn().mockResolvedValue()
@@ -128,7 +128,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('also unflags the licences for supplementary billing', async () => {
           await UpdateInvoiceNumbersService(billRun)
 
-          expect(UnflagBilledSupplementaryLicencesService.default).toHaveBeenCalled()
+          expect(UnflagBilledSupplementaryLicencesDal.default).toHaveBeenCalled()
         })
       })
 
@@ -140,7 +140,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('also unflags the licences for supplementary billing', async () => {
           await UpdateInvoiceNumbersService(billRun)
 
-          expect(UnflagBilledSupplementaryLicencesService.default).toHaveBeenCalled()
+          expect(UnflagBilledSupplementaryLicencesDal.default).toHaveBeenCalled()
         })
       })
 
@@ -148,7 +148,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('leaves the licences supplementary billing flags alone', async () => {
           await UpdateInvoiceNumbersService(billRun)
 
-          expect(UnflagBilledSupplementaryLicencesService.default).not.toHaveBeenCalled()
+          expect(UnflagBilledSupplementaryLicencesDal.default).not.toHaveBeenCalled()
         })
       })
     })

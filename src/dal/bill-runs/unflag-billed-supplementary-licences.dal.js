@@ -1,6 +1,6 @@
 /**
  * Unflag all licences in a bill run that resulted in a billing invoice (they are billed)
- * @module UnflagBilledSupplementaryLicencesService
+ * @module UnflagBilledSupplementaryLicencesDal
  */
 
 import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model.js'
@@ -38,7 +38,7 @@ import WorkflowModel from 'water-abstraction-engine/models/workflow.model.js'
  *
  * @param {module:BillRunModel} billRun - Instance of the bill run being 'sent'
  */
-export default async function unflagBilledSupplementaryLicencesService(billRun) {
+export default async function unflagBilledSupplementaryLicencesDal(billRun) {
   const { batchType, scheme } = billRun
 
   if (scheme === 'alcs') {
