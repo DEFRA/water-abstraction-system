@@ -5,21 +5,21 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 
 // Things we need to stub
-import * as CheckBusyBillRunsService from '../../../src/services/bill-runs/check-busy-bill-runs.service.js'
-import * as FetchBillRunsService from '../../../src/services/bill-runs/fetch-bill-runs.service.js'
-import * as FetchRegionsService from '../../../src/services/bill-runs/setup/fetch-regions.service.js'
+import * as CheckBusyBillRunsDal from '../../../src/dal/bill-runs/check-busy-bill-runs.dal.js'
+import * as FetchBillRunsDal from '../../../src/dal/bill-runs/fetch-bill-runs.dal.js'
+import * as FetchRegionsDal from '../../../src/dal/bill-runs/fetch-regions.dal.js'
 
 // Thing under test
 import IndexBillRunsService from '../../../src/services/bill-runs/index-bill-runs.service.js'
 
-describe('Index Bill Runs service', () => {
+describe('Bill Runs - Index Bill Runs service', () => {
   let page
   let yarStub
 
   beforeEach(() => {
     // It doesn't matter for these tests what busy state the service returns, only that it returns one.
-    vi.spyOn(CheckBusyBillRunsService, 'default').mockResolvedValue('none')
-    vi.spyOn(FetchRegionsService, 'default').mockResolvedValue([
+    vi.spyOn(CheckBusyBillRunsDal, 'default').mockResolvedValue('none')
+    vi.spyOn(FetchRegionsDal, 'default').mockResolvedValue([
       { displayName: 'Anglian', id: '1d562e9a-2104-41d9-aa75-c008a7ec9059' }
     ])
   })
@@ -30,7 +30,7 @@ describe('Index Bill Runs service', () => {
 
   describe('when there is only one page of results', () => {
     beforeEach(() => {
-      vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
+      vi.spyOn(FetchBillRunsDal, 'default').mockResolvedValue({
         results: _fetchedBillRuns(),
         total: 2
       })
@@ -160,7 +160,7 @@ describe('Index Bill Runs service', () => {
   describe('when there are multiple pages of results', () => {
     describe('and no page is selected', () => {
       beforeEach(() => {
-        vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
+        vi.spyOn(FetchBillRunsDal, 'default').mockResolvedValue({
           results: _fetchedBillRuns(),
           total: 70
         })
@@ -182,7 +182,7 @@ describe('Index Bill Runs service', () => {
       beforeEach(() => {
         page = '2'
 
-        vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
+        vi.spyOn(FetchBillRunsDal, 'default').mockResolvedValue({
           results: _fetchedBillRuns(),
           total: 70
         })
@@ -204,7 +204,7 @@ describe('Index Bill Runs service', () => {
       beforeEach(() => {
         page = '2'
 
-        vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
+        vi.spyOn(FetchBillRunsDal, 'default').mockResolvedValue({
           results: [],
           total: 70
         })
@@ -226,7 +226,7 @@ describe('Index Bill Runs service', () => {
   describe('when the filters are assessed', () => {
     beforeEach(() => {
       // For the purposes of these tests the results don't matter
-      vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({ results: [], total: 0 })
+      vi.spyOn(FetchBillRunsDal, 'default').mockResolvedValue({ results: [], total: 0 })
     })
 
     describe('and none were ever set or they were cleared', () => {

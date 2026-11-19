@@ -3,12 +3,12 @@
  * @module GenerateTwoPartTariffBillRunService
  */
 
-import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
-import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 
+import FetchBillRunDal from '../../dal/bill-runs/fetch-bill-run.dal.js'
 import GenerateAnnualBillRun from './two-part-tariff/generate-bill-run.service.js'
 import GenerateSupplementaryBillRun from './tpt-supplementary/generate-bill-run.service.js'
+import MarkAsProcessingDal from '../../dal/bill-runs/mark-as-processing.dal.js'
 
 /**
  * Checks a two-part tariff bill run can be generated, then determines which generate engine to use
@@ -33,7 +33,7 @@ import GenerateSupplementaryBillRun from './tpt-supplementary/generate-bill-run.
  * @param {string} billRunId - The UUID of the two-part tariff bill run that is ready for generating
  */
 export default async function generateTwoPartTariffBillRunService(billRunId) {
-  const billRun = await _fetchBillRun(billRunId)
+  const billRun = await FetchBillRunDal(billRunId)
 
   _validate(billRun)
 
@@ -41,12 +41,6 @@ export default async function generateTwoPartTariffBillRunService(billRunId) {
 
   // NOTE: We do not await this call intentionally. We don't want to block the user while we generate the bill run
   _generateBillRun(billRun)
-}
-
-async function _fetchBillRun(billRunId) {
-  return BillRunModel.query()
-    .findById(billRunId)
-    .select(['id', 'batchType', 'createdAt', 'externalId', 'regionId', 'scheme', 'status', 'toFinancialYearEnding'])
 }
 
 async function _generateBillRun(billRun) {
@@ -64,7 +58,7 @@ async function _markAsProcessing(billRun) {
 
   // If the 'review' step was skipped, the bill run will already have a state of 'processing'
   if (status === 'review') {
-    await BillRunModel.query().findById(id).patch({ status: 'processing', updatedAt: timestampForPostgres() })
+    await MarkAsProcessingDal(id)
   }
 }
 

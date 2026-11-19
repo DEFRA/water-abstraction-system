@@ -9,7 +9,7 @@ import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
 import { calculateAndLogTimeTaken, timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
 
 import SendBillRunRequest from '../../../requests/charging-module/send-bill-run.request.js'
-import UnflagBilledSupplementaryLicencesService from '../unflag-billed-supplementary-licences.service.js'
+import UnflagBilledSupplementaryLicencesDal from '../../../dal/bill-runs/unflag-billed-supplementary-licences.dal.js'
 import ViewBillRunRequest from '../../../requests/charging-module/view-bill-run.request.js'
 
 /**
@@ -40,7 +40,7 @@ export default async function updateInvoiceNumbersService(billRun) {
     await _updateBillRun(billRunId, externalBillRun)
 
     if (batchType === 'supplementary' || batchType === 'two_part_supplementary') {
-      await UnflagBilledSupplementaryLicencesService(billRun)
+      await UnflagBilledSupplementaryLicencesDal(billRun)
     }
 
     calculateAndLogTimeTaken(startTime, 'Send bill run complete', { billRun })

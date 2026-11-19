@@ -11,9 +11,9 @@ import {
 } from 'water-abstraction-engine/lib/general.lib.js'
 
 import BillRunError from '../../../errors/bill-run.error.js'
+import ErrorBillRunDal from '../../../dal/bill-runs/error-bill-run.dal.js'
 import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
 import GenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
-import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
 import ProcessBillingPeriodService from './process-billing-period.service.js'
 import RefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
 
@@ -53,7 +53,7 @@ export default async function generateBillRunService(billRun) {
 
     calculateAndLogTimeTaken(startTime, 'Generate annual two-part tariff bill run complete', { billRunId })
   } catch (error) {
-    await HandleErroredBillRunService(billRunId, error.code)
+    await ErrorBillRunDal(billRunId, error.code)
     globalThis.GlobalNotifier.omfg('Generate annual two-part tariff bill run failed', { billRun }, error)
   }
 }

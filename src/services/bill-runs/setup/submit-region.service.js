@@ -5,7 +5,7 @@
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
-import FetchRegionsService from './fetch-regions.service.js'
+import FetchRegionsDal from '../../../dal/bill-runs/fetch-regions.dal.js'
 import RegionPresenter from '../../../presenters/bill-runs/setup/region.presenter.js'
 import RegionValidator from '../../../validators/bill-runs/setup/region.validator.js'
 
@@ -31,7 +31,7 @@ import RegionValidator from '../../../validators/bill-runs/setup/region.validato
  */
 export default async function submitRegionService(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
-  const regions = await FetchRegionsService()
+  const regions = await FetchRegionsDal()
 
   const validationResult = _validate(payload, regions)
 

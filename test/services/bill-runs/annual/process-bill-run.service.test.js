@@ -10,8 +10,8 @@ import BillRunError from '../../../../src/errors/bill-run.error.js'
 // Things we need to stub
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 import * as ChargingModuleGenerateRequest from '../../../../src/requests/charging-module/generate-bill-run.request.js'
+import * as ErrorBillRunDal from '../../../../src/dal/bill-runs/error-bill-run.dal.js'
 import * as FetchBillingAccountsService from '../../../../src/services/bill-runs/annual/fetch-billing-accounts.service.js'
-import * as HandleErroredBillRunService from '../../../../src/services/bill-runs/handle-errored-bill-run.service.js'
 import * as LegacyRefreshBillRunRequest from '../../../../src/requests/legacy/refresh-bill-run.request.js'
 import * as ProcessBillingPeriodService from '../../../../src/services/bill-runs/annual/process-billing-period.service.js'
 
@@ -37,7 +37,7 @@ describe('Annual Process Bill Run service', () => {
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()
-    vi.spyOn(HandleErroredBillRunService, 'default').mockResolvedValue()
+    vi.spyOn(ErrorBillRunDal, 'default').mockResolvedValue()
     globalThis.GlobalNotifier = notifierStub
   })
 
@@ -108,10 +108,10 @@ describe('Annual Process Bill Run service', () => {
         vi.spyOn(FetchBillingAccountsService, 'default').mockRejectedValue(thrownError)
       })
 
-      it('calls HandleErroredBillRunService with appropriate error code', async () => {
+      it('calls ErrorBillRunDal with appropriate error code', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
+        const handlerArgs = ErrorBillRunDal.default.mock.calls[0]
 
         expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToProcessChargeVersions)
       })
@@ -139,10 +139,10 @@ describe('Annual Process Bill Run service', () => {
           vi.spyOn(ProcessBillingPeriodService, 'default').mockRejectedValue(thrownError)
         })
 
-        it('calls HandleErroredBillRunService with appropriate error code', async () => {
+        it('calls ErrorBillRunDal with appropriate error code', async () => {
           await ProcessBillRunService(billRun, [billingPeriod])
 
-          const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
+          const handlerArgs = ErrorBillRunDal.default.mock.calls[0]
 
           expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToPrepareTransactions)
         })
@@ -171,10 +171,10 @@ describe('Annual Process Bill Run service', () => {
         vi.spyOn(ChargingModuleGenerateRequest, 'default').mockRejectedValue(thrownError)
       })
 
-      it('calls HandleErroredBillRunService with appropriate error code', async () => {
+      it('calls ErrorBillRunDal with appropriate error code', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
+        const handlerArgs = ErrorBillRunDal.default.mock.calls[0]
 
         expect(handlerArgs[1]).toBeUndefined()
       })

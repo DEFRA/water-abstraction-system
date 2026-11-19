@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import * as LegacyDeleteBillRequest from '../../../src/requests/legacy/delete-bill.request.js'
 import * as ProcessBillingFlagService from '../../../src/services/licences/supplementary/process-billing-flag.service.js'
-import * as UnassignLicencesToBillRunService from '../../../src/services/bill-runs/unassign-licences-to-bill-run.service.js'
+import * as UnassignLicencesToBillRunDal from '../../../src/dal/bill-runs/unassign-licences-to-bill-run.dal.js'
 
 // Thing under test
 import SubmitRemoveBillService from '../../../src/services/bills/submit-remove-bill.service.js'
@@ -37,7 +37,7 @@ describe('Bills - Submit Remove Bill service', () => {
 
     legacyDeleteBillRequestStub = vi.spyOn(LegacyDeleteBillRequest, 'default').mockResolvedValue()
     vi.spyOn(ProcessBillingFlagService, 'default').mockResolvedValue()
-    vi.spyOn(UnassignLicencesToBillRunService, 'default').mockResolvedValue()
+    vi.spyOn(UnassignLicencesToBillRunDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -48,7 +48,7 @@ describe('Bills - Submit Remove Bill service', () => {
     it('unassigns any two-part tariff supplementary licences in the bill from the bill run', async () => {
       await SubmitRemoveBillService(bill.id, user)
 
-      expect(UnassignLicencesToBillRunService.default).toHaveBeenCalled()
+      expect(UnassignLicencesToBillRunDal.default).toHaveBeenCalled()
     })
 
     it('flags the two licences in the bill for supplementary billing', async () => {

@@ -8,7 +8,7 @@ import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 import * as CancelBillRunService from '../../../../src/services/bill-runs/cancel/cancel-bill-run.service.js'
 import * as DeleteBillRunService from '../../../../src/services/bill-runs/cancel/delete-bill-run.service.js'
-import * as UnassignBillRunToLicencesService from '../../../../src/services/bill-runs/unassign-bill-run-to-licences.service.js'
+import * as UnassignBillRunToLicencesDal from '../../../../src/dal/bill-runs/unassign-bill-run-to-licences.dal.js'
 
 // Thing under test
 import CleanEmptyBillRunsService from '../../../../src/services/jobs/clean/clean-empty-bill-runs.service.js'
@@ -32,7 +32,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
 
     // These we stub to always resolve
     vi.spyOn(DeleteBillRunService, 'default').mockResolvedValue()
-    vi.spyOn(UnassignBillRunToLicencesService, 'default').mockResolvedValue()
+    vi.spyOn(UnassignBillRunToLicencesDal, 'default').mockResolvedValue()
 
     // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -56,7 +56,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
 
       expect(CancelBillRunService.default).not.toHaveBeenCalled()
 
-      expect(UnassignBillRunToLicencesService.default).not.toHaveBeenCalled()
+      expect(UnassignBillRunToLicencesDal.default).not.toHaveBeenCalled()
       expect(DeleteBillRunService.default).not.toHaveBeenCalled()
     })
   })
@@ -88,9 +88,9 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
         expect(CancelBillRunService.default).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
         expect(CancelBillRunService.default).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
 
-        expect(UnassignBillRunToLicencesService.default).toHaveBeenCalledTimes(2)
-        expect(UnassignBillRunToLicencesService.default).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
-        expect(UnassignBillRunToLicencesService.default).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
+        expect(UnassignBillRunToLicencesDal.default).toHaveBeenCalledTimes(2)
+        expect(UnassignBillRunToLicencesDal.default).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
+        expect(UnassignBillRunToLicencesDal.default).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
 
         expect(DeleteBillRunService.default).toHaveBeenCalledTimes(2)
 
@@ -120,8 +120,8 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
         expect(CancelBillRunService.default).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
         expect(CancelBillRunService.default).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
 
-        expect(UnassignBillRunToLicencesService.default).toHaveBeenCalledOnce()
-        expect(UnassignBillRunToLicencesService.default).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
+        expect(UnassignBillRunToLicencesDal.default).toHaveBeenCalledOnce()
+        expect(UnassignBillRunToLicencesDal.default).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
 
         expect(DeleteBillRunService.default).toHaveBeenCalledOnce()
 

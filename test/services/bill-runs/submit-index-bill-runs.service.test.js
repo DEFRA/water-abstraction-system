@@ -3,9 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things to stub
 import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
-import * as CheckBusyBillRunsService from '../../../src/services/bill-runs/check-busy-bill-runs.service.js'
-import * as FetchBillRunsService from '../../../src/services/bill-runs/fetch-bill-runs.service.js'
-import * as FetchRegionsService from '../../../src/services/bill-runs/setup/fetch-regions.service.js'
+import * as CheckBusyBillRunsDal from '../../../src/dal/bill-runs/check-busy-bill-runs.dal.js'
+import * as FetchBillRunsDal from '../../../src/dal/bill-runs/fetch-bill-runs.dal.js'
+import * as FetchRegionsDal from '../../../src/dal/bill-runs/fetch-regions.dal.js'
 
 // Thing under test
 import SubmitIndexBillRunsService from '../../../src/services/bill-runs/submit-index-bill-runs.service.js'
@@ -15,8 +15,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
   let yarStub
 
   beforeEach(() => {
-    vi.spyOn(CheckBusyBillRunsService, 'default').mockResolvedValue('none')
-    vi.spyOn(FetchRegionsService, 'default').mockResolvedValue([
+    vi.spyOn(CheckBusyBillRunsDal, 'default').mockResolvedValue('none')
+    vi.spyOn(FetchRegionsDal, 'default').mockResolvedValue([
       { displayName: 'Anglian', id: '1d562e9a-2104-41d9-aa75-c008a7ec9059' },
       { displayName: 'Midlands', id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233' }
     ])
@@ -230,7 +230,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
+          vi.spyOn(FetchBillRunsDal, 'default').mockResolvedValue({
             results: _fetchedBillRuns(),
             total: 70
           })
@@ -405,7 +405,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
+          vi.spyOn(FetchBillRunsDal, 'default').mockResolvedValue({
             results: _fetchedBillRuns(),
             total: 2
           })

@@ -7,7 +7,7 @@ import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.j
 
 // Things we need to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
-import * as FetchRegionsService from '../../../../src/services/bill-runs/setup/fetch-regions.service.js'
+import * as FetchRegionsDal from '../../../../src/dal/bill-runs/fetch-regions.dal.js'
 
 // Thing under test
 import RegionService from '../../../../src/services/bill-runs/setup/region.service.js'
@@ -28,7 +28,7 @@ describe('Bill Runs - Setup - Region service', () => {
 
     vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.spyOn(FetchRegionsService, 'default').mockResolvedValue(regions)
+    vi.spyOn(FetchRegionsDal, 'default').mockResolvedValue(regions)
   })
 
   afterEach(() => {

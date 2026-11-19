@@ -1,12 +1,12 @@
 /**
  * Creates a bill run based on the regionId & billing period provided
- * @module CreateBillRunService
+ * @module CreateBillRunDal
  */
 
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 
 /**
- * Create a new bill run
+ * Creates a bill run based on the regionId & billing period provided
  *
  * @param {object} regionId - The regionId for the selected region
  * @param {object} financialYearEndings - Object that contains the from and to financial year endings
@@ -21,7 +21,7 @@ import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
  *
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance with the `.region` property populated
  */
-export default async function createBillRunService(regionId, financialYearEndings, options) {
+export default async function createBillRunDal(regionId, financialYearEndings, options) {
   const { fromFinancialYearEnding, toFinancialYearEnding } = financialYearEndings
   const optionsData = _defaultOptions(options)
 

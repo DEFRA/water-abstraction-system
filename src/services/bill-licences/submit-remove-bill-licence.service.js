@@ -6,12 +6,12 @@
 import DeleteBillLicenceRequest from '../../requests/legacy/delete-bill-licence.request.js'
 import FetchBillLicenceDal from '../../dal/bill-licences/fetch-bill-licence.dal.js'
 import ProcessBillingFlagService from '../licences/supplementary/process-billing-flag.service.js'
-import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-bill-run.service.js'
+import UnassignLicencesToBillRunDal from '../../dal/bill-runs/unassign-licences-to-bill-run.dal.js'
 
 /**
  * Orchestrates the removing of a bill licence from a bill run
  *
- * After fetching the bill licence and associated bill, it calls `UnassignBillRunToLicencesService` which will unassign
+ * After fetching the bill licence and associated bill, it calls `UnassignLicencesToBillRunDal` which will unassign
  * this bill run from the licences with matching `licence_supplementary_year` records in the bill licence.
  *
  * But the licence might not have been flagged, for example, this is not a supplementary bill run. SO, next it checks if
@@ -29,7 +29,7 @@ export default async function submitRemoveBillLicenceService(billLicenceId, user
 
   const { bill, licenceId } = billLicence
 
-  await UnassignLicencesToBillRunService([licenceId], bill.billRunId)
+  await UnassignLicencesToBillRunDal([licenceId], bill.billRunId)
   await ProcessBillingFlagService({ billLicenceId })
   await DeleteBillLicenceRequest(billLicenceId, user)
 

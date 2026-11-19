@@ -10,7 +10,7 @@ import * as CreateLicenceSupplementaryYearService from '../../../../src/services
 import * as FetchRemoveReviewLicenceService from '../../../../src/services/bill-runs/review/fetch-remove-review-licence.service.js'
 import * as ProcessBillRunPostRemove from '../../../../src/services/bill-runs/review/process-bill-run-post-remove.service.js'
 import * as RemoveReviewLicenceService from '../../../../src/services/bill-runs/review/remove-review-licence.service.js'
-import * as UnassignLicencesToBillRunService from '../../../../src/services/bill-runs/unassign-licences-to-bill-run.service.js'
+import * as UnassignLicencesToBillRunDal from '../../../../src/dal/bill-runs/unassign-licences-to-bill-run.dal.js'
 
 // Thing under test
 import SubmitRemoveService from '../../../../src/services/bill-runs/review/submit-remove.service.js'
@@ -24,7 +24,7 @@ describe('Bill Runs - Review - Submit Remove service', () => {
 
     vi.spyOn(RemoveReviewLicenceService, 'default').mockResolvedValue()
 
-    vi.spyOn(UnassignLicencesToBillRunService, 'default').mockResolvedValue()
+    vi.spyOn(UnassignLicencesToBillRunDal, 'default').mockResolvedValue()
 
     yarStub = YarStub()
     vi.spyOn(CreateLicenceSupplementaryYearService, 'default').mockResolvedValue()
@@ -51,7 +51,7 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         it('does not attempt to unassign the licence from the bill run', async () => {
           await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(UnassignLicencesToBillRunService.default).not.toHaveBeenCalled()
+          expect(UnassignLicencesToBillRunDal.default).not.toHaveBeenCalled()
         })
 
         it('flags the licence for supplementary billing', async () => {
@@ -99,7 +99,7 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         it('does not attempt to unassign the licence from the bill run', async () => {
           await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(UnassignLicencesToBillRunService.default).not.toHaveBeenCalled()
+          expect(UnassignLicencesToBillRunDal.default).not.toHaveBeenCalled()
         })
 
         it('flags the licence for supplementary billing', async () => {
@@ -142,7 +142,7 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         it('does attempt to unassign the licence from the bill run', async () => {
           await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(UnassignLicencesToBillRunService.default).toHaveBeenCalled()
+          expect(UnassignLicencesToBillRunDal.default).toHaveBeenCalled()
         })
 
         it('does not flag the licence for supplementary billing', async () => {
@@ -191,7 +191,7 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         it('does attempt to unassign the licence from the bill run', async () => {
           await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
-          expect(UnassignLicencesToBillRunService.default).toHaveBeenCalled()
+          expect(UnassignLicencesToBillRunDal.default).toHaveBeenCalled()
         })
 
         it('does not flag the licence for supplementary billing', async () => {

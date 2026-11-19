@@ -7,9 +7,9 @@ import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js
 import RegionModel from 'water-abstraction-engine/models/region.model.js'
 
 // Thing under test
-import CreateBillRunService from '../../../src/services/bill-runs/create-bill-run.service.js'
+import CreateBillRunDal from '../../../src/dal/bill-runs/create-bill-run.dal.js'
 
-describe('Create Bill Run service', () => {
+describe('BillRuns - Create Bill Run dal', () => {
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }
 
   let region
@@ -20,7 +20,7 @@ describe('Create Bill Run service', () => {
 
   describe('when the defaults are not overridden', () => {
     it('returns the new bill run instance containing the defaults', async () => {
-      const result = await CreateBillRunService(region.id, financialYearEndings)
+      const result = await CreateBillRunDal(region.id, financialYearEndings)
 
       expect(result).toBeInstanceOf(BillRunModel)
 
@@ -47,7 +47,7 @@ describe('Create Bill Run service', () => {
     const errorCode = 50
 
     it('returns the new bill run instance containing the provided values', async () => {
-      const result = await CreateBillRunService(region.id, financialYearEndings, {
+      const result = await CreateBillRunDal(region.id, financialYearEndings, {
         batchType,
         errorCode,
         externalId,
@@ -77,7 +77,7 @@ describe('Create Bill Run service', () => {
     const status = 'error'
 
     it('returns the new bill run instance containing the provided values', async () => {
-      const result = await CreateBillRunService(region.id, financialYearEndings, { externalId, status })
+      const result = await CreateBillRunDal(region.id, financialYearEndings, { externalId, status })
 
       expect(result).toBeInstanceOf(BillRunModel)
 

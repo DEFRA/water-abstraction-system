@@ -11,7 +11,7 @@ import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 import TransactionModel from 'water-abstraction-engine/models/transaction.model.js'
 import BillRunError from '../../../../src/errors/bill-run.error.js'
-import * as FetchPreviousTransactionsService from '../../../../src/services/bill-runs/fetch-previous-transactions.service.js'
+import * as FetchPreviousTransactionsDal from '../../../../src/dal/bill-runs/fetch-previous-transactions.dal.js'
 import * as GenerateTwoPartTariffTransactionService from '../../../../src/services/bill-runs/generate-two-part-tariff-transaction.service.js'
 import * as ProcessSupplementaryTransactionsService from '../../../../src/services/bill-runs/process-supplementary-transactions.service.js'
 import * as SendTransactionsService from '../../../../src/services/bill-runs/send-transactions.service.js'
@@ -47,7 +47,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
     vi.spyOn(BillLicenceModel, 'query').mockReturnValue({ insert: billLicenceInsertStub })
     vi.spyOn(TransactionModel, 'query').mockReturnValue({ insert: transactionInsertStub })
 
-    vi.spyOn(FetchPreviousTransactionsService, 'default').mockResolvedValue([])
+    vi.spyOn(FetchPreviousTransactionsDal, 'default').mockResolvedValue([])
   })
 
   afterEach(() => {

@@ -9,7 +9,7 @@ import UsersFixture from '../../support/fixtures/users.fixture.js'
 import * as FetchBillLicenceDal from '../../../src/dal/bill-licences/fetch-bill-licence.dal.js'
 import * as LegacyDeleteBillLicenceRequest from '../../../src/requests/legacy/delete-bill-licence.request.js'
 import * as ProcessBillingFlagService from '../../../src/services/licences/supplementary/process-billing-flag.service.js'
-import * as UnassignLicencesToBillRunService from '../../../src/services/bill-runs/unassign-licences-to-bill-run.service.js'
+import * as UnassignLicencesToBillRunDal from '../../../src/dal/bill-runs/unassign-licences-to-bill-run.dal.js'
 
 // Thing under test
 import SubmitRemoveBillLicenceService from '../../../src/services/bill-licences/submit-remove-bill-licence.service.js'
@@ -34,7 +34,7 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
     fetchBillLicenceDalStub = vi.spyOn(FetchBillLicenceDal, 'default').mockResolvedValue(billLicence)
     legacyDeleteBillLicenceRequestStub = vi.spyOn(LegacyDeleteBillLicenceRequest, 'default').mockResolvedValue()
     vi.spyOn(ProcessBillingFlagService, 'default').mockResolvedValue()
-    vi.spyOn(UnassignLicencesToBillRunService, 'default').mockResolvedValue()
+    vi.spyOn(UnassignLicencesToBillRunDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -48,10 +48,10 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
       expect(fetchBillLicenceDalStub).toHaveBeenCalledWith(billLicence.id)
     })
 
-    it('calls the "UnassignLicencesToBillRunService" to unassign any licence supplementary year records from the bill run', async () => {
+    it('calls the "UnassignLicencesToBillRunDal" to unassign any licence supplementary year records from the bill run', async () => {
       await SubmitRemoveBillLicenceService(billLicence.id, user)
 
-      expect(UnassignLicencesToBillRunService.default).toHaveBeenCalledWith(
+      expect(UnassignLicencesToBillRunDal.default).toHaveBeenCalledWith(
         [billLicence.licenceId],
         billLicence.bill.billRunId
       )

@@ -16,9 +16,9 @@ import RegionModel from 'water-abstraction-engine/models/region.model.js'
 import { compareStrings } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import FetchBillRunService from '../../../src/services/bill-runs/fetch-bill-run.service.js'
+import FetchBillRunSummaryDal from '../../../src/dal/bill-runs/fetch-bill-run-summary.dal.js'
 
-describe('Fetch Bill Run service', () => {
+describe('Bill Runs - Fetch Bill Run dal', () => {
   let linkedBillingAccounts
   let linkedBills
   let linkedCompanies
@@ -42,7 +42,7 @@ describe('Fetch Bill Run service', () => {
 
     // Create 3 companies. Billing accounts _have_ to be linked to a company. So, we have 1 for each billing account.
     // They must also be linked to at least 1 BillingAccountAddress (BAA). The BAA can optionally be linked to an agent
-    // company. We have to do all this setup to confirm the service returns both the company name and agent company
+    // company. We have to do all this setup to confirm the dal returns both the company name and agent company
     // name where it exists. This is because when this data finally makes it to the UI, we display the agent company
     // name where it exists, else the linked company name.
     linkedCompanies = await Promise.all([
@@ -58,7 +58,7 @@ describe('Fetch Bill Run service', () => {
       BillingAccountHelper.add({ companyId: linkedCompanies[1].id })
     ])
 
-    // We don't care about the address in our service. But it's a required field when creating a BillingAccountAddress
+    // We don't care about the address in our dal. But it's a required field when creating a BillingAccountAddress
     const address = await AddressHelper.add()
 
     // Create a BillingAccountAddress for each BillingAccount we created. On the second one we set the optional agent
@@ -76,7 +76,7 @@ describe('Fetch Bill Run service', () => {
     ])
 
     // Create the 2 bills linked to our bill run. These form the basis for the bill summaries we expect to see in the
-    // result from the service
+    // result from the dal
     linkedBills = await Promise.all([
       BillHelper.add({
         accountNumber: linkedBillingAccounts[0].accountNumber,
@@ -115,14 +115,14 @@ describe('Fetch Bill Run service', () => {
 
   describe('when a bill run with a matching ID exists', () => {
     it('returns the matching instance of BillRunModel', async () => {
-      const { billRun: result } = await FetchBillRunService(testBillRun.id)
+      const { billRun: result } = await FetchBillRunSummaryDal(testBillRun.id)
 
       expect(result.id).toEqual(testBillRun.id)
       expect(result).toBeInstanceOf(BillRunModel)
     })
 
     it('returns the matching bill run including the linked region', async () => {
-      const { billRun: result } = await FetchBillRunService(testBillRun.id)
+      const { billRun: result } = await FetchBillRunSummaryDal(testBillRun.id)
       const { region: returnedRegion } = result
 
       expect(result.id).toEqual(testBillRun.id)
@@ -133,7 +133,7 @@ describe('Fetch Bill Run service', () => {
     })
 
     it('returns a bill summary for each bill linked to the bill run', async () => {
-      const { billSummaries: result } = await FetchBillRunService(testBillRun.id)
+      const { billSummaries: result } = await FetchBillRunSummaryDal(testBillRun.id)
 
       // NOTE: When we create the licences the helper will generate random licence references. When the service returns
       // them for the first bill though, they are expected to be in ascending order. So, we need to sort them first to
@@ -172,7 +172,7 @@ describe('Fetch Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('returns a result with no values set', async () => {
-      const result = await FetchBillRunService('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillRunSummaryDal('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeDefined()
       expect(result.billRun).toBeUndefined()

@@ -4,9 +4,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Things we need to stub
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
-import * as AssignBillRunToLicencesService from '../../../../src/services/bill-runs/assign-bill-run-to-licences.service.js'
+import * as AssignBillRunToLicencesDal from '../../../../src/dal/bill-runs/assign-bill-run-to-licences.dal.js'
+import * as ErrorBillRunDal from '../../../../src/dal/bill-runs/error-bill-run.dal.js'
 import * as GenerateBillRunService from '../../../../src/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
-import * as HandleErroredBillRunService from '../../../../src/services/bill-runs/handle-errored-bill-run.service.js'
 import * as MatchAndAllocateService from '../../../../src/services/bill-runs/match/match-and-allocate.service.js'
 
 // Thing under test
@@ -32,7 +32,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
-    vi.spyOn(HandleErroredBillRunService, 'default').mockResolvedValue()
+    vi.spyOn(ErrorBillRunDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -42,7 +42,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      vi.spyOn(AssignBillRunToLicencesService, 'default').mockResolvedValue()
+      vi.spyOn(AssignBillRunToLicencesDal, 'default').mockResolvedValue()
       vi.spyOn(GenerateBillRunService, 'default').mockResolvedValue()
     })
 
@@ -115,13 +115,13 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   describe('when the service errors', () => {
     describe('because assigning the bill run to the licences fails', () => {
       beforeEach(() => {
-        vi.spyOn(AssignBillRunToLicencesService, 'default').mockRejectedValue(new Error())
+        vi.spyOn(AssignBillRunToLicencesDal, 'default').mockRejectedValue(new Error())
       })
 
-      it('calls HandleErroredBillRunService', async () => {
+      it('calls ErrorBillRunDal', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.default).toHaveBeenCalled()
+        expect(ErrorBillRunDal.default).toHaveBeenCalled()
       })
 
       it('logs the error', async () => {
@@ -137,14 +137,14 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
 
     describe('because matching and allocating fails', () => {
       beforeEach(() => {
-        vi.spyOn(AssignBillRunToLicencesService, 'default').mockResolvedValue()
+        vi.spyOn(AssignBillRunToLicencesDal, 'default').mockResolvedValue()
         vi.spyOn(MatchAndAllocateService, 'default').mockRejectedValue(new Error())
       })
 
-      it('calls HandleErroredBillRunService', async () => {
+      it('calls ErrorBillRunDal', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.default).toHaveBeenCalled()
+        expect(ErrorBillRunDal.default).toHaveBeenCalled()
       })
 
       it('logs the error', async () => {

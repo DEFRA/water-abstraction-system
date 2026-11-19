@@ -1,6 +1,6 @@
 /**
  * Assigns a bill run to licences with matching `LicenceSupplementaryYear` records
- * @module AssignBillRunToLicencesService
+ * @module AssignBillRunToLicencesDal
  */
 
 import { db } from 'water-abstraction-engine/db/db.js'
@@ -37,7 +37,7 @@ import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.j
  *
  * @param {string} billRunId - The UUID of the bill run to assign the licences to
  */
-export default async function assignBillRunToLicencesService(billRunId) {
+export default async function assignBillRunToLicencesDal(billRunId) {
   const params = [billRunId, timestampForPostgres(), billRunId]
   const query = `
     UPDATE public.licence_supplementary_years lsy1 SET

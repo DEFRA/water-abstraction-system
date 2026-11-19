@@ -8,14 +8,14 @@ import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js
 
 // Things we need to stub
 import * as ChargingModuleCreateBillRunRequest from '../../../src/requests/charging-module/create-bill-run.request.js'
-import * as CreateBillRunEventService from '../../../src/services/bill-runs/create-bill-run-event.service.js'
+import * as CreateBillRunEventDal from '../../../src/dal/bill-runs/create-bill-run-event.dal.js'
 
 // Thing under test
 import InitiateBillRunService from '../../../src/services/bill-runs/initiate-bill-run.service.js'
 
 const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } = http2.constants
 
-describe('Initiate Bill Run service', () => {
+describe('Bill Runs - Initiate Bill Run service', () => {
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }
   const user = 'test.user@defra.gov.uk'
 
@@ -27,7 +27,7 @@ describe('Initiate Bill Run service', () => {
 
     regionId = region.id
 
-    vi.spyOn(CreateBillRunEventService, 'default').mockResolvedValue()
+    vi.spyOn(CreateBillRunEventDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -70,7 +70,7 @@ describe('Initiate Bill Run service', () => {
     it('creates a new event record', async () => {
       await InitiateBillRunService(financialYearEndings, regionId, batchType, user)
 
-      expect(CreateBillRunEventService.default).toHaveBeenCalled()
+      expect(CreateBillRunEventDal.default).toHaveBeenCalled()
     })
 
     it('returns the new bill run', async () => {

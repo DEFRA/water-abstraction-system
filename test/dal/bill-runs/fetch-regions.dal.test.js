@@ -5,12 +5,12 @@ import { describe, expect, it } from 'vitest'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Thing under test
-import FetchRegionsService from '../../../../src/services/bill-runs/setup/fetch-regions.service.js'
+import FetchRegionsDal from '../../../src/dal/bill-runs/fetch-regions.dal.js'
 
-describe('Bill Runs Setup - Setup - Fetch Regions service', () => {
+describe('Bill Runs - Fetch Regions dal', () => {
   describe('when called', () => {
     it('returns the ID and display name for each region ordered by display name', async () => {
-      const results = await FetchRegionsService()
+      const results = await FetchRegionsDal()
 
       // TODO: This is necessary because other region helpers are adding regions into the database as part
       //  of their tests. (Remove when cleans have been removed)

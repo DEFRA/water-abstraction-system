@@ -1,6 +1,6 @@
 /**
  * Check if any bill runs are being processed or cancelled
- * @module CheckBusyBillRunsService
+ * @module CheckBusyBillRunsDal
  */
 
 import { db } from 'water-abstraction-engine/db/db.js'
@@ -13,7 +13,7 @@ import { db } from 'water-abstraction-engine/db/db.js'
  *
  * @returns {Promise<string>} the state of busy bill runs; 'cancelling', 'building', 'both', or 'none'
  */
-export default async function checkBusyBillRunsService() {
+export default async function checkBusyBillRunsDal() {
   const { building, cancelling } = await _fetch()
 
   if (building && cancelling) {

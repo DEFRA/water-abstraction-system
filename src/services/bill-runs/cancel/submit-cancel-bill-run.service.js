@@ -5,7 +5,7 @@
 
 import CancelBillBunService from './cancel-bill-run.service.js'
 import DeleteBillRunService from './delete-bill-run.service.js'
-import UnassignBillRunToLicencesService from '../unassign-bill-run-to-licences.service.js'
+import UnassignBillRunToLicencesDal from '../../../dal/bill-runs/unassign-bill-run-to-licences.dal.js'
 
 /**
  * Orchestrates the cancelling of a bill run
@@ -15,7 +15,7 @@ import UnassignBillRunToLicencesService from '../unassign-bill-run-to-licences.s
  *
  * It returns the fetched instance of the bill run, with the status set to 'cancel' if the bill run was cancelled.
  *
- * It then calls `UnassignBillRunToLicencesService` which will unassign the bill run from any licences with matching
+ * It then calls `UnassignBillRunToLicencesDal` which will unassign the bill run from any licences with matching
  * `licence_supplementary_year` records.
  *
  * Finally, it calls `DeleteBillRunService` which will delete the bill run and all its associated records. It will also
@@ -30,7 +30,7 @@ export default async function submitCancelBillRunService(billRunId) {
   const billRun = await CancelBillBunService(billRunId)
 
   if (billRun.status === 'cancel') {
-    await UnassignBillRunToLicencesService(billRun.id)
+    await UnassignBillRunToLicencesDal(billRun.id)
     DeleteBillRunService(billRun)
   }
 }

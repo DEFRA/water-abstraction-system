@@ -5,25 +5,21 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import LicenceSupplementaryYearModel from 'water-abstraction-engine/models/licence-supplementary-year.model.js'
 
 // Thing under test
-import UnassignLicencesToBillRunService from '../../../src/services/bill-runs/unassign-licences-to-bill-run.service.js'
+import UnassignBillRunToLicencesDal from '../../../src/dal/bill-runs/unassign-bill-run-to-licences.dal.js'
 
-describe('Bill Runs - Unassign Licences To Bill Run service', () => {
+describe('Bill Runs - Unassign Bill Run To Licences dal', () => {
   const billRunId = '091c3d3f-0328-4b10-b1a1-3eccf55416a0'
-  const licenceIds = ['098e0fff-1c3e-4be3-83b9-8f483ae5b41e', '406b8ba4-63b6-442a-86f3-a144f1f63ca9']
 
   let licenceSupplementaryYearPatch
-  let licenceSupplementaryYearWhereIn
   let licenceSupplementaryYearWhere
 
   beforeEach(() => {
     licenceSupplementaryYearPatch = vi.fn().mockReturnThis()
-    licenceSupplementaryYearWhereIn = vi.fn().mockReturnThis()
     licenceSupplementaryYearWhere = vi.fn()
 
     vi.spyOn(LicenceSupplementaryYearModel, 'query').mockReturnValue({
       patch: licenceSupplementaryYearPatch,
-      where: licenceSupplementaryYearWhere,
-      whereIn: licenceSupplementaryYearWhereIn
+      where: licenceSupplementaryYearWhere
     })
   })
 
@@ -33,15 +29,11 @@ describe('Bill Runs - Unassign Licences To Bill Run service', () => {
 
   describe('when called', () => {
     it('updates the matching "LicenceSupplementaryYear" records with a null bill run ID', async () => {
-      await UnassignLicencesToBillRunService(licenceIds, billRunId)
+      await UnassignBillRunToLicencesDal(billRunId)
 
       const patchArgs = licenceSupplementaryYearPatch.mock.calls[0][0]
 
       expect(patchArgs.billRunId).toBeNull()
-
-      const whereInArgs = licenceSupplementaryYearWhereIn.mock.calls[0]
-
-      expect(whereInArgs).toEqual(['licenceId', licenceIds])
 
       const whereArgs = licenceSupplementaryYearWhere.mock.calls[0]
 

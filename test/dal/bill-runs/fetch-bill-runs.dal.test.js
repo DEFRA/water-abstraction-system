@@ -7,9 +7,9 @@ import DatabaseConfig from 'water-abstraction-engine/config/database.config.js'
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Thing under test
-import FetchBillRunsService from '../../../src/services/bill-runs/fetch-bill-runs.service.js'
+import FetchBillRunsDal from '../../../src/dal/bill-runs/fetch-bill-runs.dal.js'
 
-describe('Fetch Bill Runs service', () => {
+describe('Bill Runs - Fetch Bill Runs service', () => {
   const region = RegionHelper.select()
 
   let filters
@@ -19,7 +19,7 @@ describe('Fetch Bill Runs service', () => {
     filters = _noFiltersApplied()
     page = '1'
 
-    // Set the default page size to 3 so we don't have to create loads of bill runs to test the service
+    // Set the default page size to 3 so we don't have to create loads of bill runs to test the dal
     vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 3)
   })
 
@@ -40,7 +40,7 @@ describe('Fetch Bill Runs service', () => {
 
     describe('for the page selected', () => {
       it('returns a result with the correct properties', async () => {
-        const { results } = await FetchBillRunsService(filters, page)
+        const { results } = await FetchBillRunsDal(filters, page)
 
         // Due to the number of other bill runs created by other tests we can't assert on the exact values.
         // Instead we just check that the object returned contains the properties we expect
@@ -59,7 +59,7 @@ describe('Fetch Bill Runs service', () => {
 
     describe('for the page selected', () => {
       it('returns a full page of 3 matching "results" and the correct "total"', async () => {
-        const { results, total } = await FetchBillRunsService(filters, page)
+        const { results, total } = await FetchBillRunsDal(filters, page)
 
         expect(results).toHaveLength(3)
         expect(total).toBeGreaterThanOrEqual(5)
@@ -72,7 +72,7 @@ describe('Fetch Bill Runs service', () => {
       })
 
       it('returns a result with the matching "results" and the correct "total"', async () => {
-        const { results, total } = await FetchBillRunsService(filters, page)
+        const { results, total } = await FetchBillRunsDal(filters, page)
 
         expect(results.length).toBeGreaterThanOrEqual(2)
         expect(total).toBeGreaterThanOrEqual(5)
@@ -85,7 +85,7 @@ describe('Fetch Bill Runs service', () => {
       })
 
       it('returns a result with no "results" but the correct "total"', async () => {
-        const { results, total } = await FetchBillRunsService(filters, page)
+        const { results, total } = await FetchBillRunsDal(filters, page)
 
         expect(results).toHaveLength(0)
         expect(total).toBeGreaterThanOrEqual(5)
@@ -100,7 +100,7 @@ describe('Fetch Bill Runs service', () => {
           })
 
           it('returns the matching bill runs', async () => {
-            const { results, total } = await FetchBillRunsService(filters, page)
+            const { results, total } = await FetchBillRunsDal(filters, page)
 
             // All returned results should match the filter
             expect(results[0].billRunNumber).toEqual(filters.number)
@@ -114,7 +114,7 @@ describe('Fetch Bill Runs service', () => {
           })
 
           it('returns no bill runs', async () => {
-            const { results, total } = await FetchBillRunsService(filters, page)
+            const { results, total } = await FetchBillRunsDal(filters, page)
 
             expect(results).toHaveLength(0)
             expect(total).toEqual(0)
@@ -129,7 +129,7 @@ describe('Fetch Bill Runs service', () => {
           })
 
           it('returns the matching bill runs', async () => {
-            const { results, total } = await FetchBillRunsService(filters, page)
+            const { results, total } = await FetchBillRunsDal(filters, page)
 
             // All returned results should match the filter
             expect(results[0].batchType).toEqual('supplementary')
@@ -143,7 +143,7 @@ describe('Fetch Bill Runs service', () => {
           })
 
           it('returns no bill runs', async () => {
-            const { results, total } = await FetchBillRunsService(filters, page)
+            const { results, total } = await FetchBillRunsDal(filters, page)
 
             expect(results).toHaveLength(0)
             expect(total).toEqual(0)
@@ -158,7 +158,7 @@ describe('Fetch Bill Runs service', () => {
           })
 
           it('returns the matching bill runs', async () => {
-            const { results, total } = await FetchBillRunsService(filters, page)
+            const { results, total } = await FetchBillRunsDal(filters, page)
 
             // All returned results should match the filter
             expect(results[0].region).toEqual(region.displayName)
@@ -172,7 +172,7 @@ describe('Fetch Bill Runs service', () => {
           })
 
           it('returns no bill runs', async () => {
-            const { results, total } = await FetchBillRunsService(filters, page)
+            const { results, total } = await FetchBillRunsDal(filters, page)
 
             expect(results).toHaveLength(0)
             expect(total).toEqual(0)
@@ -187,7 +187,7 @@ describe('Fetch Bill Runs service', () => {
           })
 
           it('returns the matching bill runs', async () => {
-            const { results, total } = await FetchBillRunsService(filters, page)
+            const { results, total } = await FetchBillRunsDal(filters, page)
 
             // All returned results should match the filter
             expect(results[0].status).toEqual('sent')
@@ -201,7 +201,7 @@ describe('Fetch Bill Runs service', () => {
           })
 
           it('returns no bill runs', async () => {
-            const { results, total } = await FetchBillRunsService(filters, page)
+            const { results, total } = await FetchBillRunsDal(filters, page)
 
             expect(results).toHaveLength(0)
             expect(total).toEqual(0)
@@ -216,7 +216,7 @@ describe('Fetch Bill Runs service', () => {
           })
 
           it('returns the matching bill runs', async () => {
-            const { results, total } = await FetchBillRunsService(filters, page)
+            const { results, total } = await FetchBillRunsDal(filters, page)
 
             // All returned results should match the filter
             expect(new Date(results[0].createdAt).getFullYear()).toEqual(filters.yearCreated)
@@ -230,7 +230,7 @@ describe('Fetch Bill Runs service', () => {
           })
 
           it('returns no bill runs', async () => {
-            const { results, total } = await FetchBillRunsService(filters, page)
+            const { results, total } = await FetchBillRunsDal(filters, page)
 
             expect(results).toHaveLength(0)
             expect(total).toEqual(0)

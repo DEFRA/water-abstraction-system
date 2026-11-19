@@ -7,7 +7,7 @@ import { pause } from 'water-abstraction-engine/lib/general.lib.js'
 // Things we need to stub
 import * as CancelBillRunService from '../../../../src/services/bill-runs/cancel/cancel-bill-run.service.js'
 import * as DeleteBillRunService from '../../../../src/services/bill-runs/cancel/delete-bill-run.service.js'
-import * as UnassignBillRunToLicencesService from '../../../../src/services/bill-runs/unassign-bill-run-to-licences.service.js'
+import * as UnassignBillRunToLicencesDal from '../../../../src/dal/bill-runs/unassign-bill-run-to-licences.dal.js'
 
 // Thing under test
 import SubmitCancelBillBunService from '../../../../src/services/bill-runs/cancel/submit-cancel-bill-run.service.js'
@@ -24,7 +24,7 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
       deleteDoneFake()
     })
 
-    vi.spyOn(UnassignBillRunToLicencesService, 'default').mockResolvedValue()
+    vi.spyOn(UnassignBillRunToLicencesDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -42,7 +42,7 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
       it('unassigns the bill run from those licences with supplementary year records', async () => {
         await SubmitCancelBillBunService(billRunId)
 
-        expect(UnassignBillRunToLicencesService.default).toHaveBeenCalled()
+        expect(UnassignBillRunToLicencesDal.default).toHaveBeenCalled()
       })
 
       it('deletes the bill run in the background and does not throw an error', async () => {
@@ -73,7 +73,7 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
       it('does not unassign the bill run from those licences with supplementary year records', async () => {
         await expect(SubmitCancelBillBunService(billRunId)).rejects.toThrow()
 
-        expect(UnassignBillRunToLicencesService.default).not.toHaveBeenCalled()
+        expect(UnassignBillRunToLicencesDal.default).not.toHaveBeenCalled()
       })
 
       it('does not delete the bill run and throws an error', async () => {

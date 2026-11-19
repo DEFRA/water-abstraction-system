@@ -5,7 +5,7 @@
 
 import EmptyBillRunPresenter from '../../presenters/bill-runs/empty-bill-run.presenter.js'
 import ErroredBillRunPresenter from '../../presenters/bill-runs/errored-bill-run.presenter.js'
-import FetchBillRunService from './fetch-bill-run.service.js'
+import FetchBillRunSummaryDal from '../../dal/bill-runs/fetch-bill-run-summary.dal.js'
 import ViewBillRunPresenter from '../../presenters/bill-runs/view-bill-run.presenter.js'
 import ViewBillSummariesPresenter from '../../presenters/bill-runs/view-bill-summaries.presenter.js'
 
@@ -18,7 +18,7 @@ import ViewBillSummariesPresenter from '../../presenters/bill-runs/view-bill-sum
  * details of the bill run and the bills linked to it plus the page title.
  */
 export default async function viewBillRunService(id) {
-  const result = await FetchBillRunService(id)
+  const result = await FetchBillRunSummaryDal(id)
 
   const formattedData = _pageData(result)
 

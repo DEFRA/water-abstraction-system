@@ -6,9 +6,9 @@
 import PaginatorPresenter from 'water-abstraction-engine/presenters/paginator.presenter.js'
 import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.lib.js'
 
-import CheckBusyBillRunsService from './check-busy-bill-runs.service.js'
-import FetchBillRunsService from './fetch-bill-runs.service.js'
-import FetchRegionsService from './setup/fetch-regions.service.js'
+import CheckBusyBillRunsDal from '../../dal/bill-runs/check-busy-bill-runs.dal.js'
+import FetchBillRunsDal from '../../dal/bill-runs/fetch-bill-runs.dal.js'
+import FetchRegionsDal from '../../dal/bill-runs/fetch-regions.dal.js'
 import IndexBillRunsPresenter from '../../presenters/bill-runs/index-bill-runs.presenter.js'
 
 /**
@@ -22,12 +22,12 @@ import IndexBillRunsPresenter from '../../presenters/bill-runs/index-bill-runs.p
 export default async function indexBillRunsService(yar, page) {
   const filters = _filters(yar)
 
-  // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
-  // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
+  // We expect the FetchBillRunsDal to take the longest to complete. But running them together means we are only waiting
+  // as long as it takes FetchBillRunsDal to complete rather than their combined time
   const [busyResult, { results: billRuns, total: totalNumber }, regions] = await Promise.all([
-    CheckBusyBillRunsService(),
-    FetchBillRunsService(filters, page),
-    FetchRegionsService()
+    CheckBusyBillRunsDal(),
+    FetchBillRunsDal(filters, page),
+    FetchRegionsDal()
   ])
 
   const pagination = PaginatorPresenter(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')

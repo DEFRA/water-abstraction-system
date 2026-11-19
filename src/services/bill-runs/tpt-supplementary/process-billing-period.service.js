@@ -12,7 +12,7 @@ import { generateUUID } from 'water-abstraction-engine/lib/general.lib.js'
 import BillRunError from '../../../errors/bill-run.error.js'
 import DetermineChargePeriodService from '../determine-charge-period.service.js'
 import DetermineMinimumChargeService from '../determine-minimum-charge.service.js'
-import FetchPreviousTransactionsService from '../fetch-previous-transactions.service.js'
+import FetchPreviousTransactionsDal from '../../../dal/bill-runs/fetch-previous-transactions.dal.js'
 import GenerateTwoPartTariffTransactionService from '../generate-two-part-tariff-transaction.service.js'
 import ProcessSupplementaryTransactionsService from '../process-supplementary-transactions.service.js'
 import SendTransactionsService from '../send-transactions.service.js'
@@ -258,7 +258,7 @@ async function _processBillLicences(billLicences, billingAccountId, billingPerio
   const cleansedBillLicences = []
 
   for (const billLicence of billLicences) {
-    const previousTransactions = await FetchPreviousTransactionsService(
+    const previousTransactions = await FetchPreviousTransactionsDal(
       billingAccountId,
       billLicence.licence.id,
       financialYearEnding,

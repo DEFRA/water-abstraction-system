@@ -1,6 +1,6 @@
 /**
  * Creates the event for when a new bill run is initialised
- * @module CreateBillRunEventService
+ * @module CreateBillRunEventDal
  */
 
 import EventModel from 'water-abstraction-engine/models/event.model.js'
@@ -16,7 +16,7 @@ import CreateBillRunEventPresenter from '../../presenters/bill-runs/create-bill-
  *
  * @returns {Promise<object>} The newly created event record
  */
-export default async function createBillRunEventService(billRun, issuer) {
+export default async function createBillRunEventDal(billRun, issuer) {
   // The legacy `water.events` table does not have a default set for its timestamp fields. So, we have to manually set
   // them when creating the record
   const timestamp = timestampForPostgres()
