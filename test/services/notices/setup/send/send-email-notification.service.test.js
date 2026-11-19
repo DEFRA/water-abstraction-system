@@ -22,7 +22,7 @@ describe('Notices - Setup - Send - Send Email Notification service', () => {
     referenceCode = generateNoticeReferenceCode('RINV-')
     notification = NotificationsFixture.notification().notification
 
-    notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).email
+    notifyResponse = NotifyResponseFixture.sendEmailSuccessfulResponse(referenceCode)
 
     vi.spyOn(CreateEmailRequest, 'default').mockResolvedValue(notifyResponse)
   })

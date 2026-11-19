@@ -22,7 +22,7 @@ describe('Notices - Setup - Send - Send Letter Notification service', () => {
     referenceCode = generateNoticeReferenceCode('RINV-')
     notification = NotificationsFixture.notification().notification
 
-    notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).letter
+    notifyResponse = NotifyResponseFixture.sendLetterSuccessfulResponse(referenceCode)
 
     vi.spyOn(CreateLetterRequest, 'default').mockResolvedValue(notifyResponse)
   })
