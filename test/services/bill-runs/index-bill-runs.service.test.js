@@ -7,7 +7,7 @@ import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
 // Things we need to stub
 import * as CheckBusyBillRunsDal from '../../../src/dal/bill-runs/check-busy-bill-runs.dal.js'
 import * as FetchBillRunsDal from '../../../src/dal/bill-runs/fetch-bill-runs.dal.js'
-import * as FetchRegionsService from '../../../src/services/bill-runs/setup/fetch-regions.service.js'
+import * as FetchRegionsDal from '../../../src/dal/bill-runs/fetch-regions.dal.js'
 
 // Thing under test
 import IndexBillRunsService from '../../../src/services/bill-runs/index-bill-runs.service.js'
@@ -19,7 +19,7 @@ describe('Bill Runs - Index Bill Runs service', () => {
   beforeEach(() => {
     // It doesn't matter for these tests what busy state the service returns, only that it returns one.
     vi.spyOn(CheckBusyBillRunsDal, 'default').mockResolvedValue('none')
-    vi.spyOn(FetchRegionsService, 'default').mockResolvedValue([
+    vi.spyOn(FetchRegionsDal, 'default').mockResolvedValue([
       { displayName: 'Anglian', id: '1d562e9a-2104-41d9-aa75-c008a7ec9059' }
     ])
   })

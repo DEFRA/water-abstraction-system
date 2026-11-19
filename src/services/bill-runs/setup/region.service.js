@@ -5,7 +5,7 @@
 
 import FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
-import FetchRegionsService from './fetch-regions.service.js'
+import FetchRegionsDal from '../../../dal/bill-runs/fetch-regions.dal.js'
 import RegionPresenter from '../../../presenters/bill-runs/setup/region.presenter.js'
 
 /**
@@ -20,7 +20,7 @@ import RegionPresenter from '../../../presenters/bill-runs/setup/region.presente
  */
 export default async function regionService(sessionId) {
   const session = await FetchSessionDal(sessionId)
-  const regions = await FetchRegionsService()
+  const regions = await FetchRegionsDal()
 
   const formattedData = RegionPresenter(session, regions)
 

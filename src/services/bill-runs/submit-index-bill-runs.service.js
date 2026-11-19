@@ -9,7 +9,7 @@ import { clearFilters, handleOneOptionSelected } from 'water-abstraction-engine/
 
 import CheckBusyBillRunsDal from '../../dal/bill-runs/check-busy-bill-runs.dal.js'
 import FetchBillRunsDal from '../../dal/bill-runs/fetch-bill-runs.dal.js'
-import FetchRegionsService from './setup/fetch-regions.service.js'
+import FetchRegionsDal from '../../dal/bill-runs/fetch-regions.dal.js'
 import IndexBillRunsPresenter from '../../presenters/bill-runs/index-bill-runs.presenter.js'
 import IndexValidator from '../../validators/bill-runs/index.validator.js'
 
@@ -36,7 +36,7 @@ export default async function submitIndexBillRunsService(payload, yar, page) {
   handleOneOptionSelected(payload, 'runTypes')
   handleOneOptionSelected(payload, 'statuses')
 
-  const regions = await FetchRegionsService()
+  const regions = await FetchRegionsDal()
   const error = _validate(payload, regions)
 
   if (!error) {

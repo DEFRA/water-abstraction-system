@@ -8,7 +8,7 @@ import { processSavedFilters } from 'water-abstraction-engine/lib/submit-page.li
 
 import CheckBusyBillRunsDal from '../../dal/bill-runs/check-busy-bill-runs.dal.js'
 import FetchBillRunsDal from '../../dal/bill-runs/fetch-bill-runs.dal.js'
-import FetchRegionsService from './setup/fetch-regions.service.js'
+import FetchRegionsDal from '../../dal/bill-runs/fetch-regions.dal.js'
 import IndexBillRunsPresenter from '../../presenters/bill-runs/index-bill-runs.presenter.js'
 
 /**
@@ -27,7 +27,7 @@ export default async function indexBillRunsService(yar, page) {
   const [busyResult, { results: billRuns, total: totalNumber }, regions] = await Promise.all([
     CheckBusyBillRunsDal(),
     FetchBillRunsDal(filters, page),
-    FetchRegionsService()
+    FetchRegionsDal()
   ])
 
   const pagination = PaginatorPresenter(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
