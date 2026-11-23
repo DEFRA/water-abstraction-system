@@ -1,8 +1,11 @@
 // Test framework
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import { generateUUID } from 'water-abstraction-engine/test/generators.js'
+
+// Things we need to stub
+import * as featureFlagsConfig from '../../../../src/config/feature-flags.config.js'
 
 // Thing under test
 import NoticeTypePresenter from '../../../../src/presenters/notices/setup/notice-type.presenter.js'
@@ -12,11 +15,17 @@ describe('Notice - Setup - Notice Type Presenter', () => {
   let session
 
   beforeEach(() => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ renewalsFinal: true })
+
     auth = {
       credentials: { scope: ['bulk_return_notifications', 'renewal_notifications'] }
     }
 
     session = { id: generateUUID(), journey: 'adhoc' }
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

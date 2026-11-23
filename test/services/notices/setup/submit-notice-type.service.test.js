@@ -24,7 +24,8 @@ describe('Notices - Setup - Submit Notice Type service', () => {
   beforeEach(() => {
     vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({
       alternateReturnInvitationPeriods: true,
-      alternateReturnReminderPeriods: true
+      alternateReturnReminderPeriods: true,
+      renewalsFinal: true
     })
 
     auth = {

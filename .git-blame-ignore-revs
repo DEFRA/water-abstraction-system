@@ -17,3 +17,9 @@
 
 # Use prettier to manage code style and formatting (#1476)
 1be5deaa2931f1f618353c1778c4a47d16dd42f0
+
+# Convert codebase to ESM from CommonJS
+fb47d8793506d929398e0d7731c5f502a453f94c
+
+# Apply 'alanism' linting autofixes
+883a8b294bd6bee005af5c4573a5dbeafc5e1e53
