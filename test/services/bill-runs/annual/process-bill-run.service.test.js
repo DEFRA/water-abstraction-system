@@ -11,7 +11,7 @@ import BillRunError from '../../../../src/errors/bill-run.error.js'
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 import * as ChargingModuleGenerateRequest from '../../../../src/requests/charging-module/generate-bill-run.request.js'
 import * as ErrorBillRunDal from '../../../../src/dal/bill-runs/error-bill-run.dal.js'
-import * as FetchBillingAccountsService from '../../../../src/services/bill-runs/annual/fetch-billing-accounts.service.js'
+import * as FetchBillingAccountsDal from '../../../../src/dal/bill-runs/annual/fetch-billing-accounts.dal.js'
 import * as LegacyRefreshBillRunRequest from '../../../../src/requests/legacy/refresh-bill-run.request.js'
 import * as ProcessBillingPeriodService from '../../../../src/services/bill-runs/annual/process-billing-period.service.js'
 
@@ -48,7 +48,7 @@ describe('Annual Process Bill Run service', () => {
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue([])
+      vi.spyOn(FetchBillingAccountsDal, 'default').mockResolvedValue([])
     })
 
     describe('and nothing is billed', () => {
@@ -105,7 +105,7 @@ describe('Annual Process Bill Run service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        vi.spyOn(FetchBillingAccountsService, 'default').mockRejectedValue(thrownError)
+        vi.spyOn(FetchBillingAccountsDal, 'default').mockRejectedValue(thrownError)
       })
 
       it('calls ErrorBillRunDal with appropriate error code', async () => {
@@ -135,7 +135,7 @@ describe('Annual Process Bill Run service', () => {
         beforeEach(() => {
           thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToPrepareTransactions)
 
-          vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue([])
+          vi.spyOn(FetchBillingAccountsDal, 'default').mockResolvedValue([])
           vi.spyOn(ProcessBillingPeriodService, 'default').mockRejectedValue(thrownError)
         })
 
@@ -166,7 +166,7 @@ describe('Annual Process Bill Run service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue([])
+        vi.spyOn(FetchBillingAccountsDal, 'default').mockResolvedValue([])
         vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(true)
         vi.spyOn(ChargingModuleGenerateRequest, 'default').mockRejectedValue(thrownError)
       })

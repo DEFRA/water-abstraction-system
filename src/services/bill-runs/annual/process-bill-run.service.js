@@ -8,7 +8,7 @@ import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstra
 
 import BillRunError from '../../../errors/bill-run.error.js'
 import ErrorBillRunDal from '../../../dal/bill-runs/error-bill-run.dal.js'
-import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
+import FetchBillingAccountsDal from '../../../dal/bill-runs/annual/fetch-billing-accounts.dal.js'
 import GenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
 import ProcessBillingPeriodService from './process-billing-period.service.js'
 import RefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
@@ -55,7 +55,7 @@ export default async function processBillRunService(billRun, billingPeriods) {
 
 async function _fetchBillingAccounts(billRun, billingPeriod) {
   try {
-    return await FetchBillingAccountsService(billRun.regionId, billingPeriod)
+    return await FetchBillingAccountsDal(billRun.regionId, billingPeriod)
   } catch (error) {
     // We know we're saying we failed to process charge versions. But we're stuck with the legacy error codes and this
     // is the closest one related to what stage we're at in the process
