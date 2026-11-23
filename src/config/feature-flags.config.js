@@ -12,5 +12,6 @@ export default {
   // converting the env var to a boolean
   alternateReturnInvitationPeriods: String(process.env.ENABLE_ALTERNATE_RETURN_INVITE_PERIODS) === 'true' || false,
   alternateReturnReminderPeriods: String(process.env.ENABLE_ALTERNATE_RETURN_REMINDER_PERIODS) === 'true' || false,
+  renewalsFinal: String(process.env.ENABLE_RENEWALS_FINAL) === 'true' || false,
   setOldReturnsDueDate: String(process.env.ENABLE_SET_OLD_RETURNS_DUE_DATE) === 'true' || false
 }

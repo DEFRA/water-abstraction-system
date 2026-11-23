@@ -5,6 +5,8 @@
 
 import { NoticeJourney, NoticeType, NoticeTypes } from 'water-abstraction-engine/lib/static-lookups.lib.js'
 
+import featureFlagsConfig from '../../../config/feature-flags.config.js'
+
 /**
  * Formats data for the `/notices/setup/{sessionId}/notice-type` page
  *
@@ -63,12 +65,15 @@ function _noticeTypes(noticeType, journey, auth) {
     }
 
     if (scope.includes('renewal_notifications')) {
-      items.push(
-        {
+      if (featureFlagsConfig.renewalsFinal) {
+        items.push({
           checked: noticeType === NoticeType.RENEWAL_FINALS,
           text: NoticeTypes[NoticeType.RENEWAL_FINALS].notificationType,
           value: NoticeType.RENEWAL_FINALS
-        },
+        })
+      }
+
+      items.push(
         {
           checked: noticeType === NoticeType.RENEWAL_INVITATIONS,
           text: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType,

@@ -1,8 +1,11 @@
 // Test framework
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Test helpers
 import NoticesFixture from '../../support/fixtures/notices.fixture.js'
+
+// Things we need to stub
+import * as featureFlagsConfig from '../../../src/config/feature-flags.config.js'
 
 // Thing under test
 import IndexNoticesPresenter from '../../../src/presenters/notices/index-notices.presenter.js'
@@ -12,6 +15,8 @@ describe('Notices - Index Notices presenter', () => {
   let notices
 
   beforeEach(() => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ renewalsFinal: true })
+
     notices = NoticesFixture.mapToFetchNoticesResult(NoticesFixture.notices())
 
     auth = {
@@ -19,10 +24,15 @@ describe('Notices - Index Notices presenter', () => {
     }
   })
 
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('correctly presents the data', () => {
     const result = IndexNoticesPresenter(notices, auth)
 
     expect(result).toEqual({
+      enableRenewalsFinal: true,
       helperText: 'Create a returns invitation, reminder or paper return notice',
       links: {
         adhoc: {
