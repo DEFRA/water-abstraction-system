@@ -5,6 +5,8 @@
 
 import { formatLongDate, formatNoticeType } from 'water-abstraction-engine/presenters/base.presenter.js'
 
+import featureFlagsConfig from '../../config/feature-flags.config.js'
+
 /**
  * Formats data for the `/notices` page
  *
@@ -19,6 +21,7 @@ export default function indexNoticesPresenter(notices, auth) {
   } = auth
 
   return {
+    enableRenewalsFinal: featureFlagsConfig.renewalsFinal,
     helperText: _helperText(scope),
     links: _links(scope),
     notices: _noticeRowData(notices),

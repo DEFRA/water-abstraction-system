@@ -155,7 +155,7 @@
             checked: filters.noticeTypes.includes('renewalFinal'),
             text: "Renewals final",
             value: "renewalFinal"
-          },
+          } if enableRenewalsFinal,
           {
             attributes: { 'data-test': 'renewal-invitations' },
             checked: filters.noticeTypes.includes('renewalInvitation'),

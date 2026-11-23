@@ -7,6 +7,7 @@ import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Things to stub
 import * as FetchNoticesDal from '../../../src/dal/notices/fetch-notices.dal.js'
+import * as featureFlagsConfig from '../../../src/config/feature-flags.config.js'
 
 // Thing under test
 import IndexNoticesService from '../../../src/services/notices/index-notices.service.js'
@@ -18,6 +19,8 @@ describe('Notices - Index Notices service', () => {
   let yarStub
 
   beforeEach(() => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ renewalsFinal: true })
+
     auth = {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
@@ -44,6 +47,7 @@ describe('Notices - Index Notices service', () => {
 
       expect(result).toEqual({
         activeNavBar: 'notices',
+        enableRenewalsFinal: true,
         filters: {
           fromDate: null,
           noticeTypes: [],

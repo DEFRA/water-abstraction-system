@@ -6,7 +6,9 @@ import NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Things to stub
 import YarStub from 'water-abstraction-engine/test/stubs/yar.stub.js'
+
 import * as FetchNoticesDal from '../../../src/dal/notices/fetch-notices.dal.js'
+import * as featureFlagsConfig from '../../../src/config/feature-flags.config.js'
 
 // Thing under test
 import SubmitIndexNoticesService from '../../../src/services/notices/submit-index-notices.service.js'
@@ -19,6 +21,8 @@ describe('Notices - Submit Index Notices service', () => {
   let yarStub
 
   beforeEach(async () => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ renewalsFinal: true })
+
     auth = {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
@@ -220,6 +224,7 @@ describe('Notices - Submit Index Notices service', () => {
 
           expect(result).toEqual({
             activeNavBar: 'notices',
+            enableRenewalsFinal: true,
             error: {
               errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
               fromDate: { text: 'Enter a valid from date' }
@@ -310,6 +315,7 @@ describe('Notices - Submit Index Notices service', () => {
 
           expect(result).toEqual({
             activeNavBar: 'notices',
+            enableRenewalsFinal: true,
             error: {
               errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
               fromDate: { text: 'Enter a valid from date' }
