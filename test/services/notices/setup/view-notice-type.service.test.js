@@ -7,6 +7,8 @@ import SessionModelStub from 'water-abstraction-engine/test/stubs/session.stub.j
 // Things we need to stub
 import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal.js'
 
+import * as featureFlagsConfig from '../../../../src/config/feature-flags.config.js'
+
 // Thing under test
 import ViewNoticeTypeService from '../../../../src/services/notices/setup/view-notice-type.service.js'
 
@@ -16,6 +18,8 @@ describe('Notices - Setup - View Notice Type service', () => {
   let sessionData
 
   beforeEach(() => {
+    vi.spyOn(featureFlagsConfig, 'default', 'get').mockReturnValue({ renewalsFinal: true })
+
     auth = {
       credentials: { scope: ['bulk_return_notifications', 'renewal_notifications'] }
     }
