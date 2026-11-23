@@ -8,7 +8,7 @@ import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 // Thing under test
 import UpdateStatusDal from '../../../src/dal/bill-runs/update-status.dal.js'
 
-describe('Bill Runs - update Status dal', () => {
+describe('Bill Runs - Update Status dal', () => {
   let billRun
   let status
   let today
