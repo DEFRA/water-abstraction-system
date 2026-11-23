@@ -6,14 +6,17 @@ import BillRunHelper from 'water-abstraction-engine/test/helpers/bill-run.helper
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 
 // Thing under test
-import MarkAsProcessingDal from '../../../src/dal/bill-runs/mark-as-processing.dal.js'
+import UpdateStatusDal from '../../../src/dal/bill-runs/update-status.dal.js'
 
-describe('Bill Runs - Mark As Processing dal', () => {
+describe('Bill Runs - update Status dal', () => {
   let billRun
+  let status
   let today
 
   beforeEach(async () => {
     billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', status: 'review' })
+
+    status = 'processing'
 
     today = new Date('2026-11-17')
 
@@ -27,7 +30,7 @@ describe('Bill Runs - Mark As Processing dal', () => {
   })
 
   it('sets the bill run status to "processing"', async () => {
-    await MarkAsProcessingDal(billRun.id)
+    await UpdateStatusDal(billRun.id, status)
 
     const result = await BillRunModel.query().findById(billRun.id).select(['status', 'updatedAt'])
 
