@@ -9,7 +9,7 @@ import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import * as FetchBillRunDal from '../../../src/dal/bill-runs/fetch-bill-run.dal.js'
 import * as GenerateAnnualBillRunService from '../../../src/services/bill-runs/two-part-tariff/generate-bill-run.service.js'
 import * as GenerateSupplementaryBillRunService from '../../../src/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
-import * as MarkAsProcessingDal from '../../../src/dal/bill-runs/mark-as-processing.dal.js'
+import * as UpdateStatusDal from '../../../src/dal/bill-runs/update-status.dal.js'
 
 // Thing under test
 import GenerateTwoPartTariffBillRunService from '../../../src/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
@@ -23,11 +23,11 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
 
   let billRun
   let fetchBillRunDalStub
-  let markAsProcessingDalStub
+  let updateStatusDalStub
 
   beforeEach(async () => {
     fetchBillRunDalStub = vi.spyOn(FetchBillRunDal, 'default')
-    markAsProcessingDalStub = vi.spyOn(MarkAsProcessingDal, 'default').mockResolvedValue()
+    updateStatusDalStub = vi.spyOn(UpdateStatusDal, 'default').mockResolvedValue()
 
     vi.spyOn(GenerateAnnualBillRunService, 'default').mockResolvedValue()
     vi.spyOn(GenerateSupplementaryBillRunService, 'default').mockResolvedValue()
@@ -72,7 +72,7 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
         it('sets the bill run status to "processing"', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(markAsProcessingDalStub).toHaveBeenCalledExactlyOnceWith(billRun.id)
+          expect(updateStatusDalStub).toHaveBeenCalledExactlyOnceWith(billRun.id, 'processing')
         })
 
         it('triggers the "generate annual bill run" service', async () => {
@@ -117,7 +117,7 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
         it('sets the bill run status to "processing"', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(markAsProcessingDalStub).toHaveBeenCalledExactlyOnceWith(billRun.id)
+          expect(updateStatusDalStub).toHaveBeenCalledExactlyOnceWith(billRun.id, 'processing')
         })
 
         it('triggers the "generate supplementary bill run" service', async () => {
@@ -137,7 +137,7 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
         it('does not update the bill run status', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(markAsProcessingDalStub).not.toHaveBeenCalled()
+          expect(updateStatusDalStub).not.toHaveBeenCalled()
         })
 
         it('triggers the "generate supplementary bill run" service', async () => {

@@ -8,7 +8,7 @@ import ExpandedError from 'water-abstraction-engine/errors/expanded.error.js'
 import FetchBillRunDal from '../../dal/bill-runs/fetch-bill-run.dal.js'
 import GenerateAnnualBillRun from './two-part-tariff/generate-bill-run.service.js'
 import GenerateSupplementaryBillRun from './tpt-supplementary/generate-bill-run.service.js'
-import MarkAsProcessingDal from '../../dal/bill-runs/mark-as-processing.dal.js'
+import UpdateStatusDal from '../../dal/bill-runs/update-status.dal.js'
 
 /**
  * Checks a two-part tariff bill run can be generated, then determines which generate engine to use
@@ -58,7 +58,7 @@ async function _markAsProcessing(billRun) {
 
   // If the 'review' step was skipped, the bill run will already have a state of 'processing'
   if (status === 'review') {
-    await MarkAsProcessingDal(id)
+    await UpdateStatusDal(id, 'processing')
   }
 }
 
