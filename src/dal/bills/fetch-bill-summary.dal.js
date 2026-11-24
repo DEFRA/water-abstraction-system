@@ -1,6 +1,6 @@
 /**
  * Fetches data for the remove bill page which summarises the bill run and billing details for the bill
- * @module FetchBillSummaryService
+ * @module FetchBillSummaryDal
  */
 
 import BillModel from 'water-abstraction-engine/models/bill.model.js'
@@ -19,7 +19,7 @@ import BillModel from 'water-abstraction-engine/models/bill.model.js'
  * @returns {Promise<object>} the matching instance of BillModel plus the linked billing account and bill
  * run. Also all bill licences linked to the bill so we can display which licences are in the bill
  */
-export default async function fetchBillSummaryService(billId) {
+export default async function fetchBillSummaryDal(billId) {
   return _fetch(billId)
 }
 

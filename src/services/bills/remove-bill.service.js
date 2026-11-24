@@ -3,7 +3,7 @@
  * @module RemoveBillService
  */
 
-import FetchBillSummaryService from './fetch-bill-summary.service.js'
+import FetchBillSummaryDal from '../../dal/bills/fetch-bill-summary.dal.js'
 import RemoveBillPresenter from '../../presenters/bills/remove-bill.presenter.js'
 
 /**
@@ -15,7 +15,7 @@ import RemoveBillPresenter from '../../presenters/bills/remove-bill.presenter.js
  * to for the remove bill page
  */
 export default async function removeBillService(billId) {
-  const bill = await FetchBillSummaryService(billId)
+  const bill = await FetchBillSummaryDal(billId)
 
   const formattedData = RemoveBillPresenter(bill)
 
