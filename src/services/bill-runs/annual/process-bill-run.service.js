@@ -8,10 +8,11 @@ import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from 'water-abstra
 
 import BillRunError from '../../../errors/bill-run.error.js'
 import ErrorBillRunDal from '../../../dal/bill-runs/error-bill-run.dal.js'
-import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
+import FetchBillingAccountsDal from '../../../dal/bill-runs/annual/fetch-billing-accounts.dal.js'
 import GenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
 import ProcessBillingPeriodService from './process-billing-period.service.js'
 import RefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
+import UpdateStatusDal from '../../../dal/bill-runs/update-status.dal.js'
 
 /**
  * Process a given bill run for the given billing periods
@@ -42,7 +43,7 @@ export default async function processBillRunService(billRun, billingPeriods) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    await _updateStatus(billRunId, 'processing')
+    await UpdateStatusDal(billRunId, 'processing')
 
     await _processBillingPeriod(billingPeriod, billRun)
 
@@ -55,7 +56,7 @@ export default async function processBillRunService(billRun, billingPeriods) {
 
 async function _fetchBillingAccounts(billRun, billingPeriod) {
   try {
-    return await FetchBillingAccountsService(billRun.regionId, billingPeriod)
+    return await FetchBillingAccountsDal(billRun.regionId, billingPeriod)
   } catch (error) {
     // We know we're saying we failed to process charge versions. But we're stuck with the legacy error codes and this
     // is the closest one related to what stage we're at in the process
@@ -67,7 +68,7 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
   // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
   // this in the UI
   if (!billRunPopulated) {
-    await _updateStatus(billRun.id, 'empty')
+    await UpdateStatusDal(billRun.id, 'empty')
 
     return
   }
@@ -85,8 +86,4 @@ async function _processBillingPeriod(billingPeriod, billRun) {
   const billRunPopulated = await ProcessBillingPeriodService(billRun, billingPeriod, billingAccounts)
 
   await _finaliseBillRun(billRun, billRunPopulated)
-}
-
-async function _updateStatus(billRunId, status) {
-  await BillRunModel.query().findById(billRunId).patch({ status })
 }

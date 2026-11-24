@@ -3,16 +3,14 @@
  * @module ProcessBillingPeriodService
  */
 
-import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model.js'
-import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
-import TransactionModel from 'water-abstraction-engine/models/transaction.model.js'
 import { generateUUID } from 'water-abstraction-engine/lib/general.lib.js'
 
 import BillRunError from '../../../errors/bill-run.error.js'
 import DetermineChargePeriodService from '../determine-charge-period.service.js'
 import DetermineMinimumChargeService from '../determine-minimum-charge.service.js'
 import GenerateTransactionsService from '../generate-transactions.service.js'
+import PersistBillDataDal from '../../../dal/bill-runs/annual/persist-bill-data.dal.js'
 import SendTransactionsService from '../send-transactions.service.js'
 
 import BillingConfig from '../../../config/billing.config.js'
@@ -275,13 +273,5 @@ async function _processBillingAccount(billingAccount, billRun, billingPeriod) {
     return false
   }
 
-  return _persistBillData(bill, billLicences, transactions)
-}
-
-async function _persistBillData(bill, billLicences, transactions) {
-  await BillModel.query().insert(bill)
-  await BillLicenceModel.query().insert(billLicences)
-  await TransactionModel.query().insert(transactions)
-
-  return true
+  return PersistBillDataDal(bill, billLicences, transactions)
 }
