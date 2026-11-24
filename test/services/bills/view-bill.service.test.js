@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
+import * as FetchBillingAccountDal from '../../../src/dal/bills/fetch-billing-account.dal.js'
 import * as FetchBillLicenceSummariesDal from '../../../src/dal/bills/fetch-bill-licence-summaries.dal.js'
 import * as ViewBillLicencePresenter from '../../../src/presenters/bill-licences/view-bill-licence.presenter.js'
 import * as ViewBillPresenter from '../../../src/presenters/bills/view-bill.presenter.js'
@@ -32,10 +32,7 @@ describe('Bills - View Bill service', () => {
           ]
         })
 
-        vi.spyOn(BillingAccountModel, 'query').mockReturnValue({
-          findById: vi.fn().mockReturnThis(),
-          modify: vi.fn().mockResolvedValue()
-        })
+        vi.spyOn(FetchBillingAccountDal, 'default').mockResolvedValue()
 
         vi.spyOn(ViewBillPresenter, 'default').mockReturnValue({
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
@@ -121,10 +118,7 @@ describe('Bills - View Bill service', () => {
         licenceSummaries: []
       })
 
-      vi.spyOn(BillingAccountModel, 'query').mockReturnValue({
-        findById: vi.fn().mockReturnThis(),
-        modify: vi.fn().mockResolvedValue(undefined)
-      })
+      vi.spyOn(FetchBillingAccountDal, 'default').mockResolvedValue(undefined)
     })
 
     it('throws an exception', async () => {
