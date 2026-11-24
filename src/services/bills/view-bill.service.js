@@ -5,8 +5,8 @@
 
 import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 
+import FetchBillLicenceSummariesDal from '../../dal/bills/fetch-bill-licence-summaries.dal.js'
 import FetchBillLicenceTransactionsDal from '../../dal/bill-licences/fetch-bill-licence-transactions.dal.js'
-import FetchBillService from './fetch-bill-service.js'
 import ViewBillLicencePresenter from '../../presenters/bill-licences/view-bill-licence.presenter.js'
 import ViewBillPresenter from '../../presenters/bills/view-bill.presenter.js'
 import ViewLicenceSummariesPresenter from '../../presenters/bills/view-licence-summaries.presenter.js'
@@ -29,7 +29,7 @@ import ViewLicenceSummariesPresenter from '../../presenters/bills/view-licence-s
  * for all the licences linked to the bill for use in the bill view page
  */
 export default async function viewBillService(id) {
-  const { bill, licenceSummaries } = await FetchBillService(id)
+  const { bill, licenceSummaries } = await FetchBillLicenceSummariesDal(id)
   const billingAccount = await _fetchBillingAccount(bill.billingAccountId)
 
   // Irrespective of of how many licences are linked to the bill, the templates always need formatted bill and billing

@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
 import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
-import * as FetchBillService from '../../../src/services/bills/fetch-bill-service.js'
+import * as FetchBillLicenceSummariesDal from '../../../src/dal/bills/fetch-bill-licence-summaries.dal.js'
 import * as ViewBillLicencePresenter from '../../../src/presenters/bill-licences/view-bill-licence.presenter.js'
 import * as ViewBillPresenter from '../../../src/presenters/bills/view-bill.presenter.js'
 import * as ViewLicenceSummariesPresenter from '../../../src/presenters/bills/view-licence-summaries.presenter.js'
@@ -21,7 +21,7 @@ describe('View Bill service', () => {
   describe('when a bill with a matching ID exists', () => {
     describe('and it is linked to multiple licences', () => {
       beforeEach(() => {
-        vi.spyOn(FetchBillService, 'default').mockResolvedValue({
+        vi.spyOn(FetchBillLicenceSummariesDal, 'default').mockResolvedValue({
           bill: {
             billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737',
             id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3'
@@ -83,7 +83,7 @@ describe('View Bill service', () => {
 
     describe('and it is linked to a single licence', () => {
       beforeEach(() => {
-        vi.spyOn(FetchBillService, 'default').mockResolvedValue({
+        vi.spyOn(FetchBillLicenceSummariesDal, 'default').mockResolvedValue({
           bill: {
             billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737',
             id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3'
@@ -116,7 +116,7 @@ describe('View Bill service', () => {
 
   describe('when a bill with a matching ID does not exist', () => {
     beforeEach(() => {
-      vi.spyOn(FetchBillService, 'default').mockResolvedValue({
+      vi.spyOn(FetchBillLicenceSummariesDal, 'default').mockResolvedValue({
         bill: undefined,
         licenceSummaries: []
       })
