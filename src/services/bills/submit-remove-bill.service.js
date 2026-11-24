@@ -3,9 +3,8 @@
  * @module SubmitRemoveBillService
  */
 
-import BillModel from 'water-abstraction-engine/models/bill.model.js'
-
 import DeleteBillRequest from '../../requests/legacy/delete-bill.request.js'
+import FetchBillDal from '../../dal/bills/fetch-bill.dal.js'
 import ProcessBillingFlagService from '../licences/supplementary/process-billing-flag.service.js'
 import UnassignLicencesToBillRunDal from '../../dal/bill-runs/unassign-licences-to-bill-run.dal.js'
 
@@ -22,7 +21,7 @@ import UnassignLicencesToBillRunDal from '../../dal/bill-runs/unassign-licences-
  * @returns {Promise<string>} Returns the redirect path the controller needs
  */
 export default async function submitRemoveBillService(billId, user) {
-  const bill = await _fetchBill(billId)
+  const bill = await FetchBillDal(billId)
 
   const { billLicences, billRunId } = bill
 
@@ -31,16 +30,6 @@ export default async function submitRemoveBillService(billId, user) {
   await DeleteBillRequest(billRunId, billId, user)
 
   return `/billing/batch/${billRunId}/processing`
-}
-
-async function _fetchBill(billId) {
-  return BillModel.query()
-    .findById(billId)
-    .select(['id', 'billRunId'])
-    .withGraphFetched('billLicences')
-    .modifyGraph('billLicences', (billLicencesBuilder) => {
-      billLicencesBuilder.select(['id', 'licenceId'])
-    })
 }
 
 async function _flagRemovedBill(billLicences) {
