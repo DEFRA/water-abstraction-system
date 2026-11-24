@@ -16,13 +16,13 @@ import WorkflowHelper from 'water-abstraction-engine/test/helpers/workflow.helpe
 import { determineCurrentFinancialYear } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Thing under test
-import FetchBillingAccountsService from '../../../../src/services/bill-runs/annual/fetch-billing-accounts.service.js'
+import FetchBillingAccountsDal from '../../../../src/dal/bill-runs/annual/fetch-billing-accounts.dal.js'
 
 const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
 const REGION_ANGLIAN_INDEX = 0
 const REGION_MIDLANDS_INDEX = 1
 
-describe('Fetch Billing Accounts service', () => {
+describe('Bill Runs - Annual - Fetch Billing Accounts dal', () => {
   const billingPeriod = determineCurrentFinancialYear()
 
   let billingAccount
@@ -54,7 +54,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -74,7 +74,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -97,7 +97,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -120,7 +120,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -139,7 +139,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -158,7 +158,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -175,7 +175,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('does not return the billing account', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const hasBillingAccountId = results.some((result) => {
           return result.id === billingAccount.id
@@ -221,7 +221,7 @@ describe('Fetch Billing Accounts service', () => {
     })
 
     it('returns the applicable billing account', async () => {
-      const results = await FetchBillingAccountsService(region.id, billingPeriod)
+      const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
       const billingAccountRecord = results.find((result) => {
         return result.id === billingAccount.id
@@ -233,7 +233,7 @@ describe('Fetch Billing Accounts service', () => {
 
     describe('that have applicable related charge versions', () => {
       it('includes the charge versions in each result', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const billingAccountRecord = results.find((result) => {
           return result.id === billingAccount.id
@@ -250,7 +250,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('includes the licence and region in each result', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const billingAccountRecord = results.find((result) => {
           return result.id === billingAccount.id
@@ -268,7 +268,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('includes the change reason in each result', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const billingAccountRecord = results.find((result) => {
           return result.id === billingAccount.id
@@ -281,7 +281,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('includes the charge references, charge category and charge elements in each result', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const billingAccountRecord = results.find((result) => {
           return result.id === billingAccount.id
@@ -338,7 +338,7 @@ describe('Fetch Billing Accounts service', () => {
       })
 
       it('excludes the charge versions in each result', async () => {
-        const results = await FetchBillingAccountsService(region.id, billingPeriod)
+        const results = await FetchBillingAccountsDal(region.id, billingPeriod)
 
         const billingAccountRecord = results.find((result) => {
           return result.id === billingAccount.id
