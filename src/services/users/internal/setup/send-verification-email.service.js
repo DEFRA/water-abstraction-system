@@ -5,12 +5,12 @@
 
 import CreateEmailRequest from 'water-abstraction-engine/requests/notify/create-email.request.js'
 import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
+import NotifyUpdatePresenter from 'water-abstraction-engine/presenters/notifications/notify-update.presenter.js'
+import UpdateNotificationDal from 'water-abstraction-engine/dal/notifications/update-notification.dal.js'
 import { pause } from 'water-abstraction-engine/lib/general.lib.js'
 import { NOTIFY_TEMPLATES } from 'water-abstraction-engine/lib/notify-templates.lib.js'
 
 import CheckNotificationStatusService from '../../../notifications/check-notification-status.service.js'
-import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
-import UpdateNotificationDal from '../../../../dal/users/internal/update-notification.dal.js'
 
 /**
  * Orchestrates sending the verification email to the new user, recording the results, and checking the status
