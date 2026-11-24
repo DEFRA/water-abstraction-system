@@ -6,10 +6,10 @@ import * as CreateEmailRequest from 'water-abstraction-engine/requests/notify/cr
 import * as GeneralLib from 'water-abstraction-engine/lib/general.lib.js'
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
+import * as NotifyUpdatePresenter from 'water-abstraction-engine/presenters/notifications/notify-update.presenter.js'
+import * as UpdateNotificationDal from 'water-abstraction-engine/presenters/notifications/notify-error.presenter.js'
 
 import * as CheckNotificationStatusService from '../../../../../src/services/notifications/check-notification-status.service.js'
-import * as NotifyUpdatePresenter from '../../../../../src/presenters/notifications/notify-update.presenter.js'
-import * as UpdateNotificationDal from '../../../../../src/dal/users/internal/update-notification.dal.js'
 
 // Thing under test
 import SendVerificationEmailService from '../../../../../src/services/users/internal/setup/send-verification-email.service.js'

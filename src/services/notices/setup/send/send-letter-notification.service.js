@@ -4,8 +4,7 @@
  */
 
 import CreateLetterRequest from 'water-abstraction-engine/requests/notify/create-letter.request.js'
-
-import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
+import NotifyUpdatePresenter from 'water-abstraction-engine/presenters/notifications/notify-update.presenter.js'
 
 /**
  * Orchestrates sending a letter notification to Notify

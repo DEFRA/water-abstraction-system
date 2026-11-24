@@ -4,9 +4,9 @@
  */
 
 import CreatePrecompiledFileRequest from 'water-abstraction-engine/requests/notify/create-precompiled-file.request.js'
+import NotifyErrorPresenter from 'water-abstraction-engine/presenters/notifications/notify-update.presenter.js'
+import NotifyUpdatePresenter from 'water-abstraction-engine/presenters/notifications/notify-error.presenter.js'
 
-import NotifyErrorPresenter from '../../../../presenters/notifications/notify-error.presenter.js'
-import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
 import PreparePaperReturnService from '../prepare-paper-return.service.js'
 
 /**
