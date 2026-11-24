@@ -7,7 +7,7 @@ import * as GeneralLib from 'water-abstraction-engine/lib/general.lib.js'
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 import NotifyConfig from 'water-abstraction-engine/config/notify.config.js'
 import * as NotifyUpdatePresenter from 'water-abstraction-engine/presenters/notifications/notify-update.presenter.js'
-import * as UpdateNotificationDal from 'water-abstraction-engine/presenters/notifications/notify-error.presenter.js'
+import * as UpdateNotificationDal from 'water-abstraction-engine/dal/notifications/update-notification.dal.js'
 
 import * as CheckNotificationStatusService from '../../../../../src/services/notifications/check-notification-status.service.js'
 
