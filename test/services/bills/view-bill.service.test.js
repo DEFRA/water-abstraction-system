@@ -11,7 +11,7 @@ import * as ViewLicenceSummariesPresenter from '../../../src/presenters/bills/vi
 // Thing under test
 import ViewBillService from '../../../src/services/bills/view-bill.service.js'
 
-describe('View Bill service', () => {
+describe('Bills - View Bill service', () => {
   const testId = '64924759-8142-4a08-9d1e-1e902cd9d316'
 
   afterEach(() => {
