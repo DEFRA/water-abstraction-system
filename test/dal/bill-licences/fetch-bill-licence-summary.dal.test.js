@@ -30,7 +30,7 @@ describe('Bill Licences - Fetch Bill Licence Summary dal', () => {
   let transaction
 
   beforeEach(async () => {
-    region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
+    region = RegionHelper.select()
     licenceRef = generateLicenceRef()
 
     company = await CompanyHelper.add()
@@ -118,7 +118,7 @@ describe('Bill Licences - Fetch Bill Licence Summary dal', () => {
             createdAt: new Date('2023-05-01'),
             id: billRun.id,
             region: {
-              displayName: 'Test Region',
+              displayName: region.displayName,
               id: region.id
             },
             scheme: 'sroc',
