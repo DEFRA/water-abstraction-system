@@ -10,7 +10,7 @@ import BillingAccountModel from 'water-abstraction-engine/models/billing-account
  *
  * @param {string} billingAccountId - The UUID for the billing account to fetch
  *
- * @returns {Promise<module:BillingAccountModel[]>} the matching instance of BillingAccountModel
+ * @returns {Promise<module:BillingAccountModel>} the matching instance of BillingAccountModel
  */
 export default async function fetchBillingAccountDal(billingAccountId) {
   return BillingAccountModel.query().findById(billingAccountId).modify('contactDetails')
