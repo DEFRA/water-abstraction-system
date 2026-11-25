@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import BillModel from 'water-abstraction-engine/models/bill.model.js'
+import * as FetchBillDal from '../../../src/dal/bills/fetch-bill.dal.js'
 import * as LegacyDeleteBillRequest from '../../../src/requests/legacy/delete-bill.request.js'
 import * as ProcessBillingFlagService from '../../../src/services/licences/supplementary/process-billing-flag.service.js'
 import * as UnassignLicencesToBillRunDal from '../../../src/dal/bill-runs/unassign-licences-to-bill-run.dal.js'
@@ -14,7 +14,6 @@ describe('Bills - Submit Remove Bill service', () => {
   const user = { id: '0aa9dcaa-9a26-4a77-97ab-c17db54d38a1', useremail: 'carol.shaw@atari.com' }
 
   let bill
-  let billStub
   let legacyDeleteBillRequestStub
 
   beforeEach(async () => {
@@ -27,13 +26,7 @@ describe('Bills - Submit Remove Bill service', () => {
       id: '274a3c01-42fe-4ed0-9212-c703ea5feaab'
     }
 
-    billStub = vi.fn().mockResolvedValue(bill)
-    vi.spyOn(BillModel, 'query').mockReturnValue({
-      findById: vi.fn().mockReturnThis(),
-      modifyGraph: billStub,
-      select: vi.fn().mockReturnThis(),
-      withGraphFetched: vi.fn().mockReturnThis()
-    })
+    vi.spyOn(FetchBillDal, 'default').mockResolvedValue(bill)
 
     legacyDeleteBillRequestStub = vi.spyOn(LegacyDeleteBillRequest, 'default').mockResolvedValue()
     vi.spyOn(ProcessBillingFlagService, 'default').mockResolvedValue()

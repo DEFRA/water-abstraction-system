@@ -12,9 +12,9 @@ import ContactHelper from 'water-abstraction-engine/test/helpers/contact.helper.
 import RegionHelper from 'water-abstraction-engine/test/helpers/region.helper.js'
 
 // Thing under test
-import FetchBillSummaryService from '../../../src/services/bills/fetch-bill-summary.service.js'
+import FetchBillSummaryDal from '../../../src/dal/bills/fetch-bill-summary.dal.js'
 
-describe('Fetch Bill Summary service', () => {
+describe('Bills - Fetch Bill Summary dal', () => {
   const billLicences = []
 
   let agentCompanyId
@@ -82,7 +82,7 @@ describe('Fetch Bill Summary service', () => {
 
   describe('when a bill with a matching ID exists', () => {
     it('will fetch the data used in the remove bill page', async () => {
-      const result = await FetchBillSummaryService(bill.id)
+      const result = await FetchBillSummaryDal(bill.id)
 
       expect(result).toEqual({
         billingAccount: {
@@ -143,7 +143,7 @@ describe('Fetch Bill Summary service', () => {
 
   describe('when a bill licence with a matching ID does not exist', () => {
     it('returns no result', async () => {
-      const result = await FetchBillSummaryService('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillSummaryDal('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeUndefined()
     })

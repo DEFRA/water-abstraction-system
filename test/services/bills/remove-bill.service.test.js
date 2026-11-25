@@ -5,16 +5,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import BillingAccountModel from 'water-abstraction-engine/models/billing-account.model.js'
 
 // Things we need to stub
-import * as FetchBillSummaryService from '../../../src/services/bills/fetch-bill-summary.service.js'
+import * as FetchBillSummaryDal from '../../../src/dal/bills/fetch-bill-summary.dal.js'
 
 // Thing under test
 import RemoveBillService from '../../../src/services/bills/remove-bill.service.js'
 
-describe('Remove Bill service', () => {
+describe('Bills - Remove Bill service', () => {
   const testId = '71d03336-f683-42fe-b67c-c861f25f1fbd'
 
   beforeEach(() => {
-    vi.spyOn(FetchBillSummaryService, 'default').mockResolvedValue(_billSummary())
+    vi.spyOn(FetchBillSummaryDal, 'default').mockResolvedValue(_billSummary())
   })
 
   afterEach(() => {

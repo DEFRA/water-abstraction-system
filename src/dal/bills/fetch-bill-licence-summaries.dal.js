@@ -1,13 +1,13 @@
 /**
  * Fetches data needed for the bill page which includes a summary for each licence linked to the bill
- * @module FetchBillService
+ * @module FetchBillLicenceSummariesDal
  */
 
 import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import { db } from 'water-abstraction-engine/db/db.js'
 
 /**
- * Fetch the matching Bill plus a summary for each licence linked to it
+ * Fetches data needed for the bill page which includes a summary for each licence linked to the bill
  *
  * Was built to provide the data needed for the '/bills/{id}' page
  *
@@ -16,7 +16,7 @@ import { db } from 'water-abstraction-engine/db/db.js'
  * @returns {Promise<object>} the matching instance of BillModel plus a summary (ID, reference, and total net amount)
  * for each licence linked to the bill
  */
-export default async function fetchBillService(id) {
+export default async function fetchBillLicenceSummariesDal(id) {
   const bill = await _fetchBill(id)
   const licenceSummaries = await _fetchLicenceSummaries(id)
 
