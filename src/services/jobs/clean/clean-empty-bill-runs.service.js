@@ -5,8 +5,8 @@
 
 import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
 
-import CancelBillBunService from '../../bill-runs/cancel/cancel-bill-run.service.js'
-import DeleteBillRunService from '../../bill-runs/cancel/delete-bill-run.service.js'
+import CancelBillRunService from '../../bill-runs/cancel/cancel-bill-run.service.js'
+import DeleteBillRunDal from '../../../dal/bill-runs/cancel/delete-bill-run.dal.js'
 import UnassignBillRunToLicencesDal from '../../../dal/bill-runs/unassign-bill-run-to-licences.dal.js'
 
 /**
@@ -45,14 +45,14 @@ export default async function cleanEmptyBillRunsService() {
 }
 
 async function _deleteEmptyBillRun(billRunId) {
-  const billRun = await CancelBillBunService(billRunId)
+  const billRun = await CancelBillRunService(billRunId)
 
   if (billRun.status !== 'cancel') {
     return false
   }
 
   await UnassignBillRunToLicencesDal(billRun.id)
-  await DeleteBillRunService(billRun)
+  await DeleteBillRunDal(billRun)
 
   return true
 }
