@@ -12,9 +12,9 @@ import RegionModel from 'water-abstraction-engine/models/region.model.js'
 import TransactionHelper from 'water-abstraction-engine/test/helpers/transaction.helper.js'
 
 // Thing under test
-import FetchBillService from '../../../src/services/bills/fetch-bill-service.js'
+import FetchBillLicenceSummariesDal from '../../../src/dal/bills/fetch-bill-licence-summaries.dal.js'
 
-describe('Fetch Bill service', () => {
+describe('Bills - Fetch Bill Licence Summaries dal', () => {
   let linkedBillLicences
   let linkedBillRun
   let linkedRegion
@@ -46,14 +46,14 @@ describe('Fetch Bill service', () => {
 
   describe('when a bill with a matching ID exists', () => {
     it('returns the matching instance of BillModel', async () => {
-      const { bill: result } = await FetchBillService(testBill.id)
+      const { bill: result } = await FetchBillLicenceSummariesDal(testBill.id)
 
       expect(result.id).toEqual(testBill.id)
       expect(result).toBeInstanceOf(BillModel)
     })
 
     it('returns the matching bill including the linked bill run', async () => {
-      const { bill: result } = await FetchBillService(testBill.id)
+      const { bill: result } = await FetchBillLicenceSummariesDal(testBill.id)
       const { billRun: returnedBillRun } = result
 
       expect(result.id).toEqual(testBill.id)
@@ -64,7 +64,7 @@ describe('Fetch Bill service', () => {
     })
 
     it('returns the matching bill including the linked bill run and the region it is linked to', async () => {
-      const { bill: result } = await FetchBillService(testBill.id)
+      const { bill: result } = await FetchBillLicenceSummariesDal(testBill.id)
       const { region: returnedRegion } = result.billRun
 
       expect(result.id).toEqual(testBill.id)
@@ -75,7 +75,7 @@ describe('Fetch Bill service', () => {
     })
 
     it('returns a transaction summary for each licence linked to the bill', async () => {
-      const { licenceSummaries: result } = await FetchBillService(testBill.id)
+      const { licenceSummaries: result } = await FetchBillLicenceSummariesDal(testBill.id)
 
       expect(result).toHaveLength(2)
       expect(result).toContainEqual({
@@ -99,7 +99,7 @@ describe('Fetch Bill service', () => {
 
   describe('when a bill with a matching ID does not exist', () => {
     it('returns a result with no values set', async () => {
-      const result = await FetchBillService('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillLicenceSummariesDal('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeDefined()
       expect(result.bill).toBeUndefined()
