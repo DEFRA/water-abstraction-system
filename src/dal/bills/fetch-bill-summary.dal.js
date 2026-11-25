@@ -16,7 +16,7 @@ import BillModel from 'water-abstraction-engine/models/bill.model.js'
  *
  * @param {string} billId - The UUID for the bill to fetch a summary of
  *
- * @returns {Promise<module:BillModel[]>} the matching instance of BillModel plus the linked billing account and bill
+ * @returns {Promise<module:BillModel>} the matching instance of BillModel plus the linked billing account and bill
  * run. Also all bill licences linked to the bill so we can display which licences are in the bill
  */
 export default async function fetchBillSummaryDal(billId) {
