@@ -10,7 +10,7 @@ import BillModel from 'water-abstraction-engine/models/bill.model.js'
  *
  * @param {string} billId - The UUID for the bill to fetch
  *
- * @returns {Promise<module:BillModel[]>} the matching instance of BillModel including the associated licence IDs
+ * @returns {Promise<module:BillModel>} the matching instance of BillModel including the associated licence IDs
  */
 export default async function fetchBillDal(billId) {
   return BillModel.query()
