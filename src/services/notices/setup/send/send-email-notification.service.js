@@ -4,8 +4,7 @@
  */
 
 import CreateEmailRequest from 'water-abstraction-engine/requests/notify/create-email.request.js'
-
-import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
+import NotifyUpdatePresenter from 'water-abstraction-engine/presenters/notifications/notify-update.presenter.js'
 
 /**
  * Orchestrates sending an email notification to Notify
