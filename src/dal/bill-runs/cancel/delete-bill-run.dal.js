@@ -1,6 +1,6 @@
 /**
  * Deletes a bill run, all its associated records and the its match in the Charging Module API
- * @module DeleteBillRunService
+ * @module DeleteBillRunDal
  */
 
 import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model.js'
@@ -31,7 +31,7 @@ import DeleteBillRunRequest from '../../../requests/charging-module/delete-bill-
  *
  * @param {module:BillRunModule} billRun - The bill run to be deleted
  */
-export default async function deleteBillRunService(billRun) {
+export default async function deleteBillRunDal(billRun) {
   try {
     const startTime = process.hrtime.bigint()
 

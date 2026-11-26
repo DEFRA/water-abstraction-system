@@ -3,8 +3,8 @@
  * @module CancelBillRunService
  */
 
-import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
-import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.js'
+import FetchBillRunDal from '../../../dal/bill-runs/fetch-bill-run.dal.js'
+import UpdateStatusDal from '../../../dal/bill-runs/update-status.dal.js'
 
 /**
  * Checks if a bill run can be cancelled, and if so, updates the status of the bill run to 'cancel'
@@ -17,17 +17,24 @@ import { timestampForPostgres } from 'water-abstraction-engine/lib/general.lib.j
  *
  * If we can mark the bill run as cancelled then the status of the instance returned will also be set to 'cancel'.
  *
+ * This service handles the POST request from the confirm cancel bill run page. We _could_ have included the the
+ * externalId as a hidden field in the form and included it in the request. This would give the impression we could
+ * avoid a query to the DB.
+ *
+ * But we need to ensure no one exploits the `POST /bill-runs/{id}/cancel` endpoint to try and delete a 'sent' bill
+ * run. So, we always have to fetch the bill run to check its status is not one that prevents us deleting it.
+ *
  * @param {string} billRunId - UUID of the bill run to be cancelled
  *
  * @returns {Promise<module:BillRunModel>} the bill run including its `externalId` and status
  */
 export default async function cancelBillRunService(billRunId) {
-  const billRun = await _fetchBillRun(billRunId)
+  const billRun = await FetchBillRunDal(billRunId)
 
   const canBeDeleted = _canBeDeleted(billRun.status)
 
   if (canBeDeleted) {
-    await _updateStatus(billRunId)
+    await UpdateStatusDal(billRunId, 'cancel')
     billRun.status = 'cancel'
   }
 
@@ -51,22 +58,4 @@ function _canBeDeleted(status) {
   const invalidStatusesForDeleting = ['sending', 'sent']
 
   return !invalidStatusesForDeleting.includes(status)
-}
-
-/**
- * This service handles the POST request from the confirm cancel bill run page. We _could_ have included the the
- * externalId as a hidden field in the form and included it in the request. This would give the impression we could
- * avoid a query to the DB.
- *
- * But we need to ensure no one exploits the `POST /bill-runs/{id}/cancel` endpoint to try and delete a 'sent' bill
- * run. So, we always have to fetch the bill run to check its status is not one that prevents us deleting it.
- *
- * @private
- */
-async function _fetchBillRun(id) {
-  return BillRunModel.query().findById(id).select(['id', 'externalId', 'status'])
-}
-
-async function _updateStatus(billRunId) {
-  return BillRunModel.query().findById(billRunId).patch({ status: 'cancel', updatedAt: timestampForPostgres() })
 }

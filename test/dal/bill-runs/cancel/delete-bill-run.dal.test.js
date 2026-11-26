@@ -22,7 +22,7 @@ import ReviewLicenceModel from 'water-abstraction-engine/models/review-licence.m
 import * as ChargingModuleDeleteBillRunRequest from '../../../../src/requests/charging-module/delete-bill-run.request.js'
 
 // Thing under test
-import DeleteBillBunService from '../../../../src/services/bill-runs/cancel/delete-bill-run.service.js'
+import DeleteBillRunDal from '../../../../src/dal/bill-runs/cancel/delete-bill-run.dal.js'
 
 describe('Bill Runs - Delete Bill Run service', () => {
   let billRun
@@ -73,13 +73,13 @@ describe('Bill Runs - Delete Bill Run service', () => {
       })
 
       it('sends a request to the Charging Module API to delete its copy', async () => {
-        await DeleteBillBunService(billRun)
+        await DeleteBillRunDal(billRun)
 
         expect(chargingModuleDeleteBillRunRequestStub).toHaveBeenCalled()
       })
 
       it('deletes any billing data data', async () => {
-        await DeleteBillBunService(billRun)
+        await DeleteBillRunDal(billRun)
 
         const billRunChargeVersionYearCount = await billRunChargeVersionYear.$query().select('id').resultSize()
         const billRunVolumeCount = await billRunVolume.$query().select('id').resultSize()
@@ -97,7 +97,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
       })
 
       it('logs a "complete" message, the bill run passed in, and the time taken in milliseconds and seconds', async () => {
-        await DeleteBillBunService(billRun)
+        await DeleteBillRunDal(billRun)
 
         const logDataArg = notifierStub.omg.mock.calls[0][1]
 
@@ -133,7 +133,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
         })
 
         it('deletes any two-part tariff review data', async () => {
-          await DeleteBillBunService(billRun)
+          await DeleteBillRunDal(billRun)
 
           const reviewChargeElementCount = await reviewChargeElement.$query().select('id').resultSize()
           const reviewChargeElementReturnCount = await reviewChargeElementReturn.$query().select('id').resultSize()
@@ -159,11 +159,11 @@ describe('Bill Runs - Delete Bill Run service', () => {
         })
 
         it('does not throw an error', async () => {
-          await DeleteBillBunService(billRun)
+          await DeleteBillRunDal(billRun)
         })
 
         it('logs the error', async () => {
-          await DeleteBillBunService(billRun)
+          await DeleteBillRunDal(billRun)
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
@@ -185,11 +185,11 @@ describe('Bill Runs - Delete Bill Run service', () => {
         })
 
         it('does not throw an error', async () => {
-          await DeleteBillBunService(billRun)
+          await DeleteBillRunDal(billRun)
         })
 
         it('logs the error', async () => {
-          await DeleteBillBunService(billRun)
+          await DeleteBillRunDal(billRun)
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
@@ -215,11 +215,11 @@ describe('Bill Runs - Delete Bill Run service', () => {
         })
 
         it('does not throw an error', async () => {
-          await DeleteBillBunService(billRun)
+          await DeleteBillRunDal(billRun)
         })
 
         it('logs the error', async () => {
-          await DeleteBillBunService(billRun)
+          await DeleteBillRunDal(billRun)
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
@@ -245,11 +245,11 @@ describe('Bill Runs - Delete Bill Run service', () => {
         })
 
         it('does not throw an error', async () => {
-          await DeleteBillBunService(billRun)
+          await DeleteBillRunDal(billRun)
         })
 
         it('logs the error', async () => {
-          await DeleteBillBunService(billRun)
+          await DeleteBillRunDal(billRun)
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
@@ -271,13 +271,13 @@ describe('Bill Runs - Delete Bill Run service', () => {
     })
 
     it('still sends a request to the Charging Module API', async () => {
-      await DeleteBillBunService(billRun)
+      await DeleteBillRunDal(billRun)
 
       expect(chargingModuleDeleteBillRunRequestStub).toHaveBeenCalled()
     })
 
     it('still logs a "complete" message, the bill run passed in, and the time taken in milliseconds and seconds', async () => {
-      await DeleteBillBunService(billRun)
+      await DeleteBillRunDal(billRun)
 
       const logDataArg = notifierStub.omg.mock.calls[0][1]
 
@@ -288,7 +288,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
     })
 
     it('does not throw an error', async () => {
-      await DeleteBillBunService(billRun)
+      await DeleteBillRunDal(billRun)
     })
   })
 })

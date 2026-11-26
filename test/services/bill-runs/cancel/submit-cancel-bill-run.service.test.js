@@ -6,11 +6,11 @@ import { pause } from 'water-abstraction-engine/lib/general.lib.js'
 
 // Things we need to stub
 import * as CancelBillRunService from '../../../../src/services/bill-runs/cancel/cancel-bill-run.service.js'
-import * as DeleteBillRunService from '../../../../src/services/bill-runs/cancel/delete-bill-run.service.js'
+import * as DeleteBillRunDal from '../../../../src/dal/bill-runs/cancel/delete-bill-run.dal.js'
 import * as UnassignBillRunToLicencesDal from '../../../../src/dal/bill-runs/unassign-bill-run-to-licences.dal.js'
 
 // Thing under test
-import SubmitCancelBillBunService from '../../../../src/services/bill-runs/cancel/submit-cancel-bill-run.service.js'
+import SubmitCancelBillRunService from '../../../../src/services/bill-runs/cancel/submit-cancel-bill-run.service.js'
 
 describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
   const billRunId = '800b8ff7-80e6-4855-a394-c79550115265'
@@ -19,7 +19,7 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
 
   beforeEach(async () => {
     deleteDoneFake = vi.fn()
-    vi.spyOn(DeleteBillRunService, 'default').mockImplementation(async () => {
+    vi.spyOn(DeleteBillRunDal, 'default').mockImplementation(async () => {
       await pause(500)
       deleteDoneFake()
     })
@@ -40,16 +40,16 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
       })
 
       it('unassigns the bill run from those licences with supplementary year records', async () => {
-        await SubmitCancelBillBunService(billRunId)
+        await SubmitCancelBillRunService(billRunId)
 
         expect(UnassignBillRunToLicencesDal.default).toHaveBeenCalled()
       })
 
       it('deletes the bill run in the background and does not throw an error', async () => {
-        await SubmitCancelBillBunService(billRunId)
+        await SubmitCancelBillRunService(billRunId)
 
         expect(CancelBillRunService.default).toHaveBeenCalled()
-        expect(DeleteBillRunService.default).toHaveBeenCalled()
+        expect(DeleteBillRunDal.default).toHaveBeenCalled()
 
         // NOTE: We have faked the DeleteBillRunService taking some time to complete so we can test that
         // SubmitCancelBillBunService returns control back to us whilst the delete is still in progress. We then pause
@@ -71,15 +71,15 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
       })
 
       it('does not unassign the bill run from those licences with supplementary year records', async () => {
-        await expect(SubmitCancelBillBunService(billRunId)).rejects.toThrow()
+        await expect(SubmitCancelBillRunService(billRunId)).rejects.toThrow()
 
         expect(UnassignBillRunToLicencesDal.default).not.toHaveBeenCalled()
       })
 
       it('does not delete the bill run and throws an error', async () => {
-        await expect(SubmitCancelBillBunService(billRunId)).rejects.toThrow()
+        await expect(SubmitCancelBillRunService(billRunId)).rejects.toThrow()
 
-        expect(DeleteBillRunService.default).not.toHaveBeenCalled()
+        expect(DeleteBillRunDal.default).not.toHaveBeenCalled()
       })
     })
   })
