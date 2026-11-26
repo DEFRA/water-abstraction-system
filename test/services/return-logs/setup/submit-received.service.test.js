@@ -26,7 +26,8 @@ describe('Return Logs - Setup - Submit Received service', () => {
       licenceId: 'cd190dc7-912a-46a5-9421-2750fb1c7ac8',
       returnLogId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
       returnReference: 12345,
-      startDate: '2023-04-01T00:00:00.000Z'
+      startDate: '2023-04-01T00:00:00.000Z',
+      submissionType: 'submit'
     }
 
     session = SessionModelStub(sessionData)
@@ -137,6 +138,41 @@ describe('Return Logs - Setup - Submit Received service', () => {
         const result = await SubmitReceivedService(session.id, payload, yarStub)
 
         expect(result).toEqual({ checkPageVisited: undefined })
+      })
+    })
+
+    describe('when the user is editing a return (they should not be able to reach this page)', () => {
+      beforeEach(() => {
+        session = SessionModelStub({ ...sessionData, checkPageVisited: true, submissionType: 'edit' })
+
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+
+        payload = {
+          receivedDateDay: '26',
+          receivedDateMonth: '11',
+          receivedDateOptions: 'customDate',
+          receivedDateYear: '2023'
+        }
+      })
+
+      it('does not save the submitted received date', async () => {
+        await SubmitReceivedService(session.id, payload, yarStub)
+
+        expect(session.receivedDate).toBeUndefined()
+        expect(session.receivedDateOptions).toBeUndefined()
+        expect(session.$update).not.toHaveBeenCalled()
+      })
+
+      it('does not set a notification message', async () => {
+        await SubmitReceivedService(session.id, payload, yarStub)
+
+        expect(yarStub.flash).not.toHaveBeenCalled()
+      })
+
+      it('still returns the details the controller needs to redirect the journey to the check page', async () => {
+        const result = await SubmitReceivedService(session.id, payload, yarStub)
+
+        expect(result).toEqual({ checkPageVisited: true })
       })
     })
 
