@@ -3,7 +3,7 @@
  * @module FetchLicencesService
  */
 
-import FetchChargeVersionsService from './fetch-charge-versions.service.js'
+import FetchChargeVersionsDal from '../../../dal/bill-runs/match/fetch-charge-versions.dal.js'
 
 /**
  * Fetches two-part tariff licences for the bill run and billing period to be matched & allocated against
@@ -15,7 +15,7 @@ import FetchChargeVersionsService from './fetch-charge-versions.service.js'
  * two-part tariff
  */
 export default async function fetchLicencesService(billRun, billingPeriod) {
-  const chargeVersions = await FetchChargeVersionsService(billRun, billingPeriod)
+  const chargeVersions = await FetchChargeVersionsDal(billRun, billingPeriod)
 
   const uniqueLicenceIds = _extractUniqueLicenceIds(chargeVersions)
 

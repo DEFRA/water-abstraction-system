@@ -18,7 +18,7 @@ import * as CRMContactsSeeder from '../../../support/seeders/crm-contacts.seeder
 import * as EmptyLicenceSeeder from '../../../support/seeders/empty-licence.seeder.js'
 
 // Thing under test
-import FetchChargeVersionsService from '../../../../src/services/bill-runs/match/fetch-charge-versions.service.js'
+import FetchChargeVersionsDal from '../../../../src/dal/bill-runs/match/fetch-charge-versions.dal.js'
 
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const PURPOSE_SPRAY_IRRIGATION_INDEX = 41
@@ -37,7 +37,7 @@ let otherChargeVersion
 let otherChargeReference
 let otherLicence
 
-describe('Bill Runs - Match - Fetch Charge Versions service', () => {
+describe('Bill Runs - Match - Fetch Charge Versions dal', () => {
   const billingPeriod = {
     endDate: new Date('2024-03-31'),
     startDate: new Date('2023-04-01')
@@ -93,7 +93,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService(billRun, billingPeriod)
+        const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
         expect(results).toHaveLength(0)
       })
@@ -119,7 +119,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService(billRun, billingPeriod)
+        const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
         expect(results).toHaveLength(0)
       })
@@ -145,7 +145,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService(billRun, billingPeriod)
+        const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
         expect(results).toHaveLength(0)
       })
@@ -171,7 +171,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService(billRun, billingPeriod)
+        const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
         expect(results).toHaveLength(0)
       })
@@ -193,7 +193,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService(billRun, billingPeriod)
+        const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
         expect(results).toHaveLength(0)
       })
@@ -217,7 +217,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService(billRun, billingPeriod)
+        const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
         expect(results).toHaveLength(0)
       })
@@ -246,7 +246,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService(billRun, billingPeriod)
+        const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
         expect(results).toHaveLength(0)
       })
@@ -272,7 +272,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       it('returns no records', async () => {
-        const results = await FetchChargeVersionsService(billRun, billingPeriod)
+        const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
         expect(results).toHaveLength(0)
       })
@@ -295,7 +295,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
       describe('and the licence has not been flagged for supplementary', () => {
         it('returns no records', async () => {
-          const results = await FetchChargeVersionsService(billRun, billingPeriod)
+          const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
           expect(results).toHaveLength(0)
         })
@@ -311,7 +311,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
         })
 
         it('returns no records', async () => {
-          const results = await FetchChargeVersionsService(billRun, billingPeriod)
+          const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
           expect(results).toHaveLength(0)
         })
@@ -327,7 +327,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
         })
 
         it('returns no records', async () => {
-          const results = await FetchChargeVersionsService(billRun, billingPeriod)
+          const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
           expect(results).toHaveLength(0)
         })
@@ -400,7 +400,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       it('returns the charge version with related licence, charge references and charge elements', async () => {
-        const results = await FetchChargeVersionsService(billRun, billingPeriod)
+        const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
         expect(results).toHaveLength(2)
         expect(results[0]).toEqual({
@@ -485,14 +485,14 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       it('returns the charge versions ordered by licence reference', async () => {
-        const results = await FetchChargeVersionsService(billRun, billingPeriod)
+        const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
         expect(results[0].licence.licenceRef).toEqual(licenceSeedData.licence.licenceRef)
         expect(results[1].licence.licenceRef).toEqual(otherLicence.licence.licenceRef)
       })
 
       it('returns the charge elements within each charge version ordered by authorised annual quantity', async () => {
-        const results = await FetchChargeVersionsService(billRun, billingPeriod)
+        const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
         expect(results[0].chargeReferences[0].chargeElements[0].id).toEqual(chargeElement2.id)
         expect(results[0].chargeReferences[0].chargeElements[1].id).toEqual(chargeElement1.id)
@@ -516,7 +516,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
       describe('and the first licence has been flagged for supplementary', () => {
         it('returns only its charge versions', async () => {
-          const results = await FetchChargeVersionsService(billRun, billingPeriod)
+          const results = await FetchChargeVersionsDal(billRun, billingPeriod)
 
           expect(results).toHaveLength(1)
           expect(results[0].licence.licenceRef).toEqual(licenceSeedData.licence.licenceRef)
