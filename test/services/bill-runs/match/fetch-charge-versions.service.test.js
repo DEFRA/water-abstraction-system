@@ -42,7 +42,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
     endDate: new Date('2024-03-31'),
     startDate: new Date('2023-04-01')
   }
-  const region = RegionHelper.select(RegionHelper.BILL_RUN_REGION_INDEX)
+  const region = RegionHelper.select()
 
   let changeReason
   let chargeCategory
