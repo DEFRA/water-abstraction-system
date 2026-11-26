@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 // Thing under test
 import CheckPresenter from '../../../../src/presenters/return-logs/setup/check.presenter.js'
 
-describe('Return Logs Setup - Check presenter', () => {
+describe('Return Logs - Setup - Check presenter', () => {
   let session
 
   beforeEach(() => {
