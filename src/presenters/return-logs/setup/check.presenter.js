@@ -78,11 +78,13 @@ function _alwaysRequiredPageData(session) {
     returnReference,
     siteDescription,
     startDate,
+    submissionType,
     twoPartTariff
   } = session
 
   return {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
+    displayChangeReceivedLink: submissionType !== 'edit',
     links: {
       cancel: `/system/return-logs/setup/${sessionId}/cancel`,
       meterDetails: `/system/return-logs/setup/${sessionId}/meter-provided`,
