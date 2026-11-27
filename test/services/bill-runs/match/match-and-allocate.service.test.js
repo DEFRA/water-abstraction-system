@@ -7,7 +7,7 @@ import * as AllocateReturnsToChargeElementService from '../../../../src/services
 import * as DetermineLicenceIssuesService from '../../../../src/services/bill-runs/match/determine-licence-issues.service.js'
 import * as FetchLicencesService from '../../../../src/services/bill-runs/match/fetch-licences.service.js'
 import * as MatchReturnsToChargeElementService from '../../../../src/services/bill-runs/match/match-returns-to-charge-element.service.js'
-import * as PersistAllocatedLicenceToResultsService from '../../../../src/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
+import * as PersistAllocatedLicenceToResultsDal from '../../../../src/dal/bill-runs/match/persist-allocated-licence-to-results.dal.js'
 import * as PrepareChargeVersionService from '../../../../src/services/bill-runs/match/prepare-charge-version.service.js'
 import * as PrepareReturnLogsService from '../../../../src/services/bill-runs/match/prepare-return-logs.service.js'
 
@@ -25,7 +25,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
     vi.spyOn(DetermineLicenceIssuesService, 'default').mockResolvedValue()
     vi.spyOn(AllocateReturnsToChargeElementService, 'default').mockReturnValue()
     vi.spyOn(MatchReturnsToChargeElementService, 'default').mockReturnValue()
-    vi.spyOn(PersistAllocatedLicenceToResultsService, 'default').mockResolvedValue()
+    vi.spyOn(PersistAllocatedLicenceToResultsDal, 'default').mockResolvedValue()
     vi.spyOn(PrepareChargeVersionService, 'default').mockReturnValue()
     vi.spyOn(PrepareReturnLogsService, 'default').mockResolvedValue()
   })
@@ -71,7 +71,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
           expect(AllocateReturnsToChargeElementService.default).toHaveBeenCalled()
 
           expect(DetermineLicenceIssuesService.default).toHaveBeenCalled()
-          expect(PersistAllocatedLicenceToResultsService.default).toHaveBeenCalled()
+          expect(PersistAllocatedLicenceToResultsDal.default).toHaveBeenCalled()
         })
 
         it('returns "true" as there are licences to process', async () => {
@@ -97,7 +97,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
           expect(AllocateReturnsToChargeElementService.default).not.toHaveBeenCalled()
 
           expect(DetermineLicenceIssuesService.default).toHaveBeenCalled()
-          expect(PersistAllocatedLicenceToResultsService.default).toHaveBeenCalled()
+          expect(PersistAllocatedLicenceToResultsDal.default).toHaveBeenCalled()
         })
 
         it('allocates the authorised quantities to the elements up to the references authorised quantity', async () => {
@@ -138,7 +138,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
         expect(MatchReturnsToChargeElementService.default).not.toHaveBeenCalled()
         expect(AllocateReturnsToChargeElementService.default).not.toHaveBeenCalled()
         expect(DetermineLicenceIssuesService.default).not.toHaveBeenCalled()
-        expect(PersistAllocatedLicenceToResultsService.default).not.toHaveBeenCalled()
+        expect(PersistAllocatedLicenceToResultsDal.default).not.toHaveBeenCalled()
       })
 
       it('returns "false" as there are no licences to process', async () => {

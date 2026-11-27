@@ -7,7 +7,7 @@ import AllocateReturnsToChargeElementService from './allocate-returns-to-charge-
 import DetermineLicenceIssuesService from './determine-licence-issues.service.js'
 import FetchLicencesService from './fetch-licences.service.js'
 import MatchReturnsToChargeElementService from './match-returns-to-charge-element.service.js'
-import PersistAllocatedLicenceToResultsService from './persist-allocated-licence-to-results.service.js'
+import PersistAllocatedLicenceToResultsDal from '../../../dal/bill-runs/match/persist-allocated-licence-to-results.dal.js'
 import PrepareChargeVersionService from './prepare-charge-version.service.js'
 import PrepareReturnLogsService from './prepare-return-logs.service.js'
 
@@ -19,7 +19,7 @@ import PrepareReturnLogsService from './prepare-return-logs.service.js'
  * charge versions, and charge references. The allocated quantity for each charge reference is set to 0, and matching
  * return logs are allocated to the corresponding charge elements.
  *
- * After processing each license, the results are persisted using PersistAllocatedLicenceToResultsService.
+ * After processing each license, the results are persisted using PersistAllocatedLicenceToResultsDal.
  *
  * @param {module:BillRunModel} billRun - The bill run being processed
  * @param {object} billingPeriod - A single billing period containing a `startDate` and `endDate`
@@ -76,7 +76,7 @@ async function _process(licences, billingPeriod, billRun) {
     })
 
     DetermineLicenceIssuesService(licence)
-    await PersistAllocatedLicenceToResultsService(billRun.id, licence)
+    await PersistAllocatedLicenceToResultsDal(billRun.id, licence)
   }
 }
 
