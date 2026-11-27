@@ -1,6 +1,6 @@
 /**
- * Persists the results from the `allocateReturnsToChargeElementService` into the DB
- * @module PersistAllocatedLicenceToResultsService
+ * Persists results of matching and allocating return logs to licence charge elements for a two-part tariff bill run
+ * @module PersistAllocatedLicenceToResultsDal
  */
 
 import ReviewChargeElementModel from 'water-abstraction-engine/models/review-charge-element.model.js'
@@ -25,7 +25,7 @@ import ReviewReturnModel from 'water-abstraction-engine/models/review-return.mod
  * @param {module:LicenceModel} licence - the two-part tariff licence included in the bill run, along with their match
  * and allocation results
  */
-export default async function persistAllocatedLicenceToResultsService(billRunId, licence) {
+export default async function persistAllocatedLicenceToResultsDal(billRunId, licence) {
   const { chargeVersions, returnLogs } = licence
 
   const reviewLicenceId = await _persistLicenceData(licence, billRunId)

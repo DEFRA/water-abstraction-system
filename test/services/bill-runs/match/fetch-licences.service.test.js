@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import * as FetchChargeVersionsService from '../../../../src/services/bill-runs/match/fetch-charge-versions.service.js'
+import * as FetchChargeVersionsDal from '../../../../src/dal/bill-runs/match/fetch-charge-versions.dal.js'
 
 // Thing under test
 import FetchLicencesService from '../../../../src/services/bill-runs/match/fetch-licences.service.js'
@@ -36,7 +36,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
 
     describe('and there is a single licence linked to a single charge version', () => {
       beforeEach(() => {
-        vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue([
+        vi.spyOn(FetchChargeVersionsDal, 'default').mockResolvedValue([
           {
             endDate: null,
             id: '9407b74d-816c-44a2-9926-73a89a9da985',
@@ -80,7 +80,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
       }
 
       beforeEach(() => {
-        vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue([
+        vi.spyOn(FetchChargeVersionsDal, 'default').mockResolvedValue([
           {
             endDate: null,
             id: '9407b74d-816c-44a2-9926-73a89a9da985',
@@ -123,7 +123,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
 
   describe('when no 2PT licences exist for the region and billing period', () => {
     beforeEach(() => {
-      vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue([])
+      vi.spyOn(FetchChargeVersionsDal, 'default').mockResolvedValue([])
     })
 
     it('will return an empty array', async () => {

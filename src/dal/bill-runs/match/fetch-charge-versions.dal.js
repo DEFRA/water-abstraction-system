@@ -1,6 +1,6 @@
 /**
- * Fetches SROC charge versions for two-part-tariff billing
- * @module FetchChargeVersionsService
+ * Fetches two-part tariff charge versions for the region and billing period being billed
+ * @module FetchChargeVersionsDal
  */
 
 import ChargeReferenceModel from 'water-abstraction-engine/models/charge-reference.model.js'
@@ -30,7 +30,7 @@ import Workflow from 'water-abstraction-engine/models/workflow.model.js'
  * @returns {Promise<object>} Contains an array of two-part tariff charge versions with linked licences, charge
  * references, charge elements and related purpose
  */
-export default async function fetchChargeVersionsService(billRun, billingPeriod) {
+export default async function fetchChargeVersionsDal(billRun, billingPeriod) {
   const { id: billRunId, batchType, regionId } = billRun
 
   const supplementary = batchType === 'two_part_supplementary'
