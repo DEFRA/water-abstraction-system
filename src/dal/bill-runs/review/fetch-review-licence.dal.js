@@ -71,7 +71,16 @@ export default async function fetchReviewLicenceDal(reviewLicenceId) {
         .withGraphFetched('reviewChargeReferences')
         .modifyGraph('reviewChargeReferences', (reviewChargeReferencesBuilder) => {
           reviewChargeReferencesBuilder
-            .select(['id', 'aggregate', 'amendedAuthorisedVolume', 'chargeAdjustment'])
+            .select([
+              'reviewChargeReferences.id',
+              'reviewChargeReferences.aggregate',
+              'reviewChargeReferences.amendedAuthorisedVolume',
+              'reviewChargeReferences.chargeAdjustment'
+            ])
+            .join('chargeReferences', 'reviewChargeReferences.chargeReferenceId', 'chargeReferences.id')
+            .join('chargeCategories', 'chargeReferences.chargeCategoryId', 'chargeCategories.id')
+            .orderBy('chargeCategories.subsistenceCharge', 'asc')
+            .orderBy('chargeCategories.reference', 'asc')
             .withGraphFetched('chargeReference')
             .modifyGraph('chargeReference', (chargeReferenceBuilder) => {
               chargeReferenceBuilder
