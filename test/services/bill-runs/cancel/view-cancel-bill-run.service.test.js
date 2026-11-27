@@ -2,25 +2,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Things we need to stub
-import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
+import * as FetchBillRunDal from '../../../../src/dal/bill-runs/cancel/fetch-bill-run.dal.js'
 
 // Thing under test
 import ViewCancelBillRunService from '../../../../src/services/bill-runs/cancel/view-cancel-bill-run.service.js'
 
-describe('Bill Runs - View Cancel Bill Run service', () => {
+describe('Bill Runs - Cancel - View Cancel Bill Run service', () => {
   const billRunId = 'd351ee81-157e-4621-98eb-db121cb48cbb'
 
-  let billRunQueryStub
+  let fetchBillRunDalStub
 
   beforeEach(async () => {
-    billRunQueryStub = vi.fn()
-
-    vi.spyOn(BillRunModel, 'query').mockReturnValue({
-      findById: vi.fn().mockReturnThis(),
-      modifyGraph: billRunQueryStub,
-      select: vi.fn().mockReturnThis(),
-      withGraphFetched: vi.fn().mockReturnThis()
-    })
+    fetchBillRunDalStub = vi.spyOn(FetchBillRunDal, 'default').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
@@ -29,7 +22,7 @@ describe('Bill Runs - View Cancel Bill Run service', () => {
 
   describe('when a bill with a matching ID exists', () => {
     beforeEach(() => {
-      billRunQueryStub.mockResolvedValue({
+      fetchBillRunDalStub.mockResolvedValue({
         batchType: 'annual',
         billRunNumber: 10101,
         createdAt: new Date('2024-02-28'),

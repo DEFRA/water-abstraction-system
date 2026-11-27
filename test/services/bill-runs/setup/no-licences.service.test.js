@@ -12,7 +12,7 @@ import * as FetchSessionDal from 'water-abstraction-engine/dal/fetch-session.dal
 import NoLicencesService from '../../../../src/services/bill-runs/setup/no-licences.service.js'
 
 describe('Bill Runs - Setup - No Licences service', () => {
-  const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)
+  const region = RegionHelper.select()
 
   let session
   let sessionData

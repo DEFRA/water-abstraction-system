@@ -3,8 +3,7 @@
  * @module ViewCancelBillRunService
  */
 
-import BillRunModel from 'water-abstraction-engine/models/bill-run.model.js'
-
+import FetchBillRunDal from '../../../dal/bill-runs/cancel/fetch-bill-run.dal.js'
 import ViewCancelBillRunPresenter from '../../../presenters/bill-runs/view-cancel-bill-run.presenter.js'
 
 /**
@@ -16,7 +15,7 @@ import ViewCancelBillRunPresenter from '../../../presenters/bill-runs/view-cance
  * details of the bill run.
  */
 export default async function viewCancelBillRunService(id) {
-  const billRun = await _fetchBillRun(id)
+  const billRun = await FetchBillRunDal(id)
 
   const formattedData = ViewCancelBillRunPresenter(billRun)
 
@@ -24,14 +23,4 @@ export default async function viewCancelBillRunService(id) {
     activeNavBar: 'bill-runs',
     ...formattedData
   }
-}
-
-async function _fetchBillRun(id) {
-  return BillRunModel.query()
-    .findById(id)
-    .select(['id', 'batchType', 'billRunNumber', 'createdAt', 'scheme', 'status', 'summer', 'toFinancialYearEnding'])
-    .withGraphFetched('region')
-    .modifyGraph('region', (builder) => {
-      builder.select(['id', 'displayName'])
-    })
 }
