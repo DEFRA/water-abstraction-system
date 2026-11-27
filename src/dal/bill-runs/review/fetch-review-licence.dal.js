@@ -101,7 +101,9 @@ export default async function fetchReviewLicenceDal(reviewLicenceId) {
                   'reviewChargeElements.status'
                 ])
                 .join('chargeElements', 'reviewChargeElements.chargeElementId', 'chargeElements.id')
+                .join('purposes', 'chargeElements.purposeId', 'purposes.id')
                 .orderBy('chargeElements.authorisedAnnualQuantity', 'desc')
+                .orderBy('purposes.description', 'asc')
                 .withGraphFetched('chargeElement')
                 .modifyGraph('chargeElement', (chargeElementBuilder) => {
                   chargeElementBuilder
