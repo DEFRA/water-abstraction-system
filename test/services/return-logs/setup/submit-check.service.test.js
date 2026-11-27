@@ -74,6 +74,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       returnsFrequency: 'month',
       returnSubmissionId: initialReturnSubmission.id,
       startDate: '2023-01-01',
+      submissionType: 'submit',
       units: 'cubicMetres',
       unitSymbol: 'm³'
     }
@@ -215,6 +216,7 @@ describe('Return Logs Setup - Submit Check service', () => {
 
       expect(result).toEqual({
         abstractionPeriod: null,
+        displayChangeReceivedLink: true,
         displayReadings: false,
         displayUnits: false,
         enterMultipleLinkText: 'Enter multiple monthly volumes',

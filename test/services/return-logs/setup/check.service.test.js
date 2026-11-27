@@ -37,6 +37,7 @@ describe('Return Logs Setup - Check service', () => {
 
       expect(result).toEqual({
         abstractionPeriod: '1 January to 31 December',
+        displayChangeReceivedLink: true,
         displayReadings: true,
         displayUnits: true,
         enterMultipleLinkText: 'Enter multiple monthly readings',
@@ -131,6 +132,7 @@ function _sessionData() {
     siteDescription: 'POINT A, TEST SITE DESCRIPTION',
     startDate: '2004-04-01T00:00:00.000Z',
     startReading: 0,
+    submissionType: 'submit',
     twoPartTariff: false,
     units: 'megalitres',
     unitSymbol: 'Ml'

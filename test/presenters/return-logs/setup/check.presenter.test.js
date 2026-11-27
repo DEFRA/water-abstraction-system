@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 // Thing under test
 import CheckPresenter from '../../../../src/presenters/return-logs/setup/check.presenter.js'
 
-describe('Return Logs Setup - Check presenter', () => {
+describe('Return Logs - Setup - Check presenter', () => {
   let session
 
   beforeEach(() => {
@@ -17,6 +17,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
       expect(result).toEqual({
         abstractionPeriod: '1 January to 31 December',
+        displayChangeReceivedLink: true,
         displayReadings: false,
         displayUnits: true,
         enterMultipleLinkText: 'Enter multiple monthly volumes',
@@ -118,6 +119,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
         expect(result).toEqual({
           abstractionPeriod: '1 January to 31 December',
+          displayChangeReceivedLink: true,
           links: {
             cancel: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/cancel',
             meterDetails: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/meter-provided',
@@ -146,6 +148,28 @@ describe('Return Logs Setup - Check presenter', () => {
           siteDescription: 'POINT A, TEST SITE DESCRIPTION',
           tariff: 'Standard'
         })
+      })
+    })
+  })
+
+  describe('the "displayChangeReceivedLink" property', () => {
+    describe('when submitting the first submission (submit)', () => {
+      it('returns true', () => {
+        const result = CheckPresenter(session)
+
+        expect(result.displayChangeReceivedLink).toBe(true)
+      })
+    })
+
+    describe('when editing the submission (edit)', () => {
+      beforeEach(() => {
+        session.submissionType = 'edit'
+      })
+
+      it('returns false', () => {
+        const result = CheckPresenter(session)
+
+        expect(result.displayChangeReceivedLink).toBe(false)
       })
     })
   })
@@ -1097,6 +1121,7 @@ function _sessionData() {
     returnsFrequency: 'month',
     siteDescription: 'POINT A, TEST SITE DESCRIPTION',
     startDate: '2023-04-01T00:00:00.000Z',
+    submissionType: 'submit',
     twoPartTariff: false,
     units: 'megalitres',
     unitSymbol: 'Ml'

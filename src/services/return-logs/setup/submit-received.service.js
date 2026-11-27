@@ -33,10 +33,15 @@ export default async function submitReceivedService(sessionId, payload, yar) {
   const error = _validate(payload, startDate)
 
   if (!error) {
-    await _save(session, payload)
+    // NOTE: The /check page does not display a 'change' link, so no user should be able to submit a received date when
+    // editing a return. But to protect the data from those who attempt to go direct to this endpoint, we check we are
+    // not in edit mode before saving the received date.
+    if (session.submissionType !== 'edit') {
+      await _save(session, payload)
 
-    if (session.checkPageVisited) {
-      flashNotification(yar, 'Updated', 'Reporting details changed')
+      if (session.checkPageVisited) {
+        flashNotification(yar, 'Updated', 'Reporting details changed')
+      }
     }
 
     return {
