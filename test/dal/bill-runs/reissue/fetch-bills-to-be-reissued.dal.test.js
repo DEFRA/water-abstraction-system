@@ -13,16 +13,16 @@ import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 
 // Thing under test
-import FetchBillsToBeReissuedService from '../../../../src/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js'
+import FetchBillsToBeReissuedDal from '../../../../src/dal/bill-runs/reissue/fetch-bills-to-be-reissued.dal.js'
 
-describe('Fetch Bills To Be Reissued service', () => {
+describe('Bill Runs - Reissue -Fetch Bills To Be Reissued dal', () => {
   let billRun
   let bill
   let regionId
 
   beforeEach(async () => {
     // We use a random regionId to avoid other tests writing bill run data in the same region which would effect the
-    // tests. The service is not interested in any of the region data beyond its ID
+    // tests. The dal is not interested in any of the region data beyond its ID
     regionId = generateUUID()
 
     billRun = await BillRunHelper.add({ regionId })
@@ -34,7 +34,7 @@ describe('Fetch Bills To Be Reissued service', () => {
 
   describe('when there are no bills to be reissued', () => {
     it('returns no results', async () => {
-      const result = await FetchBillsToBeReissuedService(regionId)
+      const result = await FetchBillsToBeReissuedDal(regionId)
 
       expect(result).toHaveLength(0)
     })
@@ -46,14 +46,14 @@ describe('Fetch Bills To Be Reissued service', () => {
     })
 
     it('returns results', async () => {
-      const result = await FetchBillsToBeReissuedService(regionId)
+      const result = await FetchBillsToBeReissuedDal(regionId)
 
       expect(result).toHaveLength(1)
       expect(result[0]).toBeInstanceOf(BillModel)
     })
 
     it('returns only the required bill fields', async () => {
-      const bill = await FetchBillsToBeReissuedService(regionId)
+      const bill = await FetchBillsToBeReissuedDal(regionId)
 
       const result = Object.keys(bill[0])
 
@@ -71,7 +71,7 @@ describe('Fetch Bills To Be Reissued service', () => {
     })
 
     it('returns only the required bill licence fields', async () => {
-      const bill = await FetchBillsToBeReissuedService(regionId)
+      const bill = await FetchBillsToBeReissuedDal(regionId)
 
       const { billLicences } = bill[0]
 
@@ -95,7 +95,7 @@ describe('Fetch Bills To Be Reissued service', () => {
       })
 
       it('returns only sroc bills', async () => {
-        const result = await FetchBillsToBeReissuedService(regionId)
+        const result = await FetchBillsToBeReissuedDal(regionId)
 
         expect(result).toHaveLength(1)
         expect(result[0].id).toEqual(bill.id)
@@ -118,7 +118,7 @@ describe('Fetch Bills To Be Reissued service', () => {
 
     it('logs an error', async () => {
       // Force an error by calling the service with an invalid uuid
-      await FetchBillsToBeReissuedService('NOT_A_UUID')
+      await FetchBillsToBeReissuedDal('NOT_A_UUID')
 
       expect(notifierStub.omfg).toHaveBeenCalledWith(
         'Could not fetch reissue bills',
@@ -128,7 +128,7 @@ describe('Fetch Bills To Be Reissued service', () => {
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchBillsToBeReissuedService(regionId)
+      const result = await FetchBillsToBeReissuedDal(regionId)
 
       expect(result).toHaveLength(0)
     })
