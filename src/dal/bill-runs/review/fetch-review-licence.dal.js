@@ -79,6 +79,7 @@ export default async function fetchReviewLicenceDal(reviewLicenceId) {
             ])
             .join('chargeReferences', 'reviewChargeReferences.chargeReferenceId', 'chargeReferences.id')
             .join('chargeCategories', 'chargeReferences.chargeCategoryId', 'chargeCategories.id')
+            .orderBy('reviewChargeReferences.amendedAuthorisedVolume', 'desc')
             .orderBy('chargeCategories.subsistenceCharge', 'asc')
             .orderBy('chargeCategories.reference', 'asc')
             .withGraphFetched('chargeReference')
