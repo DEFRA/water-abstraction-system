@@ -13,17 +13,21 @@ import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 // Things we need to stub
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
 import * as FetchBillsToBeReissuedDal from '../../../../src/dal/bill-runs/reissue/fetch-bills-to-be-reissued.dal.js'
+import * as PersistBillDal from '../../../../src/dal/bill-runs/reissue/persist-bill.dal.js'
 import * as ReissueBillService from '../../../../src/services/bill-runs/reissue/reissue-bill.service.js'
 
 // Thing under test
 import ReissueBillsService from '../../../../src/services/bill-runs/reissue/reissue-bills.service.js'
 
-describe('Reissue Bills service', () => {
+describe('Bill Runs - Reissue - Reissue Bills service', () => {
   const reissueBillRun = { regionId: generateUUID() }
 
   let notifierStub
+  let persistBillDalStub
 
   beforeEach(async () => {
+    persistBillDalStub = vi.spyOn(PersistBillDal, 'default').mockResolvedValue()
+
     // The service depends on GlobalNotifier to have been set. This happens in the GlobalNotifierPlugin
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -84,37 +88,19 @@ describe('Reissue Bills service', () => {
       it('persists all bills', async () => {
         await ReissueBillsService(reissueBillRun)
 
-        const result = await BillModel.query().whereIn('billRunId', [
-          reissueBillOne.bills[0].billRunId,
-          reissueBillTwo.bills[0].billRunId,
-          reissueBillThree.bills[0].billRunId
-        ])
-
-        expect(result).toHaveLength(3)
-      })
-
-      it('persists all bill licences', async () => {
-        await ReissueBillsService(reissueBillRun)
-
-        const result = await BillLicenceModel.query().whereIn('billId', [
-          reissueBillOne.billLicences[0].billId,
-          reissueBillTwo.billLicences[0].billId,
-          reissueBillThree.billLicences[0].billId
-        ])
-
-        expect(result).toHaveLength(3)
-      })
-
-      it('persists all transactions', async () => {
-        await ReissueBillsService(reissueBillRun)
-
-        const result = await TransactionModel.query().whereIn('billLicenceId', [
-          reissueBillOne.transactions[0].billLicenceId,
-          reissueBillTwo.transactions[0].billLicenceId,
-          reissueBillThree.transactions[0].billLicenceId
-        ])
-
-        expect(result).toHaveLength(3)
+        expect(persistBillDalStub).toHaveBeenCalledWith({
+          billLicences: [
+            reissueBillOne.billLicences[0],
+            reissueBillTwo.billLicences[0],
+            reissueBillThree.billLicences[0]
+          ],
+          bills: [reissueBillOne.bills[0], reissueBillTwo.bills[0], reissueBillThree.bills[0]],
+          transactions: [
+            reissueBillOne.transactions[0],
+            reissueBillTwo.transactions[0],
+            reissueBillThree.transactions[0]
+          ]
+        })
       })
     })
   })

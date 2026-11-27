@@ -3,11 +3,8 @@
  * @module ReissueBillsService
  */
 
-import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model.js'
-import BillModel from 'water-abstraction-engine/models/bill.model.js'
-import TransactionModel from 'water-abstraction-engine/models/transaction.model.js'
-
 import FetchBillsToBeReissuedDal from '../../../dal/bill-runs/reissue/fetch-bills-to-be-reissued.dal.js'
+import PersistBillDal from '../../../dal/bill-runs/reissue/persist-bill.dal.js'
 import ReissueBillService from './reissue-bill.service.js'
 
 /**
@@ -42,7 +39,7 @@ export default async function reissueBillsService(reissueBillRun) {
     _addNewDataToDataToPersist(dataToPersist, newData)
   }
 
-  await _persistData(dataToPersist)
+  await PersistBillDal(dataToPersist)
 
   return true
 }
@@ -52,10 +49,4 @@ function _addNewDataToDataToPersist(dataToPersist, newData) {
   dataToPersist.bills.push(...newData.bills)
   dataToPersist.billLicences.push(...newData.billLicences)
   dataToPersist.transactions.push(...newData.transactions)
-}
-
-async function _persistData(dataToPersist) {
-  await BillModel.query().insert(dataToPersist.bills)
-  await BillLicenceModel.query().insert(dataToPersist.billLicences)
-  await TransactionModel.query().insert(dataToPersist.transactions)
 }
