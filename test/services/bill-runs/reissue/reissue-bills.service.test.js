@@ -12,7 +12,7 @@ import { generateUUID } from 'water-abstraction-engine/test/generators.js'
 
 // Things we need to stub
 import GlobalNotifierStub from 'water-abstraction-engine/test/stubs/global-notifier.stub.js'
-import * as FetchBillsToBeReissuedService from '../../../../src/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js'
+import * as FetchBillsToBeReissuedDal from '../../../../src/dal/bill-runs/reissue/fetch-bills-to-be-reissued.dal.js'
 import * as ReissueBillService from '../../../../src/services/bill-runs/reissue/reissue-bill.service.js'
 
 // Thing under test
@@ -39,7 +39,7 @@ describe('Reissue Bills service', () => {
   describe('when the service is called', () => {
     describe('and there are no bills to reissue', () => {
       beforeEach(() => {
-        vi.spyOn(FetchBillsToBeReissuedService, 'default').mockResolvedValue([])
+        vi.spyOn(FetchBillsToBeReissuedDal, 'default').mockResolvedValue([])
       })
 
       it('returns "false"', async () => {
@@ -56,7 +56,7 @@ describe('Reissue Bills service', () => {
 
       beforeEach(async () => {
         // Three dummy invoices to ensure we iterate 3x
-        vi.spyOn(FetchBillsToBeReissuedService, 'default').mockResolvedValue([
+        vi.spyOn(FetchBillsToBeReissuedDal, 'default').mockResolvedValue([
           { id: generateUUID() },
           { id: generateUUID() },
           { id: generateUUID() }
@@ -68,7 +68,7 @@ describe('Reissue Bills service', () => {
         reissueBillThree = _reissueBillServiceResponse()
 
         // This stub will result in one new bill, bill licence and transaction for each dummy invoice returned by
-        // FetchBillsToBeReissuedService.
+        // FetchBillsToBeReissuedDal.
         vi.spyOn(ReissueBillService, 'default')
           .mockResolvedValueOnce(reissueBillOne)
           .mockResolvedValueOnce(reissueBillTwo)

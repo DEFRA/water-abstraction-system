@@ -1,6 +1,6 @@
 /**
- * Fetches bills to be reissued
- * @module FetchBillsToBeReissuedService
+ * Takes a region and fetches sroc bills in that region marked for reissuing, along with their transactions
+ * @module FetchBillsToBeReissuedDal
  */
 
 import BillModel from 'water-abstraction-engine/models/bill.model.js'
@@ -12,7 +12,7 @@ import BillModel from 'water-abstraction-engine/models/bill.model.js'
  *
  * @returns {Promise<module:BillModel[]>} An array of bills to be reissued
  */
-export default async function fetchBillsToBeReissuedService(regionId) {
+export default async function fetchBillsToBeReissuedDal(regionId) {
   try {
     const result = await BillModel.query()
       .select(

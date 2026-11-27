@@ -7,7 +7,7 @@ import BillLicenceModel from 'water-abstraction-engine/models/bill-licence.model
 import BillModel from 'water-abstraction-engine/models/bill.model.js'
 import TransactionModel from 'water-abstraction-engine/models/transaction.model.js'
 
-import FetchBillsToBeReissuedService from './fetch-bills-to-be-reissued.service.js'
+import FetchBillsToBeReissuedDal from '../../../dal/bill-runs/reissue/fetch-bills-to-be-reissued.dal.js'
 import ReissueBillService from './reissue-bill.service.js'
 
 /**
@@ -24,7 +24,7 @@ import ReissueBillService from './reissue-bill.service.js'
  * @returns {Promise<boolean>} `true` if any bills were reissued; `false` if not
  */
 export default async function reissueBillsService(reissueBillRun) {
-  const sourceBills = await FetchBillsToBeReissuedService(reissueBillRun.regionId)
+  const sourceBills = await FetchBillsToBeReissuedDal(reissueBillRun.regionId)
 
   if (sourceBills.length === 0) {
     return false
